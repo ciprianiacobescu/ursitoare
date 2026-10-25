@@ -40,6 +40,7 @@ jobs:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
       CODEX_API_KEY: ${{ secrets.CODEX_API_KEY }}
       OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+      TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
     steps:
       # the soft deadline counts from here: the checkout and the setup steps below use the job's time too (L4-IMP-066)
       - name: job start
@@ -69,7 +70,7 @@ jobs:
         with:
           version: "10.34.8"
       - id: l4
-        uses: ciprianiacobescu/l4/.github/actions/l4@c7da3d9a0738546ad713d265591f4360710ec209 # v0.4.30
+        uses: ciprianiacobescu/l4/.github/actions/l4@66d99acc5d9d35ba487e58084064423c71c0d358 # v0.4.32
         with:
           self-provision: ${{ vars.L4_SELF_PROVISION || 'auto' }}
       - name: doctor
