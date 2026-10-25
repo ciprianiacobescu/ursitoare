@@ -1,0 +1,69 @@
+{
+  "schema": "l4/delivery-plan@1",
+  "plan_id": "m0",
+  "target": "main",
+  "merge": "auto",
+  "limits": {
+    "max_cost_usd": 75,
+    "max_unit_attempts": 3,
+    "max_runs": 35
+  },
+  "external_dependencies": [],
+  "batches": [
+    {
+      "id": "m0-walking-skeleton",
+      "depends_on": [],
+      "acceptance_profile": "none",
+      "units": [
+        {
+          "id": "openspec:add-engine-skeleton",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-supply-chain-gate",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-db-foundation",
+          "depends_on": [
+            "openspec:add-engine-skeleton"
+          ]
+        },
+        {
+          "id": "openspec:add-architecture-fitness",
+          "depends_on": [
+            "openspec:add-engine-skeleton"
+          ]
+        },
+        {
+          "id": "openspec:add-tenancy-foundation",
+          "depends_on": [
+            "openspec:add-db-foundation",
+            "openspec:add-engine-skeleton"
+          ]
+        },
+        {
+          "id": "openspec:add-e2e-stack",
+          "depends_on": [
+            "openspec:add-engine-skeleton",
+            "openspec:add-db-foundation",
+            "openspec:add-tenancy-foundation",
+            "openspec:add-architecture-fitness"
+          ]
+        },
+        {
+          "id": "openspec:add-web-shell",
+          "depends_on": [
+            "openspec:add-engine-skeleton",
+            "openspec:add-db-foundation",
+            "openspec:add-tenancy-foundation",
+            "openspec:add-architecture-fitness",
+            "openspec:add-supply-chain-gate",
+            "openspec:add-e2e-stack"
+          ]
+        }
+      ]
+    }
+  ],
+  "exclude": []
+}
