@@ -1,0 +1,63 @@
+# note: foreach with item.* and a downstream use of results
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: inbox
+nodes:
+  inbox:
+    kind: block
+    uses: mail.read_inbox@1
+    with:
+      mailbox: support@example.com
+      max: 10
+    next: each
+  each:
+    kind: foreach
+    items: ${{ nodes.inbox.output.messages }}
+    uses: crm.find_customer@1
+    with:
+      email: ${{ item.from }}
+    next: sum
+  done:
+    kind: end
+    status: completed
+    output:
+      n: ${{ nodes.sum.output.n }}
+  sum:
+    kind: code
+    language: js
+    input:
+      customers: ${{ nodes.each.output.results }}
+    source: "return { n: input.customers.length };"
+    output_schema:
+      type: object
+      properties:
+        n:
+          type: integer
+      required:
+        - n
+    next: done

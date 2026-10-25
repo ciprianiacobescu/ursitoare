@@ -1,0 +1,94 @@
+# note: human.form output follows form_schema
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: extract
+  extract:
+    kind: llm.extract
+    input:
+      text: ${{ nodes.fetch.output.content }}
+    instructions: Extract the summary, amount, count, urgency and tags.
+    output_schema:
+      type: object
+      properties:
+        summary:
+          type: string
+        amount:
+          type: number
+        count:
+          type: integer
+        urgent:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+        note:
+          type: string
+      required:
+        - summary
+        - amount
+        - count
+        - urgent
+        - tags
+    next: frm
+  done:
+    kind: end
+    status: completed
+  frm:
+    kind: human.form
+    assignee_role: support-agent
+    form_schema:
+      type: object
+      properties:
+        reason:
+          type: string
+        qty:
+          type: integer
+      required:
+        - reason
+    timeout: P1D
+    next: mail
+    on_timeout: late
+  mail:
+    kind: block
+    uses: mail.send@1
+    with:
+      to: a@example.com
+      subject: s
+      body: ${{ nodes.frm.output.reason }}
+    next: done
+  late:
+    kind: end
+    status: failed

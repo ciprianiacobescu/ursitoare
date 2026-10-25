@@ -1,0 +1,13 @@
+# The engine is the root package; the web UI is its own package (docs/decisions/0001-repo-and-toolchain.md).
+packages:
+  - "."
+  - "web"
+# Owner-maintained (L4 forbidden path). pnpm 10 runs no dependency build scripts unless listed here: add a package
+# only after reading its install script. New versions must be at least three days old (minutes).
+minimumReleaseAge: 4320
+onlyBuiltDependencies:
+  - "@embedded-postgres/darwin-arm64"
+  - "@embedded-postgres/darwin-x64"
+  - "@embedded-postgres/linux-arm64"
+  - "@embedded-postgres/linux-x64"
+  - esbuild

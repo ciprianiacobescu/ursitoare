@@ -1,0 +1,91 @@
+# note: agent with read tools; wait; failed end with output
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: extract
+  extract:
+    kind: llm.extract
+    input:
+      text: ${{ nodes.fetch.output.content }}
+    instructions: Extract the summary, amount, count, urgency and tags.
+    output_schema:
+      type: object
+      properties:
+        summary:
+          type: string
+        amount:
+          type: number
+        count:
+          type: integer
+        urgent:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+        note:
+          type: string
+      required:
+        - summary
+        - amount
+        - count
+        - urgent
+        - tags
+    next: agent
+  done:
+    kind: end
+    status: failed
+    output:
+      a: ${{ nodes.agent.output.answer }}
+  agent:
+    kind: agent
+    input:
+      q: ${{ nodes.extract.output.summary }}
+    goal: Answer the question using the knowledge base.
+    tools:
+      - kb.search@1
+    max_steps: 10
+    output_schema:
+      type: object
+      properties:
+        answer:
+          type: string
+      required:
+        - answer
+    model_profile: careful
+    next: w
+  w:
+    kind: wait
+    duration: PT1H30M
+    next: done

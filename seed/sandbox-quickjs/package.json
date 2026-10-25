@@ -1,0 +1,25 @@
+{
+  "name": "ursitoare-sandbox-quickjs",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "M7: QuickJS-in-Wasm code-node sandbox spike",
+  "scripts": {
+    "test": "node --test --test-concurrency=1 test/*.test.ts",
+    "bench": "node bench/bench.ts",
+    "typecheck": "tsc --noEmit",
+    "ivm:install": "cd results/isolated-vm-probe && npm install --save-exact isolated-vm@7.0.1",
+    "bench:summarize": "node bench/summarize.ts",
+    "memory-probe": "node bench/memory-limit-probe.ts"
+  },
+  "dependencies": {
+    "quickjs-emscripten": "0.32.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "typescript": "7.0.2"
+  },
+  "engines": {
+    "node": ">=26"
+  }
+}

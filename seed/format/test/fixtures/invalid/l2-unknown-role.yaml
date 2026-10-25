@@ -1,0 +1,102 @@
+# expect: L2_UNKNOWN_ROLE
+# note: role not in the catalogue
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: extract
+  extract:
+    kind: llm.extract
+    input:
+      text: ${{ nodes.fetch.output.content }}
+    instructions: Extract the summary, amount, count, urgency and tags.
+    output_schema:
+      type: object
+      properties:
+        summary:
+          type: string
+        amount:
+          type: number
+        count:
+          type: integer
+        urgent:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+        note:
+          type: string
+      required:
+        - summary
+        - amount
+        - count
+        - urgent
+        - tags
+    next: approval
+  done:
+    kind: end
+    status: completed
+  approval:
+    kind: human.approval
+    assignee_role: cfo
+    summary: Approve ${{ nodes.extract.output.amount }}?
+    timeout: PT24H
+    cases:
+      approved: grant
+      rejected: decline
+      timeout: expire
+  grant:
+    kind: block
+    uses: mail.send@1
+    with:
+      to: ap@example.com
+      subject: Granted
+      body: See the ticket.
+    next: done
+  decline:
+    kind: block
+    uses: mail.send@1
+    with:
+      to: ap@example.com
+      subject: Declined
+      body: See the ticket.
+    next: done
+  expire:
+    kind: block
+    uses: mail.send@1
+    with:
+      to: ap@example.com
+      subject: Expired
+      body: See the ticket.
+    next: done

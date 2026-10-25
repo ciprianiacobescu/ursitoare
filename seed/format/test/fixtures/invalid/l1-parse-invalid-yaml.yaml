@@ -1,0 +1,4 @@
+# expect: L1_PARSE
+# note: unterminated flow sequence
+ursitoare: "0.1"
+nodes: [unclosed

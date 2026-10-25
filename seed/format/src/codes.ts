@@ -1,0 +1,66 @@
+/** Stable error and warning codes. Every code has at least one fixture under test/fixtures. */
+export const ERROR_CODES = {
+  L1: [
+    "L1_PARSE", // CLI/io level: YAML/JSON could not be parsed safely
+    "L1_REQUIRED",
+    "L1_ADDITIONAL_PROPERTY",
+    "L1_TYPE",
+    "L1_CONST",
+    "L1_ENUM",
+    "L1_UNKNOWN_KIND",
+    "L1_PATTERN",
+    "L1_MIN_ITEMS",
+    "L1_UNIQUE_ITEMS",
+    "L1_RANGE",
+    "L1_MIN_LENGTH",
+    "L1_MIN_PROPERTIES",
+    "L1_FOREACH_BODY",
+    "L1_INVALID_JSON_SCHEMA",
+    "L1_REF_SYNTAX",
+    "L1_REF_NOT_ALLOWED",
+    "L1_CODE_SYNTAX",
+    "L1_CODE_NO_RETURN",
+  ],
+  L2: [
+    "L2_UNKNOWN_BLOCK",
+    "L2_WITH_MISSING_REQUIRED",
+    "L2_WITH_UNKNOWN_PARAM",
+    "L2_UNKNOWN_ROLE",
+    "L2_UNKNOWN_DELEGATE_TARGET",
+    "L2_UNKNOWN_DELEGATE_WORKFLOW",
+    "L2_UNKNOWN_FLOW",
+    "L2_UNKNOWN_MODEL_PROFILE",
+    "L2_START_UNKNOWN",
+    "L2_UNKNOWN_SUCCESSOR",
+    "L2_MISSING_SUCCESSOR",
+    "L2_UNREACHABLE_NODE",
+    "L2_CYCLE",
+    "L2_NO_END",
+    "L2_DECIDE_CASE_MISSING",
+    "L2_DECIDE_CASE_EXTRA",
+  ],
+  L3: [
+    "L3_REF_UNKNOWN_NODE",
+    "L3_REF_NOT_DOMINATING",
+    "L3_REF_UNKNOWN_PATH",
+    "L3_REF_NO_OUTPUT",
+    "L3_REF_OUTCOME_NOT_DECIDE",
+    "L3_ITEM_OUTSIDE_FOREACH",
+    "L3_TYPE_MISMATCH",
+    "L3_ENUM_VIOLATION",
+    "L3_SWITCH_ON_TYPE",
+    "L3_SWITCH_KEY_INCOMPATIBLE",
+    "L3_TAINT_TO_CONSEQUENTIAL",
+    "L3_TAINT_TO_AGENT_WITH_EFFECTS",
+  ],
+} as const;
+
+export const WARNING_CODES = [
+  "W_LETHAL_TRIFECTA",
+  "W_TAINT_TO_OPAQUE_CALL",
+  "W_OPTIONAL_REFERENCE",
+  "W_SUSPICIOUS_INTERPOLATION",
+  "W_CODE_FORBIDDEN_API",
+] as const;
+
+export const ALL_ERROR_CODES: string[] = [...ERROR_CODES.L1, ...ERROR_CODES.L2, ...ERROR_CODES.L3];

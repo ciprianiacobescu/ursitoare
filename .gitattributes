@@ -1,0 +1,4 @@
+# Checksums of migrations are over raw bytes (add-db-foundation): keep LF on every platform.
+*.sql text eol=lf
+*.ts text eol=lf
+*.py text eol=lf

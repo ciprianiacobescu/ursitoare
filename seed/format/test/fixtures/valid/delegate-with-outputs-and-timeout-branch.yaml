@@ -1,0 +1,83 @@
+# note: delegate: next gets result, on_timeout does not
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: extract
+  extract:
+    kind: llm.extract
+    input:
+      text: ${{ nodes.fetch.output.content }}
+    instructions: Extract the summary, amount, count, urgency and tags.
+    output_schema:
+      type: object
+      properties:
+        summary:
+          type: string
+        amount:
+          type: number
+        count:
+          type: integer
+        urgent:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+        note:
+          type: string
+      required:
+        - summary
+        - amount
+        - count
+        - urgent
+        - tags
+    next: dl
+  dl:
+    kind: delegate
+    target: n8n
+    workflow: sync-crm
+    with:
+      n: ${{ nodes.extract.output.count }}
+    callback_timeout: PT30M
+    next: ok
+    on_timeout: late
+  ok:
+    kind: end
+    status: completed
+    output:
+      corr: ${{ nodes.dl.output.correlation_id }}
+      r: ${{ nodes.dl.output.result }}
+  late:
+    kind: end
+    status: failed

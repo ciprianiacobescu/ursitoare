@@ -1,0 +1,27 @@
+# Keycloak-as-default-IdP footprint check (owner decision 2026-10-24). Throwaway spike values only.
+name: us-kc
+services:
+  postgres:
+    image: postgres:18
+    command: ["postgres", "-c", "shared_buffers=128MB"]
+    environment:
+      POSTGRES_PASSWORD: spike-only-pg
+      POSTGRES_DB: keycloak
+    mem_limit: 512m
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.1
+    command: ["start", "--import-realm"]
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: spike-only-pg
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME: http://localhost:18580
+      KC_HEALTH_ENABLED: "true"
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: spike-only-admin
+    volumes: ["./import:/opt/keycloak/data/import:ro"]
+    ports: ["127.0.0.1:18580:8080"]
+    mem_limit: ${KC_MEM:-1g}
+    depends_on: [postgres]

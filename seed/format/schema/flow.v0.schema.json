@@ -1,0 +1,275 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ursitoare.dev/schema/flow.v0.schema.json",
+  "title": "Ursitoare flow, format v0 (ursitoare: 0.1)",
+  "description": "L1 of the validator. Structural schema for the document and every node kind. Registry checks (L2) and data-flow checks (L3) live in src/validate.ts.",
+  "type": "object",
+  "required": ["ursitoare", "flow", "version", "inputs", "start", "nodes"],
+  "additionalProperties": false,
+  "properties": {
+    "ursitoare": { "const": "0.1" },
+    "flow": { "type": "string", "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$" },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$"
+    },
+    "description": { "type": "string" },
+    "inputs": { "$ref": "#/$defs/objectSchema" },
+    "start": { "$ref": "#/$defs/nodeId" },
+    "nodes": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "#/$defs/nodeId" },
+      "additionalProperties": { "$ref": "#/$defs/node" }
+    }
+  },
+  "$defs": {
+    "nodeId": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+    "identifier": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+    "blockRef": { "type": "string", "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+@[0-9]+$" },
+    "flowRef": { "type": "string", "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*@[0-9]+$" },
+    "duration": {
+      "type": "string",
+      "pattern": "^P(?=[0-9]|T[0-9])([0-9]+(\\.[0-9]+)?Y)?([0-9]+(\\.[0-9]+)?M)?([0-9]+(\\.[0-9]+)?W)?([0-9]+(\\.[0-9]+)?D)?(T(?=[0-9])([0-9]+(\\.[0-9]+)?H)?([0-9]+(\\.[0-9]+)?M)?([0-9]+(\\.[0-9]+)?S)?)?$"
+    },
+    "singleRef": { "type": "string", "pattern": "^\\$\\{\\{[^{}]+\\}\\}$" },
+    "objectSchema": {
+      "type": "object",
+      "required": ["type"],
+      "properties": { "type": { "const": "object" } }
+    },
+    "valueMap": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/identifier" }
+    },
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "role": { "type": "string", "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$" },
+    "modelProfile": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+
+    "node": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": { "kind": { "type": "string" } },
+      "discriminator": { "propertyName": "kind" },
+      "oneOf": [
+        { "$ref": "#/$defs/n_block" },
+        { "$ref": "#/$defs/n_code" },
+        { "$ref": "#/$defs/n_llm_extract" },
+        { "$ref": "#/$defs/n_llm_generate" },
+        { "$ref": "#/$defs/n_llm_decide" },
+        { "$ref": "#/$defs/n_agent" },
+        { "$ref": "#/$defs/n_switch" },
+        { "$ref": "#/$defs/n_human_approval" },
+        { "$ref": "#/$defs/n_human_form" },
+        { "$ref": "#/$defs/n_foreach" },
+        { "$ref": "#/$defs/n_subflow" },
+        { "$ref": "#/$defs/n_delegate" },
+        { "$ref": "#/$defs/n_wait" },
+        { "$ref": "#/$defs/n_end" }
+      ]
+    },
+
+    "n_block": {
+      "type": "object",
+      "required": ["kind", "uses", "with"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "block" },
+        "uses": { "$ref": "#/$defs/blockRef" },
+        "with": { "$ref": "#/$defs/valueMap" },
+        "next": { "$ref": "#/$defs/nodeId" }
+      }
+    },
+    "n_code": {
+      "type": "object",
+      "required": ["kind", "language", "source", "input", "output_schema"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "code" },
+        "language": { "const": "js" },
+        "source": { "$ref": "#/$defs/nonEmptyString" },
+        "input": { "$ref": "#/$defs/valueMap" },
+        "output_schema": { "$ref": "#/$defs/objectSchema" },
+        "next": { "$ref": "#/$defs/nodeId" }
+      }
+    },
+    "n_llm_extract": {
+      "type": "object",
+      "required": ["kind", "input", "instructions", "output_schema"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "llm.extract" },
+        "input": { "$ref": "#/$defs/valueMap" },
+        "instructions": { "$ref": "#/$defs/nonEmptyString" },
+        "output_schema": { "$ref": "#/$defs/objectSchema" },
+        "model_profile": { "$ref": "#/$defs/modelProfile" },
+        "next": { "$ref": "#/$defs/nodeId" }
+      }
+    },
+    "n_llm_generate": {
+      "type": "object",
+      "required": ["kind", "input", "instructions", "output_schema"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "llm.generate" },
+        "input": { "$ref": "#/$defs/valueMap" },
+        "instructions": { "$ref": "#/$defs/nonEmptyString" },
+        "output_schema": { "$ref": "#/$defs/objectSchema" },
+        "model_profile": { "$ref": "#/$defs/modelProfile" },
+        "next": { "$ref": "#/$defs/nodeId" }
+      }
+    },
+    "n_llm_decide": {
+      "type": "object",
+      "required": ["kind", "input", "instructions", "outcomes", "cases"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "llm.decide" },
+        "input": { "$ref": "#/$defs/valueMap" },
+        "instructions": { "$ref": "#/$defs/nonEmptyString" },
+        "outcomes": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "cases": {
+          "type": "object",
+          "minProperties": 2,
+          "additionalProperties": { "$ref": "#/$defs/nodeId" }
+        },
+        "model_profile": { "$ref": "#/$defs/modelProfile" }
+      }
+    },
+    "n_agent": {
+      "type": "object",
+      "required": ["kind", "input", "goal", "tools", "max_steps", "output_schema"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "agent" },
+        "input": { "$ref": "#/$defs/valueMap" },
+        "goal": { "$ref": "#/$defs/nonEmptyString" },
+        "tools": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/blockRef" }
+        },
+        "max_steps": { "type": "integer", "minimum": 1, "maximum": 50 },
+        "output_schema": { "$ref": "#/$defs/objectSchema" },
+        "model_profile": { "$ref": "#/$defs/modelProfile" },
+        "next": { "$ref": "#/$defs/nodeId" }
+      }
+    },
+    "n_switch": {
+      "type": "object",
+      "required": ["kind", "on", "cases", "default"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "switch" },
+        "on": { "$ref": "#/$defs/singleRef" },
+        "cases": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/nodeId" }
+        },
+        "default": { "$ref": "#/$defs/nodeId" }
+      }
+    },
+    "n_human_approval": {
+      "type": "object",
+      "required": ["kind", "assignee_role", "summary", "timeout", "cases"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "human.approval" },
+        "assignee_role": { "$ref": "#/$defs/role" },
+        "summary": { "$ref": "#/$defs/nonEmptyString" },
+        "timeout": { "$ref": "#/$defs/duration" },
+        "cases": {
+          "type": "object",
+          "required": ["approved", "rejected", "timeout"],
+          "additionalProperties": false,
+          "properties": {
+            "approved": { "$ref": "#/$defs/nodeId" },
+            "rejected": { "$ref": "#/$defs/nodeId" },
+            "timeout": { "$ref": "#/$defs/nodeId" }
+          }
+        }
+      }
+    },
+    "n_human_form": {
+      "type": "object",
+      "required": ["kind", "assignee_role", "form_schema", "timeout", "on_timeout"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "human.form" },
+        "assignee_role": { "$ref": "#/$defs/role" },
+        "form_schema": { "$ref": "#/$defs/objectSchema" },
+        "timeout": { "$ref": "#/$defs/duration" },
+        "next": { "$ref": "#/$defs/nodeId" },
+        "on_timeout": { "$ref": "#/$defs/nodeId" }
+      }
+    },
+    "n_foreach": {
+      "type": "object",
+      "required": ["kind", "items", "with"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "foreach" },
+        "items": { "$ref": "#/$defs/singleRef" },
+        "uses": { "$ref": "#/$defs/blockRef" },
+        "subflow": { "$ref": "#/$defs/flowRef" },
+        "with": { "$ref": "#/$defs/valueMap" },
+        "max_parallel": { "type": "integer", "minimum": 1 },
+        "next": { "$ref": "#/$defs/nodeId" }
+      },
+      "anyOf": [{ "required": ["uses"] }, { "required": ["subflow"] }],
+      "not": { "required": ["uses", "subflow"] }
+    },
+    "n_subflow": {
+      "type": "object",
+      "required": ["kind", "flow", "with"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "subflow" },
+        "flow": { "$ref": "#/$defs/flowRef" },
+        "with": { "$ref": "#/$defs/valueMap" },
+        "next": { "$ref": "#/$defs/nodeId" }
+      }
+    },
+    "n_delegate": {
+      "type": "object",
+      "required": ["kind", "target", "workflow", "with", "callback_timeout"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "delegate" },
+        "target": { "$ref": "#/$defs/nonEmptyString" },
+        "workflow": { "$ref": "#/$defs/nonEmptyString" },
+        "with": { "$ref": "#/$defs/valueMap" },
+        "callback_timeout": { "$ref": "#/$defs/duration" },
+        "next": { "$ref": "#/$defs/nodeId" },
+        "on_timeout": { "$ref": "#/$defs/nodeId" }
+      }
+    },
+    "n_wait": {
+      "type": "object",
+      "required": ["kind", "duration"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "wait" },
+        "duration": { "$ref": "#/$defs/duration" },
+        "next": { "$ref": "#/$defs/nodeId" }
+      }
+    },
+    "n_end": {
+      "type": "object",
+      "required": ["kind", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "end" },
+        "status": { "enum": ["completed", "failed"] },
+        "output": { "$ref": "#/$defs/valueMap" }
+      }
+    }
+  }
+}

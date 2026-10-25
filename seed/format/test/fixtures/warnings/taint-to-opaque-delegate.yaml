@@ -1,0 +1,49 @@
+# expect-warnings: W_TAINT_TO_OPAQUE_CALL
+# note: untrusted into a delegate
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: dl
+  done:
+    kind: end
+    status: completed
+  dl:
+    kind: delegate
+    target: n8n
+    workflow: generate-report
+    with:
+      text: ${{ nodes.fetch.output.content }}
+    callback_timeout: PT1H
+    next: done
+    on_timeout: done

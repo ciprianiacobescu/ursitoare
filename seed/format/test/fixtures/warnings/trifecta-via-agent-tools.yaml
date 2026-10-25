@@ -1,0 +1,53 @@
+# expect-warnings: W_LETHAL_TRIFECTA
+# note: agent tool allowlists count
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: agent
+  done:
+    kind: end
+    status: completed
+  agent:
+    kind: agent
+    input:
+      q: ${{ inputs.email }}
+    goal: Help.
+    tools:
+      - docs.fetch@1
+      - kb.search@1
+      - mail.send@1
+    max_steps: 3
+    output_schema:
+      type: object
+    next: done

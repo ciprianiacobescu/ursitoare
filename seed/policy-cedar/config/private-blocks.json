@@ -1,0 +1,5 @@
+{
+  "_comment": "The v0 catalogue has NO data-classification marker, so 'reads private data' cannot be derived from it. Spike heuristic: a block with effect=read that matches one of these patterns reads private/internal business data. The catalogue should grow a per-block (or per-output-field) `data_class` annotation; see REPORT.md 'Unresolved'.",
+  "read_private_patterns": ["invoices.get@1", "erp.*", "crm.*", "orders.*", "mail.read_inbox@1", "sheets.*", "calendar.find_slots@1"],
+  "delegate": { "assumed_effect": "send", "output_untrusted": true }
+}

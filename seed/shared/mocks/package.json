@@ -1,0 +1,13 @@
+{
+  "name": "ursitoare-mocks",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic, counting, externally observable mocks for the Ursitoare Phase-0 spikes (no dependencies).",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "./start-all.sh",
+    "stop": "./stop-all.sh",
+    "test": "node selftest.mjs"
+  }
+}

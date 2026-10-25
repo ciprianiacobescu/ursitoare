@@ -1,0 +1,26 @@
+# Browser end-to-end tests (docs/testing.md). Python pytest-playwright, because that is what the L4 verifier
+# generates (e2e/test_l4_c_<hex>.py) and reads (JUnit). playwright is pinned to the Chromium revision of L4's shared,
+# read-only browser cache (1.63.0). The [tool.pytest.ini_options] section is runner configuration: a unit cannot
+# change it.
+[project]
+name = "ursitoare-e2e"
+version = "0.0.0"
+requires-python = ">=3.11"
+dependencies = [
+  "playwright==1.63.0",
+  "pytest-playwright==0.10.0",
+  "pytest>=8.3,<10",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["."]
+# Stack-only tests are deselected by default; scripts/stack-e2e.sh passes -m "stack or not stack".
+addopts = "-p no:cacheprovider --strict-markers -m \"not stack\""
+markers = [
+  "l4(*ids): the acceptance criteria (C-xxxxxxxx) this test checks",
+  "stack: needs the real compose stack (Keycloak, Mintkey); skipped on the fake profile",
+  "milestone(name): the milestone journey this test belongs to",
+]

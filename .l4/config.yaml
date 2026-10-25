@@ -1,0 +1,184 @@
+## Written by `l4 init` (v0.4.30), then edited by the repository owner; see the harness docs/SPEC.md 3.2 for every key.
+## Decisions behind each edit: docs/decisions/0001-repo-and-toolchain.md and docs/testing.md.
+version: 1
+harness:
+  delivery: action
+spec:
+  frameworks:
+  - openspec
+
+gates:
+  # Setup runs with the network; the e2e gate later runs with loopback only, so everything it needs is installed here.
+  setup:
+  - pnpm install --frozen-lockfile
+  - uv sync --project e2e --frozen
+  build:
+  - pnpm run build
+  lint:
+  - pnpm run lint
+  typecheck:
+  - pnpm run typecheck
+  test:
+    command: pnpm run test
+    reports:
+    - .l4-out/junit.xml
+  e2e:
+    # Python pytest-playwright: what the L4 verifier generates (e2e/test_l4_c_<hex>.py) and reads (JUnit).
+    command: e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure
+    format: junit
+    reports:
+    - .l4-out/e2e-junit.xml
+    serve:
+      # The offline e2e stack: engine + embedded Postgres + fake OIDC + fake egress proxy (docs/testing.md).
+      command: node test/support/e2e-stack/main.ts
+      ready_url: http://127.0.0.1:39080/health
+      timeout: 120s
+  timeout: 30m
+
+tdd:
+  # L4's default test globs minus `**/test/**` (doctor CFG-005 warns; intended, docs/decisions/0002). With it every
+  # file under test/ is a test path: a TypeScript helper, fake or e2e-stack part that red stubs there is reset to the
+  # stub after green, and one that green writes is reverted. Helpers under test/ are ordinary code, guarded by their
+  # `*.test.ts` contract tests, which stay frozen like every test file.
+  test_globs:
+  - "**/tests/**"
+  - "**/__tests__/**"
+  - "**/*_test.*"
+  - "**/test_*.*"
+  - "**/*.test.*"
+  - "**/*.spec.*"
+  - e2e/**
+  - "**/fixtures/**"
+  - "**/testdata/**"
+  - "**/conftest.py"
+  # Data the architecture and licence tests assert against: a red step (reviewed) or a person changes it, never green.
+  # `e2e/conftest.py` is a support file already (`**/conftest.py`); a task opens it for its green by naming it.
+  extra_test_support_globs:
+  - test/arch/modules.ts
+  - test/arch/licence-policy.ts
+
+odd:
+  # The default list minus `**/migrations/**`: this is a greenfield engine, every unit owns its forward-only SQL
+  # migration under src/db/migrations/, and a person merges every pull request. Secrets and env files are added.
+  forbidden_paths:
+  - .github/workflows/**
+  - .gitlab-ci.yml
+  - infra/**
+  - deploy/secrets/**
+  - .env
+  - .env.*
+  - seed/**
+  # Supply chain: which dependencies may run install scripts, and how versions are saved, are the owner's.
+  - pnpm-workspace.yaml
+  - .npmrc
+  # Gate tooling: the JUnit reporter the test gate writes through (docs/decisions/0002).
+  - tools/**
+
+profiles:
+  # Cheap first, Claude last (owner decision 2026-10-25). Secrets: OPENCODE_API_KEY, CLAUDE_CODE_OAUTH_TOKEN,
+  # CODEX_API_KEY, sealed in the GitHub environment `l4` with `l4 setup github --secret NAME=ENVVAR`.
+  deepseek:
+    adapter: opencode
+    auth: api_key
+    model: opencode-go/deepseek-v4.1-flash
+    vendor: deepseek
+  glm:
+    adapter: opencode
+    auth: api_key
+    model: opencode-go/glm-5.3-flash
+    vendor: zhipu
+  claude-sonnet:
+    adapter: claude-code
+    auth: subscription
+    model: claude-sonnet-5-5
+    vendor: anthropic
+  # The delegate of unattended plans (owner decision 2026-10-25): independent of every implementer and judge model.
+  # Same secret as the other Claude profiles, CLAUDE_CODE_OAUTH_TOKEN.
+  delegate-fable:
+    adapter: claude-code
+    auth: subscription
+    model: claude-fable-5-1
+    vendor: anthropic
+  claude-judge:
+    adapter: claude-code
+    auth: subscription
+    model: claude-opus-5-5
+    vendor: anthropic
+  codex-judge:
+    adapter: codex
+    auth: api_key
+    model: gpt-6.1-sol
+    vendor: openai
+  laya:
+    backend: system-one
+    engine: laya-local
+roles:
+  implementer:
+  - deepseek
+  - glm
+  - claude-sonnet
+  # A judge of an implementer's vendor is vetoed for that implementer; codex-judge keeps one independent judge.
+  judges:
+  - claude-judge
+  - codex-judge
+  s1_judge:
+  - laya
+  # Unattended runs: the delegate answers implementer questions read-only and escalates what it cannot check. It runs
+  # on a model no implementer or judge uses (delegate.independence: model; doctor DLG-001).
+  delegate:
+  - delegate-fable
+implementer:
+  escalate_after: 2
+  max_task_attempts: 3
+
+forge:
+  type: github
+  token_env: GITHUB_TOKEN
+  # Owner decision 2026-10-25 ("use merge auto, I want it unattended"): an active plan with `merge: auto` merges each
+  # unit that passes its gates and review. With GITHUB_TOKEN, L4's merges start no other workflow (e2e.yml does not run
+  # on them); a fine-grained L4_FORGE_TOKEN as forge.token_env changes that (docs/decisions/0001).
+  merge_policy: auto
+
+ci:
+  platform: github
+  runner_tags: []
+  # Owner decision 2026-10-25: every 30 minutes, so an active plan moves unattended. A run with no active plan and
+  # nothing held ends quickly; nothing is dispatched until a person activates a plan (yolo.hold).
+  schedule: "*/30 * * * *"
+  # Public repository: the l4-out artifact holds prompts and agent transcripts.
+  upload_artifacts: false
+  toolchains:
+    node:
+      version: "24"
+    pnpm:
+      version: "10.34.8"
+
+yolo:
+  # Nothing runs until a person activates a delivery plan that lists it (public repository).
+  hold:
+  - "*"
+  profiles:
+    unit:
+    - build
+    - lint
+    - typecheck
+    - test
+    # Run once per milestone batch, after all its units are integrated (docs/roadmap.md). L4 refuses a profile that
+    # lists e2e while gates.e2e.serve is set (yolo/admit.py `_needs_server`): the browser suite runs instead in every
+    # unit's own verification (verifier/ladder.py), in the milestone's closing unit on the whole milestone, and in
+    # .github/workflows/e2e.yml on every push to main.
+    milestone:
+    - build
+    - lint
+    - typecheck
+    - test
+  # The readiness judge reads a prerequisite as proposal, spec, design, tasks and cuts it at this size (default 20k).
+  # Units here run 35-45k; each proposal lists the interfaces it gives, so 30k shows those and the whole spec.
+  review:
+    max_dependency_chars: 30000
+
+## The delegate (on, owner decision 2026-10-25: unattended plans): a strong model answers the units' questions in CI,
+## read-only, and escalates what it cannot check. Only units of an active plan (scope yolo).
+delegate:
+  enabled: true
+  scope: yolo

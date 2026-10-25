@@ -1,0 +1,4 @@
+# expect: L1_PARSE
+# note: custom YAML tags are not allowed
+ursitoare: "0.1"
+flow: !!python/object:os.system foo

@@ -1,0 +1,11 @@
+{ "realm": "ursitoare", "enabled": true,
+  "organizationsEnabled": true,
+  "clients": [
+    { "clientId": "ursitoare-engine", "enabled": true, "publicClient": false, "secret": "spike-only-secret",
+      "serviceAccountsEnabled": true, "directAccessGrantsEnabled": true, "standardFlowEnabled": true,
+      "redirectUris": ["http://localhost:8080/auth/oidc/callback"] } ],
+  "users": [
+    { "username": "hobbyist", "enabled": true, "email": "hobbyist@example.invalid", "emailVerified": true,
+      "firstName": "Solo", "lastName": "Admin",
+      "credentials": [ { "type": "password", "value": "spike-only-user", "temporary": false } ] } ]
+}

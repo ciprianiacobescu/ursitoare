@@ -1,0 +1,19 @@
+.l4-out/
+node_modules/
+dist/
+web/dist/
+coverage/
+e2e/.venv/
+test-results/
+__pycache__/
+*.pyc
+.env
+.env.*
+deploy/secrets/
+secrets/
+*.pem
+*.key
+.DS_Store
+# local orchestration scratchpads and run logs (not product material)
+.orchestration/
+.serena/

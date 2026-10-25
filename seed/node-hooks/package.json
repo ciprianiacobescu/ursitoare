@@ -1,0 +1,27 @@
+{
+  "name": "ursitoare-node-hooks",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "NH spike: node hooks and next-node logic on the D1 interpreter (DBOS-TS 5.3.0)",
+  "scripts": {
+    "engine": "node src/main.ts",
+    "typecheck": "tsc --noEmit",
+    "check:static": "node tests/check-static.mjs",
+    "scenarios": "node tests/scenarios.mjs",
+    "lint": "node tests/lint.mjs",
+    "desugar": "node desugar/run.mjs",
+    "measure": "bash tests/measure.sh",
+    "gen:flows": "node tests/gen-flows.mjs"
+  },
+  "dependencies": {
+    "@dbos-inc/dbos-sdk": "5.3.0",
+    "ajv": "8.17.1",
+    "quickjs-emscripten": "0.32.0",
+    "yaml": "2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "typescript": "7.0.2"
+  }
+}

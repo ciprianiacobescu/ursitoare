@@ -1,0 +1,43 @@
+# Owner-maintained (L4 implementers may not edit workflows). Runs the browser e2e suite, fake profile, on every push
+# to main, so every merged unit, and therefore every milestone, is proven end to end on the merged tip
+# (docs/roadmap.md "Milestone protocol"). L4 itself also runs the suite in each unit's verification.
+name: e2e
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: set up node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+      - name: set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: "10.34.8"
+      - name: install
+        run: |
+          python3 -m pip install --user uv==0.10.0
+          pnpm install --frozen-lockfile
+          uv sync --project e2e --frozen
+          e2e/.venv/bin/playwright install --with-deps chromium
+      - name: build
+        run: pnpm run build
+      - name: serve and test
+        run: |
+          pnpm run e2e:serve > e2e-serve.log 2>&1 &
+          for i in $(seq 1 120); do curl -sf http://127.0.0.1:39080/health > /dev/null && break; sleep 1; done
+          pnpm run e2e
+      - name: server log on failure
+        if: failure()
+        run: cat e2e-serve.log

@@ -1,0 +1,27 @@
+{
+  "name": "policy-cedar-spike",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Ursitoare Phase-0 M6: Cedar policy spike",
+  "scripts": {
+    "validate": "tsx src/validate-policies.ts",
+    "test": "tsx --test test/*.test.ts",
+    "extract": "tsx src/extract-cli.ts",
+    "bench": "tsx src/bench.ts | tee results/bench-output.txt",
+    "gen-schema": "tsx src/gen-schema.ts",
+    "report:scenarios": "tsx src/report-scenarios.ts",
+    "size": "tsx src/size.ts",
+    "bench:sanity": "tsx src/bench-sanity.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cedar-policy/cedar-wasm": "4.14.0",
+    "yaml": "2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.9.2",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,47 @@
+# expect: L3_ENUM_VIOLATION
+# note: order status values are not ticket statuses
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: orders.get@1
+    with:
+      order_id: o1
+    next: tk
+  done:
+    kind: end
+    status: completed
+  tk:
+    kind: block
+    uses: crm.update_ticket@1
+    with:
+      ticket_id: t1
+      status: ${{ nodes.fetch.output.status }}
+    next: done

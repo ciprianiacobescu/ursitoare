@@ -1,0 +1,11 @@
+{
+  "name": "ursitoare-harness",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Engine-agnostic recovery and correctness harness (RT-0..RT-6) for the Ursitoare Phase-0 core spikes. No dependencies.",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "selftest": "node run.mjs --adapter ./fake-adapter.mjs --tests RT-0,RT-1,RT-2,RT-3,RT-4,RT-5,RT-6"
+  }
+}

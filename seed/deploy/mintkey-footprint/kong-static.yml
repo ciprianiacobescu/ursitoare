@@ -1,0 +1,17 @@
+# Static DB-less Kong config reproducing what apps/kong-syncer/internal/kong/yaml.go:50-90 generates for ONE service
+# (route /v1/call/<service_id>, strip_path true, request-transformer adding routing headers), with the spike's fixed UUIDs.
+_format_version: "3.0"
+services:
+  - name: 00000000-0000-4000-8000-0000000000b1
+    url: http://proxy-plugin:8086
+    routes:
+      - name: 00000000-0000-4000-8000-0000000000b1-path
+        paths: ["/v1/call/00000000-0000-4000-8000-0000000000b1"]
+        strip_path: true
+        plugins:
+          - name: request-transformer
+            config:
+              add:
+                headers:
+                  - "X-Mintkey-Service-ID:00000000-0000-4000-8000-0000000000b1"
+                  - "X-Mintkey-Tenant-ID:00000000-0000-4000-8000-0000000000a1"

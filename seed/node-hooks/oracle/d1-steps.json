@@ -1,0 +1,55 @@
+{
+  "captured_from": "core-dbos/src/main.ts (unmodified), DBOS-TS 5.3.0",
+  "cases": {
+    "INV-1002": {
+      "status": "completed",
+      "node": "done",
+      "steps": [
+        "0:fetch_invoice",
+        "1:extract",
+        "2:lookup_vendor",
+        "3:normalize",
+        "4:classify",
+        "5:pay",
+        "6:archive",
+        "7:DBOS.setEvent",
+        "8:DBOS.recv",
+        "9:DBOS.sleep",
+        "10:DBOS.setEvent"
+      ]
+    },
+    "INV-1003": {
+      "status": "completed",
+      "node": "rejected",
+      "steps": [
+        "0:fetch_invoice",
+        "1:extract",
+        "2:lookup_vendor",
+        "3:normalize",
+        "4:classify",
+        "5:notify_rejection"
+      ]
+    },
+    "INV-1001-approve": {
+      "status": "completed",
+      "node": "done",
+      "steps": [
+        "0:fetch_invoice",
+        "1:extract",
+        "2:lookup_vendor",
+        "3:normalize",
+        "4:classify",
+        "5:DBOS.setEvent",
+        "6:DBOS.recv",
+        "7:DBOS.sleep",
+        "8:DBOS.setEvent",
+        "9:pay",
+        "10:archive",
+        "11:DBOS.setEvent",
+        "12:DBOS.recv",
+        "13:DBOS.sleep",
+        "14:DBOS.setEvent"
+      ]
+    }
+  }
+}

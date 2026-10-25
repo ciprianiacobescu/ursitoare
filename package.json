@@ -1,0 +1,35 @@
+{
+  "name": "ursitoare",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Ursitoare: a durable, policy-checked workflow engine for deterministic and agentic steps",
+  "type": "module",
+  "packageManager": "pnpm@10.34.8",
+  "engines": {
+    "node": ">=24.11 <25"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && pnpm -r --if-present --filter=!ursitoare run build",
+    "typecheck": "tsc -p tsconfig.json --noEmit && pnpm -r --if-present --filter=!ursitoare run typecheck",
+    "lint": "eslint --max-warnings=0 .",
+    "test": "mkdir -p .l4-out && node --test --test-timeout=120000 --test-global-setup=test/support/global-setup.ts --test-reporter=spec --test-reporter-destination=stdout --test-reporter=./tools/node-test-junit.mjs --test-reporter-destination=.l4-out/junit.xml \"src/**/*.test.ts\" \"test/**/*.test.ts\" \"web/src/**/*.test.ts\"",
+    "e2e:setup": "uv sync --project e2e --frozen",
+    "e2e:serve": "node test/support/e2e-stack/main.ts",
+    "e2e": "e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "24.19.2",
+    "@types/pg": "8.23.1",
+    "embedded-postgres": "18.4.0-beta.17",
+    "eslint": "10.13.0",
+    "globals": "17.13.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.0"
+  },
+  "dependencies": {
+    "fastify": "5.12.7",
+    "pg": "8.23.1",
+    "pino": "10.4.0"
+  }
+}
