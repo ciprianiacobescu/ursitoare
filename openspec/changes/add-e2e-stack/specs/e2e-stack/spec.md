@@ -1,6 +1,6 @@
 ## Purpose
 
-The offline stack the browser e2e gate serves: the real engine on embedded Postgres, a loopback control listener that resets state and injects faults, and parts that later units add as one file.
+The offline stack the browser e2e gate serves: the real engine on embedded Postgres, a loopback control listener, and parts added as one file.
 
 ## ADDED Requirements
 
@@ -55,7 +55,7 @@ The `database` part SHALL start one Postgres 18.4 cluster, create the roles, bui
 
 #### Scenario: Health reports the database
 - **WHEN** `startE2eStack({ port: 0, controlPort: 0, dataDir })` runs with no `parts` option and `GET <url>/health` is fetched
-- **THEN** the answer is 200 with `status` `"ok"` and `checks.db` `"ok"`; as owner, `SHOW server_version` starts `18.4`, `ursitoare.tenant` holds exactly one row with `review_profile` `solo`; and the `pg_stat_activity` rows for `ursitoare_e2e` whose `application_name` is neither `e2e-stack` nor `e2e-test` (the test's own pool) exist and all use `ursitoare_app`
+- **THEN** the answer is 200 with `status` `"ok"` and `checks.db` `"ok"`; as owner, `SHOW server_version` starts `18.4`, `ursitoare.tenant` holds exactly one row with `review_profile` `solo`; and the `pg_stat_activity` rows for `ursitoare_e2e` whose `application_name` is neither `e2e-stack` nor `e2e-test` exist and all use `ursitoare_app`
 
 #### Scenario: Secrets are files only
 - **WHEN** the stack runs
@@ -126,14 +126,14 @@ No non-test file under `src/` SHALL register `/reset` or `/faults`, and `test/ar
 
 #### Scenario: A throwing hook stops the start
 - **WHEN** `configureServer` throws an error with `code` `"E_HOOK"`, and in another run a plain `Error`, both with message `hook failed`
-- **THEN** `main` resolves `null`, `exit` gets `1`, the fatal log line has `code` `"E_HOOK"` and `"SERVER_HOOK_FAILED"` and `msg` `"hook failed"`, no port is open, and an injected `Database` was closed once
+- **THEN** `main` resolves `null`, `exit` gets `1`, the fatal log line has `code` `"E_HOOK"` and `"SERVER_HOOK_FAILED"` and `msg` `"startup failed"` both times, and the line contains no `"hook failed"`, no port is open, and an injected `Database` was closed once
 
 ### Requirement: The stack process starts offline and stops on SIGTERM
-`node test/support/e2e-stack/main.ts` SHALL start the stack on `E2E_PORT` (default 39080) and `E2E_CONTROL_PORT` (default 39081, both 1 to 65535) with no name resolution, `E2E_DATA_DIR` as the parent directory and the engine log on stderr unless `E2E_STACK_LOG` is `0`, write only its ready line to stdout (other stdout writes go to stderr), and on SIGTERM or SIGINT, also during the start, close the engine and stop Postgres.
+`node test/support/e2e-stack/main.ts` SHALL start the stack on `E2E_PORT` (default 39080) and `E2E_CONTROL_PORT` (default 39081, both 1 to 65535) offline, `E2E_DATA_DIR` as the parent directory and the engine log on stderr unless `E2E_STACK_LOG` is `0`, write only its ready line to stdout (other stdout writes go to stderr), and on SIGTERM or SIGINT, also during the start, close the engine and stop Postgres.
 
 #### Scenario: Offline start, health, SIGTERM
-- **WHEN** the file is spawned with free ports, `E2E_DATA_DIR` and `TMPDIR` set to temp directories, `GET /health` is fetched after the first stdout line, and SIGTERM is sent; and in-process `dns.lookup` and `dns.promises.lookup` are mocked while a stack starts, resets and closes
-- **THEN** the whole stdout equals `e2e stack ready on http://127.0.0.1:<E2E_PORT> control http://127.0.0.1:<E2E_CONTROL_PORT>` plus a newline, its first line arriving within 90 s (any other first line fails the test at once), health is 200 with `checks.db` `"ok"`, the process exits with code 0, `E2E_DATA_DIR` is empty, no `postmaster.pid` remains under `TMPDIR`, and the mocks have zero calls; `DEFAULT_PORT` is `39080`, `DEFAULT_CONTROL_PORT` `39081`
+- **WHEN** the file is spawned with free ports, `E2E_DATA_DIR` and `TMPDIR` set to temp directories, `GET /health` is fetched after the first stdout line, and SIGTERM is sent; and `dns.lookup` and `dns.promises.lookup` are mocked with `mock.method` while a stack starts, resets and closes
+- **THEN** the whole stdout equals `e2e stack ready on http://127.0.0.1:<E2E_PORT> control http://127.0.0.1:<E2E_CONTROL_PORT>` plus a newline, its first line arriving within 90 s (any other first line fails the test at once), health is 200 with `checks.db` `"ok"`, the process exits with code 0, `E2E_DATA_DIR` is empty, no `postmaster.pid` remains under `TMPDIR`, and every recorded `dns.lookup` call has an IP literal as first argument (`net.isIP(arg) !== 0`), `dns.promises.lookup` none; `DEFAULT_PORT` is `39080`, `DEFAULT_CONTROL_PORT` `39081`
 
 #### Scenario: A signal during the start
 - **WHEN** the file is spawned with free ports and temp `E2E_DATA_DIR` and `TMPDIR`, and SIGTERM is sent once a `ursitoare-e2e-*` directory appears in `E2E_DATA_DIR` (up to 90 s)
@@ -155,8 +155,8 @@ No non-test file under `src/` SHALL register `/reset` or `/faults`, and `test/ar
 - **THEN** the first returns without any request; the second raises `RuntimeError` whose message contains the URL
 
 ### Requirement: The browser gate sees the database and not the control routes
-The served engine SHALL report `checks.db` `"ok"` on `GET /health` and SHALL answer 404 `NOT_FOUND` to the control paths on its own port; each test of `e2e/test_e2e_stack.py` SHALL take the `e2e_profile` fixture and call `pytest.skip` when it is not `"fake"` (unset means `fake`), so the gate that leaves `E2E_PROFILE` unset runs them.
+The served engine SHALL report `checks.db` `"ok"` on `GET /health` and SHALL answer 404 `NOT_FOUND` to the control paths on its own port; each test of `e2e/test_e2e_stack.py` SHALL take the `e2e_profile` fixture and call `pytest.skip` when it is not `"fake"` (unset means `fake`).
 
 #### Scenario: Health and control paths in the browser gate
-- **WHEN** `e2e/test_e2e_stack.py` loads `<base_url>/health` and sends `POST /reset`, `POST /faults` and `DELETE /faults` to `<base_url>`, each as `urllib.request.Request(url, method=...)` with no `data` (so no body and no `Content-Type`), reading the status from `err.code` and the body of the caught `urllib.error.HTTPError`
+- **WHEN** `e2e/test_e2e_stack.py` loads `<base_url>/health` and sends `POST /reset`, `POST /faults` and `DELETE /faults` to `<base_url>`, each as a bodyless `urllib.request.Request(url, method=...)` (no `data`, no `Content-Type`), reading status and body from the caught `urllib.error.HTTPError`
 - **THEN** health is 200 with `checks.db` `"ok"` and the three others answer 404 with `error.code` `NOT_FOUND`; a refused connection (`urllib.error.URLError`) or any other status fails the test; `e2e/test_health.py::test_health_reports_ok` still passes unchanged

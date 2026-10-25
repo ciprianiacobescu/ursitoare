@@ -2,24 +2,26 @@
 
 `add-engine-skeleton` (U01) gives, from `src/core/index.ts` (restated exactly): `interface Clock { now(): Date }`, `systemClock: Clock`, `fixedClock(iso: string): Clock`, `interface IdSource { next(prefix: string): string }`, `systemIds: IdSource`, `sequentialIds(seed?: number): IdSource` (ids `${prefix}_00000000-0000-7000-8000-<counter, 12 hex>` from `seed`, default 0).
 
-`add-db-foundation` (U02) gives, from `src/db/index.ts` and `test/support/pg.ts` (restated exactly): `ROLE_OWNER: string` (`"ursitoare_owner"`), `ROLE_APP: string` (`"ursitoare_app"`), `createPool(source: string | EndpointLike, opts?: PoolOptions): pg.Pool`, `freePort(): Promise<number>`, `readTestCluster(env?): TestCluster`, and `withTestDatabase(opts?: { migrated?: boolean; cluster?: TestCluster }): Promise<TestDatabase>` with `TestDatabase { name; ownerUrl; appUrl; ownerEndpoint; appEndpoint; ownerPool; appPool; close() }`. Its runner applies `src/db/migrations/NNNN_<name>.sql` as `ursitoare_owner`, one transaction per file; versions are unique, gaps allowed. `withTestDatabase()` clones a template migrated in the test global setup, so it holds every migration. `0001_base.sql` grants `ursitoare_app` only `USAGE` on the schema and no `PUBLIC` execute on new owner functions.
+`add-db-foundation` (U02) gives, from `src/db/index.ts` and `test/support/pg.ts` (restated exactly): `ROLE_OWNER: string` (`"ursitoare_owner"`), `ROLE_APP: string` (`"ursitoare_app"`), `createPool(source: string | EndpointLike, opts?: PoolOptions): pg.Pool`, `freePort(): Promise<number>`, `readTestCluster(env?): TestCluster`, and `withTestDatabase(opts?: { migrated?: boolean; cluster?: TestCluster }): Promise<TestDatabase>` with `TestDatabase { name; ownerUrl; appUrl; ownerEndpoint; appEndpoint; ownerPool; appPool; close() }`. Its runner applies `src/db/migrations/NNNN_<name>.sql` as `ursitoare_owner`, one transaction per file; versions are unique, gaps allowed. `withTestDatabase()` clones a template that holds every migration. `0001_base.sql` grants `ursitoare_app` only `USAGE` on the schema and no `PUBLIC` execute on new owner functions.
 
 `src/tenancy` imports only `src/core`, `src/db` and `pg` types; no new dependency.
 
 ## Decisions
 
+Decisions 8 to 12: decided by the orchestrator on 2026-10-25.
+
 1. **Tenant ids are `text`** matching `^[A-Za-z0-9_-]{1,64}$`: a `uuid` cast in a policy would raise on the empty string a pooled connection reports after `set_config`. `/` is excluded (Cedar ids use it).
 2. **The tenant is set with `set_config('app.tenant_id', $1, true)`**, a bound parameter, not `SET LOCAL`; policies read `current_setting('app.tenant_id', true)`. Before release `inTransaction` runs `set_config('app.tenant_id', '', false)`, so a session value cannot leak.
 3. **`tenant`: RLS enabled, not forced; the app role has only `SELECT`;** the owner provisions tenants.
 4. **`tenant_route` has no RLS;** it is closed by privilege and reached through three `SECURITY DEFINER` functions (owner `ursitoare_owner`, `SET search_path = pg_catalog, pg_temp`, all objects schema-qualified). Failures use SQLSTATE `U0001` (no tenant set), `U0002` (held by another tenant), `U0003` (bad kind or hash), `U0004` (reserved kind), mapped in TypeScript. Parameters carry a `p_` prefix (a bare name would bind to the column).
-5. **Reserved kinds are enforced in SQL.** `register_tenant_route` and `unregister_tenant_route` raise `U0004` when `p_kind = ANY (ARRAY['idp'])` and `session_user <> 'ursitoare_owner'`: a kind with a guessable key is provisioned on the owner pool, never claimed from a request path. A later unit that adds a provisioned kind replaces both functions with a longer array.
+5. **Reserved kinds are enforced in SQL.** The register and unregister functions raise `U0004` when `p_kind = ANY (ARRAY['idp'])` and `session_user <> 'ursitoare_owner'`: a kind with a guessable key is provisioned on the owner pool, never claimed from a request path. A later unit that adds a provisioned kind replaces both functions with a longer array.
 6. **The catalog checker is a module function,** so negative controls prove it can fail; `catalog.test.ts` runs it on a migrated database, so it checks every later migration, and pins the allowlist. Partitions need no RLS, but no app privilege.
 7. **Error messages are fixed strings;** none holds a key, hash, input tenant id or driver text.
-8. **Only `code` and `details` are contract** (decided by the orchestrator on 2026-10-25): no caller parses a message. `details` is empty except `sqlstate` for `TENANT_BOOTSTRAP_FAILED`; tests assert `hashRouteKey`'s message and that no message holds a key, hash or input.
-9. **A caught SQL error fails closed** (decided by the orchestrator on 2026-10-25): Postgres answers `COMMIT` of an aborted transaction with `ROLLBACK`, no error, so ignoring the tag would report success and lose every write. `inTransaction` reads it and throws `TENANT_TX_ABORTED`; a savepoint that `fn` rolled back leaves the transaction healthy.
-10. **Policies count by membership** (decided by the orchestrator on 2026-10-25): a permissive policy applies when `polroles` holds `0` or a role `r` with `pg_has_role(<app oid>, r, 'MEMBER')` (app role included; role missing: only `0`); a `USING (true)` policy for an inherited group opens rows too.
-11. **Catalog edge cases** (decided by the orchestrator on 2026-10-25): a table with no primary key or no `tenant_id` is `not_tenant_leading`, and its unique indexes and foreign keys are reported, so a null comparison is a violation; `view_open_to_app` also covers materialized and foreign tables; `ownerRole` is the only accepted owner of definer functions.
-12. **Catalog requirements are capability `tenancy-catalog`** (decided by the orchestrator on 2026-10-25): one spec file passed 18,000 characters.
+8. **Only `code` and `details` are contract**: no caller parses a message. `details` is empty except `sqlstate` for `TENANT_BOOTSTRAP_FAILED`; tests assert `hashRouteKey`'s message and that no message holds a key, hash or input.
+9. **A caught SQL error fails closed**: Postgres answers `COMMIT` of an aborted transaction with `ROLLBACK` and no error, which would lose every write silently, so `inTransaction` reads the tag and throws `TENANT_TX_ABORTED`; a savepoint that `fn` rolled back leaves the transaction healthy.
+10. **Policies count by membership**: a policy applies when `polroles` holds `0` or a role `r` with `pg_has_role(<app oid>, r, 'MEMBER')` (app role included; role missing: only `0`); a group's `USING (true)` opens rows too.
+11. **Catalog edge cases**: a table with no primary key or no `tenant_id` is `not_tenant_leading`, and its unique indexes and foreign keys are reported; `view_open_to_app` also covers materialized and foreign tables; `ownerRole` is the only accepted owner of definer functions.
+12. **Catalog requirements are capability `tenancy-catalog`**: one spec file passed 18,000 characters.
 
 ## Interfaces
 
@@ -57,15 +59,15 @@ Values: `TENANT_ID_PATTERN` is `/^[A-Za-z0-9_-]{1,64}$/`, `ROUTE_KIND_PATTERN` i
 
 ### Behaviour details
 
-- **`withTenantTx`:** `ctx` is validated (id pattern; `solo` or `team`) before `pool.connect()`. An error rolls back, releases the client and is rethrown as is; if the rollback or the final reset fails, the connection is destroyed. If `COMMIT` answers with command `ROLLBACK` (`fn` caught a SQL error), nothing is committed and it throws `TENANT_TX_ABORTED` after the reset; `inTransaction` does this for the other helpers too. A connect failure propagates; `fn` does not run.
-- **`ensureDefaultTenant`:** `name` must be trimmed, 1 to 200 characters. Under an advisory lock it returns the tenant with that name, else `TENANT_DEFAULT_CONFLICT` if any tenant exists, else inserts one (`ids.next("ten")`, `clock.now()`). A SQL error is `TENANT_BOOTSTRAP_FAILED` (`details.sqlstate`); it needs the owner role.
-- **`registerTenantRoute`, `unregisterTenantRoute`:** kind and key are validated in TypeScript (`TENANT_INVALID`, no SQL); `U0001`, `U0002`, `U0003`, `U0004` map to `TENANT_CONTEXT_MISSING`, `TENANT_ROUTE_CONFLICT`, `TENANT_INVALID`, `TENANT_ROUTE_RESERVED`, and a foreign-key violation (`23503`, no such tenant, register only) to `TENANT_UNKNOWN`. `unregisterTenantRoute` returns `false` for an absent or foreign route (no existence signal). After an error the transaction is aborted.
-- **`resolveTenantBy`:** an invalid `kind` is `TENANT_INVALID`; a key `hashRouteKey` refuses gives `null`. One transaction resolves with no tenant set, then reads `review_profile` with it set. A connection error propagates.
-- **`checkTenancyCatalog`** reads `pg_catalog` only and returns distinct `(rule, object)` pairs sorted by `rule`, then `object` (plain `<`); objects are `ursitoare.<relation>`, `ursitoare.<index or constraint>`, `ursitoare.<function>(<args>)` or the role name. Spec requirements "The catalog test guards every table" and "The runtime role is unprivileged" define the rules; tasks 7.1 and 7.2 list the queries. `app_role_missing` skips the role-dependent rules. A membership test skips the app role itself (`pg_has_role` is true for itself and for a superuser).
+- **`withTenantTx`:** `ctx` is validated before `pool.connect()`. An error rolls back and is rethrown as is; a failed rollback or reset destroys the connection. A `COMMIT` that answers `ROLLBACK` (decision 9) throws `TENANT_TX_ABORTED` after the reset, for every `inTransaction` helper. A connect failure propagates; `fn` does not run.
+- **`ensureDefaultTenant`:** `name` must be trimmed, 1 to 200 characters. Under an advisory lock it returns the tenant with that name, else `TENANT_DEFAULT_CONFLICT` if any tenant exists, else inserts one. A SQL error is `TENANT_BOOTSTRAP_FAILED` (`details.sqlstate`); it needs the owner role.
+- **`registerTenantRoute`, `unregisterTenantRoute`:** kind and key are validated in TypeScript first (`TENANT_INVALID`); `U0001` to `U0004` map in order to `TENANT_CONTEXT_MISSING`, `TENANT_ROUTE_CONFLICT`, `TENANT_INVALID`, `TENANT_ROUTE_RESERVED`; a foreign-key violation (`23503`, register only) maps to `TENANT_UNKNOWN`. `unregisterTenantRoute` returns `false` for an absent or foreign route (no existence signal). After an error the transaction is aborted.
+- **`resolveTenantBy`:** an invalid `kind` is `TENANT_INVALID`; a key `hashRouteKey` refuses gives `null`. A connection error propagates.
+- **`checkTenancyCatalog`** reads `pg_catalog` only and returns distinct `(rule, object)` pairs sorted by `rule`, then `object` (plain `<`); objects are `ursitoare.<relation>`, `ursitoare.<index or constraint>`, `ursitoare.<function>(<args>)` or the role name. Spec requirements "The catalog test guards every table" and "The runtime role is unprivileged" define the rules; tasks 7.1 and 7.2 list the queries.
 
 ## Data model
 
-`src/db/migrations/0002_tenancy.sql`, verbatim (the runner supplies the transaction; the plpgsql keyword is `BEGIN` without a semicolon):
+`src/db/migrations/0002_tenancy.sql`, verbatim (the runner supplies the transaction; plpgsql's `BEGIN` and final `END` carry no semicolon, so no line is one add-db-foundation refuses: `BEGIN;`, `COMMIT;`, `ROLLBACK;` or `START TRANSACTION;` alone):
 
 ```sql
 CREATE TABLE ursitoare.tenant (
@@ -107,7 +109,7 @@ BEGIN
    WHERE r.kind = p_kind AND r.key_hash = p_key_hash;
   IF v_existing IS DISTINCT FROM v_tenant THEN RAISE EXCEPTION 'route is already registered' USING ERRCODE = 'U0002'; END IF;
   RETURN false;
-END;
+END
 $fn$;
 
 CREATE FUNCTION ursitoare.unregister_tenant_route(p_kind text, p_key_hash bytea) RETURNS boolean
@@ -122,7 +124,7 @@ BEGIN
   DELETE FROM ursitoare.tenant_route r
    WHERE r.kind = p_kind AND r.key_hash = p_key_hash AND r.tenant_id = v_tenant;
   RETURN FOUND;
-END;
+END
 $fn$;
 
 CREATE FUNCTION ursitoare.resolve_tenant(p_kind text, p_key_hash bytea) RETURNS text
@@ -153,23 +155,23 @@ GRANT EXECUTE ON FUNCTION ursitoare.register_tenant_route(text, bytea), ursitoar
 ## Security
 
 1. No endpoint is added, so no authentication or PEP action.
-2. Isolation: `tenant` is row-secured on `app.tenant_id`; every later table must be tenant-leading with forced RLS and tenant-naming policies, which the catalog test enforces on every migration. The setting guards against application bugs, not arbitrary SQL as the app role.
+2. Isolation: `tenant` is row-secured on `app.tenant_id`; every later table must be tenant-leading with forced RLS and tenant-only policies, which the catalog test enforces on every migration. The setting guards against application bugs, not arbitrary SQL as the app role.
 3. Validation: ids, kinds, keys, names and profiles are checked in TypeScript and again by SQL; statements are parameterised; route keys are used only through `hashRouteKey`.
 4. Secrets: none are read; route keys can be bearer secrets, so only the SHA-256 is stored, no error or `details` holds one, and nothing is logged.
-5. Abuse cases, each a spec scenario: another tenant's rows; a tenant left on a pooled connection or lost by a caught SQL error; reading `tenant_route`; enumerating through `resolve_tenant`; taking over or removing a route; claiming `idp` as the app role; a shadowing temp table; bootstrapping as the app role; a later table with a bad key or policy; an unsafe definer; an app role inside the owner role.
+5. Abuse cases (each a scenario): another tenant's rows; a tenant left on a pooled connection or lost by a caught SQL error; reading `tenant_route`; enumerating through `resolve_tenant`; taking over or removing a route; claiming `idp` as the app role; a shadowing temp table; bootstrapping as the app role; a later table with a bad key or policy; an unsafe definer; an app role inside the owner role.
 
 ## Test plan
 
-Node test runner, `*.test.ts` beside each file, `withTestDatabase()` for database tests; no sleeps but `pg_sleep(0.05)`; `fixedClock` and `sequentialIds` injected. A test is named after its scenario (no `.`, `[` or `::`). Reset tests use `createPool(db.appEndpoint, { max: 1 })`. `tx.test.ts` creates its probe table as owner: `ursitoare.note(tenant_id text NOT NULL, id text NOT NULL, body text NOT NULL, PRIMARY KEY (tenant_id, id))`, RLS enabled and forced, policy `note_isolation` like `tenant_isolation`, `SELECT, INSERT, UPDATE` granted to `ursitoare_app`.
+Node test runner, `*.test.ts` beside each file, `withTestDatabase()` for database tests; no sleeps but `pg_sleep(0.05)`; `fixedClock` and `sequentialIds` injected. A test is named after its scenario (no `.`, `[` or `::`). Reset tests use `createPool(db.appEndpoint, { max: 1 })`. `tx.test.ts` creates its probe table as owner: `ursitoare.note(tenant_id text NOT NULL, id text NOT NULL, body text NOT NULL, PRIMARY KEY (tenant_id, id))`, RLS enabled and forced, policy `note_isolation` like `tenant_isolation`, `SELECT, INSERT, UPDATE` granted to `ursitoare_app`. The owner is neither superuser nor `BYPASSRLS`, so forced RLS filters it too: it seeds `note` rows in one transaction per tenant that first runs `SELECT set_config('app.tenant_id', $1, true)` with that tenant, and the superuser checks every `note` row, through `createPool(<readTestCluster().adminUrl with its database path replaced by db.name>, { max: 1 })` ended in `after` (a superuser bypasses RLS even when forced).
 
-Each migration test first asserts that the objects it uses exist and the ledger holds version 2 `tenancy` (task 2.1); an expected SQL failure is `await assert.rejects(p, { code })`, so red fails by assertion.
+Each migration test first asserts that its objects exist and the ledger holds version 2 `tenancy` (task 2.1).
 
-`catalog.test.ts` and `catalog.roles.test.ts` create the bad objects of one scenario as owner in one fresh database and never alter `ursitoare_app` or `ursitoare_owner`; role cases use `postgres`, `ursitoare_owner`, `no_such_role` and probe roles `probe_<hex>` (made through `readTestCluster().adminUrl`, dropped in `after`).
+`catalog.test.ts` and `catalog.roles.test.ts` create the bad objects of one scenario as owner in one fresh database and never alter `ursitoare_app` or `ursitoare_owner`.
 
 ## Decisions made while writing
 
 - **`ensureDefaultTenant` runs as the owner and never makes a second tenant;** the card's `(pool, name)` gains optional `IdSource`, `Clock`.
-- **Unregister exists:** units with expiring keys call `unregisterTenantRoute`, which touches only the current tenant's rows.
-- **Catalog rules:** one foreign-key rule, `fk_not_tenant_scoped` (object: the constraint name): every `conkey` position holding `tenant_id` must reference the other table's `tenant_id`. The unique rule skips the primary key.
-- **Policy rule:** each applicable policy (decision 10) needs `app.tenant_id` in every non-null expression; a policy with both null fails, and a table needs one.
+- **Unregister exists** for units with expiring keys; it touches only the current tenant's rows.
+- **Catalog rules:** one foreign-key rule, `fk_not_tenant_scoped` (object: the constraint name; task 7.1), and the unique rule skips the primary key.
+- **Policy rule:** a policy counts for a table only if it applies to the app role (decision 10) and is permissive (`polpermissive`); restrictive policies only narrow and are not checked. A counting policy passes when every non-null expression of it (`polqual`, `polwithcheck`), as `pg_get_expr(expr, polrelid)` prints it, equals `(tenant_id = current_setting('app.tenant_id'::text, true))` or starts with `((tenant_id = current_setting('app.tenant_id'::text, true)) AND `; a policy with both null fails. A table violates `no_tenant_policy` when any counting policy fails or none exists. Migrations therefore write the predicate as `tenant_id = current_setting('app.tenant_id', true)`, column first; later units' migrations must follow it.
 - **`mintkey_tenant_uuid` is `uuid UNIQUE`:** one Mintkey tenant per tenant.

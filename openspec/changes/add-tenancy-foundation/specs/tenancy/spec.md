@@ -47,15 +47,15 @@ Migration `0002_tenancy.sql` SHALL create `ursitoare.tenant` (`tenant_id`, `name
 
 #### Scenario: Rollback when fn throws
 - **WHEN** the owner created `note` (design.md § Test plan), and `fn` on an app pool of `max: 1` inserts a `tenant_a` note, then throws `new Error("boom")`
-- **THEN** `withTenantTx` rejects with that same error object, the owner sees no note, and on the same connection `t` is `null` or `""`
+- **THEN** `withTenantTx` rejects with that same error object, the superuser (design.md § Test plan) sees `0` notes, and on the same connection `t` is `null` or `""`
 
 #### Scenario: A caught SQL error fails closed
 - **WHEN** the owner created `note`, and `fn` for `a` on an app pool of `max: 1` inserts a `tenant_a` note, runs `SELECT 1/0` in its own `try/catch` and returns `"done"`
-- **THEN** `withTenantTx` rejects with `TENANT_TX_ABORTED`, not `"done"`; the owner sees no note, and on that connection `t` is `null` or `""`
+- **THEN** `withTenantTx` rejects with `TENANT_TX_ABORTED`, not `"done"`; the superuser sees `0` notes, and on that connection `t` is `null` or `""`
 
 #### Scenario: Tenant A cannot read or write tenant B rows
-- **WHEN** the owner inserted one `note` per tenant, and in `withTenantTx` for `a` the app pool selects all notes, selects `tenant_b` from `ursitoare.tenant`, updates `body` of tenant B's note and inserts note `n9` for `tenant_b`
-- **THEN** the notes select returns only `tenant_a`'s, the tenant select `0` rows, the update `rowCount` `0`, the insert fails with SQLSTATE `42501`; the owner sees tenant B's note unchanged and no `n9`
+- **WHEN** the owner seeded one `note` per tenant (one transaction per tenant, tenant set first, design.md § Test plan), and in `withTenantTx` for `a` the app pool selects all notes, selects `tenant_b` from `ursitoare.tenant`, updates `body` of tenant B's note and inserts note `n9` for `tenant_b`
+- **THEN** the notes select returns only `tenant_a`'s, the tenant select `0` rows, the update `rowCount` `0`, the insert fails with SQLSTATE `42501`; the superuser sees tenant B's note unchanged and no `n9`
 
 #### Scenario: Invalid context is refused before connecting
 - **WHEN** `withTenantTx` gets a spy pool counting `connect` calls and `ctx` is `{ tenantId: "", reviewProfile: "solo" }`, `{ tenantId: "a/b", reviewProfile: "solo" }` or `{ tenantId: "tenant_a", reviewProfile: "admin" }`

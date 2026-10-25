@@ -9,7 +9,7 @@ Observable result: `node test/support/e2e-stack/main.ts` starts, offline, one em
 - `test/support/e2e-stack/part.ts`: `E2eStackPart`, `PartContext`, `PartHandle`, `E2eStackError` and the validating `createPartRegistry`. `discover.ts`: `discoverParts` (parts are found in `parts/NN-<name>.ts`, started in file-name order; `*.test.ts` files are never imported).
 - `test/support/e2e-stack/database-part.ts` (the first part) and its one-line discovered file `parts/10-database.ts`, created when the part is implemented.
 - `faults.ts`, `reset.ts` and `control.ts`: the fault table and its Fastify hook, the queued reset runner, and the loopback control listener. `stack.ts`: `startE2eStack(opts?)`; `main.ts` is replaced and calls it.
-- `src/main.ts`: `MainDeps.configureServer`, called after the server is built and before it listens (the seam the fault hook needs; default no-op).
+- `src/main.ts`: `MainDeps.configureServer`, called after the server is built and before it listens (the seam the fault hook needs; default no-op). A throwing hook is a startup failure whose fatal line follows add-engine-skeleton decision 9 (no error text).
 - `test/arch/control-routes.ts` and `control-routes.test.ts`: the first extension-point rule of `add-architecture-fitness`; no non-test file under `src/` registers `/reset` or `/faults`.
 - `e2e/conftest.py`: the `fresh_state` fixture. `e2e/test_e2e_stack.py`: new browser-gate tests. `e2e/test_health.py` is not touched.
 

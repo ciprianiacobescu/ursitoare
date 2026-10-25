@@ -1,19 +1,19 @@
 ## Purpose
 
-The Postgres foundation: a validated pool, a checksummed migration runner, the owner and app roles, partitions created ahead, a database health check and a test Postgres.
+The Postgres foundation: pool, migration runner, roles, partitions, health check and test Postgres.
 
 ## ADDED Requirements
 
 ### Requirement: Pool from a database endpoint
-`createPool(source, opts?)` SHALL return a `pg` pool for a `postgres:` or `postgresql:` URL or config endpoint without connecting, and refuse anything else with `DB_INVALID`, `details.reason` naming the rule, the message never holding the URL or a password.
+`createPool(source, opts?)` SHALL return a `pg` pool for a `postgres:` or `postgresql:` URL or config endpoint without connecting, and refuse anything else with `DB_INVALID`, `details.reason` naming the first failed rule (scheme `bad_scheme`, read from the raw text; parse `bad_url`; host `missing_host`; then the rest), the message never holding the URL or a password.
 
 #### Scenario: Endpoint with a separate password
 - **WHEN** `createPool({ url: "postgres://u@127.0.0.1:5433/d", password: { reveal: () => "s3cret-x" } })` and `createPool("postgresql://u@127.0.0.1:5433/d")` are called
 - **THEN** the first `pool.options` has `host` `"127.0.0.1"`, `port` `5433`, `user` `"u"`, `database` `"d"`, `max` `10`, `password` `"s3cret-x"`, `ssl` `false`, and `pool.totalCount` is `0`; the second the same `host`; `?sslmode=verify-full` gives `ssl` `{ rejectUnauthorized: true }`
 
 #### Scenario: Bad input is refused without echoing it
-- **WHEN** the source is `"mysql://u@h/d"`, `"not a url"`, `"postgres://u@/d"`, `"postgres://u@h/d?host=x"`, `"postgres://u:p4ss@h/d?sslmode=require"`, an endpoint whose password is `""`, or the options are `{ max: 0 }`
-- **THEN** each throws `DB_INVALID` without `"p4ss"` or the URL in the message, `details.reason` being `bad_scheme` (twice), `missing_host`, `unsupported_parameter`, `unsupported_sslmode`, `bad_password`, `bad_option`
+- **WHEN** the source is `"mysql://u@h/d"`, `"not a url"`, `"postgres:///d"`, `"postgres://u@/d"`, `"postgres://h:99999/d"`, `"postgres://u@h/d?host=x"`, `"postgres://u:p4ss@h/d?sslmode=require"`, an endpoint whose password is `""`, or the options are `{ max: 0 }`
+- **THEN** each throws `DB_INVALID` without `"p4ss"` or the URL in the message, `details.reason` being `bad_scheme` (twice), `missing_host`, `bad_url` (twice), `unsupported_parameter`, `unsupported_sslmode`, `bad_password`, `bad_option`
 
 #### Scenario: An idle client error does not crash the process
 - **WHEN** `pool.emit("error", new Error("boom"))` runs on a pool made with an `onError` recorder, and on one without
@@ -43,10 +43,10 @@ The Postgres foundation: a validated pool, a checksummed migration runner, the o
 
 #### Scenario: A failing migration rolls back and stops
 - **WHEN** `0002_b.sql` is `CREATE TABLE ursitoare.t (x int); SELECT 1/0;` and `0003_c.sql` is valid
-- **THEN** it rejects with `MIGRATION_FAILED`, message starting `0002_b.sql:`, `details.sqlstate` `"22012"`; `ursitoare.t` is absent, the ledger holds only version 1, `pg_try_advisory_lock(hashtextextended('ursitoare:migrate', 0))` elsewhere returns `true`; with `0002_b.sql` fixed the next run returns `["0002_b", "0003_c"]`
+- **THEN** it rejects with `MIGRATION_FAILED`, message starting `0002_b.sql:`, `details.sqlstate` `"22012"`; `ursitoare.t` is absent, the ledger holds only version 1, `pg_try_advisory_lock(hashtextextended('ursitoare:migrate', 0))` returns `true` elsewhere; with `0002_b.sql` fixed the next run returns `["0002_b", "0003_c"]`
 
 #### Scenario: Empty directory and Postgres down
-- **WHEN** an empty directory is migrated on a bare database, and a pool with password `"pw-Q9"` aimed at a closed port of `127.0.0.1` (`freePort()`) migrates a valid directory
+- **WHEN** an empty directory is migrated on a bare database, and a pool with password `"pw-Q9"` aimed at a closed `freePort()` migrates a valid directory
 - **THEN** the first returns `{ applied: [] }` with an empty ledger table; the second rejects with `DB_UNAVAILABLE`, `details.reason` `"ECONNREFUSED"`, the message without `"pw-Q9"`
 
 #### Scenario: Edited, gone or renamed file
@@ -62,7 +62,7 @@ The Postgres foundation: a validated pool, a checksummed migration runner, the o
 
 #### Scenario: Lock held elsewhere
 - **WHEN** another session holds `SELECT pg_advisory_lock(hashtextextended('ursitoare:migrate', 0))` and `migrate(pool, dir, { lockTimeoutMs: 200 })` runs
-- **THEN** it rejects with `MIGRATION_LOCK_TIMEOUT`, ledger untouched; after the other session unlocks, `migrate` succeeds
+- **THEN** it rejects with `MIGRATION_LOCK_TIMEOUT`, ledger untouched; after the unlock `migrate` succeeds
 
 ### Requirement: Roles are bootstrapped and checked
 `ensureRoles(adminPool, passwords?)` SHALL idempotently create or repair the login roles `ursitoare_owner` and `ursitoare_app` (no superuser, `BYPASSRLS`, `CREATEDB`, `CREATEROLE` or `REPLICATION`; the app role in no other role) and send only a SCRAM-SHA-256 verifier to the server; `migrate` SHALL refuse before any DDL, with `MIGRATION_ROLE_MISSING` or `MIGRATION_ROLE_INVALID`, unless both roles exist unprivileged and the session user is `ursitoare_owner`.
@@ -99,7 +99,7 @@ The Postgres foundation: a validated pool, a checksummed migration runner, the o
 
 #### Scenario: A month table gets its window
 - **WHEN** the owner creates `ursitoare.pt_month` (`at timestamptz`, `PARTITION BY RANGE (at)`, DEFAULT partition, comment `partition: month`) and `ensurePartitions(ownerPool, clock)` runs twice with the clock at `2026-10-15T12:00:00Z`
-- **THEN** the first `created` is `ursitoare.pt_month_p202609`, `_p202610`, `_p202611`, `_p202612`, `_p202701` (full names, ascending), `skipped` `[]`; the second has both `[]`; rows at `2026-10-31T23:59:59Z` and `2026-11-01T00:00:00Z` land in `_p202610` and `_p202611`; DEFAULT is unchanged and `ursitoare_app` has no privilege on a new partition
+- **THEN** the first `created` is `ursitoare.pt_month_p202609`, `_p202610`, `_p202611`, `_p202612`, `_p202701`, `skipped` `[]`; the second has both `[]`; rows at `2026-10-31T23:59:59Z` and `2026-11-01T00:00:00Z` land in `_p202610` and `_p202611`; DEFAULT is unchanged and `ursitoare_app` has no privilege on a new partition
 
 #### Scenario: A day table and the window options
 - **WHEN** `ursitoare.pt_day` (`at date`, comment `partition: day`) exists and `ensurePartitions(ownerPool, clock, { monthsBack: 0, monthsAhead: 0 })` runs with the clock at `2026-02-10T00:00:00Z`; then with `{ monthsAhead: -1 }` and `{ monthsBack: 1.5 }`
@@ -125,7 +125,7 @@ The Postgres foundation: a validated pool, a checksummed migration runner, the o
 `openDatabase(config, deps)` SHALL return `null` without an app endpoint; otherwise inspect the runtime role, retrying every 500 ms until it succeeds or `openTimeoutMs` (default 30000) passes, throw `DB_ROLE_UNSAFE` for a superuser, `BYPASSRLS`, schema owner or member of `ursitoare_owner` or of a privileged role, throw `DB_UNAVAILABLE` at the deadline, and else register the check `db`: `"ok"` only when schema `ursitoare` exists and the role is unprivileged.
 
 #### Scenario: Not configured
-- **WHEN** `openDatabase` is called with `app: null` and `owner: null`, then with only `owner` set, on a recording `registerHealthCheck` and logger
+- **WHEN** `openDatabase` is called with `app: null` and `owner: null`, then with only `owner` set
 - **THEN** both results are `null`, nothing is registered, and only the second logs one warn `{ code: "DB_INVALID", reason: "owner_without_app" }`, message `URSITOARE_DATABASE_OWNER_URL is set without URSITOARE_DATABASE_URL; database disabled`
 
 #### Scenario: Configured, then closed
@@ -133,19 +133,19 @@ The Postgres foundation: a validated pool, a checksummed migration runner, the o
 - **THEN** `"db"` is registered once and the check gives `"ok"`; after `database.close()` (twice) it gives `"fail"`
 
 #### Scenario: Not migrated
-- **WHEN** the endpoint is a `{ migrated: false }` test database, with a recording logger
+- **WHEN** the endpoint is a `{ migrated: false }` test database
 - **THEN** it resolves a `Database`, registers `"db"`, the check gives `"fail"`, and exactly one warn is logged, `{ code: "DB_UNAVAILABLE", reason: "not_migrated" }`, message `database is not migrated; run the migrations`
 
 #### Scenario: Postgres down fails closed
 - **WHEN** the endpoint aims at a closed port (`freePort()`) with `openTimeoutMs` `50`, a recording `sleep` and a `clock` that `sleep` advances
-- **THEN** it rejects with `DB_UNAVAILABLE`, `details.reason` `"ECONNREFUSED"`; the `sleep` calls are `[50]`; nothing is registered or logged
+- **THEN** it rejects with `DB_UNAVAILABLE`, `details.reason` `"ECONNREFUSED"`; `sleep` calls are `[50]`; nothing is registered or logged
 
 #### Scenario: A privileged role that arrives late
 - **WHEN** a closed port gets a cluster started by the first `sleep` call, and the endpoint is that cluster's superuser
 - **THEN** it rejects with `DB_ROLE_UNSAFE`, `details.reason` `"superuser"`, and registers nothing
 
 #### Scenario: Privileged endpoints
-- **WHEN** the endpoint is the cluster superuser, a `BYPASSRLS` login, an `ownerEndpoint`, a login granted `ursitoare_owner`, or a login granted a `BYPASSRLS` role (test roles uniquely named, dropped in `after`)
+- **WHEN** the endpoint is the cluster superuser, a `BYPASSRLS` login, an `ownerEndpoint`, a login granted `ursitoare_owner`, or a login granted a `BYPASSRLS` role
 - **THEN** it rejects with `DB_ROLE_UNSAFE`, `details.reason` `superuser`, `bypassrls`, `owns_schema`, `owner_member` or `privileged_member`, and registers nothing
 
 #### Scenario: Check inputs
@@ -153,7 +153,7 @@ The Postgres foundation: a validated pool, a checksummed migration runner, the o
 - **THEN** it resolves `"ok"`, then `"fail"` five times, never throwing
 
 ### Requirement: Engine boot with a database
-`main` SHALL open the database before it listens, report it as `checks.db`, never run `migrate` or `ensurePartitions` or open `database.owner`, and when `openDatabase` throws write one fatal line with the error's `code` and `details.reason`, call `exit(1)` and open no port.
+`main` SHALL open the database before it listens, report it as `checks.db`, never run `migrate` or `ensurePartitions` or open `database.owner`, and when `openDatabase` throws write the engine's one fatal line (`add-engine-skeleton` decision 9), call `exit(1)` and open no port.
 
 #### Scenario: No database keeps /health green
 - **WHEN** `running = await startServer(0)` runs, and `main` runs with `database` `{ app: null, owner: null }` and an `openDatabase` spy that resolves `null`
@@ -164,5 +164,5 @@ The Postgres foundation: a validated pool, a checksummed migration runner, the o
 - **THEN** `/health` answers 200 with `checks` `{ db: "ok" }`, afterwards 503 with `checks` `{ db: "fail" }`; over `adminUrl`, `pg_stat_activity` shows the same number of `ursitoare_owner` sessions on that database before and after the start
 
 #### Scenario: A failed open stops the start
-- **WHEN** `main` runs with an `openDatabase` that rejects with `DbError("DB_ROLE_UNSAFE", ..., { reason: "superuser" })`, and again with `DB_UNAVAILABLE` and `{ reason: "ECONNREFUSED" }`
-- **THEN** exactly one fatal line is logged each time, with the `code` and `reason` of the error and `msg` `"startup failed"`, `exit` gets `1` and `main` resolves `null`
+- **WHEN** `main` runs with an `openDatabase` that rejects with `new DbError("DB_UNAVAILABLE", "database unavailable", { reason: "ECONNREFUSED" })`, and again with `new DbError("DB_ROLE_UNSAFE", "unsafe role", { reason: "superuser" })`
+- **THEN** exactly one fatal line is logged each time: `code` `"DB_UNAVAILABLE"` then `"DB_ROLE_UNSAFE"`, `reason` `"ECONNREFUSED"` then `"superuser"`, `msg` `"startup failed"` both times, no `variable`, `host` or `port`; each time `exit` gets `1`, no port is open and `main` resolves `null`
