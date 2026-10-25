@@ -5,7 +5,7 @@ Date: 2026-10-25. Status: accepted, including the owner's choice in the last sec
 ## Context
 
 L4 runs every task as a red step (new tests that fail) and a green step (code that makes them pass). These rules,
-read from the L4 v0.4.30 source (v0.4.31 changes none of them), decide what a TypeScript repository must look like:
+read from the L4 v0.4.30 source (v0.4.31 and v0.4.32 change none of them), decide what a TypeScript repository must look like:
 
 1. **Failure kinds come from the JUnit report.** A new red test must fail by assertion or with the stub's
    not-implemented error; any other failure rejects the step. L4 reads the kind from the failure message
