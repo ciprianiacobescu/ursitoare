@@ -133,6 +133,12 @@ roles:
   s1_judge:
   - jev
   - laya
+  # Writes the e2e test of a UI criterion (under web/**) that no test proves: verifier step 5; without a writer such a
+  # gap holds the unit for a person. Chosen per unit independent of the implementer's vendor, as the judges are.
+  # Delegate choice 2026-10-25: Sonnet first, codex when the implementer is claude-sonnet.
+  verifier_agent:
+  - claude-sonnet
+  - codex-judge
   # Unattended runs: the delegate answers implementer questions read-only and escalates what it cannot check. It runs
   # on a model no implementer or judge uses (delegate.independence: model; doctor DLG-001).
   delegate:

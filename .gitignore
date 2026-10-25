@@ -16,4 +16,9 @@ secrets/
 .DS_Store
 # local orchestration scratchpads and run logs (not product material)
 .orchestration/
-.serena/
+# Serena: local state stays ignored; L4's seed and its harness lessons are committed (l4 doctor MEM-002)
+.serena/*
+!.serena/project.yml
+!.serena/memories/
+.serena/memories/*
+!.serena/memories/harness/
