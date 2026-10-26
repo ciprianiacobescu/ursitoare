@@ -7,6 +7,7 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import {
+  checkExactVersions,
   checkLicences,
   checkPolicy,
   decideVenvScan,
@@ -809,5 +810,122 @@ test("C-8be4d4fc every Python distribution in the e2e venv has an allowlisted li
       checkLicences(inventory, { allowed: ALLOWED_LICENCES, exceptions: LICENCE_EXCEPTIONS }, "e2e/.venv"),
     ),
     "",
+  );
+});
+
+test("C-b51bd435 checkExactVersions refuses ranges, tags and other specs", () => {
+  const manifest = {
+    devDependencies: {
+      vite: "^8.3.5",
+      typescript: "~6.0.3",
+      a: "*",
+      b: "1.x",
+      c: "latest",
+      d: ">=1.0.0",
+      e: "github:o/r",
+      f: "file:../f",
+    },
+  };
+  const violations = answer(() => checkExactVersions("web/package.json", manifest));
+  assert.ok(Array.isArray(violations), "checkExactVersions answers");
+  assert.equal(violations.length, 8, "one violation per inexact spec");
+  for (const violation of violations) {
+    assert.equal(violation.code, "VERSION_NOT_EXACT");
+  }
+  assert.deepEqual(violations[0], {
+    code: "VERSION_NOT_EXACT",
+    subject: "web/package.json devDependencies.vite",
+    detail: '"^8.3.5" is not an exact version',
+  });
+});
+
+test("C-ec3544f7 C-b51bd435 checkExactVersions passes exact versions and refuses a range", () => {
+  assert.deepEqual(
+    answer(() =>
+      checkExactVersions("package.json", {
+        dependencies: {
+          react: "19.3.1",
+          "embedded-postgres": "18.4.0-beta.17",
+          alias: "npm:real@1.2.3",
+        },
+      }),
+    ),
+    [],
+  );
+  assert.deepEqual(
+    answer(() => checkExactVersions("package.json", { dependencies: { react: "^19.3.1" } })),
+    [
+      {
+        code: "VERSION_NOT_EXACT",
+        subject: "package.json dependencies.react",
+        detail: '"^19.3.1" is not an exact version',
+      },
+    ],
+  );
+});
+
+test("C-6faaac53 checkExactVersions refuses a range in pnpm overrides", () => {
+  assert.deepEqual(
+    answer(() => checkExactVersions("package.json", { pnpm: { overrides: { semver: "^7.0.0" } } })),
+    [
+      {
+        code: "VERSION_NOT_EXACT",
+        subject: "package.json pnpm.overrides.semver",
+        detail: '"^7.0.0" is not an exact version',
+      },
+    ],
+  );
+});
+
+test("C-c39c579d checkExactVersions ignores other fields and refuses bad manifests", () => {
+  assert.deepEqual(
+    answer(() => checkExactVersions("package.json", { name: "x", engines: { node: ">=24" } })),
+    [],
+  );
+  const invalid: LicenceViolation = {
+    code: "MANIFEST_INVALID",
+    subject: "package.json",
+    detail: "not a JSON object",
+  };
+  assert.deepEqual(answer(() => checkExactVersions("package.json", [])), [invalid]);
+  assert.deepEqual(answer(() => checkExactVersions("package.json", null)), [invalid]);
+  assert.deepEqual(answer(() => checkExactVersions("package.json", { dependencies: [] })), [
+    { code: "MANIFEST_INVALID", subject: "package.json dependencies", detail: "not a plain object" },
+  ]);
+});
+
+test("C-7fbf0b22 checkExactVersions names manifest violations", () => {
+  assert.deepEqual(answer(() => checkExactVersions("web/package.json", null)), [
+    { code: "MANIFEST_INVALID", subject: "web/package.json", detail: "not a JSON object" },
+  ]);
+  assert.deepEqual(answer(() => checkExactVersions("web/package.json", { dependencies: [] })), [
+    { code: "MANIFEST_INVALID", subject: "web/package.json dependencies", detail: "not a plain object" },
+  ]);
+});
+
+test("C-05d0c7f9 C-b51bd435 every dependency range in the root and web manifests is an exact version", () => {
+  const repoRoot = fileURLToPath(new URL("../../", import.meta.url));
+  const violations: LicenceViolation[] = [];
+  for (const manifestPath of MANIFEST_PATHS) {
+    let manifest: unknown = null;
+    try {
+      manifest = JSON.parse(fs.readFileSync(path.join(repoRoot, manifestPath), "utf8"));
+    } catch {
+      manifest = null;
+    }
+    const found = answer(() => checkExactVersions(manifestPath, manifest));
+    assert.ok(Array.isArray(found), `checkExactVersions answers for ${manifestPath}`);
+    violations.push(...found);
+  }
+  assert.equal(formatLicenceViolations(violations), "", "every dependency spec is an exact version");
+  assert.deepEqual(
+    answer(() => checkExactVersions("package.json", { dependencies: { probe: "^1.0.0" } })),
+    [
+      {
+        code: "VERSION_NOT_EXACT",
+        subject: "package.json dependencies.probe",
+        detail: '"^1.0.0" is not an exact version',
+      },
+    ],
   );
 });
