@@ -271,8 +271,130 @@ export function checkModuleGraph(
   return sortViolations(violations);
 }
 
-export function checkNetwork(_s: Snapshot, _modules?: Record<string, ModuleRule>): Violation[] {
-  throw new Error("not implemented");
+const NETWORK_ENTRY_POINTS: readonly string[] = [
+  "http",
+  "https",
+  "http2",
+  "net",
+  "tls",
+  "dgram",
+  "dns",
+  "dns/promises",
+  "child_process",
+  "cluster",
+];
+
+const NETWORK_PACKAGES: readonly string[] = [
+  "undici",
+  "ws",
+  "axios",
+  "got",
+  "node-fetch",
+  "cross-fetch",
+];
+
+const NETWORK_GLOBALS: readonly string[] = ["fetch", "WebSocket", "EventSource", "XMLHttpRequest"];
+
+const WORKER_THREADS = "worker_threads";
+
+function withoutNodePrefix(specifier: string): string {
+  return specifier.startsWith("node:") ? specifier.slice("node:".length) : specifier;
+}
+
+function isNetworkSpecifier(specifier: string): boolean {
+  const base = withoutNodePrefix(specifier);
+  if (NETWORK_ENTRY_POINTS.includes(base)) return true;
+  return NETWORK_PACKAGES.some((name) => base === name || base.startsWith(`${name}/`));
+}
+
+function isWorkerThreads(specifier: string): boolean {
+  return withoutNodePrefix(specifier) === WORKER_THREADS;
+}
+
+function networkImportViolation(file: string, line: number, name: string): Violation {
+  return {
+    code: "ARCH_NETWORK_IMPORT",
+    file,
+    line,
+    message: `${name} is allowed only in observability, identity and gateway; call through src/gateway`,
+  };
+}
+
+function workerThreadsViolation(file: string, line: number, name: string): Violation {
+  return {
+    code: "ARCH_NETWORK_IMPORT",
+    file,
+    line,
+    message: `${name} is allowed only in src/sandbox`,
+  };
+}
+
+function networkCallViolation(file: string, line: number, name: string): Violation {
+  return {
+    code: "ARCH_NETWORK_CALL",
+    file,
+    line,
+    message: `${name} is allowed only in observability, identity and gateway; call through src/gateway`,
+  };
+}
+
+function networkCalleeName(node: ts.CallExpression | ts.NewExpression): string | null {
+  const callee = node.expression;
+  if (ts.isIdentifier(callee)) {
+    return NETWORK_GLOBALS.includes(callee.text) ? callee.text : null;
+  }
+  if (ts.isPropertyAccessExpression(callee)) {
+    const receiver = callee.expression;
+    const globalReceiver =
+      ts.isIdentifier(receiver) &&
+      (receiver.text === "globalThis" || receiver.text === "self" || receiver.text === "window");
+    if (globalReceiver && NETWORK_GLOBALS.includes(callee.name.text)) return callee.name.text;
+  }
+  return null;
+}
+
+function networkCalls(file: SourceFile): Violation[] {
+  const source = ts.createSourceFile(file.path, file.text, ts.ScriptTarget.Latest, true);
+  const violations: Violation[] = [];
+  const lineOf = (node: ts.Node): number =>
+    source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1;
+
+  const visit = (node: ts.Node): void => {
+    if (ts.isCallExpression(node) || ts.isNewExpression(node)) {
+      const name = networkCalleeName(node);
+      if (name !== null) violations.push(networkCallViolation(file.path, lineOf(node), name));
+    }
+    ts.forEachChild(node, visit);
+  };
+
+  ts.forEachChild(source, visit);
+  return violations;
+}
+
+export function checkNetwork(s: Snapshot, modules: Record<string, ModuleRule> = MODULES): Violation[] {
+  const violations: Violation[] = [];
+
+  for (const file of s.files) {
+    if (isTestFile(file.path)) continue;
+    const moduleName = moduleNameOf(file.path);
+    const egress = moduleName === null ? undefined : modules[moduleName]?.egress;
+    const sandbox = moduleName === "sandbox";
+
+    for (const ref of collectImports(file)) {
+      if (ref.typeOnly || ref.specifier === null) continue;
+      if (isWorkerThreads(ref.specifier)) {
+        if (!sandbox) violations.push(workerThreadsViolation(file.path, ref.line, ref.specifier));
+        continue;
+      }
+      if (egress === undefined && isNetworkSpecifier(ref.specifier)) {
+        violations.push(networkImportViolation(file.path, ref.line, ref.specifier));
+      }
+    }
+
+    if (egress === undefined) violations.push(...networkCalls(file));
+  }
+
+  return sortViolations(violations);
 }
 
 export function checkForbiddenImports(_s: Snapshot): Violation[] {
