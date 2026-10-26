@@ -122,7 +122,7 @@ function pythonMetadataHeaders(metadata: string): Map<string, string[]> {
   let lastKey: string | null = null;
   for (const raw of metadata.split("\n")) {
     const line = raw.endsWith("\r") ? raw.slice(0, -1) : raw;
-    if (/^\s*$/.test(line)) break;
+    if (line === "") break;
     if (/^[ \t]/.test(line)) {
       if (lastKey !== null) {
         const values = headers.get(lastKey);
@@ -414,10 +414,24 @@ export function checkPolicy(policy: LicencePolicy): LicenceViolation[] {
 }
 
 export function decideVenvScan(
-  _venvExists: boolean,
-  _requireVenv: string | undefined,
+  venvExists: boolean,
+  requireVenv: string | undefined,
 ): { action: "scan" } | { action: "skip"; message: string } | { action: "fail"; violation: LicenceViolation } {
-  throw new Error("not implemented");
+  if (venvExists) return { action: "scan" };
+  if (requireVenv !== undefined && requireVenv !== "") {
+    return {
+      action: "fail",
+      violation: {
+        code: "VENV_REQUIRED",
+        subject: "e2e/.venv",
+        detail: `missing but E2E_REQUIRE_VENV is set; run "pnpm run e2e:setup"`,
+      },
+    };
+  }
+  return {
+    action: "skip",
+    message: `e2e/.venv not found; run "pnpm run e2e:setup" to create it, or set E2E_REQUIRE_VENV to fail instead of skipping`,
+  };
 }
 
 const EXACT_VERSION = /^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;

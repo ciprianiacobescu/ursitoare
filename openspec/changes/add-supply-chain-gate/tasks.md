@@ -11,7 +11,7 @@
 ## 3. Installed Python distributions
 
 - [x] 3.1 Implement `pythonLicenceOf` and `scanPythonVenv` in `test/arch/licence-rules.ts`, with fixture `dist-info` tests first in `test/arch/licences.test.ts`, implementing all scenarios of requirement "Installed Python distributions carry only allowlisted licences" except "The current venv passes"
-- [ ] 3.2 Implement `decideVenvScan` in `test/arch/licence-rules.ts` and add the live test `every Python distribution in the e2e venv has an allowlisted licence` (reads `E2E_REQUIRE_VENV` once, calls `t.skip(message)` on skip), tests first in `test/arch/licences.test.ts`, implementing requirement "A missing e2e venv skips unless it is required" and the scenario "The current venv passes"
+- [x] 3.2 Implement `decideVenvScan` in `test/arch/licence-rules.ts` and add the live test `every Python distribution in the e2e venv has an allowlisted licence` (reads `E2E_REQUIRE_VENV` once, calls `t.skip(message)` on skip), tests first in `test/arch/licences.test.ts`, implementing requirement "A missing e2e venv skips unless it is required" and the scenario "The current venv passes"
 
 ## 4. Pinned versions, built dependencies and install hooks
 
