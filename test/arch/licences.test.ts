@@ -1,13 +1,20 @@
-// Architecture test of the supply-chain gate: licence expressions and violation messages.
+// Architecture test of the supply-chain gate: licence expressions, violation messages, inventory and store readers.
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 
 import {
   checkLicences,
   checkPolicy,
   formatLicenceViolation,
   formatLicenceViolations,
+  npmLicenceOf,
   parseLicenceExpression,
+  scanNpmStore,
+  type InstalledPackage,
   type LicenceException,
   type LicencePolicy,
   type LicenceViolation,
@@ -489,4 +496,85 @@ test("C-c18692e2 C-73030b3f the licence policy data is well formed", () => {
   ]);
   assert.deepEqual(MANIFEST_PATHS, ["package.json", "web/package.json"]);
   assert.deepEqual(answer(() => checkPolicy({ allowed: ALLOWED_LICENCES, exceptions: LICENCE_EXCEPTIONS })), []);
+});
+
+// A scratch directory for fixture store and venv trees.
+function tempRoot(): string {
+  return fs.mkdtempSync(path.join(os.tmpdir(), "licences-"));
+}
+
+test("C-a74a1a7f scanNpmStore walks the store without following symlinks", () => {
+  const root = tempRoot();
+  const store = path.join(root, "node_modules", ".pnpm");
+  const first = path.join(store, "@scope+pkg@1.0.0", "node_modules");
+  fs.mkdirSync(path.join(first, "@scope", "pkg"), { recursive: true });
+  fs.writeFileSync(
+    path.join(first, "@scope", "pkg", "package.json"),
+    JSON.stringify({ name: "@scope/pkg", version: "1.0.0", license: "MIT" }),
+  );
+  const target = path.join(root, "elsewhere");
+  fs.mkdirSync(target);
+  fs.symlinkSync(target, path.join(first, "dep"));
+  const second = path.join(store, "@scope+pkg@1.0.0_peerhash", "node_modules", "@scope", "pkg");
+  fs.mkdirSync(second, { recursive: true });
+  fs.writeFileSync(
+    path.join(second, "package.json"),
+    JSON.stringify({ name: "@scope/pkg", version: "1.0.0", license: "MIT" }),
+  );
+  assert.deepEqual(answer(() => scanNpmStore(root)), [
+    { ecosystem: "npm", name: "@scope/pkg", version: "1.0.0", licence: "MIT", terms: ["MIT"] },
+  ]);
+});
+
+test("C-6a008a66 npmLicenceOf treats a legacy or free-text licence as unknown", () => {
+  const legacy = answer(() => npmLicenceOf({ license: { type: "MIT" } }));
+  const freetext = answer(() => npmLicenceOf({ license: "SEE LICENSE IN LICENSE.md" }));
+  assert.ok(legacy !== "THROWN", "npmLicenceOf answers for a legacy licence object");
+  assert.ok(freetext !== "THROWN", "npmLicenceOf answers for a free-text licence");
+  assert.equal(legacy.terms, null);
+  assert.equal(freetext.terms, null);
+  assert.ok(legacy.licence !== null, "the legacy licence text is present");
+  assert.equal(freetext.licence, "SEE LICENSE IN LICENSE.md");
+  const packages: InstalledPackage[] = [
+    { ecosystem: "npm", name: "legacy", version: "1.0.0", licence: legacy.licence, terms: legacy.terms },
+    { ecosystem: "npm", name: "freetext", version: "1.0.0", licence: freetext.licence, terms: freetext.terms },
+  ];
+  assert.deepEqual(
+    answer(() => checkLicences(packages, { allowed: ALLOWED, exceptions: [] }, "node_modules/.pnpm")),
+    [
+      {
+        code: "LICENCE_UNKNOWN",
+        subject: "npm legacy@1.0.0",
+        licence: legacy.licence,
+        detail: "licence is not a parsable SPDX expression",
+      },
+      {
+        code: "LICENCE_UNKNOWN",
+        subject: "npm freetext@1.0.0",
+        licence: "SEE LICENSE IN LICENSE.md",
+        detail: "licence is not a parsable SPDX expression",
+      },
+    ],
+  );
+});
+
+test("C-876fb064 an absent or empty store fails instead of passing", () => {
+  const emptyRoot = tempRoot();
+  assert.deepEqual(answer(() => scanNpmStore(emptyRoot)), []);
+  assert.deepEqual(checkLicences([], { allowed: ALLOWED, exceptions: [] }, "node_modules/.pnpm"), [
+    { code: "INVENTORY_EMPTY", subject: "node_modules/.pnpm", detail: "no packages found" },
+  ]);
+});
+
+test("C-9d08ccc3 every installed npm package has an allowlisted licence", () => {
+  const repoRoot = fileURLToPath(new URL("../../", import.meta.url));
+  const inventory = answer(() => scanNpmStore(repoRoot));
+  assert.ok(Array.isArray(inventory), "the store scan yields an inventory");
+  assert.ok(inventory.length > 0, "the scanned inventory is not empty");
+  assert.equal(
+    formatLicenceViolations(
+      checkLicences(inventory, { allowed: ALLOWED_LICENCES, exceptions: LICENCE_EXCEPTIONS }, "node_modules/.pnpm"),
+    ),
+    "",
+  );
 });
