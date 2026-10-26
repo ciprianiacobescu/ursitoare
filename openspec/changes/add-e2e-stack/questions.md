@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: test/support/e2e-stack/stack.db.test.ts:340 counts nested Postgres PG_VERSION directories
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: checked spec:spec.md#scenario-close-stops-postgres-a-failed-start-leaves-nothing does not resolve
 - **Blocking tasks:** 5.2
 - **Kind:** technical
 - **Asked:** 2026-10-26T23:43Z by deepseek, run r-20261026T2221Z-da09, task 5.2
