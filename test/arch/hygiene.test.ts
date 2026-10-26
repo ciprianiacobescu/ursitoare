@@ -1,8 +1,8 @@
-// Architecture test of the forbidden-import and console rules: seed, test, alias, self-package and console uses.
+// Architecture test of the forbidden-import, console and environment rules: seed, test, alias, self-package, console and process.env uses.
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { checkConsole, checkForbiddenImports } from "./rules.ts";
+import { checkConsole, checkForbiddenImports, checkProcessEnv } from "./rules.ts";
 import { snapshotOf, type Violation } from "./sources.ts";
 
 // Runs a call and returns its answer, or a marker when it throws, so a missing behaviour fails on the comparison.
@@ -21,6 +21,10 @@ function places(result: Violation[] | "THROWN"): "THROWN" | (string | number)[][
 
 function consoleViolation(file: string, line: number): Violation {
   return { code: "ARCH_CONSOLE", file, line, message: "use the logger from src/observability" };
+}
+
+function envViolation(file: string, line: number): Violation {
+  return { code: "ARCH_PROCESS_ENV", file, line, message: "read configuration through src/config" };
 }
 
 test("C-9455d3fd: seed, test and alias imports are refused", () => {
@@ -90,4 +94,59 @@ test("C-78fc80d1: console look-alikes and test files pass", () => {
     answer(() => checkConsole(snapshotOf({ "src/api/c.ts": "console.log(1);\n" }))),
     [consoleViolation("src/api/c.ts", 1)],
   );
+});
+
+test("C-5d09e70a: environment reads are refused", () => {
+  const snapshot = snapshotOf({
+    "src/api/a.ts": '\nprocess.env.PORT;\n',
+    "src/db/b.ts":
+      'process["env"];\nglobalThis.process.env.X;\nconst { env } = process;\nimport { env } from "node:process";\n',
+    "src/main.ts": "const e = process.env;\n",
+  });
+
+  assert.deepEqual(answer(() => checkProcessEnv(snapshot)), [
+    envViolation("src/api/a.ts", 2),
+    envViolation("src/db/b.ts", 1),
+    envViolation("src/db/b.ts", 2),
+    envViolation("src/db/b.ts", 3),
+    envViolation("src/db/b.ts", 4),
+    envViolation("src/main.ts", 1),
+  ]);
+});
+
+test("C-d68d430c: environment look-alikes and config files pass", () => {
+  const snapshot = snapshotOf({
+    "src/config/index.ts": "export const e = process.env;\n",
+    "src/config/x.ts": "const { env } = process;\n",
+    "src/api/c.ts": "process.argv;\nprocess.cwd();\nconfig.env;\n",
+    "src/api/d.test.ts": "process.env.X;\n",
+  });
+
+  assert.deepEqual(answer(() => checkProcessEnv(snapshot)), []);
+  assert.deepEqual(
+    answer(() => checkProcessEnv(snapshotOf({ "src/api/z.ts": "process.env.X;\n" }))),
+    [envViolation("src/api/z.ts", 1)],
+  );
+});
+
+test("C-f9b82661: the bootstrap placeholder fails the environment rule", () => {
+  const snapshot = snapshotOf({
+    "src/main.ts":
+      'import { createServer } from "node:http";\nconst port = Number(process.env.PORT);\n',
+  });
+
+  assert.deepEqual(answer(() => checkProcessEnv(snapshot)), [envViolation("src/main.ts", 2)]);
+});
+
+test("C-fe3edcae: environment reads through require are refused", () => {
+  const snapshot = snapshotOf({
+    "src/api/p.ts":
+      'const e = require("node:process").env;\nconst { env } = require("process");\nconst k = require("node:process")["env"];\n',
+  });
+
+  assert.deepEqual(answer(() => checkProcessEnv(snapshot)), [
+    envViolation("src/api/p.ts", 1),
+    envViolation("src/api/p.ts", 2),
+    envViolation("src/api/p.ts", 3),
+  ]);
 });
