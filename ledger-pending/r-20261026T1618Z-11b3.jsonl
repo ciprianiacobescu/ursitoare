@@ -2,3 +2,4 @@
 {"ts": "2026-10-26T16:18:46.027245Z", "run_id": "r-20261026T1618Z-11b3", "unit": "openspec:add-db-foundation", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 5, "merge_commit": "6c02ef8249fbfe4cf102ea0423aef451107b4994"}
 {"ts": "2026-10-26T16:18:55.052144Z", "run_id": "r-20261026T1618Z-11b3", "unit": "openspec:add-db-foundation", "seq": 3, "type": "archive.opened", "number": 6, "url": "<forge>/ciprianiacobescu/ursitoare/pull/6", "branch": "l4/archive/openspec/add-db-foundation", "head": "cd19e8870ab7aba2466a8dff2db8be673826fdb8"}
 {"ts": "2026-10-26T16:18:58.598212Z", "run_id": "r-20261026T1618Z-11b3", "unit": "openspec:add-db-foundation", "seq": 4, "type": "archive.merged", "head": "cd19e8870ab7aba2466a8dff2db8be673826fdb8", "number": 6}
+{"ts": "2026-10-26T16:19:00.890379Z", "run_id": "r-20261026T1618Z-11b3", "unit": "openspec:add-db-foundation", "seq": 5, "type": "run.finished", "exit_code": 0}
