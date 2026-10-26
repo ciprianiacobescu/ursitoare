@@ -114,8 +114,19 @@ export function checkLicences(packages: readonly InstalledPackage[], policy: Lic
   }
   const allowed = new Set(policy.allowed.map((entry) => entry.toLowerCase()));
   const violations: LicenceViolation[] = [];
+  const exempt = (pkg: InstalledPackage): boolean =>
+    policy.exceptions.some(
+      (exception) =>
+        exception.ecosystem === pkg.ecosystem &&
+        exception.name === pkg.name &&
+        exception.version === pkg.version &&
+        exception.licence === pkg.licence,
+    );
   for (const pkg of packages) {
     const subject = `${pkg.ecosystem} ${pkg.name}@${pkg.version}`;
+    if (exempt(pkg)) {
+      continue;
+    }
     if (pkg.licence === null) {
       violations.push({ code: "LICENCE_MISSING", subject, detail: "no licence found" });
       continue;
@@ -142,8 +153,49 @@ export function checkLicences(packages: readonly InstalledPackage[], policy: Lic
   return violations;
 }
 
-export function checkPolicy(_policy: LicencePolicy): LicenceViolation[] {
-  throw new Error("not implemented");
+const PYPI_RELEASE_SEGMENT = /^(0|[1-9][0-9]*)(\.(0|[1-9][0-9]*)){0,3}$/;
+const FORBIDDEN_LICENCE_PREFIXES = ["GPL", "AGPL", "LGPL", "SSPL", "BUSL", "Elastic", "Commons-Clause"];
+
+export function checkPolicy(policy: LicencePolicy): LicenceViolation[] {
+  const violations: LicenceViolation[] = [];
+  const seen = new Set<string>();
+  for (const exception of policy.exceptions) {
+    const defects: string[] = [];
+    if (exception.ecosystem === "npm") {
+      if (!isExactVersion(exception.version)) defects.push("version is not exact");
+    } else if (exception.ecosystem === "pypi") {
+      if (!PYPI_RELEASE_SEGMENT.test(exception.version)) defects.push("version is not exact");
+    } else {
+      defects.push("unknown ecosystem");
+    }
+    if (exception.reason.trim().length < 20) defects.push("reason too short");
+    if (exception.name.trim() === "") defects.push("empty name");
+    if (exception.licence.trim() === "") defects.push("empty licence");
+    const key = `${exception.ecosystem}\u0000${exception.name}\u0000${exception.version}`;
+    if (seen.has(key)) defects.push("duplicate");
+    seen.add(key);
+    if (defects.length > 0) {
+      violations.push({
+        code: "POLICY_INVALID",
+        subject: `exception ${exception.ecosystem} ${exception.name}@${exception.version}`,
+        detail: defects.join("; "),
+      });
+    }
+  }
+  for (const entry of policy.allowed) {
+    const trimmed = entry.trim();
+    const forbidden = FORBIDDEN_LICENCE_PREFIXES.some((prefix) =>
+      trimmed.toLowerCase().startsWith(prefix.toLowerCase()),
+    );
+    if (trimmed === "" || forbidden) {
+      violations.push({
+        code: "POLICY_INVALID",
+        subject: `allowlist ${entry}`,
+        detail: "forbidden or empty entry",
+      });
+    }
+  }
+  return violations;
 }
 
 export function decideVenvScan(
@@ -153,8 +205,14 @@ export function decideVenvScan(
   throw new Error("not implemented");
 }
 
-export function isExactVersion(_spec: string): boolean {
-  throw new Error("not implemented");
+const EXACT_VERSION = /^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+
+export function isExactVersion(spec: string): boolean {
+  if (EXACT_VERSION.test(spec)) return true;
+  if (!spec.startsWith("npm:")) return false;
+  const at = spec.lastIndexOf("@");
+  if (at <= "npm:".length) return false;
+  return EXACT_VERSION.test(spec.slice(at + 1));
 }
 
 export function checkExactVersions(_file: string, _manifest: unknown): LicenceViolation[] {
