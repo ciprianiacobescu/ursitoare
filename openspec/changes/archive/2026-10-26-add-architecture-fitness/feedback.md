@@ -10,15 +10,15 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | submitted | refactor | test/arch/rules.ts:1 | rules.ts reads the graph from test/arch/modules.ts |
-| FB-002 | submitted | behaviour | test/arch/secrets.ts:68 | The secret scan skips harness folders only, not the owner's .l4 files |
+| FB-001 | taken | refactor | test/arch/rules.ts:1 | rules.ts reads the graph from test/arch/modules.ts |
+| FB-002 | taken | behaviour | test/arch/secrets.ts:68 | The secret scan skips harness folders only, not the owner's .l4 files |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: rules.ts reads the graph from test/arch/modules.ts
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** refactor
 - **Where:** `test/arch/rules.ts:1-20`
 - **Lesson:** no
@@ -53,12 +53,13 @@ Waived in Q-007, Q-008 and Q-011 until this unit was on main. test/arch/rules.ts
 
 ### Outcome
 <!-- written by the harness -->
+Taken into add-architecture-fitness-followup-1
 
 ---
 
 ## FB-002: The secret scan skips harness folders only, not the owner's .l4 files
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** behaviour
 - **Where:** `test/arch/secrets.ts:68-74`
 - **Lesson:** no
@@ -84,3 +85,4 @@ Waived in Q-012 for this unit. fix 2 made listScannableFiles skip every .l4 path
 
 ### Outcome
 <!-- written by the harness -->
+Taken into add-architecture-fitness-followup-1
