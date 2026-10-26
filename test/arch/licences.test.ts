@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import {
   checkLicences,
   checkPolicy,
+  decideVenvScan,
   formatLicenceViolation,
   formatLicenceViolations,
   npmLicenceOf,
@@ -739,4 +740,74 @@ test("C-1fa7c3d4 scanPythonVenv reads dist-info across Python minors", () => {
     { ecosystem: "pypi", name: "foo_bar", version: "2.0", licence: null, terms: null },
     { ecosystem: "pypi", name: "pluggy", version: "1.7.0", licence: "MIT", terms: ["MIT"] },
   ]);
+});
+
+test("C-2241065a decideVenvScan skips an absent venv that is not required", () => {
+  const undefinedRequired = answer(() => decideVenvScan(false, undefined));
+  assert.ok(undefinedRequired !== "THROWN", "decideVenvScan answers for an unavailable venv");
+  if (undefinedRequired.action !== "skip") {
+    assert.fail(`expected skip for an unavailable venv, got ${JSON.stringify(undefinedRequired)}`);
+  }
+  assert.match(undefinedRequired.message, /^e2e\/\.venv not found/);
+  assert.match(undefinedRequired.message, /pnpm run e2e:setup/);
+  assert.match(undefinedRequired.message, /E2E_REQUIRE_VENV/);
+  const emptyRequired = answer(() => decideVenvScan(false, ""));
+  assert.ok(emptyRequired !== "THROWN", "decideVenvScan answers with an empty requirement");
+  if (emptyRequired.action !== "skip") {
+    assert.fail(`expected skip with an empty requirement, got ${JSON.stringify(emptyRequired)}`);
+  }
+  assert.match(emptyRequired.message, /^e2e\/\.venv not found/);
+  assert.match(emptyRequired.message, /pnpm run e2e:setup/);
+  assert.match(emptyRequired.message, /E2E_REQUIRE_VENV/);
+});
+
+test("C-4ca6b05c decideVenvScan fails an absent venv that is required", () => {
+  const required = answer(() => decideVenvScan(false, "1"));
+  assert.ok(required !== "THROWN", "decideVenvScan answers for an absent venv that is required");
+  if (required.action !== "fail") {
+    assert.fail(`expected fail for an absent venv with E2E_REQUIRE_VENV set, got ${JSON.stringify(required)}`);
+  }
+  assert.equal(required.violation.code, "VENV_REQUIRED");
+  assert.equal(required.violation.subject, "e2e/.venv");
+});
+
+test("C-87f4def2 C-69c81a68 decideVenvScan scans a present venv, and a present venv with no distributions fails", () => {
+  assert.deepEqual(answer(() => decideVenvScan(true, "1")), { action: "scan" });
+  assert.deepEqual(answer(() => decideVenvScan(true, undefined)), { action: "scan" });
+  const emptyVenv = tempRoot();
+  fs.mkdirSync(path.join(emptyVenv, "lib", "python3.12", "site-packages"), { recursive: true });
+  assert.deepEqual(answer(() => scanPythonVenv(emptyVenv)), []);
+  assert.deepEqual(checkLicences([], { allowed: ALLOWED, exceptions: [] }, "e2e/.venv"), [
+    { code: "INVENTORY_EMPTY", subject: "e2e/.venv", detail: "no packages found" },
+  ]);
+});
+
+test("C-8be4d4fc every Python distribution in the e2e venv has an allowlisted licence", (t) => {
+  const repoRoot = fileURLToPath(new URL("../../", import.meta.url));
+  const venvDir = path.join(repoRoot, "e2e", ".venv");
+  const required = process.env["E2E_REQUIRE_VENV"];
+  const decided = answer(() => decideVenvScan(fs.existsSync(venvDir), required));
+  assert.ok(decided !== "THROWN", "decideVenvScan answers for the e2e venv");
+  if (decided.action === "skip") {
+    t.skip(decided.message);
+    return;
+  }
+  if (decided.action === "fail") {
+    assert.fail(`the licence gate failed for the e2e venv: ${formatLicenceViolation(decided.violation)}`);
+  }
+  const inventory = answer(() => scanPythonVenv(venvDir));
+  assert.ok(Array.isArray(inventory), "the venv scan yields an inventory");
+  assert.ok(inventory.length > 0, "the scanned venv inventory is not empty");
+  const unexcepted = checkLicences(inventory, { allowed: ALLOWED_LICENCES, exceptions: [] }, "e2e/.venv");
+  assert.equal(unexcepted.length, 1, "only the reviewed exception is not exempt");
+  const [only] = unexcepted;
+  assert.ok(only, "one violation");
+  assert.equal(only.code, "LICENCE_UNKNOWN");
+  assert.equal(only.subject, "pypi text-unidecode@1.3");
+  assert.equal(
+    formatLicenceViolations(
+      checkLicences(inventory, { allowed: ALLOWED_LICENCES, exceptions: LICENCE_EXCEPTIONS }, "e2e/.venv"),
+    ),
+    "",
+  );
 });
