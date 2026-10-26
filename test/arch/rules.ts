@@ -527,8 +527,103 @@ export function checkConsole(s: Snapshot): Violation[] {
   return sortViolations(violations);
 }
 
-export function checkProcessEnv(_s: Snapshot): Violation[] {
-  throw new Error("not implemented");
+const ENV_SPECIFIERS: readonly string[] = ["process", "node:process"];
+
+function envViolation(file: string, line: number): Violation {
+  return {
+    code: "ARCH_PROCESS_ENV",
+    file,
+    line,
+    message: "read configuration through src/config",
+  };
+}
+
+function isProcessReference(node: ts.Expression): boolean {
+  if (ts.isIdentifier(node)) return node.text === "process";
+  return (
+    ts.isPropertyAccessExpression(node) &&
+    ts.isIdentifier(node.expression) &&
+    node.expression.text === "globalThis" &&
+    node.name.text === "process"
+  );
+}
+
+function isEnvRequireCall(node: ts.Expression): boolean {
+  if (!ts.isCallExpression(node)) return false;
+  const callee = node.expression;
+  if (!ts.isIdentifier(callee) || callee.text !== "require") return false;
+  const argument = node.arguments[0];
+  return (
+    argument !== undefined && ts.isStringLiteral(argument) && ENV_SPECIFIERS.includes(argument.text)
+  );
+}
+
+function bindingNamesEnv(element: ts.BindingElement): boolean {
+  const named = element.propertyName ?? element.name;
+  return (ts.isIdentifier(named) || ts.isStringLiteral(named)) && named.text === "env";
+}
+
+function importsEnv(node: ts.ImportDeclaration): boolean {
+  if (
+    !ts.isStringLiteral(node.moduleSpecifier) ||
+    !ENV_SPECIFIERS.includes(node.moduleSpecifier.text)
+  ) {
+    return false;
+  }
+  const bindings = node.importClause?.namedBindings;
+  return (
+    bindings !== undefined &&
+    ts.isNamedImports(bindings) &&
+    bindings.elements.some((element) => element.name.text === "env")
+  );
+}
+
+function isEnvNamedAccess(node: ts.PropertyAccessExpression | ts.ElementAccessExpression): boolean {
+  if (ts.isPropertyAccessExpression(node)) return node.name.text === "env";
+  return ts.isStringLiteral(node.argumentExpression) && node.argumentExpression.text === "env";
+}
+
+function processEnvUses(file: SourceFile): Violation[] {
+  const source = ts.createSourceFile(file.path, file.text, ts.ScriptTarget.Latest, true);
+  const violations: Violation[] = [];
+  const lineOf = (node: ts.Node): number =>
+    source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1;
+
+  const visit = (node: ts.Node): void => {
+    if (
+      (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) &&
+      isEnvNamedAccess(node) &&
+      (isProcessReference(node.expression) || isEnvRequireCall(node.expression))
+    ) {
+      violations.push(envViolation(file.path, lineOf(node)));
+    } else if (
+      ts.isVariableDeclaration(node) &&
+      ts.isObjectBindingPattern(node.name) &&
+      node.initializer !== undefined &&
+      (isProcessReference(node.initializer) || isEnvRequireCall(node.initializer)) &&
+      node.name.elements.some(bindingNamesEnv)
+    ) {
+      violations.push(envViolation(file.path, lineOf(node)));
+    } else if (ts.isImportDeclaration(node) && importsEnv(node)) {
+      violations.push(envViolation(file.path, lineOf(node)));
+    }
+    ts.forEachChild(node, visit);
+  };
+
+  ts.forEachChild(source, visit);
+  return violations;
+}
+
+export function checkProcessEnv(s: Snapshot): Violation[] {
+  const violations: Violation[] = [];
+
+  for (const file of s.files) {
+    if (!file.path.startsWith("src/") || isTestFile(file.path)) continue;
+    if (moduleNameOf(file.path) === "config") continue;
+    violations.push(...processEnvUses(file));
+  }
+
+  return sortViolations(violations);
 }
 
 export function checkAll(_s: Snapshot, _modules?: Record<string, ModuleRule>): Violation[] {
