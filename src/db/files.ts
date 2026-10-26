@@ -1,11 +1,8 @@
 import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
 
 import { DbError } from "./errors.ts";
-
-export const DEFAULT_MIGRATIONS_DIR: string = fileURLToPath(new URL("./migrations", import.meta.url));
 
 const FILE_PATTERN = /^(\d{4})_([a-z][a-z0-9_]{0,62})\.sql$/;
 const TRANSACTION_CONTROL = /^(BEGIN|COMMIT|ROLLBACK|START\s+TRANSACTION)\s*;$/i;
