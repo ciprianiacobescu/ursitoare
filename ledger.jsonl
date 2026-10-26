@@ -99,3 +99,5 @@
 {"at":"2026-10-26T22:21:27Z","run":"r-20261026T2221Z-da09","type":"unit.dispatched","unit":"openspec:add-e2e-stack"}
 {"at":"2026-10-26T23:45:39Z","detail":"awaiting_human: no new answers (open: Q-001) (escalated to a person: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-e2e-stack"}
 {"at":"2026-10-26T23:48:04Z","by":"harness","reason":"the cause is gone: openspec:add-e2e-stack is awaiting_human","type":"plan.resumed"}
+{"at":"2026-10-26T23:48:06Z","attempt":1,"cost_usd":2.241362,"runs":2,"type":"plan.charged","unit":"openspec:add-e2e-stack"}
+{"at":"2026-10-26T23:48:06Z","run":"r-20261026T2348Z-9953","type":"unit.dispatched","unit":"openspec:add-e2e-stack"}
