@@ -7,6 +7,7 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import {
+  checkBuiltDependencies,
   checkExactVersions,
   checkLicences,
   checkPolicy,
@@ -16,6 +17,7 @@ import {
   npmLicenceOf,
   parseLicenceExpression,
   pythonLicenceOf,
+  readTopLevelList,
   scanNpmStore,
   scanPythonVenv,
   type InstalledPackage,
@@ -507,6 +509,14 @@ function tempRoot(): string {
   return fs.mkdtempSync(path.join(os.tmpdir(), "licences-"));
 }
 
+// A workspace file whose onlyBuiltDependencies list holds the given entries.
+function workspaceYamlWith(entries: readonly string[], quoteFirst = false): string {
+  const items = entries.map((entry, index) =>
+    quoteFirst && index === 0 ? `  - '${entry}'` : `  - ${entry}`,
+  );
+  return ["packages:", '  - "."', "onlyBuiltDependencies:", ...items, ""].join("\n");
+}
+
 test("C-a74a1a7f scanNpmStore walks the store without following symlinks", () => {
   const root = tempRoot();
   const store = path.join(root, "node_modules", ".pnpm");
@@ -928,4 +938,130 @@ test("C-05d0c7f9 C-b51bd435 every dependency range in the root and web manifests
       },
     ],
   );
+});
+
+test("C-606611bb C-41ded6c9 onlyBuiltDependencies equals the reviewed list", () => {
+  const repoRoot = fileURLToPath(new URL("../../", import.meta.url));
+  let workspaceYaml = "";
+  try {
+    workspaceYaml = fs.readFileSync(path.join(repoRoot, "pnpm-workspace.yaml"), "utf8");
+  } catch {
+    workspaceYaml = "";
+  }
+  assert.deepEqual(
+    answer(() => checkBuiltDependencies(workspaceYaml, REVIEWED_BUILT_DEPENDENCIES)),
+    [],
+    "the repository list matches the reviewed list",
+  );
+  const reordered = workspaceYamlWith([...REVIEWED_BUILT_DEPENDENCIES].reverse(), true);
+  assert.deepEqual(
+    answer(() => checkBuiltDependencies(reordered, REVIEWED_BUILT_DEPENDENCIES)),
+    [],
+    "reordering and quoting do not change the set",
+  );
+  const drift = answer(() =>
+    checkBuiltDependencies(workspaceYamlWith([...REVIEWED_BUILT_DEPENDENCIES, "evil-postinstall"]), REVIEWED_BUILT_DEPENDENCIES),
+  );
+  assert.ok(Array.isArray(drift), "checkBuiltDependencies answers for a drifted list");
+  assert.equal(drift.length, 1, "an added package is drift");
+});
+
+test("C-41ded6c9 checkBuiltDependencies fails an added package", () => {
+  const workspaceYaml = workspaceYamlWith([...REVIEWED_BUILT_DEPENDENCIES, "evil-postinstall"]);
+  assert.deepEqual(answer(() => checkBuiltDependencies(workspaceYaml, REVIEWED_BUILT_DEPENDENCIES)), [
+    {
+      code: "BUILT_DEPS_DRIFT",
+      subject: "pnpm-workspace.yaml onlyBuiltDependencies",
+      detail:
+        "not reviewed: [evil-postinstall]; change pnpm-workspace.yaml and test/arch/licence-policy.ts together",
+    },
+  ]);
+});
+
+test("C-4557b8b9 checkBuiltDependencies fails a removed package or a duplicate", () => {
+  const withoutEsbuild = REVIEWED_BUILT_DEPENDENCIES.filter((name) => name !== "esbuild");
+  assert.deepEqual(answer(() => checkBuiltDependencies(workspaceYamlWith(withoutEsbuild), REVIEWED_BUILT_DEPENDENCIES)), [
+    {
+      code: "BUILT_DEPS_DRIFT",
+      subject: "pnpm-workspace.yaml onlyBuiltDependencies",
+      detail: "missing: [esbuild]; change pnpm-workspace.yaml and test/arch/licence-policy.ts together",
+    },
+  ]);
+  const duplicated = workspaceYamlWith([...REVIEWED_BUILT_DEPENDENCIES, "esbuild"]);
+  assert.deepEqual(answer(() => checkBuiltDependencies(duplicated, REVIEWED_BUILT_DEPENDENCIES)), [
+    {
+      code: "BUILT_DEPS_DRIFT",
+      subject: "pnpm-workspace.yaml onlyBuiltDependencies",
+      detail: "duplicates: [esbuild]; change pnpm-workspace.yaml and test/arch/licence-policy.ts together",
+    },
+  ]);
+});
+
+test("C-ed7ff850 checkBuiltDependencies handles an absent key, an empty reviewed list and an unsupported form", () => {
+  assert.deepEqual(answer(() => checkBuiltDependencies('packages:\n  - "."\n', ["esbuild"])), [
+    {
+      code: "BUILT_DEPS_DRIFT",
+      subject: "pnpm-workspace.yaml onlyBuiltDependencies",
+      detail: "key not found; change pnpm-workspace.yaml and test/arch/licence-policy.ts together",
+    },
+  ]);
+  assert.deepEqual(answer(() => checkBuiltDependencies("onlyBuiltDependencies:\n", [])), []);
+  let message: string | null = null;
+  try {
+    readTopLevelList("onlyBuiltDependencies: [esbuild]\n", "onlyBuiltDependencies");
+  } catch (error) {
+    message = error instanceof Error ? error.message : String(error);
+  }
+  assert.ok(
+    message !== null && message.startsWith("unsupported YAML form"),
+    `readTopLevelList refuses an inline list with an unsupported YAML form error, got ${String(message)}`,
+  );
+});
+
+test("C-59b6d3e2 checkBuiltDependencies fails a missing workspace file", () => {
+  const violations = answer(() => checkBuiltDependencies("", REVIEWED_BUILT_DEPENDENCIES));
+  assert.ok(Array.isArray(violations), "checkBuiltDependencies answers for a missing workspace file");
+  assert.equal(violations.length, 1);
+  const [first] = violations;
+  assert.ok(first, "one violation");
+  assert.equal(first.code, "BUILT_DEPS_DRIFT");
+  assert.equal(first.subject, "pnpm-workspace.yaml onlyBuiltDependencies");
+  assert.ok(
+    first.detail.startsWith("key not found"),
+    `the detail names the absent key, got ${first.detail}`,
+  );
+});
+
+test("C-75476b3c checkBuiltDependencies gives the fixed drift details in order", () => {
+  const reviewed = ["esbuild"];
+  assert.deepEqual(answer(() => checkBuiltDependencies('packages:\n  - "."\n', reviewed)), [
+    {
+      code: "BUILT_DEPS_DRIFT",
+      subject: "pnpm-workspace.yaml onlyBuiltDependencies",
+      detail: "key not found; change pnpm-workspace.yaml and test/arch/licence-policy.ts together",
+    },
+  ]);
+  const unsupported = answer(() => checkBuiltDependencies("onlyBuiltDependencies: [esbuild]\n", reviewed));
+  assert.ok(Array.isArray(unsupported), "checkBuiltDependencies answers for an unsupported form");
+  assert.equal(unsupported.length, 1);
+  const [unsupportedFirst] = unsupported;
+  assert.ok(unsupportedFirst, "one violation");
+  assert.equal(unsupportedFirst.code, "BUILT_DEPS_DRIFT");
+  assert.equal(unsupportedFirst.subject, "pnpm-workspace.yaml onlyBuiltDependencies");
+  assert.ok(
+    unsupportedFirst.detail.startsWith("unsupported form: unsupported YAML form"),
+    `the detail starts with the parser error, got ${unsupportedFirst.detail}`,
+  );
+  assert.ok(
+    unsupportedFirst.detail.endsWith("change pnpm-workspace.yaml and test/arch/licence-policy.ts together"),
+    `the detail ends with the review instruction, got ${unsupportedFirst.detail}`,
+  );
+  assert.deepEqual(answer(() => checkBuiltDependencies(workspaceYamlWith(["evil", "evil"]), reviewed)), [
+    {
+      code: "BUILT_DEPS_DRIFT",
+      subject: "pnpm-workspace.yaml onlyBuiltDependencies",
+      detail:
+        "not reviewed: [evil]; missing: [esbuild]; duplicates: [evil]; change pnpm-workspace.yaml and test/arch/licence-policy.ts together",
+    },
+  ]);
 });
