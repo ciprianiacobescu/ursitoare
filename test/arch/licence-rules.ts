@@ -1,5 +1,8 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this module implements it.
 
+import fs, { type Dirent } from "node:fs";
+import path from "node:path";
+
 export interface LicenceException {
   ecosystem: "npm" | "pypi";
   name: string;
@@ -92,16 +95,96 @@ export function parseLicenceExpression(text: string): string[] | null {
   return terms;
 }
 
-export function npmLicenceOf(_packageJson: unknown): LicenceReading {
-  throw new Error("not implemented");
+export function npmLicenceOf(packageJson: unknown): LicenceReading {
+  if (typeof packageJson !== "object" || packageJson === null) {
+    return { licence: null, terms: null };
+  }
+  const data = packageJson as Record<string, unknown>;
+  const licences = data["licenses"];
+  if (licences !== undefined && licences !== null && typeof licences !== "string") {
+    return { licence: JSON.stringify(licences), terms: null };
+  }
+  const license = data["license"];
+  if (typeof license === "string" && license.trim() !== "") {
+    const licence = license.trim();
+    return { licence, terms: parseLicenceExpression(licence) };
+  }
+  if (license !== undefined && license !== null) {
+    return { licence: JSON.stringify(license), terms: null };
+  }
+  return { licence: null, terms: null };
 }
 
 export function pythonLicenceOf(_metadata: string): LicenceReading {
   throw new Error("not implemented");
 }
 
-export function scanNpmStore(_repoRoot: string): InstalledPackage[] {
-  throw new Error("not implemented");
+export function scanNpmStore(repoRoot: string): InstalledPackage[] {
+  const store = path.join(repoRoot, "node_modules", ".pnpm");
+  let roots: Dirent[];
+  try {
+    roots = fs.readdirSync(store, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+  const found = new Map<string, InstalledPackage>();
+  for (const child of roots) {
+    if (child.name === "node_modules" || child.name === "lock.yaml" || !child.isDirectory()) continue;
+    const modulesDir = path.join(store, child.name, "node_modules");
+    const packages: string[] = [];
+    let entries: Dirent[];
+    try {
+      entries = fs.readdirSync(modulesDir, { withFileTypes: true });
+    } catch {
+      continue;
+    }
+    for (const entry of entries) {
+      if (entry.isSymbolicLink()) continue;
+      if (entry.isDirectory() && entry.name.startsWith("@")) {
+        let scoped: Dirent[];
+        try {
+          scoped = fs.readdirSync(path.join(modulesDir, entry.name), { withFileTypes: true });
+        } catch {
+          continue;
+        }
+        for (const inner of scoped) {
+          if (!inner.isSymbolicLink() && inner.isDirectory()) packages.push(`${entry.name}/${inner.name}`);
+        }
+      } else if (entry.isDirectory()) {
+        packages.push(entry.name);
+      }
+    }
+    for (const pkgName of packages) {
+      const pkgDir = path.join(modulesDir, ...pkgName.split("/"));
+      let parsed: unknown = null;
+      let fromJson = false;
+      try {
+        parsed = JSON.parse(fs.readFileSync(path.join(pkgDir, "package.json"), "utf8"));
+        fromJson = true;
+      } catch {
+        void 0;
+      }
+      const data = (typeof parsed === "object" && parsed !== null ? parsed : null) as
+        | { name?: unknown; version?: unknown }
+        | null;
+      const jsonName = typeof data?.name === "string" ? data.name : null;
+      const jsonVersion = typeof data?.version === "string" ? data.version : null;
+      const reading = fromJson ? npmLicenceOf(parsed) : { licence: null, terms: null };
+      const [storeNameSegment = ""] = child.name.split("@");
+      const name = fromJson && jsonName !== null ? jsonName : storeNameSegment.replace("+", "/");
+      const version = jsonVersion ?? "unknown";
+      const item: InstalledPackage = {
+        ecosystem: "npm",
+        name,
+        version,
+        licence: reading.licence,
+        terms: reading.terms === null ? null : [...reading.terms],
+      };
+      const dedup = `${pkgName}@${version}`;
+      if (!found.has(dedup)) found.set(dedup, item);
+    }
+  }
+  return [...found.values()].sort((a, b) => `${a.name}@${a.version}`.localeCompare(`${b.name}@${b.version}`));
 }
 
 export function scanPythonVenv(_venvDir: string): InstalledPackage[] {

@@ -6,7 +6,7 @@
 
 ## 2. Installed npm packages
 
-- [ ] 2.1 Implement `npmLicenceOf` and `scanNpmStore` in `test/arch/licence-rules.ts`, with fixture-store tests and the live test `every installed npm package has an allowlisted licence` first in `test/arch/licences.test.ts`, implementing the scenarios "A store fixture is walked without following symlinks", "A legacy or free-text licence is unknown", "An absent or empty store fails instead of passing" and "The current lockfile passes" of requirement "Installed npm packages carry only allowlisted licences"
+- [x] 2.1 Implement `npmLicenceOf` and `scanNpmStore` in `test/arch/licence-rules.ts`, with fixture-store tests and the live test `every installed npm package has an allowlisted licence` first in `test/arch/licences.test.ts`, implementing the scenarios "A store fixture is walked without following symlinks", "A legacy or free-text licence is unknown", "An absent or empty store fails instead of passing" and "The current lockfile passes" of requirement "Installed npm packages carry only allowlisted licences"
 
 ## 3. Installed Python distributions
 
