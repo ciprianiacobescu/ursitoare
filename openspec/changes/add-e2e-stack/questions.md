@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 5.2 | technical | test/support/e2e-stack/stack.db.test.ts:340 counts nested Postgres PG_VERSION directories |
+| Q-001 | answered | 5.2 | technical | test/support/e2e-stack/stack.db.test.ts:340 counts nested Postgres PG_VERSION directories |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: test/support/e2e-stack/stack.db.test.ts:340 counts nested Postgres PG_VERSION directories
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: checked spec:spec.md#scenario-close-stops-postgres-a-failed-start-leaves-nothing does not resolve
 - **Blocking tasks:** 5.2
 - **Kind:** technical
@@ -37,3 +37,4 @@ Edit `test/support/e2e-stack/stack.db.test.ts`: at line 339 replace `const clust
 
 ### Answer
 <!-- write below this line -->
+Take option 1. Edit `test/support/e2e-stack/stack.db.test.ts`: at line 339 replace `const clusterDirs = dirsWithPgVersion(tmpDir);` with `const clusterDirs = dirsWithPgVersion(tmpDir).filter((dir) => path.dirname(dir) === tmpDir);`. Change nothing else in the test. The claim checks out: a fresh initdb cluster (PostgreSQL via Homebrew, run locally) holds PG_VERSION in PGDATA and in each of base/1, base/14212 and base/14213. So the recursive walk finds four or more directories, and `clusterDirs.length === 1` cannot pass. startCluster (test/support/pg.ts:85) creates the cluster at mkdtemp(join(tmpdir(), "ursitoare-pg-")), and the test sets TMPDIR to tmpDir. That makes the cluster root the only match that is a direct child of tmpDir. The test still asserts exactly one, and then that this directory, every postmaster.pid and the stack directory are gone after close, which is what C-fe09bf7e requires.
