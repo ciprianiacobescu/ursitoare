@@ -110,6 +110,15 @@ profiles:
     auth: api_key
     model: gpt-6.1-sol
     vendor: openai
+  # Delegate addition 2026-10-26: a judge of a vendor no implementer has, on the key CI already holds (OPENCODE_API_KEY).
+  # CODEX_API_KEY was never set, so when a task escalated to claude-sonnet (add-engine-skeleton 2.1) no judge was
+  # independent and the unit waited (exit 12, no independent verifier). Remove it, or keep it as a fallback, once
+  # codex-judge has its key.
+  gemini-judge:
+    adapter: opencode
+    auth: api_key
+    model: opencode-go/gemini-4-argon
+    vendor: google
   # System One (owner decision 2026-10-25, every L4 project): Jev first, Laya when Jev does not open. Secret
   # TYPESAFE_API_KEY in the GitHub environment `l4`.
   jev:
@@ -128,17 +137,21 @@ roles:
   - glm
   - claude-sonnet
   # A judge of an implementer's vendor is vetoed for that implementer; codex-judge keeps one independent judge.
+  # gemini-judge judges a unit that claude-sonnet worked on while codex-judge has no key (judges are tried in order).
   judges:
   - claude-judge
+  - gemini-judge
   - codex-judge
   s1_judge:
   - jev
   - laya
   # Writes the e2e test of a UI criterion (under web/**) that no test proves: verifier step 5; without a writer such a
   # gap holds the unit for a person. Chosen per unit independent of the implementer's vendor, as the judges are.
-  # Delegate choice 2026-10-25: Sonnet first, codex when the implementer is claude-sonnet.
+  # Delegate choice 2026-10-25: Sonnet first, codex when the implementer is claude-sonnet; gemini-judge until codex
+  # has its key (2026-10-26).
   verifier_agent:
   - claude-sonnet
+  - gemini-judge
   - codex-judge
   # Unattended runs: the delegate answers implementer questions read-only and escalates what it cannot check. It runs
   # on a model no implementer or judge uses (delegate.independence: model; doctor DLG-001).
