@@ -149,6 +149,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-005: Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: checked test/arch/modules.ts:132 does not resolve
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
