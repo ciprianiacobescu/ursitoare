@@ -1,0 +1,268 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/core/index.ts",
+      "src/db/index.ts",
+      "test/support/pg.ts",
+      "src/db/migrations/NNNN_<name>.sql",
+      "src/tenancy",
+      "src/core",
+      "src/db",
+      "src/tenancy/index.ts",
+      "test/support/tenants.ts",
+      "docs/decisions/0002",
+      "src/db/migrations/0002_tenancy.sql",
+      "src/tenancy/{errors,context,tx,bootstrap,routes,catalog,index}.ts",
+      "src/tenancy/{context,schema,tx,bootstrap,routes,resolve,unregister,catalog,catalog.roles}.test.ts",
+      "test/support/tenants.test.ts",
+      "src/db/base.test.ts",
+      "src/tenancy/context.test.ts",
+      "src/tenancy/errors.ts",
+      "src/tenancy/context.ts",
+      "src/tenancy/schema.test.ts",
+      "src/tenancy/tx.test.ts",
+      "src/tenancy/tx.ts",
+      "src/tenancy/bootstrap.test.ts",
+      "src/tenancy/bootstrap.ts",
+      "src/tenancy/routes.test.ts",
+      "src/tenancy/routes.ts",
+      "src/tenancy/resolve.test.ts",
+      "src/tenancy/unregister.test.ts",
+      "src/tenancy/catalog.test.ts",
+      "src/tenancy/catalog.ts",
+      "src/tenancy/catalog.roles.test.ts",
+      "**/^[A-Za-z0-9_-]{1,64}$",
+      "**/catalog.test.ts",
+      "**/index.ts",
+      "**/context.ts",
+      "**/tx.ts",
+      "**/[]",
+      "**/*.test.ts",
+      "**/[",
+      "**/tx.test.ts",
+      "**/catalog.roles.test.ts",
+      "**/package.json",
+      "**/pg.ts",
+      "**/conkey[1]",
+      "**/indkey[0]",
+      "module core",
+      "module db",
+      "module docs",
+      "module tenancy",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-tenancy-foundation/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tenancy-foundation/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tenancy-foundation/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tenancy-foundation/.l4/ledger/r-20261026T2059Z-f582.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tenancy-foundation/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tenancy-foundation/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tenancy-foundation/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/db/migrations/0002_tenancy.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/bootstrap.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tenancy/bootstrap.ts",
+        "module": "tenancy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/catalog.roles.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tenancy/catalog.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tenancy/catalog.ts",
+        "module": "tenancy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/context.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tenancy/context.ts",
+        "module": "tenancy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/errors.ts",
+        "module": "tenancy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/resolve.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tenancy/routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tenancy/routes.ts",
+        "module": "tenancy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tenancy/tx.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tenancy/tx.ts",
+        "module": "tenancy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/unregister.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/tenants.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/tenants.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/tenancy/bootstrap.ts, src/tenancy/catalog.ts, src/tenancy/context.ts, src/tenancy/errors.ts, src/tenancy/routes.ts and 2 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/tenancy/bootstrap.ts",
+      "src/tenancy/catalog.ts",
+      "src/tenancy/context.ts",
+      "src/tenancy/errors.ts",
+      "src/tenancy/routes.ts",
+      "src/tenancy/tx.ts",
+      "test/support/tenants.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 299,
+      "passed": 299,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 40,
+      "new_passed": 40,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
