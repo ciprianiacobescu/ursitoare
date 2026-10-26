@@ -65,19 +65,19 @@ The Postgres foundation: pool, migration runner, roles, partitions, health check
 - **THEN** it rejects with `MIGRATION_LOCK_TIMEOUT`, ledger untouched; after the unlock `migrate` succeeds
 
 ### Requirement: Roles are bootstrapped and checked
-`ensureRoles(adminPool, passwords?)` SHALL idempotently create or repair the login roles `ursitoare_owner` and `ursitoare_app` (no superuser, `BYPASSRLS`, `CREATEDB`, `CREATEROLE` or `REPLICATION`; the app role in no other role) and send only a SCRAM-SHA-256 verifier to the server; `migrate` SHALL refuse before any DDL, with `MIGRATION_ROLE_MISSING` or `MIGRATION_ROLE_INVALID`, unless both roles exist unprivileged and the session user is `ursitoare_owner`.
+`ensureRoles(adminPool, passwords?)` SHALL idempotently create or repair the login roles `ursitoare_owner` and `ursitoare_app` (no superuser, `BYPASSRLS`, `CREATEDB`, `CREATEROLE` or `REPLICATION`; every membership of the app role revoked) and send only a SCRAM-SHA-256 verifier to the server; `migrate` SHALL refuse before any DDL, with `MIGRATION_ROLE_MISSING` or `MIGRATION_ROLE_INVALID`, unless both roles exist unprivileged and the session user is `ursitoare_owner`.
 
 #### Scenario: Create, repeat, repair
-- **WHEN** `ensureRoles(admin, { ownerPassword: "o-1", appPassword: "a-1" })` runs twice on a pristine cluster, then, after `ALTER ROLE ursitoare_app BYPASSRLS` and `GRANT ursitoare_owner TO ursitoare_app`, `ensureRoles(admin, { appPassword: "a-2" })`
-- **THEN** `created` is `["ursitoare_owner", "ursitoare_app"]`, `[]`, `[]`; neither role has `rolsuper`, `rolbypassrls`, `rolcreatedb` or `rolcreaterole`; `pg_has_role('ursitoare_app', 'ursitoare_owner', 'MEMBER')` is `false`; `"a-2"` logs in as the app role and `"a-1"` does not; both `pg_authid.rolpassword` values start with `SCRAM-SHA-256$4096:` and lack `a-2`
+- **WHEN** `ensureRoles(admin, { ownerPassword: "o-1", appPassword: "a-1" })` runs twice on a pristine cluster, then, after `ALTER ROLE ursitoare_app BYPASSRLS`, `GRANT ursitoare_owner TO ursitoare_app`, `GRANT pg_read_all_data TO ursitoare_app` and, by a `CREATEROLE` login holding `pg_monitor` `WITH ADMIN OPTION`, `GRANT pg_monitor TO ursitoare_app`, `ensureRoles(admin, { appPassword: "a-2" })`
+- **THEN** `created` is `["ursitoare_owner", "ursitoare_app"]`, `[]`, `[]`; neither role has `rolsuper`, `rolbypassrls`, `rolcreatedb` or `rolcreaterole`; `pg_auth_members` has no row whose `member` is `ursitoare_app`; `"a-2"` logs in as the app role and `"a-1"` does not; both `pg_authid.rolpassword` values start with `SCRAM-SHA-256$4096:` and lack `a-2`
 
 #### Scenario: Bad input, a weak admin and quotes
 - **WHEN** `appPassword` is `""`, holds a NUL, holds `"é"` or is 513 characters long; `ensureRoles` gets a pool connected as `ursitoare_app`; and `appPassword` is `o'brien";DROP ROLE ursitoare_owner;--` in two concurrent calls
 - **THEN** the first four reject with `DB_INVALID`, `details.reason` `bad_password`, the fifth with `DB_ROLES_FAILED`, `details.sqlstate` `"42501"`; the concurrent calls resolve, the app role logs in with that password and `ursitoare_owner` still exists
 
 #### Scenario: Migration preconditions
-- **WHEN** `migrate` runs on bare databases (a) with only `ursitoare_owner` made by raw `CREATE ROLE`; (b) after `ensureRoles`, on a superuser pool; then as the owner (c) after `ALTER ROLE ursitoare_app BYPASSRLS`; (d) after `GRANT ursitoare_owner TO ursitoare_app`
-- **THEN** it rejects with `MIGRATION_ROLE_MISSING` (`details.roles` `["ursitoare_app"]`), `MIGRATION_ROLE_INVALID` `wrong_session_role`, and for (c) and (d) `MIGRATION_ROLE_INVALID` `app_role_privileged`; none creates schema `ursitoare`
+- **WHEN** `migrate` runs on bare databases (a) with only `ursitoare_owner` made by raw `CREATE ROLE`; (b) after `ensureRoles`, on a superuser pool; then as the owner (c) after `ALTER ROLE ursitoare_app BYPASSRLS`; (d) after `GRANT ursitoare_owner TO ursitoare_app`; (e) after granting the app role a `BYPASSRLS` role; (f) after `ALTER ROLE ursitoare_owner BYPASSRLS`
+- **THEN** it rejects with `MIGRATION_ROLE_MISSING` (`details.roles` `["ursitoare_app"]`), `MIGRATION_ROLE_INVALID` `wrong_session_role`, for (c) to (e) `MIGRATION_ROLE_INVALID` `app_role_privileged`, for (f) `owner_role_privileged`; none creates schema `ursitoare`
 
 ### Requirement: Base migration and grants model
 `0001_base.sql` SHALL create schema `ursitoare` owned by `ursitoare_owner`, grant `ursitoare_app` only `USAGE` on it, hide `schema_migration` from the app role, remove `PUBLIC` execution from new owner functions, and leave `ursitoare_app` owning nothing.
@@ -106,7 +106,7 @@ The Postgres foundation: pool, migration runner, roles, partitions, health check
 - **THEN** `created` holds the 28 names `ursitoare.pt_day_p20260201` to `_p20260228`; the bad options reject with `DB_INVALID`, `details.reason` `bad_option`
 
 #### Scenario: Tables that are skipped or refused
-- **WHEN** the schema holds a LIST and a HASH partitioned table and `ensurePartitions` runs; then, beside a valid `pt_month` and one at a time, a range table with no comment, with the comment `partition: week`, or keyed on `(at, id)` or on a `text` column is added
+- **WHEN** the schema holds a LIST and a HASH partitioned table and `ensurePartitions` runs; then, beside a valid `pt_month` and one at a time, a range table with no comment, with the comment `partition: week`, or keyed on `(at, id)` or on a `text` column (both with comment `partition: month`) is added
 - **THEN** the first run resolves with `created` `[]`; the comment cases reject with `PARTITION_GRANULARITY_MISSING`, the key cases with `PARTITION_KEY_UNSUPPORTED`, `details.table` naming the bad table, and nothing is created, not even for `pt_month`
 
 #### Scenario: Rows already in DEFAULT
@@ -153,7 +153,7 @@ The Postgres foundation: pool, migration runner, roles, partitions, health check
 - **THEN** it resolves `"ok"`, then `"fail"` five times, never throwing
 
 ### Requirement: Engine boot with a database
-`main` SHALL open the database before it listens, report it as `checks.db`, never run `migrate` or `ensurePartitions` or open `database.owner`, and when `openDatabase` throws write the engine's one fatal line (`add-engine-skeleton` decision 9), call `exit(1)` and open no port.
+`main` SHALL open the database before it listens, report it as `checks.db`, never run `migrate` or `ensurePartitions` or open `database.owner`, and when `openDatabase` throws write the engine's one fatal line (`add-engine-skeleton` decision 9), call `exit(1)` and open no port; it SHALL end the app pool (`database.close()`) when the server shuts down and when `listen` fails.
 
 #### Scenario: No database keeps /health green
 - **WHEN** `running = await startServer(0)` runs, and `main` runs with `database` `{ app: null, owner: null }` and an `openDatabase` spy that resolves `null`
@@ -166,3 +166,7 @@ The Postgres foundation: pool, migration runner, roles, partitions, health check
 #### Scenario: A failed open stops the start
 - **WHEN** `main` runs with an `openDatabase` that rejects with `new DbError("DB_UNAVAILABLE", "database unavailable", { reason: "ECONNREFUSED" })`, and again with `new DbError("DB_ROLE_UNSAFE", "unsafe role", { reason: "superuser" })`
 - **THEN** exactly one fatal line is logged each time: `code` `"DB_UNAVAILABLE"` then `"DB_ROLE_UNSAFE"`, `reason` `"ECONNREFUSED"` then `"superuser"`, `msg` `"startup failed"` both times, no `variable`, `host` or `port`; each time `exit` gets `1`, no port is open and `main` resolves `null`
+
+#### Scenario: Shutdown and a busy port end the pool
+- **WHEN** `main` runs with a port-0 config, an `EventEmitter` signal source, an `exit` spy and an `openDatabase` stub resolving `{ appPool: {} as pg.Pool, close }` with a `close` spy, then `SIGTERM`; and again with the port of a listening server
+- **THEN** the first time `close` has run once when `exit` gets `0`; the second time the one fatal line has `code` `"EADDRINUSE"`, `exit` gets `1`, `main` resolves `null` and `close` has run once
