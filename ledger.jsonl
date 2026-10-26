@@ -51,3 +51,6 @@
 {"at":"2026-10-26T16:16:45Z","head":"39aa79065801e6204e6daa815be5d9f15edcd608","pr":5,"target_before":"6c9571af8dcf3137bba40615a90d88eb589cdae3","type":"unit.merge_requested","unit":"openspec:add-db-foundation"}
 {"at":"2026-10-26T16:16:53Z","ci":"not_run","head":"39aa79065801e6204e6daa815be5d9f15edcd608","merge_commit":"6c02ef8249fbfe4cf102ea0423aef451107b4994","method":"squash","pr":5,"raced":false,"type":"unit.merged","unit":"openspec:add-db-foundation"}
 {"at":"2026-10-26T16:16:59Z","branch":"l4/openspec/add-db-foundation","head":"39aa79065801e6204e6daa815be5d9f15edcd608","type":"unit.branch_deleted","unit":"openspec:add-db-foundation"}
+{"at":"2026-10-26T16:17:21Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"6c02ef8249fbfe4cf102ea0423aef451107b4994","status":"pass","type":"unit.postcheck","unit":"openspec:add-db-foundation"}
+{"at":"2026-10-26T16:17:21Z","revision":"6c02ef8249fbfe4cf102ea0423aef451107b4994","type":"unit.integrated","unit":"openspec:add-db-foundation"}
+{"at":"2026-10-26T16:17:21Z","attempt":1,"cost_usd":2.954111,"runs":3,"type":"plan.charged","unit":"openspec:add-db-foundation"}

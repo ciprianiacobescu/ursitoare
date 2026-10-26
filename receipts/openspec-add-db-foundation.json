@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-26T16:17:21Z",
+  "integrated_revision": "6c02ef8249fbfe4cf102ea0423aef451107b4994",
+  "merge_commit": "6c02ef8249fbfe4cf102ea0423aef451107b4994",
+  "plan_digest": "7c2df2bf58862787",
+  "plan_id": "m0",
+  "postcheck": "pass",
+  "pr": 5,
+  "receipt_id": "m0/openspec:add-db-foundation/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "39aa79065801e6204e6daa815be5d9f15edcd608",
+  "spec_digest": "cf1ed90785e15f08",
+  "target": "main",
+  "unit_id": "openspec:add-db-foundation"
+}
