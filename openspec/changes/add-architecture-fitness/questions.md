@@ -85,6 +85,7 @@ reject The scenario's THEN says each of the four fixture results also carries th
 ## Q-003: Criterion C-c63269ba (architecture-rules › Secret-pattern scan of repository files › Each kind is detected without echoing it): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: checked test/arch/secrets.ts:38 does not resolve
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
