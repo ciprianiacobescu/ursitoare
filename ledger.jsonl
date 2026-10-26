@@ -86,3 +86,4 @@
 {"at":"2026-10-26T21:59:37Z","run":"r-20261026T2159Z-7973","type":"unit.dispatched","unit":"openspec:add-tenancy-foundation"}
 {"at":"2026-10-26T22:06:50Z","attempt":1,"cost_usd":5.080361,"runs":3,"type":"plan.charged","unit":"openspec:add-tenancy-foundation"}
 {"at":"2026-10-26T22:06:50Z","run":"r-20261026T2206Z-46cf","type":"unit.dispatched","unit":"openspec:add-tenancy-foundation"}
+{"at":"2026-10-26T22:08:22Z","detail":"the repository CI is still running on the hand-off commit d51de18510 (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"d51de185106deb9ff06047ac7afc92034a6a51bb","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-tenancy-foundation"}
