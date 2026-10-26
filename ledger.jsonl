@@ -39,3 +39,5 @@
 {"at":"2026-10-26T13:39:55Z","branch":"l4/archive/openspec/add-supply-chain-gate","head":"e1b02a6ea178b04b5d11424819ac3e7cc9d07f99","type":"unit.branch_deleted","unit":"openspec:add-supply-chain-gate"}
 {"at":"2026-10-26T13:39:57Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-db-foundation"}
 {"at":"2026-10-26T13:39:57Z","run":"r-20261026T1339Z-eb55","type":"unit.dispatched","unit":"openspec:add-db-foundation"}
+{"at":"2026-10-26T13:45:58Z","attempt":1,"cost_usd":0.0,"runs":2,"type":"plan.charged","unit":"openspec:add-db-foundation"}
+{"at":"2026-10-26T13:45:58Z","run":"r-20261026T1345Z-9f1a","type":"unit.dispatched","unit":"openspec:add-db-foundation"}
