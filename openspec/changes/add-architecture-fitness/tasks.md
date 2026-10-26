@@ -1,6 +1,6 @@
 ## 1. Shared analysis
 
-- [ ] 1.1 Write `test/arch/sources.test.ts` first (scenarios "Violations are formatted and ordered", "Specifiers resolve relative to the importing file" and "The snapshot reads a real directory" on a temp directory removed in `after`), then implement `formatViolation`, `sortViolations`, `isTestFile`, `snapshotOf`, `readSnapshot`, `resolveSpecifier` and the `REPO_ROOT` value in `test/arch/sources.ts`, implementing requirement "Static analysis names file and line"
+- [x] 1.1 Write `test/arch/sources.test.ts` first (scenarios "Violations are formatted and ordered", "Specifiers resolve relative to the importing file" and "The snapshot reads a real directory" on a temp directory removed in `after`), then implement `formatViolation`, `sortViolations`, `isTestFile`, `snapshotOf`, `readSnapshot`, `resolveSpecifier` and the `REPO_ROOT` value in `test/arch/sources.ts`, implementing requirement "Static analysis names file and line"
 - [ ] 1.2 Extend `test/arch/sources.test.ts` first with the scenarios "Import forms are found" (ten lines, exact specifiers, lines, `typeOnly` and `dynamic` flags) and "Require forms are found", then implement `collectImports` in `test/arch/sources.ts` with `import ts from "typescript"` and `ts.createSourceFile` (declarations, `export ... from`, `import("literal")`, import type nodes, non-literal dynamic imports, `require` calls and `import x = require(...)`), implementing requirements "Static analysis names file and line" and "Require calls and import-equals declarations are value imports"
 
 ## 2. Module graph
