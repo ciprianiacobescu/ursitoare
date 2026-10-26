@@ -73,6 +73,13 @@ jobs:
         uses: ciprianiacobescu/l4/.github/actions/l4@66d99acc5d9d35ba487e58084064423c71c0d358 # v0.4.32
         with:
           self-provision: ${{ vars.L4_SELF_PROVISION || 'auto' }}
+      # L4's e2e gate runs Playwright in a sandbox that mounts this cache read-only (doctor ENV-007), so the browser is
+      # installed here on the runner, as e2e.yml does (doctor CI-003). The pin equals e2e/uv.lock's playwright and L4's
+      # PLAYWRIGHT_VERSION (1.63.0); the path is L4's cache root (L4_CACHE, else XDG_CACHE_HOME/l4, else ~/.cache/l4).
+      - name: Chromium for the e2e gate
+        run: |
+          PLAYWRIGHT_BROWSERS_PATH="${L4_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/l4}/shared/ms-playwright" \
+            uvx --from playwright==1.63.0 playwright install --with-deps chromium
       - name: doctor
         run: l4 doctor --ci --fix || l4 ci map-exit $?
       - name: save agent CLI cache
