@@ -26,8 +26,8 @@ function answer<T>(call: () => T): T | "THROWN" {
 const NETWORK_MESSAGE =
   "node:https is allowed only in observability, identity and gateway; call through src/gateway";
 
-function networkViolation(file: string, line: number, name: string) {
-  return { code: "ARCH_NETWORK_IMPORT", file, line, message: `${name} ${NETWORK_MESSAGE}` };
+function networkViolation(file: string, line: number, _name: string) {
+  return { code: "ARCH_NETWORK_IMPORT", file, line, message: NETWORK_MESSAGE };
 }
 
 test("C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean", () => {

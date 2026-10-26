@@ -626,6 +626,13 @@ export function checkProcessEnv(s: Snapshot): Violation[] {
   return sortViolations(violations);
 }
 
-export function checkAll(_s: Snapshot, _modules?: Record<string, ModuleRule>): Violation[] {
-  throw new Error("not implemented");
+export function checkAll(s: Snapshot, modules: Record<string, ModuleRule> = MODULES): Violation[] {
+  return sortViolations([
+    ...checkGraphIntegrity(modules),
+    ...checkModuleGraph(s, modules),
+    ...checkNetwork(s, modules),
+    ...checkForbiddenImports(s),
+    ...checkConsole(s),
+    ...checkProcessEnv(s),
+  ]);
 }
