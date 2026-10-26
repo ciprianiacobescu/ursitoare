@@ -82,3 +82,5 @@
 {"at":"2026-10-26T20:59:17Z","branch":"l4/archive/openspec/add-architecture-fitness","head":"f8ceff5fb2fff1b8d66e80d2b193c61dd4dae74a","type":"unit.branch_deleted","unit":"openspec:add-architecture-fitness"}
 {"at":"2026-10-26T20:59:19Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-tenancy-foundation"}
 {"at":"2026-10-26T20:59:19Z","run":"r-20261026T2059Z-f582","type":"unit.dispatched","unit":"openspec:add-tenancy-foundation"}
+{"at":"2026-10-26T21:59:37Z","attempt":1,"cost_usd":3.23165,"runs":2,"type":"plan.charged","unit":"openspec:add-tenancy-foundation"}
+{"at":"2026-10-26T21:59:37Z","run":"r-20261026T2159Z-7973","type":"unit.dispatched","unit":"openspec:add-tenancy-foundation"}
