@@ -19,7 +19,7 @@
 ## 4. Secret scan
 
 - [x] 4.1 Write `test/arch/secrets.test.ts` first (scenarios "Each kind is detected without echoing it" and "Look-alikes pass", secrets built at run time from fragments so the file itself matches no pattern), then implement the `SECRET_PATTERNS` value and `scanText` in `test/arch/secrets.ts` from design.md § Secret kinds, implementing requirement "Secret-pattern scan of repository files"
-- [ ] 4.2 Extend `test/arch/secrets.test.ts` first (scenarios "The file list covers tracked and untracked files only" with `git init` and `git add` in a temp directory, and "Git unavailable fails loudly"), then implement `listScannableFiles` (`git ls-files -co --exclude-standard`, `seed/`, symlink, directory, missing and binary files skipped, `ARCH_GIT_UNAVAILABLE`) and `scanRepository` in `test/arch/secrets.ts`, implementing requirement "Secret-pattern scan of repository files"
+- [x] 4.2 Extend `test/arch/secrets.test.ts` first (scenarios "The file list covers tracked and untracked files only" with `git init` and `git add` in a temp directory, and "Git unavailable fails loudly"), then implement `listScannableFiles` (`git ls-files -co --exclude-standard`, `seed/`, symlink, directory, missing and binary files skipped, `ARCH_GIT_UNAVAILABLE`) and `scanRepository` in `test/arch/secrets.ts`, implementing requirement "Secret-pattern scan of repository files"
 
 ## 5. The whole tree
 
