@@ -20,6 +20,10 @@ interface CreatedRow extends QueryResultRow {
   created: boolean;
 }
 
+interface RemovedRow extends QueryResultRow {
+  removed: boolean;
+}
+
 interface ResolveRow extends QueryResultRow {
   tenant_id: string | null;
 }
@@ -83,8 +87,30 @@ export async function registerTenantRoute(
   return row?.created === true ? "created" : "exists";
 }
 
-export function unregisterTenantRoute(_tx: TenantTx, _kind: string, _key: string): Promise<boolean> {
-  throw new Error("not implemented");
+export async function unregisterTenantRoute(
+  tx: TenantTx,
+  kind: string,
+  key: string,
+): Promise<boolean> {
+  assertRouteKind(kind);
+  const keyHash = hashRouteKey(key);
+
+  let row: RemovedRow | undefined;
+  try {
+    const result = await tx.query<RemovedRow>(
+      "SELECT ursitoare.unregister_tenant_route($1, $2) AS removed",
+      [kind, keyHash],
+    );
+    row = result.rows[0];
+  } catch (error) {
+    const mapped = toTenancyError(error);
+    if (mapped !== undefined) {
+      throw mapped;
+    }
+    throw error;
+  }
+
+  return row?.removed === true;
 }
 
 export async function resolveTenantBy(
