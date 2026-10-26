@@ -1,0 +1,395 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/main.ts",
+      "src/health.ts",
+      "src/health.test.ts",
+      "test/support/e2e-stack/main.ts",
+      "e2e/test_health.py",
+      "docs/decisions/0002",
+      "src/core",
+      "src/config",
+      "src/observability",
+      "src/api",
+      "src/main.test.ts",
+      "src/core/{clock,ids,index}.ts",
+      "src/config/{secret,errors,config,process,index}.ts",
+      "src/observability/{logger,tracer,index}.ts",
+      "src/api/{errors,health,server,shutdown,index}.ts",
+      "src",
+      "dns/promises",
+      "src/core/clock.test.ts",
+      "src/core/ids.test.ts",
+      "src/core/clock.ts",
+      "src/core/ids.ts",
+      "src/core/index.ts",
+      "src/observability/logger.test.ts",
+      "src/observability/logger.ts",
+      "src/observability/index.ts",
+      "src/observability/tracer.test.ts",
+      "src/observability/tracer.ts",
+      "src/config/secret.test.ts",
+      "src/config/secret.ts",
+      "src/config/errors.ts",
+      "src/config/config.test.ts",
+      "src/config/config.ts",
+      "src/config/process.ts",
+      "src/config/index.ts",
+      "src/api/errors.test.ts",
+      "src/api/errors.ts",
+      "src/api/health.test.ts",
+      "src/api/health.ts",
+      "src/api/server.test.ts",
+      "src/api/server.ts",
+      "src/api/index.ts",
+      "src/api/shutdown.test.ts",
+      "src/api/shutdown.ts",
+      "**/index.ts",
+      "**/FST_ERR_CTP*",
+      "**/URSITOARE_*",
+      "**/^[A-Za-z0-9.:_-]{1,253}$",
+      "**/^[0-9]{1,5}$",
+      "**/^[0-9]{1,6}$",
+      "^[A-Za-z0-9+/]+={0,2}$",
+      "**/[util.inspect.custom]",
+      "**/\"[REDACTED]\"",
+      "**/^[A-Za-z0-9._-]{1,64}$",
+      "**/*_FILE",
+      "**/*.test.ts",
+      "**/[",
+      "**/shutdown.test.ts",
+      "**/server.test.ts",
+      "**/b[1]",
+      "**/b[2..7]",
+      "**/^[a-z][a-z0-9]{0,15}$",
+      "**/*",
+      "**/*.headers",
+      "**/headers[\"set-cookie\"]",
+      "**/process.argv[1]",
+      "module api",
+      "module config",
+      "module core",
+      "module dns",
+      "module docs",
+      "module e2e",
+      "module health",
+      "module health.test",
+      "module main",
+      "module main.test",
+      "module observability",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-engine-skeleton-fix-1/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-engine-skeleton-fix-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-engine-skeleton-fix-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-engine-skeleton-fix-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-engine-skeleton/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-engine-skeleton/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-engine-skeleton/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-engine-skeleton/.l4/ledger/r-20261026T0930Z-3e3f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-engine-skeleton/.l4/ledger/r-20261026T1111Z-3b02.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-engine-skeleton/.l4/ledger/r-20261026T1132Z-7654.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-engine-skeleton/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-engine-skeleton/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/errors.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/errors.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/health.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/health.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/server.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/server.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/shutdown.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/shutdown.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/config.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/config/config.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/errors.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/process.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/secret.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/config/secret.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/core/clock.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/core/clock.ts",
+        "module": "core",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/core/ids.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/core/ids.ts",
+        "module": "core",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/health.ts",
+        "module": "health",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/observability/index.ts",
+        "module": "observability",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/observability/logger.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/observability/logger.ts",
+        "module": "observability",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/observability/tracer.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/observability/tracer.ts",
+        "module": "observability",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/errors.ts, src/api/health.ts, src/api/server.ts, src/api/shutdown.ts, src/config/config.ts and 10 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/errors.ts",
+      "src/api/health.ts",
+      "src/api/server.ts",
+      "src/api/shutdown.ts",
+      "src/config/config.ts",
+      "src/config/errors.ts",
+      "src/config/process.ts",
+      "src/config/secret.ts",
+      "src/core/clock.ts",
+      "src/core/ids.ts",
+      "src/health.ts",
+      "src/main.ts",
+      "src/observability/index.ts",
+      "src/observability/logger.ts",
+      "src/observability/tracer.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 98,
+      "passed": 98,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 88,
+      "new_passed": 88,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

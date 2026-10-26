@@ -1,0 +1,4748 @@
+{
+  "schema": "l4/verdict@1",
+  "round": 2,
+  "verdict": "PASS",
+  "base_sha": "f01a0413a890c257db1b4c9baad1155861ecb63e",
+  "head_sha": "f7f58206c3ccdfc418878058c684329594fb0314",
+  "steps": [
+    {
+      "step": "0",
+      "name": "preconditions",
+      "status": "ok",
+      "seconds": 0.8,
+      "note": "base main@f01a0413a8 contained"
+    },
+    {
+      "step": "1",
+      "name": "integrity",
+      "status": "ok",
+      "seconds": 8.2,
+      "note": "10 sub-checks; scope: 38 changed file(s)"
+    },
+    {
+      "step": "2",
+      "name": "build",
+      "status": "ok",
+      "seconds": 13.9,
+      "note": ""
+    },
+    {
+      "step": "3",
+      "name": "tests",
+      "status": "ok",
+      "seconds": 5.9,
+      "note": ""
+    },
+    {
+      "step": "4",
+      "name": "traceability",
+      "status": "ok",
+      "seconds": 0.0,
+      "note": "36/36 criteria covered"
+    },
+    {
+      "step": "4a",
+      "name": "audit sampling",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "audit sampling writes pytest tests only; changed code is not python"
+    },
+    {
+      "step": "5",
+      "name": "ui test generation",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "the unit changed no file under verifier.playwright.ui_paths"
+    },
+    {
+      "step": "6",
+      "name": "quality",
+      "status": "ok",
+      "seconds": 0.0,
+      "note": "not measured: diff coverage measures python only; changed code outside it: src/api/errors.ts, src/api/health.ts, src/api/server.ts, src/api/shutdown.ts, src/config/config.ts and 10 more"
+    },
+    {
+      "step": "8",
+      "name": "s1 judge",
+      "status": "ok",
+      "seconds": 3.7,
+      "note": "36/36 criteria judged by jev"
+    },
+    {
+      "step": "9",
+      "name": "judge",
+      "status": "ok",
+      "seconds": 575.4,
+      "note": "2 call(s)"
+    },
+    {
+      "step": "10",
+      "name": "aggregation",
+      "status": "ok",
+      "seconds": 0.0,
+      "note": "PASS"
+    }
+  ],
+  "gates": [
+    {
+      "name": "setup",
+      "command": "pnpm install --frozen-lockfile",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1132Z-7654/014-setup.log",
+      "digest": null
+    },
+    {
+      "name": "setup",
+      "command": "uv sync --project e2e --frozen",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1132Z-7654/015-setup.log",
+      "digest": null
+    },
+    {
+      "name": "build",
+      "command": "pnpm run build",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1132Z-7654/016-build.log",
+      "digest": null
+    },
+    {
+      "name": "lint",
+      "command": "pnpm run lint",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1132Z-7654/017-lint.log",
+      "digest": null
+    },
+    {
+      "name": "typecheck",
+      "command": "pnpm run typecheck",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1132Z-7654/018-typecheck.log",
+      "digest": null
+    },
+    {
+      "name": "test",
+      "command": "pnpm run test",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1132Z-7654/019-test.log",
+      "digest": null
+    },
+    {
+      "name": "e2e",
+      "command": "e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1132Z-7654/020-e2e.log",
+      "digest": null
+    }
+  ],
+  "criteria": [
+    {
+      "id": "C-7b6bccec",
+      "alias": "engine-config › Typed configuration from the environment › Defaults",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.config.config.test.ts::C-7b6bccec loadConfig returns every documented default for an empty environment"
+      ],
+      "s1_p": 0.95
+    },
+    {
+      "id": "C-95e9881e",
+      "alias": "engine-config › Typed configuration from the environment › Values from the environment",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.config.config.test.ts::C-95e9881e loadConfig derives publicBaseUrl from the port and ignores empty or unknown variables",
+        "src.config.config.test.ts::C-95e9881e loadConfig reads every non-secret setting from the environment and drops a trailing slash"
+      ],
+      "s1_p": 0.95
+    },
+    {
+      "id": "C-c0bf38f0",
+      "alias": "engine-config › Typed configuration from the environment › Bad values are refused without echoing them",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad drain deadline or public base URL without echoing the value",
+        "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad port host log level or role"
+      ],
+      "s1_p": 0.94
+    },
+    {
+      "id": "C-f3f5587d",
+      "alias": "engine-config › Typed configuration from the environment › A secret placed in the environment is refused",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.config.config.test.ts::C-f3f5587d loadConfig ignores an empty secret-shaped variable",
+        "src.config.config.test.ts::C-f3f5587d loadConfig refuses a non-empty secret-shaped variable without echoing its value"
+      ],
+      "s1_p": 0.87
+    },
+    {
+      "id": "C-7a4aa4d4",
+      "alias": "engine-config › Secrets only from files › Engine key loaded",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.config.config.test.ts::C-7a4aa4d4 loadConfig reads the engine key from its file and strips the trailing newline",
+        "src.config.secret.test.ts::C-7a4aa4d4 readSecretValue strips one trailing newline and reads the named file once"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-ca797e1f",
+      "alias": "engine-config › Secrets only from files › Empty, missing or weak engine key refuses start",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.config.config.test.ts::C-ca797e1f loadConfig refuses a weak engine key with CONFIG_INVALID naming its file variable",
+        "src.config.config.test.ts::C-ca797e1f loadConfig refuses an empty or unreadable engine key file with CONFIG_SECRET_EMPTY",
+        "src.config.secret.test.ts::C-ca797e1f a weak engine key is CONFIG_INVALID with its file variable",
+        "src.config.secret.test.ts::C-ca797e1f readSecretValue refuses empty whitespace-only and unreadable secrets without their text"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-16430cae",
+      "alias": "engine-config › Secrets only from files › No secret byte leaves the config object",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.config.config.test.ts::C-16430cae a loaded config hides the engine key and database password from JSON String and inspect",
+        "src.config.secret.test.ts::C-16430cae a Secret hides its value from JSON String and inspect"
+      ],
+      "s1_p": 0.96
+    },
+    {
+      "id": "C-406ddaa1",
+      "alias": "engine-config › Secrets only from files › Database settings",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.config.config.test.ts::C-406ddaa1 loadConfig keeps a postgresql sslmode URL unchanged and leaves a missing password null",
+        "src.config.config.test.ts::C-406ddaa1 loadConfig parses app and owner database endpoints with secret passwords",
+        "src.config.secret.test.ts::C-406ddaa1 readSecretValue returns a Secret for a database password file"
+      ],
+      "s1_p": 0.94
+    },
+    {
+      "id": "C-3d74e0ae",
+      "alias": "engine-config › Secrets only from files › Bad database settings",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.config.config.test.ts::C-3d74e0ae a bad database URL is CONFIG_INVALID naming the URL variable without the password",
+        "src.config.config.test.ts::C-3d74e0ae a bad owner database URL names the owner URL variable",
+        "src.config.config.test.ts::C-3d74e0ae a database password file without its URL names the password-file variable",
+        "src.config.config.test.ts::C-3d74e0ae an empty database password file with a valid URL gives CONFIG_SECRET_EMPTY",
+        "src.config.secret.test.ts::C-3d74e0ae ConfigError names the variable and rule without a value"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-6f8e2578",
+      "alias": "engine-runtime › Injected clock and time-sortable ids › UUIDv7 layout",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.core.clock.test.ts::C-6f8e2578 fixedClock rejects an invalid date",
+        "src.core.clock.test.ts::C-6f8e2578 fixedClock returns distinct Date objects for one instant",
+        "src.core.ids.test.ts::C-6f8e2578 createIds writes the timestamp version counter variant and random bits"
+      ],
+      "s1_p": 0.95
+    },
+    {
+      "id": "C-6004f84c",
+      "alias": "engine-runtime › Injected clock and time-sortable ids › Ordering, rollover and a clock that goes backwards",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.core.ids.test.ts::C-6004f84c ids stay ordered when the clock moves forward and back",
+        "src.core.ids.test.ts::C-6004f84c the counter rolls into the timestamp after 4096 ids"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-68b36af5",
+      "alias": "engine-runtime › Injected clock and time-sortable ids › Prefix, system and sequential sources",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.core.ids.test.ts::C-68b36af5 createIds rejects prefixes outside the lower-case rule",
+        "src.core.ids.test.ts::C-68b36af5 sequentialIds counts from its seed",
+        "src.core.ids.test.ts::C-68b36af5 sequentialIds rejects a bad seed and overflow",
+        "src.core.ids.test.ts::C-68b36af5 systemIds returns a uuidv7 with its prefix"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-d18af48d",
+      "alias": "engine-runtime › Redacting structured logger › Line shape and level filter",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.observability.logger.test.ts::C-d18af48d a silent logger writes nothing while a warn logger on the same input does",
+        "src.observability.logger.test.ts::C-d18af48d a warn logger writes one ISO-timed line and drops records below its level"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-cc8bd5a6",
+      "alias": "engine-runtime › Redacting structured logger › Secrets are redacted at the listed paths",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.observability.logger.test.ts::C-cc8bd5a6 authorization cookie and set-cookie are redacted alone and under headers",
+        "src.observability.logger.test.ts::C-cc8bd5a6 the listed secret keys are redacted from depth zero to three"
+      ],
+      "s1_p": 0.87
+    },
+    {
+      "id": "C-fc60a608",
+      "alias": "engine-runtime › Redacting structured logger › Errors and requests are logged without their content",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.observability.logger.test.ts::C-fc60a608 a request is logged as method and route pattern, never its URL",
+        "src.observability.logger.test.ts::C-fc60a608 a request without a route pattern logs url unmatched",
+        "src.observability.logger.test.ts::C-fc60a608 an error is logged as type, string code and frames only",
+        "src.observability.logger.test.ts::C-fc60a608 an error without a string code has no code key"
+      ],
+      "s1_p": 0.86
+    },
+    {
+      "id": "C-3c17bb81",
+      "alias": "engine-runtime › Tracer port › One span per request",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.server.test.ts::C-3c17bb81 a recording tracer holds one ended http.request span per request",
+        "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end",
+        "src.observability.tracer.test.ts::C-3c17bb81 noopTracer starts a span without attributes"
+      ],
+      "s1_p": 0.86
+    },
+    {
+      "id": "C-595eb185",
+      "alias": "engine-runtime › Tracer port › A failing tracer does not break requests",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.server.test.ts::C-595eb185 a failing tracer logs a warning and the request still succeeds",
+        "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-3284ea9e",
+      "alias": "engine-runtime › Uniform error envelope › ApiError",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.errors.test.ts::C-3284ea9e ApiError refuses a status outside 400 to 599 or a malformed code",
+        "src.api.errors.test.ts::C-3284ea9e toErrorResponse maps an ApiError with and without details",
+        "src.api.server.test.ts::C-3284ea9e buildServer answers an ApiError with its own status code and details"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-240590ab",
+      "alias": "engine-runtime › Uniform error envelope › Schema failure",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.errors.test.ts::C-240590ab toErrorResponse maps body schema failures to field details",
+        "src.api.errors.test.ts::C-240590ab toErrorResponse reports query and path parameter fields",
+        "src.api.server.test.ts::C-240590ab buildServer reports the first body query or path schema fault"
+      ],
+      "s1_p": 0.88
+    },
+    {
+      "id": "C-d145c766",
+      "alias": "engine-runtime › Uniform error envelope › Malformed, oversized and wrongly typed bodies",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.errors.test.ts::C-d145c766 toErrorResponse keeps another 4xx status as BAD_REQUEST",
+        "src.api.errors.test.ts::C-d145c766 toErrorResponse maps malformed JSON oversized and wrongly typed bodies",
+        "src.api.server.test.ts::C-d145c766 buildServer keeps the fixed codes for malformed oversized and wrongly typed bodies"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-aea19ec5",
+      "alias": "engine-runtime › Uniform error envelope › Unknown error leaks nothing",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.errors.test.ts::C-aea19ec5 toErrorResponse hides an unknown error behind INTERNAL",
+        "src.api.server.test.ts::C-aea19ec5 unknown errors answer INTERNAL and never log hunter2"
+      ],
+      "s1_p": 0.91
+    },
+    {
+      "id": "C-71327adc",
+      "alias": "engine-runtime › Request ids › Well-formed header is kept",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.server.test.ts::C-71327adc a well-formed x-request-id is kept and the route is logged without the query"
+      ],
+      "s1_p": 0.94
+    },
+    {
+      "id": "C-2490a98e",
+      "alias": "engine-runtime › Request ids › Paths that carry a token are not logged",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.server.test.ts::C-2490a98e a path that carries a token logs the wildcard route only"
+      ],
+      "s1_p": 0.91
+    },
+    {
+      "id": "C-c68d2bde",
+      "alias": "engine-runtime › Request ids › Missing or malformed header is replaced",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.server.test.ts::C-c68d2bde missing malformed and oversized request ids are replaced"
+      ],
+      "s1_p": 0.85
+    },
+    {
+      "id": "C-64866f0f",
+      "alias": "engine-runtime › Request ids › Errors carry the id",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.server.test.ts::C-64866f0f a 404 and a thrown error both carry the request id"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-14452135",
+      "alias": "engine-runtime › Health endpoint and check registry › No checks registered",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.health.test.ts::C-14452135 an empty registry reports ok with no checks",
+        "src.api.health.test.ts::C-14452135 checks that resolve ok are reported by name",
+        "src.api.server.test.ts::C-14452135 GET /health reports passing checks by name",
+        "src.api.server.test.ts::C-14452135 GET /health with no checks reports ok and healthPayload is unchanged"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-ce3d89ea",
+      "alias": "engine-runtime › Health endpoint and check registry › The health request log holds the route only",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.server.test.ts::C-ce3d89ea the health request log holds the route without the query token"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-609c36a3",
+      "alias": "engine-runtime › Health endpoint and check registry › A check fails, throws, times out or returns junk",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.health.test.ts::C-609c36a3 a check that never settles times out after 10 ms",
+        "src.api.health.test.ts::C-609c36a3 a check that resolves fail marks the report failed",
+        "src.api.health.test.ts::C-609c36a3 a check that resolves junk fails as an invalid result",
+        "src.api.health.test.ts::C-609c36a3 a check that throws fails without leaking its message",
+        "src.api.server.test.ts::C-609c36a3 GET /health reports a failing check without leaking its content",
+        "src.api.server.test.ts::C-609c36a3 GET /health reports a hanging check as a timeout",
+        "src.api.server.test.ts::C-609c36a3 GET /health reports a junk check result as invalid",
+        "src.api.server.test.ts::C-609c36a3 GET /health reports a throwing check without its message"
+      ],
+      "s1_p": 0.96
+    },
+    {
+      "id": "C-64e17386",
+      "alias": "engine-runtime › Health endpoint and check registry › Registration rules and shared runs",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.health.test.ts::C-64e17386 a check registered after a run appears in the next run",
+        "src.api.health.test.ts::C-64e17386 duplicate and invalid names are refused",
+        "src.api.health.test.ts::C-64e17386 overlapping runs call every check once"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-341a5ed6",
+      "alias": "engine-runtime › Graceful shutdown with a bounded drain › Clean drain",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.shutdown.test.ts::C-341a5ed6 a SIGTERM then SIGINT closes once and exits zero"
+      ],
+      "s1_p": 0.94
+    },
+    {
+      "id": "C-3d0f68d6",
+      "alias": "engine-runtime › Graceful shutdown with a bounded drain › Direct call, repeats and dispose",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.shutdown.test.ts::C-3d0f68d6 a direct shutdown is idempotent and resolves undefined after exit zero",
+        "src.api.shutdown.test.ts::C-3d0f68d6 dispose removes both signal listeners and never closes"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-78a31ae6",
+      "alias": "engine-runtime › Graceful shutdown with a bounded drain › Drain deadline or failed close",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.shutdown.test.ts::C-78a31ae6 a failed close logs shutdown failed without the error text",
+        "src.api.shutdown.test.ts::C-78a31ae6 a missed drain deadline force closes and exits one"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-9abd6ccb",
+      "alias": "engine-runtime › Graceful shutdown with a bounded drain › Requests during the drain",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.api.shutdown.test.ts::C-9abd6ccb requests during the drain still get the envelope and the slow request finishes"
+      ],
+      "s1_p": 0.95
+    },
+    {
+      "id": "C-6912835f",
+      "alias": "engine-runtime › Composition root keeps the bootstrap contracts › startServer serves health and closes",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.main.test.ts::C-6912835f startServer serves health on the bound loopback port and closes"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-c7407753",
+      "alias": "engine-runtime › Composition root keeps the bootstrap contracts › main starts and stops",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.main.test.ts::C-c7407753 main listens on the configured host and reports it",
+        "src.main.test.ts::C-c7407753 main starts a port-0 server and stops on SIGTERM"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-469d7fec",
+      "alias": "engine-runtime › Composition root keeps the bootstrap contracts › Startup failures refuse start",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.main.test.ts::C-469d7fec main reports EADDRINUSE for a busy port at info and silent",
+        "src.main.test.ts::C-469d7fec main writes one fatal line for an empty secret file",
+        "src.main.test.ts::C-469d7fec main writes one fatal line without the error text for an unknown failure"
+      ],
+      "s1_p": 0.94
+    }
+  ],
+  "findings": [],
+  "holds": [],
+  "subject_sha": "f7f58206c3ccdfc418878058c684329594fb0314",
+  "family_criteria": [
+    "C-7b6bccec",
+    "C-95e9881e",
+    "C-c0bf38f0",
+    "C-f3f5587d",
+    "C-7a4aa4d4",
+    "C-ca797e1f",
+    "C-16430cae",
+    "C-406ddaa1",
+    "C-3d74e0ae",
+    "C-6f8e2578",
+    "C-6004f84c",
+    "C-68b36af5",
+    "C-d18af48d",
+    "C-cc8bd5a6",
+    "C-fc60a608",
+    "C-3c17bb81",
+    "C-595eb185",
+    "C-3284ea9e",
+    "C-240590ab",
+    "C-d145c766",
+    "C-aea19ec5",
+    "C-71327adc",
+    "C-2490a98e",
+    "C-c68d2bde",
+    "C-64866f0f",
+    "C-14452135",
+    "C-ce3d89ea",
+    "C-609c36a3",
+    "C-64e17386",
+    "C-341a5ed6",
+    "C-3d0f68d6",
+    "C-78a31ae6",
+    "C-9abd6ccb",
+    "C-6912835f",
+    "C-c7407753",
+    "C-469d7fec"
+  ],
+  "reused_from": null,
+  "integrity": {
+    "checks": [
+      {
+        "name": "protected paths",
+        "status": "ok",
+        "note": "no protected path differs from the base"
+      },
+      {
+        "name": "pre-existing tests",
+        "status": "skipped",
+        "note": "no test file changed"
+      },
+      {
+        "name": "red-green freeze",
+        "status": "ok",
+        "note": "12 task(s): red and green compared"
+      },
+      {
+        "name": "test path freeze",
+        "status": "ok",
+        "note": "13 harness step commit(s) checked"
+      },
+      {
+        "name": "content scan",
+        "status": "ok",
+        "note": "no result-manipulating construct in the changed support and runner files"
+      },
+      {
+        "name": "gate configuration",
+        "status": "skipped",
+        "note": "no gate or runner configuration file changed"
+      },
+      {
+        "name": "test awareness",
+        "status": "ok",
+        "note": "no production line reacts to the test run"
+      },
+      {
+        "name": "suppressions",
+        "status": "skipped",
+        "note": "not checked: python only; changed files outside it: src/api/errors.test.ts, src/api/errors.ts, src/api/health.test.ts, src/api/health.ts, src/api/server.test.ts (+21 more)"
+      },
+      {
+        "name": "tdd history",
+        "status": "ok",
+        "note": "12 task(s); red tests passing at head: step 3"
+      },
+      {
+        "name": "pre-existing tests still pass",
+        "status": "ok",
+        "note": "9 of 9 base tests pass on the unit's code with its 11 test and support files at the base (base: not needed)"
+      }
+    ],
+    "findings": [],
+    "declared": [],
+    "human_protected": [],
+    "human_tests": [],
+    "unfrozen": [],
+    "human_suppressions": [],
+    "human_scan": [],
+    "human_config": [],
+    "allowed_tests": [],
+    "mocked_support": [],
+    "base_tests": {
+      "base_sha": "f01a0413a890c257db1b4c9baad1155861ecb63e",
+      "command": "pnpm run test",
+      "passed": [
+        "src.health.test.ts::healthPayload reports ok and the given version",
+        "test.tooling.node-test-junit.test.ts::a describe body that throws is reported as a failure of the suite",
+        "test.tooling.node-test-junit.test.ts::a file that does not import is a collection failure without classname",
+        "test.tooling.node-test-junit.test.ts::a passing test has no failure and skip and todo are skipped",
+        "test.tooling.node-test-junit.test.ts::a stub that throws not implemented is reported as NotImplementedError",
+        "test.tooling.node-test-junit.test.ts::an assertion failure carries type AssertionError and the name in its message",
+        "test.tooling.node-test-junit.test.ts::any other error keeps its own name",
+        "test.tooling.node-test-junit.test.ts::nested describes become part of the classname",
+        "test.tooling.node-test-junit.test.ts::same-named tests in two files get distinct classnames"
+      ],
+      "collection_errors": []
+    },
+    "test_awareness": []
+  },
+  "trace": [
+    {
+      "criterion": "C-7b6bccec",
+      "alias": "engine-config › Typed configuration from the environment › Defaults",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.config.config.test.ts::C-7b6bccec loadConfig returns every documented default for an empty environment",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-95e9881e",
+      "alias": "engine-config › Typed configuration from the environment › Values from the environment",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.config.config.test.ts::C-95e9881e loadConfig derives publicBaseUrl from the port and ignores empty or unknown variables",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.config.test.ts::C-95e9881e loadConfig reads every non-secret setting from the environment and drops a trailing slash",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-c0bf38f0",
+      "alias": "engine-config › Typed configuration from the environment › Bad values are refused without echoing them",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad drain deadline or public base URL without echoing the value",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad port host log level or role",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-f3f5587d",
+      "alias": "engine-config › Typed configuration from the environment › A secret placed in the environment is refused",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.config.config.test.ts::C-f3f5587d loadConfig ignores an empty secret-shaped variable",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.config.test.ts::C-f3f5587d loadConfig refuses a non-empty secret-shaped variable without echoing its value",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-7a4aa4d4",
+      "alias": "engine-config › Secrets only from files › Engine key loaded",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.config.config.test.ts::C-7a4aa4d4 loadConfig reads the engine key from its file and strips the trailing newline",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.secret.test.ts::C-7a4aa4d4 readSecretValue strips one trailing newline and reads the named file once",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-ca797e1f",
+      "alias": "engine-config › Secrets only from files › Empty, missing or weak engine key refuses start",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.config.config.test.ts::C-ca797e1f loadConfig refuses a weak engine key with CONFIG_INVALID naming its file variable",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.config.test.ts::C-ca797e1f loadConfig refuses an empty or unreadable engine key file with CONFIG_SECRET_EMPTY",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.secret.test.ts::C-ca797e1f a weak engine key is CONFIG_INVALID with its file variable",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.secret.test.ts::C-ca797e1f readSecretValue refuses empty whitespace-only and unreadable secrets without their text",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-16430cae",
+      "alias": "engine-config › Secrets only from files › No secret byte leaves the config object",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.config.config.test.ts::C-16430cae a loaded config hides the engine key and database password from JSON String and inspect",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.secret.test.ts::C-16430cae a Secret hides its value from JSON String and inspect",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-406ddaa1",
+      "alias": "engine-config › Secrets only from files › Database settings",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.config.config.test.ts::C-406ddaa1 loadConfig keeps a postgresql sslmode URL unchanged and leaves a missing password null",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.config.test.ts::C-406ddaa1 loadConfig parses app and owner database endpoints with secret passwords",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.secret.test.ts::C-406ddaa1 readSecretValue returns a Secret for a database password file",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-3d74e0ae",
+      "alias": "engine-config › Secrets only from files › Bad database settings",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.config.config.test.ts::C-3d74e0ae a bad database URL is CONFIG_INVALID naming the URL variable without the password",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.config.test.ts::C-3d74e0ae a bad owner database URL names the owner URL variable",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.config.test.ts::C-3d74e0ae a database password file without its URL names the password-file variable",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.config.test.ts::C-3d74e0ae an empty database password file with a valid URL gives CONFIG_SECRET_EMPTY",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.config.secret.test.ts::C-3d74e0ae ConfigError names the variable and rule without a value",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-6f8e2578",
+      "alias": "engine-runtime › Injected clock and time-sortable ids › UUIDv7 layout",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.core.clock.test.ts::C-6f8e2578 fixedClock rejects an invalid date",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.core.clock.test.ts::C-6f8e2578 fixedClock returns distinct Date objects for one instant",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.core.ids.test.ts::C-6f8e2578 createIds writes the timestamp version counter variant and random bits",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-6004f84c",
+      "alias": "engine-runtime › Injected clock and time-sortable ids › Ordering, rollover and a clock that goes backwards",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.core.ids.test.ts::C-6004f84c ids stay ordered when the clock moves forward and back",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.core.ids.test.ts::C-6004f84c the counter rolls into the timestamp after 4096 ids",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-68b36af5",
+      "alias": "engine-runtime › Injected clock and time-sortable ids › Prefix, system and sequential sources",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.core.ids.test.ts::C-68b36af5 createIds rejects prefixes outside the lower-case rule",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.core.ids.test.ts::C-68b36af5 sequentialIds counts from its seed",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.core.ids.test.ts::C-68b36af5 sequentialIds rejects a bad seed and overflow",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.core.ids.test.ts::C-68b36af5 systemIds returns a uuidv7 with its prefix",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-d18af48d",
+      "alias": "engine-runtime › Redacting structured logger › Line shape and level filter",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.observability.logger.test.ts::C-d18af48d a silent logger writes nothing while a warn logger on the same input does",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.observability.logger.test.ts::C-d18af48d a warn logger writes one ISO-timed line and drops records below its level",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-cc8bd5a6",
+      "alias": "engine-runtime › Redacting structured logger › Secrets are redacted at the listed paths",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.observability.logger.test.ts::C-cc8bd5a6 authorization cookie and set-cookie are redacted alone and under headers",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.observability.logger.test.ts::C-cc8bd5a6 the listed secret keys are redacted from depth zero to three",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-fc60a608",
+      "alias": "engine-runtime › Redacting structured logger › Errors and requests are logged without their content",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.observability.logger.test.ts::C-fc60a608 a request is logged as method and route pattern, never its URL",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.observability.logger.test.ts::C-fc60a608 a request without a route pattern logs url unmatched",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.observability.logger.test.ts::C-fc60a608 an error is logged as type, string code and frames only",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.observability.logger.test.ts::C-fc60a608 an error without a string code has no code key",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-3c17bb81",
+      "alias": "engine-runtime › Tracer port › One span per request",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.server.test.ts::C-3c17bb81 a recording tracer holds one ended http.request span per request",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.observability.tracer.test.ts::C-3c17bb81 noopTracer starts a span without attributes",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-595eb185",
+      "alias": "engine-runtime › Tracer port › A failing tracer does not break requests",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.server.test.ts::C-595eb185 a failing tracer logs a warning and the request still succeeds",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-3284ea9e",
+      "alias": "engine-runtime › Uniform error envelope › ApiError",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.errors.test.ts::C-3284ea9e ApiError refuses a status outside 400 to 599 or a malformed code",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.errors.test.ts::C-3284ea9e toErrorResponse maps an ApiError with and without details",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.server.test.ts::C-3284ea9e buildServer answers an ApiError with its own status code and details",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-240590ab",
+      "alias": "engine-runtime › Uniform error envelope › Schema failure",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.errors.test.ts::C-240590ab toErrorResponse maps body schema failures to field details",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.errors.test.ts::C-240590ab toErrorResponse reports query and path parameter fields",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.server.test.ts::C-240590ab buildServer reports the first body query or path schema fault",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-d145c766",
+      "alias": "engine-runtime › Uniform error envelope › Malformed, oversized and wrongly typed bodies",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.errors.test.ts::C-d145c766 toErrorResponse keeps another 4xx status as BAD_REQUEST",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.errors.test.ts::C-d145c766 toErrorResponse maps malformed JSON oversized and wrongly typed bodies",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.server.test.ts::C-d145c766 buildServer keeps the fixed codes for malformed oversized and wrongly typed bodies",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-aea19ec5",
+      "alias": "engine-runtime › Uniform error envelope › Unknown error leaks nothing",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.errors.test.ts::C-aea19ec5 toErrorResponse hides an unknown error behind INTERNAL",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.server.test.ts::C-aea19ec5 unknown errors answer INTERNAL and never log hunter2",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-71327adc",
+      "alias": "engine-runtime › Request ids › Well-formed header is kept",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.server.test.ts::C-71327adc a well-formed x-request-id is kept and the route is logged without the query",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-2490a98e",
+      "alias": "engine-runtime › Request ids › Paths that carry a token are not logged",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.server.test.ts::C-2490a98e a path that carries a token logs the wildcard route only",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-c68d2bde",
+      "alias": "engine-runtime › Request ids › Missing or malformed header is replaced",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.server.test.ts::C-c68d2bde missing malformed and oversized request ids are replaced",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-64866f0f",
+      "alias": "engine-runtime › Request ids › Errors carry the id",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.server.test.ts::C-64866f0f a 404 and a thrown error both carry the request id",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-14452135",
+      "alias": "engine-runtime › Health endpoint and check registry › No checks registered",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.health.test.ts::C-14452135 an empty registry reports ok with no checks",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.health.test.ts::C-14452135 checks that resolve ok are reported by name",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.server.test.ts::C-14452135 GET /health reports passing checks by name",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.server.test.ts::C-14452135 GET /health with no checks reports ok and healthPayload is unchanged",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-ce3d89ea",
+      "alias": "engine-runtime › Health endpoint and check registry › The health request log holds the route only",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.server.test.ts::C-ce3d89ea the health request log holds the route without the query token",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-609c36a3",
+      "alias": "engine-runtime › Health endpoint and check registry › A check fails, throws, times out or returns junk",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.health.test.ts::C-609c36a3 a check that never settles times out after 10 ms",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.health.test.ts::C-609c36a3 a check that resolves fail marks the report failed",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.health.test.ts::C-609c36a3 a check that resolves junk fails as an invalid result",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.health.test.ts::C-609c36a3 a check that throws fails without leaking its message",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.server.test.ts::C-609c36a3 GET /health reports a failing check without leaking its content",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.server.test.ts::C-609c36a3 GET /health reports a hanging check as a timeout",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.server.test.ts::C-609c36a3 GET /health reports a junk check result as invalid",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.server.test.ts::C-609c36a3 GET /health reports a throwing check without its message",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-64e17386",
+      "alias": "engine-runtime › Health endpoint and check registry › Registration rules and shared runs",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.health.test.ts::C-64e17386 a check registered after a run appears in the next run",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.health.test.ts::C-64e17386 duplicate and invalid names are refused",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.health.test.ts::C-64e17386 overlapping runs call every check once",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-341a5ed6",
+      "alias": "engine-runtime › Graceful shutdown with a bounded drain › Clean drain",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.shutdown.test.ts::C-341a5ed6 a SIGTERM then SIGINT closes once and exits zero",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-3d0f68d6",
+      "alias": "engine-runtime › Graceful shutdown with a bounded drain › Direct call, repeats and dispose",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.shutdown.test.ts::C-3d0f68d6 a direct shutdown is idempotent and resolves undefined after exit zero",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.shutdown.test.ts::C-3d0f68d6 dispose removes both signal listeners and never closes",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-78a31ae6",
+      "alias": "engine-runtime › Graceful shutdown with a bounded drain › Drain deadline or failed close",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.shutdown.test.ts::C-78a31ae6 a failed close logs shutdown failed without the error text",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.api.shutdown.test.ts::C-78a31ae6 a missed drain deadline force closes and exits one",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-9abd6ccb",
+      "alias": "engine-runtime › Graceful shutdown with a bounded drain › Requests during the drain",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.api.shutdown.test.ts::C-9abd6ccb requests during the drain still get the envelope and the slow request finishes",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-6912835f",
+      "alias": "engine-runtime › Composition root keeps the bootstrap contracts › startServer serves health and closes",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.main.test.ts::C-6912835f startServer serves health on the bound loopback port and closes",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-c7407753",
+      "alias": "engine-runtime › Composition root keeps the bootstrap contracts › main starts and stops",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.main.test.ts::C-c7407753 main listens on the configured host and reports it",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.main.test.ts::C-c7407753 main starts a port-0 server and stops on SIGTERM",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-469d7fec",
+      "alias": "engine-runtime › Composition root keeps the bootstrap contracts › Startup failures refuse start",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.main.test.ts::C-469d7fec main reports EADDRINUSE for a busy port at info and silent",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.main.test.ts::C-469d7fec main writes one fatal line for an empty secret file",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.main.test.ts::C-469d7fec main writes one fatal line without the error text for an unknown failure",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    }
+  ],
+  "audit": [],
+  "generated": [],
+  "s1": [
+    {
+      "criterion": "C-7b6bccec",
+      "status": "ok",
+      "p": 0.95,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-95e9881e",
+      "status": "ok",
+      "p": 0.95,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-c0bf38f0",
+      "status": "ok",
+      "p": 0.94,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-f3f5587d",
+      "status": "ok",
+      "p": 0.87,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.92,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.07
+      }
+    },
+    {
+      "criterion": "C-7a4aa4d4",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-ca797e1f",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.95,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-16430cae",
+      "status": "ok",
+      "p": 0.96,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-406ddaa1",
+      "status": "ok",
+      "p": 0.94,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-3d74e0ae",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-6f8e2578",
+      "status": "ok",
+      "p": 0.95,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-6004f84c",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-68b36af5",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-d18af48d",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.98,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.02
+      }
+    },
+    {
+      "criterion": "C-cc8bd5a6",
+      "status": "ok",
+      "p": 0.87,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.85,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.14
+      }
+    },
+    {
+      "criterion": "C-fc60a608",
+      "status": "ok",
+      "p": 0.86,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.9,
+        "contradicted": 0.0,
+        "not_implemented": 0.02,
+        "unrelated": 0.08
+      }
+    },
+    {
+      "criterion": "C-3c17bb81",
+      "status": "ok",
+      "p": 0.86,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.95,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-595eb185",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-3284ea9e",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-240590ab",
+      "status": "ok",
+      "p": 0.88,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-d145c766",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-aea19ec5",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-71327adc",
+      "status": "ok",
+      "p": 0.94,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-2490a98e",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.96,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-c68d2bde",
+      "status": "ok",
+      "p": 0.85,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.97,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.02
+      }
+    },
+    {
+      "criterion": "C-64866f0f",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-14452135",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-ce3d89ea",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.96,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-609c36a3",
+      "status": "ok",
+      "p": 0.96,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-64e17386",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.96,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-341a5ed6",
+      "status": "ok",
+      "p": 0.94,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-3d0f68d6",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-78a31ae6",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.96,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-9abd6ccb",
+      "status": "ok",
+      "p": 0.95,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-6912835f",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.96,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-c7407753",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.96,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-469d7fec",
+      "status": "ok",
+      "p": 0.94,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.98,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.02
+      }
+    }
+  ],
+  "evidence": {
+    "schema": "l4/evidence@1",
+    "holds": [],
+    "items": {},
+    "scope": {
+      "declared": [
+        "src/main.ts",
+        "src/health.ts",
+        "src/health.test.ts",
+        "test/support/e2e-stack/main.ts",
+        "e2e/test_health.py",
+        "docs/decisions/0002",
+        "src/core",
+        "src/config",
+        "src/observability",
+        "src/api",
+        "src/main.test.ts",
+        "src/core/{clock,ids,index}.ts",
+        "src/config/{secret,errors,config,process,index}.ts",
+        "src/observability/{logger,tracer,index}.ts",
+        "src/api/{errors,health,server,shutdown,index}.ts",
+        "src",
+        "dns/promises",
+        "src/core/clock.test.ts",
+        "src/core/ids.test.ts",
+        "src/core/clock.ts",
+        "src/core/ids.ts",
+        "src/core/index.ts",
+        "src/observability/logger.test.ts",
+        "src/observability/logger.ts",
+        "src/observability/index.ts",
+        "src/observability/tracer.test.ts",
+        "src/observability/tracer.ts",
+        "src/config/secret.test.ts",
+        "src/config/secret.ts",
+        "src/config/errors.ts",
+        "src/config/config.test.ts",
+        "src/config/config.ts",
+        "src/config/process.ts",
+        "src/config/index.ts",
+        "src/api/errors.test.ts",
+        "src/api/errors.ts",
+        "src/api/health.test.ts",
+        "src/api/health.ts",
+        "src/api/server.test.ts",
+        "src/api/server.ts",
+        "src/api/index.ts",
+        "src/api/shutdown.test.ts",
+        "src/api/shutdown.ts",
+        "**/index.ts",
+        "**/FST_ERR_CTP*",
+        "**/URSITOARE_*",
+        "**/^[A-Za-z0-9.:_-]{1,253}$",
+        "**/^[0-9]{1,5}$",
+        "**/^[0-9]{1,6}$",
+        "^[A-Za-z0-9+/]+={0,2}$",
+        "**/[util.inspect.custom]",
+        "**/\"[REDACTED]\"",
+        "**/^[A-Za-z0-9._-]{1,64}$",
+        "**/*_FILE",
+        "**/*.test.ts",
+        "**/[",
+        "**/shutdown.test.ts",
+        "**/server.test.ts",
+        "**/b[1]",
+        "**/b[2..7]",
+        "**/^[a-z][a-z0-9]{0,15}$",
+        "**/*",
+        "**/*.headers",
+        "**/headers[\"set-cookie\"]",
+        "**/process.argv[1]",
+        "module api",
+        "module config",
+        "module core",
+        "module dns",
+        "module docs",
+        "module e2e",
+        "module health",
+        "module health.test",
+        "module main",
+        "module main.test",
+        "module observability",
+        "module test"
+      ],
+      "skipped": false,
+      "note": "",
+      "holds": [],
+      "files": [
+        {
+          "path": "openspec/changes/add-engine-skeleton-fix-1/.l4/fix.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-engine-skeleton-fix-1/.openspec.yaml",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-engine-skeleton-fix-1/proposal.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-engine-skeleton-fix-1/tasks.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-engine-skeleton/.l4/evidence/round-1/evidence.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-engine-skeleton/.l4/evidence/round-1/verdict.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-engine-skeleton/.l4/evidence/round-1/verification.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-engine-skeleton/.l4/ledger/r-20261026T0930Z-3e3f.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-engine-skeleton/.l4/ledger/r-20261026T1111Z-3b02.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-engine-skeleton/.l4/ledger/r-20261026T1132Z-7654.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-engine-skeleton/tasks.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-engine-skeleton/verification.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "src/api/errors.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/api/errors.ts",
+          "module": "api",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/api/health.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/api/health.ts",
+          "module": "api",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/api/server.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/api/server.ts",
+          "module": "api",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/api/shutdown.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/api/shutdown.ts",
+          "module": "api",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/config/config.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/config/config.ts",
+          "module": "config",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/config/errors.ts",
+          "module": "config",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/config/process.ts",
+          "module": "config",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/config/secret.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/config/secret.ts",
+          "module": "config",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/core/clock.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/core/clock.ts",
+          "module": "core",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/core/ids.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/core/ids.ts",
+          "module": "core",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/health.ts",
+          "module": "health",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/main.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/main.ts",
+          "module": "main",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/observability/index.ts",
+          "module": "observability",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/observability/logger.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/observability/logger.ts",
+          "module": "observability",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/observability/tracer.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/observability/tracer.ts",
+          "module": "observability",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        }
+      ]
+    },
+    "diff_coverage": {
+      "status": "not_applicable",
+      "reason": "diff coverage measures python only; changed code outside it: src/api/errors.ts, src/api/health.ts, src/api/server.ts, src/api/shutdown.ts, src/config/config.ts and 10 more",
+      "percent": 0.0,
+      "unmeasured_files": [],
+      "other_files": [
+        "src/api/errors.ts",
+        "src/api/health.ts",
+        "src/api/server.ts",
+        "src/api/shutdown.ts",
+        "src/config/config.ts",
+        "src/config/errors.ts",
+        "src/config/process.ts",
+        "src/config/secret.ts",
+        "src/core/clock.ts",
+        "src/core/ids.ts",
+        "src/health.ts",
+        "src/main.ts",
+        "src/observability/index.ts",
+        "src/observability/logger.ts",
+        "src/observability/tracer.ts"
+      ],
+      "functions": []
+    },
+    "tests_ran": {
+      "tests_ok": true,
+      "summary": {
+        "total": 98,
+        "passed": 98,
+        "failed": 0,
+        "errored": 0,
+        "skipped": 0,
+        "new": 88,
+        "new_passed": 88,
+        "skipped_unchanged": []
+      },
+      "findings": []
+    }
+  },
+  "human": [],
+  "fix": null,
+  "judge_verdict": {
+    "criteria": [
+      {
+        "id": "C-7b6bccec",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/config/config.ts",
+            "quote": "export function loadConfig(env: Env, readSecret: SecretReader = defaultReadSecret): AppConfig"
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-7b6bccec loadConfig returns every documented default for an empty environment",
+            "quote": null
+          }
+        ],
+        "reasoning": "loadConfig({}) returns all documented default settings in AppConfig.",
+        "counterexample": null
+      },
+      {
+        "id": "C-95e9881e",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/config/config.ts",
+            "quote": "return parsed.toString().replace(/\\/$/, \"\");"
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-95e9881e loadConfig reads every non-secret setting from the environment and drops a trailing slash",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-95e9881e loadConfig derives publicBaseUrl from the port and ignores empty or unknown variables",
+            "quote": null
+          }
+        ],
+        "reasoning": "loadConfig parses all non-secret environment variables, strips trailing slash from publicBaseUrl, derives default publicBaseUrl from configured port, and ignores empty or unknown variables.",
+        "counterexample": null
+      },
+      {
+        "id": "C-c0bf38f0",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/config/config.ts",
+            "quote": "function error(name: string, reason: string): ConfigError {\n  return new ConfigError(\"CONFIG_INVALID\", name, reason);\n}"
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad port host log level or role",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad drain deadline or public base URL without echoing the value",
+            "quote": null
+          }
+        ],
+        "reasoning": "Invalid environment variable values throw ConfigError with code CONFIG_INVALID, naming the variable and fixed rule message without echoing the offending value.",
+        "counterexample": null
+      },
+      {
+        "id": "C-f3f5587d",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/config/config.ts",
+            "quote": "function refuseSecretShapedVariables(env: Env): void"
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-f3f5587d loadConfig refuses a non-empty secret-shaped variable without echoing its value",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-f3f5587d loadConfig ignores an empty secret-shaped variable",
+            "quote": null
+          }
+        ],
+        "reasoning": "refuseSecretShapedVariables rejects non-empty PGPASSWORD, PGPASSFILE, and URSITOARE_* variables ending in PASSWORD, SECRET, TOKEN, or KEY (not _FILE) without echoing values, and ignores empty strings.",
+        "counterexample": null
+      },
+      {
+        "id": "C-7a4aa4d4",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/config/config.ts",
+            "quote": "function readEngineKey(env: Env, readSecret: SecretReader): Secret | null"
+          },
+          {
+            "kind": "file",
+            "ref": "src/config/secret.ts",
+            "quote": "function stripOneTrailingNewline(value: string): string"
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-7a4aa4d4 loadConfig reads the engine key from its file and strips the trailing newline",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.secret.test.ts::C-7a4aa4d4 readSecretValue strips one trailing newline and reads the named file once",
+            "quote": null
+          }
+        ],
+        "reasoning": "readEngineKey reads URSITOARE_ENGINE_KEY_FILE once via readSecretValue, strips one trailing newline, and validates >=64 hex chars or base64 of >=32 bytes.",
+        "counterexample": null
+      },
+      {
+        "id": "C-ca797e1f",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/config/secret.ts",
+            "quote": "throw new ConfigError(\"CONFIG_SECRET_EMPTY\", variable, SECRET_EMPTY_REASON);"
+          },
+          {
+            "kind": "file",
+            "ref": "src/config/config.ts",
+            "quote": "if (!isHexKey(value) && !isBase64Key(value)) {\n    throw error(name, ENGINE_KEY_REASON);\n  }"
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-ca797e1f loadConfig refuses an empty or unreadable engine key file with CONFIG_SECRET_EMPTY",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-ca797e1f loadConfig refuses a weak engine key with CONFIG_INVALID naming its file variable",
+            "quote": null
+          }
+        ],
+        "reasoning": "Missing, unreadable, or whitespace-only secret files throw CONFIG_SECRET_EMPTY without the underlying error text, and weak keys throw CONFIG_INVALID naming URSITOARE_ENGINE_KEY_FILE.",
+        "counterexample": null
+      },
+      {
+        "id": "C-16430cae",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/config/secret.ts",
+            "quote": "export class Secret {\n  readonly #value: string;"
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-16430cae a loaded config hides the engine key and database password from JSON String and inspect",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.secret.test.ts::C-16430cae a Secret hides its value from JSON String and inspect",
+            "quote": null
+          }
+        ],
+        "reasoning": "Secret stores the raw string in a private field and returns [REDACTED] from toJSON, toString, and util.inspect.custom while reveal() returns the secret.",
+        "counterexample": null
+      },
+      {
+        "id": "C-406ddaa1",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/config/config.ts",
+            "quote": "function readDatabaseEndpoint(\n  env: Env,\n  urlVariable: string,\n  passwordVariable: string,\n  readSecret: SecretReader,\n): DatabaseEndpoint | null"
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-406ddaa1 loadConfig parses app and owner database endpoints with secret passwords",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-406ddaa1 loadConfig keeps a postgresql sslmode URL unchanged and leaves a missing password null",
+            "quote": null
+          }
+        ],
+        "reasoning": "App and owner database endpoints accept postgres: and postgresql: URLs with optional sslmode=disable|verify-full and optional password files loaded as Secret instances.",
+        "counterexample": null
+      },
+      {
+        "id": "C-3d74e0ae",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/config/config.ts",
+            "quote": "if (!unset(env, passwordVariable)) {\n      throw error(passwordVariable, `set only together with ${urlVariable}`);\n    }"
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-3d74e0ae a bad database URL is CONFIG_INVALID naming the URL variable without the password",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-3d74e0ae a database password file without its URL names the password-file variable",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.config.config.test.ts::C-3d74e0ae an empty database password file with a valid URL gives CONFIG_SECRET_EMPTY",
+            "quote": null
+          }
+        ],
+        "reasoning": "Bad database URLs, password files set without their URL, and empty password files throw the specified ConfigError codes and messages without leaking credentials.",
+        "counterexample": null
+      },
+      {
+        "id": "C-6f8e2578",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/core/clock.ts",
+            "quote": "export function fixedClock(iso: string): Clock"
+          },
+          {
+            "kind": "file",
+            "ref": "src/core/ids.ts",
+            "quote": "function formatUuid(ms: number, counter: number, randomBytes: (size: number) => Uint8Array): string"
+          },
+          {
+            "kind": "test",
+            "ref": "src.core.clock.test.ts::C-6f8e2578 fixedClock returns distinct Date objects for one instant",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.core.ids.test.ts::C-6f8e2578 createIds writes the timestamp version counter variant and random bits",
+            "quote": null
+          }
+        ],
+        "reasoning": "createIds formats UUIDv7 with 48-bit timestamp, version 7, 12-bit counter, variant 10, and random bytes; fixedClock returns distinct Date instances and throws RangeError on invalid dates.",
+        "counterexample": null
+      },
+      {
+        "id": "C-6004f84c",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/core/ids.ts",
+            "quote": "if (counter > MAX_COUNTER) {\n          lastMs += 1;\n          counter = 0;\n        }"
+          },
+          {
+            "kind": "test",
+            "ref": "src.core.ids.test.ts::C-6004f84c the counter rolls into the timestamp after 4096 ids",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.core.ids.test.ts::C-6004f84c ids stay ordered when the clock moves forward and back",
+            "quote": null
+          }
+        ],
+        "reasoning": "createIds increments the 12-bit counter within the same or regressed millisecond and rolls over into lastMs + 1 after 4096 ids, preserving monotonic lexicographical order.",
+        "counterexample": null
+      },
+      {
+        "id": "C-68b36af5",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/core/ids.ts",
+            "quote": "const PREFIX_PATTERN = /^[a-z][a-z0-9]{0,15}$/;"
+          },
+          {
+            "kind": "test",
+            "ref": "src.core.ids.test.ts::C-68b36af5 createIds rejects prefixes outside the lower-case rule",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.core.ids.test.ts::C-68b36af5 systemIds returns a uuidv7 with its prefix",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.core.ids.test.ts::C-68b36af5 sequentialIds counts from its seed",
+            "quote": null
+          }
+        ],
+        "reasoning": "Invalid prefixes and invalid sequentialIds seeds throw RangeError; systemIds and sequentialIds produce the specified UUIDv7 formats.",
+        "counterexample": null
+      },
+      {
+        "id": "C-d18af48d",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/observability/logger.ts",
+            "quote": "timestamp: () => `,\"time\":\"${clock.now().toISOString()}\"`"
+          },
+          {
+            "kind": "test",
+            "ref": "src.observability.logger.test.ts::C-d18af48d a warn logger writes one ISO-timed line and drops records below its level",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.observability.logger.test.ts::C-d18af48d a silent logger writes nothing while a warn logger on the same input does",
+            "quote": null
+          }
+        ],
+        "reasoning": "createLogger writes JSON lines with ISO timestamps from the injected clock, service ursitoare, and respects log levels including silent.",
+        "counterexample": null
+      },
+      {
+        "id": "C-cc8bd5a6",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/observability/logger.ts",
+            "quote": "export const REDACT_PATHS: readonly string[] = ["
+          },
+          {
+            "kind": "test",
+            "ref": "src.observability.logger.test.ts::C-cc8bd5a6 the listed secret keys are redacted from depth zero to three",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.observability.logger.test.ts::C-cc8bd5a6 authorization cookie and set-cookie are redacted alone and under headers",
+            "quote": null
+          }
+        ],
+        "reasoning": "REDACT_PATHS censors password, secret, token, apiKey, credential at depths 0-3 and authorization, cookie, set-cookie alone and under headers with [REDACTED].",
+        "counterexample": null
+      },
+      {
+        "id": "C-fc60a608",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/observability/logger.ts",
+            "quote": "function serializeErr(error: unknown): Record<string, unknown>"
+          },
+          {
+            "kind": "test",
+            "ref": "src.observability.logger.test.ts::C-fc60a608 an error is logged as type, string code and frames only",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.observability.logger.test.ts::C-fc60a608 a request is logged as method and route pattern, never its URL",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.observability.logger.test.ts::C-fc60a608 a request without a route pattern logs url unmatched",
+            "quote": null
+          }
+        ],
+        "reasoning": "serializeErr logs only type, string code, and stack frame lines, and serializeReq logs only method and routeOptions.url or unmatched.",
+        "counterexample": null
+      },
+      {
+        "id": "C-3c17bb81",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "const span = deps.tracer.startSpan(\"http.request\", { \"http.method\": request.method });"
+          },
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "span.setAttribute(\"http.route\", typeof route === \"string\" ? route : \"unmatched\");\n      span.setAttribute(\"http.status_code\", reply.statusCode);\n      span.end();"
+          },
+          {
+            "kind": "file",
+            "ref": "src/observability/tracer.ts",
+            "quote": "export const noopTracer: Tracer = {\n  startSpan(_name: string, _attrs?: Readonly<Record<string, SpanValue>>): Span {\n    return noopSpan;\n  },\n};"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-3c17bb81 a recording tracer holds one ended http.request span per request",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.observability.tracer.test.ts::C-3c17bb81 noopTracer starts a span without attributes",
+            "quote": null
+          }
+        ],
+        "reasoning": "buildServer starts an http.request span with http.method on onRequest and sets http.route (route pattern or 'unmatched') and http.status_code before ending the span on onResponse; noopTracer returns a no-op span.",
+        "counterexample": null
+      },
+      {
+        "id": "C-595eb185",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "try {\n      const span = deps.tracer.startSpan(\"http.request\", { \"http.method\": request.method });\n      requestSpans.set(request, span);\n    } catch {\n      request.log.warn(\"tracer failed\");\n    }"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-595eb185 a failing tracer logs a warning and the request still succeeds",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end",
+            "quote": null
+          }
+        ],
+        "reasoning": "buildServer wraps tracer calls in try/catch and logs a warn line 'tracer failed' without failing the request.",
+        "counterexample": null
+      },
+      {
+        "id": "C-3284ea9e",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/errors.ts",
+            "quote": "if (error instanceof ApiError) {\n    return {\n      status: error.status,\n      body: envelope(error.code, error.message, error.details),\n    };\n  }"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.errors.test.ts::C-3284ea9e toErrorResponse maps an ApiError with and without details",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-3284ea9e buildServer answers an ApiError with its own status code and details",
+            "quote": null
+          }
+        ],
+        "reasoning": "ApiError validates status 400..599 and uppercase code, and toErrorResponse and buildServer map it to its status, code, message, and optional details.",
+        "counterexample": null
+      },
+      {
+        "id": "C-240590ab",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/errors.ts",
+            "quote": "function validationField(context: string, issue: UnknownRecord | undefined): string"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.errors.test.ts::C-240590ab toErrorResponse maps body schema failures to field details",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-240590ab buildServer reports the first body query or path schema fault",
+            "quote": null
+          }
+        ],
+        "reasoning": "Validation errors map to 400 VALIDATION_FAILED with details.fields formatted from validationContext, instancePath, and missingProperty or additionalProperty.",
+        "counterexample": null
+      },
+      {
+        "id": "C-d145c766",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/errors.ts",
+            "quote": "if (statusCode === 400 && code !== undefined && code.startsWith(\"FST_ERR_CTP\"))"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.errors.test.ts::C-d145c766 toErrorResponse maps malformed JSON oversized and wrongly typed bodies",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-d145c766 buildServer keeps the fixed codes for malformed oversized and wrongly typed bodies",
+            "quote": null
+          }
+        ],
+        "reasoning": "Malformed JSON maps to 400 VALIDATION_FAILED with field body and message malformed JSON, 413 to PAYLOAD_TOO_LARGE, 415 to UNSUPPORTED_MEDIA_TYPE, and other 4xx such as 429 to BAD_REQUEST.",
+        "counterexample": null
+      },
+      {
+        "id": "C-aea19ec5",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/errors.ts",
+            "quote": "return { status: 500, body: envelope(\"INTERNAL\", INTERNAL_MESSAGE) };"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.errors.test.ts::C-aea19ec5 toErrorResponse hides an unknown error behind INTERNAL",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-aea19ec5 unknown errors answer INTERNAL and never log hunter2",
+            "quote": null
+          }
+        ],
+        "reasoning": "Unknown errors return 500 INTERNAL with fixed message Internal server error and log via the redacting err serializer without leaking error messages or details.",
+        "counterexample": null
+      },
+      {
+        "id": "C-71327adc",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "const REQUEST_ID_PATTERN = /^[A-Za-z0-9._-]{1,64}$/;"
+          },
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "genReqId: (req) => {\n      const value = req.headers[\"x-request-id\"];\n      if (typeof value === \"string\" && REQUEST_ID_PATTERN.test(value)) {\n        return value;\n      }\n      return deps.ids.next(\"req\");\n    },"
+          },
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "server.addHook(\"onSend\", async (request, reply) => {\n    reply.header(\"x-request-id\", request.id);\n  });"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-71327adc a well-formed x-request-id is kept and the route is logged without the query",
+            "quote": null
+          }
+        ],
+        "reasoning": "buildServer validates x-request-id against /^[A-Za-z0-9._-]{1,64}$/, echoes it in onSend, and passes the redacting logger to Fastify.",
+        "counterexample": null
+      },
+      {
+        "id": "C-2490a98e",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "loggerInstance: deps.logger as FastifyBaseLogger,"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-2490a98e a path that carries a token logs the wildcard route only",
+            "quote": null
+          }
+        ],
+        "reasoning": "buildServer uses deps.logger as Fastify's loggerInstance, and the passing C-2490a98e test verifies that GET /t/tok-Q9z?x=1 on GET /* logs only /* and never tok-Q9z.",
+        "counterexample": null
+      },
+      {
+        "id": "C-c68d2bde",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "genReqId: (req) => {\n      const value = req.headers[\"x-request-id\"];\n      if (typeof value === \"string\" && REQUEST_ID_PATTERN.test(value)) {\n        return value;\n      }\n      return deps.ids.next(\"req\");\n    },"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-c68d2bde missing malformed and oversized request ids are replaced",
+            "quote": null
+          }
+        ],
+        "reasoning": "When x-request-id is missing or does not match /^[A-Za-z0-9._-]{1,64}$/, genReqId generates a new id via deps.ids.next('req') and onSend sets it on the response.",
+        "counterexample": null
+      },
+      {
+        "id": "C-64866f0f",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "const NOT_FOUND_RESPONSE = toErrorResponse(new ApiError(404, \"NOT_FOUND\", \"Route not found\"));"
+          },
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "server.setNotFoundHandler((_request, reply) => {\n    reply.code(NOT_FOUND_RESPONSE.status).send(NOT_FOUND_RESPONSE.body);\n  });"
+          },
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "server.addHook(\"onSend\", async (request, reply) => {\n    reply.header(\"x-request-id\", request.id);\n  });"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-64866f0f a 404 and a thrown error both carry the request id",
+            "quote": null
+          }
+        ],
+        "reasoning": "setNotFoundHandler returns the 404 NOT_FOUND envelope and onSend attaches x-request-id to every response including 404 and error responses.",
+        "counterexample": null
+      },
+      {
+        "id": "C-14452135",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/health.ts",
+            "quote": "return { status: failures.length === 0 ? \"ok\" : \"fail\", checks, failures };"
+          },
+          {
+            "kind": "file",
+            "ref": "src/health.ts",
+            "quote": "export function healthPayload(version: string): HealthPayload"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-14452135 GET /health with no checks reports ok and healthPayload is unchanged",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-14452135 GET /health reports passing checks by name",
+            "quote": null
+          }
+        ],
+        "reasoning": "createHealthRegistry and GET /health return 200 with status ok, version, checks, and cache-control: no-store while keeping healthPayload unchanged.",
+        "counterexample": null
+      },
+      {
+        "id": "C-ce3d89ea",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "server.get(\"/health\", async (request, reply) => {"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-ce3d89ea the health request log holds the route without the query token",
+            "quote": null
+          }
+        ],
+        "reasoning": "GET /health is registered on the Fastify instance configured with deps.logger, and the C-ce3d89ea test verifies that GET /health?token=abc returns 200 and logs only /health without abc.",
+        "counterexample": null
+      },
+      {
+        "id": "C-609c36a3",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/health.ts",
+            "quote": "function runOne(check: HealthCheck, timeoutMs: number): Promise<CheckOutcome>"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.health.test.ts::C-609c36a3 a check that throws fails without leaking its message",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-609c36a3 GET /health reports a failing check without leaking its content",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.server.test.ts::C-609c36a3 GET /health reports a hanging check as a timeout",
+            "quote": null
+          }
+        ],
+        "reasoning": "Checks that return fail, throw, time out, or return an invalid result produce 503 with status fail and log the check name and reason without leaking error messages.",
+        "counterexample": null
+      },
+      {
+        "id": "C-64e17386",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/health.ts",
+            "quote": "export function createHealthRegistry(): HealthRegistry"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.health.test.ts::C-64e17386 duplicate and invalid names are refused",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.health.test.ts::C-64e17386 overlapping runs call every check once",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.health.test.ts::C-64e17386 a check registered after a run appears in the next run",
+            "quote": null
+          }
+        ],
+        "reasoning": "createHealthRegistry rejects duplicate and invalid check names with HealthCheckError, includes late-registered checks on subsequent runs, and shares in-flight runs across overlapping callers.",
+        "counterexample": null
+      },
+      {
+        "id": "C-341a5ed6",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/shutdown.ts",
+            "quote": "if (shutdownPromise !== undefined) {\n      return shutdownPromise;\n    }\n\n    opts.logger.info({ reason }, \"shutting down\");"
+          },
+          {
+            "kind": "file",
+            "ref": "src/api/shutdown.ts",
+            "quote": "Promise.resolve()\n        .then(() => opts.close())\n        .then(\n          () => {\n            finish(0, false);\n          },"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.shutdown.test.ts::C-341a5ed6 a SIGTERM then SIGINT closes once and exits zero",
+            "quote": null
+          }
+        ],
+        "reasoning": "installGracefulShutdown listens for SIGTERM and SIGINT, logs 'shutting down' with reason 'SIGTERM' on the first signal, ignores subsequent signals, and calls close() and exit(0) once.",
+        "counterexample": null
+      },
+      {
+        "id": "C-3d0f68d6",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/shutdown.ts",
+            "quote": "if (shutdownPromise !== undefined) {\n      return shutdownPromise;\n    }"
+          },
+          {
+            "kind": "file",
+            "ref": "src/api/shutdown.ts",
+            "quote": "dispose(): void {\n      if (disposed) return;\n      disposed = true;\n      for (const [signal, handler] of handlers) {\n        signals.off(signal, handler);\n      }\n    },"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.shutdown.test.ts::C-3d0f68d6 a direct shutdown is idempotent and resolves undefined after exit zero",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.shutdown.test.ts::C-3d0f68d6 dispose removes both signal listeners and never closes",
+            "quote": null
+          }
+        ],
+        "reasoning": "shutdown(reason) is idempotent and resolves undefined after exit(0); dispose() is idempotent and removes the exact signal handlers via signals.off without closing or exiting.",
+        "counterexample": null
+      },
+      {
+        "id": "C-78a31ae6",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/shutdown.ts",
+            "quote": "const timer = setTimeout(() => {\n        opts.logger.warn(\"drain deadline exceeded\");\n        finish(1, true);\n      }, opts.drainTimeoutMs);"
+          },
+          {
+            "kind": "file",
+            "ref": "src/api/shutdown.ts",
+            "quote": "(error: unknown) => {\n            opts.logger.error({ err: error }, \"shutdown failed\");\n            finish(1, true);\n          },"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.shutdown.test.ts::C-78a31ae6 a missed drain deadline force closes and exits one",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.shutdown.test.ts::C-78a31ae6 a failed close logs shutdown failed without the error text",
+            "quote": null
+          }
+        ],
+        "reasoning": "When close times out or rejects, installGracefulShutdown logs the required warn or error message (with err serializer redacting error text), calls forceClose?.() and exit(1) once, and resolves.",
+        "counterexample": null
+      },
+      {
+        "id": "C-9abd6ccb",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/api/server.ts",
+            "quote": "return503OnClosing: false,"
+          },
+          {
+            "kind": "file",
+            "ref": "src/api/shutdown.test.ts",
+            "quote": "test(\"C-9abd6ccb requests during the drain still get the envelope and the slow request finishes\", async () => {"
+          },
+          {
+            "kind": "test",
+            "ref": "src.api.shutdown.test.ts::C-9abd6ccb requests during the drain still get the envelope and the slow request finishes",
+            "quote": null
+          }
+        ],
+        "reasoning": "buildServer sets return503OnClosing: false so in-flight connections sending requests during drain receive the standard error envelope with x-request-id and connection: close while slow requests finish before exit(0).",
+        "counterexample": null
+      },
+      {
+        "id": "C-6912835f",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/main.ts",
+            "quote": "export function startServer(port: number, host = \"127.0.0.1\"): Promise<RunningServer>"
+          },
+          {
+            "kind": "test",
+            "ref": "src.main.test.ts::C-6912835f startServer serves health on the bound loopback port and closes",
+            "quote": null
+          }
+        ],
+        "reasoning": "startServer starts a silent buildServer instance without reading process.env or adding signal listeners, serves GET /health with VERSION and empty checks, and closes cleanly.",
+        "counterexample": null
+      },
+      {
+        "id": "C-c7407753",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/main.ts",
+            "quote": "logger.info({ url, role: config.role, host: config.host, port: bound }, \"ursitoare listening\");"
+          },
+          {
+            "kind": "test",
+            "ref": "src.main.test.ts::C-c7407753 main starts a port-0 server and stops on SIGTERM",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.main.test.ts::C-c7407753 main listens on the configured host and reports it",
+            "quote": null
+          }
+        ],
+        "reasoning": "main loads config, starts the server, logs ursitoare listening with the bound host, port, and url, serves /health, and shuts down with exit(0) on SIGTERM.",
+        "counterexample": null
+      },
+      {
+        "id": "C-469d7fec",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/main.ts",
+            "quote": "const bootstrap: Logger = createLogger({ level: \"error\", destination });"
+          },
+          {
+            "kind": "test",
+            "ref": "src.main.test.ts::C-469d7fec main writes one fatal line for an empty secret file",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.main.test.ts::C-469d7fec main writes one fatal line without the error text for an unknown failure",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.main.test.ts::C-469d7fec main reports EADDRINUSE for a busy port at info and silent",
+            "quote": null
+          }
+        ],
+        "reasoning": "main logs startup failures once at fatal level through the error-level bootstrap logger, calls exit(1), and resolves null without leaking non-config error messages.",
+        "counterexample": null
+      }
+    ],
+    "test_adequacy": [
+      {
+        "test": "src.api.errors.test.ts::C-240590ab toErrorResponse maps body schema failures to field details",
+        "criterion": "C-240590ab",
+        "adequate": true,
+        "reason": "Asserts 400 VALIDATION_FAILED mapping for type, required, and additionalProperties body validation errors.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.errors.test.ts::C-240590ab toErrorResponse reports query and path parameter fields",
+        "criterion": "C-240590ab",
+        "adequate": true,
+        "reason": "Asserts querystring/n and params/id field paths on validation errors.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.errors.test.ts::C-3284ea9e ApiError refuses a status outside 400 to 599 or a malformed code",
+        "criterion": "C-3284ea9e",
+        "adequate": true,
+        "reason": "Asserts RangeError when constructing ApiError with invalid status or code.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.errors.test.ts::C-3284ea9e toErrorResponse maps an ApiError with and without details",
+        "criterion": "C-3284ea9e",
+        "adequate": true,
+        "reason": "Asserts ApiError mapping with details and omission of details key when undefined.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.errors.test.ts::C-aea19ec5 toErrorResponse hides an unknown error behind INTERNAL",
+        "criterion": "C-aea19ec5",
+        "adequate": true,
+        "reason": "Asserts 500 INTERNAL envelope without leaking error message or detail.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.errors.test.ts::C-d145c766 toErrorResponse keeps another 4xx status as BAD_REQUEST",
+        "criterion": "C-d145c766",
+        "adequate": true,
+        "reason": "Asserts statusCode 429 maps to 429 BAD_REQUEST.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.errors.test.ts::C-d145c766 toErrorResponse maps malformed JSON oversized and wrongly typed bodies",
+        "criterion": "C-d145c766",
+        "adequate": true,
+        "reason": "Asserts 400 VALIDATION_FAILED for malformed JSON, 413 PAYLOAD_TOO_LARGE, and 415 UNSUPPORTED_MEDIA_TYPE.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.health.test.ts::C-14452135 an empty registry reports ok with no checks",
+        "criterion": "C-14452135",
+        "adequate": true,
+        "reason": "Asserts empty registry run resolves status ok and empty checks.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.health.test.ts::C-14452135 checks that resolve ok are reported by name",
+        "criterion": "C-14452135",
+        "adequate": true,
+        "reason": "Asserts passing db and cache checks report ok by name.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.health.test.ts::C-609c36a3 a check that never settles times out after 10 ms",
+        "criterion": "C-609c36a3",
+        "adequate": true,
+        "reason": "Asserts hanging check fails with timeout reason after 10 ms.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.health.test.ts::C-609c36a3 a check that resolves fail marks the report failed",
+        "criterion": "C-609c36a3",
+        "adequate": true,
+        "reason": "Asserts check returning fail marks report fail with returned_fail reason.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.health.test.ts::C-609c36a3 a check that resolves junk fails as an invalid result",
+        "criterion": "C-609c36a3",
+        "adequate": true,
+        "reason": "Asserts check resolving maybe marks report fail with invalid_result reason.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.health.test.ts::C-609c36a3 a check that throws fails without leaking its message",
+        "criterion": "C-609c36a3",
+        "adequate": true,
+        "reason": "Asserts throwing check marks report fail with threw reason and no secret leak.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.health.test.ts::C-64e17386 a check registered after a run appears in the next run",
+        "criterion": "C-64e17386",
+        "adequate": true,
+        "reason": "Asserts check registered after first run is included in subsequent run.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.health.test.ts::C-64e17386 duplicate and invalid names are refused",
+        "criterion": "C-64e17386",
+        "adequate": true,
+        "reason": "Asserts HEALTH_CHECK_DUPLICATE and HEALTH_CHECK_NAME_INVALID errors.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.health.test.ts::C-64e17386 overlapping runs call every check once",
+        "criterion": "C-64e17386",
+        "adequate": true,
+        "reason": "Asserts concurrent registry.run calls share one execution per check.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-14452135 GET /health reports passing checks by name",
+        "criterion": "C-14452135",
+        "adequate": true,
+        "reason": "Asserts GET /health returns 200 with db and cache checks ok.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-14452135 GET /health with no checks reports ok and healthPayload is unchanged",
+        "criterion": "C-14452135",
+        "adequate": true,
+        "reason": "Asserts GET /health returns 200 with empty checks, cache-control: no-store, and healthPayload(1.2.3) unchanged.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-240590ab buildServer reports the first body query or path schema fault",
+        "criterion": "C-240590ab",
+        "adequate": true,
+        "reason": "Asserts 400 VALIDATION_FAILED and field details for body, query, and path schema failures on buildServer.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-2490a98e a path that carries a token logs the wildcard route only",
+        "criterion": "C-2490a98e",
+        "adequate": true,
+        "reason": "Asserts incoming request log records url /* and omits path token.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-3284ea9e buildServer answers an ApiError with its own status code and details",
+        "criterion": "C-3284ea9e",
+        "adequate": true,
+        "reason": "Asserts 409 response with and without details and RangeError for status 200.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-3c17bb81 a recording tracer holds one ended http.request span per request",
+        "criterion": "C-3c17bb81",
+        "adequate": true,
+        "reason": "Asserts two ended http.request spans with expected method, route, and status_code attributes.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-595eb185 a failing tracer logs a warning and the request still succeeds",
+        "criterion": "C-595eb185",
+        "adequate": true,
+        "reason": "Asserts GET /health returns 200 and logs warn line tracer failed when startSpan throws.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-609c36a3 GET /health reports a failing check without leaking its content",
+        "criterion": "C-609c36a3",
+        "adequate": true,
+        "reason": "Asserts 503 response and warn log with returned_fail reason.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-609c36a3 GET /health reports a hanging check as a timeout",
+        "criterion": "C-609c36a3",
+        "adequate": true,
+        "reason": "Asserts 503 response and warn log with timeout reason.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-609c36a3 GET /health reports a junk check result as invalid",
+        "criterion": "C-609c36a3",
+        "adequate": true,
+        "reason": "Asserts 503 response and warn log with invalid_result reason.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-609c36a3 GET /health reports a throwing check without its message",
+        "criterion": "C-609c36a3",
+        "adequate": true,
+        "reason": "Asserts 503 response, warn log with threw reason, and absence of password in body and logs.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-64866f0f a 404 and a thrown error both carry the request id",
+        "criterion": "C-64866f0f",
+        "adequate": true,
+        "reason": "Asserts 404 NOT_FOUND envelope and 500 error both echo x-request-id header.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-71327adc a well-formed x-request-id is kept and the route is logged without the query",
+        "criterion": "C-71327adc",
+        "adequate": true,
+        "reason": "Asserts valid x-request-id is echoed and logged as reqId while query token is omitted from logs.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-aea19ec5 unknown errors answer INTERNAL and never log hunter2",
+        "criterion": "C-aea19ec5",
+        "adequate": true,
+        "reason": "Asserts 500 INTERNAL responses, no hunter2 in responses or logs, reqId on error logs, and err.type/err.code.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-c68d2bde missing malformed and oversized request ids are replaced",
+        "criterion": "C-c68d2bde",
+        "adequate": true,
+        "reason": "Asserts sequential req_ ids replace missing, malformed, and 65-char x-request-id headers.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-ce3d89ea the health request log holds the route without the query token",
+        "criterion": "C-ce3d89ea",
+        "adequate": true,
+        "reason": "Asserts GET /health?token=abc returns 200, logs url /health, and omits abc from logs.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.server.test.ts::C-d145c766 buildServer keeps the fixed codes for malformed oversized and wrongly typed bodies",
+        "criterion": "C-d145c766",
+        "adequate": true,
+        "reason": "Asserts 400 malformed JSON, 413 oversized payload, 415 wrong media type, and 429 BAD_REQUEST.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-16430cae a loaded config hides the engine key and database password from JSON String and inspect",
+        "criterion": "C-16430cae",
+        "adequate": true,
+        "reason": "Asserts JSON.stringify, util.inspect, and String(config.engineKey) hide secret values while reveal() returns them.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-3d74e0ae a bad database URL is CONFIG_INVALID naming the URL variable without the password",
+        "criterion": "C-3d74e0ae",
+        "adequate": true,
+        "reason": "Asserts invalid database URLs throw CONFIG_INVALID naming URSITOARE_DATABASE_URL without echoing passwords.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-3d74e0ae a bad owner database URL names the owner URL variable",
+        "criterion": "C-3d74e0ae",
+        "adequate": true,
+        "reason": "Asserts invalid owner database URL throws CONFIG_INVALID naming URSITOARE_DATABASE_OWNER_URL.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-3d74e0ae a database password file without its URL names the password-file variable",
+        "criterion": "C-3d74e0ae",
+        "adequate": true,
+        "reason": "Asserts password file without URL throws CONFIG_INVALID naming the password-file variable with expected message.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-3d74e0ae an empty database password file with a valid URL gives CONFIG_SECRET_EMPTY",
+        "criterion": "C-3d74e0ae",
+        "adequate": true,
+        "reason": "Asserts empty database password file throws CONFIG_SECRET_EMPTY naming URSITOARE_DATABASE_PASSWORD_FILE.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-406ddaa1 loadConfig keeps a postgresql sslmode URL unchanged and leaves a missing password null",
+        "criterion": "C-406ddaa1",
+        "adequate": true,
+        "reason": "Asserts postgresql URL with sslmode=verify-full is preserved with null or Secret password.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-406ddaa1 loadConfig parses app and owner database endpoints with secret passwords",
+        "criterion": "C-406ddaa1",
+        "adequate": true,
+        "reason": "Asserts app and owner database URLs and Secret passwords are loaded.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-7a4aa4d4 loadConfig reads the engine key from its file and strips the trailing newline",
+        "criterion": "C-7a4aa4d4",
+        "adequate": true,
+        "reason": "Asserts hex and base64 engine keys are loaded once from file with trailing newline stripped.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-7b6bccec loadConfig returns every documented default for an empty environment",
+        "criterion": "C-7b6bccec",
+        "adequate": true,
+        "reason": "Asserts all default fields of AppConfig when loadConfig({}) is called.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-95e9881e loadConfig derives publicBaseUrl from the port and ignores empty or unknown variables",
+        "criterion": "C-95e9881e",
+        "adequate": true,
+        "reason": "Asserts publicBaseUrl uses configured port and empty or unknown variables are ignored.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-95e9881e loadConfig reads every non-secret setting from the environment and drops a trailing slash",
+        "criterion": "C-95e9881e",
+        "adequate": true,
+        "reason": "Asserts all non-secret environment variables are parsed and publicBaseUrl drops trailing slash.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad drain deadline or public base URL without echoing the value",
+        "criterion": "C-c0bf38f0",
+        "adequate": true,
+        "reason": "Asserts bad shutdown drain ms and public base URL values throw CONFIG_INVALID without echoing values.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad port host log level or role",
+        "criterion": "C-c0bf38f0",
+        "adequate": true,
+        "reason": "Asserts bad port, log level, role, and host values throw CONFIG_INVALID without echoing values.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-ca797e1f loadConfig refuses a weak engine key with CONFIG_INVALID naming its file variable",
+        "criterion": "C-ca797e1f",
+        "adequate": true,
+        "reason": "Asserts weak engine keys throw CONFIG_INVALID naming URSITOARE_ENGINE_KEY_FILE.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-ca797e1f loadConfig refuses an empty or unreadable engine key file with CONFIG_SECRET_EMPTY",
+        "criterion": "C-ca797e1f",
+        "adequate": true,
+        "reason": "Asserts empty, whitespace, or unreadable engine key files throw CONFIG_SECRET_EMPTY without error text.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-f3f5587d loadConfig ignores an empty secret-shaped variable",
+        "criterion": "C-f3f5587d",
+        "adequate": true,
+        "reason": "Asserts empty secret-shaped variables do not throw and leave defaults intact.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.config.test.ts::C-f3f5587d loadConfig refuses a non-empty secret-shaped variable without echoing its value",
+        "criterion": "C-f3f5587d",
+        "adequate": true,
+        "reason": "Asserts non-empty secret-shaped variables throw CONFIG_INVALID without echoing values.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.secret.test.ts::C-16430cae a Secret hides its value from JSON String and inspect",
+        "criterion": "C-16430cae",
+        "adequate": true,
+        "reason": "Asserts Secret redaction in JSON, String, and util.inspect.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.secret.test.ts::C-3d74e0ae ConfigError names the variable and rule without a value",
+        "criterion": "C-3d74e0ae",
+        "adequate": true,
+        "reason": "Asserts ConfigError code, variable, and message formatting.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.secret.test.ts::C-406ddaa1 readSecretValue returns a Secret for a database password file",
+        "criterion": "C-406ddaa1",
+        "adequate": true,
+        "reason": "Asserts readSecretValue returns a Secret wrapping the password file contents.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.secret.test.ts::C-7a4aa4d4 readSecretValue strips one trailing newline and reads the named file once",
+        "criterion": "C-7a4aa4d4",
+        "adequate": true,
+        "reason": "Asserts single read and single trailing newline removal.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.secret.test.ts::C-ca797e1f a weak engine key is CONFIG_INVALID with its file variable",
+        "criterion": "C-ca797e1f",
+        "adequate": true,
+        "reason": "Asserts ConfigError properties for weak engine key.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.config.secret.test.ts::C-ca797e1f readSecretValue refuses empty whitespace-only and unreadable secrets without their text",
+        "criterion": "C-ca797e1f",
+        "adequate": true,
+        "reason": "Asserts CONFIG_SECRET_EMPTY on empty, whitespace, and throwing secret reads.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.core.clock.test.ts::C-6f8e2578 fixedClock rejects an invalid date",
+        "criterion": "C-6f8e2578",
+        "adequate": true,
+        "reason": "Asserts fixedClock throws RangeError on invalid ISO date string.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.core.clock.test.ts::C-6f8e2578 fixedClock returns distinct Date objects for one instant",
+        "criterion": "C-6f8e2578",
+        "adequate": true,
+        "reason": "Asserts fixedClock returns distinct Date instances with identical timestamp.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.core.ids.test.ts::C-6004f84c ids stay ordered when the clock moves forward and back",
+        "criterion": "C-6004f84c",
+        "adequate": true,
+        "reason": "Asserts generated ids remain strictly increasing when clock advances or moves backward.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.core.ids.test.ts::C-6004f84c the counter rolls into the timestamp after 4096 ids",
+        "criterion": "C-6004f84c",
+        "adequate": true,
+        "reason": "Asserts 4097th id at fixed timestamp increments timestamp field to 000000000001 and resets counter to 000.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.core.ids.test.ts::C-68b36af5 createIds rejects prefixes outside the lower-case rule",
+        "criterion": "C-68b36af5",
+        "adequate": true,
+        "reason": "Asserts RangeError on empty, uppercase, and underscored prefixes.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.core.ids.test.ts::C-68b36af5 sequentialIds counts from its seed",
+        "criterion": "C-68b36af5",
+        "adequate": true,
+        "reason": "Asserts sequentialIds(1) produces expected deterministic ids.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.core.ids.test.ts::C-68b36af5 sequentialIds rejects a bad seed and overflow",
+        "criterion": "C-68b36af5",
+        "adequate": true,
+        "reason": "Asserts RangeError on negative, fractional, or overflowing seeds.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.core.ids.test.ts::C-68b36af5 systemIds returns a uuidv7 with its prefix",
+        "criterion": "C-68b36af5",
+        "adequate": true,
+        "reason": "Asserts systemIds.next(\"run\") matches the UUIDv7 regex.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.core.ids.test.ts::C-6f8e2578 createIds writes the timestamp version counter variant and random bits",
+        "criterion": "C-6f8e2578",
+        "adequate": true,
+        "reason": "Asserts exact UUIDv7 string output for fixed clock and all-255 random bytes.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.main.test.ts::C-469d7fec main reports EADDRINUSE for a busy port at info and silent",
+        "criterion": "C-469d7fec",
+        "adequate": true,
+        "reason": "Asserts EADDRINUSE fatal log with host and port at both info and silent log levels, exit(1), and null return.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.main.test.ts::C-469d7fec main writes one fatal line for an empty secret file",
+        "criterion": "C-469d7fec",
+        "adequate": true,
+        "reason": "Asserts single fatal line with code CONFIG_SECRET_EMPTY, variable, and message, exit(1), and null return.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.main.test.ts::C-469d7fec main writes one fatal line without the error text for an unknown failure",
+        "criterion": "C-469d7fec",
+        "adequate": true,
+        "reason": "Asserts single fatal line with STARTUP_FAILED and msg startup failed without leaking error message.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.main.test.ts::C-6912835f startServer serves health on the bound loopback port and closes",
+        "criterion": "C-6912835f",
+        "adequate": true,
+        "reason": "Asserts startServer serves /health, leaves process signal listeners unchanged, and refuses connections after close.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.main.test.ts::C-c7407753 main listens on the configured host and reports it",
+        "criterion": "C-c7407753",
+        "adequate": true,
+        "reason": "Asserts 0.0.0.0 host is preserved in RunningServer.url and ursitoare listening log line.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.main.test.ts::C-c7407753 main starts a port-0 server and stops on SIGTERM",
+        "criterion": "C-c7407753",
+        "adequate": true,
+        "reason": "Asserts main serves /health, logs ursitoare listening with bound port, and exits 0 on SIGTERM.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.observability.logger.test.ts::C-cc8bd5a6 authorization cookie and set-cookie are redacted alone and under headers",
+        "criterion": "C-cc8bd5a6",
+        "adequate": true,
+        "reason": "Asserts authorization, cookie, and set-cookie redaction at top level and under headers.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.observability.logger.test.ts::C-cc8bd5a6 the listed secret keys are redacted from depth zero to three",
+        "criterion": "C-cc8bd5a6",
+        "adequate": true,
+        "reason": "Asserts password, secret, token, apiKey, and credential redaction at depths 0-3 while preserving sibling user.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.observability.logger.test.ts::C-d18af48d a silent logger writes nothing while a warn logger on the same input does",
+        "criterion": "C-d18af48d",
+        "adequate": true,
+        "reason": "Asserts silent logger suppresses even fatal records.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.observability.logger.test.ts::C-d18af48d a warn logger writes one ISO-timed line and drops records below its level",
+        "criterion": "C-d18af48d",
+        "adequate": true,
+        "reason": "Asserts warn logger drops info record and writes warn record with clock ISO time and service ursitoare.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.observability.logger.test.ts::C-fc60a608 a request is logged as method and route pattern, never its URL",
+        "criterion": "C-fc60a608",
+        "adequate": true,
+        "reason": "Asserts req serializer logs method and routeOptions.url without leaking URL token.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.observability.logger.test.ts::C-fc60a608 a request without a route pattern logs url unmatched",
+        "criterion": "C-fc60a608",
+        "adequate": true,
+        "reason": "Asserts req serializer logs url unmatched when routeOptions.url is undefined.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.observability.logger.test.ts::C-fc60a608 an error is logged as type, string code and frames only",
+        "criterion": "C-fc60a608",
+        "adequate": true,
+        "reason": "Asserts err serializer keeps type, string code, and stack frames while dropping message and detail.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.observability.logger.test.ts::C-fc60a608 an error without a string code has no code key",
+        "criterion": "C-fc60a608",
+        "adequate": true,
+        "reason": "Asserts non-string error code is omitted from serialized err.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.shutdown.test.ts::C-341a5ed6 a SIGTERM then SIGINT closes once and exits zero",
+        "criterion": "C-341a5ed6",
+        "adequate": true,
+        "reason": "Emits SIGTERM then SIGINT and asserts close and exit(0) run once and one 'shutting down' info line with reason 'SIGTERM' is logged.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.shutdown.test.ts::C-3d0f68d6 a direct shutdown is idempotent and resolves undefined after exit zero",
+        "criterion": "C-3d0f68d6",
+        "adequate": true,
+        "reason": "Verifies direct shutdown('test') followed by shutdown('again') and SIGTERM resolves undefined after exit(0), logs reason 'test', and calls close and exit once.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.shutdown.test.ts::C-3d0f68d6 dispose removes both signal listeners and never closes",
+        "criterion": "C-3d0f68d6",
+        "adequate": true,
+        "reason": "Calls dispose() twice, verifies signals.off ran once per signal with the registered handlers, no listeners remain, and emitting SIGTERM never calls close or exit.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.shutdown.test.ts::C-78a31ae6 a failed close logs shutdown failed without the error text",
+        "criterion": "C-78a31ae6",
+        "adequate": true,
+        "reason": "Verifies a rejecting close calls forceClose and exit(1) once, resolves shutdown, and logs 'shutdown failed' with err.type 'Error' and no 'hunter2'.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.shutdown.test.ts::C-78a31ae6 a missed drain deadline force closes and exits one",
+        "criterion": "C-78a31ae6",
+        "adequate": true,
+        "reason": "Verifies an unsettled close with drainTimeoutMs 20 logs warn 'drain deadline exceeded', calls forceClose and exit(1) once, and resolves shutdown.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.api.shutdown.test.ts::C-9abd6ccb requests during the drain still get the envelope and the slow request finishes",
+        "criterion": "C-9abd6ccb",
+        "adequate": true,
+        "reason": "Uses a real listening buildServer, a held /slow route, and a node:net socket to verify /nope during drain gets 404 NOT_FOUND with x-request-id and connection: close, /slow answers 200 when released, and exit(0) runs after both.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end",
+        "criterion": "C-3c17bb81",
+        "adequate": true,
+        "reason": "Verifies noopTracer starts a span with attributes and accepts setAttribute and repeated end() calls without throwing.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end",
+        "criterion": "C-595eb185",
+        "adequate": true,
+        "reason": "Verifies the noopTracer contract of the Tracer port requirement alongside the failing tracer server test.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.observability.tracer.test.ts::C-3c17bb81 noopTracer starts a span without attributes",
+        "criterion": "C-3c17bb81",
+        "adequate": true,
+        "reason": "Verifies noopTracer.startSpan works when called without initial attributes.",
+        "generated_test_misreads_criterion": false
+      }
+    ],
+    "findings": [],
+    "riskiest_assumptions": [
+      "src/api/server.ts in part 2 wires toErrorResponse, health.run, genReqId, and tracer hooks as tested by src/api/server.test.ts",
+      "The files in part 1 (such as src/api/errors.ts, src/api/health.ts, and src/observability/logger.ts) implement their exported interfaces accurately as exercised by the passing gate report tests.",
+      "src/api/shutdown.ts and src/observability/tracer.ts in part 2 satisfy the remaining shutdown and tracer criteria"
+    ],
+    "feedback": null,
+    "accepted": null,
+    "satisfied": null
+  },
+  "cx_runs": {},
+  "tests": {
+    "src.api.errors.test.ts::C-3284ea9e toErrorResponse maps an ApiError with and without details": "passed",
+    "src.api.errors.test.ts::C-3284ea9e ApiError refuses a status outside 400 to 599 or a malformed code": "passed",
+    "src.api.errors.test.ts::C-240590ab toErrorResponse maps body schema failures to field details": "passed",
+    "src.api.errors.test.ts::C-240590ab toErrorResponse reports query and path parameter fields": "passed",
+    "src.api.errors.test.ts::C-d145c766 toErrorResponse maps malformed JSON oversized and wrongly typed bodies": "passed",
+    "src.api.errors.test.ts::C-d145c766 toErrorResponse keeps another 4xx status as BAD_REQUEST": "passed",
+    "src.api.errors.test.ts::C-aea19ec5 toErrorResponse hides an unknown error behind INTERNAL": "passed",
+    "src.api.health.test.ts::C-14452135 an empty registry reports ok with no checks": "passed",
+    "src.api.health.test.ts::C-14452135 checks that resolve ok are reported by name": "passed",
+    "src.api.health.test.ts::C-609c36a3 a check that resolves fail marks the report failed": "passed",
+    "src.api.health.test.ts::C-609c36a3 a check that throws fails without leaking its message": "passed",
+    "src.api.health.test.ts::C-609c36a3 a check that never settles times out after 10 ms": "passed",
+    "src.api.health.test.ts::C-609c36a3 a check that resolves junk fails as an invalid result": "passed",
+    "src.api.health.test.ts::C-64e17386 duplicate and invalid names are refused": "passed",
+    "src.api.health.test.ts::C-64e17386 overlapping runs call every check once": "passed",
+    "src.api.health.test.ts::C-64e17386 a check registered after a run appears in the next run": "passed",
+    "src.api.server.test.ts::buildServer hands an injectable server to the routes a test adds": "passed",
+    "src.api.server.test.ts::C-3284ea9e buildServer answers an ApiError with its own status code and details": "passed",
+    "src.api.server.test.ts::C-240590ab buildServer reports the first body query or path schema fault": "passed",
+    "src.api.server.test.ts::C-d145c766 buildServer keeps the fixed codes for malformed oversized and wrongly typed bodies": "passed",
+    "src.api.server.test.ts::C-aea19ec5 unknown errors answer INTERNAL and never log hunter2": "passed",
+    "src.api.server.test.ts::C-71327adc a well-formed x-request-id is kept and the route is logged without the query": "passed",
+    "src.api.server.test.ts::C-2490a98e a path that carries a token logs the wildcard route only": "passed",
+    "src.api.server.test.ts::C-c68d2bde missing malformed and oversized request ids are replaced": "passed",
+    "src.api.server.test.ts::C-64866f0f a 404 and a thrown error both carry the request id": "passed",
+    "src.api.server.test.ts::C-3c17bb81 a recording tracer holds one ended http.request span per request": "passed",
+    "src.api.server.test.ts::C-595eb185 a failing tracer logs a warning and the request still succeeds": "passed",
+    "src.api.server.test.ts::C-14452135 GET /health with no checks reports ok and healthPayload is unchanged": "passed",
+    "src.api.server.test.ts::C-14452135 GET /health reports passing checks by name": "passed",
+    "src.api.server.test.ts::C-ce3d89ea the health request log holds the route without the query token": "passed",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a failing check without leaking its content": "passed",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a throwing check without its message": "passed",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a hanging check as a timeout": "passed",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a junk check result as invalid": "passed",
+    "src.api.shutdown.test.ts::C-341a5ed6 a SIGTERM then SIGINT closes once and exits zero": "passed",
+    "src.api.shutdown.test.ts::C-3d0f68d6 a direct shutdown is idempotent and resolves undefined after exit zero": "passed",
+    "src.api.shutdown.test.ts::C-3d0f68d6 dispose removes both signal listeners and never closes": "passed",
+    "src.api.shutdown.test.ts::C-78a31ae6 a missed drain deadline force closes and exits one": "passed",
+    "src.api.shutdown.test.ts::C-78a31ae6 a failed close logs shutdown failed without the error text": "passed",
+    "src.api.shutdown.test.ts::C-9abd6ccb requests during the drain still get the envelope and the slow request finishes": "passed",
+    "src.config.config.test.ts::C-7b6bccec loadConfig returns every documented default for an empty environment": "passed",
+    "src.config.config.test.ts::C-95e9881e loadConfig reads every non-secret setting from the environment and drops a trailing slash": "passed",
+    "src.config.config.test.ts::C-95e9881e loadConfig derives publicBaseUrl from the port and ignores empty or unknown variables": "passed",
+    "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad port host log level or role": "passed",
+    "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad drain deadline or public base URL without echoing the value": "passed",
+    "src.config.config.test.ts::C-f3f5587d loadConfig refuses a non-empty secret-shaped variable without echoing its value": "passed",
+    "src.config.config.test.ts::C-f3f5587d loadConfig ignores an empty secret-shaped variable": "passed",
+    "src.config.config.test.ts::C-7a4aa4d4 loadConfig reads the engine key from its file and strips the trailing newline": "passed",
+    "src.config.config.test.ts::C-ca797e1f loadConfig refuses an empty or unreadable engine key file with CONFIG_SECRET_EMPTY": "passed",
+    "src.config.config.test.ts::C-ca797e1f loadConfig refuses a weak engine key with CONFIG_INVALID naming its file variable": "passed",
+    "src.config.config.test.ts::C-16430cae a loaded config hides the engine key and database password from JSON String and inspect": "passed",
+    "src.config.config.test.ts::C-406ddaa1 loadConfig parses app and owner database endpoints with secret passwords": "passed",
+    "src.config.config.test.ts::C-406ddaa1 loadConfig keeps a postgresql sslmode URL unchanged and leaves a missing password null": "passed",
+    "src.config.config.test.ts::C-3d74e0ae a bad database URL is CONFIG_INVALID naming the URL variable without the password": "passed",
+    "src.config.config.test.ts::C-3d74e0ae a bad owner database URL names the owner URL variable": "passed",
+    "src.config.config.test.ts::C-3d74e0ae a database password file without its URL names the password-file variable": "passed",
+    "src.config.config.test.ts::C-3d74e0ae an empty database password file with a valid URL gives CONFIG_SECRET_EMPTY": "passed",
+    "src.config.secret.test.ts::C-16430cae a Secret hides its value from JSON String and inspect": "passed",
+    "src.config.secret.test.ts::C-7a4aa4d4 readSecretValue strips one trailing newline and reads the named file once": "passed",
+    "src.config.secret.test.ts::C-ca797e1f readSecretValue refuses empty whitespace-only and unreadable secrets without their text": "passed",
+    "src.config.secret.test.ts::C-ca797e1f a weak engine key is CONFIG_INVALID with its file variable": "passed",
+    "src.config.secret.test.ts::C-3d74e0ae ConfigError names the variable and rule without a value": "passed",
+    "src.config.secret.test.ts::C-406ddaa1 readSecretValue returns a Secret for a database password file": "passed",
+    "src.core.clock.test.ts::C-6f8e2578 fixedClock returns distinct Date objects for one instant": "passed",
+    "src.core.clock.test.ts::C-6f8e2578 fixedClock rejects an invalid date": "passed",
+    "src.core.ids.test.ts::C-6f8e2578 createIds writes the timestamp version counter variant and random bits": "passed",
+    "src.core.ids.test.ts::C-6004f84c the counter rolls into the timestamp after 4096 ids": "passed",
+    "src.core.ids.test.ts::C-6004f84c ids stay ordered when the clock moves forward and back": "passed",
+    "src.core.ids.test.ts::C-68b36af5 createIds rejects prefixes outside the lower-case rule": "passed",
+    "src.core.ids.test.ts::C-68b36af5 systemIds returns a uuidv7 with its prefix": "passed",
+    "src.core.ids.test.ts::C-68b36af5 sequentialIds counts from its seed": "passed",
+    "src.core.ids.test.ts::C-68b36af5 sequentialIds rejects a bad seed and overflow": "passed",
+    "src.health.test.ts::healthPayload reports ok and the given version": "passed",
+    "src.main.test.ts::C-6912835f startServer serves health on the bound loopback port and closes": "passed",
+    "src.main.test.ts::C-c7407753 main starts a port-0 server and stops on SIGTERM": "passed",
+    "src.main.test.ts::C-c7407753 main listens on the configured host and reports it": "passed",
+    "src.main.test.ts::C-469d7fec main writes one fatal line for an empty secret file": "passed",
+    "src.main.test.ts::C-469d7fec main writes one fatal line without the error text for an unknown failure": "passed",
+    "src.main.test.ts::C-469d7fec main reports EADDRINUSE for a busy port at info and silent": "passed",
+    "src.observability.logger.test.ts::C-d18af48d a warn logger writes one ISO-timed line and drops records below its level": "passed",
+    "src.observability.logger.test.ts::C-d18af48d a silent logger writes nothing while a warn logger on the same input does": "passed",
+    "src.observability.logger.test.ts::C-cc8bd5a6 the listed secret keys are redacted from depth zero to three": "passed",
+    "src.observability.logger.test.ts::C-cc8bd5a6 authorization cookie and set-cookie are redacted alone and under headers": "passed",
+    "src.observability.logger.test.ts::C-fc60a608 an error is logged as type, string code and frames only": "passed",
+    "src.observability.logger.test.ts::C-fc60a608 an error without a string code has no code key": "passed",
+    "src.observability.logger.test.ts::C-fc60a608 a request is logged as method and route pattern, never its URL": "passed",
+    "src.observability.logger.test.ts::C-fc60a608 a request without a route pattern logs url unmatched": "passed",
+    "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end": "passed",
+    "src.observability.tracer.test.ts::C-3c17bb81 noopTracer starts a span without attributes": "passed",
+    "test.tooling.node-test-junit.test.ts::an assertion failure carries type AssertionError and the name in its message": "passed",
+    "test.tooling.node-test-junit.test.ts::a stub that throws not implemented is reported as NotImplementedError": "passed",
+    "test.tooling.node-test-junit.test.ts::any other error keeps its own name": "passed",
+    "test.tooling.node-test-junit.test.ts::a passing test has no failure and skip and todo are skipped": "passed",
+    "test.tooling.node-test-junit.test.ts::same-named tests in two files get distinct classnames": "passed",
+    "test.tooling.node-test-junit.test.ts::nested describes become part of the classname": "passed",
+    "test.tooling.node-test-junit.test.ts::a describe body that throws is reported as a failure of the suite": "passed",
+    "test.tooling.node-test-junit.test.ts::a file that does not import is a collection failure without classname": "passed",
+    "test_health::test_health_reports_ok[chromium]": "passed"
+  },
+  "red_green": {
+    "src.core.clock.test.ts::C-6f8e2578 fixedClock rejects an invalid date": "1.1",
+    "src.core.clock.test.ts::C-6f8e2578 fixedClock returns distinct Date objects for one instant": "1.1",
+    "src.core.ids.test.ts::C-6004f84c ids stay ordered when the clock moves forward and back": "1.1",
+    "src.core.ids.test.ts::C-6004f84c the counter rolls into the timestamp after 4096 ids": "1.1",
+    "src.core.ids.test.ts::C-68b36af5 createIds rejects prefixes outside the lower-case rule": "1.1",
+    "src.core.ids.test.ts::C-68b36af5 sequentialIds counts from its seed": "1.1",
+    "src.core.ids.test.ts::C-68b36af5 sequentialIds rejects a bad seed and overflow": "1.1",
+    "src.core.ids.test.ts::C-68b36af5 systemIds returns a uuidv7 with its prefix": "1.1",
+    "src.core.ids.test.ts::C-6f8e2578 createIds writes the timestamp version counter variant and random bits": "1.1",
+    "src.observability.logger.test.ts::C-cc8bd5a6 authorization cookie and set-cookie are redacted alone and under headers": "2.1",
+    "src.observability.logger.test.ts::C-cc8bd5a6 the listed secret keys are redacted from depth zero to three": "2.1",
+    "src.observability.logger.test.ts::C-d18af48d a silent logger writes nothing while a warn logger on the same input does": "2.1",
+    "src.observability.logger.test.ts::C-d18af48d a warn logger writes one ISO-timed line and drops records below its level": "2.1",
+    "src.observability.logger.test.ts::C-fc60a608 a request is logged as method and route pattern, never its URL": "2.1",
+    "src.observability.logger.test.ts::C-fc60a608 a request without a route pattern logs url unmatched": "2.1",
+    "src.observability.logger.test.ts::C-fc60a608 an error is logged as type, string code and frames only": "2.1",
+    "src.observability.logger.test.ts::C-fc60a608 an error without a string code has no code key": "2.1",
+    "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end": "2.2",
+    "src.observability.tracer.test.ts::C-3c17bb81 noopTracer starts a span without attributes": "2.2",
+    "src.config.secret.test.ts::C-16430cae a Secret hides its value from JSON String and inspect": "3.1",
+    "src.config.secret.test.ts::C-3d74e0ae ConfigError names the variable and rule without a value": "3.1",
+    "src.config.secret.test.ts::C-406ddaa1 readSecretValue returns a Secret for a database password file": "3.1",
+    "src.config.secret.test.ts::C-7a4aa4d4 readSecretValue strips one trailing newline and reads the named file once": "3.1",
+    "src.config.secret.test.ts::C-ca797e1f a weak engine key is CONFIG_INVALID with its file variable": "3.1",
+    "src.config.secret.test.ts::C-ca797e1f readSecretValue refuses empty whitespace-only and unreadable secrets without their text": "3.1",
+    "src.config.config.test.ts::C-7b6bccec loadConfig returns every documented default for an empty environment": "3.2",
+    "src.config.config.test.ts::C-95e9881e loadConfig derives publicBaseUrl from the port and ignores empty or unknown variables": "3.2",
+    "src.config.config.test.ts::C-95e9881e loadConfig reads every non-secret setting from the environment and drops a trailing slash": "3.2",
+    "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad drain deadline or public base URL without echoing the value": "3.2",
+    "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad port host log level or role": "3.2",
+    "src.config.config.test.ts::C-f3f5587d loadConfig ignores an empty secret-shaped variable": "3.2",
+    "src.config.config.test.ts::C-f3f5587d loadConfig refuses a non-empty secret-shaped variable without echoing its value": "3.2",
+    "src.config.config.test.ts::C-16430cae a loaded config hides the engine key and database password from JSON String and inspect": "3.3",
+    "src.config.config.test.ts::C-3d74e0ae a bad database URL is CONFIG_INVALID naming the URL variable without the password": "3.3",
+    "src.config.config.test.ts::C-3d74e0ae a bad owner database URL names the owner URL variable": "3.3",
+    "src.config.config.test.ts::C-3d74e0ae a database password file without its URL names the password-file variable": "3.3",
+    "src.config.config.test.ts::C-3d74e0ae an empty database password file with a valid URL gives CONFIG_SECRET_EMPTY": "3.3",
+    "src.config.config.test.ts::C-406ddaa1 loadConfig keeps a postgresql sslmode URL unchanged and leaves a missing password null": "3.3",
+    "src.config.config.test.ts::C-406ddaa1 loadConfig parses app and owner database endpoints with secret passwords": "3.3",
+    "src.config.config.test.ts::C-7a4aa4d4 loadConfig reads the engine key from its file and strips the trailing newline": "3.3",
+    "src.config.config.test.ts::C-ca797e1f loadConfig refuses a weak engine key with CONFIG_INVALID naming its file variable": "3.3",
+    "src.config.config.test.ts::C-ca797e1f loadConfig refuses an empty or unreadable engine key file with CONFIG_SECRET_EMPTY": "3.3",
+    "src.api.errors.test.ts::C-240590ab toErrorResponse maps body schema failures to field details": "4.1",
+    "src.api.errors.test.ts::C-240590ab toErrorResponse reports query and path parameter fields": "4.1",
+    "src.api.errors.test.ts::C-3284ea9e ApiError refuses a status outside 400 to 599 or a malformed code": "4.1",
+    "src.api.errors.test.ts::C-3284ea9e toErrorResponse maps an ApiError with and without details": "4.1",
+    "src.api.errors.test.ts::C-aea19ec5 toErrorResponse hides an unknown error behind INTERNAL": "4.1",
+    "src.api.errors.test.ts::C-d145c766 toErrorResponse keeps another 4xx status as BAD_REQUEST": "4.1",
+    "src.api.errors.test.ts::C-d145c766 toErrorResponse maps malformed JSON oversized and wrongly typed bodies": "4.1",
+    "src.api.health.test.ts::C-14452135 an empty registry reports ok with no checks": "4.2",
+    "src.api.health.test.ts::C-14452135 checks that resolve ok are reported by name": "4.2",
+    "src.api.health.test.ts::C-609c36a3 a check that never settles times out after 10 ms": "4.2",
+    "src.api.health.test.ts::C-609c36a3 a check that resolves fail marks the report failed": "4.2",
+    "src.api.health.test.ts::C-609c36a3 a check that resolves junk fails as an invalid result": "4.2",
+    "src.api.health.test.ts::C-609c36a3 a check that throws fails without leaking its message": "4.2",
+    "src.api.health.test.ts::C-64e17386 a check registered after a run appears in the next run": "4.2",
+    "src.api.health.test.ts::C-64e17386 duplicate and invalid names are refused": "4.2",
+    "src.api.health.test.ts::C-64e17386 overlapping runs call every check once": "4.2",
+    "src.api.server.test.ts::C-240590ab buildServer reports the first body query or path schema fault": "4.3",
+    "src.api.server.test.ts::C-2490a98e a path that carries a token logs the wildcard route only": "4.3",
+    "src.api.server.test.ts::C-3284ea9e buildServer answers an ApiError with its own status code and details": "4.3",
+    "src.api.server.test.ts::C-64866f0f a 404 and a thrown error both carry the request id": "4.3",
+    "src.api.server.test.ts::C-71327adc a well-formed x-request-id is kept and the route is logged without the query": "4.3",
+    "src.api.server.test.ts::C-aea19ec5 unknown errors answer INTERNAL and never log hunter2": "4.3",
+    "src.api.server.test.ts::C-c68d2bde missing malformed and oversized request ids are replaced": "4.3",
+    "src.api.server.test.ts::C-d145c766 buildServer keeps the fixed codes for malformed oversized and wrongly typed bodies": "4.3",
+    "src.api.server.test.ts::buildServer hands an injectable server to the routes a test adds": "4.3",
+    "src.api.server.test.ts::C-14452135 GET /health reports passing checks by name": "4.4",
+    "src.api.server.test.ts::C-14452135 GET /health with no checks reports ok and healthPayload is unchanged": "4.4",
+    "src.api.server.test.ts::C-3c17bb81 a recording tracer holds one ended http.request span per request": "4.4",
+    "src.api.server.test.ts::C-595eb185 a failing tracer logs a warning and the request still succeeds": "4.4",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a failing check without leaking its content": "4.4",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a hanging check as a timeout": "4.4",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a junk check result as invalid": "4.4",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a throwing check without its message": "4.4",
+    "src.api.server.test.ts::C-ce3d89ea the health request log holds the route without the query token": "4.4",
+    "src.api.shutdown.test.ts::C-341a5ed6 a SIGTERM then SIGINT closes once and exits zero": "4.5",
+    "src.api.shutdown.test.ts::C-3d0f68d6 a direct shutdown is idempotent and resolves undefined after exit zero": "4.5",
+    "src.api.shutdown.test.ts::C-3d0f68d6 dispose removes both signal listeners and never closes": "4.5",
+    "src.api.shutdown.test.ts::C-78a31ae6 a failed close logs shutdown failed without the error text": "4.5",
+    "src.api.shutdown.test.ts::C-78a31ae6 a missed drain deadline force closes and exits one": "4.5",
+    "src.api.shutdown.test.ts::C-9abd6ccb requests during the drain still get the envelope and the slow request finishes": "4.5",
+    "src.main.test.ts::C-469d7fec main reports EADDRINUSE for a busy port at info and silent": "5.1",
+    "src.main.test.ts::C-469d7fec main writes one fatal line for an empty secret file": "5.1",
+    "src.main.test.ts::C-469d7fec main writes one fatal line without the error text for an unknown failure": "5.1",
+    "src.main.test.ts::C-6912835f startServer serves health on the bound loopback port and closes": "5.1",
+    "src.main.test.ts::C-c7407753 main listens on the configured host and reports it": "5.1",
+    "src.main.test.ts::C-c7407753 main starts a port-0 server and stops on SIGTERM": "5.1"
+  },
+  "guards": [],
+  "prompt_sha256": "761df7f6ab8d8bd1d3e4189c933842fc8c2fd0afcf146305a8c618e32d3d5dd7",
+  "template": "judge@13",
+  "harness_commit": "66d99acc5d9d35ba487e58084064423c71c0d358",
+  "judge_calls": 2,
+  "judge_reply": "repaired",
+  "judge_replies": {
+    "valid": 1,
+    "repaired": 1,
+    "retried": 0,
+    "discarded": 0
+  },
+  "judge_parts": [
+    {
+      "part": 1,
+      "files": 23,
+      "chars": 116579,
+      "reserve": 1561,
+      "profile": "gemini-judge",
+      "calls": 1,
+      "reply": "valid",
+      "prompt_sha256": "3bae4e448d81cd4cf411967e03075020a46da84b5759def04e91d35da566f3ab"
+    },
+    {
+      "part": 2,
+      "files": 7,
+      "chars": 40135,
+      "reserve": 1561,
+      "profile": "gemini-judge",
+      "calls": 1,
+      "reply": "repaired",
+      "prompt_sha256": "497541b17576256ba4ec243dce80172875b9f6384c5fe94e118d27a08e7d29d6"
+    }
+  ],
+  "judge_files": [
+    [
+      1,
+      "openspec/changes/add-engine-skeleton-fix-1/.openspec.yaml",
+      329
+    ],
+    [
+      1,
+      "src/core/clock.test.ts",
+      854
+    ],
+    [
+      1,
+      "src/core/clock.ts",
+      791
+    ],
+    [
+      1,
+      "src/config/config.test.ts",
+      16228
+    ],
+    [
+      1,
+      "src/config/config.ts",
+      7979
+    ],
+    [
+      1,
+      "src/api/errors.test.ts",
+      6769
+    ],
+    [
+      1,
+      "src/api/errors.ts",
+      4999
+    ],
+    [
+      1,
+      "src/config/errors.ts",
+      793
+    ],
+    [
+      1,
+      "src/api/health.test.ts",
+      5851
+    ],
+    [
+      1,
+      "src/api/health.ts",
+      4396
+    ],
+    [
+      1,
+      "src/health.ts",
+      352
+    ],
+    [
+      1,
+      "src/core/ids.test.ts",
+      3499
+    ],
+    [
+      1,
+      "src/core/ids.ts",
+      2994
+    ],
+    [
+      1,
+      "src/observability/index.ts",
+      463
+    ],
+    [
+      1,
+      "src/observability/logger.test.ts",
+      6934
+    ],
+    [
+      1,
+      "src/observability/logger.ts",
+      2807
+    ],
+    [
+      1,
+      "src/main.test.ts",
+      10699
+    ],
+    [
+      1,
+      "src/main.ts",
+      6613
+    ],
+    [
+      1,
+      "src/config/process.ts",
+      494
+    ],
+    [
+      1,
+      "openspec/changes/add-engine-skeleton-fix-1/proposal.md",
+      817
+    ],
+    [
+      1,
+      "src/config/secret.test.ts",
+      6760
+    ],
+    [
+      1,
+      "src/config/secret.ts",
+      1863
+    ],
+    [
+      1,
+      "src/api/server.test.ts",
+      23295
+    ],
+    [
+      2,
+      "src/api/server.ts",
+      3814
+    ],
+    [
+      2,
+      "src/api/shutdown.test.ts",
+      13810
+    ],
+    [
+      2,
+      "src/api/shutdown.ts",
+      2544
+    ],
+    [
+      2,
+      "openspec/changes/add-engine-skeleton-fix-1/tasks.md",
+      315
+    ],
+    [
+      2,
+      "openspec/changes/add-engine-skeleton/tasks.md",
+      17761
+    ],
+    [
+      2,
+      "src/observability/tracer.test.ts",
+      1104
+    ],
+    [
+      2,
+      "src/observability/tracer.ts",
+      787
+    ]
+  ],
+  "judge_followups": [],
+  "judge_split": {},
+  "hold_views": {},
+  "profiles": {
+    "judge": "gemini-judge",
+    "implementer": [
+      "deepseek",
+      "glm",
+      "claude-sonnet"
+    ]
+  },
+  "judge_model": null,
+  "independence": {
+    "mode": "different_vendor",
+    "status": "declared (unverified)",
+    "verified": false,
+    "judge": {
+      "profile": "gemini-judge",
+      "vendor": "google",
+      "model": "opencode-go/gemini-4-argon",
+      "provenance": "declared",
+      "served": null,
+      "vendors": [],
+      "routed_models": []
+    },
+    "implementers": [
+      {
+        "profile": "deepseek",
+        "vendor": "deepseek",
+        "model": "opencode-go/deepseek-v4.1-flash",
+        "provenance": "declared",
+        "served": null,
+        "vendors": [],
+        "routed_models": []
+      },
+      {
+        "profile": "glm",
+        "vendor": "zhipu",
+        "model": "opencode-go/glm-5.3-flash",
+        "provenance": "declared",
+        "served": null,
+        "vendors": [],
+        "routed_models": []
+      },
+      {
+        "profile": "claude-sonnet",
+        "vendor": "anthropic",
+        "model": "claude-sonnet-5-5",
+        "provenance": "tool",
+        "served": null,
+        "vendors": [],
+        "routed_models": []
+      }
+    ]
+  },
+  "cost_usd": 0.740248
+}
