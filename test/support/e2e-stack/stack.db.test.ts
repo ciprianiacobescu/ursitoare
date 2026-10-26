@@ -336,7 +336,7 @@ test("C-fe09bf7e closing the stack stops Postgres and removes its cluster direct
     stack = started.stack;
     const api = databaseApi(stack.handles);
 
-    const clusterDirs = dirsWithPgVersion(tmpDir);
+    const clusterDirs = dirsWithPgVersion(tmpDir).filter((dir) => path.dirname(dir) === tmpDir);
     assert.equal(clusterDirs.length, 1, "one cluster directory holds PG_VERSION while the stack runs");
     const clusterDir = clusterDirs[0];
     assert.ok(clusterDir !== undefined, "the cluster directory was found");

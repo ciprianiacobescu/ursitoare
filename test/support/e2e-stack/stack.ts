@@ -10,6 +10,7 @@ import type { RunningServer } from "../../../src/main.ts";
 import type { LogDestination } from "../../../src/observability/index.ts";
 import { startControlServer } from "./control.ts";
 import type { ControlServer } from "./control.ts";
+import { discoverParts } from "./discover.ts";
 import type { E2eStackPart, PartContext, PartHandle } from "./part.ts";
 import { E2eStackError } from "./part.ts";
 import { createFaultTable } from "./faults.ts";
@@ -109,7 +110,7 @@ export async function startE2eStack(opts: StackOptions = {}): Promise<E2eStack> 
 
   const dataDir = await resolveDataDir(opts.dataDir);
   const ports = await pickPorts(requestedPort, requestedControlPort);
-  const parts = opts.parts ?? [];
+  const parts = opts.parts ?? (await discoverParts());
 
   const stackDir = await fs.mkdtemp(path.join(dataDir, "ursitoare-e2e-"));
   await fs.chmod(stackDir, DIRECTORY_MODE);
@@ -168,7 +169,16 @@ export async function startE2eStack(opts: StackOptions = {}): Promise<E2eStack> 
     parts,
     context: contextFor,
     faults,
-    engineHealthy: async () => true,
+    engineHealthy: async () => {
+      try {
+        const response = await fetch(`${engineUrl}/health`, {
+          signal: AbortSignal.timeout(5000),
+        });
+        return response.status === 200;
+      } catch {
+        return false;
+      }
+    },
   });
 
   function trackedReset(): Promise<void> {
