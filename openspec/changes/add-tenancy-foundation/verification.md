@@ -1,4 +1,4 @@
-# Verification: openspec:add-tenancy-foundation: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-tenancy-foundation: PASS (round 3)
 
 traceability: 37/37 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 37/37 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.4 | base merged: main@bc9febc9a4 as ca9412f05d (1 commit) |
-| 1 | integrity | ok | 19.5 | 10 sub-checks; scope: 25 changed file(s) |
-| 2 | build | ok | 16.2 |  |
-| 3 | tests | ok | 18.8 |  |
-| 4 | traceability | ok | 0.1 | 37/37 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/tenancy/bootstrap.ts, src/tenancy/catalog.ts, src/tenancy/context.ts, src/tenancy/errors.ts, src/tenancy/routes.ts and 2 more |
-| 8 | s1 judge | ok | 3.2 | 36/37 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 173.3 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -206,6 +206,10 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-58a3293a | ok | 0.890 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-ae959f29 | ok | 0.910 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-002 accept F-a449516e by the delegate (claude-fable-5-1 via claude-code): The finding is waived. The requirement "The runtime role is unprivileged" names a closed list of role conditions: missing, superuser, BYPASSRLS, owning a relation, or membership in ursitoare_owner or in a superuser or BYPASSRLS role. The checker implements exactly that list, and membership in pg_rea...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -250,7 +254,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Findings
 
-- [major, judge] App-role membership in pg_read_all_data / pg_write_all_data is not reported (spec gap) (criterion C-ae959f29): APP_ROLE_PRIVILEGED flags membership only in ownerRole or in a superuser or BYPASSRLS role. If a later change grants ursitoare_app the predefined pg_read_all_data or pg_write_all_data role, the app role can read or write tenant_route directly. The catalog check stays clean in that case, because has_table_privilege on tenant_route may report the predefined-role grant inconsistently, and no role rule covers it.
+- [minor, judge] App-role membership in pg_read_all_data / pg_write_all_data is not reported (spec gap) (criterion C-ae959f29): APP_ROLE_PRIVILEGED flags membership only in ownerRole or in a superuser or BYPASSRLS role. If a later change grants ursitoare_app the predefined pg_read_all_data or pg_write_all_data role, the app role can read or write tenant_route directly. The catalog check stays clean in that case, because has_table_privilege on tenant_route may report the predefined-role grant inconsistently, and no role rule covers it. (waived by the delegate (claude-fable-5-1 via claude-code): The finding is waived. The requirement "The runtime role is unprivileged" names a closed list of role conditions: missing, supe...
 - [minor, judge] A unique index that includes tenant_id but does not lead with it is reported (spec gap) (criterion C-be7b9eeb): The spec says a unique index violates when it 'does not lead with or include tenant_id', which can be read either way. The code checks only indkey[0], so an index on (email, tenant_id) is reported.
 - [minor, judge] A foreign key with tenant_id at a later position is accepted (spec gap) (criterion C-be7b9eeb): The FK rule only requires tenant_id somewhere in conkey, mapped to the referenced tenant_id. No scenario pins down whether it must lead.
 - [minor, judge] security_invoker spellings other than true/on are not exempt (spec gap) (criterion C-f9e36a0c): A view created WITH (security_invoker = 1) or 'yes' is stored with that literal, so a view that is in fact safe is reported as view_open_to_app.
