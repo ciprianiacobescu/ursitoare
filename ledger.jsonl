@@ -61,3 +61,5 @@
 {"at":"2026-10-26T19:15:54Z","by":"harness","reason":"the cause is gone: openspec:add-architecture-fitness is awaiting_human","type":"plan.resumed"}
 {"at":"2026-10-26T19:15:57Z","attempt":1,"cost_usd":1.220802,"runs":2,"type":"plan.charged","unit":"openspec:add-architecture-fitness"}
 {"at":"2026-10-26T19:15:57Z","run":"r-20261026T1915Z-7f92","type":"unit.dispatched","unit":"openspec:add-architecture-fitness"}
+{"at":"2026-10-26T19:34:24Z","attempt":1,"cost_usd":7.331134,"runs":3,"type":"plan.charged","unit":"openspec:add-architecture-fitness"}
+{"at":"2026-10-26T19:34:24Z","run":"r-20261026T1934Z-9532","type":"unit.dispatched","unit":"openspec:add-architecture-fitness"}
