@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Finding F-a154400b: The module graph is duplicated: the rules ignore test/arch/modules.ts |
 | Q-008 | answered | none | verdict | Finding F-a985c7e4: task 2.1: modules.ts is not the graph the rules check |
 | Q-009 | answered | none | verdict | Finding F-ed69f6e7: The egress pin is not checked when a pinned module row is missing |
-| Q-010 | open | none | verdict | Finding F-85a00370: A default import with all-type named specifiers is treated as type-only |
+| Q-010 | answered | none | verdict | Finding F-85a00370: A default import with all-type named specifiers is treated as type-only |
 <!-- l4:index:end -->
 
 ---
@@ -294,7 +294,8 @@ reject The finding is correct and the repository shows it. checkGraphIntegrity i
 
 ## Q-010: Finding F-85a00370: A default import with all-type named specifiers is treated as type-only
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -315,3 +316,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct and the repository shows it. namedBindingsAreTypeOnly in test/arch/sources.ts returns true when the clause is not itself type-only but its named bindings are a non-empty NamedImports list whose elements all carry the type modifier; it never looks at the ImportClause's default binding name. So for import https, { type Agent } from "node:https"; the clause has a default value binding, yet the ref is marked typeOnly, and checkNetwork in test/arch/rules.ts skips every ref whose typeOnly is true, so the import of node:https from a non-egress module is not reported, and the same holds for worker_threads. Design decision 3 makes a declaration type-only only for import type, export type from, an import type node, and a declaration with only named specifiers, at least one, all type-modified; a declaration with a default binding is not such a declaration and is a value import. WHEN collectImports reads an import declaration that has a default binding and named specifiers that are all type-modified, such as import https, { type Agent } from "node:https"; in src/api/a.ts THEN the ref has typeOnly false and checkNetwork reports ARCH_NETWORK_IMPORT at that line with message node:https is allowed only in observability, identity and gateway; call through src/gateway.
