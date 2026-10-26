@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { inspect } from "node:util";
 
 import type { Env } from "./config.ts";
 import { loadConfig } from "./config.ts";
-import { ConfigError } from "./index.ts";
+import { ConfigError, Secret } from "./index.ts";
 
 const PORT_MESSAGE = "URSITOARE_PORT: must be an integer from 1 to 65535";
 const LOG_LEVEL_MESSAGE = "URSITOARE_LOG_LEVEL: must be one of fatal, error, warn, info, debug, trace, silent";
@@ -170,4 +171,249 @@ test("C-f3f5587d loadConfig ignores an empty secret-shaped variable", () => {
       assert.equal(config.publicBaseUrl, "http://127.0.0.1:8080");
     }
   });
+});
+
+test("C-7a4aa4d4 loadConfig reads the engine key from its file and strips the trailing newline", () => {
+  const engineKeyPath = "/run/secrets/engine_key";
+  const hexKey = "9f".repeat(32);
+  const hexCalls: string[] = [];
+  const hexConfig = loadConfig({ URSITOARE_ENGINE_KEY_FILE: engineKeyPath }, (path) => {
+    hexCalls.push(path);
+    return `${hexKey}\n`;
+  });
+
+  assert.ok(hexConfig.engineKey instanceof Secret);
+  assert.equal(hexConfig.engineKey.reveal(), hexKey);
+  assert.deepEqual(hexCalls, [engineKeyPath]);
+
+  const base64Key = Buffer.alloc(32, 7).toString("base64");
+  const base64Calls: string[] = [];
+  const base64Config = loadConfig({ URSITOARE_ENGINE_KEY_FILE: engineKeyPath }, (path) => {
+    base64Calls.push(path);
+    return base64Key;
+  });
+
+  assert.ok(base64Config.engineKey instanceof Secret);
+  assert.equal(base64Config.engineKey.reveal(), base64Key);
+  assert.deepEqual(base64Calls, [engineKeyPath]);
+});
+
+test("C-ca797e1f loadConfig refuses an empty or unreadable engine key file with CONFIG_SECRET_EMPTY", () => {
+  const engineKeyPath = "/run/secrets/engine_key";
+  const readers: (() => string)[] = [
+    () => "",
+    () => "\n",
+    () => "  \n",
+    () => {
+      throw new Error(`cannot read ${engineKeyPath}`);
+    },
+  ];
+
+  for (const readSecret of readers) {
+    assert.throws(
+      () => loadConfig({ URSITOARE_ENGINE_KEY_FILE: engineKeyPath }, readSecret),
+      (error: unknown) => {
+        assert.ok(error instanceof ConfigError);
+        assert.equal(error.code, "CONFIG_SECRET_EMPTY");
+        assert.equal(error.variable, "URSITOARE_ENGINE_KEY_FILE");
+        assert.equal(error.message, "URSITOARE_ENGINE_KEY_FILE: file is missing, unreadable or empty");
+        assert.ok(!error.message.includes("cannot read"));
+        assert.ok(!error.message.includes(engineKeyPath));
+        return true;
+      },
+    );
+  }
+});
+
+test("C-ca797e1f loadConfig refuses a weak engine key with CONFIG_INVALID naming its file variable", () => {
+  const engineKeyPath = "/run/secrets/engine_key";
+
+  for (const weak of ["k".repeat(32), "a".repeat(63)]) {
+    assert.throws(
+      () => loadConfig({ URSITOARE_ENGINE_KEY_FILE: engineKeyPath }, () => weak),
+      (error: unknown) => {
+        assert.ok(error instanceof ConfigError);
+        assert.equal(error.code, "CONFIG_INVALID");
+        assert.equal(error.variable, "URSITOARE_ENGINE_KEY_FILE");
+        assert.equal(
+          error.message,
+          "URSITOARE_ENGINE_KEY_FILE: key must be at least 64 hex characters or base64 of at least 32 bytes",
+        );
+        assert.ok(!error.message.includes(weak));
+        return true;
+      },
+    );
+  }
+});
+
+test("C-16430cae a loaded config hides the engine key and database password from JSON String and inspect", () => {
+  const engineKey = "ab12".repeat(16);
+  const password = "pw-Zq7";
+  const config = loadConfig(
+    {
+      URSITOARE_ENGINE_KEY_FILE: "/run/secrets/engine_key",
+      URSITOARE_DATABASE_URL: "postgres://ursitoare_app@db.internal:5432/ursitoare",
+      URSITOARE_DATABASE_PASSWORD_FILE: "/run/secrets/db_password",
+    },
+    (path) => (path === "/run/secrets/engine_key" ? engineKey : `${password}\n`),
+  );
+
+  assert.ok(config.engineKey instanceof Secret);
+  assert.equal(config.engineKey.reveal(), engineKey);
+
+  const app = config.database.app;
+  assert.ok(app !== null);
+  const secret = app.password;
+  assert.ok(secret instanceof Secret);
+  assert.equal(secret.reveal(), password);
+
+  const representations = [
+    JSON.stringify(config),
+    inspect(config, { depth: null }),
+    String(config.engineKey),
+  ];
+  for (const representation of representations) {
+    assert.ok(!representation.includes(engineKey));
+    assert.ok(!representation.includes(password));
+  }
+});
+
+test("C-406ddaa1 loadConfig parses app and owner database endpoints with secret passwords", () => {
+  const appUrl = "postgres://ursitoare_app@db.internal:5432/ursitoare";
+  const ownerUrl = "postgres://ursitoare_owner@db.internal:5432/ursitoare";
+  const calls: string[] = [];
+  const config = loadConfig(
+    {
+      URSITOARE_DATABASE_URL: appUrl,
+      URSITOARE_DATABASE_PASSWORD_FILE: "/run/secrets/db_password",
+      URSITOARE_DATABASE_OWNER_URL: ownerUrl,
+      URSITOARE_DATABASE_OWNER_PASSWORD_FILE: "/run/secrets/db_owner_password",
+    },
+    (path) => {
+      calls.push(path);
+      return path.endsWith("owner_password") ? "pw-owner\n" : "pw-app\n";
+    },
+  );
+
+  const app = config.database.app;
+  assert.ok(app !== null);
+  assert.equal(app.url, appUrl);
+  assert.ok(app.password instanceof Secret);
+  assert.equal(app.password.reveal(), "pw-app");
+
+  const owner = config.database.owner;
+  assert.ok(owner !== null);
+  assert.equal(owner.url, ownerUrl);
+  assert.ok(owner.password instanceof Secret);
+  assert.equal(owner.password.reveal(), "pw-owner");
+  assert.deepEqual([...calls].sort(), ["/run/secrets/db_owner_password", "/run/secrets/db_password"]);
+});
+
+test("C-406ddaa1 loadConfig keeps a postgresql sslmode URL unchanged and leaves a missing password null", () => {
+  const appUrl = "postgresql://ursitoare_app@db.internal:5432/ursitoare?sslmode=verify-full";
+
+  const withoutPassword = loadConfig({ URSITOARE_DATABASE_URL: appUrl });
+  const appWithoutPassword = withoutPassword.database.app;
+  assert.ok(appWithoutPassword !== null);
+  assert.equal(appWithoutPassword.url, appUrl);
+  assert.equal(appWithoutPassword.password, null);
+  assert.equal(withoutPassword.database.owner, null);
+
+  const withPassword = loadConfig(
+    {
+      URSITOARE_DATABASE_URL: appUrl,
+      URSITOARE_DATABASE_PASSWORD_FILE: "/run/secrets/db_password",
+    },
+    () => "pw-app\n",
+  );
+  const appWithPassword = withPassword.database.app;
+  assert.ok(appWithPassword !== null);
+  assert.equal(appWithPassword.url, appUrl);
+  assert.ok(appWithPassword.password instanceof Secret);
+  assert.equal(appWithPassword.password.reveal(), "pw-app");
+});
+
+test("C-3d74e0ae a bad database URL is CONFIG_INVALID naming the URL variable without the password", () => {
+  const badUrls = [
+    "postgres://u:pw@h/db",
+    "postgres://u@h/db?password=x",
+    "postgres://u@h/db?sslmode=require",
+    "postgres://u@h/db?application_name=x",
+    "mysql://u@h/db",
+  ];
+
+  for (const url of badUrls) {
+    assert.throws(
+      () => loadConfig({ URSITOARE_DATABASE_URL: url }),
+      (error: unknown) => {
+        assert.ok(error instanceof ConfigError);
+        assert.equal(error.code, "CONFIG_INVALID");
+        assert.equal(error.variable, "URSITOARE_DATABASE_URL");
+        assert.ok(!error.message.includes("pw"));
+        assert.ok(!error.message.includes(url));
+        return true;
+      },
+    );
+  }
+});
+
+test("C-3d74e0ae a bad owner database URL names the owner URL variable", () => {
+  assert.throws(
+    () => loadConfig({ URSITOARE_DATABASE_OWNER_URL: "mysql://u@h/db" }),
+    (error: unknown) => {
+      assert.ok(error instanceof ConfigError);
+      assert.equal(error.code, "CONFIG_INVALID");
+      assert.equal(error.variable, "URSITOARE_DATABASE_OWNER_URL");
+      return true;
+    },
+  );
+});
+
+test("C-3d74e0ae a database password file without its URL names the password-file variable", () => {
+  const cases = [
+    {
+      env: { URSITOARE_DATABASE_PASSWORD_FILE: "/run/secrets/db_password" },
+      variable: "URSITOARE_DATABASE_PASSWORD_FILE",
+      message: "URSITOARE_DATABASE_PASSWORD_FILE: set only together with URSITOARE_DATABASE_URL",
+    },
+    {
+      env: { URSITOARE_DATABASE_OWNER_PASSWORD_FILE: "/run/secrets/db_owner_password" },
+      variable: "URSITOARE_DATABASE_OWNER_PASSWORD_FILE",
+      message:
+        "URSITOARE_DATABASE_OWNER_PASSWORD_FILE: set only together with URSITOARE_DATABASE_OWNER_URL",
+    },
+  ];
+
+  for (const bad of cases) {
+    assert.throws(
+      () => loadConfig(bad.env, () => "pw-x"),
+      (error: unknown) => {
+        assert.ok(error instanceof ConfigError);
+        assert.equal(error.code, "CONFIG_INVALID");
+        assert.equal(error.variable, bad.variable);
+        assert.equal(error.message, bad.message);
+        assert.ok(!error.message.includes("pw-x"));
+        return true;
+      },
+    );
+  }
+});
+
+test("C-3d74e0ae an empty database password file with a valid URL gives CONFIG_SECRET_EMPTY", () => {
+  const env = {
+    URSITOARE_DATABASE_URL: "postgres://ursitoare_app@db.internal:5432/ursitoare",
+    URSITOARE_DATABASE_PASSWORD_FILE: "/run/secrets/db_password",
+  };
+
+  for (const empty of ["", "\n", "  \n"]) {
+    assert.throws(
+      () => loadConfig(env, () => empty),
+      (error: unknown) => {
+        assert.ok(error instanceof ConfigError);
+        assert.equal(error.code, "CONFIG_SECRET_EMPTY");
+        assert.equal(error.variable, "URSITOARE_DATABASE_PASSWORD_FILE");
+        return true;
+      },
+    );
+  }
 });
