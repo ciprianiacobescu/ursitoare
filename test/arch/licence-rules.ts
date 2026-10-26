@@ -27,12 +27,19 @@ export interface LicenceViolation {
   detail: string;
 }
 
-export function formatLicenceViolation(_v: LicenceViolation): string {
-  throw new Error("not implemented");
+const LICENCE_TEXT_LIMIT = 80;
+
+export function formatLicenceViolation(v: LicenceViolation): string {
+  let message = `${v.code}: ${v.subject}`;
+  if (v.licence !== undefined) {
+    const text = v.licence.length > LICENCE_TEXT_LIMIT ? `${v.licence.slice(0, LICENCE_TEXT_LIMIT - 3)}...` : v.licence;
+    message += ` licence "${text}"`;
+  }
+  return `${message} - ${v.detail}`;
 }
 
-export function formatLicenceViolations(_vs: readonly LicenceViolation[]): string {
-  throw new Error("not implemented");
+export function formatLicenceViolations(vs: readonly LicenceViolation[]): string {
+  return vs.map(formatLicenceViolation).join("\n");
 }
 
 export interface LicenceReading {
@@ -53,8 +60,36 @@ export interface LicencePolicy {
   exceptions: readonly LicenceException[];
 }
 
-export function parseLicenceExpression(_text: string): string[] | null {
-  throw new Error("not implemented");
+export function parseLicenceExpression(text: string): string[] | null {
+  const tokens = text.match(/[()]|[^\s()]+/g) ?? [];
+  const terms: string[] = [];
+  let pos = 0;
+  const isOperator = (t: string | undefined): boolean => t !== undefined && /^(and|or)$/i.test(t);
+  const parseAtom = (): boolean => {
+    const t = tokens[pos];
+    if (t === undefined) return false;
+    if (t === "(") {
+      pos++;
+      if (!parseExpr()) return false;
+      if (tokens[pos] !== ")") return false;
+      pos++;
+      return true;
+    }
+    if (t === ")" || isOperator(t) || !/^[A-Za-z0-9.+-]+$/.test(t)) return false;
+    if (!terms.includes(t)) terms.push(t);
+    pos++;
+    return true;
+  };
+  const parseExpr = (): boolean => {
+    if (!parseAtom()) return false;
+    while (isOperator(tokens[pos])) {
+      pos++;
+      if (!parseAtom()) return false;
+    }
+    return true;
+  };
+  if (!parseExpr() || pos !== tokens.length) return null;
+  return terms;
 }
 
 export function npmLicenceOf(_packageJson: unknown): LicenceReading {
