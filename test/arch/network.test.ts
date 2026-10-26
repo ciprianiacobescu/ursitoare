@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { checkNetwork } from "./rules.ts";
-import { snapshotOf } from "./sources.ts";
+import { collectImports, snapshotOf } from "./sources.ts";
 
 // Runs a call and returns its answer, or a marker when it throws, so a missing behaviour fails on the comparison.
 function answer<T>(call: () => T): T | "THROWN" {
@@ -87,6 +87,21 @@ test("C-a2eef903: egress modules, type-only imports, client methods and test fil
   });
 
   assert.deepEqual(answer(() => checkNetwork(snapshot)), []);
+});
+
+test("C-a2eef903: a default import with all-type named specifiers is a value import", () => {
+  const text = 'import https, { type Agent } from "node:https";\n';
+  const refs = answer(() => collectImports({ path: "src/api/a.ts", text }));
+  assert.deepEqual(
+    answer(() =>
+      refs === "THROWN" ? "THROWN" : refs.map((r) => [r.line, r.specifier, r.typeOnly]),
+    ),
+    [[1, "node:https", false]],
+  );
+
+  assert.deepEqual(answer(() => checkNetwork(snapshotOf({ "src/api/a.ts": text }))), [
+    networkViolation("ARCH_NETWORK_IMPORT", "src/api/a.ts", 1, "node:https"),
+  ]);
 });
 
 test("C-fa65851b: an import-equals declaration is a value import", () => {
