@@ -95,3 +95,5 @@
 {"at":"2026-10-26T22:20:00Z","revision":"6f96d4f6957527bdade0b51f4af471c92d29cb81","type":"unit.integrated","unit":"openspec:add-tenancy-foundation"}
 {"at":"2026-10-26T22:20:00Z","attempt":1,"cost_usd":5.080361,"runs":3,"type":"plan.charged","unit":"openspec:add-tenancy-foundation"}
 {"at":"2026-10-26T22:21:25Z","branch":"l4/archive/openspec/add-tenancy-foundation","head":"9f164b2bb6f6972a450055c641ac94e057aeaa23","type":"unit.branch_deleted","unit":"openspec:add-tenancy-foundation"}
+{"at":"2026-10-26T22:21:27Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-e2e-stack"}
+{"at":"2026-10-26T22:21:27Z","run":"r-20261026T2221Z-da09","type":"unit.dispatched","unit":"openspec:add-e2e-stack"}
