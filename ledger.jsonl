@@ -54,3 +54,4 @@
 {"at":"2026-10-26T16:17:21Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"6c02ef8249fbfe4cf102ea0423aef451107b4994","status":"pass","type":"unit.postcheck","unit":"openspec:add-db-foundation"}
 {"at":"2026-10-26T16:17:21Z","revision":"6c02ef8249fbfe4cf102ea0423aef451107b4994","type":"unit.integrated","unit":"openspec:add-db-foundation"}
 {"at":"2026-10-26T16:17:21Z","attempt":1,"cost_usd":2.954111,"runs":3,"type":"plan.charged","unit":"openspec:add-db-foundation"}
+{"at":"2026-10-26T16:19:07Z","branch":"l4/archive/openspec/add-db-foundation","head":"cd19e8870ab7aba2466a8dff2db8be673826fdb8","type":"unit.branch_deleted","unit":"openspec:add-db-foundation"}
