@@ -1,8 +1,8 @@
 import type { QueryResultRow } from "pg";
 
-import { hashRouteKey, ROUTE_KIND_PATTERN, type TenantContext } from "./context.ts";
+import { type ReviewProfile, hashRouteKey, ROUTE_KIND_PATTERN, type TenantContext } from "./context.ts";
 import { TenancyError } from "./errors.ts";
-import type { TenantPool, TenantTx } from "./tx.ts";
+import { inTransaction, type TenantPool, type TenantTx } from "./tx.ts";
 
 export type RouteRegistration = "created" | "exists";
 
@@ -18,6 +18,14 @@ const SQLSTATE_ERRORS: Readonly<Record<string, { code: TenancyError["code"]; mes
 
 interface CreatedRow extends QueryResultRow {
   created: boolean;
+}
+
+interface ResolveRow extends QueryResultRow {
+  tenant_id: string | null;
+}
+
+interface ProfileRow extends QueryResultRow {
+  review_profile: string;
 }
 
 function sqlState(error: unknown): string | undefined {
@@ -79,6 +87,37 @@ export function unregisterTenantRoute(_tx: TenantTx, _kind: string, _key: string
   throw new Error("not implemented");
 }
 
-export function resolveTenantBy(_pool: TenantPool, _kind: string, _key: string): Promise<TenantContext | null> {
-  throw new Error("not implemented");
+export async function resolveTenantBy(
+  pool: TenantPool,
+  kind: string,
+  key: string,
+): Promise<TenantContext | null> {
+  assertRouteKind(kind);
+  let keyHash: Buffer;
+  try {
+    keyHash = hashRouteKey(key);
+  } catch {
+    return null;
+  }
+
+  return inTransaction(pool, async (client) => {
+    const resolved = await client.query<ResolveRow>(
+      "SELECT ursitoare.resolve_tenant($1, $2) AS tenant_id",
+      [kind, keyHash],
+    );
+    const tenantId = resolved.rows[0]?.tenant_id;
+    if (tenantId === null || tenantId === undefined) {
+      return null;
+    }
+    await client.query("SELECT set_config('app.tenant_id', $1, true)", [tenantId]);
+    const tenant = await client.query<ProfileRow>(
+      "SELECT review_profile FROM ursitoare.tenant WHERE tenant_id = $1",
+      [tenantId],
+    );
+    const profile = tenant.rows[0]?.review_profile;
+    if (profile === undefined) {
+      throw new TenancyError("TENANT_UNKNOWN", "tenant is unknown");
+    }
+    return { tenantId, reviewProfile: profile as ReviewProfile };
+  });
 }
