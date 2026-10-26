@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-26T12:01:40Z",
+  "integrated_revision": "f9390c6b5d6228dbb8f789542cb36288b6386bd5",
+  "merge_commit": "f9390c6b5d6228dbb8f789542cb36288b6386bd5",
+  "plan_digest": "7c2df2bf58862787",
+  "plan_id": "m0",
+  "postcheck": "pass",
+  "pr": 1,
+  "receipt_id": "m0/openspec:add-engine-skeleton/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "4fded0db35fcc0227d47dbe868789dc730915bd7",
+  "spec_digest": "252ac1d24212677b",
+  "target": "main",
+  "unit_id": "openspec:add-engine-skeleton"
+}
