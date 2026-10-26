@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Finding F-9d433ef5: A failed tenant reset after a successful COMMIT rejects although the writes were committed |
+| Q-001 | answered | none | verdict | Finding F-9d433ef5: A failed tenant reset after a successful COMMIT rejects although the writes were committed |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Finding F-9d433ef5: A failed tenant reset after a successful COMMIT rejects although the writes were committed
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -40,3 +41,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived. The design already decides this case: a failed reset destroys the connection, and when the connection dies the connection is destroyed and the original error is rethrown. The code does exactly that: a reset error after a successful COMMIT marks the client for destruction, is kept as the failure when nothing earlier failed, and is rethrown after release. The reset is a plain set_config of a session-level custom setting, which fails only when the connection itself is broken, so this is the design's "connection dies" row, not a case the documents leave open. A caller that sees a connection error after sending COMMIT can never be sure whether the writes landed, which is the general post-commit ambiguity of any database client, and the judge's own suggested behaviour restates what the code does now.
