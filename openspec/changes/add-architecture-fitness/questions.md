@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | open | none | verdict | Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied? |
-| Q-007 | open | none | verdict | Finding F-a154400b: The module graph is duplicated: the rules ignore test/arch/modules.ts |
+| Q-007 | answered | none | verdict | Finding F-a154400b: The module graph is duplicated: the rules ignore test/arch/modules.ts |
 | Q-008 | open | none | verdict | Finding F-a985c7e4: task 2.1: modules.ts is not the graph the rules check |
 | Q-009 | open | none | verdict | Finding F-ed69f6e7: The egress pin is not checked when a pinned module row is missing |
 | Q-010 | open | none | verdict | Finding F-85a00370: A default import with all-type named specifiers is treated as type-only |
@@ -213,7 +213,8 @@ accept The criterion describes what the implementer does if a rule flags code th
 
 ## Q-007: Finding F-a154400b: The module graph is duplicated: the rules ignore test/arch/modules.ts
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -234,6 +235,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct and the repository shows it. test/arch/rules.ts imports only typescript and ./sources.ts; it never imports ./modules.ts. Instead it declares and exports its own literal MODULES, and that literal is the default argument of checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll. test/arch/modules.ts holds a second, independent literal of the same graph and is not a re-export. The design Interfaces put MODULES only in test/arch/modules.ts, and design decision 13 and the proposal say a later unit that needs a new module or edge changes test/arch/modules.ts in its red step; with the current code such a change alters nothing the rules read, so the rules' own messages that point at test/arch/modules.ts are misleading. modules.test.ts asserts the shape of the copy in modules.ts while repo.test.ts calls checkGraphIntegrity() and checkAll(readSnapshot()) with no argument, so it checks the copy in rules.ts; the two copies can drift apart without any test failing. rules.ts also exports MODULES, which the Interfaces do not list. One literal must be the source of truth and the rules must read it by default. WHEN a module or edge is added to the MODULES exported by test/arch/modules.ts and no modules argument is passed THEN checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll evaluate that changed graph, because their default is the very object exported by test/arch/modules.ts and no second literal of the graph exists in test/arch/rules.ts.
 ---
 
 ## Q-008: Finding F-a985c7e4: task 2.1: modules.ts is not the graph the rules check
