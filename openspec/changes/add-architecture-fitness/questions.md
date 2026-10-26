@@ -358,6 +358,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-012: Finding F-6db2196c: Secret scan narrowed to skip every .l4 path
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: checked .gitignore:1 does not resolve
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 5, verifier
