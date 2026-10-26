@@ -75,3 +75,4 @@
 {"at":"2026-10-26T20:56:57Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-architecture-fitness can go on","type":"plan.resumed"}
 {"at":"2026-10-26T20:57:01Z","head":"2099b3f3976b5a507e23a02b067ad313a775c6fb","pr":7,"target_before":"2b5ba97dfb28b46b7f51f1e1be4ca9db7c1653b7","type":"unit.merge_requested","unit":"openspec:add-architecture-fitness"}
 {"at":"2026-10-26T20:57:05Z","ci":"not_run","head":"2099b3f3976b5a507e23a02b067ad313a775c6fb","merge_commit":"fb5d6693c273b118c46b5948ed928bd81c9a67fd","method":"squash","pr":7,"raced":false,"type":"unit.merged","unit":"openspec:add-architecture-fitness"}
+{"at":"2026-10-26T20:57:10Z","branch":"l4/openspec/add-architecture-fitness","head":"2099b3f3976b5a507e23a02b067ad313a775c6fb","type":"unit.branch_deleted","unit":"openspec:add-architecture-fitness"}
