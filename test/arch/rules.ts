@@ -1,6 +1,8 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this module implements it.
+import ts from "typescript";
+
 import { MODULES } from "./modules.ts";
-import type { Egress, ModuleRule, Snapshot, Violation } from "./sources.ts";
+import type { Egress, ModuleRule, Snapshot, SourceFile, Violation } from "./sources.ts";
 import { collectImports, isTestFile, resolveSpecifier, sortViolations } from "./sources.ts";
 
 const GRAPH_FILE = "test/arch/modules.ts";
@@ -124,6 +126,75 @@ function unknownModuleViolation(dir: string, file: string, line: number): Violat
   };
 }
 
+function isRootFile(path: string): boolean {
+  return path.startsWith("src/") && !path.slice("src/".length).includes("/");
+}
+
+function dynamicImportViolation(file: string, line: number): Violation {
+  return {
+    code: "ARCH_DYNAMIC_IMPORT",
+    file,
+    line,
+    message: "use a literal specifier",
+  };
+}
+
+function deepImportViolation(file: string, line: number, to: string): Violation {
+  return {
+    code: "ARCH_DEEP_IMPORT",
+    file,
+    line,
+    message: `import ${to} through src/${to}/index.ts`,
+  };
+}
+
+function rootFileViolation(file: string, line: number, message: string): Violation {
+  return { code: "ARCH_ROOT_FILE", file, line, message };
+}
+
+function loaderViolations(file: SourceFile): Violation[] {
+  const source = ts.createSourceFile(file.path, file.text, ts.ScriptTarget.Latest, true);
+  const violations: Violation[] = [];
+  const lineOf = (node: ts.Node): number =>
+    source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1;
+  const push = (name: string, node: ts.Node): void => {
+    violations.push({
+      code: "ARCH_DYNAMIC_IMPORT",
+      file: file.path,
+      line: lineOf(node),
+      message: `${name} hides the module; use a static import`,
+    });
+  };
+
+  const visit = (node: ts.Node): void => {
+    if (ts.isIdentifier(node) && node.text === "createRequire") {
+      push("createRequire", node);
+    } else if (ts.isElementAccessExpression(node)) {
+      const argument = node.argumentExpression;
+      if (ts.isStringLiteral(argument) && argument.text === "createRequire") {
+        push("createRequire", argument);
+      }
+    } else if (ts.isCallExpression(node)) {
+      const callee = node.expression;
+      if (ts.isIdentifier(callee) && callee.text === "getBuiltinModule") {
+        push("getBuiltinModule", callee);
+      } else if (ts.isPropertyAccessExpression(callee) && callee.name.text === "getBuiltinModule") {
+        push("getBuiltinModule", callee.name);
+      } else if (
+        ts.isElementAccessExpression(callee) &&
+        ts.isStringLiteral(callee.argumentExpression) &&
+        callee.argumentExpression.text === "getBuiltinModule"
+      ) {
+        push("getBuiltinModule", callee.argumentExpression);
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+
+  ts.forEachChild(source, visit);
+  return violations;
+}
+
 export function checkModuleGraph(
   s: Snapshot,
   modules: Record<string, ModuleRule> = MODULES,
@@ -137,17 +208,47 @@ export function checkModuleGraph(
   for (const file of s.files) {
     if (isTestFile(file.path)) continue;
     const from = moduleNameOf(file.path);
-    if (from === null) continue;
-    const allowed = modules[from]?.allowed ?? [];
+    const root = isRootFile(file.path);
+    const main = file.path === "src/main.ts";
+    const allowed = from === null ? [] : modules[from]?.allowed ?? [];
+
     for (const ref of collectImports(file)) {
-      if (ref.specifier === null) continue;
+      if (ref.specifier === null) {
+        violations.push(dynamicImportViolation(file.path, ref.line));
+        continue;
+      }
       const resolved = resolveSpecifier(file.path, ref.specifier);
       if (resolved === null) continue;
       const to = moduleNameOf(resolved);
-      if (to === null || to === from) continue;
+
+      if (to === null) {
+        if (resolved === "src/main.ts") {
+          violations.push(
+            rootFileViolation(file.path, ref.line, "src/main.ts is the composition root and is imported by nothing"),
+          );
+        }
+        continue;
+      }
+
+      if (root && !main) {
+        violations.push(
+          rootFileViolation(
+            file.path,
+            ref.line,
+            `${file.path} is a leaf file and may not import module ${to}`,
+          ),
+        );
+        continue;
+      }
+
+      if (from !== null && to === from) continue;
+
       if (!Object.hasOwn(modules, to)) {
         violations.push(unknownModuleViolation(to, file.path, ref.line));
-      } else if (!allowed.includes(to)) {
+        continue;
+      }
+
+      if (from !== null && !allowed.includes(to)) {
         violations.push({
           code: "ARCH_MODULE_EDGE",
           file: file.path,
@@ -156,8 +257,15 @@ export function checkModuleGraph(
             allowed.length === 0 ? "none" : allowed.join(", ")
           } (test/arch/modules.ts)`,
         });
+        continue;
+      }
+
+      if (resolved !== `src/${to}/index.ts`) {
+        violations.push(deepImportViolation(file.path, ref.line, to));
       }
     }
+
+    violations.push(...loaderViolations(file));
   }
 
   return sortViolations(violations);
