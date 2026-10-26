@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 5.1 | technical | test/arch/repo.test.ts:30 networkViolation prepends the name to the full message |
 | Q-002 | answered | none | verdict | Criterion C-851f3c7c (architecture-rules › Complete module graph as data › Inconsistent graphs are reported): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-c63269ba (architecture-rules › Secret-pattern scan of repository files › Each kind is detected without echoing it): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied? |
 | Q-007 | answered | none | verdict | Finding F-a154400b: The module graph is duplicated: the rules ignore test/arch/modules.ts |
@@ -117,7 +117,7 @@ accept: scanText reports all eight kinds at their lines without echoing them, wi
 
 ## Q-004: Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The criterion describes the implementer's conduct, not code: when the merged tree fails a rule, the task must end with a blocker and the diff must leave src/, test/support/, owner files and modules.ts untouched and weaken no rule. Settling it needs the unit's actual run and diff: whether checkAll(re
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -145,6 +145,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept: a conduct criterion. On this unit checkAll(readSnapshot()) is empty (repo.test.ts passes), so no blocker was due, and the diff of the unit changes only test/arch and its openspec folders: nothing under src/ or test/support/ and no owner file.
 ---
 
 ## Q-005: Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied?
