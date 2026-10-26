@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-26T20:57:40Z",
+  "integrated_revision": "fb5d6693c273b118c46b5948ed928bd81c9a67fd",
+  "merge_commit": "fb5d6693c273b118c46b5948ed928bd81c9a67fd",
+  "plan_digest": "7c2df2bf58862787",
+  "plan_id": "m0",
+  "postcheck": "pass",
+  "pr": 7,
+  "receipt_id": "m0/openspec:add-architecture-fitness/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "2099b3f3976b5a507e23a02b067ad313a775c6fb",
+  "spec_digest": "7bb26224f85aa758",
+  "target": "main",
+  "unit_id": "openspec:add-architecture-fitness"
+}
