@@ -3,6 +3,8 @@
 import fs, { type Dirent } from "node:fs";
 import path from "node:path";
 
+import ts from "typescript";
+
 import { PYPI_CLASSIFIER_SPDX } from "./licence-policy.ts";
 
 export interface LicenceException {
@@ -710,6 +712,48 @@ export function checkBuiltDependencies(workspaceYaml: string, reviewed: readonly
   return [{ code: "BUILT_DEPS_DRIFT", subject, detail: parts.join("; ") }];
 }
 
-export function findForbiddenImports(_source: string): string[] {
-  throw new Error("not implemented");
+const FORBIDDEN_MODULES = new Set([
+  "http",
+  "https",
+  "http2",
+  "net",
+  "dns",
+  "tls",
+  "dgram",
+  "child_process",
+  "worker_threads",
+  "undici",
+]);
+
+function isForbiddenModule(specifier: string): boolean {
+  const withoutNodePrefix = specifier.startsWith("node:") ? specifier.slice("node:".length) : specifier;
+  return FORBIDDEN_MODULES.has(withoutNodePrefix);
+}
+
+export function findForbiddenImports(source: string): string[] {
+  const file = ts.createSourceFile("source.ts", source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const found: string[] = [];
+  const recordSpecifier = (specifier: string): void => {
+    if (isForbiddenModule(specifier)) found.push(specifier);
+  };
+  const visit = (node: ts.Node): void => {
+    if (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) {
+      const specifier = node.moduleSpecifier;
+      if (specifier !== undefined && ts.isStringLiteral(specifier)) recordSpecifier(specifier.text);
+    } else if (ts.isCallExpression(node)) {
+      const callee = node.expression;
+      const isRequire = ts.isIdentifier(callee) && callee.text === "require";
+      const isDynamicImport = callee.kind === ts.SyntaxKind.ImportKeyword;
+      if (isRequire || isDynamicImport) {
+        const [argument] = node.arguments;
+        if (node.arguments.length === 1 && argument !== undefined && ts.isStringLiteral(argument)) {
+          recordSpecifier(argument.text);
+        }
+      }
+      if (ts.isIdentifier(callee) && callee.text === "fetch") found.push("fetch");
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(file);
+  return found;
 }

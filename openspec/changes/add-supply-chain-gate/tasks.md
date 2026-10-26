@@ -21,4 +21,4 @@
 
 ## 5. Read-only guard
 
-- [ ] 5.1 Implement `findForbiddenImports` with `ts.createSourceFile` in `test/arch/licence-rules.ts` and the live test `the licence gate reads files only`, which scans `test/arch/licence-rules.ts` and `test/arch/licence-policy.ts` and never `test/arch/licences.test.ts`, tests first in `test/arch/licences.test.ts`, implementing requirement "The licence gate reads files only"
+- [x] 5.1 Implement `findForbiddenImports` with `ts.createSourceFile` in `test/arch/licence-rules.ts` and the live test `the licence gate reads files only`, which scans `test/arch/licence-rules.ts` and `test/arch/licence-policy.ts` and never `test/arch/licences.test.ts`, tests first in `test/arch/licences.test.ts`, implementing requirement "The licence gate reads files only"
