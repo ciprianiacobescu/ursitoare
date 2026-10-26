@@ -58,3 +58,4 @@
 {"at":"2026-10-26T16:19:10Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-architecture-fitness"}
 {"at":"2026-10-26T16:19:10Z","run":"r-20261026T1619Z-8dc6","type":"unit.dispatched","unit":"openspec:add-architecture-fitness"}
 {"at":"2026-10-26T17:22:28Z","detail":"awaiting_human: no new answers (open: Q-001) (escalated to a person: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-architecture-fitness"}
+{"at":"2026-10-26T19:15:54Z","by":"harness","reason":"the cause is gone: openspec:add-architecture-fitness is awaiting_human","type":"plan.resumed"}
