@@ -8,7 +8,7 @@
 
 ## 3. Test support
 
-- [ ] 3.1 Write `test/support/tenants.test.ts` first, then implement `TENANT_A_ID`, `TENANT_B_ID` and `seedTwoTenants(db)` in `test/support/tenants.ts` (the only task that changes it): through `db.ownerPool`, `INSERT INTO ursitoare.tenant (tenant_id, name) VALUES ('tenant_a', 'Tenant A'), ('tenant_b', 'Tenant B') ON CONFLICT DO NOTHING`, then `SELECT tenant_id, review_profile` for both ids and return `{ a, b }` as `TenantContext` values (`TestDatabase` imported as a type from `./pg.ts`, `TenantContext` as a type from `../../src/tenancy/index.ts`), implementing requirement "Two seeded tenants for isolation tests"
+- [x] 3.1 Write `test/support/tenants.test.ts` first, then implement `TENANT_A_ID`, `TENANT_B_ID` and `seedTwoTenants(db)` in `test/support/tenants.ts` (the only task that changes it): through `db.ownerPool`, `INSERT INTO ursitoare.tenant (tenant_id, name) VALUES ('tenant_a', 'Tenant A'), ('tenant_b', 'Tenant B') ON CONFLICT DO NOTHING`, then `SELECT tenant_id, review_profile` for both ids and return `{ a, b }` as `TenantContext` values (`TestDatabase` imported as a type from `./pg.ts`, `TenantContext` as a type from `../../src/tenancy/index.ts`), implementing requirement "Two seeded tenants for isolation tests"
 
 ## 4. Tenant transactions
 
