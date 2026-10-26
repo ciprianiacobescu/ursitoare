@@ -1,6 +1,6 @@
 ## 1. Errors, context and hashing
 
-- [ ] 1.1 Write `src/tenancy/context.test.ts` first (the known SHA-256 values, the refused keys, the 4096 boundary), then implement `TenancyError` and `TenancyErrorCode` in `src/tenancy/errors.ts`, and in `src/tenancy/context.ts` the real values of `TENANT_ID_PATTERN`, `ROUTE_KIND_PATTERN` and `MAX_ROUTE_KEY_LENGTH`, `hashRouteKey` (`createHash("sha256")` over the UTF-8 bytes; refuse an empty key, one with `!key.isWellFormed()` and one over 4096 code units, message `"invalid route key"`) and the internal `assertTenantContext(ctx)` (id pattern, `solo` or `team`, else `TENANT_INVALID`), with `TenantContext` and `ReviewProfile`, all exported through `src/tenancy/index.ts` (types with `export type`), implementing requirement "Route keys are hashed"
+- [x] 1.1 Write `src/tenancy/context.test.ts` first (the known SHA-256 values, the refused keys, the 4096 boundary), then implement `TenancyError` and `TenancyErrorCode` in `src/tenancy/errors.ts`, and in `src/tenancy/context.ts` the real values of `TENANT_ID_PATTERN`, `ROUTE_KIND_PATTERN` and `MAX_ROUTE_KEY_LENGTH`, `hashRouteKey` (`createHash("sha256")` over the UTF-8 bytes; refuse an empty key, one with `!key.isWellFormed()` and one over 4096 code units, message `"invalid route key"`) and the internal `assertTenantContext(ctx)` (id pattern, `solo` or `team`, else `TENANT_INVALID`), with `TenantContext` and `ReviewProfile`, all exported through `src/tenancy/index.ts` (types with `export type`), implementing requirement "Route keys are hashed"
 
 ## 2. Migration
 
