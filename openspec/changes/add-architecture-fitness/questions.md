@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Finding F-ed69f6e7: The egress pin is not checked when a pinned module row is missing |
 | Q-010 | answered | none | verdict | Finding F-85a00370: A default import with all-type named specifiers is treated as type-only |
 | Q-011 | answered | none | verdict | Finding F-3c3edcf1: task 2.1: the rules read a second copy of the graph, not test/arch/modules.ts |
-| Q-012 | open | none | verdict | Finding F-6db2196c: Secret scan narrowed to skip every .l4 path |
+| Q-012 | answered | none | verdict | Finding F-6db2196c: Secret scan narrowed to skip every .l4 path |
 <!-- l4:index:end -->
 
 ---
@@ -358,7 +358,7 @@ accept: the same duplicate graph as Q-007 and Q-008, waived for this unit for th
 
 ## Q-012: Finding F-6db2196c: Secret scan narrowed to skip every .l4 path
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: checked .gitignore:1 does not resolve
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -380,3 +380,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept: the file that failed the scan is harness evidence (the round-2 verdict.json under this unit .l4 folder, where the judge quoted a private-key header in prose). No person or implementer writes under a unit .l4 folder, so the blocker the requirement asks for would have come to the owner, who takes this exclusion. Waived for this unit as written; the follow-up after the merge narrows it to .l4 folders under openspec/changes, so .l4/config.yaml and .l4/plans are scanned again, and states the exclusion in the spec.
