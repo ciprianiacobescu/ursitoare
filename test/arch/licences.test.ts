@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
+  checkLicences,
   formatLicenceViolation,
   formatLicenceViolations,
   parseLicenceExpression,
@@ -17,6 +18,20 @@ function answer<T>(call: () => T): T | "THROWN" {
     return "THROWN";
   }
 }
+
+const ALLOWED = [
+  "MIT",
+  "Apache-2.0",
+  "BSD-2-Clause",
+  "BSD-3-Clause",
+  "ISC",
+  "PostgreSQL",
+  "0BSD",
+  "CC0-1.0",
+  "MPL-2.0",
+  "BlueOak-1.0.0",
+  "PSF-2.0",
+];
 
 const GPL_VIOLATION: LicenceViolation = {
   code: "LICENCE_TERM_NOT_ALLOWED",
@@ -72,4 +87,188 @@ test("C-1c977f83 formatLicenceViolations joins the lines with a newline and give
     ].join("\n"),
   );
   assert.equal(answer(() => formatLicenceViolations([])), "");
+});
+
+test("C-2fb3cbe9 checkLicences fails a copyleft term", () => {
+  assert.deepEqual(
+    answer(() =>
+      checkLicences(
+        [
+          {
+            ecosystem: "npm",
+            name: "left-pad-gpl",
+            version: "1.0.0",
+            licence: "GPL-3.0-only",
+            terms: ["GPL-3.0-only"],
+          },
+        ],
+        { allowed: ALLOWED, exceptions: [] },
+        "node_modules/.pnpm",
+      ),
+    ),
+    [
+      {
+        code: "LICENCE_TERM_NOT_ALLOWED",
+        subject: "npm left-pad-gpl@1.0.0",
+        licence: "GPL-3.0-only",
+        detail: "terms not on the allowlist: GPL-3.0-only",
+      },
+    ],
+  );
+});
+
+test("C-30fdcfea checkLicences passes permissive licences", () => {
+  assert.deepEqual(
+    answer(() =>
+      checkLicences(
+        [
+          { ecosystem: "npm", name: "react", version: "19.3.1", licence: "MIT", terms: ["MIT"] },
+          {
+            ecosystem: "npm",
+            name: "typescript",
+            version: "6.0.3",
+            licence: "Apache-2.0",
+            terms: ["Apache-2.0"],
+          },
+        ],
+        { allowed: ALLOWED, exceptions: [] },
+        "node_modules/.pnpm",
+      ),
+    ),
+    [],
+  );
+});
+
+test("C-ae5033da checkLicences reports a package without a licence", () => {
+  const violations = answer(() =>
+    checkLicences(
+      [{ ecosystem: "npm", name: "nolic", version: "2.0.0", licence: null, terms: null }],
+      { allowed: ALLOWED, exceptions: [] },
+      "node_modules/.pnpm",
+    ),
+  );
+  assert.ok(Array.isArray(violations), "checkLicences returns violations");
+  assert.equal(violations.length, 1);
+  const [first] = violations;
+  assert.ok(first, "one violation");
+  assert.equal(first.code, "LICENCE_MISSING");
+  assert.equal(first.subject, "npm nolic@2.0.0");
+  assert.match(formatLicenceViolation(first), /nolic@2\.0\.0/);
+});
+
+test("C-30f06cd4 checkLicences judges every term of a licence expression", () => {
+  assert.deepEqual(
+    answer(() =>
+      checkLicences(
+        [
+          {
+            ecosystem: "npm",
+            name: "dual",
+            version: "1.0.0",
+            licence: "MIT OR GPL-3.0-only",
+            terms: ["MIT", "GPL-3.0-only"],
+          },
+        ],
+        { allowed: ALLOWED, exceptions: [] },
+        "node_modules/.pnpm",
+      ),
+    ),
+    [
+      {
+        code: "LICENCE_TERM_NOT_ALLOWED",
+        subject: "npm dual@1.0.0",
+        licence: "MIT OR GPL-3.0-only",
+        detail: "terms not on the allowlist: GPL-3.0-only",
+      },
+    ],
+  );
+});
+
+test("C-ca426357 checkLicences refuses a near-miss identifier", () => {
+  assert.deepEqual(
+    answer(() =>
+      checkLicences(
+        [
+          {
+            ecosystem: "npm",
+            name: "plus",
+            version: "1.0.0",
+            licence: "Apache-2.0+",
+            terms: ["Apache-2.0+"],
+          },
+        ],
+        { allowed: ALLOWED, exceptions: [] },
+        "node_modules/.pnpm",
+      ),
+    ),
+    [
+      {
+        code: "LICENCE_TERM_NOT_ALLOWED",
+        subject: "npm plus@1.0.0",
+        licence: "Apache-2.0+",
+        detail: "terms not on the allowlist: Apache-2.0+",
+      },
+    ],
+  );
+});
+
+test("C-7f94877e checkLicences matches terms without regard to case", () => {
+  assert.deepEqual(
+    answer(() =>
+      checkLicences(
+        [{ ecosystem: "npm", name: "lower-mit", version: "1.0.0", licence: "mit", terms: ["mit"] }],
+        { allowed: ALLOWED, exceptions: [] },
+        "node_modules/.pnpm",
+      ),
+    ),
+    [],
+  );
+  const violations = answer(() =>
+    checkLicences(
+      [
+        {
+          ecosystem: "npm",
+          name: "lower-gpl",
+          version: "1.0.0",
+          licence: "gpl-3.0-only",
+          terms: ["gpl-3.0-only"],
+        },
+      ],
+      { allowed: ALLOWED, exceptions: [] },
+      "node_modules/.pnpm",
+    ),
+  );
+  assert.ok(Array.isArray(violations), "checkLicences returns violations");
+  assert.equal(violations.length, 1);
+  const [first] = violations;
+  assert.ok(first, "one violation");
+  assert.equal(first.code, "LICENCE_TERM_NOT_ALLOWED");
+  assert.equal(first.subject, "npm lower-gpl@1.0.0");
+});
+
+test("C-ff913dc5 checkLicences gives fixed subjects and details", () => {
+  assert.deepEqual(
+    answer(() =>
+      checkLicences(
+        [
+          { ecosystem: "pypi", name: "a", version: "1", licence: null, terms: null },
+          { ecosystem: "npm", name: "b", version: "2", licence: "Foo Bar", terms: null },
+        ],
+        { allowed: ALLOWED, exceptions: [] },
+        "node_modules/.pnpm",
+      ),
+    ),
+    [
+      { code: "LICENCE_MISSING", subject: "pypi a@1", detail: "no licence found" },
+      {
+        code: "LICENCE_UNKNOWN",
+        subject: "npm b@2",
+        licence: "Foo Bar",
+        detail: "licence is not a parsable SPDX expression",
+      },
+    ],
+  );
+  assert.deepEqual(answer(() => checkLicences([], { allowed: ALLOWED, exceptions: [] }, "e2e/.venv")), [
+    { code: "INVENTORY_EMPTY", subject: "e2e/.venv", detail: "no packages found" },
+  ]);
 });
