@@ -2,6 +2,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import type { Dirent } from "node:fs";
 import { dirname, join, posix, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import ts from "typescript";
 
 export type Egress = "tools" | "oidc" | "otlp";
 
@@ -132,8 +133,109 @@ export interface ImportRef {
   dynamic: boolean;
 }
 
-export function collectImports(_file: SourceFile): ImportRef[] {
-  throw new Error("not implemented");
+function literalText(node: ts.Expression | ts.TypeNode | undefined): string | null {
+  if (node !== undefined && ts.isStringLiteral(node)) return node.text;
+  return null;
+}
+
+function moduleSpecifierOf(
+  node: ts.ImportDeclaration | ts.ExportDeclaration,
+): ts.StringLiteral | undefined {
+  const specifier = node.moduleSpecifier;
+  return specifier !== undefined && ts.isStringLiteral(specifier) ? specifier : undefined;
+}
+
+function importTypeArgument(argument: ts.TypeNode): ts.LiteralTypeNode | undefined {
+  return ts.isLiteralTypeNode(argument) ? argument : undefined;
+}
+
+function namedBindingsAreTypeOnly(node: ts.ImportClause | ts.ExportDeclaration): boolean {
+  if (node.isTypeOnly) return true;
+  const bindings = ts.isImportClause(node) ? node.namedBindings : node.exportClause;
+  if (bindings === undefined || !ts.isNamedImports(bindings) && !ts.isNamedExports(bindings)) {
+    return false;
+  }
+  return bindings.elements.length > 0 && bindings.elements.every((element) => element.isTypeOnly);
+}
+
+export function collectImports(file: SourceFile): ImportRef[] {
+  const source = ts.createSourceFile(
+    file.path,
+    file.text,
+    ts.ScriptTarget.Latest,
+    true,
+  );
+  const refs: ImportRef[] = [];
+  const lineOf = (node: ts.Node): number =>
+    source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1;
+
+  const visit = (node: ts.Node): void => {
+    if (ts.isImportDeclaration(node)) {
+      const moduleSpecifier = moduleSpecifierOf(node);
+      if (moduleSpecifier !== undefined) {
+        refs.push({
+          specifier: moduleSpecifier.text,
+          line: lineOf(moduleSpecifier),
+          typeOnly: node.importClause !== undefined && namedBindingsAreTypeOnly(node.importClause),
+          dynamic: false,
+        });
+      }
+    } else if (ts.isExportDeclaration(node)) {
+      const moduleSpecifier = moduleSpecifierOf(node);
+      if (moduleSpecifier !== undefined) {
+        refs.push({
+          specifier: moduleSpecifier.text,
+          line: lineOf(moduleSpecifier),
+          typeOnly: namedBindingsAreTypeOnly(node),
+          dynamic: false,
+        });
+      }
+    } else if (ts.isImportEqualsDeclaration(node)) {
+      if (ts.isExternalModuleReference(node.moduleReference)) {
+        const reference = node.moduleReference.expression;
+        refs.push({
+          specifier: literalText(reference),
+          line: lineOf(reference !== undefined && ts.isStringLiteral(reference) ? reference : node),
+          typeOnly: node.isTypeOnly,
+          dynamic: false,
+        });
+      }
+    } else if (ts.isImportTypeNode(node)) {
+      const literal = importTypeArgument(node.argument);
+      if (literal !== undefined && ts.isStringLiteral(literal.literal)) {
+        refs.push({
+          specifier: literal.literal.text,
+          line: lineOf(literal.literal),
+          typeOnly: true,
+          dynamic: false,
+        });
+      }
+    } else if (ts.isCallExpression(node)) {
+      if (node.expression.kind === ts.SyntaxKind.ImportKeyword) {
+        const argument = node.arguments[0];
+        const specifier = literalText(argument);
+        refs.push({
+          specifier,
+          line: lineOf(argument !== undefined && ts.isStringLiteral(argument) ? argument : node),
+          typeOnly: false,
+          dynamic: true,
+        });
+      } else if (ts.isIdentifier(node.expression) && node.expression.text === "require") {
+        const argument = node.arguments[0];
+        const specifier = literalText(argument);
+        refs.push({
+          specifier,
+          line: lineOf(argument !== undefined && ts.isStringLiteral(argument) ? argument : node),
+          typeOnly: false,
+          dynamic: true,
+        });
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+
+  ts.forEachChild(source, visit);
+  return refs;
 }
 
 export function resolveSpecifier(fromPath: string, specifier: string): string | null {
