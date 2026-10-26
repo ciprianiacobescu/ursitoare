@@ -1,0 +1,13 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-architecture-fitness",
+  "round": 3,
+  "findings": [
+    "F-ed69f6e7",
+    "F-85a00370"
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": []
+}

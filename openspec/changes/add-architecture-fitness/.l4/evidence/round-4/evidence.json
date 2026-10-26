@@ -1,0 +1,354 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/main.ts",
+      "src/core",
+      "src/config",
+      "src/observability",
+      "src/api",
+      "src/main.test.ts",
+      "src",
+      "seed",
+      "test",
+      "test/support/pg.ts",
+      "src/<dir>",
+      "src/health.ts",
+      "src/<N>",
+      "src/<N>/index.ts",
+      "test/arch/modules.ts",
+      "undici/x",
+      "src/sandbox",
+      "ursitoare",
+      "test/arch/<rule>.ts",
+      "test/arch/<rule>.test.ts",
+      "docs/decisions/0002",
+      "dns/promises",
+      "test/arch/{sources,rules,secrets}.ts",
+      "test/arch",
+      "test/support",
+      "src/gateway",
+      "src/identity",
+      "test/arch/sources.test.ts",
+      "test/arch/sources.ts",
+      "test/arch/modules.test.ts",
+      "test/arch/rules.ts",
+      "test/arch/imports.test.ts",
+      "test/arch/network.test.ts",
+      "test/arch/hygiene.test.ts",
+      "test/arch/secrets.test.ts",
+      "test/arch/secrets.ts",
+      "test/arch/repo.test.ts",
+      "test/**/*.test.ts",
+      "**/eslint.config.js",
+      "**/index.ts",
+      "**/MODULES[M].allowed",
+      "**/package.json",
+      "**/process[\"env\"]",
+      "**/*.test.ts",
+      "**/^ARCH_[A-Z_]+$",
+      "**/sources.ts",
+      "**/rules.ts",
+      "**/repo.test.ts",
+      "**/[]",
+      "**/modules.ts",
+      "test/arch/*.test.ts",
+      "**/[authoring]",
+      "module <N>",
+      "module <dir>",
+      "module api",
+      "module config",
+      "module core",
+      "module dns",
+      "module docs",
+      "module gateway",
+      "module health",
+      "module identity",
+      "module main",
+      "module main.test",
+      "module observability",
+      "module sandbox",
+      "module test",
+      "module undici"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-architecture-fitness-fix-1/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness-fix-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness-fix-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness-fix-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness-fix-2/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness-fix-2/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness-fix-2/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness-fix-2/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/evidence/round-2/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/evidence/round-2/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/evidence/round-2/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/evidence/round-3/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/evidence/round-3/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/evidence/round-3/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/ledger/r-20261026T1619Z-8dc6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/ledger/r-20261026T1915Z-7f92.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/ledger/r-20261026T1934Z-9532.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/.l4/ledger/r-20261026T2019Z-2739.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-architecture-fitness/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/arch/hygiene.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/arch/imports.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/arch/modules.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/arch/modules.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/arch/network.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/arch/repo.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/arch/rules.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/arch/secrets.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/arch/secrets.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/arch/sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/arch/sources.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: test/arch/modules.ts, test/arch/rules.ts, test/arch/secrets.ts, test/arch/sources.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "test/arch/modules.ts",
+      "test/arch/rules.ts",
+      "test/arch/secrets.ts",
+      "test/arch/sources.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 257,
+      "passed": 257,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 42,
+      "new_passed": 42,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

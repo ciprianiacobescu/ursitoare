@@ -1,0 +1,383 @@
+# Questions — add-architecture-fitness
+
+<!-- l4:questions v1
+How to answer: write under "### Answer" and set **Status** to `answered`.
+To accept the clarifier's suggestion as-is, set **Status** to `accepted`.
+Status values: open · answered · accepted · answered-by-clarifier · dismissed · superseded
+Kind values: technical · product · ambiguous · verdict · harness. For a `verdict` question, start the answer with `accept` or
+`reject`, then give your reason; for a `harness` question, with `accept` or `retry`.
+Do not change question IDs. Commit and push to the l4/… branch to resume the run. -->
+
+<!-- l4:index:start -->
+| ID | Status | Blocking | Kind | Question |
+|----|--------|----------|------|----------|
+| Q-001 | accepted | 5.1 | technical | test/arch/repo.test.ts:30 networkViolation prepends the name to the full message |
+| Q-002 | answered | none | verdict | Criterion C-851f3c7c (architecture-rules › Complete module graph as data › Inconsistent graphs are reported): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-c63269ba (architecture-rules › Secret-pattern scan of repository files › Each kind is detected without echoing it): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied? |
+| Q-005 | answered | none | verdict | Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied? |
+| Q-006 | answered | none | verdict | Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied? |
+| Q-007 | answered | none | verdict | Finding F-a154400b: The module graph is duplicated: the rules ignore test/arch/modules.ts |
+| Q-008 | answered | none | verdict | Finding F-a985c7e4: task 2.1: modules.ts is not the graph the rules check |
+| Q-009 | answered | none | verdict | Finding F-ed69f6e7: The egress pin is not checked when a pinned module row is missing |
+| Q-010 | answered | none | verdict | Finding F-85a00370: A default import with all-type named specifiers is treated as type-only |
+| Q-011 | answered | none | verdict | Finding F-3c3edcf1: task 2.1: the rules read a second copy of the graph, not test/arch/modules.ts |
+| Q-012 | answered | none | verdict | Finding F-6db2196c: Secret scan narrowed to skip every .l4 path |
+<!-- l4:index:end -->
+
+---
+
+## Q-001: test/arch/repo.test.ts:30 networkViolation prepends the name to the full message
+
+- **Status:** accepted
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the answer would unfreeze test/arch/repo.test.ts of task 5.1 (delegate.unfreeze is false)
+- **Blocking tasks:** 5.1
+- **Kind:** technical
+- **Asked:** 2026-10-26T17:20Z by deepseek, run r-20261026T1619Z-8dc6, task 5.1
+
+### Context
+networkViolation builds message: `${name} ${NETWORK_MESSAGE}`, so the assertions at lines 60 and 159 expect `node:https node:https is allowed only in observability, identity and gateway; call through src/gateway`. The require scenario at line 124 asserts the same violation's message equals NETWORK_MESSAGE (`node:https is allowed only ...`), and design.md's message table specifies the single message. No checkAll implementation can return both a doubled and a single message for the same require("node:https") violation, so the red test is internally contradictory.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `test/arch/repo.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-architecture-fitness`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `test/arch/repo.test.ts`: in `networkViolation`, rename parameter `name` to `_name` and change `message: `${name} ${NETWORK_MESSAGE}`` to `message: NETWORK_MESSAGE`.
+
+### Clarifier suggestion
+Edit `test/arch/repo.test.ts`: in `networkViolation`, rename parameter `name` to `_name` and change `message: `${name} ${NETWORK_MESSAGE}`` to `message: NETWORK_MESSAGE`.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: Criterion C-851f3c7c (architecture-rules › Complete module graph as data › Inconsistent graphs are reported): accept as satisfied?
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-851f3c7c (architecture-rules › Complete module graph as data › Inconsistent graphs are reported)
+
+### Context
+Criterion C-851f3c7c (architecture-rules › Complete module graph as data › Inconsistent graphs are reported) is needs human after round 2.
+
+Scenario:
+\- **WHEN** `checkGraphIntegrity` runs on `{ a: { allowed: ["b"] }, b: { allowed: ["a"] } }`, then on `{ a: { allowed: ["zzz"] } }`, then on `{ a: { allowed: ["a"] } }`, then on `{ a: { allowed: ["b", "b"] }, b: { allowed: [] } }`
+\- **THEN** each call returns violations with code `ARCH_GRAPH_INVALID` at `test/arch/modules.ts:1`, and some message of each contains respectively `cycle`, `zzz`, `itself` and `twice`; each result also carries the egress-pin violations (these fixtures name no egress module), so the test asserts with `some`, not on the length
+
+Why: judge fail counted as insufficient_evidence: counterexample unexecuted (not executed in M0: the verifier worktree is M1 (verifier 1.5))
+Judge: fail
+Tracing tests: test.arch.modules.test.ts::C-65b86cc0 C-851f3c7c: the shipped graph is consistent (passed, red_assertion); test.arch.modules.test.ts::C-70858a5b C-851f3c7c: the graph carries the version 3 edges (passed, red_assertion); test.arch.modules.test.ts::C-851f3c7c: inconsistent graphs are reported (passed, red_assertion, inadequate); test.arch.modules.test.ts::C-90199ce0 C-851f3c7c: the graph holds the 30 modules in roadmap order (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+reject The scenario's THEN says each of the four fixture results also carries the egress-pin violations because the fixtures name no egress module, and design decision 6 pins the modules with an egress value to exactly observability, identity and gateway. The implementation does not deliver that: checkGraphIntegrity loops over Object.entries(modules) and consults PINNED_EGRESS only for rows that are present, so a graph with no observability, identity or gateway row (every one of the four fixtures, and a copy of MODULES with the gateway row deleted) yields no pin violation at all. On { a: { allowed: ["zzz"] } } it returns exactly one violation, the unknown-name one, and nothing about the pin. The passing test cannot see this because it asserts only with some on the needle and with every on code, file and line, never that a pin violation is present. The judge's major finding therefore stands. WHEN checkGraphIntegrity runs on a graph that lacks a row for observability, identity or gateway, such as { a: { allowed: ["zzz"] } } or a copy of MODULES without the gateway row THEN in addition to its other violations it returns, for each missing pinned module, an ARCH_GRAPH_INVALID violation at test/arch/modules.ts:1 whose message names that module and says it must carry its pinned egress value.
+---
+
+## Q-003: Criterion C-c63269ba (architecture-rules › Secret-pattern scan of repository files › Each kind is detected without echoing it): accept as satisfied?
+
+- **Status:** answered
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: checked test/arch/secrets.ts:38 does not resolve
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-c63269ba (architecture-rules › Secret-pattern scan of repository files › Each kind is detected without echoing it)
+
+### Context
+Criterion C-c63269ba (architecture-rules › Secret-pattern scan of repository files › Each kind is detected without echoing it) is needs human after round 2.
+
+Scenario:
+\- **WHEN** `scanText("a.txt", text)` gets one line per kind, built at run time from a prefix and `"x".repeat(n)` (for example `"sk-" + "x".repeat(32)`, `"AKIA" + "X".repeat(16)`, `"-----BEGIN " + "RSA PRIVATE KEY" + "-----"`, and the minimum lengths of the other kinds in design.md), after two lines of prose
+\- **THEN** it returns one `ARCH_SECRET` violation per secret line, at its line number, whose message is `<kind>-shaped text; build test values at run time` with the kind name (`pem_private_key`, `mintkey_agent_key`, `anthropic_key`, `sk_key`, `github_token`, `github_pat`, `aws_access_key`, `slack_token`), and does not contain the secret text
+
+Why: uncovered: the tests that trace it are inadequate or did not pass
+Judge: pass
+Tracing tests: test.arch.secrets.test.ts::C-c63269ba: each secret kind is detected at its line without echoing the text (passed, red_assertion, inadequate)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+accept: scanText reports all eight kinds at their lines without echoing them, with the design.md minimum lengths. The test uses longer values than the minimum for three kinds, and the pem and aws patterns are a little broader than design.md (an extra space before the closing dashes, no guard after AKIA); both only add detections.
+---
+
+## Q-004: Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied?
+
+- **Status:** answered
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The criterion describes the implementer's conduct, not code: when the merged tree fails a rule, the task must end with a blocker and the diff must leave src/, test/support/, owner files and modules.ts untouched and weaken no rule. Settling it needs the unit's actual run and diff: whether checkAll(re
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task)
+
+### Context
+Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task) is needs human after round 2.
+
+Scenario:
+\- **WHEN** `checkAll(readSnapshot())` returns the one violation `{ code: "ARCH_NETWORK_IMPORT", file: "src/api/x.ts", line: 3, message: "node:https is allowed only in observability, identity and gateway; call through src/gateway" }`
+\- **THEN** the task ends with a blocker whose text is `formatViolation` of it, `src/api/x.ts:3: ARCH_NETWORK_IMPORT node:https is allowed only in observability, identity and gateway; call through src/gateway`, and the task's diff changes no file under `src/` or `test/support/`, no owner file and not `test/arch/modules.ts`, and adds no `skip`, `todo` or narrower pattern to a rule
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: not_verifiable
+Tracing tests: none
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+accept: a conduct criterion. On this unit checkAll(readSnapshot()) is empty (repo.test.ts passes), so no blocker was due, and the diff of the unit changes only test/arch and its openspec folders: nothing under src/ or test/support/ and no owner file.
+---
+
+## Q-005: Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied?
+
+- **Status:** answered
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: checked test/arch/modules.ts:132 does not resolve
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task)
+
+### Context
+Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task) is needs human after round 2.
+
+Scenario:
+\- **WHEN** `checkAll(readSnapshot())` returns `ARCH_UNKNOWN_MODULE` for file `src/scratch` at line 1
+\- **THEN** the blocker names `src/scratch`, line 1, the code `ARCH_UNKNOWN_MODULE` and its message, and `test/arch/modules.ts` gains no row
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: not_verifiable
+Tracing tests: none
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+accept: as Q-004. No directory of src/ is outside the graph at this head (repo.test.ts passes), so no ARCH_UNKNOWN_MODULE was raised and test/arch/modules.ts gained no row for one.
+---
+
+## Q-006: Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied?
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule)
+
+### Context
+Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule) is needs human after round 2.
+
+Scenario:
+\- **WHEN** the reported violation is on code that a passing scenario of this change lists, for example a type-only `import type { Server } from "node:http";` in `src/api/server.ts`
+\- **THEN** the implementer fixes the rule in `test/arch/rules.ts` or `test/arch/sources.ts` with a failing test first, and raises no blocker
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: not_verifiable
+Tracing tests: none
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+accept The criterion describes what the implementer does if a rule flags code that a passing scenario lists, and the repository shows that outcome for the scenario's own example. The network rule in test/arch/rules.ts skips every type-only import, and collectImports in test/arch/sources.ts marks import type declarations and all-type named bindings as type-only, so a type-only import of node:http in src/api is not reported. A test in network.test.ts asserts that checkNetwork returns an empty array for src/api/a.ts holding import type { Server } from "node:http" and import { type Server as Other } from "node:http", and a sources test asserts the typeOnly flags of every import form. The repository test asserts that checkAll over the real tree is an empty array, and no rule file contains a skip, todo or narrowed pattern, so no false positive was left standing and no blocker was raised. The criterion is satisfied as it stands.
+---
+
+## Q-007: Finding F-a154400b: The module graph is duplicated: the rules ignore test/arch/modules.ts
+
+- **Status:** answered
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+The judge raised a major finding in round 2, and no deterministic check confirms it (criterion C-65b86cc0).
+
+Title: The module graph is duplicated: the rules ignore test/arch/modules.ts
+Detail: The fix for F-35492b20 stopped rules.ts from importing modules.ts. Instead, rules.ts defines and exports its own literal MODULES, which is the default for checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll. modules.ts holds a second, independent copy. It is not a re-export, although the implementer's note says it is. A later unit that adds a module or edge in test/arch/modules.ts, as design decision 13 and the proposal say it should, changes nothing the rules read. modules.test.ts checks one copy, while checkGraphIntegrity() and the repo test check the other. rules.ts also exports MODULES, which is not in the Interfaces.
+Suggested fix: Keep one source of truth: make modules.ts the only literal and have rules.ts import it, or make modules.ts `export { MODULES } from "./rules.ts"` if the base-replay constraint forbids the import.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-65b86cc0 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+accept: waived for this unit only. The second literal is how fix 1 answered F-35492b20: the base-test replay keeps test/arch/repo.test.ts at head (unfrozen by Q-001) and sets aside test/arch/modules.ts, a support file this unit adds, so a rules.ts that imports modules.ts cannot load in that run, and a fix as the reject asks would fail the same way. The import loads once modules.ts is on main; a follow-up right after this unit merges makes rules.ts read MODULES from modules.ts and drops the second literal.
+<!-- l4 questions --replace by CiprianSpot on 2026-10-26; previous answer:
+> reject The finding is correct and the repository shows it. test/arch/rules.ts imports only typescript and ./sources.ts; it never imports ./modules.ts. Instead it declares and exports its own literal MODULES, and that literal is the default argument of checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll. test/arch/modules.ts holds a second, independent literal of the same graph and is not a re-export. The design Interfaces put MODULES only in test/arch/modules.ts, and design decision 13 and the proposal say a later unit that needs a new module or edge changes test/arch/modules.ts in its red step; with the current code such a change alters nothing the rules read, so the rules' own messages that point at test/arch/modules.ts are misleading. modules.test.ts asserts the shape of the copy in modules.ts while repo.test.ts calls checkGraphIntegrity() and checkAll(readSnapshot()) with no argument, so it checks the copy in rules.ts; the two copies can drift apart without any test failing. rules.ts also exports MODULES, which the Interfaces do not list. One literal must be the source of truth and the rules must read it by default. WHEN a module or edge is added to the MODULES exported by test/arch/modules.ts and no modules argument is passed THEN checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll evaluate that changed graph, because their default is the very object exported by test/arch/modules.ts and no second literal of the graph exists in test/arch/rules.ts.
+-->
+---
+
+## Q-008: Finding F-a985c7e4: task 2.1: modules.ts is not the graph the rules check
+
+- **Status:** answered
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+The judge raised a major finding in round 2, and no deterministic check confirms it (criterion C-65b86cc0).
+
+Title: task 2.1: modules.ts is not the graph the rules check
+Detail: Task 2.1 makes test/arch/modules.ts the complete graph data file and builds checkGraphIntegrity on it. At head, checkGraphIntegrity defaults to a separate copy in rules.ts, so the data file has no effect on any rule.
+Suggested fix: Have rules.ts take its default MODULES from test/arch/modules.ts.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-65b86cc0 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+accept: the same defect as Q-007, waived for the same reason; the follow-up after the merge makes test/arch/modules.ts the only literal of the graph and the default of every rule.
+<!-- l4 questions --replace by CiprianSpot on 2026-10-26; previous answer:
+> reject The finding is correct and the repository shows it. test/arch/rules.ts imports only typescript and ./sources.ts and never imports ./modules.ts; it declares and exports its own literal MODULES, and that literal is the default argument of checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll. test/arch/modules.ts exports a second, independent literal of the same graph. The design Interfaces place MODULES only in test/arch/modules.ts, and design decision 13 and the proposal say a later unit that needs a new module or edge changes test/arch/modules.ts in its red step; with the current code such a change alters nothing the rules read, and the rules' own messages pointing at test/arch/modules.ts are misleading. repo.test.ts calls checkGraphIntegrity() and checkAll(readSnapshot()) with no modules argument, so the merged-tree gate checks the copy in rules.ts while modules.test.ts asserts the shape of the copy in modules.ts; the two can drift apart without any test failing. WHEN a module or edge is added to the MODULES exported by test/arch/modules.ts and no modules argument is passed THEN checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll evaluate that changed graph, because their default is the very object exported by test/arch/modules.ts and test/arch/rules.ts holds no second literal of the graph.
+-->
+---
+
+## Q-009: Finding F-ed69f6e7: The egress pin is not checked when a pinned module row is missing
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+The judge raised a major finding in round 2, and no deterministic check confirms it (criterion C-851f3c7c).
+
+Title: The egress pin is not checked when a pinned module row is missing
+Detail: checkGraphIntegrity checks the pin only for rows that are present. Deleting the `gateway` row, or any fixture without the three egress modules, reports no pin violation. This contradicts the C-851f3c7c THEN, which says each result carries the egress-pin violations, and design decision 6, which says the egress modules are exactly observability, identity and gateway.
+Suggested fix: Also loop over PINNED_EGRESS and report a pinned module that is missing from `modules` or carries no egress value.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-851f3c7c as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+reject The finding is correct and the repository shows it. checkGraphIntegrity in test/arch/rules.ts iterates Object.entries(modules) and reads PINNED_EGRESS only for the row being visited; it never iterates PINNED_EGRESS itself. So a pinned module that is absent from the graph is never reported: on { a: { allowed: ["zzz"] } } the function returns exactly one violation, the unknown-name one, and on a copy of MODULES with the gateway row deleted it returns nothing about gateway. The missing-egress branch fires only when the row exists with egress undefined, which is why the shipped test that removes the egress property but keeps the gateway row still passes. The scenario "Inconsistent graphs are reported" says each of the four fixture results also carries the egress-pin violations because those fixtures name no egress module, and design decision 6 says the modules with an egress value are exactly observability, identity and gateway, a pin that a reviewed rule edit must guard. A graph that silently drops an egress module is as much a pin break as one that adds a capability. WHEN checkGraphIntegrity runs on a graph that lacks a row for observability, identity or gateway, such as { a: { allowed: ["zzz"] } } or a copy of MODULES without the gateway row THEN in addition to its other violations it returns, for each missing pinned module, an ARCH_GRAPH_INVALID violation at test/arch/modules.ts:1 whose message names that module and says it must carry its pinned egress value.
+---
+
+## Q-010: Finding F-85a00370: A default import with all-type named specifiers is treated as type-only
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+The judge raised a major finding in round 2, and no deterministic check confirms it (criterion C-a2eef903).
+
+Title: A default import with all-type named specifiers is treated as type-only
+Detail: namedBindingsAreTypeOnly ignores the default binding. `import https, { type Agent } from "node:https";` is therefore marked typeOnly, and checkNetwork skips it, although `https` is a value import. Design decision 3 makes a declaration type-only only when it has nothing but named specifiers, at least one, all `type`-modified. This bypasses the network and worker_threads rules.
+Suggested fix: Return false from namedBindingsAreTypeOnly when the ImportClause has a default `name`.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-a2eef903 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+reject The finding is correct and the repository shows it. namedBindingsAreTypeOnly in test/arch/sources.ts returns true when the clause is not itself type-only but its named bindings are a non-empty NamedImports list whose elements all carry the type modifier; it never looks at the ImportClause's default binding name. So for import https, { type Agent } from "node:https"; the clause has a default value binding, yet the ref is marked typeOnly, and checkNetwork in test/arch/rules.ts skips every ref whose typeOnly is true, so the import of node:https from a non-egress module is not reported, and the same holds for worker_threads. Design decision 3 makes a declaration type-only only for import type, export type from, an import type node, and a declaration with only named specifiers, at least one, all type-modified; a declaration with a default binding is not such a declaration and is a value import. WHEN collectImports reads an import declaration that has a default binding and named specifiers that are all type-modified, such as import https, { type Agent } from "node:https"; in src/api/a.ts THEN the ref has typeOnly false and checkNetwork reports ARCH_NETWORK_IMPORT at that line with message node:https is allowed only in observability, identity and gateway; call through src/gateway.
+
+---
+
+## Q-011: Finding F-3c3edcf1: task 2.1: the rules read a second copy of the graph, not test/arch/modules.ts
+
+- **Status:** answered
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The finding is factually right: test/arch/rules.ts:17 defines its own export const MODULES and imports only from typescript and ./sources.ts (lines 2-5), while test/arch/modules.ts:3 holds a second literal; checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll default to the rules.ts copy
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 5, verifier
+
+### Context
+The judge raised a major finding in round 5, and no deterministic check confirms it (criterion C-90199ce0).
+
+Title: task 2.1: the rules read a second copy of the graph, not test/arch/modules.ts
+Detail: test/arch/modules.ts holds a literal MODULES, but test/arch/rules.ts defines its own literal `export const MODULES` and uses it as the default for checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll. rules.ts never imports modules.ts. The implementer's note that modules.ts re-exports MODULES is wrong. Design decision 13 and the proposal say a later unit adds a module or edge by editing test/arch/modules.ts, yet such an edit would change nothing the rules enforce, and the messages still point at test/arch/modules.ts. modules.test.ts checks one copy while the rules use the other, so the two can drift silently.
+Suggested fix: Keep one graph: have rules.ts import MODULES from ./modules.ts, or have modules.ts re-export it from a single definition, and add a test that the rules' default graph is the modules.ts object.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-90199ce0 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+accept: the same duplicate graph as Q-007 and Q-008, waived for this unit for the same reason: the base-test replay cannot load test/arch/modules.ts from rules.ts in this unit. A follow-up right after the merge makes rules.ts read MODULES from test/arch/modules.ts, drops the second literal and the stale scaffold header.
+---
+
+## Q-012: Finding F-6db2196c: Secret scan narrowed to skip every .l4 path
+
+- **Status:** answered
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: checked .gitignore:1 does not resolve
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 5, verifier
+
+### Context
+The judge raised a major finding in round 5, and no deterministic check confirms it (criterion C-eea53b80).
+
+Title: Secret scan narrowed to skip every .l4 path
+Detail: listScannableFiles drops any path that is `.l4`, starts with `.l4/` or contains `/.l4/`. The requirement says every tracked and untracked-not-ignored file outside seed/ is scanned. The implementer added this so the repo test would pass on a harness evidence file, which requirement C-eea53b80 says calls for a blocker instead. A real key committed under any .l4 directory now goes unreported.
+Suggested fix: Remove isHarnessPath and raise a blocker naming the harness file. Alternatively, get a reviewed spec decision that excludes .l4, add it to the scenario, and back it with a test.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-eea53b80 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+accept: the file that failed the scan is harness evidence (the round-2 verdict.json under this unit .l4 folder, where the judge quoted a private-key header in prose). No person or implementer writes under a unit .l4 folder, so the blocker the requirement asks for would have come to the owner, who takes this exclusion. Waived for this unit as written; the follow-up after the merge narrows it to .l4 folders under openspec/changes, so .l4/config.yaml and .l4/plans are scanned again, and states the exclusion in the spec.
