@@ -1,0 +1,4483 @@
+{
+  "schema": "l4/verdict@1",
+  "round": 2,
+  "verdict": "NEEDS_HUMAN",
+  "base_sha": "2c97ad2f39b299b4ea12786643fe6ef0970ebc31",
+  "head_sha": "9f19c67e64f48bd75ea2aad1619a3a7f94502318",
+  "steps": [
+    {
+      "step": "0",
+      "name": "preconditions",
+      "status": "ok",
+      "seconds": 0.8,
+      "note": "base main@2c97ad2f39 contained"
+    },
+    {
+      "step": "1",
+      "name": "integrity",
+      "status": "ok",
+      "seconds": 18.2,
+      "note": "10 sub-checks (+1 unfrozen by human answers); scope: 23 changed file(s)"
+    },
+    {
+      "step": "2",
+      "name": "build",
+      "status": "ok",
+      "seconds": 15.5,
+      "note": ""
+    },
+    {
+      "step": "3",
+      "name": "tests",
+      "status": "ok",
+      "seconds": 16.5,
+      "note": ""
+    },
+    {
+      "step": "4",
+      "name": "traceability",
+      "status": "ok",
+      "seconds": 0.1,
+      "note": "42/45 criteria covered"
+    },
+    {
+      "step": "4a",
+      "name": "audit sampling",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "audit sampling writes pytest tests only; changed code is not python"
+    },
+    {
+      "step": "5",
+      "name": "ui test generation",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "the unit changed no file under verifier.playwright.ui_paths"
+    },
+    {
+      "step": "6",
+      "name": "quality",
+      "status": "ok",
+      "seconds": 0.0,
+      "note": "not measured: diff coverage measures python only; changed code outside it: test/arch/modules.ts, test/arch/rules.ts, test/arch/secrets.ts, test/arch/sources.ts"
+    },
+    {
+      "step": "8",
+      "name": "s1 judge",
+      "status": "ok",
+      "seconds": 4.7,
+      "note": "44/45 criteria judged by jev; the state does not fit 450 tokens even without the excerpt"
+    },
+    {
+      "step": "9",
+      "name": "judge",
+      "status": "ok",
+      "seconds": 154.5,
+      "note": "1 call(s)"
+    },
+    {
+      "step": "10",
+      "name": "aggregation",
+      "status": "ok",
+      "seconds": 0.0,
+      "note": "NEEDS_HUMAN"
+    }
+  ],
+  "gates": [
+    {
+      "name": "setup",
+      "command": "pnpm install --frozen-lockfile",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1915Z-7f92/030-setup.log",
+      "digest": null
+    },
+    {
+      "name": "setup",
+      "command": "uv sync --project e2e --frozen",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1915Z-7f92/031-setup.log",
+      "digest": null
+    },
+    {
+      "name": "build",
+      "command": "pnpm run build",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1915Z-7f92/032-build.log",
+      "digest": null
+    },
+    {
+      "name": "lint",
+      "command": "pnpm run lint",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1915Z-7f92/033-lint.log",
+      "digest": null
+    },
+    {
+      "name": "typecheck",
+      "command": "pnpm run typecheck",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1915Z-7f92/034-typecheck.log",
+      "digest": null
+    },
+    {
+      "name": "test",
+      "command": "pnpm run test",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1915Z-7f92/035-test.log",
+      "digest": null
+    },
+    {
+      "name": "e2e",
+      "command": "e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1915Z-7f92/036-e2e.log",
+      "digest": null
+    }
+  ],
+  "criteria": [
+    {
+      "id": "C-2073476a",
+      "alias": "architecture-require-forms › Require calls and import-equals declarations are value imports › Require forms are found",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.sources.test.ts::C-2073476a require forms are found as value imports with their flags"
+      ],
+      "s1_p": 0.91
+    },
+    {
+      "id": "C-eae7dab7",
+      "alias": "architecture-require-forms › Require calls and import-equals declarations are value imports › A require call is a value import of its specifier",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.repo.test.ts::C-eae7dab7: a require call is a value import of its specifier"
+      ],
+      "s1_p": 0.65
+    },
+    {
+      "id": "C-fa65851b",
+      "alias": "architecture-require-forms › Require calls and import-equals declarations are value imports › An import-equals declaration is a value import",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.network.test.ts::C-fa65851b: an import-equals declaration is a value import"
+      ],
+      "s1_p": 0.75
+    },
+    {
+      "id": "C-8fa501e4",
+      "alias": "architecture-require-forms › Require calls and import-equals declarations are value imports › Every scanned extension is covered",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.network.test.ts::C-8fa501e4: every scanned extension is covered"
+      ],
+      "s1_p": 0.88
+    },
+    {
+      "id": "C-82116acd",
+      "alias": "architecture-require-forms › Require calls and import-equals declarations are value imports › A non-literal require is unseeable",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.imports.test.ts::C-82116acd: a non-literal require is unseeable"
+      ],
+      "s1_p": 0.71
+    },
+    {
+      "id": "C-b49548b8",
+      "alias": "architecture-require-forms › Loader functions are refused › createRequire is refused",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.imports.test.ts::C-b49548b8: createRequire is refused"
+      ],
+      "s1_p": 0.9
+    },
+    {
+      "id": "C-6b1f49c4",
+      "alias": "architecture-require-forms › Loader functions are refused › getBuiltinModule is refused",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.imports.test.ts::C-6b1f49c4: getBuiltinModule is refused"
+      ],
+      "s1_p": 0.89
+    },
+    {
+      "id": "C-fe3edcae",
+      "alias": "architecture-require-forms › Environment reads through require are refused › Environment through require is refused",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.hygiene.test.ts::C-fe3edcae: environment reads through require are refused"
+      ],
+      "s1_p": 0.89
+    },
+    {
+      "id": "C-dd8c8f9a",
+      "alias": "architecture-require-forms › Look-alikes and test files pass the require rules › Require look-alikes and test files pass",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.repo.test.ts::C-dd8c8f9a: require look-alikes and test files pass"
+      ],
+      "s1_p": 0.91
+    },
+    {
+      "id": "C-90199ce0",
+      "alias": "architecture-rules › Complete module graph as data › The graph holds the 30 modules",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.modules.test.ts::C-90199ce0 C-851f3c7c: the graph holds the 30 modules in roadmap order"
+      ],
+      "s1_p": 0.82
+    },
+    {
+      "id": "C-70858a5b",
+      "alias": "architecture-rules › Complete module graph as data › The graph carries the version 3 edges",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.modules.test.ts::C-70858a5b C-851f3c7c: the graph carries the version 3 edges"
+      ],
+      "s1_p": 0.76
+    },
+    {
+      "id": "C-65b86cc0",
+      "alias": "architecture-rules › Complete module graph as data › The shipped graph is consistent",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.modules.test.ts::C-65b86cc0 C-851f3c7c: the shipped graph is consistent"
+      ],
+      "s1_p": 0.91
+    },
+    {
+      "id": "C-851f3c7c",
+      "alias": "architecture-rules › Complete module graph as data › Inconsistent graphs are reported",
+      "result": "needs_human",
+      "judge": "fail",
+      "reason": "judge fail counted as insufficient_evidence: counterexample unexecuted (not executed in M0: the verifier worktree is M1 (verifier 1.5))",
+      "counterexample": {
+        "status": "unexecuted",
+        "note": "not executed in M0: the verifier worktree is M1 (verifier 1.5)"
+      },
+      "tests": [
+        "test.arch.modules.test.ts::C-65b86cc0 C-851f3c7c: the shipped graph is consistent",
+        "test.arch.modules.test.ts::C-70858a5b C-851f3c7c: the graph carries the version 3 edges",
+        "test.arch.modules.test.ts::C-90199ce0 C-851f3c7c: the graph holds the 30 modules in roadmap order"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-6923119c",
+      "alias": "architecture-rules › Complete module graph as data › A new egress capability is refused",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.modules.test.ts::C-6923119c: a new egress capability is refused"
+      ],
+      "s1_p": 0.8
+    },
+    {
+      "id": "C-b5e05684",
+      "alias": "architecture-rules › Static analysis names file and line › Import forms are found",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.sources.test.ts::C-b5e05684 import forms are found with their lines, type-only and dynamic flags"
+      ],
+      "s1_p": 0.95
+    },
+    {
+      "id": "C-ec6975cf",
+      "alias": "architecture-rules › Static analysis names file and line › Violations are formatted and ordered",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.sources.test.ts::C-ec6975cf formatViolation names file, line, code and message for any code",
+        "test.arch.sources.test.ts::C-ec6975cf sortViolations orders by file, then line, then code"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-18aa910d",
+      "alias": "architecture-rules › Static analysis names file and line › Specifiers resolve relative to the importing file",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.sources.test.ts::C-18aa910d resolveSpecifier resolves relative imports against the importing file"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-f0665065",
+      "alias": "architecture-rules › Static analysis names file and line › The snapshot reads a real directory",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.sources.test.ts::C-f0665065 readSnapshot reads the source files of a real directory without symlinks"
+      ],
+      "s1_p": 0.91
+    },
+    {
+      "id": "C-df527545",
+      "alias": "architecture-rules › Modules and imports follow the graph › Allowed imports and nothing to do pass",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.imports.test.ts::C-0bc7739e C-df527545: a forbidden edge names both modules",
+        "test.arch.imports.test.ts::C-df527545: allowed imports and nothing to do pass"
+      ],
+      "s1_p": 0.82
+    },
+    {
+      "id": "C-0bc7739e",
+      "alias": "architecture-rules › Modules and imports follow the graph › A forbidden edge names both modules",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.imports.test.ts::C-0bc7739e C-df527545: a forbidden edge names both modules"
+      ],
+      "s1_p": 0.86
+    },
+    {
+      "id": "C-f3249f34",
+      "alias": "architecture-rules › Modules and imports follow the graph › Deep imports are refused",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.imports.test.ts::C-f3249f34: deep imports are refused"
+      ],
+      "s1_p": 0.74
+    },
+    {
+      "id": "C-4d6f98c2",
+      "alias": "architecture-rules › Modules and imports follow the graph › Unknown directories are refused",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.imports.test.ts::C-4d6f98c2: unknown directories are refused"
+      ],
+      "s1_p": 0.88
+    },
+    {
+      "id": "C-cc435a91",
+      "alias": "architecture-rules › Modules and imports follow the graph › Root files follow the leaf rule",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.imports.test.ts::C-cc435a91: root files follow the leaf rule"
+      ],
+      "s1_p": 0.88
+    },
+    {
+      "id": "C-36562121",
+      "alias": "architecture-rules › Modules and imports follow the graph › Unseeable and exempt imports",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.imports.test.ts::C-36562121: unseeable imports are refused and test files are exempt"
+      ],
+      "s1_p": 0.78
+    },
+    {
+      "id": "C-8e07c9a6",
+      "alias": "architecture-rules › Network access only in egress modules › Violations outside egress modules",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.network.test.ts::C-8e07c9a6: network imports and calls outside egress modules are refused"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-bdf0820d",
+      "alias": "architecture-rules › Network access only in egress modules › Process and worker entry points are refused",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.network.test.ts::C-bdf0820d: process and worker entry points are refused"
+      ],
+      "s1_p": 0.91
+    },
+    {
+      "id": "C-a2eef903",
+      "alias": "architecture-rules › Network access only in egress modules › Allowed uses",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.network.test.ts::C-a2eef903: egress modules, type-only imports, client methods and test files pass"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-f9b82661",
+      "alias": "architecture-rules › Network access only in egress modules › The bootstrap placeholder fails",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.hygiene.test.ts::C-f9b82661: the bootstrap placeholder fails the environment rule",
+        "test.arch.network.test.ts::C-f9b82661: the bootstrap placeholder fails the network rule"
+      ],
+      "s1_p": 0.81
+    },
+    {
+      "id": "C-9455d3fd",
+      "alias": "architecture-rules › No import of seed or test from src › Seed, test and alias imports are refused",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.hygiene.test.ts::C-6ae206c9 C-9455d3fd: look-alike and test-file imports pass",
+        "test.arch.hygiene.test.ts::C-9455d3fd: seed, test and alias imports are refused"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-6ae206c9",
+      "alias": "architecture-rules › No import of seed or test from src › Look-alike and test-file imports pass",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.hygiene.test.ts::C-6ae206c9 C-9455d3fd: look-alike and test-file imports pass"
+      ],
+      "s1_p": 0.87
+    },
+    {
+      "id": "C-5fe3458c",
+      "alias": "architecture-rules › No console in src › Console uses are refused",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.hygiene.test.ts::C-5fe3458c: console uses are refused"
+      ],
+      "s1_p": 0.91
+    },
+    {
+      "id": "C-78fc80d1",
+      "alias": "architecture-rules › No console in src › Console look-alikes pass",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.hygiene.test.ts::C-78fc80d1: console look-alikes and test files pass"
+      ],
+      "s1_p": 0.79
+    },
+    {
+      "id": "C-5d09e70a",
+      "alias": "architecture-rules › Environment only in config › Environment reads are refused",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.hygiene.test.ts::C-5d09e70a: environment reads are refused"
+      ],
+      "s1_p": 0.89
+    },
+    {
+      "id": "C-d68d430c",
+      "alias": "architecture-rules › Environment only in config › Environment look-alikes pass",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.hygiene.test.ts::C-d68d430c: environment look-alikes and config files pass"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-c63269ba",
+      "alias": "architecture-rules › Secret-pattern scan of repository files › Each kind is detected without echoing it",
+      "result": "needs_human",
+      "judge": "pass",
+      "reason": "uncovered: the tests that trace it are inadequate or did not pass",
+      "counterexample": null,
+      "tests": [],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-58d38ea1",
+      "alias": "architecture-rules › Secret-pattern scan of repository files › Look-alikes pass",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.secrets.test.ts::C-58d38ea1: secret look-alikes pass while a real key is still reported"
+      ],
+      "s1_p": 0.79
+    },
+    {
+      "id": "C-e7ed48e1",
+      "alias": "architecture-rules › Secret-pattern scan of repository files › The file list covers tracked and untracked files only",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.secrets.test.ts::C-e7ed48e1: the file list covers tracked and untracked files only"
+      ],
+      "s1_p": 0.78
+    },
+    {
+      "id": "C-bb0edd4e",
+      "alias": "architecture-rules › Secret-pattern scan of repository files › Git unavailable fails loudly",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.secrets.test.ts::C-bb0edd4e: an unavailable git fails the scan loudly"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-c0da3179",
+      "alias": "architecture-rules › The current tree passes every rule › The merged tree is clean",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean"
+      ],
+      "s1_p": 0.89
+    },
+    {
+      "id": "C-6bb73a15",
+      "alias": "architecture-rules › The current tree passes every rule › Violations are all listed in one run",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.repo.test.ts::C-6bb73a15: violations are all listed in one run"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-eea53b80",
+      "alias": "architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task",
+      "result": "needs_human",
+      "judge": "not_verifiable",
+      "reason": "uncovered: no adequate discriminating test traces it",
+      "counterexample": null,
+      "tests": [],
+      "s1_p": 0.06
+    },
+    {
+      "id": "C-8c4b4392",
+      "alias": "architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task",
+      "result": "needs_human",
+      "judge": "not_verifiable",
+      "reason": "uncovered: no adequate discriminating test traces it",
+      "counterexample": null,
+      "tests": [],
+      "s1_p": 0.05
+    },
+    {
+      "id": "C-ba84c521",
+      "alias": "architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule",
+      "result": "needs_human",
+      "judge": "not_verifiable",
+      "reason": "uncovered: no adequate discriminating test traces it",
+      "counterexample": null,
+      "tests": [],
+      "s1_p": 0.04
+    },
+    {
+      "id": "C-9ded7e99",
+      "alias": "architecture-tree-blockers › The merged tree meets the facts this change relies on › Facts verified on the base branch",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean"
+      ],
+      "s1_p": 0.79
+    },
+    {
+      "id": "C-069f346e",
+      "alias": "architecture-tree-blockers › The merged tree meets the facts this change relies on › Facts that add-engine-skeleton delivers",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean"
+      ],
+      "s1_p": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "title": "The module graph is duplicated: the rules ignore test/arch/modules.ts",
+      "detail": "The fix for F-35492b20 stopped rules.ts from importing modules.ts. Instead, rules.ts defines and exports its own literal MODULES, which is the default for checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll. modules.ts holds a second, independent copy. It is not a re-export, although the implementer's note says it is. A later unit that adds a module or edge in test/arch/modules.ts, as design decision 13 and the proposal say it should, changes nothing the rules read. modules.test.ts checks one copy, while checkGraphIntegrity() and the repo test check the other. rules.ts also exports MODULES, which is not in the Interfaces.",
+      "source": "judge",
+      "criterion": "C-65b86cc0",
+      "log": null,
+      "spec_gap": false,
+      "suggested_fix": "Keep one source of truth: make modules.ts the only literal and have rules.ts import it, or make modules.ts `export { MODULES } from \"./rules.ts\"` if the base-replay constraint forbids the import.",
+      "id": "F-a154400b",
+      "feedback": null
+    },
+    {
+      "severity": "major",
+      "title": "task 2.1: modules.ts is not the graph the rules check",
+      "detail": "Task 2.1 makes test/arch/modules.ts the complete graph data file and builds checkGraphIntegrity on it. At head, checkGraphIntegrity defaults to a separate copy in rules.ts, so the data file has no effect on any rule.",
+      "source": "judge",
+      "criterion": "C-65b86cc0",
+      "log": null,
+      "spec_gap": false,
+      "suggested_fix": "Have rules.ts take its default MODULES from test/arch/modules.ts.",
+      "id": "F-a985c7e4",
+      "feedback": null
+    },
+    {
+      "severity": "major",
+      "title": "The egress pin is not checked when a pinned module row is missing",
+      "detail": "checkGraphIntegrity checks the pin only for rows that are present. Deleting the `gateway` row, or any fixture without the three egress modules, reports no pin violation. This contradicts the C-851f3c7c THEN, which says each result carries the egress-pin violations, and design decision 6, which says the egress modules are exactly observability, identity and gateway.",
+      "source": "judge",
+      "criterion": "C-851f3c7c",
+      "log": null,
+      "spec_gap": false,
+      "suggested_fix": "Also loop over PINNED_EGRESS and report a pinned module that is missing from `modules` or carries no egress value.",
+      "id": "F-ed69f6e7",
+      "feedback": null
+    },
+    {
+      "severity": "major",
+      "title": "A default import with all-type named specifiers is treated as type-only",
+      "detail": "namedBindingsAreTypeOnly ignores the default binding. `import https, { type Agent } from \"node:https\";` is therefore marked typeOnly, and checkNetwork skips it, although `https` is a value import. Design decision 3 makes a declaration type-only only when it has nothing but named specifiers, at least one, all `type`-modified. This bypasses the network and worker_threads rules.",
+      "source": "judge",
+      "criterion": "C-a2eef903",
+      "log": null,
+      "spec_gap": false,
+      "suggested_fix": "Return false from namedBindingsAreTypeOnly when the ImportClause has a default `name`.",
+      "id": "F-85a00370",
+      "feedback": null
+    },
+    {
+      "severity": "minor",
+      "title": "A template-literal require or import specifier is only a dynamic import",
+      "detail": "literalText accepts only StringLiteral. `require(`node:https`)` gets specifier null: checkModuleGraph reports ARCH_DYNAMIC_IMPORT and checkNetwork reports nothing. Another reasonable implementation would read the NoSubstitutionTemplateLiteral as the literal `node:https`.",
+      "source": "judge",
+      "criterion": "C-82116acd",
+      "log": null,
+      "spec_gap": true,
+      "suggested_fix": "WHEN src/api/a.ts has const h = require(`node:https`); THEN checkModuleGraph reports ARCH_DYNAMIC_IMPORT with message `use a literal specifier` at that line and checkNetwork reports nothing for it.",
+      "id": "F-59a3831c",
+      "feedback": null
+    },
+    {
+      "severity": "minor",
+      "title": "A getBuiltinModule reference without a call is not reported",
+      "detail": "Only calls of getBuiltinModule are flagged. `const g = process.getBuiltinModule;` passes. createRequire, by contrast, is flagged as any identifier.",
+      "source": "judge",
+      "criterion": "C-6b1f49c4",
+      "log": null,
+      "spec_gap": true,
+      "suggested_fix": "WHEN src/api/b.ts has const g = process.getBuiltinModule; THEN checkModuleGraph reports no violation for that line.",
+      "id": "F-fd5c0529",
+      "feedback": null
+    },
+    {
+      "severity": "minor",
+      "title": "Stale scaffold comment kept in rules.ts",
+      "detail": "rules.ts still starts with the comment `Signature stub (milestone scaffold...)` although it is now implemented. The comment was removed from sources.ts and secrets.ts.",
+      "source": "judge",
+      "criterion": null,
+      "log": null,
+      "spec_gap": false,
+      "suggested_fix": "Remove the stub comment.",
+      "id": "F-a74c6006",
+      "feedback": null
+    },
+    {
+      "severity": "minor",
+      "title": "the judge called a test inadequate",
+      "detail": "test.arch.modules.test.ts::C-851f3c7c: inconsistent graphs are reported",
+      "source": "judge",
+      "criterion": "C-851f3c7c",
+      "log": null,
+      "spec_gap": false,
+      "suggested_fix": "",
+      "id": "F-c28dd9cf",
+      "feedback": null
+    },
+    {
+      "severity": "minor",
+      "title": "the judge called a test inadequate",
+      "detail": "test.arch.secrets.test.ts::C-c63269ba: each secret kind is detected at its line without echoing the text",
+      "source": "judge",
+      "criterion": "C-c63269ba",
+      "log": null,
+      "spec_gap": false,
+      "suggested_fix": "",
+      "id": "F-a5c1aa56",
+      "feedback": null
+    }
+  ],
+  "holds": [],
+  "subject_sha": "9f19c67e64f48bd75ea2aad1619a3a7f94502318",
+  "family_criteria": [
+    "C-2073476a",
+    "C-eae7dab7",
+    "C-fa65851b",
+    "C-8fa501e4",
+    "C-82116acd",
+    "C-b49548b8",
+    "C-6b1f49c4",
+    "C-fe3edcae",
+    "C-dd8c8f9a",
+    "C-90199ce0",
+    "C-70858a5b",
+    "C-65b86cc0",
+    "C-851f3c7c",
+    "C-6923119c",
+    "C-b5e05684",
+    "C-ec6975cf",
+    "C-18aa910d",
+    "C-f0665065",
+    "C-df527545",
+    "C-0bc7739e",
+    "C-f3249f34",
+    "C-4d6f98c2",
+    "C-cc435a91",
+    "C-36562121",
+    "C-8e07c9a6",
+    "C-bdf0820d",
+    "C-a2eef903",
+    "C-f9b82661",
+    "C-9455d3fd",
+    "C-6ae206c9",
+    "C-5fe3458c",
+    "C-78fc80d1",
+    "C-5d09e70a",
+    "C-d68d430c",
+    "C-c63269ba",
+    "C-58d38ea1",
+    "C-e7ed48e1",
+    "C-bb0edd4e",
+    "C-c0da3179",
+    "C-6bb73a15",
+    "C-eea53b80",
+    "C-8c4b4392",
+    "C-ba84c521",
+    "C-9ded7e99",
+    "C-069f346e"
+  ],
+  "reused_from": null,
+  "integrity": {
+    "checks": [
+      {
+        "name": "protected paths",
+        "status": "ok",
+        "note": "no protected path differs from the base"
+      },
+      {
+        "name": "pre-existing tests",
+        "status": "skipped",
+        "note": "no test file changed"
+      },
+      {
+        "name": "red-green freeze",
+        "status": "ok",
+        "note": "12 task(s): red and green compared (+1 unfrozen by human answers)"
+      },
+      {
+        "name": "test path freeze",
+        "status": "ok",
+        "note": "13 harness step commit(s) checked"
+      },
+      {
+        "name": "content scan",
+        "status": "skipped",
+        "note": "not checked: python only; changed files outside it: test/arch/modules.ts"
+      },
+      {
+        "name": "gate configuration",
+        "status": "skipped",
+        "note": "no gate or runner configuration file changed"
+      },
+      {
+        "name": "test awareness",
+        "status": "ok",
+        "note": "no production line reacts to the test run"
+      },
+      {
+        "name": "suppressions",
+        "status": "skipped",
+        "note": "not checked: python only; changed files outside it: test/arch/hygiene.test.ts, test/arch/imports.test.ts, test/arch/modules.test.ts, test/arch/modules.ts, test/arch/network.test.ts (+6 more)"
+      },
+      {
+        "name": "tdd history",
+        "status": "ok",
+        "note": "12 task(s); red tests passing at head: step 3"
+      },
+      {
+        "name": "pre-existing tests still pass",
+        "status": "ok",
+        "note": "218 of 218 base tests pass on the unit's code with its 7 test and support files at the base (base: not needed)"
+      }
+    ],
+    "findings": [],
+    "declared": [],
+    "human_protected": [],
+    "human_tests": [],
+    "unfrozen": [
+      "test/arch/repo.test.ts (task 5.1, unfrozen by Q-001 (human))"
+    ],
+    "human_suppressions": [],
+    "human_scan": [],
+    "human_config": [],
+    "allowed_tests": [
+      "test/arch/repo.test.ts kept at head for the run (task 5.1: unfrozen by Q-001)"
+    ],
+    "mocked_support": [],
+    "base_tests": {
+      "base_sha": "2c97ad2f39b299b4ea12786643fe6ef0970ebc31",
+      "command": "pnpm run test",
+      "passed": [
+        "src.api.errors.test.ts::C-240590ab toErrorResponse maps body schema failures to field details",
+        "src.api.errors.test.ts::C-240590ab toErrorResponse reports query and path parameter fields",
+        "src.api.errors.test.ts::C-3284ea9e ApiError refuses a status outside 400 to 599 or a malformed code",
+        "src.api.errors.test.ts::C-3284ea9e toErrorResponse maps an ApiError with and without details",
+        "src.api.errors.test.ts::C-aea19ec5 toErrorResponse hides an unknown error behind INTERNAL",
+        "src.api.errors.test.ts::C-d145c766 toErrorResponse keeps another 4xx status as BAD_REQUEST",
+        "src.api.errors.test.ts::C-d145c766 toErrorResponse maps malformed JSON oversized and wrongly typed bodies",
+        "src.api.health.test.ts::C-14452135 an empty registry reports ok with no checks",
+        "src.api.health.test.ts::C-14452135 checks that resolve ok are reported by name",
+        "src.api.health.test.ts::C-609c36a3 a check that never settles times out after 10 ms",
+        "src.api.health.test.ts::C-609c36a3 a check that resolves fail marks the report failed",
+        "src.api.health.test.ts::C-609c36a3 a check that resolves junk fails as an invalid result",
+        "src.api.health.test.ts::C-609c36a3 a check that throws fails without leaking its message",
+        "src.api.health.test.ts::C-64e17386 a check registered after a run appears in the next run",
+        "src.api.health.test.ts::C-64e17386 duplicate and invalid names are refused",
+        "src.api.health.test.ts::C-64e17386 overlapping runs call every check once",
+        "src.api.server.test.ts::C-14452135 GET /health reports passing checks by name",
+        "src.api.server.test.ts::C-14452135 GET /health with no checks reports ok and healthPayload is unchanged",
+        "src.api.server.test.ts::C-240590ab buildServer reports the first body query or path schema fault",
+        "src.api.server.test.ts::C-2490a98e a path that carries a token logs the wildcard route only",
+        "src.api.server.test.ts::C-3284ea9e buildServer answers an ApiError with its own status code and details",
+        "src.api.server.test.ts::C-3c17bb81 a recording tracer holds one ended http.request span per request",
+        "src.api.server.test.ts::C-595eb185 a failing tracer logs a warning and the request still succeeds",
+        "src.api.server.test.ts::C-609c36a3 GET /health reports a failing check without leaking its content",
+        "src.api.server.test.ts::C-609c36a3 GET /health reports a hanging check as a timeout",
+        "src.api.server.test.ts::C-609c36a3 GET /health reports a junk check result as invalid",
+        "src.api.server.test.ts::C-609c36a3 GET /health reports a throwing check without its message",
+        "src.api.server.test.ts::C-64866f0f a 404 and a thrown error both carry the request id",
+        "src.api.server.test.ts::C-71327adc a well-formed x-request-id is kept and the route is logged without the query",
+        "src.api.server.test.ts::C-aea19ec5 unknown errors answer INTERNAL and never log hunter2",
+        "src.api.server.test.ts::C-c68d2bde missing malformed and oversized request ids are replaced",
+        "src.api.server.test.ts::C-ce3d89ea the health request log holds the route without the query token",
+        "src.api.server.test.ts::C-d145c766 buildServer keeps the fixed codes for malformed oversized and wrongly typed bodies",
+        "src.api.server.test.ts::buildServer hands an injectable server to the routes a test adds",
+        "src.api.shutdown.test.ts::C-341a5ed6 a SIGTERM then SIGINT closes once and exits zero",
+        "src.api.shutdown.test.ts::C-3d0f68d6 a direct shutdown is idempotent and resolves undefined after exit zero",
+        "src.api.shutdown.test.ts::C-3d0f68d6 dispose removes both signal listeners and never closes",
+        "src.api.shutdown.test.ts::C-78a31ae6 a failed close logs shutdown failed without the error text",
+        "src.api.shutdown.test.ts::C-78a31ae6 a missed drain deadline force closes and exits one",
+        "src.api.shutdown.test.ts::C-9abd6ccb requests during the drain still get the envelope and the slow request finishes",
+        "src.config.config.test.ts::C-16430cae a loaded config hides the engine key and database password from JSON String and inspect",
+        "src.config.config.test.ts::C-3d74e0ae a bad database URL is CONFIG_INVALID naming the URL variable without the password",
+        "src.config.config.test.ts::C-3d74e0ae a bad owner database URL names the owner URL variable",
+        "src.config.config.test.ts::C-3d74e0ae a database password file without its URL names the password-file variable",
+        "src.config.config.test.ts::C-3d74e0ae an empty database password file with a valid URL gives CONFIG_SECRET_EMPTY",
+        "src.config.config.test.ts::C-406ddaa1 loadConfig keeps a postgresql sslmode URL unchanged and leaves a missing password null",
+        "src.config.config.test.ts::C-406ddaa1 loadConfig parses app and owner database endpoints with secret passwords",
+        "src.config.config.test.ts::C-7a4aa4d4 loadConfig reads the engine key from its file and strips the trailing newline",
+        "src.config.config.test.ts::C-7b6bccec loadConfig returns every documented default for an empty environment",
+        "src.config.config.test.ts::C-95e9881e loadConfig derives publicBaseUrl from the port and ignores empty or unknown variables",
+        "src.config.config.test.ts::C-95e9881e loadConfig reads every non-secret setting from the environment and drops a trailing slash",
+        "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad drain deadline or public base URL without echoing the value",
+        "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad port host log level or role",
+        "src.config.config.test.ts::C-ca797e1f loadConfig refuses a weak engine key with CONFIG_INVALID naming its file variable",
+        "src.config.config.test.ts::C-ca797e1f loadConfig refuses an empty or unreadable engine key file with CONFIG_SECRET_EMPTY",
+        "src.config.config.test.ts::C-f3f5587d loadConfig ignores an empty secret-shaped variable",
+        "src.config.config.test.ts::C-f3f5587d loadConfig refuses a non-empty secret-shaped variable without echoing its value",
+        "src.config.secret.test.ts::C-16430cae a Secret hides its value from JSON String and inspect",
+        "src.config.secret.test.ts::C-3d74e0ae ConfigError names the variable and rule without a value",
+        "src.config.secret.test.ts::C-406ddaa1 readSecretValue returns a Secret for a database password file",
+        "src.config.secret.test.ts::C-7a4aa4d4 readSecretValue strips one trailing newline and reads the named file once",
+        "src.config.secret.test.ts::C-ca797e1f a weak engine key is CONFIG_INVALID with its file variable",
+        "src.config.secret.test.ts::C-ca797e1f readSecretValue refuses empty whitespace-only and unreadable secrets without their text",
+        "src.core.clock.test.ts::C-6f8e2578 fixedClock rejects an invalid date",
+        "src.core.clock.test.ts::C-6f8e2578 fixedClock returns distinct Date objects for one instant",
+        "src.core.ids.test.ts::C-6004f84c ids stay ordered when the clock moves forward and back",
+        "src.core.ids.test.ts::C-6004f84c the counter rolls into the timestamp after 4096 ids",
+        "src.core.ids.test.ts::C-68b36af5 createIds rejects prefixes outside the lower-case rule",
+        "src.core.ids.test.ts::C-68b36af5 sequentialIds counts from its seed",
+        "src.core.ids.test.ts::C-68b36af5 sequentialIds rejects a bad seed and overflow",
+        "src.core.ids.test.ts::C-68b36af5 systemIds returns a uuidv7 with its prefix",
+        "src.core.ids.test.ts::C-6f8e2578 createIds writes the timestamp version counter variant and random bits",
+        "src.db.base.test.ts::C-081c5cff the app role is subject to forced row level security",
+        "src.db.base.test.ts::C-162b9c47 new functions and tables start closed to the app role",
+        "src.db.base.test.ts::C-d4c6bb53 the base migration records the ledger and keeps objects owned by the owner role",
+        "src.db.base.test.ts::C-e3e42ffe the app role has only USAGE on the schema",
+        "src.db.files.test.ts::C-55276583 readMigrationFiles refuses badly named entries",
+        "src.db.files.test.ts::C-55276583 readMigrationFiles refuses duplicate versions",
+        "src.db.files.test.ts::C-55276583 readMigrationFiles refuses version zero and non-file entries",
+        "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses a directory that does not exist",
+        "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses an empty file",
+        "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses transaction control lines",
+        "src.db.files.test.ts::C-8a52d337 readMigrationFiles allows gaps and returns an empty list for an empty directory",
+        "src.db.files.test.ts::C-8a52d337 readMigrationFiles sorts valid files and hashes their bytes",
+        "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck fails closed when the query rejects or times out",
+        "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck refuses an invalid timeout before querying",
+        "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail after the test database is closed",
+        "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail for an unmigrated test database",
+        "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok for a migrated test database",
+        "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok only for a migrated unprivileged role",
+        "src.db.migrate.test.ts::C-2735b4ff C-c664fa4c migrate bootstraps an empty directory and applies a later file",
+        "src.db.migrate.test.ts::C-3815951d migrate refuses an invalid lock timeout before querying",
+        "src.db.migrate.test.ts::C-3815951d migrate times out on a held lock and releases its own after a failure",
+        "src.db.migrate.test.ts::C-4a57a001 a failing migration rolls back, releases the lock and stops",
+        "src.db.migrate.test.ts::C-77b8f169 two runners are serialised by the advisory lock",
+        "src.db.migrate.test.ts::C-94eda93a migrate refuses missing and privileged roles before any DDL",
+        "src.db.migrate.test.ts::C-b2b0429a migrate refuses an edited missing renamed or emptied file set",
+        "src.db.migrate.test.ts::C-c664fa4c migrate applies files in order, repeats, extends and fills a gap",
+        "src.db.open.test.ts::C-1f0e219e openDatabase returns null for no endpoint and warns once for an owner alone",
+        "src.db.open.test.ts::C-32617fd8 openDatabase fails closed on a closed port after one sleep of the remaining time",
+        "src.db.open.test.ts::C-32617fd8 openDatabase rejects a bad openTimeoutMs and a bad scheme without sleeping",
+        "src.db.open.test.ts::C-69717e99 openDatabase refuses every privileged app endpoint and registers nothing",
+        "src.db.open.test.ts::C-7454acfb openDatabase on an unmigrated database registers db, fails it and warns once",
+        "src.db.open.test.ts::C-869163e0 openDatabase registers db once, ok, then fail after close twice",
+        "src.db.open.test.ts::C-faf8f8a6 openDatabase refuses a superuser whose cluster starts during the first sleep",
+        "src.db.partitions.test.ts::C-5cc5a771 ensurePartitions ignores list and hash parents and refuses unusable range tables",
+        "src.db.partitions.test.ts::C-87e84b3f ensurePartitions serialises callers and fails closed when Postgres is down",
+        "src.db.partitions.test.ts::C-c37e9432 ensurePartitions creates daily partitions and refuses bad window options",
+        "src.db.partitions.test.ts::C-f0ece24f ensurePartitions skips a range whose rows already sit in the DEFAULT partition",
+        "src.db.partitions.test.ts::C-fb7ba2ed ensurePartitions creates the monthly window and routes rows",
+        "src.db.pool.test.ts::C-63221721 createPool refuses bad endpoints and options without echoing them",
+        "src.db.pool.test.ts::C-7c1574be createPool accepts postgresql URLs and verify-full TLS",
+        "src.db.pool.test.ts::C-7c1574be createPool builds a pool from an endpoint password with the default options",
+        "src.db.pool.test.ts::C-dc754ade an idle client error reaches onError once and never throws",
+        "src.db.prepare.test.ts::C-58e0ebf0 prepareDatabase migrates first and then creates the partition window",
+        "src.db.roles.test.ts::C-d380769b ensureRoles keeps a quoted password and the owner role",
+        "src.db.roles.test.ts::C-d380769b ensureRoles refuses a weak admin with DB_ROLES_FAILED",
+        "src.db.roles.test.ts::C-d380769b ensureRoles refuses empty non-ASCII NUL and oversized passwords",
+        "src.db.roles.test.ts::C-f1949ac2 ensureRoles creates repeats and repairs the login roles",
+        "src.health.test.ts::healthPayload reports ok and the given version",
+        "src.main.db.test.ts::C-6d93e8d5 shutdown and a failed listen end the app pool",
+        "src.main.db.test.ts::C-ad848b65 main writes one fatal line and opens no port when the open fails",
+        "src.main.db.test.ts::C-b3bd64b0 main opens no database and keeps health green",
+        "src.main.db.test.ts::C-fb007fe9 main registers db, serves ok then fail, and never opens the owner",
+        "src.main.test.ts::C-469d7fec main reports EADDRINUSE for a busy port at info and silent",
+        "src.main.test.ts::C-469d7fec main writes one fatal line for an empty secret file",
+        "src.main.test.ts::C-469d7fec main writes one fatal line without the error text for an unknown failure",
+        "src.main.test.ts::C-6912835f startServer serves health on the bound loopback port and closes",
+        "src.main.test.ts::C-c7407753 main listens on the configured host and reports it",
+        "src.main.test.ts::C-c7407753 main starts a port-0 server and stops on SIGTERM",
+        "src.observability.logger.test.ts::C-cc8bd5a6 authorization cookie and set-cookie are redacted alone and under headers",
+        "src.observability.logger.test.ts::C-cc8bd5a6 the listed secret keys are redacted from depth zero to three",
+        "src.observability.logger.test.ts::C-d18af48d a silent logger writes nothing while a warn logger on the same input does",
+        "src.observability.logger.test.ts::C-d18af48d a warn logger writes one ISO-timed line and drops records below its level",
+        "src.observability.logger.test.ts::C-fc60a608 a request is logged as method and route pattern, never its URL",
+        "src.observability.logger.test.ts::C-fc60a608 a request without a route pattern logs url unmatched",
+        "src.observability.logger.test.ts::C-fc60a608 an error is logged as type, string code and frames only",
+        "src.observability.logger.test.ts::C-fc60a608 an error without a string code has no code key",
+        "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end",
+        "src.observability.tracer.test.ts::C-3c17bb81 noopTracer starts a span without attributes",
+        "test.arch.licences.test.ts::C-04784843 a one-word License is judged as an identifier",
+        "test.arch.licences.test.ts::C-05d0c7f9 C-b51bd435 every dependency range in the root and web manifests is an exact version",
+        "test.arch.licences.test.ts::C-0797a2c3 topLevelKeys reads keys from column zero only",
+        "test.arch.licences.test.ts::C-0910d0a3 pythonLicenceOf falls back from free text to the classifiers",
+        "test.arch.licences.test.ts::C-0db64dfc unmapped classifiers and missing licences fail",
+        "test.arch.licences.test.ts::C-0f36e537 checkInstallFiles refuses forbidden npmrc keys",
+        "test.arch.licences.test.ts::C-115a4581 C-ce1eedc7 the licence gate reads files only",
+        "test.arch.licences.test.ts::C-1524fbc5 parseLicenceExpression gives null for malformed expressions only",
+        "test.arch.licences.test.ts::C-1c977f83 formatLicenceViolations joins the lines with a newline and gives an empty string for none",
+        "test.arch.licences.test.ts::C-1fa7c3d4 scanPythonVenv reads dist-info across Python minors",
+        "test.arch.licences.test.ts::C-2241065a decideVenvScan skips an absent venv that is not required",
+        "test.arch.licences.test.ts::C-2ae464e9 checkInstallFiles reports a root pnpmfile",
+        "test.arch.licences.test.ts::C-2fb3cbe9 checkLicences fails a copyleft term",
+        "test.arch.licences.test.ts::C-30f06cd4 checkLicences judges every term of a licence expression",
+        "test.arch.licences.test.ts::C-30fdcfea checkLicences passes permissive licences",
+        "test.arch.licences.test.ts::C-41ded6c9 checkBuiltDependencies fails an added package",
+        "test.arch.licences.test.ts::C-4557b8b9 checkBuiltDependencies fails a removed package or a duplicate",
+        "test.arch.licences.test.ts::C-4767d4f0 checkInstallFiles refuses forbidden workspace keys",
+        "test.arch.licences.test.ts::C-4ca6b05c decideVenvScan fails an absent venv that is required",
+        "test.arch.licences.test.ts::C-59b6d3e2 checkBuiltDependencies fails a missing workspace file",
+        "test.arch.licences.test.ts::C-606611bb C-41ded6c9 onlyBuiltDependencies equals the reviewed list",
+        "test.arch.licences.test.ts::C-65a32526 checkPolicy accepts the reviewed exception version",
+        "test.arch.licences.test.ts::C-67d87882 checkInstallHooks refuses every install-time lifecycle script",
+        "test.arch.licences.test.ts::C-6a008a66 npmLicenceOf treats a legacy or free-text licence as unknown",
+        "test.arch.licences.test.ts::C-6c266a75 checkPolicy refuses pypi versions that are not a release segment",
+        "test.arch.licences.test.ts::C-6faaac53 checkExactVersions refuses a range in pnpm overrides",
+        "test.arch.licences.test.ts::C-706e1113 pythonLicenceOf reads an SPDX License-Expression",
+        "test.arch.licences.test.ts::C-75476b3c checkBuiltDependencies gives the fixed drift details in order",
+        "test.arch.licences.test.ts::C-79c32cd5 C-2ae464e9 checkInstallFiles finds nothing in clean roots and a pnpmfile in a dirty one",
+        "test.arch.licences.test.ts::C-79c32cd5 C-67d87882 the repository runs no install hooks",
+        "test.arch.licences.test.ts::C-7b90839f checkPolicy rejects malformed policy data in order",
+        "test.arch.licences.test.ts::C-7dd0d742 checkInstallHooks refuses a pnpm setting other than overrides",
+        "test.arch.licences.test.ts::C-7f94877e checkLicences matches terms without regard to case",
+        "test.arch.licences.test.ts::C-7fbf0b22 checkExactVersions names manifest violations",
+        "test.arch.licences.test.ts::C-876fb064 an absent or empty store fails instead of passing",
+        "test.arch.licences.test.ts::C-87f4def2 C-69c81a68 decideVenvScan scans a present venv, and a present venv with no distributions fails",
+        "test.arch.licences.test.ts::C-8be4d4fc every Python distribution in the e2e venv has an allowlisted licence",
+        "test.arch.licences.test.ts::C-8eaf01ec checkPolicy admits pypi release segment versions",
+        "test.arch.licences.test.ts::C-92d19a9f C-6107b0c0 checkLicences exempts only the reviewed version and licence text",
+        "test.arch.licences.test.ts::C-991042c4 checkPolicy judges npm exception versions with isExactVersion",
+        "test.arch.licences.test.ts::C-9d08ccc3 every installed npm package has an allowlisted licence",
+        "test.arch.licences.test.ts::C-a223af90 checkInstallHooks allows ordinary scripts and overrides and refuses bad shapes",
+        "test.arch.licences.test.ts::C-a74a1a7f scanNpmStore walks the store without following symlinks",
+        "test.arch.licences.test.ts::C-ae2f6322 checkPolicy does not judge an unknown ecosystem on its version",
+        "test.arch.licences.test.ts::C-ae5033da checkLicences reports a package without a licence",
+        "test.arch.licences.test.ts::C-b51bd435 checkExactVersions refuses ranges, tags and other specs",
+        "test.arch.licences.test.ts::C-b7a7ed55 parseLicenceExpression reads the distinct terms of an expression",
+        "test.arch.licences.test.ts::C-c18692e2 C-73030b3f the licence policy data is well formed",
+        "test.arch.licences.test.ts::C-c39c579d checkExactVersions ignores other fields and refuses bad manifests",
+        "test.arch.licences.test.ts::C-ca426357 checkLicences refuses a near-miss identifier",
+        "test.arch.licences.test.ts::C-ce1eedc7 findForbiddenImports reports imports, dynamic imports, require and fetch",
+        "test.arch.licences.test.ts::C-db08d47c formatLicenceViolation cuts a long licence text and omits an absent one",
+        "test.arch.licences.test.ts::C-dcc52cf2 a permissive classifier cannot hide a copyleft License text",
+        "test.arch.licences.test.ts::C-ec3544f7 C-b51bd435 checkExactVersions passes exact versions and refuses a range",
+        "test.arch.licences.test.ts::C-ed7ff850 checkBuiltDependencies handles an absent key, an empty reviewed list and an unsupported form",
+        "test.arch.licences.test.ts::C-ed8723d5 findForbiddenImports ignores text inside comments and literals",
+        "test.arch.licences.test.ts::C-f0b009a1 formatLicenceViolation names code, subject, licence and detail",
+        "test.arch.licences.test.ts::C-ff913dc5 checkLicences gives fixed subjects and details",
+        "test.arch.repo.test.ts::C-6bb73a15: violations are all listed in one run",
+        "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean",
+        "test.arch.repo.test.ts::C-dd8c8f9a: require look-alikes and test files pass",
+        "test.arch.repo.test.ts::C-eae7dab7: a require call is a value import of its specifier",
+        "test.support.global-setup.test.ts::C-589bae1c global setup publishes the coordinates of a migrated shared cluster",
+        "test.support.global-setup.test.ts::C-b3edfa92 global setup starts a cluster and global teardown stops it",
+        "test.support.pg.test.ts::C-081c5cff the app pool is subject to row level security",
+        "test.support.pg.test.ts::C-6d9f36e4 eight databases run in parallel and all drop on close",
+        "test.support.pg.test.ts::C-6d9f36e4 migrated false has no schema while the default clone does",
+        "test.support.pg.test.ts::C-6d9f36e4 withTestDatabase clones fresh isolated databases with owner and app pools",
+        "test.support.pg.test.ts::C-f2409274 startCluster refuses a busy port and removes its data directory",
+        "test.support.pg.test.ts::C-f2409274 withTestDatabase needs TEST_PG_CLUSTER when no cluster is given",
+        "test.tooling.node-test-junit.test.ts::a describe body that throws is reported as a failure of the suite",
+        "test.tooling.node-test-junit.test.ts::a file that does not import is a collection failure without classname",
+        "test.tooling.node-test-junit.test.ts::a passing test has no failure and skip and todo are skipped",
+        "test.tooling.node-test-junit.test.ts::a stub that throws not implemented is reported as NotImplementedError",
+        "test.tooling.node-test-junit.test.ts::an assertion failure carries type AssertionError and the name in its message",
+        "test.tooling.node-test-junit.test.ts::any other error keeps its own name",
+        "test.tooling.node-test-junit.test.ts::nested describes become part of the classname",
+        "test.tooling.node-test-junit.test.ts::same-named tests in two files get distinct classnames"
+      ],
+      "collection_errors": []
+    },
+    "test_awareness": []
+  },
+  "trace": [
+    {
+      "criterion": "C-2073476a",
+      "alias": "architecture-require-forms › Require calls and import-equals declarations are value imports › Require forms are found",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.sources.test.ts::C-2073476a require forms are found as value imports with their flags",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-eae7dab7",
+      "alias": "architecture-require-forms › Require calls and import-equals declarations are value imports › A require call is a value import of its specifier",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.repo.test.ts::C-eae7dab7: a require call is a value import of its specifier",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-fa65851b",
+      "alias": "architecture-require-forms › Require calls and import-equals declarations are value imports › An import-equals declaration is a value import",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.network.test.ts::C-fa65851b: an import-equals declaration is a value import",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-8fa501e4",
+      "alias": "architecture-require-forms › Require calls and import-equals declarations are value imports › Every scanned extension is covered",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.network.test.ts::C-8fa501e4: every scanned extension is covered",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-82116acd",
+      "alias": "architecture-require-forms › Require calls and import-equals declarations are value imports › A non-literal require is unseeable",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.imports.test.ts::C-82116acd: a non-literal require is unseeable",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-b49548b8",
+      "alias": "architecture-require-forms › Loader functions are refused › createRequire is refused",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.imports.test.ts::C-b49548b8: createRequire is refused",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-6b1f49c4",
+      "alias": "architecture-require-forms › Loader functions are refused › getBuiltinModule is refused",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.imports.test.ts::C-6b1f49c4: getBuiltinModule is refused",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-fe3edcae",
+      "alias": "architecture-require-forms › Environment reads through require are refused › Environment through require is refused",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.hygiene.test.ts::C-fe3edcae: environment reads through require are refused",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-dd8c8f9a",
+      "alias": "architecture-require-forms › Look-alikes and test files pass the require rules › Require look-alikes and test files pass",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.repo.test.ts::C-dd8c8f9a: require look-alikes and test files pass",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-90199ce0",
+      "alias": "architecture-rules › Complete module graph as data › The graph holds the 30 modules",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.modules.test.ts::C-90199ce0 C-851f3c7c: the graph holds the 30 modules in roadmap order",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-70858a5b",
+      "alias": "architecture-rules › Complete module graph as data › The graph carries the version 3 edges",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.modules.test.ts::C-70858a5b C-851f3c7c: the graph carries the version 3 edges",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-65b86cc0",
+      "alias": "architecture-rules › Complete module graph as data › The shipped graph is consistent",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.modules.test.ts::C-65b86cc0 C-851f3c7c: the shipped graph is consistent",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-851f3c7c",
+      "alias": "architecture-rules › Complete module graph as data › Inconsistent graphs are reported",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.modules.test.ts::C-65b86cc0 C-851f3c7c: the shipped graph is consistent",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "test.arch.modules.test.ts::C-70858a5b C-851f3c7c: the graph carries the version 3 edges",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "test.arch.modules.test.ts::C-851f3c7c: inconsistent graphs are reported",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": false,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "test.arch.modules.test.ts::C-90199ce0 C-851f3c7c: the graph holds the 30 modules in roadmap order",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-6923119c",
+      "alias": "architecture-rules › Complete module graph as data › A new egress capability is refused",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.modules.test.ts::C-6923119c: a new egress capability is refused",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-b5e05684",
+      "alias": "architecture-rules › Static analysis names file and line › Import forms are found",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.sources.test.ts::C-b5e05684 import forms are found with their lines, type-only and dynamic flags",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-ec6975cf",
+      "alias": "architecture-rules › Static analysis names file and line › Violations are formatted and ordered",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.sources.test.ts::C-ec6975cf formatViolation names file, line, code and message for any code",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "test.arch.sources.test.ts::C-ec6975cf sortViolations orders by file, then line, then code",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-18aa910d",
+      "alias": "architecture-rules › Static analysis names file and line › Specifiers resolve relative to the importing file",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.sources.test.ts::C-18aa910d resolveSpecifier resolves relative imports against the importing file",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-f0665065",
+      "alias": "architecture-rules › Static analysis names file and line › The snapshot reads a real directory",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.sources.test.ts::C-f0665065 readSnapshot reads the source files of a real directory without symlinks",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-df527545",
+      "alias": "architecture-rules › Modules and imports follow the graph › Allowed imports and nothing to do pass",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.imports.test.ts::C-0bc7739e C-df527545: a forbidden edge names both modules",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "test.arch.imports.test.ts::C-df527545: allowed imports and nothing to do pass",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-0bc7739e",
+      "alias": "architecture-rules › Modules and imports follow the graph › A forbidden edge names both modules",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.imports.test.ts::C-0bc7739e C-df527545: a forbidden edge names both modules",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-f3249f34",
+      "alias": "architecture-rules › Modules and imports follow the graph › Deep imports are refused",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.imports.test.ts::C-f3249f34: deep imports are refused",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-4d6f98c2",
+      "alias": "architecture-rules › Modules and imports follow the graph › Unknown directories are refused",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.imports.test.ts::C-4d6f98c2: unknown directories are refused",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-cc435a91",
+      "alias": "architecture-rules › Modules and imports follow the graph › Root files follow the leaf rule",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.imports.test.ts::C-cc435a91: root files follow the leaf rule",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-36562121",
+      "alias": "architecture-rules › Modules and imports follow the graph › Unseeable and exempt imports",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.imports.test.ts::C-36562121: unseeable imports are refused and test files are exempt",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-8e07c9a6",
+      "alias": "architecture-rules › Network access only in egress modules › Violations outside egress modules",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.network.test.ts::C-8e07c9a6: network imports and calls outside egress modules are refused",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-bdf0820d",
+      "alias": "architecture-rules › Network access only in egress modules › Process and worker entry points are refused",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.network.test.ts::C-bdf0820d: process and worker entry points are refused",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-a2eef903",
+      "alias": "architecture-rules › Network access only in egress modules › Allowed uses",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.network.test.ts::C-a2eef903: egress modules, type-only imports, client methods and test files pass",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-f9b82661",
+      "alias": "architecture-rules › Network access only in egress modules › The bootstrap placeholder fails",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.hygiene.test.ts::C-f9b82661: the bootstrap placeholder fails the environment rule",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "test.arch.network.test.ts::C-f9b82661: the bootstrap placeholder fails the network rule",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-9455d3fd",
+      "alias": "architecture-rules › No import of seed or test from src › Seed, test and alias imports are refused",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.hygiene.test.ts::C-6ae206c9 C-9455d3fd: look-alike and test-file imports pass",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "test.arch.hygiene.test.ts::C-9455d3fd: seed, test and alias imports are refused",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-6ae206c9",
+      "alias": "architecture-rules › No import of seed or test from src › Look-alike and test-file imports pass",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.hygiene.test.ts::C-6ae206c9 C-9455d3fd: look-alike and test-file imports pass",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-5fe3458c",
+      "alias": "architecture-rules › No console in src › Console uses are refused",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.hygiene.test.ts::C-5fe3458c: console uses are refused",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-78fc80d1",
+      "alias": "architecture-rules › No console in src › Console look-alikes pass",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.hygiene.test.ts::C-78fc80d1: console look-alikes and test files pass",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-5d09e70a",
+      "alias": "architecture-rules › Environment only in config › Environment reads are refused",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.hygiene.test.ts::C-5d09e70a: environment reads are refused",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-d68d430c",
+      "alias": "architecture-rules › Environment only in config › Environment look-alikes pass",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.hygiene.test.ts::C-d68d430c: environment look-alikes and config files pass",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-c63269ba",
+      "alias": "architecture-rules › Secret-pattern scan of repository files › Each kind is detected without echoing it",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.secrets.test.ts::C-c63269ba: each secret kind is detected at its line without echoing the text",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": false,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-58d38ea1",
+      "alias": "architecture-rules › Secret-pattern scan of repository files › Look-alikes pass",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.secrets.test.ts::C-58d38ea1: secret look-alikes pass while a real key is still reported",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-e7ed48e1",
+      "alias": "architecture-rules › Secret-pattern scan of repository files › The file list covers tracked and untracked files only",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.secrets.test.ts::C-e7ed48e1: the file list covers tracked and untracked files only",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-bb0edd4e",
+      "alias": "architecture-rules › Secret-pattern scan of repository files › Git unavailable fails loudly",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.secrets.test.ts::C-bb0edd4e: an unavailable git fails the scan loudly",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-c0da3179",
+      "alias": "architecture-rules › The current tree passes every rule › The merged tree is clean",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-6bb73a15",
+      "alias": "architecture-rules › The current tree passes every rule › Violations are all listed in one run",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.repo.test.ts::C-6bb73a15: violations are all listed in one run",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-eea53b80",
+      "alias": "architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task",
+      "state": "uncovered",
+      "tests": [],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-8c4b4392",
+      "alias": "architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task",
+      "state": "uncovered",
+      "tests": [],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-ba84c521",
+      "alias": "architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule",
+      "state": "uncovered",
+      "tests": [],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-9ded7e99",
+      "alias": "architecture-tree-blockers › The merged tree meets the facts this change relies on › Facts verified on the base branch",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-069f346e",
+      "alias": "architecture-tree-blockers › The merged tree meets the facts this change relies on › Facts that add-engine-skeleton delivers",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    }
+  ],
+  "audit": [],
+  "generated": [],
+  "s1": [
+    {
+      "criterion": "C-2073476a",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-eae7dab7",
+      "status": "ok",
+      "p": 0.65,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.77,
+        "contradicted": 0.03,
+        "not_implemented": 0.12,
+        "unrelated": 0.08
+      }
+    },
+    {
+      "criterion": "C-fa65851b",
+      "status": "ok",
+      "p": 0.75,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.87,
+        "contradicted": 0.04,
+        "not_implemented": 0.08,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-8fa501e4",
+      "status": "ok",
+      "p": 0.88,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-82116acd",
+      "status": "ok",
+      "p": 0.71,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.85,
+        "contradicted": 0.03,
+        "not_implemented": 0.04,
+        "unrelated": 0.08
+      }
+    },
+    {
+      "criterion": "C-b49548b8",
+      "status": "ok",
+      "p": 0.9,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-6b1f49c4",
+      "status": "ok",
+      "p": 0.89,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-fe3edcae",
+      "status": "ok",
+      "p": 0.89,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.98,
+        "contradicted": 0.01,
+        "not_implemented": 0.01,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-dd8c8f9a",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.97,
+        "contradicted": 0.01,
+        "not_implemented": 0.02,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-90199ce0",
+      "status": "ok",
+      "p": 0.82,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.96,
+        "contradicted": 0.01,
+        "not_implemented": 0.02,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-70858a5b",
+      "status": "ok",
+      "p": 0.76,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.91,
+        "contradicted": 0.01,
+        "not_implemented": 0.04,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-65b86cc0",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-851f3c7c",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-6923119c",
+      "status": "ok",
+      "p": 0.8,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.96,
+        "contradicted": 0.01,
+        "not_implemented": 0.02,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-b5e05684",
+      "status": "ok",
+      "p": 0.95,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-ec6975cf",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-18aa910d",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-f0665065",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-df527545",
+      "status": "ok",
+      "p": 0.82,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.98,
+        "contradicted": 0.0,
+        "not_implemented": 0.02,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-0bc7739e",
+      "status": "ok",
+      "p": 0.86,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.98,
+        "contradicted": 0.0,
+        "not_implemented": 0.02,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-f3249f34",
+      "status": "ok",
+      "p": 0.74,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.8,
+        "contradicted": 0.1,
+        "not_implemented": 0.06,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-4d6f98c2",
+      "status": "ok",
+      "p": 0.88,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.96,
+        "contradicted": 0.0,
+        "not_implemented": 0.02,
+        "unrelated": 0.02
+      }
+    },
+    {
+      "criterion": "C-cc435a91",
+      "status": "ok",
+      "p": 0.88,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.95,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-36562121",
+      "status": "ok",
+      "p": 0.78,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.86,
+        "contradicted": 0.01,
+        "not_implemented": 0.05,
+        "unrelated": 0.08
+      }
+    },
+    {
+      "criterion": "C-8e07c9a6",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-bdf0820d",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-a2eef903",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-f9b82661",
+      "status": "ok",
+      "p": 0.81,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-9455d3fd",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-6ae206c9",
+      "status": "ok",
+      "p": 0.87,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.98,
+        "contradicted": 0.0,
+        "not_implemented": 0.02,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-5fe3458c",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-78fc80d1",
+      "status": "ok",
+      "p": 0.79,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.85,
+        "contradicted": 0.0,
+        "not_implemented": 0.03,
+        "unrelated": 0.12
+      }
+    },
+    {
+      "criterion": "C-5d09e70a",
+      "status": "ok",
+      "p": 0.89,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-d68d430c",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-c63269ba",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-58d38ea1",
+      "status": "ok",
+      "p": 0.79,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.93,
+        "contradicted": 0.06,
+        "not_implemented": 0.01,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-e7ed48e1",
+      "status": "ok",
+      "p": 0.78,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.88,
+        "contradicted": 0.01,
+        "not_implemented": 0.01,
+        "unrelated": 0.1
+      }
+    },
+    {
+      "criterion": "C-bb0edd4e",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-c0da3179",
+      "status": "ok",
+      "p": 0.89,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-6bb73a15",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-eea53b80",
+      "status": "ok",
+      "p": 0.06,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.01,
+        "contradicted": 0.03,
+        "not_implemented": 0.8,
+        "unrelated": 0.16
+      }
+    },
+    {
+      "criterion": "C-8c4b4392",
+      "status": "ok",
+      "p": 0.05,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.89,
+        "unrelated": 0.11
+      }
+    },
+    {
+      "criterion": "C-ba84c521",
+      "status": "ok",
+      "p": 0.04,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.0,
+        "contradicted": 0.05,
+        "not_implemented": 0.85,
+        "unrelated": 0.1
+      }
+    },
+    {
+      "criterion": "C-9ded7e99",
+      "status": "ok",
+      "p": 0.79,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.95,
+        "contradicted": 0.0,
+        "not_implemented": 0.03,
+        "unrelated": 0.02
+      }
+    },
+    {
+      "criterion": "C-069f346e",
+      "status": "unavailable",
+      "p": null,
+      "model": "",
+      "engine": "jev",
+      "reason": "the state does not fit 450 tokens even without the excerpt",
+      "truncated": false,
+      "evidence": null
+    }
+  ],
+  "evidence": {
+    "schema": "l4/evidence@1",
+    "holds": [],
+    "items": {},
+    "scope": {
+      "declared": [
+        "src/main.ts",
+        "src/core",
+        "src/config",
+        "src/observability",
+        "src/api",
+        "src/main.test.ts",
+        "src",
+        "seed",
+        "test",
+        "test/support/pg.ts",
+        "src/<dir>",
+        "src/health.ts",
+        "src/<N>",
+        "src/<N>/index.ts",
+        "test/arch/modules.ts",
+        "undici/x",
+        "src/sandbox",
+        "ursitoare",
+        "test/arch/<rule>.ts",
+        "test/arch/<rule>.test.ts",
+        "docs/decisions/0002",
+        "dns/promises",
+        "test/arch/{sources,rules,secrets}.ts",
+        "test/arch",
+        "test/support",
+        "src/gateway",
+        "src/identity",
+        "test/arch/sources.test.ts",
+        "test/arch/sources.ts",
+        "test/arch/modules.test.ts",
+        "test/arch/rules.ts",
+        "test/arch/imports.test.ts",
+        "test/arch/network.test.ts",
+        "test/arch/hygiene.test.ts",
+        "test/arch/secrets.test.ts",
+        "test/arch/secrets.ts",
+        "test/arch/repo.test.ts",
+        "test/**/*.test.ts",
+        "**/eslint.config.js",
+        "**/index.ts",
+        "**/MODULES[M].allowed",
+        "**/package.json",
+        "**/process[\"env\"]",
+        "**/*.test.ts",
+        "**/^ARCH_[A-Z_]+$",
+        "**/sources.ts",
+        "**/rules.ts",
+        "**/repo.test.ts",
+        "**/[]",
+        "**/modules.ts",
+        "test/arch/*.test.ts",
+        "**/[authoring]",
+        "module <N>",
+        "module <dir>",
+        "module api",
+        "module config",
+        "module core",
+        "module dns",
+        "module docs",
+        "module gateway",
+        "module health",
+        "module identity",
+        "module main",
+        "module main.test",
+        "module observability",
+        "module sandbox",
+        "module test",
+        "module undici"
+      ],
+      "skipped": false,
+      "note": "",
+      "holds": [],
+      "files": [
+        {
+          "path": "openspec/changes/add-architecture-fitness-fix-1/.l4/fix.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-fix-1/.openspec.yaml",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-fix-1/proposal.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-fix-1/tasks.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness/.l4/evidence/round-1/evidence.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness/.l4/evidence/round-1/verdict.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness/.l4/evidence/round-1/verification.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness/.l4/ledger/r-20261026T1619Z-8dc6.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness/.l4/ledger/r-20261026T1915Z-7f92.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness/questions.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness/tasks.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness/verification.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "test/arch/hygiene.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/arch/imports.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/arch/modules.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/arch/modules.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/arch/network.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/arch/repo.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/arch/rules.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/arch/secrets.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/arch/secrets.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/arch/sources.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/arch/sources.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        }
+      ]
+    },
+    "diff_coverage": {
+      "status": "not_applicable",
+      "reason": "diff coverage measures python only; changed code outside it: test/arch/modules.ts, test/arch/rules.ts, test/arch/secrets.ts, test/arch/sources.ts",
+      "percent": 0.0,
+      "unmeasured_files": [],
+      "other_files": [
+        "test/arch/modules.ts",
+        "test/arch/rules.ts",
+        "test/arch/secrets.ts",
+        "test/arch/sources.ts"
+      ],
+      "functions": []
+    },
+    "tests_ran": {
+      "tests_ok": true,
+      "summary": {
+        "total": 257,
+        "passed": 257,
+        "failed": 0,
+        "errored": 0,
+        "skipped": 0,
+        "new": 42,
+        "new_passed": 42,
+        "skipped_unchanged": []
+      },
+      "findings": []
+    }
+  },
+  "human": [],
+  "fix": null,
+  "judge_verdict": {
+    "criteria": [
+      {
+        "id": "C-2073476a",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/sources.ts",
+            "quote": "} else if (ts.isIdentifier(node.expression) && node.expression.text === \"require\") {"
+          },
+          {
+            "kind": "test",
+            "ref": "test.arch.sources.test.ts::C-2073476a require forms are found as value imports with their flags",
+            "quote": null
+          }
+        ],
+        "reasoning": "A bare `require` call is collected with dynamic true. `ImportEqualsDeclaration` takes typeOnly from node.isTypeOnly and dynamic false. `obj.require` has a property-access callee, so it is skipped. The test asserts the four tuples exactly.",
+        "counterexample": null
+      },
+      {
+        "id": "C-eae7dab7",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.repo.test.ts::C-eae7dab7: a require call is a value import of its specifier",
+            "quote": null
+          }
+        ],
+        "reasoning": "Require refs feed checkNetwork, checkModuleGraph and checkForbiddenImports. The test checks the order, codes, lines and three messages.",
+        "counterexample": null
+      },
+      {
+        "id": "C-fa65851b",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/sources.ts",
+            "quote": "typeOnly: node.isTypeOnly,"
+          },
+          {
+            "kind": "test",
+            "ref": "test.arch.network.test.ts::C-fa65851b: an import-equals declaration is a value import",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-8fa501e4",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.network.test.ts::C-8fa501e4: every scanned extension is covered",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-82116acd",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.imports.test.ts::C-82116acd: a non-literal require is unseeable",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-b49548b8",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/rules.ts",
+            "quote": "if (ts.isIdentifier(node) && node.text === \"createRequire\") {\n      push(\"createRequire\", node);"
+          },
+          {
+            "kind": "test",
+            "ref": "test.arch.imports.test.ts::C-b49548b8: createRequire is refused",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-6b1f49c4",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.imports.test.ts::C-6b1f49c4: getBuiltinModule is refused",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-fe3edcae",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/rules.ts",
+            "quote": "(isProcessReference(node.expression) || isEnvRequireCall(node.expression))"
+          },
+          {
+            "kind": "test",
+            "ref": "test.arch.hygiene.test.ts::C-fe3edcae: environment reads through require are refused",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-dd8c8f9a",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.repo.test.ts::C-dd8c8f9a: require look-alikes and test files pass",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-90199ce0",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/modules.ts",
+            "quote": "export const MODULES: Record<string, ModuleRule> = {\n  core: { allowed: [] },"
+          },
+          {
+            "kind": "test",
+            "ref": "test.arch.modules.test.ts::C-90199ce0 C-851f3c7c: the graph holds the 30 modules in roadmap order",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-70858a5b",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.modules.test.ts::C-70858a5b C-851f3c7c: the graph carries the version 3 edges",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-65b86cc0",
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.modules.test.ts::C-65b86cc0 C-851f3c7c: the shipped graph is consistent",
+            "quote": null
+          }
+        ],
+        "reasoning": "checkGraphIntegrity() returns []. Its default is the copy of MODULES inside rules.ts, not the one in modules.ts; the two copies are identical today (see finding).",
+        "counterexample": null
+      },
+      {
+        "id": "C-851f3c7c",
+        "verdict": "fail",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/rules.ts",
+            "quote": "for (const [name, rule] of Object.entries(modules)) {"
+          },
+          {
+            "kind": "file",
+            "ref": "test/arch/rules.ts",
+            "quote": "if (pinned !== undefined && egress === undefined) {"
+          }
+        ],
+        "reasoning": "The THEN says each result also carries the egress-pin violations, because these fixtures name no egress module. The pin check only loops over the rows that are present, so a graph without observability, identity or gateway gets no pin violation. The cycle, zzz, itself and twice messages are produced. The tests assert only those needles and never check the pin violations.",
+        "counterexample": {
+          "call": "import pathlib, subprocess\n\ndef test_fixture_graph_carries_egress_pin_violations():\n    script = pathlib.Path('test/arch/_cx_pin.ts')\n    script.write_text('import { checkGraphIntegrity } from \"./rules.ts\";\\nconst r = checkGraphIntegrity({ a: { allowed: [\"zzz\"] } });\\nprocess.stdout.write(String(r.some((v) => /observability|identity|gateway/.test(v.message))));\\n')\n    try:\n        out = subprocess.run(['node', str(script)], capture_output=True, text=True, check=True).stdout\n    finally:\n        script.unlink()\n    assert out == 'true'\n",
+          "expected": "the result holds egress-pin violations naming observability, identity and gateway",
+          "actual": "one violation only: 'a allows zzz, which is not in test/arch/modules.ts' (out == 'false')"
+        }
+      },
+      {
+        "id": "C-6923119c",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.modules.test.ts::C-6923119c: a new egress capability is refused",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-b5e05684",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.sources.test.ts::C-b5e05684 import forms are found with their lines, type-only and dynamic flags",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-ec6975cf",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.sources.test.ts::C-ec6975cf formatViolation names file, line, code and message for any code",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "test.arch.sources.test.ts::C-ec6975cf sortViolations orders by file, then line, then code",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-18aa910d",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.sources.test.ts::C-18aa910d resolveSpecifier resolves relative imports against the importing file",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-f0665065",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.sources.test.ts::C-f0665065 readSnapshot reads the source files of a real directory without symlinks",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-df527545",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.imports.test.ts::C-df527545: allowed imports and nothing to do pass",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-0bc7739e",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.imports.test.ts::C-0bc7739e C-df527545: a forbidden edge names both modules",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-f3249f34",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.imports.test.ts::C-f3249f34: deep imports are refused",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-4d6f98c2",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.imports.test.ts::C-4d6f98c2: unknown directories are refused",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-cc435a91",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.imports.test.ts::C-cc435a91: root files follow the leaf rule",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-36562121",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.imports.test.ts::C-36562121: unseeable imports are refused and test files are exempt",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-8e07c9a6",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.network.test.ts::C-8e07c9a6: network imports and calls outside egress modules are refused",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-bdf0820d",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.network.test.ts::C-bdf0820d: process and worker entry points are refused",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-a2eef903",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.network.test.ts::C-a2eef903: egress modules, type-only imports, client methods and test files pass",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-f9b82661",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.network.test.ts::C-f9b82661: the bootstrap placeholder fails the network rule",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "test.arch.hygiene.test.ts::C-f9b82661: the bootstrap placeholder fails the environment rule",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-9455d3fd",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.hygiene.test.ts::C-9455d3fd: seed, test and alias imports are refused",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-6ae206c9",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.hygiene.test.ts::C-6ae206c9 C-9455d3fd: look-alike and test-file imports pass",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-5fe3458c",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.hygiene.test.ts::C-5fe3458c: console uses are refused",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-78fc80d1",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.hygiene.test.ts::C-78fc80d1: console look-alikes and test files pass",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-5d09e70a",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.hygiene.test.ts::C-5d09e70a: environment reads are refused",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-d68d430c",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.hygiene.test.ts::C-d68d430c: environment look-alikes and config files pass",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-c63269ba",
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/secrets.ts",
+            "quote": "{ kind: \"pem_private_key\", pattern: /-----BEGIN (?:[A-Z]+ )*PRIVATE KEY(?: BLOCK)? ?-----/ },"
+          },
+          {
+            "kind": "test",
+            "ref": "test.arch.secrets.test.ts::C-c63269ba: each secret kind is detected at its line without echoing the text",
+            "quote": null
+          }
+        ],
+        "reasoning": "Every kind is detected at its line, and no message echoes the secret. The test's PEM line has a space before the closing dashes, unlike the spec's form; the regex also matches the spec's form without the space.",
+        "counterexample": null
+      },
+      {
+        "id": "C-58d38ea1",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.secrets.test.ts::C-58d38ea1: secret look-alikes pass while a real key is still reported",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-e7ed48e1",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.secrets.test.ts::C-e7ed48e1: the file list covers tracked and untracked files only",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-bb0edd4e",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.secrets.test.ts::C-bb0edd4e: an unavailable git fails the scan loudly",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-c0da3179",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean",
+            "quote": null
+          },
+          {
+            "kind": "file",
+            "ref": "test/arch/repo.test.ts",
+            "quote": "assert.deepEqual(answer(() => checkAll(readSnapshot())), []);"
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-6bb73a15",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.repo.test.ts::C-6bb73a15: violations are all listed in one run",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      },
+      {
+        "id": "C-eea53b80",
+        "verdict": "not_verifiable",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean",
+            "quote": null
+          }
+        ],
+        "reasoning": "A process rule that applies only when the merged tree reports a violation. The real tree reports none, and the diff changes no file under src/ or test/support/.",
+        "counterexample": null
+      },
+      {
+        "id": "C-8c4b4392",
+        "verdict": "not_verifiable",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean",
+            "quote": null
+          }
+        ],
+        "reasoning": "No ARCH_UNKNOWN_MODULE occurred, so no blocker was due; a process rule.",
+        "counterexample": null
+      },
+      {
+        "id": "C-ba84c521",
+        "verdict": "not_verifiable",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/rules.ts",
+            "quote": null
+          }
+        ],
+        "reasoning": "A process rule for false positives; none is shown to have occurred.",
+        "counterexample": null
+      },
+      {
+        "id": "C-9ded7e99",
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean",
+            "quote": null
+          }
+        ],
+        "reasoning": "checkModuleGraph(readSnapshot()) returns [], so no ARCH_UNKNOWN_MODULE is reported for any src/ directory at head.",
+        "counterexample": null
+      },
+      {
+        "id": "C-069f346e",
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "test",
+            "ref": "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean",
+            "quote": null
+          }
+        ],
+        "reasoning": "",
+        "counterexample": null
+      }
+    ],
+    "test_adequacy": [
+      {
+        "test": "test.arch.sources.test.ts::C-2073476a require forms are found as value imports with their flags",
+        "criterion": "C-2073476a",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.repo.test.ts::C-eae7dab7: a require call is a value import of its specifier",
+        "criterion": "C-eae7dab7",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.network.test.ts::C-fa65851b: an import-equals declaration is a value import",
+        "criterion": "C-fa65851b",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.network.test.ts::C-8fa501e4: every scanned extension is covered",
+        "criterion": "C-8fa501e4",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.imports.test.ts::C-82116acd: a non-literal require is unseeable",
+        "criterion": "C-82116acd",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.imports.test.ts::C-b49548b8: createRequire is refused",
+        "criterion": "C-b49548b8",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.imports.test.ts::C-6b1f49c4: getBuiltinModule is refused",
+        "criterion": "C-6b1f49c4",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.hygiene.test.ts::C-fe3edcae: environment reads through require are refused",
+        "criterion": "C-fe3edcae",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.repo.test.ts::C-dd8c8f9a: require look-alikes and test files pass",
+        "criterion": "C-dd8c8f9a",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.modules.test.ts::C-90199ce0 C-851f3c7c: the graph holds the 30 modules in roadmap order",
+        "criterion": "C-90199ce0",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.modules.test.ts::C-70858a5b C-851f3c7c: the graph carries the version 3 edges",
+        "criterion": "C-70858a5b",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.modules.test.ts::C-65b86cc0 C-851f3c7c: the shipped graph is consistent",
+        "criterion": "C-65b86cc0",
+        "adequate": true,
+        "reason": "It checks the default checkGraphIntegrity(), which reads the copy of MODULES in rules.ts, not the one in modules.ts.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.modules.test.ts::C-851f3c7c: inconsistent graphs are reported",
+        "criterion": "C-851f3c7c",
+        "adequate": false,
+        "reason": "It asserts the cycle/zzz/itself/twice needles and the file and line, but never that the egress-pin violations are carried, as the THEN says.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.modules.test.ts::C-6923119c: a new egress capability is refused",
+        "criterion": "C-6923119c",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.sources.test.ts::C-b5e05684 import forms are found with their lines, type-only and dynamic flags",
+        "criterion": "C-b5e05684",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.sources.test.ts::C-ec6975cf formatViolation names file, line, code and message for any code",
+        "criterion": "C-ec6975cf",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.sources.test.ts::C-ec6975cf sortViolations orders by file, then line, then code",
+        "criterion": "C-ec6975cf",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.sources.test.ts::C-18aa910d resolveSpecifier resolves relative imports against the importing file",
+        "criterion": "C-18aa910d",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.sources.test.ts::C-f0665065 readSnapshot reads the source files of a real directory without symlinks",
+        "criterion": "C-f0665065",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.imports.test.ts::C-df527545: allowed imports and nothing to do pass",
+        "criterion": "C-df527545",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.imports.test.ts::C-0bc7739e C-df527545: a forbidden edge names both modules",
+        "criterion": "C-0bc7739e",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.imports.test.ts::C-f3249f34: deep imports are refused",
+        "criterion": "C-f3249f34",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.imports.test.ts::C-4d6f98c2: unknown directories are refused",
+        "criterion": "C-4d6f98c2",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.imports.test.ts::C-cc435a91: root files follow the leaf rule",
+        "criterion": "C-cc435a91",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.imports.test.ts::C-36562121: unseeable imports are refused and test files are exempt",
+        "criterion": "C-36562121",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.network.test.ts::C-8e07c9a6: network imports and calls outside egress modules are refused",
+        "criterion": "C-8e07c9a6",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.network.test.ts::C-bdf0820d: process and worker entry points are refused",
+        "criterion": "C-bdf0820d",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.network.test.ts::C-a2eef903: egress modules, type-only imports, client methods and test files pass",
+        "criterion": "C-a2eef903",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.network.test.ts::C-f9b82661: the bootstrap placeholder fails the network rule",
+        "criterion": "C-f9b82661",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.hygiene.test.ts::C-f9b82661: the bootstrap placeholder fails the environment rule",
+        "criterion": "C-f9b82661",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.hygiene.test.ts::C-9455d3fd: seed, test and alias imports are refused",
+        "criterion": "C-9455d3fd",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.hygiene.test.ts::C-6ae206c9 C-9455d3fd: look-alike and test-file imports pass",
+        "criterion": "C-6ae206c9",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.hygiene.test.ts::C-5fe3458c: console uses are refused",
+        "criterion": "C-5fe3458c",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.hygiene.test.ts::C-78fc80d1: console look-alikes and test files pass",
+        "criterion": "C-78fc80d1",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.hygiene.test.ts::C-5d09e70a: environment reads are refused",
+        "criterion": "C-5d09e70a",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.hygiene.test.ts::C-d68d430c: environment look-alikes and config files pass",
+        "criterion": "C-d68d430c",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.secrets.test.ts::C-c63269ba: each secret kind is detected at its line without echoing the text",
+        "criterion": "C-c63269ba",
+        "adequate": false,
+        "reason": "The PEM fixture is built with join(\" \"), which gives a space before the closing dashes. The spec's form `-----BEGIN RSA PRIVATE KEY-----` is never tested, and the regex was widened to fit the fixture.",
+        "generated_test_misreads_criterion": true
+      },
+      {
+        "test": "test.arch.secrets.test.ts::C-58d38ea1: secret look-alikes pass while a real key is still reported",
+        "criterion": "C-58d38ea1",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.secrets.test.ts::C-e7ed48e1: the file list covers tracked and untracked files only",
+        "criterion": "C-e7ed48e1",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.secrets.test.ts::C-bb0edd4e: an unavailable git fails the scan loudly",
+        "criterion": "C-bb0edd4e",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean",
+        "criterion": "C-c0da3179",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean",
+        "criterion": "C-9ded7e99",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean",
+        "criterion": "C-069f346e",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.arch.repo.test.ts::C-6bb73a15: violations are all listed in one run",
+        "criterion": "C-6bb73a15",
+        "adequate": true,
+        "reason": "",
+        "generated_test_misreads_criterion": false
+      }
+    ],
+    "findings": [
+      {
+        "severity": "major",
+        "criterion": "C-65b86cc0",
+        "title": "The module graph is duplicated: the rules ignore test/arch/modules.ts",
+        "detail": "The fix for F-35492b20 stopped rules.ts from importing modules.ts. Instead, rules.ts defines and exports its own literal MODULES, which is the default for checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll. modules.ts holds a second, independent copy. It is not a re-export, although the implementer's note says it is. A later unit that adds a module or edge in test/arch/modules.ts, as design decision 13 and the proposal say it should, changes nothing the rules read. modules.test.ts checks one copy, while checkGraphIntegrity() and the repo test check the other. rules.ts also exports MODULES, which is not in the Interfaces.",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/rules.ts",
+            "quote": "export const MODULES: Record<string, ModuleRule> = {"
+          },
+          {
+            "kind": "file",
+            "ref": "test/arch/modules.ts",
+            "quote": "export const MODULES: Record<string, ModuleRule> = {"
+          }
+        ],
+        "suggested_fix": "Keep one source of truth: make modules.ts the only literal and have rules.ts import it, or make modules.ts `export { MODULES } from \"./rules.ts\"` if the base-replay constraint forbids the import.",
+        "spec_gap": false
+      },
+      {
+        "severity": "major",
+        "criterion": "C-65b86cc0",
+        "title": "task 2.1: modules.ts is not the graph the rules check",
+        "detail": "Task 2.1 makes test/arch/modules.ts the complete graph data file and builds checkGraphIntegrity on it. At head, checkGraphIntegrity defaults to a separate copy in rules.ts, so the data file has no effect on any rule.",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/rules.ts",
+            "quote": "export function checkGraphIntegrity(modules: Record<string, ModuleRule> = MODULES): Violation[] {"
+          }
+        ],
+        "suggested_fix": "Have rules.ts take its default MODULES from test/arch/modules.ts.",
+        "spec_gap": false
+      },
+      {
+        "severity": "major",
+        "criterion": "C-851f3c7c",
+        "title": "The egress pin is not checked when a pinned module row is missing",
+        "detail": "checkGraphIntegrity checks the pin only for rows that are present. Deleting the `gateway` row, or any fixture without the three egress modules, reports no pin violation. This contradicts the C-851f3c7c THEN, which says each result carries the egress-pin violations, and design decision 6, which says the egress modules are exactly observability, identity and gateway.",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/rules.ts",
+            "quote": "for (const [name, rule] of Object.entries(modules)) {"
+          }
+        ],
+        "suggested_fix": "Also loop over PINNED_EGRESS and report a pinned module that is missing from `modules` or carries no egress value.",
+        "spec_gap": false
+      },
+      {
+        "severity": "major",
+        "criterion": "C-a2eef903",
+        "title": "A default import with all-type named specifiers is treated as type-only",
+        "detail": "namedBindingsAreTypeOnly ignores the default binding. `import https, { type Agent } from \"node:https\";` is therefore marked typeOnly, and checkNetwork skips it, although `https` is a value import. Design decision 3 makes a declaration type-only only when it has nothing but named specifiers, at least one, all `type`-modified. This bypasses the network and worker_threads rules.",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/sources.ts",
+            "quote": "return bindings.elements.length > 0 && bindings.elements.every((element) => element.isTypeOnly);"
+          }
+        ],
+        "suggested_fix": "Return false from namedBindingsAreTypeOnly when the ImportClause has a default `name`.",
+        "spec_gap": false
+      },
+      {
+        "severity": "minor",
+        "criterion": "C-82116acd",
+        "title": "A template-literal require or import specifier is only a dynamic import",
+        "detail": "literalText accepts only StringLiteral. `require(`node:https`)` gets specifier null: checkModuleGraph reports ARCH_DYNAMIC_IMPORT and checkNetwork reports nothing. Another reasonable implementation would read the NoSubstitutionTemplateLiteral as the literal `node:https`.",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/sources.ts",
+            "quote": "if (node !== undefined && ts.isStringLiteral(node)) return node.text;"
+          }
+        ],
+        "suggested_fix": "WHEN src/api/a.ts has const h = require(`node:https`); THEN checkModuleGraph reports ARCH_DYNAMIC_IMPORT with message `use a literal specifier` at that line and checkNetwork reports nothing for it.",
+        "spec_gap": true
+      },
+      {
+        "severity": "minor",
+        "criterion": "C-6b1f49c4",
+        "title": "A getBuiltinModule reference without a call is not reported",
+        "detail": "Only calls of getBuiltinModule are flagged. `const g = process.getBuiltinModule;` passes. createRequire, by contrast, is flagged as any identifier.",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/rules.ts",
+            "quote": "} else if (ts.isCallExpression(node)) {"
+          }
+        ],
+        "suggested_fix": "WHEN src/api/b.ts has const g = process.getBuiltinModule; THEN checkModuleGraph reports no violation for that line.",
+        "spec_gap": true
+      },
+      {
+        "severity": "minor",
+        "criterion": null,
+        "title": "Stale scaffold comment kept in rules.ts",
+        "detail": "rules.ts still starts with the comment `Signature stub (milestone scaffold...)` although it is now implemented. The comment was removed from sources.ts and secrets.ts.",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/arch/rules.ts",
+            "quote": "// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this module implements it."
+          }
+        ],
+        "suggested_fix": "Remove the stub comment.",
+        "spec_gap": false
+      }
+    ],
+    "riskiest_assumptions": [
+      "That the C-851f3c7c THEN sentence about the egress-pin violations is a required outcome and not just an explanation of why the test asserts with `some`.",
+      "That the gate's passing test run reflects the committed head, including the real-tree check over src/.",
+      "That the TypeScript parser handles `import type X = require(...)` and .cjs/.mjs/.tsx files the way I traced them in the AST walk."
+    ],
+    "feedback": null,
+    "accepted": null,
+    "satisfied": null
+  },
+  "cx_runs": {
+    "C-851f3c7c": {
+      "status": "unexecuted",
+      "note": "not executed in M0: the verifier worktree is M1 (verifier 1.5)"
+    }
+  },
+  "tests": {
+    "src.api.errors.test.ts::C-3284ea9e toErrorResponse maps an ApiError with and without details": "passed",
+    "src.api.errors.test.ts::C-3284ea9e ApiError refuses a status outside 400 to 599 or a malformed code": "passed",
+    "src.api.errors.test.ts::C-240590ab toErrorResponse maps body schema failures to field details": "passed",
+    "src.api.errors.test.ts::C-240590ab toErrorResponse reports query and path parameter fields": "passed",
+    "src.api.errors.test.ts::C-d145c766 toErrorResponse maps malformed JSON oversized and wrongly typed bodies": "passed",
+    "src.api.errors.test.ts::C-d145c766 toErrorResponse keeps another 4xx status as BAD_REQUEST": "passed",
+    "src.api.errors.test.ts::C-aea19ec5 toErrorResponse hides an unknown error behind INTERNAL": "passed",
+    "src.api.health.test.ts::C-14452135 an empty registry reports ok with no checks": "passed",
+    "src.api.health.test.ts::C-14452135 checks that resolve ok are reported by name": "passed",
+    "src.api.health.test.ts::C-609c36a3 a check that resolves fail marks the report failed": "passed",
+    "src.api.health.test.ts::C-609c36a3 a check that throws fails without leaking its message": "passed",
+    "src.api.health.test.ts::C-609c36a3 a check that never settles times out after 10 ms": "passed",
+    "src.api.health.test.ts::C-609c36a3 a check that resolves junk fails as an invalid result": "passed",
+    "src.api.health.test.ts::C-64e17386 duplicate and invalid names are refused": "passed",
+    "src.api.health.test.ts::C-64e17386 overlapping runs call every check once": "passed",
+    "src.api.health.test.ts::C-64e17386 a check registered after a run appears in the next run": "passed",
+    "src.api.server.test.ts::buildServer hands an injectable server to the routes a test adds": "passed",
+    "src.api.server.test.ts::C-3284ea9e buildServer answers an ApiError with its own status code and details": "passed",
+    "src.api.server.test.ts::C-240590ab buildServer reports the first body query or path schema fault": "passed",
+    "src.api.server.test.ts::C-d145c766 buildServer keeps the fixed codes for malformed oversized and wrongly typed bodies": "passed",
+    "src.api.server.test.ts::C-aea19ec5 unknown errors answer INTERNAL and never log hunter2": "passed",
+    "src.api.server.test.ts::C-71327adc a well-formed x-request-id is kept and the route is logged without the query": "passed",
+    "src.api.server.test.ts::C-2490a98e a path that carries a token logs the wildcard route only": "passed",
+    "src.api.server.test.ts::C-c68d2bde missing malformed and oversized request ids are replaced": "passed",
+    "src.api.server.test.ts::C-64866f0f a 404 and a thrown error both carry the request id": "passed",
+    "src.api.server.test.ts::C-3c17bb81 a recording tracer holds one ended http.request span per request": "passed",
+    "src.api.server.test.ts::C-595eb185 a failing tracer logs a warning and the request still succeeds": "passed",
+    "src.api.server.test.ts::C-14452135 GET /health with no checks reports ok and healthPayload is unchanged": "passed",
+    "src.api.server.test.ts::C-14452135 GET /health reports passing checks by name": "passed",
+    "src.api.server.test.ts::C-ce3d89ea the health request log holds the route without the query token": "passed",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a failing check without leaking its content": "passed",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a throwing check without its message": "passed",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a hanging check as a timeout": "passed",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a junk check result as invalid": "passed",
+    "src.api.shutdown.test.ts::C-341a5ed6 a SIGTERM then SIGINT closes once and exits zero": "passed",
+    "src.api.shutdown.test.ts::C-3d0f68d6 a direct shutdown is idempotent and resolves undefined after exit zero": "passed",
+    "src.api.shutdown.test.ts::C-3d0f68d6 dispose removes both signal listeners and never closes": "passed",
+    "src.api.shutdown.test.ts::C-78a31ae6 a missed drain deadline force closes and exits one": "passed",
+    "src.api.shutdown.test.ts::C-78a31ae6 a failed close logs shutdown failed without the error text": "passed",
+    "src.api.shutdown.test.ts::C-9abd6ccb requests during the drain still get the envelope and the slow request finishes": "passed",
+    "src.config.config.test.ts::C-7b6bccec loadConfig returns every documented default for an empty environment": "passed",
+    "src.config.config.test.ts::C-95e9881e loadConfig reads every non-secret setting from the environment and drops a trailing slash": "passed",
+    "src.config.config.test.ts::C-95e9881e loadConfig derives publicBaseUrl from the port and ignores empty or unknown variables": "passed",
+    "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad port host log level or role": "passed",
+    "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad drain deadline or public base URL without echoing the value": "passed",
+    "src.config.config.test.ts::C-f3f5587d loadConfig refuses a non-empty secret-shaped variable without echoing its value": "passed",
+    "src.config.config.test.ts::C-f3f5587d loadConfig ignores an empty secret-shaped variable": "passed",
+    "src.config.config.test.ts::C-7a4aa4d4 loadConfig reads the engine key from its file and strips the trailing newline": "passed",
+    "src.config.config.test.ts::C-ca797e1f loadConfig refuses an empty or unreadable engine key file with CONFIG_SECRET_EMPTY": "passed",
+    "src.config.config.test.ts::C-ca797e1f loadConfig refuses a weak engine key with CONFIG_INVALID naming its file variable": "passed",
+    "src.config.config.test.ts::C-16430cae a loaded config hides the engine key and database password from JSON String and inspect": "passed",
+    "src.config.config.test.ts::C-406ddaa1 loadConfig parses app and owner database endpoints with secret passwords": "passed",
+    "src.config.config.test.ts::C-406ddaa1 loadConfig keeps a postgresql sslmode URL unchanged and leaves a missing password null": "passed",
+    "src.config.config.test.ts::C-3d74e0ae a bad database URL is CONFIG_INVALID naming the URL variable without the password": "passed",
+    "src.config.config.test.ts::C-3d74e0ae a bad owner database URL names the owner URL variable": "passed",
+    "src.config.config.test.ts::C-3d74e0ae a database password file without its URL names the password-file variable": "passed",
+    "src.config.config.test.ts::C-3d74e0ae an empty database password file with a valid URL gives CONFIG_SECRET_EMPTY": "passed",
+    "src.config.secret.test.ts::C-16430cae a Secret hides its value from JSON String and inspect": "passed",
+    "src.config.secret.test.ts::C-7a4aa4d4 readSecretValue strips one trailing newline and reads the named file once": "passed",
+    "src.config.secret.test.ts::C-ca797e1f readSecretValue refuses empty whitespace-only and unreadable secrets without their text": "passed",
+    "src.config.secret.test.ts::C-ca797e1f a weak engine key is CONFIG_INVALID with its file variable": "passed",
+    "src.config.secret.test.ts::C-3d74e0ae ConfigError names the variable and rule without a value": "passed",
+    "src.config.secret.test.ts::C-406ddaa1 readSecretValue returns a Secret for a database password file": "passed",
+    "src.core.clock.test.ts::C-6f8e2578 fixedClock returns distinct Date objects for one instant": "passed",
+    "src.core.clock.test.ts::C-6f8e2578 fixedClock rejects an invalid date": "passed",
+    "src.core.ids.test.ts::C-6f8e2578 createIds writes the timestamp version counter variant and random bits": "passed",
+    "src.core.ids.test.ts::C-6004f84c the counter rolls into the timestamp after 4096 ids": "passed",
+    "src.core.ids.test.ts::C-6004f84c ids stay ordered when the clock moves forward and back": "passed",
+    "src.core.ids.test.ts::C-68b36af5 createIds rejects prefixes outside the lower-case rule": "passed",
+    "src.core.ids.test.ts::C-68b36af5 systemIds returns a uuidv7 with its prefix": "passed",
+    "src.core.ids.test.ts::C-68b36af5 sequentialIds counts from its seed": "passed",
+    "src.core.ids.test.ts::C-68b36af5 sequentialIds rejects a bad seed and overflow": "passed",
+    "src.db.base.test.ts::C-d4c6bb53 the base migration records the ledger and keeps objects owned by the owner role": "passed",
+    "src.db.base.test.ts::C-e3e42ffe the app role has only USAGE on the schema": "passed",
+    "src.db.base.test.ts::C-162b9c47 new functions and tables start closed to the app role": "passed",
+    "src.db.base.test.ts::C-081c5cff the app role is subject to forced row level security": "passed",
+    "src.db.files.test.ts::C-8a52d337 readMigrationFiles sorts valid files and hashes their bytes": "passed",
+    "src.db.files.test.ts::C-8a52d337 readMigrationFiles allows gaps and returns an empty list for an empty directory": "passed",
+    "src.db.files.test.ts::C-55276583 readMigrationFiles refuses duplicate versions": "passed",
+    "src.db.files.test.ts::C-55276583 readMigrationFiles refuses badly named entries": "passed",
+    "src.db.files.test.ts::C-55276583 readMigrationFiles refuses version zero and non-file entries": "passed",
+    "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses an empty file": "passed",
+    "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses transaction control lines": "passed",
+    "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses a directory that does not exist": "passed",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok only for a migrated unprivileged role": "passed",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck fails closed when the query rejects or times out": "passed",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck refuses an invalid timeout before querying": "passed",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok for a migrated test database": "passed",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail for an unmigrated test database": "passed",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail after the test database is closed": "passed",
+    "src.db.migrate.test.ts::C-c664fa4c migrate applies files in order, repeats, extends and fills a gap": "passed",
+    "src.db.migrate.test.ts::C-4a57a001 a failing migration rolls back, releases the lock and stops": "passed",
+    "src.db.migrate.test.ts::C-2735b4ff C-c664fa4c migrate bootstraps an empty directory and applies a later file": "passed",
+    "src.db.migrate.test.ts::C-b2b0429a migrate refuses an edited missing renamed or emptied file set": "passed",
+    "src.db.migrate.test.ts::C-77b8f169 two runners are serialised by the advisory lock": "passed",
+    "src.db.migrate.test.ts::C-3815951d migrate times out on a held lock and releases its own after a failure": "passed",
+    "src.db.migrate.test.ts::C-3815951d migrate refuses an invalid lock timeout before querying": "passed",
+    "src.db.migrate.test.ts::C-94eda93a migrate refuses missing and privileged roles before any DDL": "passed",
+    "src.db.open.test.ts::C-1f0e219e openDatabase returns null for no endpoint and warns once for an owner alone": "passed",
+    "src.db.open.test.ts::C-869163e0 openDatabase registers db once, ok, then fail after close twice": "passed",
+    "src.db.open.test.ts::C-7454acfb openDatabase on an unmigrated database registers db, fails it and warns once": "passed",
+    "src.db.open.test.ts::C-32617fd8 openDatabase fails closed on a closed port after one sleep of the remaining time": "passed",
+    "src.db.open.test.ts::C-faf8f8a6 openDatabase refuses a superuser whose cluster starts during the first sleep": "passed",
+    "src.db.open.test.ts::C-69717e99 openDatabase refuses every privileged app endpoint and registers nothing": "passed",
+    "src.db.open.test.ts::C-32617fd8 openDatabase rejects a bad openTimeoutMs and a bad scheme without sleeping": "passed",
+    "src.db.partitions.test.ts::C-fb7ba2ed ensurePartitions creates the monthly window and routes rows": "passed",
+    "src.db.partitions.test.ts::C-c37e9432 ensurePartitions creates daily partitions and refuses bad window options": "passed",
+    "src.db.partitions.test.ts::C-5cc5a771 ensurePartitions ignores list and hash parents and refuses unusable range tables": "passed",
+    "src.db.partitions.test.ts::C-f0ece24f ensurePartitions skips a range whose rows already sit in the DEFAULT partition": "passed",
+    "src.db.partitions.test.ts::C-87e84b3f ensurePartitions serialises callers and fails closed when Postgres is down": "passed",
+    "src.db.pool.test.ts::C-7c1574be createPool builds a pool from an endpoint password with the default options": "passed",
+    "src.db.pool.test.ts::C-7c1574be createPool accepts postgresql URLs and verify-full TLS": "passed",
+    "src.db.pool.test.ts::C-63221721 createPool refuses bad endpoints and options without echoing them": "passed",
+    "src.db.pool.test.ts::C-dc754ade an idle client error reaches onError once and never throws": "passed",
+    "src.db.prepare.test.ts::C-58e0ebf0 prepareDatabase migrates first and then creates the partition window": "passed",
+    "src.db.roles.test.ts::C-f1949ac2 ensureRoles creates repeats and repairs the login roles": "passed",
+    "src.db.roles.test.ts::C-d380769b ensureRoles refuses empty non-ASCII NUL and oversized passwords": "passed",
+    "src.db.roles.test.ts::C-d380769b ensureRoles refuses a weak admin with DB_ROLES_FAILED": "passed",
+    "src.db.roles.test.ts::C-d380769b ensureRoles keeps a quoted password and the owner role": "passed",
+    "src.health.test.ts::healthPayload reports ok and the given version": "passed",
+    "src.main.db.test.ts::C-b3bd64b0 main opens no database and keeps health green": "passed",
+    "src.main.db.test.ts::C-fb007fe9 main registers db, serves ok then fail, and never opens the owner": "passed",
+    "src.main.db.test.ts::C-ad848b65 main writes one fatal line and opens no port when the open fails": "passed",
+    "src.main.db.test.ts::C-6d93e8d5 shutdown and a failed listen end the app pool": "passed",
+    "src.main.test.ts::C-6912835f startServer serves health on the bound loopback port and closes": "passed",
+    "src.main.test.ts::C-c7407753 main starts a port-0 server and stops on SIGTERM": "passed",
+    "src.main.test.ts::C-c7407753 main listens on the configured host and reports it": "passed",
+    "src.main.test.ts::C-469d7fec main writes one fatal line for an empty secret file": "passed",
+    "src.main.test.ts::C-469d7fec main writes one fatal line without the error text for an unknown failure": "passed",
+    "src.main.test.ts::C-469d7fec main reports EADDRINUSE for a busy port at info and silent": "passed",
+    "src.observability.logger.test.ts::C-d18af48d a warn logger writes one ISO-timed line and drops records below its level": "passed",
+    "src.observability.logger.test.ts::C-d18af48d a silent logger writes nothing while a warn logger on the same input does": "passed",
+    "src.observability.logger.test.ts::C-cc8bd5a6 the listed secret keys are redacted from depth zero to three": "passed",
+    "src.observability.logger.test.ts::C-cc8bd5a6 authorization cookie and set-cookie are redacted alone and under headers": "passed",
+    "src.observability.logger.test.ts::C-fc60a608 an error is logged as type, string code and frames only": "passed",
+    "src.observability.logger.test.ts::C-fc60a608 an error without a string code has no code key": "passed",
+    "src.observability.logger.test.ts::C-fc60a608 a request is logged as method and route pattern, never its URL": "passed",
+    "src.observability.logger.test.ts::C-fc60a608 a request without a route pattern logs url unmatched": "passed",
+    "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end": "passed",
+    "src.observability.tracer.test.ts::C-3c17bb81 noopTracer starts a span without attributes": "passed",
+    "test.arch.hygiene.test.ts::C-9455d3fd: seed, test and alias imports are refused": "passed",
+    "test.arch.hygiene.test.ts::C-6ae206c9 C-9455d3fd: look-alike and test-file imports pass": "passed",
+    "test.arch.hygiene.test.ts::C-5fe3458c: console uses are refused": "passed",
+    "test.arch.hygiene.test.ts::C-78fc80d1: console look-alikes and test files pass": "passed",
+    "test.arch.hygiene.test.ts::C-5d09e70a: environment reads are refused": "passed",
+    "test.arch.hygiene.test.ts::C-d68d430c: environment look-alikes and config files pass": "passed",
+    "test.arch.hygiene.test.ts::C-f9b82661: the bootstrap placeholder fails the environment rule": "passed",
+    "test.arch.hygiene.test.ts::C-fe3edcae: environment reads through require are refused": "passed",
+    "test.arch.imports.test.ts::C-df527545: allowed imports and nothing to do pass": "passed",
+    "test.arch.imports.test.ts::C-0bc7739e C-df527545: a forbidden edge names both modules": "passed",
+    "test.arch.imports.test.ts::C-4d6f98c2: unknown directories are refused": "passed",
+    "test.arch.imports.test.ts::C-f3249f34: deep imports are refused": "passed",
+    "test.arch.imports.test.ts::C-cc435a91: root files follow the leaf rule": "passed",
+    "test.arch.imports.test.ts::C-36562121: unseeable imports are refused and test files are exempt": "passed",
+    "test.arch.imports.test.ts::C-82116acd: a non-literal require is unseeable": "passed",
+    "test.arch.imports.test.ts::C-b49548b8: createRequire is refused": "passed",
+    "test.arch.imports.test.ts::C-6b1f49c4: getBuiltinModule is refused": "passed",
+    "test.arch.licences.test.ts::C-b7a7ed55 parseLicenceExpression reads the distinct terms of an expression": "passed",
+    "test.arch.licences.test.ts::C-1524fbc5 parseLicenceExpression gives null for malformed expressions only": "passed",
+    "test.arch.licences.test.ts::C-f0b009a1 formatLicenceViolation names code, subject, licence and detail": "passed",
+    "test.arch.licences.test.ts::C-db08d47c formatLicenceViolation cuts a long licence text and omits an absent one": "passed",
+    "test.arch.licences.test.ts::C-1c977f83 formatLicenceViolations joins the lines with a newline and gives an empty string for none": "passed",
+    "test.arch.licences.test.ts::C-2fb3cbe9 checkLicences fails a copyleft term": "passed",
+    "test.arch.licences.test.ts::C-30fdcfea checkLicences passes permissive licences": "passed",
+    "test.arch.licences.test.ts::C-ae5033da checkLicences reports a package without a licence": "passed",
+    "test.arch.licences.test.ts::C-30f06cd4 checkLicences judges every term of a licence expression": "passed",
+    "test.arch.licences.test.ts::C-ca426357 checkLicences refuses a near-miss identifier": "passed",
+    "test.arch.licences.test.ts::C-7f94877e checkLicences matches terms without regard to case": "passed",
+    "test.arch.licences.test.ts::C-ff913dc5 checkLicences gives fixed subjects and details": "passed",
+    "test.arch.licences.test.ts::C-92d19a9f C-6107b0c0 checkLicences exempts only the reviewed version and licence text": "passed",
+    "test.arch.licences.test.ts::C-7b90839f checkPolicy rejects malformed policy data in order": "passed",
+    "test.arch.licences.test.ts::C-8eaf01ec checkPolicy admits pypi release segment versions": "passed",
+    "test.arch.licences.test.ts::C-6c266a75 checkPolicy refuses pypi versions that are not a release segment": "passed",
+    "test.arch.licences.test.ts::C-991042c4 checkPolicy judges npm exception versions with isExactVersion": "passed",
+    "test.arch.licences.test.ts::C-ae2f6322 checkPolicy does not judge an unknown ecosystem on its version": "passed",
+    "test.arch.licences.test.ts::C-65a32526 checkPolicy accepts the reviewed exception version": "passed",
+    "test.arch.licences.test.ts::C-c18692e2 C-73030b3f the licence policy data is well formed": "passed",
+    "test.arch.licences.test.ts::C-a74a1a7f scanNpmStore walks the store without following symlinks": "passed",
+    "test.arch.licences.test.ts::C-6a008a66 npmLicenceOf treats a legacy or free-text licence as unknown": "passed",
+    "test.arch.licences.test.ts::C-876fb064 an absent or empty store fails instead of passing": "passed",
+    "test.arch.licences.test.ts::C-9d08ccc3 every installed npm package has an allowlisted licence": "passed",
+    "test.arch.licences.test.ts::C-706e1113 pythonLicenceOf reads an SPDX License-Expression": "passed",
+    "test.arch.licences.test.ts::C-0910d0a3 pythonLicenceOf falls back from free text to the classifiers": "passed",
+    "test.arch.licences.test.ts::C-dcc52cf2 a permissive classifier cannot hide a copyleft License text": "passed",
+    "test.arch.licences.test.ts::C-04784843 a one-word License is judged as an identifier": "passed",
+    "test.arch.licences.test.ts::C-0db64dfc unmapped classifiers and missing licences fail": "passed",
+    "test.arch.licences.test.ts::C-1fa7c3d4 scanPythonVenv reads dist-info across Python minors": "passed",
+    "test.arch.licences.test.ts::C-2241065a decideVenvScan skips an absent venv that is not required": "passed",
+    "test.arch.licences.test.ts::C-4ca6b05c decideVenvScan fails an absent venv that is required": "passed",
+    "test.arch.licences.test.ts::C-87f4def2 C-69c81a68 decideVenvScan scans a present venv, and a present venv with no distributions fails": "passed",
+    "test.arch.licences.test.ts::C-8be4d4fc every Python distribution in the e2e venv has an allowlisted licence": "passed",
+    "test.arch.licences.test.ts::C-b51bd435 checkExactVersions refuses ranges, tags and other specs": "passed",
+    "test.arch.licences.test.ts::C-ec3544f7 C-b51bd435 checkExactVersions passes exact versions and refuses a range": "passed",
+    "test.arch.licences.test.ts::C-6faaac53 checkExactVersions refuses a range in pnpm overrides": "passed",
+    "test.arch.licences.test.ts::C-c39c579d checkExactVersions ignores other fields and refuses bad manifests": "passed",
+    "test.arch.licences.test.ts::C-7fbf0b22 checkExactVersions names manifest violations": "passed",
+    "test.arch.licences.test.ts::C-05d0c7f9 C-b51bd435 every dependency range in the root and web manifests is an exact version": "passed",
+    "test.arch.licences.test.ts::C-606611bb C-41ded6c9 onlyBuiltDependencies equals the reviewed list": "passed",
+    "test.arch.licences.test.ts::C-41ded6c9 checkBuiltDependencies fails an added package": "passed",
+    "test.arch.licences.test.ts::C-4557b8b9 checkBuiltDependencies fails a removed package or a duplicate": "passed",
+    "test.arch.licences.test.ts::C-ed7ff850 checkBuiltDependencies handles an absent key, an empty reviewed list and an unsupported form": "passed",
+    "test.arch.licences.test.ts::C-59b6d3e2 checkBuiltDependencies fails a missing workspace file": "passed",
+    "test.arch.licences.test.ts::C-75476b3c checkBuiltDependencies gives the fixed drift details in order": "passed",
+    "test.arch.licences.test.ts::C-67d87882 checkInstallHooks refuses every install-time lifecycle script": "passed",
+    "test.arch.licences.test.ts::C-7dd0d742 checkInstallHooks refuses a pnpm setting other than overrides": "passed",
+    "test.arch.licences.test.ts::C-a223af90 checkInstallHooks allows ordinary scripts and overrides and refuses bad shapes": "passed",
+    "test.arch.licences.test.ts::C-2ae464e9 checkInstallFiles reports a root pnpmfile": "passed",
+    "test.arch.licences.test.ts::C-4767d4f0 checkInstallFiles refuses forbidden workspace keys": "passed",
+    "test.arch.licences.test.ts::C-0f36e537 checkInstallFiles refuses forbidden npmrc keys": "passed",
+    "test.arch.licences.test.ts::C-0797a2c3 topLevelKeys reads keys from column zero only": "passed",
+    "test.arch.licences.test.ts::C-79c32cd5 C-2ae464e9 checkInstallFiles finds nothing in clean roots and a pnpmfile in a dirty one": "passed",
+    "test.arch.licences.test.ts::C-79c32cd5 C-67d87882 the repository runs no install hooks": "passed",
+    "test.arch.licences.test.ts::C-ce1eedc7 findForbiddenImports reports imports, dynamic imports, require and fetch": "passed",
+    "test.arch.licences.test.ts::C-ed8723d5 findForbiddenImports ignores text inside comments and literals": "passed",
+    "test.arch.licences.test.ts::C-115a4581 C-ce1eedc7 the licence gate reads files only": "passed",
+    "test.arch.modules.test.ts::C-90199ce0 C-851f3c7c: the graph holds the 30 modules in roadmap order": "passed",
+    "test.arch.modules.test.ts::C-70858a5b C-851f3c7c: the graph carries the version 3 edges": "passed",
+    "test.arch.modules.test.ts::C-65b86cc0 C-851f3c7c: the shipped graph is consistent": "passed",
+    "test.arch.modules.test.ts::C-851f3c7c: inconsistent graphs are reported": "passed",
+    "test.arch.modules.test.ts::C-6923119c: a new egress capability is refused": "passed",
+    "test.arch.network.test.ts::C-8e07c9a6: network imports and calls outside egress modules are refused": "passed",
+    "test.arch.network.test.ts::C-bdf0820d: process and worker entry points are refused": "passed",
+    "test.arch.network.test.ts::C-a2eef903: egress modules, type-only imports, client methods and test files pass": "passed",
+    "test.arch.network.test.ts::C-fa65851b: an import-equals declaration is a value import": "passed",
+    "test.arch.network.test.ts::C-8fa501e4: every scanned extension is covered": "passed",
+    "test.arch.network.test.ts::C-f9b82661: the bootstrap placeholder fails the network rule": "passed",
+    "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean": "passed",
+    "test.arch.repo.test.ts::C-6bb73a15: violations are all listed in one run": "passed",
+    "test.arch.repo.test.ts::C-eae7dab7: a require call is a value import of its specifier": "passed",
+    "test.arch.repo.test.ts::C-dd8c8f9a: require look-alikes and test files pass": "passed",
+    "test.arch.secrets.test.ts::C-c63269ba: each secret kind is detected at its line without echoing the text": "passed",
+    "test.arch.secrets.test.ts::C-58d38ea1: secret look-alikes pass while a real key is still reported": "passed",
+    "test.arch.secrets.test.ts::C-e7ed48e1: the file list covers tracked and untracked files only": "passed",
+    "test.arch.secrets.test.ts::C-bb0edd4e: an unavailable git fails the scan loudly": "passed",
+    "test.arch.sources.test.ts::C-ec6975cf formatViolation names file, line, code and message for any code": "passed",
+    "test.arch.sources.test.ts::C-ec6975cf sortViolations orders by file, then line, then code": "passed",
+    "test.arch.sources.test.ts::C-18aa910d resolveSpecifier resolves relative imports against the importing file": "passed",
+    "test.arch.sources.test.ts::C-b5e05684 import forms are found with their lines, type-only and dynamic flags": "passed",
+    "test.arch.sources.test.ts::C-2073476a require forms are found as value imports with their flags": "passed",
+    "test.arch.sources.test.ts::C-f0665065 readSnapshot reads the source files of a real directory without symlinks": "passed",
+    "test.support.global-setup.test.ts::C-589bae1c global setup publishes the coordinates of a migrated shared cluster": "passed",
+    "test.support.global-setup.test.ts::C-b3edfa92 global setup starts a cluster and global teardown stops it": "passed",
+    "test.support.pg.test.ts::C-6d9f36e4 withTestDatabase clones fresh isolated databases with owner and app pools": "passed",
+    "test.support.pg.test.ts::C-6d9f36e4 migrated false has no schema while the default clone does": "passed",
+    "test.support.pg.test.ts::C-6d9f36e4 eight databases run in parallel and all drop on close": "passed",
+    "test.support.pg.test.ts::C-081c5cff the app pool is subject to row level security": "passed",
+    "test.support.pg.test.ts::C-f2409274 startCluster refuses a busy port and removes its data directory": "passed",
+    "test.support.pg.test.ts::C-f2409274 withTestDatabase needs TEST_PG_CLUSTER when no cluster is given": "passed",
+    "test.tooling.node-test-junit.test.ts::an assertion failure carries type AssertionError and the name in its message": "passed",
+    "test.tooling.node-test-junit.test.ts::a stub that throws not implemented is reported as NotImplementedError": "passed",
+    "test.tooling.node-test-junit.test.ts::any other error keeps its own name": "passed",
+    "test.tooling.node-test-junit.test.ts::a passing test has no failure and skip and todo are skipped": "passed",
+    "test.tooling.node-test-junit.test.ts::same-named tests in two files get distinct classnames": "passed",
+    "test.tooling.node-test-junit.test.ts::nested describes become part of the classname": "passed",
+    "test.tooling.node-test-junit.test.ts::a describe body that throws is reported as a failure of the suite": "passed",
+    "test.tooling.node-test-junit.test.ts::a file that does not import is a collection failure without classname": "passed",
+    "test_health::test_health_reports_ok[chromium]": "passed"
+  },
+  "red_green": {
+    "test.arch.sources.test.ts::C-18aa910d resolveSpecifier resolves relative imports against the importing file": "1.1",
+    "test.arch.sources.test.ts::C-ec6975cf formatViolation names file, line, code and message for any code": "1.1",
+    "test.arch.sources.test.ts::C-ec6975cf sortViolations orders by file, then line, then code": "1.1",
+    "test.arch.sources.test.ts::C-f0665065 readSnapshot reads the source files of a real directory without symlinks": "1.1",
+    "test.arch.sources.test.ts::C-2073476a require forms are found as value imports with their flags": "1.2",
+    "test.arch.sources.test.ts::C-b5e05684 import forms are found with their lines, type-only and dynamic flags": "1.2",
+    "test.arch.modules.test.ts::C-65b86cc0 C-851f3c7c: the shipped graph is consistent": "2.1",
+    "test.arch.modules.test.ts::C-6923119c: a new egress capability is refused": "2.1",
+    "test.arch.modules.test.ts::C-70858a5b C-851f3c7c: the graph carries the version 3 edges": "2.1",
+    "test.arch.modules.test.ts::C-851f3c7c: inconsistent graphs are reported": "2.1",
+    "test.arch.modules.test.ts::C-90199ce0 C-851f3c7c: the graph holds the 30 modules in roadmap order": "2.1",
+    "test.arch.imports.test.ts::C-0bc7739e C-df527545: a forbidden edge names both modules": "2.2",
+    "test.arch.imports.test.ts::C-4d6f98c2: unknown directories are refused": "2.2",
+    "test.arch.imports.test.ts::C-df527545: allowed imports and nothing to do pass": "2.2",
+    "test.arch.imports.test.ts::C-36562121: unseeable imports are refused and test files are exempt": "2.3",
+    "test.arch.imports.test.ts::C-6b1f49c4: getBuiltinModule is refused": "2.3",
+    "test.arch.imports.test.ts::C-82116acd: a non-literal require is unseeable": "2.3",
+    "test.arch.imports.test.ts::C-b49548b8: createRequire is refused": "2.3",
+    "test.arch.imports.test.ts::C-cc435a91: root files follow the leaf rule": "2.3",
+    "test.arch.imports.test.ts::C-f3249f34: deep imports are refused": "2.3",
+    "test.arch.network.test.ts::C-8e07c9a6: network imports and calls outside egress modules are refused": "3.1",
+    "test.arch.network.test.ts::C-8fa501e4: every scanned extension is covered": "3.1",
+    "test.arch.network.test.ts::C-a2eef903: egress modules, type-only imports, client methods and test files pass": "3.1",
+    "test.arch.network.test.ts::C-bdf0820d: process and worker entry points are refused": "3.1",
+    "test.arch.network.test.ts::C-f9b82661: the bootstrap placeholder fails the network rule": "3.1",
+    "test.arch.network.test.ts::C-fa65851b: an import-equals declaration is a value import": "3.1",
+    "test.arch.hygiene.test.ts::C-6ae206c9 C-9455d3fd: look-alike and test-file imports pass": "3.2",
+    "test.arch.hygiene.test.ts::C-9455d3fd: seed, test and alias imports are refused": "3.2",
+    "test.arch.hygiene.test.ts::C-5fe3458c: console uses are refused": "3.3",
+    "test.arch.hygiene.test.ts::C-78fc80d1: console look-alikes and test files pass": "3.3",
+    "test.arch.hygiene.test.ts::C-5d09e70a: environment reads are refused": "3.4",
+    "test.arch.hygiene.test.ts::C-d68d430c: environment look-alikes and config files pass": "3.4",
+    "test.arch.hygiene.test.ts::C-f9b82661: the bootstrap placeholder fails the environment rule": "3.4",
+    "test.arch.hygiene.test.ts::C-fe3edcae: environment reads through require are refused": "3.4",
+    "test.arch.secrets.test.ts::C-58d38ea1: secret look-alikes pass while a real key is still reported": "4.1",
+    "test.arch.secrets.test.ts::C-c63269ba: each secret kind is detected at its line without echoing the text": "4.1",
+    "test.arch.secrets.test.ts::C-bb0edd4e: an unavailable git fails the scan loudly": "4.2",
+    "test.arch.secrets.test.ts::C-e7ed48e1: the file list covers tracked and untracked files only": "4.2",
+    "test.arch.repo.test.ts::C-6bb73a15: violations are all listed in one run": "5.1",
+    "test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean": "5.1",
+    "test.arch.repo.test.ts::C-dd8c8f9a: require look-alikes and test files pass": "5.1",
+    "test.arch.repo.test.ts::C-eae7dab7: a require call is a value import of its specifier": "5.1"
+  },
+  "guards": [
+    "guard.violation: test/arch/modules.ts"
+  ],
+  "prompt_sha256": "a45234b16e0a29e0272959497075f2a4fce8dd128779fce7adc13e70607ed7b8",
+  "template": "judge@13",
+  "harness_commit": "66d99acc5d9d35ba487e58084064423c71c0d358",
+  "judge_calls": 1,
+  "judge_reply": "valid",
+  "judge_replies": {
+    "valid": 1,
+    "repaired": 0,
+    "retried": 0,
+    "discarded": 0
+  },
+  "judge_parts": [],
+  "judge_files": [
+    [
+      1,
+      "openspec/changes/add-architecture-fitness-fix-1/.openspec.yaml",
+      344
+    ],
+    [
+      1,
+      "test/arch/hygiene.test.ts",
+      5999
+    ],
+    [
+      1,
+      "test/arch/imports.test.ts",
+      7650
+    ],
+    [
+      1,
+      "test/arch/modules.test.ts",
+      6771
+    ],
+    [
+      1,
+      "test/arch/modules.ts",
+      3981
+    ],
+    [
+      1,
+      "test/arch/network.test.ts",
+      5378
+    ],
+    [
+      1,
+      "openspec/changes/add-architecture-fitness-fix-1/proposal.md",
+      987
+    ],
+    [
+      1,
+      "test/arch/repo.test.ts",
+      5573
+    ],
+    [
+      1,
+      "test/arch/rules.ts",
+      25205
+    ],
+    [
+      1,
+      "test/arch/secrets.test.ts",
+      5874
+    ],
+    [
+      1,
+      "test/arch/secrets.ts",
+      4661
+    ],
+    [
+      1,
+      "test/arch/sources.test.ts",
+      5957
+    ],
+    [
+      1,
+      "test/arch/sources.ts",
+      9108
+    ],
+    [
+      1,
+      "openspec/changes/add-architecture-fitness-fix-1/tasks.md",
+      368
+    ],
+    [
+      1,
+      "openspec/changes/add-architecture-fitness/tasks.md",
+      12677
+    ]
+  ],
+  "judge_followups": [],
+  "judge_split": {},
+  "hold_views": {},
+  "profiles": {
+    "judge": "claude-judge",
+    "implementer": [
+      "deepseek"
+    ]
+  },
+  "judge_model": "claude-opus-5-5",
+  "independence": {
+    "mode": "different_vendor",
+    "status": "declared (unverified)",
+    "verified": false,
+    "judge": {
+      "profile": "claude-judge",
+      "vendor": "anthropic",
+      "model": "claude-opus-5-5",
+      "provenance": "served",
+      "served": "claude-opus-5-5",
+      "vendors": [],
+      "routed_models": []
+    },
+    "implementers": [
+      {
+        "profile": "deepseek",
+        "vendor": "deepseek",
+        "model": "opencode-go/deepseek-v4.1-flash",
+        "provenance": "declared",
+        "served": null,
+        "vendors": [],
+        "routed_models": []
+      }
+    ]
+  },
+  "cost_usd": 1.19822
+}
