@@ -1,16 +1,16 @@
-// Bootstrap placeholder: serves GET /health only, so the L4 e2e gate has something to serve on the empty tree.
-// The engine skeleton unit (openspec change add-engine-skeleton) replaces it with the real composition root.
-import { createServer } from "node:http";
-import type { AddressInfo } from "node:net";
 import { fileURLToPath } from "node:url";
 
 import type { FastifyInstance } from "fastify";
+import pino from "pino";
 
 import type { SignalSource } from "./api/index.ts";
+import { buildServer, installGracefulShutdown } from "./api/index.ts";
 import type { AppConfig } from "./config/index.ts";
+import { ConfigError, loadConfigFromProcess } from "./config/index.ts";
+import { systemIds } from "./core/index.ts";
 import type { openDatabase } from "./db/index.ts";
-import { healthPayload } from "./health.ts";
-import type { LogDestination } from "./observability/index.ts";
+import type { LogDestination, Logger } from "./observability/index.ts";
+import { createLogger, noopTracer } from "./observability/index.ts";
 
 export const VERSION = "0.0.0";
 
@@ -19,30 +19,66 @@ export interface RunningServer {
   close(): Promise<void>;
 }
 
-export function startServer(port: number, host = "127.0.0.1"): Promise<RunningServer> {
-  const server = createServer((req, res) => {
-    if (req.method === "GET" && req.url === "/health") {
-      res.writeHead(200, { "content-type": "application/json" });
-      res.end(JSON.stringify(healthPayload(VERSION)));
-      return;
-    }
-    res.writeHead(404, { "content-type": "application/json" });
-    res.end(JSON.stringify({ error: "not_found" }));
-  });
-  return new Promise((resolve, reject) => {
-    server.once("error", reject);
-    server.listen(port, host, () => {
-      const { port: bound } = server.address() as AddressInfo;
-      resolve({
-        url: `http://${host}:${bound}`,
-        close: () => new Promise<void>((done, fail) => server.close((err) => (err ? fail(err) : done()))),
-      });
-    });
-  });
+function formatHost(host: string): string {
+  return host.includes(":") ? `[${host}]` : host;
 }
 
-// Signature stub of the composition root (milestone scaffold, docs/decisions/0002): add-engine-skeleton implements it.
-// The optional members belong to later units: openDatabase (add-db-foundation), configureServer (add-e2e-stack).
+async function listen(server: FastifyInstance, port: number, host: string): Promise<number> {
+  await server.listen({ port, host });
+  const address = server.server.address();
+  if (address === null || typeof address === "string") {
+    return port;
+  }
+  return address.port;
+}
+
+function fatalFields(error: unknown): Record<string, unknown> {
+  const fields: Record<string, unknown> = {};
+  const code = (error as { code?: unknown } | null)?.code;
+  fields["code"] = typeof code === "string" ? code : "STARTUP_FAILED";
+  if (error instanceof ConfigError) {
+    fields["variable"] = error.variable;
+  }
+  const reason = (error as { details?: { reason?: unknown } } | null)?.details?.reason;
+  if (typeof reason === "string") {
+    fields["reason"] = reason;
+  }
+  return fields;
+}
+
+function fatalMessage(error: unknown): string {
+  if (error instanceof ConfigError) {
+    return `startup failed: ${error.message}`;
+  }
+  return "startup failed";
+}
+
+export function startServer(port: number, host = "127.0.0.1"): Promise<RunningServer> {
+  return (async () => {
+    const logger = createLogger({ level: "silent" });
+    const server = await buildServer({
+      version: VERSION,
+      ids: systemIds,
+      logger,
+      tracer: noopTracer,
+    });
+    try {
+      const bound = await listen(server, port, host);
+      return {
+        url: `http://${formatHost(host)}:${bound}`,
+        close: async () => {
+          await server.close();
+        },
+      };
+    } catch (error) {
+      await server.close().catch(() => undefined);
+      throw error;
+    }
+  })();
+}
+
+// Signature of the composition root. The optional members belong to later units: openDatabase
+// (add-db-foundation), configureServer (add-e2e-stack); main keeps and ignores them.
 export interface MainDeps {
   loadConfig: () => AppConfig;
   destination: LogDestination;
@@ -52,15 +88,70 @@ export interface MainDeps {
   configureServer?: (server: FastifyInstance) => void | Promise<void>;
 }
 
-export function main(_deps?: Partial<MainDeps>): Promise<RunningServer | null> {
-  throw new Error("not implemented");
+export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer | null> {
+  const destination = deps.destination ?? pino.destination(1);
+  const bootstrap: Logger = createLogger({ level: "error", destination });
+  const loadConfig = deps.loadConfig ?? loadConfigFromProcess;
+  const signals = deps.signals ?? process;
+  const exit = deps.exit ?? process.exit;
+
+  let config: AppConfig;
+  try {
+    config = loadConfig();
+  } catch (error) {
+    bootstrap.fatal(fatalFields(error), fatalMessage(error));
+    exit(1);
+    return null;
+  }
+
+  const logger = createLogger({ level: config.logLevel, destination });
+
+  let server: FastifyInstance;
+  try {
+    server = await buildServer({
+      version: VERSION,
+      ids: systemIds,
+      logger,
+      tracer: noopTracer,
+    });
+  } catch (error) {
+    bootstrap.fatal(fatalFields(error), fatalMessage(error));
+    exit(1);
+    return null;
+  }
+
+  let bound: number;
+  try {
+    bound = await listen(server, config.port, config.host);
+  } catch (error) {
+    await server.close().catch(() => undefined);
+    bootstrap.fatal(
+      { ...fatalFields(error), host: config.host, port: config.port },
+      "startup failed",
+    );
+    exit(1);
+    return null;
+  }
+
+  const url = `http://${formatHost(config.host)}:${bound}`;
+  logger.info({ url, role: config.role, host: config.host, port: bound }, "ursitoare listening");
+
+  installGracefulShutdown({
+    close: () => server.close(),
+    drainTimeoutMs: config.shutdownDrainMs,
+    exit,
+    logger,
+    signals,
+  });
+
+  return {
+    url,
+    close: async () => {
+      await server.close();
+    },
+  };
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const port = Number(process.env.PORT ?? "8080");
-  const running = await startServer(port, process.env.HOST ?? "127.0.0.1");
-  process.stdout.write(`ursitoare listening on ${running.url}\n`);
-  const stop = (): void => void running.close().then(() => process.exit(0));
-  process.once("SIGTERM", stop);
-  process.once("SIGINT", stop);
+  await main();
 }

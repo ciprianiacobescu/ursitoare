@@ -1,4 +1,4 @@
-// Bootstrap placeholder: the engine skeleton unit (openspec change add-engine-skeleton) replaces this module.
+// The health payload shared by the API health endpoint.
 
 export interface HealthPayload {
   status: "ok";
