@@ -1,6 +1,7 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this module implements it.
 import { MODULES } from "./modules.ts";
 import type { Egress, ModuleRule, Snapshot, Violation } from "./sources.ts";
+import { collectImports, isTestFile, resolveSpecifier, sortViolations } from "./sources.ts";
 
 const GRAPH_FILE = "test/arch/modules.ts";
 
@@ -106,8 +107,60 @@ export function checkGraphIntegrity(modules: Record<string, ModuleRule> = MODULE
   return violations;
 }
 
-export function checkModuleGraph(_s: Snapshot, _modules?: Record<string, ModuleRule>): Violation[] {
-  throw new Error("not implemented");
+function moduleNameOf(path: string): string | null {
+  if (!path.startsWith("src/")) return null;
+  const rest = path.slice("src/".length);
+  const slash = rest.indexOf("/");
+  if (slash === -1) return null;
+  return rest.slice(0, slash);
+}
+
+function unknownModuleViolation(dir: string, file: string, line: number): Violation {
+  return {
+    code: "ARCH_UNKNOWN_MODULE",
+    file,
+    line,
+    message: `${dir} is not in test/arch/modules.ts; add its row in a red step`,
+  };
+}
+
+export function checkModuleGraph(
+  s: Snapshot,
+  modules: Record<string, ModuleRule> = MODULES,
+): Violation[] {
+  const violations: Violation[] = [];
+
+  for (const dir of s.srcDirs) {
+    if (!Object.hasOwn(modules, dir)) violations.push(unknownModuleViolation(dir, `src/${dir}`, 1));
+  }
+
+  for (const file of s.files) {
+    if (isTestFile(file.path)) continue;
+    const from = moduleNameOf(file.path);
+    if (from === null) continue;
+    const allowed = modules[from]?.allowed ?? [];
+    for (const ref of collectImports(file)) {
+      if (ref.specifier === null) continue;
+      const resolved = resolveSpecifier(file.path, ref.specifier);
+      if (resolved === null) continue;
+      const to = moduleNameOf(resolved);
+      if (to === null || to === from) continue;
+      if (!Object.hasOwn(modules, to)) {
+        violations.push(unknownModuleViolation(to, file.path, ref.line));
+      } else if (!allowed.includes(to)) {
+        violations.push({
+          code: "ARCH_MODULE_EDGE",
+          file: file.path,
+          line: ref.line,
+          message: `${from} may not import ${to}; allowed: ${
+            allowed.length === 0 ? "none" : allowed.join(", ")
+          } (test/arch/modules.ts)`,
+        });
+      }
+    }
+  }
+
+  return sortViolations(violations);
 }
 
 export function checkNetwork(_s: Snapshot, _modules?: Record<string, ModuleRule>): Violation[] {
