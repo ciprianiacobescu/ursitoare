@@ -478,16 +478,137 @@ export function checkExactVersions(file: string, manifest: unknown): LicenceViol
   return violations;
 }
 
-export function checkInstallHooks(_file: string, _manifest: unknown): LicenceViolation[] {
-  throw new Error("not implemented");
+const INSTALL_HOOK_SCRIPTS = new Set([
+  "pnpm:devPreinstall",
+  "preinstall",
+  "install",
+  "postinstall",
+  "preprepare",
+  "prepare",
+  "postprepare",
+]);
+
+export function checkInstallHooks(file: string, manifest: unknown): LicenceViolation[] {
+  if (!isPlainObject(manifest)) return [];
+  const violations: LicenceViolation[] = [];
+  const scripts = manifest["scripts"];
+  if (scripts !== undefined) {
+    if (!isPlainObject(scripts)) {
+      violations.push({ code: "MANIFEST_INVALID", subject: `${file} scripts`, detail: "not a plain object" });
+    } else {
+      for (const key of Object.keys(scripts)) {
+        if (!INSTALL_HOOK_SCRIPTS.has(key)) continue;
+        violations.push({
+          code: "INSTALL_HOOK_FORBIDDEN",
+          subject: `${file} scripts.${key}`,
+          detail: "runs code at install time",
+        });
+      }
+    }
+  }
+  const pnpm = manifest["pnpm"];
+  if (pnpm !== undefined) {
+    if (!isPlainObject(pnpm)) {
+      violations.push({ code: "MANIFEST_INVALID", subject: `${file} pnpm`, detail: "not a plain object" });
+    } else {
+      for (const key of Object.keys(pnpm)) {
+        if (key === "overrides") continue;
+        violations.push({
+          code: "INSTALL_HOOK_FORBIDDEN",
+          subject: `${file} pnpm.${key}`,
+          detail: "pnpm settings other than overrides are not allowed",
+        });
+      }
+    }
+  }
+  return violations;
 }
 
-export function topLevelKeys(_yamlText: string): string[] {
-  throw new Error("not implemented");
+export function topLevelKeys(yamlText: string): string[] {
+  const keys: string[] = [];
+  for (const raw of yamlText.split("\n")) {
+    const line = raw.endsWith("\r") ? raw.slice(0, -1) : raw;
+    const entry = parseTopLevelEntry(line);
+    if (entry !== null) keys.push(entry.key);
+  }
+  return keys;
 }
 
-export function checkInstallFiles(_repoRoot: string): LicenceViolation[] {
-  throw new Error("not implemented");
+const FORBIDDEN_WORKSPACE_KEYS = new Set([
+  "pnpmfile",
+  "globalPnpmfile",
+  "dangerouslyAllowAllBuilds",
+  "neverBuiltDependencies",
+  "onlyBuiltDependenciesFile",
+  "allowBuilds",
+  "configDependencies",
+]);
+
+function normaliseNpmrcSetting(key: string): string {
+  return key.toLowerCase().replace(/[-_]/g, "");
+}
+
+const FORBIDDEN_NPMRC_SETTINGS = new Set(
+  [...FORBIDDEN_WORKSPACE_KEYS, "onlyBuiltDependencies"].map((key) => normaliseNpmrcSetting(key)),
+);
+
+function readTextFile(file: string): string | null {
+  try {
+    return fs.readFileSync(file, "utf8");
+  } catch {
+    return null;
+  }
+}
+
+function fileExists(file: string): boolean {
+  try {
+    fs.lstatSync(file);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function checkInstallFiles(repoRoot: string): LicenceViolation[] {
+  const violations: LicenceViolation[] = [];
+  for (const name of [".pnpmfile.cjs", ".pnpmfile.mjs"]) {
+    if (!fileExists(path.join(repoRoot, name))) continue;
+    violations.push({
+      code: "INSTALL_HOOK_FORBIDDEN",
+      subject: name,
+      detail: "a pnpmfile runs code at install time",
+    });
+  }
+  const workspace = readTextFile(path.join(repoRoot, "pnpm-workspace.yaml"));
+  if (workspace !== null) {
+    for (const key of topLevelKeys(workspace)) {
+      if (!FORBIDDEN_WORKSPACE_KEYS.has(key)) continue;
+      violations.push({
+        code: "INSTALL_HOOK_FORBIDDEN",
+        subject: `pnpm-workspace.yaml ${key}`,
+        detail: "workspace setting that runs or widens install-time code",
+      });
+    }
+  }
+  for (const relative of [".npmrc", path.join("web", ".npmrc")]) {
+    const text = readTextFile(path.join(repoRoot, relative));
+    if (text === null) continue;
+    for (const raw of text.split("\n")) {
+      const line = raw.endsWith("\r") ? raw.slice(0, -1) : raw;
+      const equals = line.indexOf("=");
+      if (equals < 0) continue;
+      const rawKey = line.slice(0, equals).trim();
+      if (rawKey === "" || rawKey.startsWith("#") || rawKey.startsWith(";")) continue;
+      const key = rawKey.replace(/\[[^\]]*\]$/, "").trim();
+      if (!FORBIDDEN_NPMRC_SETTINGS.has(normaliseNpmrcSetting(key))) continue;
+      violations.push({
+        code: "INSTALL_HOOK_FORBIDDEN",
+        subject: `${relative} ${key}`,
+        detail: ".npmrc setting that runs or widens install-time code",
+      });
+    }
+  }
+  return violations;
 }
 
 function stripYamlComment(value: string): string {

@@ -17,7 +17,7 @@
 
 - [x] 4.1 Implement `isExactVersion` and `checkExactVersions` in `test/arch/licence-rules.ts` and the live test `every dependency range in the root and web manifests is an exact version` (it passes `null` for a file it cannot read or parse), tests first in `test/arch/licences.test.ts`, implementing requirement "Every dependency spec in the manifests is an exact version" and the "Manifest violations" scenario of "Violations carry fixed subjects and details"
 - [x] 4.2 Implement `readTopLevelList` and `checkBuiltDependencies` in `test/arch/licence-rules.ts` and the live test `onlyBuiltDependencies equals the reviewed list` (it passes `""` for an unreadable `pnpm-workspace.yaml`), tests first in `test/arch/licences.test.ts`, implementing requirement "onlyBuiltDependencies equals the reviewed list" and the "Built dependency details" scenario of "Violations carry fixed subjects and details"
-- [ ] 4.3 Implement `checkInstallHooks`, `topLevelKeys` and `checkInstallFiles` (pnpmfiles, `pnpm-workspace.yaml` keys, `.npmrc` and `web/.npmrc` settings) in `test/arch/licence-rules.ts` and the live test `the repository runs no install hooks`, with fixture-root tests first in `test/arch/licences.test.ts`, implementing requirement "No code runs at install time outside the reviewed list"
+- [x] 4.3 Implement `checkInstallHooks`, `topLevelKeys` and `checkInstallFiles` (pnpmfiles, `pnpm-workspace.yaml` keys, `.npmrc` and `web/.npmrc` settings) in `test/arch/licence-rules.ts` and the live test `the repository runs no install hooks`, with fixture-root tests first in `test/arch/licences.test.ts`, implementing requirement "No code runs at install time outside the reviewed list"
 
 ## 5. Read-only guard
 
