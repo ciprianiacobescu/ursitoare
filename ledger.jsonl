@@ -25,3 +25,4 @@
 {"at":"2026-10-26T12:01:40Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"f9390c6b5d6228dbb8f789542cb36288b6386bd5","status":"pass","type":"unit.postcheck","unit":"openspec:add-engine-skeleton"}
 {"at":"2026-10-26T12:01:40Z","revision":"f9390c6b5d6228dbb8f789542cb36288b6386bd5","type":"unit.integrated","unit":"openspec:add-engine-skeleton"}
 {"at":"2026-10-26T12:01:40Z","attempt":1,"cost_usd":2.469711,"runs":4,"type":"plan.charged","unit":"openspec:add-engine-skeleton"}
+{"at":"2026-10-26T12:03:33Z","branch":"l4/archive/openspec/add-engine-skeleton","head":"9592053888faff7cf544590205cdae761f04569e","type":"unit.branch_deleted","unit":"openspec:add-engine-skeleton"}
