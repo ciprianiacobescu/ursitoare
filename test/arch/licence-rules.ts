@@ -108,8 +108,38 @@ export function scanPythonVenv(_venvDir: string): InstalledPackage[] {
   throw new Error("not implemented");
 }
 
-export function checkLicences(_packages: readonly InstalledPackage[], _policy: LicencePolicy, _scope: string): LicenceViolation[] {
-  throw new Error("not implemented");
+export function checkLicences(packages: readonly InstalledPackage[], policy: LicencePolicy, scope: string): LicenceViolation[] {
+  if (packages.length === 0) {
+    return [{ code: "INVENTORY_EMPTY", subject: scope, detail: "no packages found" }];
+  }
+  const allowed = new Set(policy.allowed.map((entry) => entry.toLowerCase()));
+  const violations: LicenceViolation[] = [];
+  for (const pkg of packages) {
+    const subject = `${pkg.ecosystem} ${pkg.name}@${pkg.version}`;
+    if (pkg.licence === null) {
+      violations.push({ code: "LICENCE_MISSING", subject, detail: "no licence found" });
+      continue;
+    }
+    if (pkg.terms === null) {
+      violations.push({
+        code: "LICENCE_UNKNOWN",
+        subject,
+        licence: pkg.licence,
+        detail: "licence is not a parsable SPDX expression",
+      });
+      continue;
+    }
+    const refused = pkg.terms.filter((term) => !allowed.has(term.toLowerCase()));
+    if (refused.length > 0) {
+      violations.push({
+        code: "LICENCE_TERM_NOT_ALLOWED",
+        subject,
+        licence: pkg.licence,
+        detail: `terms not on the allowlist: ${refused.join(", ")}`,
+      });
+    }
+  }
+  return violations;
 }
 
 export function checkPolicy(_policy: LicencePolicy): LicenceViolation[] {
