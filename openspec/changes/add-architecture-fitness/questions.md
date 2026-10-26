@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 5.1 | technical | test/arch/repo.test.ts:30 networkViolation prepends the name to the full message |
+| Q-001 | accepted | 5.1 | technical | test/arch/repo.test.ts:30 networkViolation prepends the name to the full message |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: test/arch/repo.test.ts:30 networkViolation prepends the name to the full message
 
-- **Status:** open
+- **Status:** accepted
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the answer would unfreeze test/arch/repo.test.ts of task 5.1 (delegate.unfreeze is false)
 - **Blocking tasks:** 5.1
 - **Kind:** technical
