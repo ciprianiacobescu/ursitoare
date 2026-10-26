@@ -215,3 +215,7 @@ yolo:
 delegate:
   enabled: true
   scope: yolo
+  # The delegate may accept a clarifier suggestion that unfreezes a test file of a blocked task (an internally
+  # contradictory red test), as written; never a support file. Owner decision 2026-10-26, after
+  # add-architecture-fitness Q-001.
+  unfreeze: true
