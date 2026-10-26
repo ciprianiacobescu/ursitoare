@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | open | none | verdict | Criterion C-c63269ba (architecture-rules › Secret-pattern scan of repository files › Each kind is detected without echoing it): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied? |
-| Q-006 | open | none | verdict | Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied? |
+| Q-006 | answered | none | verdict | Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied? |
 | Q-007 | open | none | verdict | Finding F-a154400b: The module graph is duplicated: the rules ignore test/arch/modules.ts |
 | Q-008 | open | none | verdict | Finding F-a985c7e4: task 2.1: modules.ts is not the graph the rules check |
 | Q-009 | open | none | verdict | Finding F-ed69f6e7: The egress pin is not checked when a pinned module row is missing |
@@ -180,7 +180,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-006: Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -207,6 +208,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion describes what the implementer does if a rule flags code that a passing scenario lists, and the repository shows that outcome for the scenario's own example. The network rule in test/arch/rules.ts skips every type-only import, and collectImports in test/arch/sources.ts marks import type declarations and all-type named bindings as type-only, so a type-only import of node:http in src/api is not reported. A test in network.test.ts asserts that checkNetwork returns an empty array for src/api/a.ts holding import type { Server } from "node:http" and import { type Server as Other } from "node:http", and a sources test asserts the typeOnly flags of every import form. The repository test asserts that checkAll over the real tree is an empty array, and no rule file contains a skip, todo or narrowed pattern, so no false positive was left standing and no blocker was raised. The criterion is satisfied as it stands.
 ---
 
 ## Q-007: Finding F-a154400b: The module graph is duplicated: the rules ignore test/arch/modules.ts
