@@ -59,7 +59,8 @@ tdd:
 
 odd:
   # The default list minus `**/migrations/**`: this is a greenfield engine, every unit owns its forward-only SQL
-  # migration under src/db/migrations/, and a person merges every pull request. Secrets and env files are added.
+  # migration under src/db/migrations/. An active plan merges a unit after its gates and review pass (merge: auto,
+  # owner decision 2026-10-25), with no person reading the migration first. Secrets and env files are added.
   forbidden_paths:
   - .github/workflows/**
   - .gitlab-ci.yml
@@ -173,6 +174,9 @@ yolo:
   # Nothing runs until a person activates a delivery plan that lists it (public repository).
   hold:
   - "*"
+  # Owner decision 2026-10-26 ("Why not do it yourself - continue as my delegate"): the owner's delegate agent raises a
+  # plan's limits with `l4 yolo resume --extend-…`; each raise is recorded in the plan ledger (plan.extended).
+  extend_by_agents: true
   profiles:
     unit:
     - build
