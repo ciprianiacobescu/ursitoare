@@ -397,8 +397,76 @@ export function checkNetwork(s: Snapshot, modules: Record<string, ModuleRule> = 
   return sortViolations(violations);
 }
 
-export function checkForbiddenImports(_s: Snapshot): Violation[] {
-  throw new Error("not implemented");
+const SELF_PACKAGE = "ursitoare";
+
+function forbiddenImportViolation(file: string, line: number, message: string): Violation {
+  return { code: "ARCH_FORBIDDEN_IMPORT", file, line, message };
+}
+
+function isUnder(path: string, dir: string): boolean {
+  return path === dir || path.startsWith(`${dir}/`);
+}
+
+export function checkForbiddenImports(s: Snapshot): Violation[] {
+  const violations: Violation[] = [];
+
+  for (const file of s.files) {
+    if (!file.path.startsWith("src/")) continue;
+    const test = isTestFile(file.path);
+
+    for (const ref of collectImports(file)) {
+      const specifier = ref.specifier;
+      if (specifier === null) continue;
+      const resolved = resolveSpecifier(file.path, specifier);
+
+      if (resolved !== null && isUnder(resolved, "seed")) {
+        violations.push(
+          forbiddenImportViolation(
+            file.path,
+            ref.line,
+            `${specifier} resolves into seed/; seed is not importable from src`,
+          ),
+        );
+        continue;
+      }
+
+      if (test) continue;
+
+      if (resolved !== null && isUnder(resolved, "test")) {
+        violations.push(
+          forbiddenImportViolation(
+            file.path,
+            ref.line,
+            `${specifier} resolves into test/; test code is not importable from src`,
+          ),
+        );
+        continue;
+      }
+
+      if (specifier.startsWith("#")) {
+        violations.push(
+          forbiddenImportViolation(
+            file.path,
+            ref.line,
+            `${specifier} is a package.json imports alias; import the module directly`,
+          ),
+        );
+        continue;
+      }
+
+      if (specifier === SELF_PACKAGE || specifier.startsWith(`${SELF_PACKAGE}/`)) {
+        violations.push(
+          forbiddenImportViolation(
+            file.path,
+            ref.line,
+            `${specifier} is the package's own name; import the module directly`,
+          ),
+        );
+      }
+    }
+  }
+
+  return sortViolations(violations);
 }
 
 export function checkConsole(_s: Snapshot): Violation[] {
