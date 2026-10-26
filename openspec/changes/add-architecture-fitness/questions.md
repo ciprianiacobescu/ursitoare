@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied? |
 | Q-007 | answered | none | verdict | Finding F-a154400b: The module graph is duplicated: the rules ignore test/arch/modules.ts |
 | Q-008 | answered | none | verdict | Finding F-a985c7e4: task 2.1: modules.ts is not the graph the rules check |
-| Q-009 | open | none | verdict | Finding F-ed69f6e7: The egress pin is not checked when a pinned module row is missing |
+| Q-009 | answered | none | verdict | Finding F-ed69f6e7: The egress pin is not checked when a pinned module row is missing |
 | Q-010 | open | none | verdict | Finding F-85a00370: A default import with all-type named specifiers is treated as type-only |
 <!-- l4:index:end -->
 
@@ -267,7 +267,8 @@ reject The finding is correct and the repository shows it. test/arch/rules.ts im
 
 ## Q-009: Finding F-ed69f6e7: The egress pin is not checked when a pinned module row is missing
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -288,6 +289,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct and the repository shows it. checkGraphIntegrity in test/arch/rules.ts iterates Object.entries(modules) and reads PINNED_EGRESS only for the row being visited; it never iterates PINNED_EGRESS itself. So a pinned module that is absent from the graph is never reported: on { a: { allowed: ["zzz"] } } the function returns exactly one violation, the unknown-name one, and on a copy of MODULES with the gateway row deleted it returns nothing about gateway. The missing-egress branch fires only when the row exists with egress undefined, which is why the shipped test that removes the egress property but keeps the gateway row still passes. The scenario "Inconsistent graphs are reported" says each of the four fixture results also carries the egress-pin violations because those fixtures name no egress module, and design decision 6 says the modules with an egress value are exactly observability, identity and gateway, a pin that a reviewed rule edit must guard. A graph that silently drops an egress module is as much a pin break as one that adds a capability. WHEN checkGraphIntegrity runs on a graph that lacks a row for observability, identity or gateway, such as { a: { allowed: ["zzz"] } } or a copy of MODULES without the gateway row THEN in addition to its other violations it returns, for each missing pinned module, an ARCH_GRAPH_INVALID violation at test/arch/modules.ts:1 whose message names that module and says it must carry its pinned egress value.
 ---
 
 ## Q-010: Finding F-85a00370: A default import with all-type named specifiers is treated as type-only
