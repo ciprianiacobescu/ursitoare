@@ -4,11 +4,21 @@ import { test } from "node:test";
 
 import {
   checkLicences,
+  checkPolicy,
   formatLicenceViolation,
   formatLicenceViolations,
   parseLicenceExpression,
+  type LicenceException,
+  type LicencePolicy,
   type LicenceViolation,
 } from "./licence-rules.ts";
+import {
+  ALLOWED_LICENCES,
+  LICENCE_EXCEPTIONS,
+  MANIFEST_PATHS,
+  PYPI_CLASSIFIER_SPDX,
+  REVIEWED_BUILT_DEPENDENCIES,
+} from "./licence-policy.ts";
 
 // Runs a call and returns its answer, or a marker when it throws, so a missing behaviour fails on the comparison.
 function answer<T>(call: () => T): T | "THROWN" {
@@ -271,4 +281,212 @@ test("C-ff913dc5 checkLicences gives fixed subjects and details", () => {
   assert.deepEqual(answer(() => checkLicences([], { allowed: ALLOWED, exceptions: [] }, "e2e/.venv")), [
     { code: "INVENTORY_EMPTY", subject: "e2e/.venv", detail: "no packages found" },
   ]);
+});
+
+function textUnidecodeException(): LicenceException {
+  return {
+    ecosystem: "pypi",
+    name: "text-unidecode",
+    version: "1.3",
+    licence: "Artistic License; GNU General Public License (GPL); GNU General Public License v2 or later (GPLv2+)",
+    reason: "Test-only transitive dependency of the e2e venv, offered under the Artistic License or the GPL.",
+  };
+}
+
+test("C-92d19a9f C-6107b0c0 checkLicences exempts only the reviewed version and licence text", () => {
+  const policy: LicencePolicy = { allowed: ALLOWED, exceptions: [textUnidecodeException()] };
+  assert.deepEqual(
+    answer(() =>
+      checkLicences(
+        [
+          {
+            ecosystem: "pypi",
+            name: "text-unidecode",
+            version: "1.3",
+            licence: textUnidecodeException().licence,
+            terms: null,
+          },
+        ],
+        policy,
+        "e2e/.venv",
+      ),
+    ),
+    [],
+  );
+  assert.deepEqual(
+    answer(() =>
+      checkLicences(
+        [
+          {
+            ecosystem: "pypi",
+            name: "text-unidecode",
+            version: "1.4",
+            licence: textUnidecodeException().licence,
+            terms: null,
+          },
+        ],
+        policy,
+        "e2e/.venv",
+      ),
+    ),
+    [
+      {
+        code: "LICENCE_UNKNOWN",
+        subject: "pypi text-unidecode@1.4",
+        licence: textUnidecodeException().licence,
+        detail: "licence is not a parsable SPDX expression",
+      },
+    ],
+  );
+  assert.deepEqual(
+    answer(() =>
+      checkLicences(
+        [
+          {
+            ecosystem: "pypi",
+            name: "text-unidecode",
+            version: "1.3",
+            licence: "GPL-3.0-only",
+            terms: ["GPL-3.0-only"],
+          },
+        ],
+        policy,
+        "e2e/.venv",
+      ),
+    ),
+    [
+      {
+        code: "LICENCE_TERM_NOT_ALLOWED",
+        subject: "pypi text-unidecode@1.3",
+        licence: "GPL-3.0-only",
+        detail: "terms not on the allowlist: GPL-3.0-only",
+      },
+    ],
+  );
+});
+
+test("C-7b90839f checkPolicy rejects malformed policy data in order", () => {
+  const valid = textUnidecodeException();
+  const policy: LicencePolicy = {
+    allowed: ["MIT", "GPL-3.0-only"],
+    exceptions: [
+      valid,
+      { ...valid, name: "a-pkg", version: "^1.0.0" },
+      { ...valid, name: "b-pkg", reason: "ok" },
+      { ...valid },
+    ],
+  };
+  assert.deepEqual(answer(() => checkPolicy(policy)), [
+    { code: "POLICY_INVALID", subject: "exception pypi a-pkg@^1.0.0", detail: "version is not exact" },
+    { code: "POLICY_INVALID", subject: "exception pypi b-pkg@1.3", detail: "reason too short" },
+    { code: "POLICY_INVALID", subject: "exception pypi text-unidecode@1.3", detail: "duplicate" },
+    { code: "POLICY_INVALID", subject: "allowlist GPL-3.0-only", detail: "forbidden or empty entry" },
+  ]);
+});
+
+test("C-8eaf01ec checkPolicy admits pypi release segment versions", () => {
+  const base = textUnidecodeException();
+  const versions: readonly (readonly [string, string])[] = [
+    ["ok-a", "1.3"],
+    ["ok-b", "2.0.1"],
+    ["ok-c", "1.2.3.4"],
+    ["ok-d", "0"],
+  ];
+  const policy: LicencePolicy = {
+    allowed: ["MIT"],
+    exceptions: versions.map(([name, version]) => ({ ...base, name, version })),
+  };
+  assert.deepEqual(answer(() => checkPolicy(policy)), []);
+});
+
+test("C-6c266a75 checkPolicy refuses pypi versions that are not a release segment", () => {
+  const base = textUnidecodeException();
+  const versions: readonly (readonly [string, string])[] = [
+    ["bad-a", "1.*"],
+    ["bad-b", "==1.3"],
+    ["bad-c", "1.3rc1"],
+    ["bad-d", "1.3.post1"],
+    ["bad-e", "01.3"],
+    ["bad-f", ""],
+    ["bad-g", "1.2.3.4.5"],
+  ];
+  const policy: LicencePolicy = {
+    allowed: ["MIT"],
+    exceptions: versions.map(([name, version]) => ({ ...base, name, version })),
+  };
+  assert.deepEqual(
+    answer(() => checkPolicy(policy)),
+    versions.map(([name, version]) => ({
+      code: "POLICY_INVALID",
+      subject: `exception pypi ${name}@${version}`,
+      detail: "version is not exact",
+    })),
+  );
+});
+
+test("C-991042c4 checkPolicy judges npm exception versions with isExactVersion", () => {
+  const base = textUnidecodeException();
+  const versions: readonly (readonly [string, string])[] = [
+    ["n-a", "1.2.3"],
+    ["n-b", "18.4.0-beta.17"],
+    ["n-c", "npm:real@1.2.3"],
+    ["n-d", "1.3"],
+    ["n-e", "^1.2.3"],
+    ["n-f", ""],
+    ["n-g", "1.2.x"],
+  ];
+  const policy: LicencePolicy = {
+    allowed: ["MIT"],
+    exceptions: versions.map(([name, version]) => ({ ...base, ecosystem: "npm", name, version })),
+  };
+  assert.deepEqual(answer(() => checkPolicy(policy)), [
+    { code: "POLICY_INVALID", subject: "exception npm n-d@1.3", detail: "version is not exact" },
+    { code: "POLICY_INVALID", subject: "exception npm n-e@^1.2.3", detail: "version is not exact" },
+    { code: "POLICY_INVALID", subject: "exception npm n-f@", detail: "version is not exact" },
+    { code: "POLICY_INVALID", subject: "exception npm n-g@1.2.x", detail: "version is not exact" },
+  ]);
+});
+
+test("C-ae2f6322 checkPolicy does not judge an unknown ecosystem on its version", () => {
+  const entry: LicenceException = {
+    ...textUnidecodeException(),
+    ecosystem: "cargo" as LicenceException["ecosystem"],
+    name: "c-a",
+    version: "1.*",
+  };
+  assert.deepEqual(answer(() => checkPolicy({ allowed: ["MIT"], exceptions: [entry] })), [
+    { code: "POLICY_INVALID", subject: "exception cargo c-a@1.*", detail: "unknown ecosystem" },
+  ]);
+});
+
+test("C-65a32526 checkPolicy accepts the reviewed exception version", () => {
+  assert.deepEqual(
+    answer(() => checkPolicy({ allowed: ["MIT"], exceptions: [textUnidecodeException()] })),
+    [],
+  );
+});
+
+test("C-c18692e2 C-73030b3f the licence policy data is well formed", () => {
+  assert.deepEqual(ALLOWED_LICENCES, ALLOWED);
+  assert.deepEqual(LICENCE_EXCEPTIONS, [textUnidecodeException()]);
+  assert.deepEqual(PYPI_CLASSIFIER_SPDX, {
+    "MIT License": "MIT",
+    "BSD License": "BSD-3-Clause",
+    "Apache Software License": "Apache-2.0",
+    "ISC License (ISCL)": "ISC",
+    "Python Software Foundation License": "PSF-2.0",
+    "PostgreSQL License": "PostgreSQL",
+    "Mozilla Public License 2.0 (MPL 2.0)": "MPL-2.0",
+    "Zero-Clause BSD (0BSD)": "0BSD",
+    "CC0 1.0 Universal (CC0 1.0) Public Domain Dedication": "CC0-1.0",
+  });
+  assert.deepEqual(REVIEWED_BUILT_DEPENDENCIES, [
+    "@embedded-postgres/darwin-arm64",
+    "@embedded-postgres/darwin-x64",
+    "@embedded-postgres/linux-arm64",
+    "@embedded-postgres/linux-x64",
+    "esbuild",
+  ]);
+  assert.deepEqual(MANIFEST_PATHS, ["package.json", "web/package.json"]);
+  assert.deepEqual(answer(() => checkPolicy({ allowed: ALLOWED_LICENCES, exceptions: LICENCE_EXCEPTIONS })), []);
 });
