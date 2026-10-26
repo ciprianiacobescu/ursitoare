@@ -1,0 +1,4499 @@
+{
+  "schema": "l4/verdict@1",
+  "round": 1,
+  "verdict": "PASS",
+  "base_sha": "6c9571af8dcf3137bba40615a90d88eb589cdae3",
+  "head_sha": "970db98ce68d4ee10c4f13162024dc2b4859183e",
+  "steps": [
+    {
+      "step": "0",
+      "name": "preconditions",
+      "status": "ok",
+      "seconds": 0.4,
+      "note": "base main@6c9571af8d contained"
+    },
+    {
+      "step": "1",
+      "name": "integrity",
+      "status": "ok",
+      "seconds": 10.8,
+      "note": "10 sub-checks; scope: 30 changed file(s)"
+    },
+    {
+      "step": "2",
+      "name": "build",
+      "status": "ok",
+      "seconds": 15.5,
+      "note": ""
+    },
+    {
+      "step": "3",
+      "name": "tests",
+      "status": "ok",
+      "seconds": 14.8,
+      "note": ""
+    },
+    {
+      "step": "4",
+      "name": "traceability",
+      "status": "ok",
+      "seconds": 0.0,
+      "note": "40/40 criteria covered"
+    },
+    {
+      "step": "4a",
+      "name": "audit sampling",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "audit sampling writes pytest tests only; changed code is not python"
+    },
+    {
+      "step": "5",
+      "name": "ui test generation",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "the unit changed no file under verifier.playwright.ui_paths"
+    },
+    {
+      "step": "6",
+      "name": "quality",
+      "status": "ok",
+      "seconds": 0.0,
+      "note": "not measured: diff coverage measures python only; changed code outside it: src/db/errors.ts, src/db/files.ts, src/db/health.ts, src/db/index.ts, src/db/migrate.ts and 8 more"
+    },
+    {
+      "step": "8",
+      "name": "s1 judge",
+      "status": "ok",
+      "seconds": 2.8,
+      "note": "40/40 criteria judged by jev"
+    },
+    {
+      "step": "9",
+      "name": "judge",
+      "status": "ok",
+      "seconds": 400.4,
+      "note": "2 call(s)"
+    },
+    {
+      "step": "10",
+      "name": "aggregation",
+      "status": "ok",
+      "seconds": 0.0,
+      "note": "PASS"
+    }
+  ],
+  "gates": [
+    {
+      "name": "setup",
+      "command": "pnpm install --frozen-lockfile",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1403Z-88d4/264-setup.log",
+      "digest": null
+    },
+    {
+      "name": "setup",
+      "command": "uv sync --project e2e --frozen",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1403Z-88d4/265-setup.log",
+      "digest": null
+    },
+    {
+      "name": "build",
+      "command": "pnpm run build",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1403Z-88d4/266-build.log",
+      "digest": null
+    },
+    {
+      "name": "lint",
+      "command": "pnpm run lint",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1403Z-88d4/267-lint.log",
+      "digest": null
+    },
+    {
+      "name": "typecheck",
+      "command": "pnpm run typecheck",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1403Z-88d4/268-typecheck.log",
+      "digest": null
+    },
+    {
+      "name": "test",
+      "command": "pnpm run test",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1403Z-88d4/269-test.log",
+      "digest": null
+    },
+    {
+      "name": "e2e",
+      "command": "e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure",
+      "status": "pass",
+      "reason": "",
+      "log": ".l4-out/gates/r-20261026T1403Z-88d4/270-e2e.log",
+      "digest": null
+    }
+  ],
+  "criteria": [
+    {
+      "id": "C-7c1574be",
+      "alias": "database › Pool from a database endpoint › Endpoint with a separate password",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.pool.test.ts::C-7c1574be createPool accepts postgresql URLs and verify-full TLS",
+        "src.db.pool.test.ts::C-7c1574be createPool builds a pool from an endpoint password with the default options"
+      ],
+      "s1_p": 0.94
+    },
+    {
+      "id": "C-63221721",
+      "alias": "database › Pool from a database endpoint › Bad input is refused without echoing it",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.pool.test.ts::C-63221721 createPool refuses bad endpoints and options without echoing them"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-dc754ade",
+      "alias": "database › Pool from a database endpoint › An idle client error does not crash the process",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.pool.test.ts::C-dc754ade an idle client error reaches onError once and never throws"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-8a52d337",
+      "alias": "database › Migration file names › Valid directory",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.files.test.ts::C-8a52d337 readMigrationFiles allows gaps and returns an empty list for an empty directory",
+        "src.db.files.test.ts::C-8a52d337 readMigrationFiles sorts valid files and hashes their bytes"
+      ],
+      "s1_p": 0.94
+    },
+    {
+      "id": "C-55276583",
+      "alias": "database › Migration file names › Invalid entries",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.files.test.ts::C-55276583 readMigrationFiles refuses badly named entries",
+        "src.db.files.test.ts::C-55276583 readMigrationFiles refuses duplicate versions",
+        "src.db.files.test.ts::C-55276583 readMigrationFiles refuses version zero and non-file entries"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-6a2a3916",
+      "alias": "database › Migration file names › Empty file, transaction control, no directory",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses a directory that does not exist",
+        "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses an empty file",
+        "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses transaction control lines"
+      ],
+      "s1_p": 0.94
+    },
+    {
+      "id": "C-c664fa4c",
+      "alias": "database › Forward-only migration runner › Apply, repeat, extend, fill a gap",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.migrate.test.ts::C-2735b4ff C-c664fa4c migrate bootstraps an empty directory and applies a later file",
+        "src.db.migrate.test.ts::C-c664fa4c migrate applies files in order, repeats, extends and fills a gap"
+      ],
+      "s1_p": 0.94
+    },
+    {
+      "id": "C-4a57a001",
+      "alias": "database › Forward-only migration runner › A failing migration rolls back and stops",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.migrate.test.ts::C-4a57a001 a failing migration rolls back, releases the lock and stops"
+      ],
+      "s1_p": 0.9
+    },
+    {
+      "id": "C-2735b4ff",
+      "alias": "database › Forward-only migration runner › Empty directory and Postgres down",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.migrate.test.ts::C-2735b4ff C-c664fa4c migrate bootstraps an empty directory and applies a later file"
+      ],
+      "s1_p": 0.49
+    },
+    {
+      "id": "C-b2b0429a",
+      "alias": "database › Forward-only migration runner › Edited, gone or renamed file",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.migrate.test.ts::C-b2b0429a migrate refuses an edited missing renamed or emptied file set"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-77b8f169",
+      "alias": "database › Concurrent runners are serialised › Two runners",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.migrate.test.ts::C-77b8f169 two runners are serialised by the advisory lock"
+      ],
+      "s1_p": 0.74
+    },
+    {
+      "id": "C-3815951d",
+      "alias": "database › Concurrent runners are serialised › Lock held elsewhere",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.migrate.test.ts::C-3815951d migrate refuses an invalid lock timeout before querying",
+        "src.db.migrate.test.ts::C-3815951d migrate times out on a held lock and releases its own after a failure"
+      ],
+      "s1_p": 0.87
+    },
+    {
+      "id": "C-f1949ac2",
+      "alias": "database › Roles are bootstrapped and checked › Create, repeat, repair",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.roles.test.ts::C-f1949ac2 ensureRoles creates repeats and repairs the login roles"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-d380769b",
+      "alias": "database › Roles are bootstrapped and checked › Bad input, a weak admin and quotes",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.roles.test.ts::C-d380769b ensureRoles keeps a quoted password and the owner role",
+        "src.db.roles.test.ts::C-d380769b ensureRoles refuses a weak admin with DB_ROLES_FAILED",
+        "src.db.roles.test.ts::C-d380769b ensureRoles refuses empty non-ASCII NUL and oversized passwords"
+      ],
+      "s1_p": 0.91
+    },
+    {
+      "id": "C-94eda93a",
+      "alias": "database › Roles are bootstrapped and checked › Migration preconditions",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.migrate.test.ts::C-94eda93a migrate refuses missing and privileged roles before any DDL"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-d4c6bb53",
+      "alias": "database › Base migration and grants model › Ledger and ownership",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.base.test.ts::C-d4c6bb53 the base migration records the ledger and keeps objects owned by the owner role"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-e3e42ffe",
+      "alias": "database › Base migration and grants model › The app role has no more than USAGE",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.base.test.ts::C-e3e42ffe the app role has only USAGE on the schema"
+      ],
+      "s1_p": 0.87
+    },
+    {
+      "id": "C-162b9c47",
+      "alias": "database › Base migration and grants model › New objects start closed",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.base.test.ts::C-162b9c47 new functions and tables start closed to the app role"
+      ],
+      "s1_p": 0.91
+    },
+    {
+      "id": "C-fb7ba2ed",
+      "alias": "database › Partitions are created ahead by whoever migrates › A month table gets its window",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.partitions.test.ts::C-fb7ba2ed ensurePartitions creates the monthly window and routes rows"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-c37e9432",
+      "alias": "database › Partitions are created ahead by whoever migrates › A day table and the window options",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.partitions.test.ts::C-c37e9432 ensurePartitions creates daily partitions and refuses bad window options"
+      ],
+      "s1_p": 0.95
+    },
+    {
+      "id": "C-5cc5a771",
+      "alias": "database › Partitions are created ahead by whoever migrates › Tables that are skipped or refused",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.partitions.test.ts::C-5cc5a771 ensurePartitions ignores list and hash parents and refuses unusable range tables"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-f0ece24f",
+      "alias": "database › Partitions are created ahead by whoever migrates › Rows already in DEFAULT",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.partitions.test.ts::C-f0ece24f ensurePartitions skips a range whose rows already sit in the DEFAULT partition"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-87e84b3f",
+      "alias": "database › Partitions are created ahead by whoever migrates › Concurrent callers and Postgres down",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.partitions.test.ts::C-87e84b3f ensurePartitions serialises callers and fails closed when Postgres is down"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-58e0ebf0",
+      "alias": "database › Partitions are created ahead by whoever migrates › prepareDatabase migrates then partitions",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.prepare.test.ts::C-58e0ebf0 prepareDatabase migrates first and then creates the partition window"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-1f0e219e",
+      "alias": "database › Database opening and health check › Not configured",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.open.test.ts::C-1f0e219e openDatabase returns null for no endpoint and warns once for an owner alone"
+      ],
+      "s1_p": 0.94
+    },
+    {
+      "id": "C-869163e0",
+      "alias": "database › Database opening and health check › Configured, then closed",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.open.test.ts::C-869163e0 openDatabase registers db once, ok, then fail after close twice"
+      ],
+      "s1_p": 0.94
+    },
+    {
+      "id": "C-7454acfb",
+      "alias": "database › Database opening and health check › Not migrated",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.open.test.ts::C-7454acfb openDatabase on an unmigrated database registers db, fails it and warns once"
+      ],
+      "s1_p": 0.95
+    },
+    {
+      "id": "C-32617fd8",
+      "alias": "database › Database opening and health check › Postgres down fails closed",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.open.test.ts::C-32617fd8 openDatabase fails closed on a closed port after one sleep of the remaining time",
+        "src.db.open.test.ts::C-32617fd8 openDatabase rejects a bad openTimeoutMs and a bad scheme without sleeping"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-faf8f8a6",
+      "alias": "database › Database opening and health check › A privileged role that arrives late",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.open.test.ts::C-faf8f8a6 openDatabase refuses a superuser whose cluster starts during the first sleep"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-69717e99",
+      "alias": "database › Database opening and health check › Privileged endpoints",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.open.test.ts::C-69717e99 openDatabase refuses every privileged app endpoint and registers nothing"
+      ],
+      "s1_p": 0.91
+    },
+    {
+      "id": "C-ebfa9bed",
+      "alias": "database › Database opening and health check › Check inputs",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck fails closed when the query rejects or times out",
+        "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck refuses an invalid timeout before querying",
+        "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail after the test database is closed",
+        "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail for an unmigrated test database",
+        "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok for a migrated test database",
+        "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok only for a migrated unprivileged role"
+      ],
+      "s1_p": 0.9
+    },
+    {
+      "id": "C-b3bd64b0",
+      "alias": "database › Engine boot with a database › No database keeps /health green",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.main.db.test.ts::C-b3bd64b0 main opens no database and keeps health green"
+      ],
+      "s1_p": 0.94
+    },
+    {
+      "id": "C-fb007fe9",
+      "alias": "database › Engine boot with a database › Database configured",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.main.db.test.ts::C-fb007fe9 main registers db, serves ok then fail, and never opens the owner"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-ad848b65",
+      "alias": "database › Engine boot with a database › A failed open stops the start",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.main.db.test.ts::C-ad848b65 main writes one fatal line and opens no port when the open fails"
+      ],
+      "s1_p": 0.91
+    },
+    {
+      "id": "C-6d93e8d5",
+      "alias": "database › Engine boot with a database › Shutdown and a busy port end the pool",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.main.db.test.ts::C-6d93e8d5 shutdown and a failed listen end the app pool"
+      ],
+      "s1_p": 0.93
+    },
+    {
+      "id": "C-589bae1c",
+      "alias": "test-database › One embedded Postgres cluster per test run › Coordinates reach test files",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.support.global-setup.test.ts::C-589bae1c global setup publishes the coordinates of a migrated shared cluster"
+      ],
+      "s1_p": 0.61
+    },
+    {
+      "id": "C-b3edfa92",
+      "alias": "test-database › One embedded Postgres cluster per test run › Setup then teardown",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.support.global-setup.test.ts::C-b3edfa92 global setup starts a cluster and global teardown stops it"
+      ],
+      "s1_p": 0.9
+    },
+    {
+      "id": "C-f2409274",
+      "alias": "test-database › One embedded Postgres cluster per test run › No cluster or no start",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.support.pg.test.ts::C-f2409274 startCluster refuses a busy port and removes its data directory",
+        "test.support.pg.test.ts::C-f2409274 withTestDatabase needs TEST_PG_CLUSTER when no cluster is given"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-6d9f36e4",
+      "alias": "test-database › A fresh database per test › Fresh, isolated, dropped on close",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "test.support.pg.test.ts::C-6d9f36e4 eight databases run in parallel and all drop on close",
+        "test.support.pg.test.ts::C-6d9f36e4 migrated false has no schema while the default clone does",
+        "test.support.pg.test.ts::C-6d9f36e4 withTestDatabase clones fresh isolated databases with owner and app pools"
+      ],
+      "s1_p": 0.92
+    },
+    {
+      "id": "C-081c5cff",
+      "alias": "test-database › A fresh database per test › App pool obeys RLS",
+      "result": "pass",
+      "judge": "pass",
+      "reason": "the judge passed it and a discriminating test passes",
+      "counterexample": null,
+      "tests": [
+        "src.db.base.test.ts::C-081c5cff the app role is subject to forced row level security",
+        "test.support.pg.test.ts::C-081c5cff the app pool is subject to row level security"
+      ],
+      "s1_p": 0.91
+    }
+  ],
+  "findings": [],
+  "holds": [],
+  "subject_sha": "970db98ce68d4ee10c4f13162024dc2b4859183e",
+  "family_criteria": [
+    "C-7c1574be",
+    "C-63221721",
+    "C-dc754ade",
+    "C-8a52d337",
+    "C-55276583",
+    "C-6a2a3916",
+    "C-c664fa4c",
+    "C-4a57a001",
+    "C-2735b4ff",
+    "C-b2b0429a",
+    "C-77b8f169",
+    "C-3815951d",
+    "C-f1949ac2",
+    "C-d380769b",
+    "C-94eda93a",
+    "C-d4c6bb53",
+    "C-e3e42ffe",
+    "C-162b9c47",
+    "C-fb7ba2ed",
+    "C-c37e9432",
+    "C-5cc5a771",
+    "C-f0ece24f",
+    "C-87e84b3f",
+    "C-58e0ebf0",
+    "C-1f0e219e",
+    "C-869163e0",
+    "C-7454acfb",
+    "C-32617fd8",
+    "C-faf8f8a6",
+    "C-69717e99",
+    "C-ebfa9bed",
+    "C-b3bd64b0",
+    "C-fb007fe9",
+    "C-ad848b65",
+    "C-6d93e8d5",
+    "C-589bae1c",
+    "C-b3edfa92",
+    "C-f2409274",
+    "C-6d9f36e4",
+    "C-081c5cff"
+  ],
+  "reused_from": null,
+  "integrity": {
+    "checks": [
+      {
+        "name": "protected paths",
+        "status": "ok",
+        "note": "no protected path differs from the base"
+      },
+      {
+        "name": "pre-existing tests",
+        "status": "skipped",
+        "note": "no test file changed"
+      },
+      {
+        "name": "red-green freeze",
+        "status": "ok",
+        "note": "12 task(s): red and green compared"
+      },
+      {
+        "name": "test path freeze",
+        "status": "ok",
+        "note": "12 harness step commit(s) checked"
+      },
+      {
+        "name": "content scan",
+        "status": "ok",
+        "note": "no result-manipulating construct in the changed support and runner files"
+      },
+      {
+        "name": "gate configuration",
+        "status": "skipped",
+        "note": "no gate or runner configuration file changed"
+      },
+      {
+        "name": "test awareness",
+        "status": "ok",
+        "note": "no production line reacts to the test run"
+      },
+      {
+        "name": "suppressions",
+        "status": "skipped",
+        "note": "not checked: python only; changed files outside it: src/db/base.test.ts, src/db/errors.ts, src/db/files.test.ts, src/db/files.ts, src/db/health.test.ts (+20 more)"
+      },
+      {
+        "name": "tdd history",
+        "status": "ok",
+        "note": "12 task(s); red tests passing at head: step 3"
+      },
+      {
+        "name": "pre-existing tests still pass",
+        "status": "ok",
+        "note": "155 of 155 base tests pass on the unit's code with its 12 test and support files at the base (base: not needed)"
+      }
+    ],
+    "findings": [],
+    "declared": [],
+    "human_protected": [],
+    "human_tests": [],
+    "unfrozen": [],
+    "human_suppressions": [],
+    "human_scan": [],
+    "human_config": [],
+    "allowed_tests": [],
+    "mocked_support": [],
+    "base_tests": {
+      "base_sha": "6c9571af8dcf3137bba40615a90d88eb589cdae3",
+      "command": "pnpm run test",
+      "passed": [
+        "src.api.errors.test.ts::C-240590ab toErrorResponse maps body schema failures to field details",
+        "src.api.errors.test.ts::C-240590ab toErrorResponse reports query and path parameter fields",
+        "src.api.errors.test.ts::C-3284ea9e ApiError refuses a status outside 400 to 599 or a malformed code",
+        "src.api.errors.test.ts::C-3284ea9e toErrorResponse maps an ApiError with and without details",
+        "src.api.errors.test.ts::C-aea19ec5 toErrorResponse hides an unknown error behind INTERNAL",
+        "src.api.errors.test.ts::C-d145c766 toErrorResponse keeps another 4xx status as BAD_REQUEST",
+        "src.api.errors.test.ts::C-d145c766 toErrorResponse maps malformed JSON oversized and wrongly typed bodies",
+        "src.api.health.test.ts::C-14452135 an empty registry reports ok with no checks",
+        "src.api.health.test.ts::C-14452135 checks that resolve ok are reported by name",
+        "src.api.health.test.ts::C-609c36a3 a check that never settles times out after 10 ms",
+        "src.api.health.test.ts::C-609c36a3 a check that resolves fail marks the report failed",
+        "src.api.health.test.ts::C-609c36a3 a check that resolves junk fails as an invalid result",
+        "src.api.health.test.ts::C-609c36a3 a check that throws fails without leaking its message",
+        "src.api.health.test.ts::C-64e17386 a check registered after a run appears in the next run",
+        "src.api.health.test.ts::C-64e17386 duplicate and invalid names are refused",
+        "src.api.health.test.ts::C-64e17386 overlapping runs call every check once",
+        "src.api.server.test.ts::C-14452135 GET /health reports passing checks by name",
+        "src.api.server.test.ts::C-14452135 GET /health with no checks reports ok and healthPayload is unchanged",
+        "src.api.server.test.ts::C-240590ab buildServer reports the first body query or path schema fault",
+        "src.api.server.test.ts::C-2490a98e a path that carries a token logs the wildcard route only",
+        "src.api.server.test.ts::C-3284ea9e buildServer answers an ApiError with its own status code and details",
+        "src.api.server.test.ts::C-3c17bb81 a recording tracer holds one ended http.request span per request",
+        "src.api.server.test.ts::C-595eb185 a failing tracer logs a warning and the request still succeeds",
+        "src.api.server.test.ts::C-609c36a3 GET /health reports a failing check without leaking its content",
+        "src.api.server.test.ts::C-609c36a3 GET /health reports a hanging check as a timeout",
+        "src.api.server.test.ts::C-609c36a3 GET /health reports a junk check result as invalid",
+        "src.api.server.test.ts::C-609c36a3 GET /health reports a throwing check without its message",
+        "src.api.server.test.ts::C-64866f0f a 404 and a thrown error both carry the request id",
+        "src.api.server.test.ts::C-71327adc a well-formed x-request-id is kept and the route is logged without the query",
+        "src.api.server.test.ts::C-aea19ec5 unknown errors answer INTERNAL and never log hunter2",
+        "src.api.server.test.ts::C-c68d2bde missing malformed and oversized request ids are replaced",
+        "src.api.server.test.ts::C-ce3d89ea the health request log holds the route without the query token",
+        "src.api.server.test.ts::C-d145c766 buildServer keeps the fixed codes for malformed oversized and wrongly typed bodies",
+        "src.api.server.test.ts::buildServer hands an injectable server to the routes a test adds",
+        "src.api.shutdown.test.ts::C-341a5ed6 a SIGTERM then SIGINT closes once and exits zero",
+        "src.api.shutdown.test.ts::C-3d0f68d6 a direct shutdown is idempotent and resolves undefined after exit zero",
+        "src.api.shutdown.test.ts::C-3d0f68d6 dispose removes both signal listeners and never closes",
+        "src.api.shutdown.test.ts::C-78a31ae6 a failed close logs shutdown failed without the error text",
+        "src.api.shutdown.test.ts::C-78a31ae6 a missed drain deadline force closes and exits one",
+        "src.api.shutdown.test.ts::C-9abd6ccb requests during the drain still get the envelope and the slow request finishes",
+        "src.config.config.test.ts::C-16430cae a loaded config hides the engine key and database password from JSON String and inspect",
+        "src.config.config.test.ts::C-3d74e0ae a bad database URL is CONFIG_INVALID naming the URL variable without the password",
+        "src.config.config.test.ts::C-3d74e0ae a bad owner database URL names the owner URL variable",
+        "src.config.config.test.ts::C-3d74e0ae a database password file without its URL names the password-file variable",
+        "src.config.config.test.ts::C-3d74e0ae an empty database password file with a valid URL gives CONFIG_SECRET_EMPTY",
+        "src.config.config.test.ts::C-406ddaa1 loadConfig keeps a postgresql sslmode URL unchanged and leaves a missing password null",
+        "src.config.config.test.ts::C-406ddaa1 loadConfig parses app and owner database endpoints with secret passwords",
+        "src.config.config.test.ts::C-7a4aa4d4 loadConfig reads the engine key from its file and strips the trailing newline",
+        "src.config.config.test.ts::C-7b6bccec loadConfig returns every documented default for an empty environment",
+        "src.config.config.test.ts::C-95e9881e loadConfig derives publicBaseUrl from the port and ignores empty or unknown variables",
+        "src.config.config.test.ts::C-95e9881e loadConfig reads every non-secret setting from the environment and drops a trailing slash",
+        "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad drain deadline or public base URL without echoing the value",
+        "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad port host log level or role",
+        "src.config.config.test.ts::C-ca797e1f loadConfig refuses a weak engine key with CONFIG_INVALID naming its file variable",
+        "src.config.config.test.ts::C-ca797e1f loadConfig refuses an empty or unreadable engine key file with CONFIG_SECRET_EMPTY",
+        "src.config.config.test.ts::C-f3f5587d loadConfig ignores an empty secret-shaped variable",
+        "src.config.config.test.ts::C-f3f5587d loadConfig refuses a non-empty secret-shaped variable without echoing its value",
+        "src.config.secret.test.ts::C-16430cae a Secret hides its value from JSON String and inspect",
+        "src.config.secret.test.ts::C-3d74e0ae ConfigError names the variable and rule without a value",
+        "src.config.secret.test.ts::C-406ddaa1 readSecretValue returns a Secret for a database password file",
+        "src.config.secret.test.ts::C-7a4aa4d4 readSecretValue strips one trailing newline and reads the named file once",
+        "src.config.secret.test.ts::C-ca797e1f a weak engine key is CONFIG_INVALID with its file variable",
+        "src.config.secret.test.ts::C-ca797e1f readSecretValue refuses empty whitespace-only and unreadable secrets without their text",
+        "src.core.clock.test.ts::C-6f8e2578 fixedClock rejects an invalid date",
+        "src.core.clock.test.ts::C-6f8e2578 fixedClock returns distinct Date objects for one instant",
+        "src.core.ids.test.ts::C-6004f84c ids stay ordered when the clock moves forward and back",
+        "src.core.ids.test.ts::C-6004f84c the counter rolls into the timestamp after 4096 ids",
+        "src.core.ids.test.ts::C-68b36af5 createIds rejects prefixes outside the lower-case rule",
+        "src.core.ids.test.ts::C-68b36af5 sequentialIds counts from its seed",
+        "src.core.ids.test.ts::C-68b36af5 sequentialIds rejects a bad seed and overflow",
+        "src.core.ids.test.ts::C-68b36af5 systemIds returns a uuidv7 with its prefix",
+        "src.core.ids.test.ts::C-6f8e2578 createIds writes the timestamp version counter variant and random bits",
+        "src.health.test.ts::healthPayload reports ok and the given version",
+        "src.main.test.ts::C-469d7fec main reports EADDRINUSE for a busy port at info and silent",
+        "src.main.test.ts::C-469d7fec main writes one fatal line for an empty secret file",
+        "src.main.test.ts::C-469d7fec main writes one fatal line without the error text for an unknown failure",
+        "src.main.test.ts::C-6912835f startServer serves health on the bound loopback port and closes",
+        "src.main.test.ts::C-c7407753 main listens on the configured host and reports it",
+        "src.main.test.ts::C-c7407753 main starts a port-0 server and stops on SIGTERM",
+        "src.observability.logger.test.ts::C-cc8bd5a6 authorization cookie and set-cookie are redacted alone and under headers",
+        "src.observability.logger.test.ts::C-cc8bd5a6 the listed secret keys are redacted from depth zero to three",
+        "src.observability.logger.test.ts::C-d18af48d a silent logger writes nothing while a warn logger on the same input does",
+        "src.observability.logger.test.ts::C-d18af48d a warn logger writes one ISO-timed line and drops records below its level",
+        "src.observability.logger.test.ts::C-fc60a608 a request is logged as method and route pattern, never its URL",
+        "src.observability.logger.test.ts::C-fc60a608 a request without a route pattern logs url unmatched",
+        "src.observability.logger.test.ts::C-fc60a608 an error is logged as type, string code and frames only",
+        "src.observability.logger.test.ts::C-fc60a608 an error without a string code has no code key",
+        "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end",
+        "src.observability.tracer.test.ts::C-3c17bb81 noopTracer starts a span without attributes",
+        "test.arch.licences.test.ts::C-04784843 a one-word License is judged as an identifier",
+        "test.arch.licences.test.ts::C-05d0c7f9 C-b51bd435 every dependency range in the root and web manifests is an exact version",
+        "test.arch.licences.test.ts::C-0797a2c3 topLevelKeys reads keys from column zero only",
+        "test.arch.licences.test.ts::C-0910d0a3 pythonLicenceOf falls back from free text to the classifiers",
+        "test.arch.licences.test.ts::C-0db64dfc unmapped classifiers and missing licences fail",
+        "test.arch.licences.test.ts::C-0f36e537 checkInstallFiles refuses forbidden npmrc keys",
+        "test.arch.licences.test.ts::C-115a4581 C-ce1eedc7 the licence gate reads files only",
+        "test.arch.licences.test.ts::C-1524fbc5 parseLicenceExpression gives null for malformed expressions only",
+        "test.arch.licences.test.ts::C-1c977f83 formatLicenceViolations joins the lines with a newline and gives an empty string for none",
+        "test.arch.licences.test.ts::C-1fa7c3d4 scanPythonVenv reads dist-info across Python minors",
+        "test.arch.licences.test.ts::C-2241065a decideVenvScan skips an absent venv that is not required",
+        "test.arch.licences.test.ts::C-2ae464e9 checkInstallFiles reports a root pnpmfile",
+        "test.arch.licences.test.ts::C-2fb3cbe9 checkLicences fails a copyleft term",
+        "test.arch.licences.test.ts::C-30f06cd4 checkLicences judges every term of a licence expression",
+        "test.arch.licences.test.ts::C-30fdcfea checkLicences passes permissive licences",
+        "test.arch.licences.test.ts::C-41ded6c9 checkBuiltDependencies fails an added package",
+        "test.arch.licences.test.ts::C-4557b8b9 checkBuiltDependencies fails a removed package or a duplicate",
+        "test.arch.licences.test.ts::C-4767d4f0 checkInstallFiles refuses forbidden workspace keys",
+        "test.arch.licences.test.ts::C-4ca6b05c decideVenvScan fails an absent venv that is required",
+        "test.arch.licences.test.ts::C-59b6d3e2 checkBuiltDependencies fails a missing workspace file",
+        "test.arch.licences.test.ts::C-606611bb C-41ded6c9 onlyBuiltDependencies equals the reviewed list",
+        "test.arch.licences.test.ts::C-65a32526 checkPolicy accepts the reviewed exception version",
+        "test.arch.licences.test.ts::C-67d87882 checkInstallHooks refuses every install-time lifecycle script",
+        "test.arch.licences.test.ts::C-6a008a66 npmLicenceOf treats a legacy or free-text licence as unknown",
+        "test.arch.licences.test.ts::C-6c266a75 checkPolicy refuses pypi versions that are not a release segment",
+        "test.arch.licences.test.ts::C-6faaac53 checkExactVersions refuses a range in pnpm overrides",
+        "test.arch.licences.test.ts::C-706e1113 pythonLicenceOf reads an SPDX License-Expression",
+        "test.arch.licences.test.ts::C-75476b3c checkBuiltDependencies gives the fixed drift details in order",
+        "test.arch.licences.test.ts::C-79c32cd5 C-2ae464e9 checkInstallFiles finds nothing in clean roots and a pnpmfile in a dirty one",
+        "test.arch.licences.test.ts::C-79c32cd5 C-67d87882 the repository runs no install hooks",
+        "test.arch.licences.test.ts::C-7b90839f checkPolicy rejects malformed policy data in order",
+        "test.arch.licences.test.ts::C-7dd0d742 checkInstallHooks refuses a pnpm setting other than overrides",
+        "test.arch.licences.test.ts::C-7f94877e checkLicences matches terms without regard to case",
+        "test.arch.licences.test.ts::C-7fbf0b22 checkExactVersions names manifest violations",
+        "test.arch.licences.test.ts::C-876fb064 an absent or empty store fails instead of passing",
+        "test.arch.licences.test.ts::C-87f4def2 C-69c81a68 decideVenvScan scans a present venv, and a present venv with no distributions fails",
+        "test.arch.licences.test.ts::C-8be4d4fc every Python distribution in the e2e venv has an allowlisted licence",
+        "test.arch.licences.test.ts::C-8eaf01ec checkPolicy admits pypi release segment versions",
+        "test.arch.licences.test.ts::C-92d19a9f C-6107b0c0 checkLicences exempts only the reviewed version and licence text",
+        "test.arch.licences.test.ts::C-991042c4 checkPolicy judges npm exception versions with isExactVersion",
+        "test.arch.licences.test.ts::C-9d08ccc3 every installed npm package has an allowlisted licence",
+        "test.arch.licences.test.ts::C-a223af90 checkInstallHooks allows ordinary scripts and overrides and refuses bad shapes",
+        "test.arch.licences.test.ts::C-a74a1a7f scanNpmStore walks the store without following symlinks",
+        "test.arch.licences.test.ts::C-ae2f6322 checkPolicy does not judge an unknown ecosystem on its version",
+        "test.arch.licences.test.ts::C-ae5033da checkLicences reports a package without a licence",
+        "test.arch.licences.test.ts::C-b51bd435 checkExactVersions refuses ranges, tags and other specs",
+        "test.arch.licences.test.ts::C-b7a7ed55 parseLicenceExpression reads the distinct terms of an expression",
+        "test.arch.licences.test.ts::C-c18692e2 C-73030b3f the licence policy data is well formed",
+        "test.arch.licences.test.ts::C-c39c579d checkExactVersions ignores other fields and refuses bad manifests",
+        "test.arch.licences.test.ts::C-ca426357 checkLicences refuses a near-miss identifier",
+        "test.arch.licences.test.ts::C-ce1eedc7 findForbiddenImports reports imports, dynamic imports, require and fetch",
+        "test.arch.licences.test.ts::C-db08d47c formatLicenceViolation cuts a long licence text and omits an absent one",
+        "test.arch.licences.test.ts::C-dcc52cf2 a permissive classifier cannot hide a copyleft License text",
+        "test.arch.licences.test.ts::C-ec3544f7 C-b51bd435 checkExactVersions passes exact versions and refuses a range",
+        "test.arch.licences.test.ts::C-ed7ff850 checkBuiltDependencies handles an absent key, an empty reviewed list and an unsupported form",
+        "test.arch.licences.test.ts::C-ed8723d5 findForbiddenImports ignores text inside comments and literals",
+        "test.arch.licences.test.ts::C-f0b009a1 formatLicenceViolation names code, subject, licence and detail",
+        "test.arch.licences.test.ts::C-ff913dc5 checkLicences gives fixed subjects and details",
+        "test.tooling.node-test-junit.test.ts::a describe body that throws is reported as a failure of the suite",
+        "test.tooling.node-test-junit.test.ts::a file that does not import is a collection failure without classname",
+        "test.tooling.node-test-junit.test.ts::a passing test has no failure and skip and todo are skipped",
+        "test.tooling.node-test-junit.test.ts::a stub that throws not implemented is reported as NotImplementedError",
+        "test.tooling.node-test-junit.test.ts::an assertion failure carries type AssertionError and the name in its message",
+        "test.tooling.node-test-junit.test.ts::any other error keeps its own name",
+        "test.tooling.node-test-junit.test.ts::nested describes become part of the classname",
+        "test.tooling.node-test-junit.test.ts::same-named tests in two files get distinct classnames"
+      ],
+      "collection_errors": []
+    },
+    "test_awareness": []
+  },
+  "trace": [
+    {
+      "criterion": "C-7c1574be",
+      "alias": "database › Pool from a database endpoint › Endpoint with a separate password",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.pool.test.ts::C-7c1574be createPool accepts postgresql URLs and verify-full TLS",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.pool.test.ts::C-7c1574be createPool builds a pool from an endpoint password with the default options",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-63221721",
+      "alias": "database › Pool from a database endpoint › Bad input is refused without echoing it",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.pool.test.ts::C-63221721 createPool refuses bad endpoints and options without echoing them",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-dc754ade",
+      "alias": "database › Pool from a database endpoint › An idle client error does not crash the process",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.pool.test.ts::C-dc754ade an idle client error reaches onError once and never throws",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-8a52d337",
+      "alias": "database › Migration file names › Valid directory",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.files.test.ts::C-8a52d337 readMigrationFiles allows gaps and returns an empty list for an empty directory",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.files.test.ts::C-8a52d337 readMigrationFiles sorts valid files and hashes their bytes",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-55276583",
+      "alias": "database › Migration file names › Invalid entries",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.files.test.ts::C-55276583 readMigrationFiles refuses badly named entries",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.files.test.ts::C-55276583 readMigrationFiles refuses duplicate versions",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.files.test.ts::C-55276583 readMigrationFiles refuses version zero and non-file entries",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-6a2a3916",
+      "alias": "database › Migration file names › Empty file, transaction control, no directory",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses a directory that does not exist",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses an empty file",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses transaction control lines",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-c664fa4c",
+      "alias": "database › Forward-only migration runner › Apply, repeat, extend, fill a gap",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.migrate.test.ts::C-2735b4ff C-c664fa4c migrate bootstraps an empty directory and applies a later file",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.migrate.test.ts::C-c664fa4c migrate applies files in order, repeats, extends and fills a gap",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-4a57a001",
+      "alias": "database › Forward-only migration runner › A failing migration rolls back and stops",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.migrate.test.ts::C-4a57a001 a failing migration rolls back, releases the lock and stops",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-2735b4ff",
+      "alias": "database › Forward-only migration runner › Empty directory and Postgres down",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.migrate.test.ts::C-2735b4ff C-c664fa4c migrate bootstraps an empty directory and applies a later file",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-b2b0429a",
+      "alias": "database › Forward-only migration runner › Edited, gone or renamed file",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.migrate.test.ts::C-b2b0429a migrate refuses an edited missing renamed or emptied file set",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-77b8f169",
+      "alias": "database › Concurrent runners are serialised › Two runners",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.migrate.test.ts::C-77b8f169 two runners are serialised by the advisory lock",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-3815951d",
+      "alias": "database › Concurrent runners are serialised › Lock held elsewhere",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.migrate.test.ts::C-3815951d migrate refuses an invalid lock timeout before querying",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.migrate.test.ts::C-3815951d migrate times out on a held lock and releases its own after a failure",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-f1949ac2",
+      "alias": "database › Roles are bootstrapped and checked › Create, repeat, repair",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.roles.test.ts::C-f1949ac2 ensureRoles creates repeats and repairs the login roles",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-d380769b",
+      "alias": "database › Roles are bootstrapped and checked › Bad input, a weak admin and quotes",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.roles.test.ts::C-d380769b ensureRoles keeps a quoted password and the owner role",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.roles.test.ts::C-d380769b ensureRoles refuses a weak admin with DB_ROLES_FAILED",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.roles.test.ts::C-d380769b ensureRoles refuses empty non-ASCII NUL and oversized passwords",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-94eda93a",
+      "alias": "database › Roles are bootstrapped and checked › Migration preconditions",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.migrate.test.ts::C-94eda93a migrate refuses missing and privileged roles before any DDL",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-d4c6bb53",
+      "alias": "database › Base migration and grants model › Ledger and ownership",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.base.test.ts::C-d4c6bb53 the base migration records the ledger and keeps objects owned by the owner role",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-e3e42ffe",
+      "alias": "database › Base migration and grants model › The app role has no more than USAGE",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.base.test.ts::C-e3e42ffe the app role has only USAGE on the schema",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-162b9c47",
+      "alias": "database › Base migration and grants model › New objects start closed",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.base.test.ts::C-162b9c47 new functions and tables start closed to the app role",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-fb7ba2ed",
+      "alias": "database › Partitions are created ahead by whoever migrates › A month table gets its window",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.partitions.test.ts::C-fb7ba2ed ensurePartitions creates the monthly window and routes rows",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-c37e9432",
+      "alias": "database › Partitions are created ahead by whoever migrates › A day table and the window options",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.partitions.test.ts::C-c37e9432 ensurePartitions creates daily partitions and refuses bad window options",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-5cc5a771",
+      "alias": "database › Partitions are created ahead by whoever migrates › Tables that are skipped or refused",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.partitions.test.ts::C-5cc5a771 ensurePartitions ignores list and hash parents and refuses unusable range tables",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-f0ece24f",
+      "alias": "database › Partitions are created ahead by whoever migrates › Rows already in DEFAULT",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.partitions.test.ts::C-f0ece24f ensurePartitions skips a range whose rows already sit in the DEFAULT partition",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-87e84b3f",
+      "alias": "database › Partitions are created ahead by whoever migrates › Concurrent callers and Postgres down",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.partitions.test.ts::C-87e84b3f ensurePartitions serialises callers and fails closed when Postgres is down",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-58e0ebf0",
+      "alias": "database › Partitions are created ahead by whoever migrates › prepareDatabase migrates then partitions",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.prepare.test.ts::C-58e0ebf0 prepareDatabase migrates first and then creates the partition window",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-1f0e219e",
+      "alias": "database › Database opening and health check › Not configured",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.open.test.ts::C-1f0e219e openDatabase returns null for no endpoint and warns once for an owner alone",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-869163e0",
+      "alias": "database › Database opening and health check › Configured, then closed",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.open.test.ts::C-869163e0 openDatabase registers db once, ok, then fail after close twice",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-7454acfb",
+      "alias": "database › Database opening and health check › Not migrated",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.open.test.ts::C-7454acfb openDatabase on an unmigrated database registers db, fails it and warns once",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-32617fd8",
+      "alias": "database › Database opening and health check › Postgres down fails closed",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.open.test.ts::C-32617fd8 openDatabase fails closed on a closed port after one sleep of the remaining time",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.open.test.ts::C-32617fd8 openDatabase rejects a bad openTimeoutMs and a bad scheme without sleeping",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-faf8f8a6",
+      "alias": "database › Database opening and health check › A privileged role that arrives late",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.open.test.ts::C-faf8f8a6 openDatabase refuses a superuser whose cluster starts during the first sleep",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-69717e99",
+      "alias": "database › Database opening and health check › Privileged endpoints",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.open.test.ts::C-69717e99 openDatabase refuses every privileged app endpoint and registers nothing",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-ebfa9bed",
+      "alias": "database › Database opening and health check › Check inputs",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck fails closed when the query rejects or times out",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck refuses an invalid timeout before querying",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail after the test database is closed",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail for an unmigrated test database",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok for a migrated test database",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok only for a migrated unprivileged role",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-b3bd64b0",
+      "alias": "database › Engine boot with a database › No database keeps /health green",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.main.db.test.ts::C-b3bd64b0 main opens no database and keeps health green",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-fb007fe9",
+      "alias": "database › Engine boot with a database › Database configured",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.main.db.test.ts::C-fb007fe9 main registers db, serves ok then fail, and never opens the owner",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-ad848b65",
+      "alias": "database › Engine boot with a database › A failed open stops the start",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.main.db.test.ts::C-ad848b65 main writes one fatal line and opens no port when the open fails",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-6d93e8d5",
+      "alias": "database › Engine boot with a database › Shutdown and a busy port end the pool",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.main.db.test.ts::C-6d93e8d5 shutdown and a failed listen end the app pool",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-589bae1c",
+      "alias": "test-database › One embedded Postgres cluster per test run › Coordinates reach test files",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.support.global-setup.test.ts::C-589bae1c global setup publishes the coordinates of a migrated shared cluster",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-b3edfa92",
+      "alias": "test-database › One embedded Postgres cluster per test run › Setup then teardown",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.support.global-setup.test.ts::C-b3edfa92 global setup starts a cluster and global teardown stops it",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-f2409274",
+      "alias": "test-database › One embedded Postgres cluster per test run › No cluster or no start",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.support.pg.test.ts::C-f2409274 startCluster refuses a busy port and removes its data directory",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "test.support.pg.test.ts::C-f2409274 withTestDatabase needs TEST_PG_CLUSTER when no cluster is given",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-6d9f36e4",
+      "alias": "test-database › A fresh database per test › Fresh, isolated, dropped on close",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "test.support.pg.test.ts::C-6d9f36e4 eight databases run in parallel and all drop on close",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "test.support.pg.test.ts::C-6d9f36e4 migrated false has no schema while the default clone does",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "test.support.pg.test.ts::C-6d9f36e4 withTestDatabase clones fresh isolated databases with owner and app pools",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    },
+    {
+      "criterion": "C-081c5cff",
+      "alias": "test-database › A fresh database per test › App pool obeys RLS",
+      "state": "covered",
+      "tests": [
+        {
+          "id": "src.db.base.test.ts::C-081c5cff the app role is subject to forced row level security",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        },
+        {
+          "id": "test.support.pg.test.ts::C-081c5cff the app pool is subject to row level security",
+          "status": "passed",
+          "proof": "red_assertion",
+          "adequate": true,
+          "note": "",
+          "over_cap": 0
+        }
+      ],
+      "ignored": [],
+      "held": "",
+      "capped": []
+    }
+  ],
+  "audit": [],
+  "generated": [],
+  "s1": [
+    {
+      "criterion": "C-7c1574be",
+      "status": "ok",
+      "p": 0.94,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-63221721",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-dc754ade",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-8a52d337",
+      "status": "ok",
+      "p": 0.94,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-55276583",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.98,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.02
+      }
+    },
+    {
+      "criterion": "C-6a2a3916",
+      "status": "ok",
+      "p": 0.94,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-c664fa4c",
+      "status": "ok",
+      "p": 0.94,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-4a57a001",
+      "status": "ok",
+      "p": 0.9,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-2735b4ff",
+      "status": "ok",
+      "p": 0.49,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.74,
+        "contradicted": 0.06,
+        "not_implemented": 0.1,
+        "unrelated": 0.1
+      }
+    },
+    {
+      "criterion": "C-b2b0429a",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-77b8f169",
+      "status": "ok",
+      "p": 0.74,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.89,
+        "contradicted": 0.03,
+        "not_implemented": 0.02,
+        "unrelated": 0.06
+      }
+    },
+    {
+      "criterion": "C-3815951d",
+      "status": "ok",
+      "p": 0.87,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-f1949ac2",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-d380769b",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-94eda93a",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.98,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-d4c6bb53",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-e3e42ffe",
+      "status": "ok",
+      "p": 0.87,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.97,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.02
+      }
+    },
+    {
+      "criterion": "C-162b9c47",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.95,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-fb7ba2ed",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-c37e9432",
+      "status": "ok",
+      "p": 0.95,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-5cc5a771",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.98,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.02
+      }
+    },
+    {
+      "criterion": "C-f0ece24f",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.97,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.03
+      }
+    },
+    {
+      "criterion": "C-87e84b3f",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-58e0ebf0",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-1f0e219e",
+      "status": "ok",
+      "p": 0.94,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-869163e0",
+      "status": "ok",
+      "p": 0.94,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-7454acfb",
+      "status": "ok",
+      "p": 0.95,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-32617fd8",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-faf8f8a6",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.98,
+        "contradicted": 0.0,
+        "not_implemented": 0.01,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-69717e99",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-ebfa9bed",
+      "status": "ok",
+      "p": 0.9,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.01,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-b3bd64b0",
+      "status": "ok",
+      "p": 0.94,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-fb007fe9",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-ad848b65",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-6d93e8d5",
+      "status": "ok",
+      "p": 0.93,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-589bae1c",
+      "status": "ok",
+      "p": 0.61,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.91,
+        "contradicted": 0.01,
+        "not_implemented": 0.04,
+        "unrelated": 0.04
+      }
+    },
+    {
+      "criterion": "C-b3edfa92",
+      "status": "ok",
+      "p": 0.9,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-f2409274",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.99,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.01
+      }
+    },
+    {
+      "criterion": "C-6d9f36e4",
+      "status": "ok",
+      "p": 0.92,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 1.0,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.0
+      }
+    },
+    {
+      "criterion": "C-081c5cff",
+      "status": "ok",
+      "p": 0.91,
+      "model": "jev-1.13.0",
+      "engine": "jev",
+      "reason": "",
+      "truncated": true,
+      "evidence": {
+        "implemented": 0.98,
+        "contradicted": 0.0,
+        "not_implemented": 0.0,
+        "unrelated": 0.02
+      }
+    }
+  ],
+  "evidence": {
+    "schema": "l4/evidence@1",
+    "holds": [],
+    "items": {},
+    "scope": {
+      "declared": [
+        "src/db",
+        "test/support",
+        "src/core",
+        "test/support/global-setup.ts",
+        "src/db/migrations",
+        "src/db/roles.ts",
+        "src/db/migrations/0001_base.sql",
+        "src/main.db.test.ts",
+        "docs/decisions/0002",
+        "src/config",
+        "src/api",
+        "src/main.ts",
+        "--test-global-setup=test/support/global-setup.ts",
+        "src/db/{errors,pool,files,migrate,roles,partitions,prepare,health,open,index}.ts",
+        "test/support/pg.ts",
+        "src/db/base.test.ts",
+        "test/support/pg.test.ts",
+        "test/support/global-setup.test.ts",
+        "@types/pg",
+        "src/db/pool.test.ts",
+        "src/db/errors.ts",
+        "src/db/pool.ts",
+        "src/db/index.ts",
+        "postgres://<role>:<password>@127.0.0.1:<port>/<name>",
+        "src/db/files.test.ts",
+        "src/db/files.ts",
+        "src/db/roles.test.ts",
+        "src/db/migrate.test.ts",
+        "src/db/migrate.ts",
+        "src/db/partitions.test.ts",
+        "src/db/prepare.test.ts",
+        "src/db/partitions.ts",
+        "src/db/prepare.ts",
+        "src/core/index.ts",
+        "src/db/health.test.ts",
+        "src/db/health.ts",
+        "src/db/open.test.ts",
+        "postgres://postgres@127.0.0.1:<port>/postgres",
+        "src/db/open.ts",
+        "**/0115_*.sql",
+        "**/PARTITION_*",
+        "**/*_FILE",
+        "**/*.test.ts",
+        "**/opts?",
+        "@embedded-postgres/*",
+        "module --test-global-setup=test",
+        "module @types",
+        "module api",
+        "module config",
+        "module core",
+        "module db",
+        "module docs",
+        "module main",
+        "module main.db.test",
+        "module postgres:",
+        "module test"
+      ],
+      "skipped": false,
+      "note": "",
+      "holds": [],
+      "files": [
+        {
+          "path": "openspec/changes/add-db-foundation/.l4/ledger/r-20261026T1345Z-9f1a.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-db-foundation/.l4/ledger/r-20261026T1402Z-3a50.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-db-foundation/.l4/ledger/r-20261026T1403Z-88d4.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-db-foundation/tasks.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "src/db/base.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/db/errors.ts",
+          "module": "db",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/db/files.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/db/files.ts",
+          "module": "db",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/db/health.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/db/health.ts",
+          "module": "db",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/db/index.ts",
+          "module": "db",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/db/migrate.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/db/migrate.ts",
+          "module": "db",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/db/migrations/0001_base.sql",
+          "module": "db",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/db/open.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/db/open.ts",
+          "module": "db",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/db/partitions.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/db/partitions.ts",
+          "module": "db",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/db/pool.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/db/pool.ts",
+          "module": "db",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/db/prepare.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/db/prepare.ts",
+          "module": "db",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/db/roles.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/db/roles.ts",
+          "module": "db",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "src/main.db.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/main.ts",
+          "module": "main",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/support/global-setup.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/support/global-setup.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/support/pg.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/support/pg.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        }
+      ]
+    },
+    "diff_coverage": {
+      "status": "not_applicable",
+      "reason": "diff coverage measures python only; changed code outside it: src/db/errors.ts, src/db/files.ts, src/db/health.ts, src/db/index.ts, src/db/migrate.ts and 8 more",
+      "percent": 0.0,
+      "unmeasured_files": [],
+      "other_files": [
+        "src/db/errors.ts",
+        "src/db/files.ts",
+        "src/db/health.ts",
+        "src/db/index.ts",
+        "src/db/migrate.ts",
+        "src/db/open.ts",
+        "src/db/partitions.ts",
+        "src/db/pool.ts",
+        "src/db/prepare.ts",
+        "src/db/roles.ts",
+        "src/main.ts",
+        "test/support/global-setup.ts",
+        "test/support/pg.ts"
+      ],
+      "functions": []
+    },
+    "tests_ran": {
+      "tests_ok": true,
+      "summary": {
+        "total": 215,
+        "passed": 215,
+        "failed": 0,
+        "errored": 0,
+        "skipped": 0,
+        "new": 59,
+        "new_passed": 59,
+        "skipped_unchanged": []
+      },
+      "findings": []
+    }
+  },
+  "human": [],
+  "fix": null,
+  "judge_verdict": {
+    "criteria": [
+      {
+        "id": "C-7c1574be",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/pool.ts",
+            "quote": "const config: pg.PoolConfig = {\n    host: parsed.hostname,\n    user: decodeURIComponent(parsed.username),\n    database: decodeURIComponent(parsed.pathname.replace(/^\\//, \"\")),\n    ssl: sslMode === \"verify-full\" ? { rejectUnauthorized: true } : false,"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.pool.test.ts::C-7c1574be createPool builds a pool from an endpoint password with the default options",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.pool.test.ts::C-7c1574be createPool accepts postgresql URLs and verify-full TLS",
+            "quote": null
+          }
+        ],
+        "reasoning": "createPool builds a pg.Pool without connecting, sets host, port, user, database, max (10), password from endpoint.password.reveal(), ssl false by default and { rejectUnauthorized: true } for sslmode=verify-full.",
+        "counterexample": null
+      },
+      {
+        "id": "C-63221721",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/pool.ts",
+            "quote": "const separator = raw.indexOf(\":\");\n  const scheme = separator === -1 ? raw.toLowerCase() : raw.slice(0, separator).toLowerCase();\n  if (!SUPPORTED_SCHEMES.has(scheme)) invalid(\"bad_scheme\");"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.pool.test.ts::C-63221721 createPool refuses bad endpoints and options without echoing them",
+            "quote": null
+          }
+        ],
+        "reasoning": "createPool validates scheme, URL parsing, hostname, query parameters, sslmode, password and integer options in the required order and throws DbError(DB_INVALID) with fixed message and details.reason without echoing URLs or passwords.",
+        "counterexample": null
+      },
+      {
+        "id": "C-dc754ade",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/pool.ts",
+            "quote": "const pool = new pg.Pool(config);\n  pool.on(\"error\", opts.onError ?? noop);\n  return pool;"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.pool.test.ts::C-dc754ade an idle client error reaches onError once and never throws",
+            "quote": null
+          }
+        ],
+        "reasoning": "createPool attaches opts.onError or a no-op listener to the pool error event so idle client errors never crash the process.",
+        "counterexample": null
+      },
+      {
+        "id": "C-8a52d337",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/files.ts",
+            "quote": "pending.sort((left, right) => left.version - right.version);"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.files.test.ts::C-8a52d337 readMigrationFiles sorts valid files and hashes their bytes",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.files.test.ts::C-8a52d337 readMigrationFiles allows gaps and returns an empty list for an empty directory",
+            "quote": null
+          }
+        ],
+        "reasoning": "readMigrationFiles parses NNNN_<name>.sql files, sorts them in ascending version order, computes SHA-256 hex checksums, and returns [] for an empty directory.",
+        "counterexample": null
+      },
+      {
+        "id": "C-55276583",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/files.ts",
+            "quote": "if (!entry.isFile()) invalidName(file, \"not_regular_file\");"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.files.test.ts::C-55276583 readMigrationFiles refuses duplicate versions",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.files.test.ts::C-55276583 readMigrationFiles refuses badly named entries",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.files.test.ts::C-55276583 readMigrationFiles refuses version zero and non-file entries",
+            "quote": null
+          }
+        ],
+        "reasoning": "readMigrationFiles rejects non-regular files, bad names, version 0000, and duplicate versions with MIGRATION_INVALID_NAME and details { file, reason }.",
+        "counterexample": null
+      },
+      {
+        "id": "C-6a2a3916",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/files.ts",
+            "quote": "const TRANSACTION_CONTROL = /^(BEGIN|COMMIT|ROLLBACK|START\\s+TRANSACTION)\\s*;$/i;"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses an empty file",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses transaction control lines",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses a directory that does not exist",
+            "quote": null
+          }
+        ],
+        "reasoning": "readMigrationFiles throws MIGRATION_FAILED with reason directory_unreadable, empty, or transaction_control as specified.",
+        "counterexample": null
+      },
+      {
+        "id": "C-c664fa4c",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/migrate.ts",
+            "quote": "await client.query(\"SET LOCAL search_path = ursitoare, pg_catalog\");"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.migrate.test.ts::C-c664fa4c migrate applies files in order, repeats, extends and fills a gap",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.migrate.test.ts::C-2735b4ff C-c664fa4c migrate bootstraps an empty directory and applies a later file",
+            "quote": null
+          }
+        ],
+        "reasoning": "migrate applies pending migration files in ascending version order inside per-file transactions with search_path = ursitoare, pg_catalog and records them in ursitoare.schema_migration.",
+        "counterexample": null
+      },
+      {
+        "id": "C-4a57a001",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/migrate.ts",
+            "quote": "return new DbError(\"MIGRATION_FAILED\", `${file.file}: ${detail.slice(0, MAX_MESSAGE_LENGTH)}`, {"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.migrate.test.ts::C-4a57a001 a failing migration rolls back, releases the lock and stops",
+            "quote": null
+          }
+        ],
+        "reasoning": "A failing SQL migration rolls back the transaction, releases the advisory lock in finally, and rejects with MIGRATION_FAILED including file and sqlstate details.",
+        "counterexample": null
+      },
+      {
+        "id": "C-2735b4ff",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/migrate.ts",
+            "quote": "return new DbError(\"DB_UNAVAILABLE\", \"database unavailable\", {"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.migrate.test.ts::C-2735b4ff C-c664fa4c migrate bootstraps an empty directory and applies a later file",
+            "quote": null
+          }
+        ],
+        "reasoning": "Migrating an empty directory creates the empty ledger and returns { applied: [] }; a connection failure rejects with DB_UNAVAILABLE and reason ECONNREFUSED without leaking the password.",
+        "counterexample": null
+      },
+      {
+        "id": "C-b2b0429a",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/migrate.ts",
+            "quote": "throw new DbError(\"MIGRATION_CHECKSUM_MISMATCH\", \"an applied migration file changed\", {"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.migrate.test.ts::C-b2b0429a migrate refuses an edited missing renamed or emptied file set",
+            "quote": null
+          }
+        ],
+        "reasoning": "verifyLedger checks all existing ledger rows before applying any pending file, throwing MIGRATION_FILE_MISSING or MIGRATION_CHECKSUM_MISMATCH and leaving the ledger untouched.",
+        "counterexample": null
+      },
+      {
+        "id": "C-77b8f169",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/migrate.ts",
+            "quote": "await client.query(`SELECT pg_advisory_lock(${LOCK_EXPRESSION})`);"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.migrate.test.ts::C-77b8f169 two runners are serialised by the advisory lock",
+            "quote": null
+          }
+        ],
+        "reasoning": "Concurrent calls to migrate are serialised by pg_advisory_lock(hashtextextended('ursitoare:migrate', 0)) prior to checking and updating the ledger.",
+        "counterexample": null
+      },
+      {
+        "id": "C-3815951d",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/migrate.ts",
+            "quote": "if (sqlState(error) === LOCK_BUSY_SQLSTATE) {\n          throw new DbError(\"MIGRATION_LOCK_TIMEOUT\", \"timed out waiting for the migration lock\");\n        }"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.migrate.test.ts::C-3815951d migrate times out on a held lock and releases its own after a failure",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.migrate.test.ts::C-3815951d migrate refuses an invalid lock timeout before querying",
+            "quote": null
+          }
+        ],
+        "reasoning": "migrate sets lock_timeout before acquiring the advisory lock, maps SQLSTATE 55P03 to MIGRATION_LOCK_TIMEOUT, and resets lock_timeout and unlocks in finally.",
+        "counterexample": null
+      },
+      {
+        "id": "C-f1949ac2",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/roles.ts",
+            "quote": "const statement = await formatStatement(\n      client,\n      \"REVOKE %I FROM %I GRANTED BY %I\",\n      [membership.role, ROLE_APP, membership.grantor],\n    );"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.roles.test.ts::C-f1949ac2 ensureRoles creates repeats and repairs the login roles",
+            "quote": null
+          }
+        ],
+        "reasoning": "ensureRoles creates or alters ursitoare_owner and ursitoare_app with unprivileged attributes, computes a SCRAM-SHA-256$4096 verifier client-side, and revokes all memberships of ursitoare_app using GRANTED BY.",
+        "counterexample": null
+      },
+      {
+        "id": "C-d380769b",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/roles.ts",
+            "quote": "const PRINTABLE_ASCII = /^[\\x20-\\x7e]{1,512}$/;\nconst ROLE_ATTRIBUTES = \"LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS\";"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.roles.test.ts::C-d380769b ensureRoles refuses empty non-ASCII NUL and oversized passwords",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.roles.test.ts::C-d380769b ensureRoles refuses a weak admin with DB_ROLES_FAILED",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.roles.test.ts::C-d380769b ensureRoles keeps a quoted password and the owner role",
+            "quote": null
+          }
+        ],
+        "reasoning": "ensureRoles validates printable ASCII passwords of length 1..512 before opening a transaction, serialises concurrent calls with an advisory xact lock, hashes the password into a SCRAM verifier, and maps SQL errors to DB_ROLES_FAILED with details.sqlstate.",
+        "counterexample": null
+      },
+      {
+        "id": "C-94eda93a",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/migrate.ts",
+            "quote": "if (currentUser !== ROLE_OWNER) {\n    roleInvalid(\"wrong_session_role\");\n  }"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.migrate.test.ts::C-94eda93a migrate refuses missing and privileged roles before any DDL",
+            "quote": null
+          }
+        ],
+        "reasoning": "checkRoles runs before taking the lock or executing any DDL, rejecting missing roles with MIGRATION_ROLE_MISSING and unsafe session, owner, or app roles with MIGRATION_ROLE_INVALID.",
+        "counterexample": null
+      },
+      {
+        "id": "C-d4c6bb53",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/migrations/0001_base.sql",
+            "quote": "CREATE SCHEMA IF NOT EXISTS ursitoare;"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.base.test.ts::C-d4c6bb53 the base migration records the ledger and keeps objects owned by the owner role",
+            "quote": null
+          }
+        ],
+        "reasoning": "0001_base.sql creates schema ursitoare owned by ursitoare_owner, records version 1 in the ledger, and leaves ursitoare_app owning no catalog objects.",
+        "counterexample": null
+      },
+      {
+        "id": "C-e3e42ffe",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/migrations/0001_base.sql",
+            "quote": "GRANT USAGE ON SCHEMA ursitoare TO ursitoare_app;\nREVOKE ALL ON TABLE ursitoare.schema_migration FROM PUBLIC, ursitoare_app;"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.base.test.ts::C-e3e42ffe the app role has only USAGE on the schema",
+            "quote": null
+          }
+        ],
+        "reasoning": "0001_base.sql revokes all on schema ursitoare from PUBLIC, grants only USAGE to ursitoare_app, and revokes all on ursitoare.schema_migration from PUBLIC and ursitoare_app.",
+        "counterexample": null
+      },
+      {
+        "id": "C-162b9c47",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/migrations/0001_base.sql",
+            "quote": "ALTER DEFAULT PRIVILEGES FOR ROLE ursitoare_owner REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.base.test.ts::C-162b9c47 new functions and tables start closed to the app role",
+            "quote": null
+          }
+        ],
+        "reasoning": "0001_base.sql revokes default PUBLIC execute privileges on functions created by ursitoare_owner, so new functions and tables are closed to ursitoare_app until granted.",
+        "counterexample": null
+      },
+      {
+        "id": "C-fb7ba2ed",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/partitions.ts",
+            "quote": "const base = monthStart(now);\n  const start = addMonths(base, -window.monthsBack);\n  const end = addMonths(base, window.monthsAhead + 1);"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.partitions.test.ts::C-fb7ba2ed ensurePartitions creates the monthly window and routes rows",
+            "quote": null
+          }
+        ],
+        "reasoning": "ensurePartitions creates the 5 monthly UTC partitions from 1 month back to 3 months ahead on the first run and none on the second run.",
+        "counterexample": null
+      },
+      {
+        "id": "C-c37e9432",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/partitions.ts",
+            "quote": "if (typeof value !== \"number\" || !Number.isInteger(value) || value < min || value > max) {\n    badOption();\n  }"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.partitions.test.ts::C-c37e9432 ensurePartitions creates daily partitions and refuses bad window options",
+            "quote": null
+          }
+        ],
+        "reasoning": "ensurePartitions creates the 28 daily partitions for February 2026 when monthsBack and monthsAhead are 0, and rejects negative or non-integer window options with DB_INVALID and reason bad_option.",
+        "counterexample": null
+      },
+      {
+        "id": "C-5cc5a771",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/partitions.ts",
+            "quote": "if (keyNames.length !== 1 || keyTypes.length !== 1 || keyType === undefined || !TIME_TYPES.has(keyType)) {\n      throw new DbError(\"PARTITION_KEY_UNSUPPORTED\", \"range partition key is not a single time column\", {\n        table,\n      });\n    }"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.partitions.test.ts::C-5cc5a771 ensurePartitions ignores list and hash parents and refuses unusable range tables",
+            "quote": null
+          }
+        ],
+        "reasoning": "ensurePartitions queries only range-partitioned parent tables (partstrat = 'r'), ignoring LIST and HASH tables, and validates every parent's single time column key and granularity comment before creating any partitions.",
+        "counterexample": null
+      },
+      {
+        "id": "C-f0ece24f",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/partitions.ts",
+            "quote": "if (code === RANGE_OVERLAP_SQLSTATE) {\n      return;\n    }\n    if (code === DEFAULT_HOLDS_ROWS_SQLSTATE) {\n      skipped.push(qualified);\n      return;\n    }"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.partitions.test.ts::C-f0ece24f ensurePartitions skips a range whose rows already sit in the DEFAULT partition",
+            "quote": null
+          }
+        ],
+        "reasoning": "ensurePartitions uses a savepoint per partition creation, treating SQLSTATE 42P17 (overlap with existing partition) as already covered and SQLSTATE 23514 (rows in DEFAULT) as skipped while creating the remaining partitions.",
+        "counterexample": null
+      },
+      {
+        "id": "C-87e84b3f",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/partitions.ts",
+            "quote": "await client.query(\"BEGIN\");\n    await client.query(`SELECT pg_advisory_xact_lock(${LOCK_EXPRESSION})`);"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.partitions.test.ts::C-87e84b3f ensurePartitions serialises callers and fails closed when Postgres is down",
+            "quote": null
+          }
+        ],
+        "reasoning": "ensurePartitions serialises concurrent callers under pg_advisory_xact_lock(hashtextextended('ursitoare:ensure_partitions', 0)) and wraps connection failures in DbError(DB_UNAVAILABLE) with details.reason.",
+        "counterexample": null
+      },
+      {
+        "id": "C-58e0ebf0",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/prepare.ts",
+            "quote": "const { applied } = await migrate(ownerPool);\n  const { created } = await ensurePartitions(ownerPool, clock);\n  return { applied, partitions: created };"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.prepare.test.ts::C-58e0ebf0 prepareDatabase migrates first and then creates the partition window",
+            "quote": null
+          }
+        ],
+        "reasoning": "prepareDatabase runs migrate(ownerPool) followed by ensurePartitions(ownerPool, clock) and returns { applied, partitions: created }.",
+        "counterexample": null
+      },
+      {
+        "id": "C-1f0e219e",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/open.ts",
+            "quote": "\"URSITOARE_DATABASE_OWNER_URL is set without URSITOARE_DATABASE_URL; database disabled\""
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.open.test.ts::C-1f0e219e openDatabase returns null for no endpoint and warns once for an owner alone",
+            "quote": null
+          }
+        ],
+        "reasoning": "openDatabase returns null without registering a check when app is null, and logs the required warning when owner is set without app.",
+        "counterexample": null
+      },
+      {
+        "id": "C-869163e0",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/open.ts",
+            "quote": "deps.health.registerHealthCheck(\"db\", createDbHealthCheck(pool));"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.open.test.ts::C-869163e0 openDatabase registers db once, ok, then fail after close twice",
+            "quote": null
+          }
+        ],
+        "reasoning": "openDatabase registers the db check once returning ok on a migrated database, and idempotently closes the pool so subsequent checks return fail.",
+        "counterexample": null
+      },
+      {
+        "id": "C-7454acfb",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/open.ts",
+            "quote": "\"database is not migrated; run the migrations\""
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.open.test.ts::C-7454acfb openDatabase on an unmigrated database registers db, fails it and warns once",
+            "quote": null
+          }
+        ],
+        "reasoning": "When schema ursitoare is absent, openDatabase logs one not_migrated warning, registers the db check (which resolves fail), and returns the Database handle.",
+        "counterexample": null
+      },
+      {
+        "id": "C-32617fd8",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/open.ts",
+            "quote": "await sleep(Math.min(RETRY_MS, remaining));"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.open.test.ts::C-32617fd8 openDatabase fails closed on a closed port after one sleep of the remaining time",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.open.test.ts::C-32617fd8 openDatabase rejects a bad openTimeoutMs and a bad scheme without sleeping",
+            "quote": null
+          }
+        ],
+        "reasoning": "openDatabase sleeps min(500, remaining) between failed inspection attempts until the deadline, then closes the pool and throws DB_UNAVAILABLE with the error code.",
+        "counterexample": null
+      },
+      {
+        "id": "C-faf8f8a6",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/open.ts",
+            "quote": "throw new DbError(\"DB_ROLE_UNSAFE\", \"database role is unsafe\", { reason });"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.open.test.ts::C-faf8f8a6 openDatabase refuses a superuser whose cluster starts during the first sleep",
+            "quote": null
+          }
+        ],
+        "reasoning": "When Postgres becomes reachable after a retry sleep with a superuser role, openDatabase closes the pool, throws DB_ROLE_UNSAFE with reason superuser, and registers nothing.",
+        "counterexample": null
+      },
+      {
+        "id": "C-69717e99",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/open.ts",
+            "quote": "function unsafeReason(state: RuntimeState): string | null {"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.open.test.ts::C-69717e99 openDatabase refuses every privileged app endpoint and registers nothing",
+            "quote": null
+          }
+        ],
+        "reasoning": "unsafeReason detects superuser, bypassrls, owns_schema, owner_member, and privileged_member in order, closing the pool and throwing DB_ROLE_UNSAFE without registering a health check.",
+        "counterexample": null
+      },
+      {
+        "id": "C-ebfa9bed",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/health.ts",
+            "quote": "const state = await withTimeout(inspectRuntime(pool), timeoutMs);\n      return state !== undefined && healthy(state) ? \"ok\" : \"fail\";"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok only for a migrated unprivileged role",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck fails closed when the query rejects or times out",
+            "quote": null
+          }
+        ],
+        "reasoning": "createDbHealthCheck resolves ok only when migrated is true and all five privilege flags are false, and resolves fail on any flag, error, or timeout.",
+        "counterexample": null
+      },
+      {
+        "id": "C-b3bd64b0",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/main.ts",
+            "quote": "database = await (deps.openDatabase ?? openDatabase)(config, { health, logger });"
+          },
+          {
+            "kind": "test",
+            "ref": "src.main.db.test.ts::C-b3bd64b0 main opens no database and keeps health green",
+            "quote": null
+          }
+        ],
+        "reasoning": "startServer and main with no database configured serve 200 ok with checks {} on GET /health, and main invokes openDatabase once with the loaded config.",
+        "counterexample": null
+      },
+      {
+        "id": "C-fb007fe9",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/main.ts",
+            "quote": "const health: HealthRegistry = createHealthRegistry();"
+          },
+          {
+            "kind": "test",
+            "ref": "src.main.db.test.ts::C-fb007fe9 main registers db, serves ok then fail, and never opens the owner",
+            "quote": null
+          }
+        ],
+        "reasoning": "main passes the health registry to openDatabase and buildServer, serving 200 { db: ok } then 503 { db: fail } after database.close(), without opening any owner session.",
+        "counterexample": null
+      },
+      {
+        "id": "C-ad848b65",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/main.ts",
+            "quote": "bootstrap.fatal(fatalFields(error), fatalMessage(error));\n    exit(1);\n    return null;"
+          },
+          {
+            "kind": "test",
+            "ref": "src.main.db.test.ts::C-ad848b65 main writes one fatal line and opens no port when the open fails",
+            "quote": null
+          }
+        ],
+        "reasoning": "When openDatabase rejects, main writes one fatal line with code, reason, and msg 'startup failed' (without variable, host, or port), calls exit(1), opens no port, and resolves null.",
+        "counterexample": null
+      },
+      {
+        "id": "C-6d93e8d5",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/main.ts",
+            "quote": "close: async () => {\n      await database?.close();\n      await server.close();\n    },"
+          },
+          {
+            "kind": "test",
+            "ref": "src.main.db.test.ts::C-6d93e8d5 shutdown and a failed listen end the app pool",
+            "quote": null
+          }
+        ],
+        "reasoning": "main awaits database.close() during graceful shutdown before exit(0) and in the listen catch block before logging EADDRINUSE and calling exit(1).",
+        "counterexample": null
+      },
+      {
+        "id": "C-589bae1c",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/support/global-setup.ts",
+            "quote": "await prepareDatabase(ownerPool, systemClock);"
+          },
+          {
+            "kind": "test",
+            "ref": "test.support.global-setup.test.ts::C-589bae1c global setup publishes the coordinates of a migrated shared cluster",
+            "quote": null
+          }
+        ],
+        "reasoning": "globalSetup starts an embedded Postgres 18.4 cluster on 127.0.0.1, creates both roles, prepares the template database, closes all pools, and publishes TEST_PG_CLUSTER.",
+        "counterexample": null
+      },
+      {
+        "id": "C-b3edfa92",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/support/global-setup.ts",
+            "quote": "delete process.env.TEST_PG_CLUSTER;\n  if (cluster !== undefined) {\n    await cluster.stop();\n  }"
+          },
+          {
+            "kind": "test",
+            "ref": "test.support.global-setup.test.ts::C-b3edfa92 global setup starts a cluster and global teardown stops it",
+            "quote": null
+          }
+        ],
+        "reasoning": "globalSetup publishes a new reachable cluster in TEST_PG_CLUSTER and globalTeardown unsets the variable and stops the cluster so its port refuses connections.",
+        "counterexample": null
+      },
+      {
+        "id": "C-f2409274",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/support/pg.ts",
+            "quote": "await rm(dataDir, { recursive: true, force: true });\n    const detail = error instanceof Error ? `: ${error.message}` : \"\";\n    throw new TestClusterError(\n      \"TEST_CLUSTER_START_FAILED\",\n      `could not start the embedded Postgres on port ${port}${detail}`,\n      dataDir,\n    );"
+          },
+          {
+            "kind": "test",
+            "ref": "test.support.pg.test.ts::C-f2409274 startCluster refuses a busy port and removes its data directory",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "test.support.pg.test.ts::C-f2409274 withTestDatabase needs TEST_PG_CLUSTER when no cluster is given",
+            "quote": null
+          }
+        ],
+        "reasoning": "startCluster removes dataDir and throws TestClusterError(TEST_CLUSTER_START_FAILED) when starting on a busy port, and withTestDatabase throws TestClusterError(TEST_CLUSTER_MISSING) naming pnpm run test when TEST_PG_CLUSTER is unset.",
+        "counterexample": null
+      },
+      {
+        "id": "C-6d9f36e4",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "test/support/pg.ts",
+            "quote": "const name = `t_${randomBytes(12).toString(\"hex\")}`;\n  const migrated = opts?.migrated ?? true;\n  const template = migrated ? cluster.template : TEMPLATE_DATABASE;"
+          },
+          {
+            "kind": "test",
+            "ref": "test.support.pg.test.ts::C-6d9f36e4 withTestDatabase clones fresh isolated databases with owner and app pools",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "test.support.pg.test.ts::C-6d9f36e4 migrated false has no schema while the default clone does",
+            "quote": null
+          },
+          {
+            "kind": "test",
+            "ref": "test.support.pg.test.ts::C-6d9f36e4 eight databases run in parallel and all drop on close",
+            "quote": null
+          }
+        ],
+        "reasoning": "withTestDatabase clones isolated databases from the template (or template0 when migrated is false), connects ownerPool and appPool as ursitoare_owner and ursitoare_app, and idempotently ends both pools and force-drops the database on close().",
+        "counterexample": null
+      },
+      {
+        "id": "C-081c5cff",
+        "verdict": "pass",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "file",
+            "ref": "src/db/base.test.ts",
+            "quote": "assert.deepEqual(visible.rows, [{ tenant_id: \"a\" }]);"
+          },
+          {
+            "kind": "test",
+            "ref": "src.db.base.test.ts::C-081c5cff the app role is subject to forced row level security",
+            "quote": null
+          }
+        ],
+        "reasoning": "The appPool connects as unprivileged ursitoare_app and sees only the row matching app.tenant_id under forced RLS, while the superuser connection sees both rows.",
+        "counterexample": null
+      }
+    ],
+    "test_adequacy": [
+      {
+        "test": "src.db.base.test.ts::C-d4c6bb53 the base migration records the ledger and keeps objects owned by the owner role",
+        "criterion": "C-d4c6bb53",
+        "adequate": true,
+        "reason": "Verifies ledger rows, SHA-256 checksum of 0001_base.sql, schema owner ursitoare_owner, and zero objects owned by ursitoare_app across all four catalogs.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.base.test.ts::C-e3e42ffe the app role has only USAGE on the schema",
+        "criterion": "C-e3e42ffe",
+        "adequate": true,
+        "reason": "Asserts SQLSTATE 42501 on SELECT/UPDATE/DROP of schema_migration and CREATE TABLE in ursitoare, USAGE privilege true, and unprivileged current_user.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.base.test.ts::C-162b9c47 new functions and tables start closed to the app role",
+        "criterion": "C-162b9c47",
+        "adequate": true,
+        "reason": "Asserts EXECUTE on new function and SELECT on new table are false before explicit GRANT and true after.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.base.test.ts::C-081c5cff the app role is subject to forced row level security",
+        "criterion": "C-081c5cff",
+        "adequate": true,
+        "reason": "Verifies appPool sees only tenant a under forced RLS while superuser sees both tenants a and b.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.files.test.ts::C-8a52d337 readMigrationFiles sorts valid files and hashes their bytes",
+        "criterion": "C-8a52d337",
+        "adequate": true,
+        "reason": "Checks sorted versions, names, filenames, SQL contents, and SHA-256 hex checksums.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.files.test.ts::C-8a52d337 readMigrationFiles allows gaps and returns an empty list for an empty directory",
+        "criterion": "C-8a52d337",
+        "adequate": true,
+        "reason": "Checks empty directory returns [] and version gaps are preserved in ascending order.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.files.test.ts::C-55276583 readMigrationFiles refuses duplicate versions",
+        "criterion": "C-55276583",
+        "adequate": true,
+        "reason": "Asserts MIGRATION_INVALID_NAME with reason duplicate_version and offending filename.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.files.test.ts::C-55276583 readMigrationFiles refuses badly named entries",
+        "criterion": "C-55276583",
+        "adequate": true,
+        "reason": "Asserts MIGRATION_INVALID_NAME with reason bad_name for 1_a.sql, 0002_A.sql, 0002_a.SQL, and README.md.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.files.test.ts::C-55276583 readMigrationFiles refuses version zero and non-file entries",
+        "criterion": "C-55276583",
+        "adequate": true,
+        "reason": "Asserts MIGRATION_INVALID_NAME with bad_name for 0000_z.sql and not_regular_file for subdirectory 0002_d.sql.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses an empty file",
+        "criterion": "C-6a2a3916",
+        "adequate": true,
+        "reason": "Asserts MIGRATION_FAILED with reason empty for an empty migration file.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses transaction control lines",
+        "criterion": "C-6a2a3916",
+        "adequate": true,
+        "reason": "Asserts MIGRATION_FAILED with reason transaction_control for commit/begin/rollback/start transaction lines.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses a directory that does not exist",
+        "criterion": "C-6a2a3916",
+        "adequate": true,
+        "reason": "Asserts MIGRATION_FAILED with reason directory_unreadable when the directory does not exist.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.support.global-setup.test.ts::C-589bae1c global setup publishes the coordinates of a migrated shared cluster",
+        "criterion": "C-589bae1c",
+        "adequate": true,
+        "reason": "Checks host 127.0.0.1, server_version 18.4, roles exist, zero connections to template, and cloned database ledger matches DEFAULT_MIGRATIONS_DIR.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.support.global-setup.test.ts::C-b3edfa92 global setup starts a cluster and global teardown stops it",
+        "criterion": "C-b3edfa92",
+        "adequate": true,
+        "reason": "Calls globalSetup and globalTeardown in-process, verifying the new cluster accepts connections and refuses them after teardown with TEST_PG_CLUSTER unset.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok only for a migrated unprivileged role",
+        "criterion": "C-ebfa9bed",
+        "adequate": true,
+        "reason": "Tests stub pool responses for healthy and each unhealthy flag combination.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck fails closed when the query rejects or times out",
+        "criterion": "C-ebfa9bed",
+        "adequate": true,
+        "reason": "Tests rejecting and hanging stub pools with timeoutMs 10, asserting both resolve fail.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck refuses an invalid timeout before querying",
+        "criterion": "C-ebfa9bed",
+        "adequate": true,
+        "reason": "Verifies invalid timeoutMs values throw DB_INVALID bad_option synchronously without querying.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok for a migrated test database",
+        "criterion": "C-ebfa9bed",
+        "adequate": true,
+        "reason": "Verifies ok against a real migrated test database appPool.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail for an unmigrated test database",
+        "criterion": "C-ebfa9bed",
+        "adequate": true,
+        "reason": "Verifies fail against an unmigrated test database appPool.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail after the test database is closed",
+        "criterion": "C-ebfa9bed",
+        "adequate": true,
+        "reason": "Verifies fail after closing the test database twice.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.main.db.test.ts::C-b3bd64b0 main opens no database and keeps health green",
+        "criterion": "C-b3bd64b0",
+        "adequate": true,
+        "reason": "Verifies startServer(0) and main with null database endpoints both serve 200 ok with checks {} and openDatabase spy is called once with config.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.main.db.test.ts::C-fb007fe9 main registers db, serves ok then fail, and never opens the owner",
+        "criterion": "C-fb007fe9",
+        "adequate": true,
+        "reason": "Verifies /health returns 200 { db: ok } then 503 { db: fail } after closing Database, and ursitoare_owner session count in pg_stat_activity is unchanged.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.main.db.test.ts::C-ad848b65 main writes one fatal line and opens no port when the open fails",
+        "criterion": "C-ad848b65",
+        "adequate": true,
+        "reason": "Tests DB_UNAVAILABLE and DB_ROLE_UNSAFE rejections from openDatabase, checking the single fatal log line fields, exit(1), no port opened, and null resolution.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.main.db.test.ts::C-6d93e8d5 shutdown and a failed listen end the app pool",
+        "criterion": "C-6d93e8d5",
+        "adequate": true,
+        "reason": "Verifies close spy runs once on SIGTERM before exit(0) and once on EADDRINUSE before exit(1) and null return.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.migrate.test.ts::C-c664fa4c migrate applies files in order, repeats, extends and fills a gap",
+        "criterion": "C-c664fa4c",
+        "adequate": true,
+        "reason": "Tests initial apply, repeat no-op, extension with 0004_d, gap filling with 0002_b, ledger contents, and ursitoare.widget creation.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.migrate.test.ts::C-4a57a001 a failing migration rolls back, releases the lock and stops",
+        "criterion": "C-4a57a001",
+        "adequate": true,
+        "reason": "Verifies division-by-zero migration rejects with MIGRATION_FAILED and sqlstate 22012, rolls back ursitoare.t, leaves only version 1 in ledger, releases advisory lock, and succeeds once fixed.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.migrate.test.ts::C-2735b4ff C-c664fa4c migrate bootstraps an empty directory and applies a later file",
+        "criterion": "C-2735b4ff",
+        "adequate": true,
+        "reason": "Verifies empty directory returns { applied: [] } with an empty ledger table, and closed port rejects with DB_UNAVAILABLE ECONNREFUSED without password in message.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.migrate.test.ts::C-2735b4ff C-c664fa4c migrate bootstraps an empty directory and applies a later file",
+        "criterion": "C-c664fa4c",
+        "adequate": true,
+        "reason": "Verifies applying a file after bootstrapping an empty directory records the migration and creates the table.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.migrate.test.ts::C-b2b0429a migrate refuses an edited missing renamed or emptied file set",
+        "criterion": "C-b2b0429a",
+        "adequate": true,
+        "reason": "Tests appended comment (MIGRATION_CHECKSUM_MISMATCH), deleted file, renamed file, and emptied directory (MIGRATION_FILE_MISSING), confirming 0003_c is unapplied and ledger is unchanged.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.migrate.test.ts::C-77b8f169 two runners are serialised by the advisory lock",
+        "criterion": "C-77b8f169",
+        "adequate": true,
+        "reason": "Runs two concurrent migrate calls on three pg_sleep(0.05) files, asserting applied lengths 0 and 3 and 3 ledger rows.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.migrate.test.ts::C-3815951d migrate times out on a held lock and releases its own after a failure",
+        "criterion": "C-3815951d",
+        "adequate": true,
+        "reason": "Holds the advisory lock in another session, asserts MIGRATION_LOCK_TIMEOUT with lockTimeoutMs 200 and untouched database, then unlocks and verifies migrate succeeds.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.migrate.test.ts::C-3815951d migrate refuses an invalid lock timeout before querying",
+        "criterion": "C-3815951d",
+        "adequate": true,
+        "reason": "Asserts DB_INVALID bad_option for lockTimeoutMs 0 and 1.5 with no schema created.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.migrate.test.ts::C-94eda93a migrate refuses missing and privileged roles before any DDL",
+        "criterion": "C-94eda93a",
+        "adequate": true,
+        "reason": "Tests all six precondition failure cases (a) through (f) and verifies error codes, details, and absence of schema ursitoare.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.open.test.ts::C-1f0e219e openDatabase returns null for no endpoint and warns once for an owner alone",
+        "criterion": "C-1f0e219e",
+        "adequate": true,
+        "reason": "Checks both null endpoints and owner-only endpoint, asserting null return, no health registration, and the exact warning on owner-only.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.open.test.ts::C-869163e0 openDatabase registers db once, ok, then fail after close twice",
+        "criterion": "C-869163e0",
+        "adequate": true,
+        "reason": "Verifies db check is registered once and returns ok, then fail after calling database.close() twice.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.open.test.ts::C-7454acfb openDatabase on an unmigrated database registers db, fails it and warns once",
+        "criterion": "C-7454acfb",
+        "adequate": true,
+        "reason": "Verifies openDatabase on { migrated: false } database resolves, registers db check returning fail, and logs the single not_migrated warning.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.open.test.ts::C-32617fd8 openDatabase fails closed on a closed port after one sleep of the remaining time",
+        "criterion": "C-32617fd8",
+        "adequate": true,
+        "reason": "Verifies DB_UNAVAILABLE with ECONNREFUSED on a closed port with openTimeoutMs 50, sleep calls [50], and nothing registered or logged.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.open.test.ts::C-32617fd8 openDatabase rejects a bad openTimeoutMs and a bad scheme without sleeping",
+        "criterion": "C-32617fd8",
+        "adequate": true,
+        "reason": "Verifies immediate DB_INVALID rejection for negative openTimeoutMs and bad URL scheme without sleeping.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.open.test.ts::C-faf8f8a6 openDatabase refuses a superuser whose cluster starts during the first sleep",
+        "criterion": "C-faf8f8a6",
+        "adequate": true,
+        "reason": "Starts an EmbeddedPostgres cluster during the first sleep and verifies openDatabase rejects with DB_ROLE_UNSAFE superuser and registers nothing.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.open.test.ts::C-69717e99 openDatabase refuses every privileged app endpoint and registers nothing",
+        "criterion": "C-69717e99",
+        "adequate": true,
+        "reason": "Tests superuser, BYPASSRLS, schema owner, owner member, and privileged member endpoints, asserting DB_ROLE_UNSAFE with each expected reason and no registration.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.partitions.test.ts::C-fb7ba2ed ensurePartitions creates the monthly window and routes rows",
+        "criterion": "C-fb7ba2ed",
+        "adequate": true,
+        "reason": "Verifies monthly partition creation for -1 to +3 months, idempotency on second run, row routing across boundary timestamps, untouched DEFAULT, and no app privilege on leaf partitions.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.partitions.test.ts::C-c37e9432 ensurePartitions creates daily partitions and refuses bad window options",
+        "criterion": "C-c37e9432",
+        "adequate": true,
+        "reason": "Verifies 28 daily partitions for February 2026 with monthsBack 0 and monthsAhead 0, and DB_INVALID bad_option for negative or non-integer window options.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.partitions.test.ts::C-5cc5a771 ensurePartitions ignores list and hash parents and refuses unusable range tables",
+        "criterion": "C-5cc5a771",
+        "adequate": true,
+        "reason": "Verifies LIST and HASH tables are ignored, and missing/invalid comments or multi-column/text keys reject with PARTITION_GRANULARITY_MISSING or PARTITION_KEY_UNSUPPORTED without creating any partitions.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.partitions.test.ts::C-f0ece24f ensurePartitions skips a range whose rows already sit in the DEFAULT partition",
+        "criterion": "C-f0ece24f",
+        "adequate": true,
+        "reason": "Verifies range with existing differently-named partition is treated as present, range with DEFAULT rows is returned in skipped with rows left in DEFAULT, and remaining months are created.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.partitions.test.ts::C-87e84b3f ensurePartitions serialises callers and fails closed when Postgres is down",
+        "criterion": "C-87e84b3f",
+        "adequate": true,
+        "reason": "Verifies concurrent callers return created lengths 0 and 5, and a closed port rejects with DB_UNAVAILABLE ECONNREFUSED.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.pool.test.ts::C-7c1574be createPool builds a pool from an endpoint password with the default options",
+        "criterion": "C-7c1574be",
+        "adequate": true,
+        "reason": "Asserts host, port, user, database, max, password, ssl, and totalCount on the created pool.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.pool.test.ts::C-7c1574be createPool accepts postgresql URLs and verify-full TLS",
+        "criterion": "C-7c1574be",
+        "adequate": true,
+        "reason": "Asserts postgresql:// scheme and ssl: { rejectUnauthorized: true } for sslmode=verify-full.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.pool.test.ts::C-63221721 createPool refuses bad endpoints and options without echoing them",
+        "criterion": "C-63221721",
+        "adequate": true,
+        "reason": "Tests all 9 invalid endpoint and option inputs, asserting DB_INVALID, the exact details.reason, and absence of the URL and password in the error message.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.pool.test.ts::C-dc754ade an idle client error reaches onError once and never throws",
+        "criterion": "C-dc754ade",
+        "adequate": true,
+        "reason": "Emits an error on a pool with an onError recorder and on one without, verifying the recorder receives it once and neither throws.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.prepare.test.ts::C-58e0ebf0 prepareDatabase migrates first and then creates the partition window",
+        "criterion": "C-58e0ebf0",
+        "adequate": true,
+        "reason": "Verifies prepareDatabase applies all migrations on the first run with no partitions, and creates the 5 monthly partitions on the second run after pt_month is added.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.roles.test.ts::C-f1949ac2 ensureRoles creates repeats and repairs the login roles",
+        "criterion": "C-f1949ac2",
+        "adequate": true,
+        "reason": "Verifies role creation, idempotence, privilege and membership repair (including a grant by a CREATEROLE login), login with new password, and SCRAM-SHA-256$4096 verifier format.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.roles.test.ts::C-d380769b ensureRoles refuses empty non-ASCII NUL and oversized passwords",
+        "criterion": "C-d380769b",
+        "adequate": true,
+        "reason": "Verifies DB_INVALID with reason bad_password for empty, NUL, non-ASCII, and 513-char passwords.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.roles.test.ts::C-d380769b ensureRoles refuses a weak admin with DB_ROLES_FAILED",
+        "criterion": "C-d380769b",
+        "adequate": true,
+        "reason": "Verifies DB_ROLES_FAILED with sqlstate 42501 when ensureRoles is called with an unprivileged pool.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "src.db.roles.test.ts::C-d380769b ensureRoles keeps a quoted password and the owner role",
+        "criterion": "C-d380769b",
+        "adequate": true,
+        "reason": "Verifies concurrent ensureRoles calls with a quote/injection password succeed, allow login, and preserve ursitoare_owner.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.support.pg.test.ts::C-6d9f36e4 withTestDatabase clones fresh isolated databases with owner and app pools",
+        "criterion": "C-6d9f36e4",
+        "adequate": true,
+        "reason": "Verifies distinct names, isolated tables, ledger presence, current_user on both pools, idempotent close, and database removal.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.support.pg.test.ts::C-6d9f36e4 migrated false has no schema while the default clone does",
+        "criterion": "C-6d9f36e4",
+        "adequate": true,
+        "reason": "Verifies that migrated: false clones have no ursitoare schema while default clones do.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.support.pg.test.ts::C-6d9f36e4 eight databases run in parallel and all drop on close",
+        "criterion": "C-6d9f36e4",
+        "adequate": true,
+        "reason": "Verifies 8 concurrent withTestDatabase calls succeed with distinct names and drop cleanly on close.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.support.pg.test.ts::C-081c5cff the app pool is subject to row level security",
+        "criterion": "C-081c5cff",
+        "adequate": true,
+        "reason": "Verifies forced RLS filters rows on appPool according to app.tenant_id while the admin superuser sees all rows.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.support.pg.test.ts::C-f2409274 startCluster refuses a busy port and removes its data directory",
+        "criterion": "C-f2409274",
+        "adequate": true,
+        "reason": "Verifies startCluster on an occupied port rejects with TestClusterError(TEST_CLUSTER_START_FAILED) and removes dataDir.",
+        "generated_test_misreads_criterion": false
+      },
+      {
+        "test": "test.support.pg.test.ts::C-f2409274 withTestDatabase needs TEST_PG_CLUSTER when no cluster is given",
+        "criterion": "C-f2409274",
+        "adequate": true,
+        "reason": "Verifies withTestDatabase rejects with TestClusterError(TEST_CLUSTER_MISSING) mentioning pnpm run test when TEST_PG_CLUSTER is unset.",
+        "generated_test_misreads_criterion": false
+      }
+    ],
+    "findings": [],
+    "riskiest_assumptions": [
+      "The implementations in part 2 (pool.ts, roles.ts, partitions.ts, prepare.ts, pg.ts) match the interfaces imported by the part 1 modules and tests.",
+      "The tests in src/db/partitions.test.ts (located in part 1 of the diff) adequately assert all observable outcomes for C-fb7ba2ed, C-c37e9432, C-5cc5a771, C-f0ece24f, and C-87e84b3f.",
+      "Postgres advisory lock keys computed via hashtextextended('ursitoare:migrate', 0) do not collide with any other session locks in the test environment."
+    ],
+    "feedback": null,
+    "accepted": null,
+    "satisfied": null
+  },
+  "cx_runs": {},
+  "tests": {
+    "src.api.errors.test.ts::C-3284ea9e toErrorResponse maps an ApiError with and without details": "passed",
+    "src.api.errors.test.ts::C-3284ea9e ApiError refuses a status outside 400 to 599 or a malformed code": "passed",
+    "src.api.errors.test.ts::C-240590ab toErrorResponse maps body schema failures to field details": "passed",
+    "src.api.errors.test.ts::C-240590ab toErrorResponse reports query and path parameter fields": "passed",
+    "src.api.errors.test.ts::C-d145c766 toErrorResponse maps malformed JSON oversized and wrongly typed bodies": "passed",
+    "src.api.errors.test.ts::C-d145c766 toErrorResponse keeps another 4xx status as BAD_REQUEST": "passed",
+    "src.api.errors.test.ts::C-aea19ec5 toErrorResponse hides an unknown error behind INTERNAL": "passed",
+    "src.api.health.test.ts::C-14452135 an empty registry reports ok with no checks": "passed",
+    "src.api.health.test.ts::C-14452135 checks that resolve ok are reported by name": "passed",
+    "src.api.health.test.ts::C-609c36a3 a check that resolves fail marks the report failed": "passed",
+    "src.api.health.test.ts::C-609c36a3 a check that throws fails without leaking its message": "passed",
+    "src.api.health.test.ts::C-609c36a3 a check that never settles times out after 10 ms": "passed",
+    "src.api.health.test.ts::C-609c36a3 a check that resolves junk fails as an invalid result": "passed",
+    "src.api.health.test.ts::C-64e17386 duplicate and invalid names are refused": "passed",
+    "src.api.health.test.ts::C-64e17386 overlapping runs call every check once": "passed",
+    "src.api.health.test.ts::C-64e17386 a check registered after a run appears in the next run": "passed",
+    "src.api.server.test.ts::buildServer hands an injectable server to the routes a test adds": "passed",
+    "src.api.server.test.ts::C-3284ea9e buildServer answers an ApiError with its own status code and details": "passed",
+    "src.api.server.test.ts::C-240590ab buildServer reports the first body query or path schema fault": "passed",
+    "src.api.server.test.ts::C-d145c766 buildServer keeps the fixed codes for malformed oversized and wrongly typed bodies": "passed",
+    "src.api.server.test.ts::C-aea19ec5 unknown errors answer INTERNAL and never log hunter2": "passed",
+    "src.api.server.test.ts::C-71327adc a well-formed x-request-id is kept and the route is logged without the query": "passed",
+    "src.api.server.test.ts::C-2490a98e a path that carries a token logs the wildcard route only": "passed",
+    "src.api.server.test.ts::C-c68d2bde missing malformed and oversized request ids are replaced": "passed",
+    "src.api.server.test.ts::C-64866f0f a 404 and a thrown error both carry the request id": "passed",
+    "src.api.server.test.ts::C-3c17bb81 a recording tracer holds one ended http.request span per request": "passed",
+    "src.api.server.test.ts::C-595eb185 a failing tracer logs a warning and the request still succeeds": "passed",
+    "src.api.server.test.ts::C-14452135 GET /health with no checks reports ok and healthPayload is unchanged": "passed",
+    "src.api.server.test.ts::C-14452135 GET /health reports passing checks by name": "passed",
+    "src.api.server.test.ts::C-ce3d89ea the health request log holds the route without the query token": "passed",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a failing check without leaking its content": "passed",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a throwing check without its message": "passed",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a hanging check as a timeout": "passed",
+    "src.api.server.test.ts::C-609c36a3 GET /health reports a junk check result as invalid": "passed",
+    "src.api.shutdown.test.ts::C-341a5ed6 a SIGTERM then SIGINT closes once and exits zero": "passed",
+    "src.api.shutdown.test.ts::C-3d0f68d6 a direct shutdown is idempotent and resolves undefined after exit zero": "passed",
+    "src.api.shutdown.test.ts::C-3d0f68d6 dispose removes both signal listeners and never closes": "passed",
+    "src.api.shutdown.test.ts::C-78a31ae6 a missed drain deadline force closes and exits one": "passed",
+    "src.api.shutdown.test.ts::C-78a31ae6 a failed close logs shutdown failed without the error text": "passed",
+    "src.api.shutdown.test.ts::C-9abd6ccb requests during the drain still get the envelope and the slow request finishes": "passed",
+    "src.config.config.test.ts::C-7b6bccec loadConfig returns every documented default for an empty environment": "passed",
+    "src.config.config.test.ts::C-95e9881e loadConfig reads every non-secret setting from the environment and drops a trailing slash": "passed",
+    "src.config.config.test.ts::C-95e9881e loadConfig derives publicBaseUrl from the port and ignores empty or unknown variables": "passed",
+    "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad port host log level or role": "passed",
+    "src.config.config.test.ts::C-c0bf38f0 loadConfig refuses a bad drain deadline or public base URL without echoing the value": "passed",
+    "src.config.config.test.ts::C-f3f5587d loadConfig refuses a non-empty secret-shaped variable without echoing its value": "passed",
+    "src.config.config.test.ts::C-f3f5587d loadConfig ignores an empty secret-shaped variable": "passed",
+    "src.config.config.test.ts::C-7a4aa4d4 loadConfig reads the engine key from its file and strips the trailing newline": "passed",
+    "src.config.config.test.ts::C-ca797e1f loadConfig refuses an empty or unreadable engine key file with CONFIG_SECRET_EMPTY": "passed",
+    "src.config.config.test.ts::C-ca797e1f loadConfig refuses a weak engine key with CONFIG_INVALID naming its file variable": "passed",
+    "src.config.config.test.ts::C-16430cae a loaded config hides the engine key and database password from JSON String and inspect": "passed",
+    "src.config.config.test.ts::C-406ddaa1 loadConfig parses app and owner database endpoints with secret passwords": "passed",
+    "src.config.config.test.ts::C-406ddaa1 loadConfig keeps a postgresql sslmode URL unchanged and leaves a missing password null": "passed",
+    "src.config.config.test.ts::C-3d74e0ae a bad database URL is CONFIG_INVALID naming the URL variable without the password": "passed",
+    "src.config.config.test.ts::C-3d74e0ae a bad owner database URL names the owner URL variable": "passed",
+    "src.config.config.test.ts::C-3d74e0ae a database password file without its URL names the password-file variable": "passed",
+    "src.config.config.test.ts::C-3d74e0ae an empty database password file with a valid URL gives CONFIG_SECRET_EMPTY": "passed",
+    "src.config.secret.test.ts::C-16430cae a Secret hides its value from JSON String and inspect": "passed",
+    "src.config.secret.test.ts::C-7a4aa4d4 readSecretValue strips one trailing newline and reads the named file once": "passed",
+    "src.config.secret.test.ts::C-ca797e1f readSecretValue refuses empty whitespace-only and unreadable secrets without their text": "passed",
+    "src.config.secret.test.ts::C-ca797e1f a weak engine key is CONFIG_INVALID with its file variable": "passed",
+    "src.config.secret.test.ts::C-3d74e0ae ConfigError names the variable and rule without a value": "passed",
+    "src.config.secret.test.ts::C-406ddaa1 readSecretValue returns a Secret for a database password file": "passed",
+    "src.core.clock.test.ts::C-6f8e2578 fixedClock returns distinct Date objects for one instant": "passed",
+    "src.core.clock.test.ts::C-6f8e2578 fixedClock rejects an invalid date": "passed",
+    "src.core.ids.test.ts::C-6f8e2578 createIds writes the timestamp version counter variant and random bits": "passed",
+    "src.core.ids.test.ts::C-6004f84c the counter rolls into the timestamp after 4096 ids": "passed",
+    "src.core.ids.test.ts::C-6004f84c ids stay ordered when the clock moves forward and back": "passed",
+    "src.core.ids.test.ts::C-68b36af5 createIds rejects prefixes outside the lower-case rule": "passed",
+    "src.core.ids.test.ts::C-68b36af5 systemIds returns a uuidv7 with its prefix": "passed",
+    "src.core.ids.test.ts::C-68b36af5 sequentialIds counts from its seed": "passed",
+    "src.core.ids.test.ts::C-68b36af5 sequentialIds rejects a bad seed and overflow": "passed",
+    "src.db.base.test.ts::C-d4c6bb53 the base migration records the ledger and keeps objects owned by the owner role": "passed",
+    "src.db.base.test.ts::C-e3e42ffe the app role has only USAGE on the schema": "passed",
+    "src.db.base.test.ts::C-162b9c47 new functions and tables start closed to the app role": "passed",
+    "src.db.base.test.ts::C-081c5cff the app role is subject to forced row level security": "passed",
+    "src.db.files.test.ts::C-8a52d337 readMigrationFiles sorts valid files and hashes their bytes": "passed",
+    "src.db.files.test.ts::C-8a52d337 readMigrationFiles allows gaps and returns an empty list for an empty directory": "passed",
+    "src.db.files.test.ts::C-55276583 readMigrationFiles refuses duplicate versions": "passed",
+    "src.db.files.test.ts::C-55276583 readMigrationFiles refuses badly named entries": "passed",
+    "src.db.files.test.ts::C-55276583 readMigrationFiles refuses version zero and non-file entries": "passed",
+    "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses an empty file": "passed",
+    "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses transaction control lines": "passed",
+    "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses a directory that does not exist": "passed",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok only for a migrated unprivileged role": "passed",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck fails closed when the query rejects or times out": "passed",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck refuses an invalid timeout before querying": "passed",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok for a migrated test database": "passed",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail for an unmigrated test database": "passed",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail after the test database is closed": "passed",
+    "src.db.migrate.test.ts::C-c664fa4c migrate applies files in order, repeats, extends and fills a gap": "passed",
+    "src.db.migrate.test.ts::C-4a57a001 a failing migration rolls back, releases the lock and stops": "passed",
+    "src.db.migrate.test.ts::C-2735b4ff C-c664fa4c migrate bootstraps an empty directory and applies a later file": "passed",
+    "src.db.migrate.test.ts::C-b2b0429a migrate refuses an edited missing renamed or emptied file set": "passed",
+    "src.db.migrate.test.ts::C-77b8f169 two runners are serialised by the advisory lock": "passed",
+    "src.db.migrate.test.ts::C-3815951d migrate times out on a held lock and releases its own after a failure": "passed",
+    "src.db.migrate.test.ts::C-3815951d migrate refuses an invalid lock timeout before querying": "passed",
+    "src.db.migrate.test.ts::C-94eda93a migrate refuses missing and privileged roles before any DDL": "passed",
+    "src.db.open.test.ts::C-1f0e219e openDatabase returns null for no endpoint and warns once for an owner alone": "passed",
+    "src.db.open.test.ts::C-869163e0 openDatabase registers db once, ok, then fail after close twice": "passed",
+    "src.db.open.test.ts::C-7454acfb openDatabase on an unmigrated database registers db, fails it and warns once": "passed",
+    "src.db.open.test.ts::C-32617fd8 openDatabase fails closed on a closed port after one sleep of the remaining time": "passed",
+    "src.db.open.test.ts::C-faf8f8a6 openDatabase refuses a superuser whose cluster starts during the first sleep": "passed",
+    "src.db.open.test.ts::C-69717e99 openDatabase refuses every privileged app endpoint and registers nothing": "passed",
+    "src.db.open.test.ts::C-32617fd8 openDatabase rejects a bad openTimeoutMs and a bad scheme without sleeping": "passed",
+    "src.db.partitions.test.ts::C-fb7ba2ed ensurePartitions creates the monthly window and routes rows": "passed",
+    "src.db.partitions.test.ts::C-c37e9432 ensurePartitions creates daily partitions and refuses bad window options": "passed",
+    "src.db.partitions.test.ts::C-5cc5a771 ensurePartitions ignores list and hash parents and refuses unusable range tables": "passed",
+    "src.db.partitions.test.ts::C-f0ece24f ensurePartitions skips a range whose rows already sit in the DEFAULT partition": "passed",
+    "src.db.partitions.test.ts::C-87e84b3f ensurePartitions serialises callers and fails closed when Postgres is down": "passed",
+    "src.db.pool.test.ts::C-7c1574be createPool builds a pool from an endpoint password with the default options": "passed",
+    "src.db.pool.test.ts::C-7c1574be createPool accepts postgresql URLs and verify-full TLS": "passed",
+    "src.db.pool.test.ts::C-63221721 createPool refuses bad endpoints and options without echoing them": "passed",
+    "src.db.pool.test.ts::C-dc754ade an idle client error reaches onError once and never throws": "passed",
+    "src.db.prepare.test.ts::C-58e0ebf0 prepareDatabase migrates first and then creates the partition window": "passed",
+    "src.db.roles.test.ts::C-f1949ac2 ensureRoles creates repeats and repairs the login roles": "passed",
+    "src.db.roles.test.ts::C-d380769b ensureRoles refuses empty non-ASCII NUL and oversized passwords": "passed",
+    "src.db.roles.test.ts::C-d380769b ensureRoles refuses a weak admin with DB_ROLES_FAILED": "passed",
+    "src.db.roles.test.ts::C-d380769b ensureRoles keeps a quoted password and the owner role": "passed",
+    "src.health.test.ts::healthPayload reports ok and the given version": "passed",
+    "src.main.db.test.ts::C-b3bd64b0 main opens no database and keeps health green": "passed",
+    "src.main.db.test.ts::C-fb007fe9 main registers db, serves ok then fail, and never opens the owner": "passed",
+    "src.main.db.test.ts::C-ad848b65 main writes one fatal line and opens no port when the open fails": "passed",
+    "src.main.db.test.ts::C-6d93e8d5 shutdown and a failed listen end the app pool": "passed",
+    "src.main.test.ts::C-6912835f startServer serves health on the bound loopback port and closes": "passed",
+    "src.main.test.ts::C-c7407753 main starts a port-0 server and stops on SIGTERM": "passed",
+    "src.main.test.ts::C-c7407753 main listens on the configured host and reports it": "passed",
+    "src.main.test.ts::C-469d7fec main writes one fatal line for an empty secret file": "passed",
+    "src.main.test.ts::C-469d7fec main writes one fatal line without the error text for an unknown failure": "passed",
+    "src.main.test.ts::C-469d7fec main reports EADDRINUSE for a busy port at info and silent": "passed",
+    "src.observability.logger.test.ts::C-d18af48d a warn logger writes one ISO-timed line and drops records below its level": "passed",
+    "src.observability.logger.test.ts::C-d18af48d a silent logger writes nothing while a warn logger on the same input does": "passed",
+    "src.observability.logger.test.ts::C-cc8bd5a6 the listed secret keys are redacted from depth zero to three": "passed",
+    "src.observability.logger.test.ts::C-cc8bd5a6 authorization cookie and set-cookie are redacted alone and under headers": "passed",
+    "src.observability.logger.test.ts::C-fc60a608 an error is logged as type, string code and frames only": "passed",
+    "src.observability.logger.test.ts::C-fc60a608 an error without a string code has no code key": "passed",
+    "src.observability.logger.test.ts::C-fc60a608 a request is logged as method and route pattern, never its URL": "passed",
+    "src.observability.logger.test.ts::C-fc60a608 a request without a route pattern logs url unmatched": "passed",
+    "src.observability.tracer.test.ts::C-3c17bb81 C-595eb185 noopTracer spans accept attributes and repeated end": "passed",
+    "src.observability.tracer.test.ts::C-3c17bb81 noopTracer starts a span without attributes": "passed",
+    "test.arch.licences.test.ts::C-b7a7ed55 parseLicenceExpression reads the distinct terms of an expression": "passed",
+    "test.arch.licences.test.ts::C-1524fbc5 parseLicenceExpression gives null for malformed expressions only": "passed",
+    "test.arch.licences.test.ts::C-f0b009a1 formatLicenceViolation names code, subject, licence and detail": "passed",
+    "test.arch.licences.test.ts::C-db08d47c formatLicenceViolation cuts a long licence text and omits an absent one": "passed",
+    "test.arch.licences.test.ts::C-1c977f83 formatLicenceViolations joins the lines with a newline and gives an empty string for none": "passed",
+    "test.arch.licences.test.ts::C-2fb3cbe9 checkLicences fails a copyleft term": "passed",
+    "test.arch.licences.test.ts::C-30fdcfea checkLicences passes permissive licences": "passed",
+    "test.arch.licences.test.ts::C-ae5033da checkLicences reports a package without a licence": "passed",
+    "test.arch.licences.test.ts::C-30f06cd4 checkLicences judges every term of a licence expression": "passed",
+    "test.arch.licences.test.ts::C-ca426357 checkLicences refuses a near-miss identifier": "passed",
+    "test.arch.licences.test.ts::C-7f94877e checkLicences matches terms without regard to case": "passed",
+    "test.arch.licences.test.ts::C-ff913dc5 checkLicences gives fixed subjects and details": "passed",
+    "test.arch.licences.test.ts::C-92d19a9f C-6107b0c0 checkLicences exempts only the reviewed version and licence text": "passed",
+    "test.arch.licences.test.ts::C-7b90839f checkPolicy rejects malformed policy data in order": "passed",
+    "test.arch.licences.test.ts::C-8eaf01ec checkPolicy admits pypi release segment versions": "passed",
+    "test.arch.licences.test.ts::C-6c266a75 checkPolicy refuses pypi versions that are not a release segment": "passed",
+    "test.arch.licences.test.ts::C-991042c4 checkPolicy judges npm exception versions with isExactVersion": "passed",
+    "test.arch.licences.test.ts::C-ae2f6322 checkPolicy does not judge an unknown ecosystem on its version": "passed",
+    "test.arch.licences.test.ts::C-65a32526 checkPolicy accepts the reviewed exception version": "passed",
+    "test.arch.licences.test.ts::C-c18692e2 C-73030b3f the licence policy data is well formed": "passed",
+    "test.arch.licences.test.ts::C-a74a1a7f scanNpmStore walks the store without following symlinks": "passed",
+    "test.arch.licences.test.ts::C-6a008a66 npmLicenceOf treats a legacy or free-text licence as unknown": "passed",
+    "test.arch.licences.test.ts::C-876fb064 an absent or empty store fails instead of passing": "passed",
+    "test.arch.licences.test.ts::C-9d08ccc3 every installed npm package has an allowlisted licence": "passed",
+    "test.arch.licences.test.ts::C-706e1113 pythonLicenceOf reads an SPDX License-Expression": "passed",
+    "test.arch.licences.test.ts::C-0910d0a3 pythonLicenceOf falls back from free text to the classifiers": "passed",
+    "test.arch.licences.test.ts::C-dcc52cf2 a permissive classifier cannot hide a copyleft License text": "passed",
+    "test.arch.licences.test.ts::C-04784843 a one-word License is judged as an identifier": "passed",
+    "test.arch.licences.test.ts::C-0db64dfc unmapped classifiers and missing licences fail": "passed",
+    "test.arch.licences.test.ts::C-1fa7c3d4 scanPythonVenv reads dist-info across Python minors": "passed",
+    "test.arch.licences.test.ts::C-2241065a decideVenvScan skips an absent venv that is not required": "passed",
+    "test.arch.licences.test.ts::C-4ca6b05c decideVenvScan fails an absent venv that is required": "passed",
+    "test.arch.licences.test.ts::C-87f4def2 C-69c81a68 decideVenvScan scans a present venv, and a present venv with no distributions fails": "passed",
+    "test.arch.licences.test.ts::C-8be4d4fc every Python distribution in the e2e venv has an allowlisted licence": "passed",
+    "test.arch.licences.test.ts::C-b51bd435 checkExactVersions refuses ranges, tags and other specs": "passed",
+    "test.arch.licences.test.ts::C-ec3544f7 C-b51bd435 checkExactVersions passes exact versions and refuses a range": "passed",
+    "test.arch.licences.test.ts::C-6faaac53 checkExactVersions refuses a range in pnpm overrides": "passed",
+    "test.arch.licences.test.ts::C-c39c579d checkExactVersions ignores other fields and refuses bad manifests": "passed",
+    "test.arch.licences.test.ts::C-7fbf0b22 checkExactVersions names manifest violations": "passed",
+    "test.arch.licences.test.ts::C-05d0c7f9 C-b51bd435 every dependency range in the root and web manifests is an exact version": "passed",
+    "test.arch.licences.test.ts::C-606611bb C-41ded6c9 onlyBuiltDependencies equals the reviewed list": "passed",
+    "test.arch.licences.test.ts::C-41ded6c9 checkBuiltDependencies fails an added package": "passed",
+    "test.arch.licences.test.ts::C-4557b8b9 checkBuiltDependencies fails a removed package or a duplicate": "passed",
+    "test.arch.licences.test.ts::C-ed7ff850 checkBuiltDependencies handles an absent key, an empty reviewed list and an unsupported form": "passed",
+    "test.arch.licences.test.ts::C-59b6d3e2 checkBuiltDependencies fails a missing workspace file": "passed",
+    "test.arch.licences.test.ts::C-75476b3c checkBuiltDependencies gives the fixed drift details in order": "passed",
+    "test.arch.licences.test.ts::C-67d87882 checkInstallHooks refuses every install-time lifecycle script": "passed",
+    "test.arch.licences.test.ts::C-7dd0d742 checkInstallHooks refuses a pnpm setting other than overrides": "passed",
+    "test.arch.licences.test.ts::C-a223af90 checkInstallHooks allows ordinary scripts and overrides and refuses bad shapes": "passed",
+    "test.arch.licences.test.ts::C-2ae464e9 checkInstallFiles reports a root pnpmfile": "passed",
+    "test.arch.licences.test.ts::C-4767d4f0 checkInstallFiles refuses forbidden workspace keys": "passed",
+    "test.arch.licences.test.ts::C-0f36e537 checkInstallFiles refuses forbidden npmrc keys": "passed",
+    "test.arch.licences.test.ts::C-0797a2c3 topLevelKeys reads keys from column zero only": "passed",
+    "test.arch.licences.test.ts::C-79c32cd5 C-2ae464e9 checkInstallFiles finds nothing in clean roots and a pnpmfile in a dirty one": "passed",
+    "test.arch.licences.test.ts::C-79c32cd5 C-67d87882 the repository runs no install hooks": "passed",
+    "test.arch.licences.test.ts::C-ce1eedc7 findForbiddenImports reports imports, dynamic imports, require and fetch": "passed",
+    "test.arch.licences.test.ts::C-ed8723d5 findForbiddenImports ignores text inside comments and literals": "passed",
+    "test.arch.licences.test.ts::C-115a4581 C-ce1eedc7 the licence gate reads files only": "passed",
+    "test.support.global-setup.test.ts::C-589bae1c global setup publishes the coordinates of a migrated shared cluster": "passed",
+    "test.support.global-setup.test.ts::C-b3edfa92 global setup starts a cluster and global teardown stops it": "passed",
+    "test.support.pg.test.ts::C-6d9f36e4 withTestDatabase clones fresh isolated databases with owner and app pools": "passed",
+    "test.support.pg.test.ts::C-6d9f36e4 migrated false has no schema while the default clone does": "passed",
+    "test.support.pg.test.ts::C-6d9f36e4 eight databases run in parallel and all drop on close": "passed",
+    "test.support.pg.test.ts::C-081c5cff the app pool is subject to row level security": "passed",
+    "test.support.pg.test.ts::C-f2409274 startCluster refuses a busy port and removes its data directory": "passed",
+    "test.support.pg.test.ts::C-f2409274 withTestDatabase needs TEST_PG_CLUSTER when no cluster is given": "passed",
+    "test.tooling.node-test-junit.test.ts::an assertion failure carries type AssertionError and the name in its message": "passed",
+    "test.tooling.node-test-junit.test.ts::a stub that throws not implemented is reported as NotImplementedError": "passed",
+    "test.tooling.node-test-junit.test.ts::any other error keeps its own name": "passed",
+    "test.tooling.node-test-junit.test.ts::a passing test has no failure and skip and todo are skipped": "passed",
+    "test.tooling.node-test-junit.test.ts::same-named tests in two files get distinct classnames": "passed",
+    "test.tooling.node-test-junit.test.ts::nested describes become part of the classname": "passed",
+    "test.tooling.node-test-junit.test.ts::a describe body that throws is reported as a failure of the suite": "passed",
+    "test.tooling.node-test-junit.test.ts::a file that does not import is a collection failure without classname": "passed",
+    "test_health::test_health_reports_ok[chromium]": "passed"
+  },
+  "red_green": {
+    "src.db.pool.test.ts::C-63221721 createPool refuses bad endpoints and options without echoing them": "1.1",
+    "src.db.pool.test.ts::C-7c1574be createPool accepts postgresql URLs and verify-full TLS": "1.1",
+    "src.db.pool.test.ts::C-7c1574be createPool builds a pool from an endpoint password with the default options": "1.1",
+    "src.db.pool.test.ts::C-dc754ade an idle client error reaches onError once and never throws": "1.1",
+    "test.support.pg.test.ts::C-081c5cff the app pool is subject to row level security": "2.1",
+    "test.support.pg.test.ts::C-6d9f36e4 eight databases run in parallel and all drop on close": "2.1",
+    "test.support.pg.test.ts::C-6d9f36e4 migrated false has no schema while the default clone does": "2.1",
+    "test.support.pg.test.ts::C-6d9f36e4 withTestDatabase clones fresh isolated databases with owner and app pools": "2.1",
+    "test.support.pg.test.ts::C-f2409274 startCluster refuses a busy port and removes its data directory": "2.1",
+    "test.support.pg.test.ts::C-f2409274 withTestDatabase needs TEST_PG_CLUSTER when no cluster is given": "2.1",
+    "src.db.files.test.ts::C-55276583 readMigrationFiles refuses badly named entries": "3.1",
+    "src.db.files.test.ts::C-55276583 readMigrationFiles refuses duplicate versions": "3.1",
+    "src.db.files.test.ts::C-55276583 readMigrationFiles refuses version zero and non-file entries": "3.1",
+    "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses a directory that does not exist": "3.1",
+    "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses an empty file": "3.1",
+    "src.db.files.test.ts::C-6a2a3916 readMigrationFiles refuses transaction control lines": "3.1",
+    "src.db.files.test.ts::C-8a52d337 readMigrationFiles allows gaps and returns an empty list for an empty directory": "3.1",
+    "src.db.files.test.ts::C-8a52d337 readMigrationFiles sorts valid files and hashes their bytes": "3.1",
+    "src.db.roles.test.ts::C-d380769b ensureRoles keeps a quoted password and the owner role": "4.1",
+    "src.db.roles.test.ts::C-d380769b ensureRoles refuses a weak admin with DB_ROLES_FAILED": "4.1",
+    "src.db.roles.test.ts::C-d380769b ensureRoles refuses empty non-ASCII NUL and oversized passwords": "4.1",
+    "src.db.roles.test.ts::C-f1949ac2 ensureRoles creates repeats and repairs the login roles": "4.1",
+    "src.db.migrate.test.ts::C-2735b4ff C-c664fa4c migrate bootstraps an empty directory and applies a later file": "5.1",
+    "src.db.migrate.test.ts::C-4a57a001 a failing migration rolls back, releases the lock and stops": "5.1",
+    "src.db.migrate.test.ts::C-c664fa4c migrate applies files in order, repeats, extends and fills a gap": "5.1",
+    "src.db.migrate.test.ts::C-3815951d migrate refuses an invalid lock timeout before querying": "5.2",
+    "src.db.migrate.test.ts::C-3815951d migrate times out on a held lock and releases its own after a failure": "5.2",
+    "src.db.migrate.test.ts::C-77b8f169 two runners are serialised by the advisory lock": "5.2",
+    "src.db.migrate.test.ts::C-94eda93a migrate refuses missing and privileged roles before any DDL": "5.2",
+    "src.db.migrate.test.ts::C-b2b0429a migrate refuses an edited missing renamed or emptied file set": "5.2",
+    "src.db.base.test.ts::C-081c5cff the app role is subject to forced row level security": "6.1",
+    "src.db.base.test.ts::C-162b9c47 new functions and tables start closed to the app role": "6.1",
+    "src.db.base.test.ts::C-d4c6bb53 the base migration records the ledger and keeps objects owned by the owner role": "6.1",
+    "src.db.base.test.ts::C-e3e42ffe the app role has only USAGE on the schema": "6.1",
+    "src.db.partitions.test.ts::C-5cc5a771 ensurePartitions ignores list and hash parents and refuses unusable range tables": "7.1",
+    "src.db.partitions.test.ts::C-87e84b3f ensurePartitions serialises callers and fails closed when Postgres is down": "7.1",
+    "src.db.partitions.test.ts::C-c37e9432 ensurePartitions creates daily partitions and refuses bad window options": "7.1",
+    "src.db.partitions.test.ts::C-f0ece24f ensurePartitions skips a range whose rows already sit in the DEFAULT partition": "7.1",
+    "src.db.partitions.test.ts::C-fb7ba2ed ensurePartitions creates the monthly window and routes rows": "7.1",
+    "src.db.prepare.test.ts::C-58e0ebf0 prepareDatabase migrates first and then creates the partition window": "7.1",
+    "test.support.global-setup.test.ts::C-589bae1c global setup publishes the coordinates of a migrated shared cluster": "8.1",
+    "test.support.global-setup.test.ts::C-b3edfa92 global setup starts a cluster and global teardown stops it": "8.1",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck fails closed when the query rejects or times out": "9.1",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck refuses an invalid timeout before querying": "9.1",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail after the test database is closed": "9.1",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports fail for an unmigrated test database": "9.1",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok for a migrated test database": "9.1",
+    "src.db.health.test.ts::C-ebfa9bed createDbHealthCheck reports ok only for a migrated unprivileged role": "9.1",
+    "src.db.open.test.ts::C-1f0e219e openDatabase returns null for no endpoint and warns once for an owner alone": "9.2",
+    "src.db.open.test.ts::C-32617fd8 openDatabase fails closed on a closed port after one sleep of the remaining time": "9.2",
+    "src.db.open.test.ts::C-32617fd8 openDatabase rejects a bad openTimeoutMs and a bad scheme without sleeping": "9.2",
+    "src.db.open.test.ts::C-69717e99 openDatabase refuses every privileged app endpoint and registers nothing": "9.2",
+    "src.db.open.test.ts::C-7454acfb openDatabase on an unmigrated database registers db, fails it and warns once": "9.2",
+    "src.db.open.test.ts::C-869163e0 openDatabase registers db once, ok, then fail after close twice": "9.2",
+    "src.db.open.test.ts::C-faf8f8a6 openDatabase refuses a superuser whose cluster starts during the first sleep": "9.2",
+    "src.main.db.test.ts::C-6d93e8d5 shutdown and a failed listen end the app pool": "10.1",
+    "src.main.db.test.ts::C-ad848b65 main writes one fatal line and opens no port when the open fails": "10.1",
+    "src.main.db.test.ts::C-b3bd64b0 main opens no database and keeps health green": "10.1",
+    "src.main.db.test.ts::C-fb007fe9 main registers db, serves ok then fail, and never opens the owner": "10.1"
+  },
+  "guards": [],
+  "prompt_sha256": "48261b185910f0eedfdfa954a72c67e0a19be7b7538d7400d4b3275730f28a0e",
+  "template": "judge@13",
+  "harness_commit": "66d99acc5d9d35ba487e58084064423c71c0d358",
+  "judge_calls": 2,
+  "judge_reply": "valid",
+  "judge_replies": {
+    "valid": 2,
+    "repaired": 0,
+    "retried": 0,
+    "discarded": 0
+  },
+  "judge_parts": [
+    {
+      "part": 1,
+      "files": 17,
+      "chars": 112340,
+      "reserve": 1284,
+      "profile": "gemini-judge",
+      "calls": 1,
+      "reply": "valid",
+      "prompt_sha256": "6c48b9fdc2699ac229b291b25f3f81d3a3a6cde612a6241e73d1e70e9bfe74fd"
+    },
+    {
+      "part": 2,
+      "files": 10,
+      "chars": 89842,
+      "reserve": 1284,
+      "profile": "gemini-judge",
+      "calls": 1,
+      "reply": "valid",
+      "prompt_sha256": "49d8d724b16cf1772138c5cc5e188e65dc0b136e550e2c400480dd083b3d5604"
+    }
+  ],
+  "judge_files": [
+    [
+      1,
+      "src/db/migrations/0001_base.sql",
+      495
+    ],
+    [
+      1,
+      "src/db/base.test.ts",
+      10128
+    ],
+    [
+      1,
+      "src/db/errors.ts",
+      817
+    ],
+    [
+      1,
+      "src/db/files.test.ts",
+      6630
+    ],
+    [
+      1,
+      "src/db/files.ts",
+      3169
+    ],
+    [
+      1,
+      "test/support/global-setup.test.ts",
+      4950
+    ],
+    [
+      1,
+      "test/support/global-setup.ts",
+      3011
+    ],
+    [
+      1,
+      "src/db/health.test.ts",
+      3971
+    ],
+    [
+      1,
+      "src/db/health.ts",
+      3414
+    ],
+    [
+      1,
+      "src/db/index.ts",
+      725
+    ],
+    [
+      1,
+      "src/main.db.test.ts",
+      12262
+    ],
+    [
+      1,
+      "src/main.ts",
+      2721
+    ],
+    [
+      1,
+      "src/db/migrate.test.ts",
+      23116
+    ],
+    [
+      1,
+      "src/db/migrate.ts",
+      8953
+    ],
+    [
+      1,
+      "src/db/open.test.ts",
+      11371
+    ],
+    [
+      1,
+      "src/db/open.ts",
+      3643
+    ],
+    [
+      1,
+      "src/db/partitions.test.ts",
+      12964
+    ],
+    [
+      2,
+      "src/db/partitions.ts",
+      9946
+    ],
+    [
+      2,
+      "test/support/pg.test.ts",
+      11040
+    ],
+    [
+      2,
+      "test/support/pg.ts",
+      9120
+    ],
+    [
+      2,
+      "src/db/pool.test.ts",
+      4247
+    ],
+    [
+      2,
+      "src/db/pool.ts",
+      4189
+    ],
+    [
+      2,
+      "src/db/prepare.test.ts",
+      4471
+    ],
+    [
+      2,
+      "src/db/prepare.ts",
+      865
+    ],
+    [
+      2,
+      "src/db/roles.test.ts",
+      8254
+    ],
+    [
+      2,
+      "src/db/roles.ts",
+      7147
+    ],
+    [
+      2,
+      "openspec/changes/add-db-foundation/tasks.md",
+      30563
+    ]
+  ],
+  "judge_followups": [],
+  "judge_split": {},
+  "hold_views": {},
+  "profiles": {
+    "judge": "gemini-judge",
+    "implementer": [
+      "deepseek",
+      "glm",
+      "claude-sonnet"
+    ]
+  },
+  "judge_model": null,
+  "independence": {
+    "mode": "different_vendor",
+    "status": "declared (unverified)",
+    "verified": false,
+    "judge": {
+      "profile": "gemini-judge",
+      "vendor": "google",
+      "model": "opencode-go/gemini-4-argon",
+      "provenance": "declared",
+      "served": null,
+      "vendors": [],
+      "routed_models": []
+    },
+    "implementers": [
+      {
+        "profile": "deepseek",
+        "vendor": "deepseek",
+        "model": "opencode-go/deepseek-v4.1-flash",
+        "provenance": "declared",
+        "served": null,
+        "vendors": [],
+        "routed_models": []
+      },
+      {
+        "profile": "glm",
+        "vendor": "zhipu",
+        "model": "opencode-go/glm-5.3-flash",
+        "provenance": "declared",
+        "served": null,
+        "vendors": [],
+        "routed_models": []
+      },
+      {
+        "profile": "claude-sonnet",
+        "vendor": "anthropic",
+        "model": "claude-sonnet-5-5",
+        "provenance": "tool",
+        "served": null,
+        "vendors": [],
+        "routed_models": []
+      }
+    ]
+  },
+  "cost_usd": 0.622336
+}
