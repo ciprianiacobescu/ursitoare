@@ -10,7 +10,7 @@ Every test: no driver error escapes it. It first asserts with `assert.ok` that t
 
 ## 3. Migration files
 
-- [ ] 3.1 Write `src/db/files.test.ts` first (temporary directories written by the test; gaps, `0000`, duplicates), then implement `readMigrationFiles` and `MigrationFile` in `src/db/files.ts` (`readdir` with file types, name pattern `^(\d{4})_([a-z][a-z0-9_]{0,62})\.sql$`, version at least 1, reasons `bad_name`, `not_regular_file`, `duplicate_version`, then `MIGRATION_FAILED` for `empty` (an empty file), `transaction_control` (a line that is only `BEGIN;`, `COMMIT;`, `ROLLBACK;` or `START TRANSACTION;`, any case) and `directory_unreadable`; the internal `checksumOf` is SHA-256 hex) and export them through `src/db/index.ts`, implementing requirement "Migration file names". The test computes the expected checksum with `node:crypto`
+- [x] 3.1 Write `src/db/files.test.ts` first (temporary directories written by the test; gaps, `0000`, duplicates), then implement `readMigrationFiles` and `MigrationFile` in `src/db/files.ts` (`readdir` with file types, name pattern `^(\d{4})_([a-z][a-z0-9_]{0,62})\.sql$`, version at least 1, reasons `bad_name`, `not_regular_file`, `duplicate_version`, then `MIGRATION_FAILED` for `empty` (an empty file), `transaction_control` (a line that is only `BEGIN;`, `COMMIT;`, `ROLLBACK;` or `START TRANSACTION;`, any case) and `directory_unreadable`; the internal `checksumOf` is SHA-256 hex) and export them through `src/db/index.ts`, implementing requirement "Migration file names". The test computes the expected checksum with `node:crypto`
 
 ## 4. Roles
 
