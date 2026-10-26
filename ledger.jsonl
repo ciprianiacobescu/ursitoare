@@ -71,3 +71,4 @@
 {"at":"2026-10-26T20:44:02Z","by":"harness","reason":"the cause is gone: openspec:add-architecture-fitness is awaiting_human","type":"plan.resumed"}
 {"at":"2026-10-26T20:44:04Z","attempt":1,"cost_usd":15.556204,"runs":5,"type":"plan.charged","unit":"openspec:add-architecture-fitness"}
 {"at":"2026-10-26T20:44:04Z","run":"r-20261026T2044Z-50e9","type":"unit.dispatched","unit":"openspec:add-architecture-fitness"}
+{"at":"2026-10-26T20:45:47Z","detail":"the repository CI is still running on the hand-off commit 2099b3f397 (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"2099b3f3976b5a507e23a02b067ad313a775c6fb","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-architecture-fitness"}
