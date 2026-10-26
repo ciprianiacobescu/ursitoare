@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 5.1 | technical | test/arch/repo.test.ts:30 networkViolation prepends the name to the full message |
-| Q-002 | open | none | verdict | Criterion C-851f3c7c (architecture-rules › Complete module graph as data › Inconsistent graphs are reported): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-851f3c7c (architecture-rules › Complete module graph as data › Inconsistent graphs are reported): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-c63269ba (architecture-rules › Secret-pattern scan of repository files › Each kind is detected without echoing it): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied? |
@@ -51,7 +51,8 @@ Edit `test/arch/repo.test.ts`: in `networkViolation`, rename parameter `name` to
 
 ## Q-002: Criterion C-851f3c7c (architecture-rules › Complete module graph as data › Inconsistent graphs are reported): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -78,6 +79,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The scenario's THEN says each of the four fixture results also carries the egress-pin violations because the fixtures name no egress module, and design decision 6 pins the modules with an egress value to exactly observability, identity and gateway. The implementation does not deliver that: checkGraphIntegrity loops over Object.entries(modules) and consults PINNED_EGRESS only for rows that are present, so a graph with no observability, identity or gateway row (every one of the four fixtures, and a copy of MODULES with the gateway row deleted) yields no pin violation at all. On { a: { allowed: ["zzz"] } } it returns exactly one violation, the unknown-name one, and nothing about the pin. The passing test cannot see this because it asserts only with some on the needle and with every on code, file and line, never that a pin violation is present. The judge's major finding therefore stands. WHEN checkGraphIntegrity runs on a graph that lacks a row for observability, identity or gateway, such as { a: { allowed: ["zzz"] } } or a copy of MODULES without the gateway row THEN in addition to its other violations it returns, for each missing pinned module, an ARCH_GRAPH_INVALID violation at test/arch/modules.ts:1 whose message names that module and says it must carry its pinned egress value.
 ---
 
 ## Q-003: Criterion C-c63269ba (architecture-rules › Secret-pattern scan of repository files › Each kind is detected without echoing it): accept as satisfied?
