@@ -53,8 +53,10 @@ delegates; only `identity` talks to the OIDC provider; only `observability` expo
 - Node's test runner; `*.test.ts` next to the code. `pnpm test` writes `.l4-out/junit.xml` through the owner reporter
   `tools/node-test-junit.mjs` (`docs/decisions/0002-l4-typescript-test-gate.md`).
 - Red steps: a new test fails by assertion or because a stub throws `new Error("not implemented")`, never with
-  another error. Test names contain no `.`, `[` or `::`. Every task adds at least one Node test (a browser journey
-  alone is not a red step).
+  another error, and each criterion has at least one test that fails by assertion: L4 does not count a stub's
+  not-implemented error, so a test whose call reaches a stub wraps it in `assert.doesNotThrow(() => { ... })` or
+  `await assert.doesNotReject(async () => { ... })` (`src/observability/logger.test.ts`). Test names contain no `.`,
+  `[` or `::`. Every task adds at least one Node test (a browser journey alone is not a red step).
 - A test never lets a driver or SQL error escape (L4 cannot read its kind): a test of a migration first asserts that its
   objects exist (`to_regclass`, `to_regprocedure`) or that the ledger holds the expected versions, and an expected
   failure is `await assert.rejects(p, { code })`. Every symbol a test imports is in its change's Interfaces, so the
