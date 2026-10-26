@@ -117,6 +117,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-004: Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The criterion describes the implementer's conduct, not code: when the merged tree fails a rule, the task must end with a blocker and the diff must leave src/, test/support/, owner files and modules.ts untouched and weaken no rule. Settling it needs the unit's actual run and diff: whether checkAll(re
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
