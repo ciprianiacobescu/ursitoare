@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-851f3c7c (architecture-rules › Complete module graph as data › Inconsistent graphs are reported): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-c63269ba (architecture-rules › Secret-pattern scan of repository files › Each kind is detected without echoing it): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied? |
-| Q-005 | open | none | verdict | Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied? |
+| Q-005 | answered | none | verdict | Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied? |
 | Q-007 | answered | none | verdict | Finding F-a154400b: The module graph is duplicated: the rules ignore test/arch/modules.ts |
 | Q-008 | answered | none | verdict | Finding F-a985c7e4: task 2.1: modules.ts is not the graph the rules check |
@@ -150,7 +150,7 @@ accept: a conduct criterion. On this unit checkAll(readSnapshot()) is empty (rep
 
 ## Q-005: Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: checked test/arch/modules.ts:132 does not resolve
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -178,6 +178,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept: as Q-004. No directory of src/ is outside the graph at this head (repo.test.ts passes), so no ARCH_UNKNOWN_MODULE was raised and test/arch/modules.ts gained no row for one.
 ---
 
 ## Q-006: Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied?
