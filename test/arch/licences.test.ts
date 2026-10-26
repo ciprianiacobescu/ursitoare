@@ -13,7 +13,9 @@ import {
   formatLicenceViolations,
   npmLicenceOf,
   parseLicenceExpression,
+  pythonLicenceOf,
   scanNpmStore,
+  scanPythonVenv,
   type InstalledPackage,
   type LicenceException,
   type LicencePolicy,
@@ -577,4 +579,164 @@ test("C-9d08ccc3 every installed npm package has an allowlisted licence", () => 
     ),
     "",
   );
+});
+
+test("C-706e1113 pythonLicenceOf reads an SPDX License-Expression", () => {
+  const metadata = [
+    "Metadata-Version: 2.1",
+    "Name: dual-licensed",
+    "Version: 2.0",
+    "License-Expression: MIT AND PSF-2.0",
+    "",
+    "Dual licensed.",
+  ].join("\n");
+  assert.deepEqual(answer(() => pythonLicenceOf(metadata)), {
+    licence: "MIT AND PSF-2.0",
+    terms: ["MIT", "PSF-2.0"],
+  });
+});
+
+test("C-0910d0a3 pythonLicenceOf falls back from free text to the classifiers", () => {
+  const metadata = [
+    "Metadata-Version: 2.1",
+    "Name: apache",
+    "Version: 1.0",
+    "License: Apache License",
+    "Classifier: License :: OSI Approved :: Apache Software License",
+    "",
+    "Free text.",
+  ].join("\n");
+  assert.deepEqual(answer(() => pythonLicenceOf(metadata)), {
+    licence: "Apache Software License",
+    terms: ["Apache-2.0"],
+  });
+});
+
+test("C-dcc52cf2 a permissive classifier cannot hide a copyleft License text", () => {
+  const metadata = [
+    "Metadata-Version: 2.1",
+    "Name: hidden",
+    "Version: 1.0",
+    "License: GPL-3.0-only",
+    "Classifier: License :: OSI Approved :: MIT License",
+    "",
+    "Copyleft.",
+  ].join("\n");
+  const reading = answer(() => pythonLicenceOf(metadata));
+  assert.ok(reading !== "THROWN", "pythonLicenceOf answers");
+  assert.deepEqual(reading.terms, ["GPL-3.0-only", "MIT"]);
+  assert.deepEqual(
+    answer(() =>
+      checkLicences(
+        [{ ecosystem: "pypi", name: "hidden", version: "1.0", licence: reading.licence, terms: reading.terms }],
+        { allowed: ALLOWED, exceptions: [] },
+        "e2e/.venv",
+      ),
+    ),
+    [
+      {
+        code: "LICENCE_TERM_NOT_ALLOWED",
+        subject: "pypi hidden@1.0",
+        licence: reading.licence,
+        detail: "terms not on the allowlist: GPL-3.0-only",
+      },
+    ],
+  );
+});
+
+test("C-04784843 a one-word License is judged as an identifier", () => {
+  const metadata = [
+    "Metadata-Version: 2.1",
+    "Name: bsd",
+    "Version: 1.0",
+    "License: BSD",
+    "Classifier: License :: OSI Approved :: BSD License",
+    "",
+    "One word.",
+  ].join("\n");
+  const reading = answer(() => pythonLicenceOf(metadata));
+  assert.ok(reading !== "THROWN", "pythonLicenceOf answers");
+  assert.equal(reading.licence, "BSD; BSD License");
+  assert.deepEqual(reading.terms, ["BSD", "BSD-3-Clause"]);
+  assert.deepEqual(
+    answer(() =>
+      checkLicences(
+        [{ ecosystem: "pypi", name: "bsd", version: "1.0", licence: reading.licence, terms: reading.terms }],
+        { allowed: ALLOWED, exceptions: [] },
+        "e2e/.venv",
+      ),
+    ),
+    [
+      {
+        code: "LICENCE_TERM_NOT_ALLOWED",
+        subject: "pypi bsd@1.0",
+        licence: "BSD; BSD License",
+        detail: "terms not on the allowlist: BSD",
+      },
+    ],
+  );
+});
+
+test("C-0db64dfc unmapped classifiers and missing licences fail", () => {
+  const textUnidecode = [
+    "Metadata-Version: 2.0",
+    "Name: text-unidecode",
+    "Version: 1.3",
+    "License: Artistic License",
+    "Classifier: License :: OSI Approved :: Artistic License",
+    "Classifier: License :: OSI Approved :: GNU General Public License (GPL)",
+    "Classifier: License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+    "",
+    "Text-Unidecode",
+  ].join("\n");
+  const missing = ["Metadata-Version: 2.1", "Name: nolic", "Version: 1.0", "Summary: no licence", "", "Nothing."].join(
+    "\n",
+  );
+  const first = answer(() => pythonLicenceOf(textUnidecode));
+  const second = answer(() => pythonLicenceOf(missing));
+  assert.ok(first !== "THROWN", "pythonLicenceOf answers for the unmapped classifiers");
+  assert.ok(second !== "THROWN", "pythonLicenceOf answers for the missing licence");
+  assert.deepEqual(first, {
+    licence:
+      "Artistic License; GNU General Public License (GPL); GNU General Public License v2 or later (GPLv2+)",
+    terms: null,
+  });
+  assert.deepEqual(second, { licence: null, terms: null });
+  assert.deepEqual(
+    answer(() =>
+      checkLicences(
+        [
+          { ecosystem: "pypi", name: "text-unidecode", version: "1.3", licence: first.licence, terms: first.terms },
+          { ecosystem: "pypi", name: "nolic", version: "1.0", licence: second.licence, terms: second.terms },
+        ],
+        { allowed: ALLOWED, exceptions: [] },
+        "e2e/.venv",
+      ),
+    ),
+    [
+      {
+        code: "LICENCE_UNKNOWN",
+        subject: "pypi text-unidecode@1.3",
+        licence: first.licence,
+        detail: "licence is not a parsable SPDX expression",
+      },
+      { code: "LICENCE_MISSING", subject: "pypi nolic@1.0", detail: "no licence found" },
+    ],
+  );
+});
+
+test("C-1fa7c3d4 scanPythonVenv reads dist-info across Python minors", () => {
+  const venv = tempRoot();
+  const pluggy = path.join(venv, "lib", "python3.12", "site-packages", "pluggy-1.7.0.dist-info");
+  fs.mkdirSync(pluggy, { recursive: true });
+  fs.writeFileSync(
+    path.join(pluggy, "METADATA"),
+    ["Metadata-Version: 2.1", "Name: pluggy", "Version: 1.7.0", "License: MIT", "", "Plugin manager."].join("\n"),
+  );
+  const fooBar = path.join(venv, "lib", "python3.13", "site-packages", "foo_bar-2.0.dist-info");
+  fs.mkdirSync(fooBar, { recursive: true });
+  assert.deepEqual(answer(() => scanPythonVenv(venv)), [
+    { ecosystem: "pypi", name: "foo_bar", version: "2.0", licence: null, terms: null },
+    { ecosystem: "pypi", name: "pluggy", version: "1.7.0", licence: "MIT", terms: ["MIT"] },
+  ]);
 });
