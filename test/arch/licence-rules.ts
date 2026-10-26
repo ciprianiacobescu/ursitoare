@@ -444,8 +444,38 @@ export function isExactVersion(spec: string): boolean {
   return EXACT_VERSION.test(spec.slice(at + 1));
 }
 
-export function checkExactVersions(_file: string, _manifest: unknown): LicenceViolation[] {
-  throw new Error("not implemented");
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+export function checkExactVersions(file: string, manifest: unknown): LicenceViolation[] {
+  if (!isPlainObject(manifest)) {
+    return [{ code: "MANIFEST_INVALID", subject: file, detail: "not a JSON object" }];
+  }
+  const violations: LicenceViolation[] = [];
+  const sections: Array<[string, unknown]> = [];
+  for (const key of ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"]) {
+    if (manifest[key] !== undefined) sections.push([key, manifest[key]]);
+  }
+  const pnpm = manifest["pnpm"];
+  if (isPlainObject(pnpm) && pnpm["overrides"] !== undefined) {
+    sections.push(["pnpm.overrides", pnpm["overrides"]]);
+  }
+  for (const [section, value] of sections) {
+    if (!isPlainObject(value)) {
+      violations.push({ code: "MANIFEST_INVALID", subject: `${file} ${section}`, detail: "not a plain object" });
+      continue;
+    }
+    for (const [name, spec] of Object.entries(value)) {
+      if (typeof spec === "string" && isExactVersion(spec)) continue;
+      violations.push({
+        code: "VERSION_NOT_EXACT",
+        subject: `${file} ${section}.${name}`,
+        detail: `${JSON.stringify(spec)} is not an exact version`,
+      });
+    }
+  }
+  return violations;
 }
 
 export function checkInstallHooks(_file: string, _manifest: unknown): LicenceViolation[] {
