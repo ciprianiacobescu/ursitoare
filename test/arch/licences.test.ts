@@ -9,6 +9,8 @@ import { fileURLToPath } from "node:url";
 import {
   checkBuiltDependencies,
   checkExactVersions,
+  checkInstallFiles,
+  checkInstallHooks,
   checkLicences,
   checkPolicy,
   decideVenvScan,
@@ -20,6 +22,7 @@ import {
   readTopLevelList,
   scanNpmStore,
   scanPythonVenv,
+  topLevelKeys,
   type InstalledPackage,
   type LicenceException,
   type LicencePolicy,
@@ -515,6 +518,17 @@ function workspaceYamlWith(entries: readonly string[], quoteFirst = false): stri
     quoteFirst && index === 0 ? `  - '${entry}'` : `  - ${entry}`,
   );
   return ["packages:", '  - "."', "onlyBuiltDependencies:", ...items, ""].join("\n");
+}
+
+// A scratch repository root holding the given files, keyed by their relative path.
+function fixtureRoot(files: Readonly<Record<string, string>>): string {
+  const root = tempRoot();
+  for (const [relative, content] of Object.entries(files)) {
+    const target = path.join(root, ...relative.split("/"));
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.writeFileSync(target, content);
+  }
+  return root;
 }
 
 test("C-a74a1a7f scanNpmStore walks the store without following symlinks", () => {
@@ -1062,6 +1076,173 @@ test("C-75476b3c checkBuiltDependencies gives the fixed drift details in order",
       subject: "pnpm-workspace.yaml onlyBuiltDependencies",
       detail:
         "not reviewed: [evil]; missing: [esbuild]; duplicates: [evil]; change pnpm-workspace.yaml and test/arch/licence-policy.ts together",
+    },
+  ]);
+});
+
+test("C-67d87882 checkInstallHooks refuses every install-time lifecycle script", () => {
+  const hooks = [
+    "pnpm:devPreinstall",
+    "preinstall",
+    "install",
+    "postinstall",
+    "preprepare",
+    "prepare",
+    "postprepare",
+  ];
+  for (const hook of hooks) {
+    assert.deepEqual(
+      answer(() => checkInstallHooks("package.json", { scripts: { [hook]: "node x.js" } })),
+      [
+        {
+          code: "INSTALL_HOOK_FORBIDDEN",
+          subject: `package.json scripts.${hook}`,
+          detail: "runs code at install time",
+        },
+      ],
+      `the ${hook} script runs code at install time`,
+    );
+  }
+});
+
+test("C-7dd0d742 checkInstallHooks refuses a pnpm setting other than overrides", () => {
+  for (const key of ["onlyBuiltDependencies", "allowBuilds"]) {
+    assert.deepEqual(
+      answer(() => checkInstallHooks("web/package.json", { pnpm: { [key]: ["evil"] } })),
+      [
+        {
+          code: "INSTALL_HOOK_FORBIDDEN",
+          subject: `web/package.json pnpm.${key}`,
+          detail: "pnpm settings other than overrides are not allowed",
+        },
+      ],
+      `the pnpm ${key} setting is refused`,
+    );
+  }
+});
+
+test("C-a223af90 checkInstallHooks allows ordinary scripts and overrides and refuses bad shapes", () => {
+  assert.deepEqual(
+    answer(() =>
+      checkInstallHooks("package.json", {
+        scripts: { build: "tsc", test: "node --test" },
+        pnpm: { overrides: { semver: "7.7.1" } },
+      }),
+    ),
+    [],
+  );
+  assert.deepEqual(answer(() => checkInstallHooks("package.json", [])), []);
+  assert.deepEqual(answer(() => checkInstallHooks("package.json", { scripts: [] })), [
+    { code: "MANIFEST_INVALID", subject: "package.json scripts", detail: "not a plain object" },
+  ]);
+});
+
+test("C-2ae464e9 checkInstallFiles reports a root pnpmfile", () => {
+  for (const name of [".pnpmfile.cjs", ".pnpmfile.mjs"]) {
+    const root = fixtureRoot({ [name]: "module.exports = {};\n" });
+    assert.deepEqual(
+      answer(() => checkInstallFiles(root)),
+      [{ code: "INSTALL_HOOK_FORBIDDEN", subject: name, detail: "a pnpmfile runs code at install time" }],
+      `a ${name} at the repository root runs code`,
+    );
+  }
+});
+
+test("C-4767d4f0 checkInstallFiles refuses forbidden workspace keys", () => {
+  const cases: ReadonlyArray<readonly [string, string]> = [
+    ['packages:\n  - "."\nneverBuiltDependencies:\n  - x\n', "neverBuiltDependencies"],
+    ["dangerouslyAllowAllBuilds: true\n", "dangerouslyAllowAllBuilds"],
+    ["allowBuilds:\n  evil: true\n", "allowBuilds"],
+    ["globalPnpmfile: ./g.cjs\n", "globalPnpmfile"],
+    ["configDependencies:\n  c: 1.0.0\n", "configDependencies"],
+    ["pnpmfile: ./g.cjs\n", "pnpmfile"],
+    ["onlyBuiltDependenciesFile: ./o.json\n", "onlyBuiltDependenciesFile"],
+  ];
+  for (const [yaml, key] of cases) {
+    const root = fixtureRoot({ "pnpm-workspace.yaml": yaml });
+    assert.deepEqual(
+      answer(() => checkInstallFiles(root)),
+      [
+        {
+          code: "INSTALL_HOOK_FORBIDDEN",
+          subject: `pnpm-workspace.yaml ${key}`,
+          detail: "workspace setting that runs or widens install-time code",
+        },
+      ],
+      `the workspace key ${key} is refused`,
+    );
+  }
+});
+
+test("C-0f36e537 checkInstallFiles refuses forbidden npmrc keys", () => {
+  const root = fixtureRoot({
+    ".npmrc":
+      "save-exact=true\n# note\nglobal-pnpmfile=./g.cjs\nonly-built-dependencies[]=evil\nALLOW-BUILDS[esbuild]=true\n",
+    "web/.npmrc": "pnpmfile=./x.cjs\n",
+  });
+  assert.deepEqual(answer(() => checkInstallFiles(root)), [
+    {
+      code: "INSTALL_HOOK_FORBIDDEN",
+      subject: ".npmrc global-pnpmfile",
+      detail: ".npmrc setting that runs or widens install-time code",
+    },
+    {
+      code: "INSTALL_HOOK_FORBIDDEN",
+      subject: ".npmrc only-built-dependencies",
+      detail: ".npmrc setting that runs or widens install-time code",
+    },
+    {
+      code: "INSTALL_HOOK_FORBIDDEN",
+      subject: ".npmrc ALLOW-BUILDS",
+      detail: ".npmrc setting that runs or widens install-time code",
+    },
+    {
+      code: "INSTALL_HOOK_FORBIDDEN",
+      subject: "web/.npmrc pnpmfile",
+      detail: ".npmrc setting that runs or widens install-time code",
+    },
+  ]);
+});
+
+test("C-0797a2c3 topLevelKeys reads keys from column zero only", () => {
+  const yaml = 'packages:\n  - "."\n# note\nonlyBuiltDependencies:\n  - esbuild\n"pnpmfile": x\n  nested: 1\n';
+  assert.deepEqual(answer(() => topLevelKeys(yaml)), ["packages", "onlyBuiltDependencies", "pnpmfile"]);
+  assert.deepEqual(answer(() => topLevelKeys("  indented: 1\n# only a comment\n")), []);
+});
+
+test("C-79c32cd5 C-2ae464e9 checkInstallFiles finds nothing in clean roots and a pnpmfile in a dirty one", () => {
+  assert.deepEqual(answer(() => checkInstallFiles(tempRoot())), []);
+  const clean = fixtureRoot({ ".npmrc": "save-exact=true\nengine-strict=false\n" });
+  assert.deepEqual(answer(() => checkInstallFiles(clean)), []);
+  const dirty = fixtureRoot({ ".pnpmfile.cjs": "module.exports = {};\n" });
+  assert.deepEqual(answer(() => checkInstallFiles(dirty)), [
+    { code: "INSTALL_HOOK_FORBIDDEN", subject: ".pnpmfile.cjs", detail: "a pnpmfile runs code at install time" },
+  ]);
+});
+
+test("C-79c32cd5 C-67d87882 the repository runs no install hooks", () => {
+  const repoRoot = fileURLToPath(new URL("../../", import.meta.url));
+  const violations: LicenceViolation[] = [];
+  for (const manifestPath of MANIFEST_PATHS) {
+    let manifest: unknown = null;
+    try {
+      manifest = JSON.parse(fs.readFileSync(path.join(repoRoot, manifestPath), "utf8"));
+    } catch {
+      manifest = null;
+    }
+    const found = answer(() => checkInstallHooks(manifestPath, manifest));
+    assert.ok(Array.isArray(found), `checkInstallHooks answers for ${manifestPath}`);
+    violations.push(...found);
+  }
+  const files = answer(() => checkInstallFiles(repoRoot));
+  assert.ok(Array.isArray(files), "checkInstallFiles answers for the repository root");
+  violations.push(...files);
+  assert.equal(formatLicenceViolations(violations), "");
+  assert.deepEqual(answer(() => checkInstallHooks("package.json", { scripts: { postinstall: "node x.js" } })), [
+    {
+      code: "INSTALL_HOOK_FORBIDDEN",
+      subject: "package.json scripts.postinstall",
+      detail: "runs code at install time",
     },
   ]);
 });
