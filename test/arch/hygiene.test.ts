@@ -1,8 +1,8 @@
-// Architecture test of the forbidden-import rule: seed, test, alias and self-package imports.
+// Architecture test of the forbidden-import and console rules: seed, test, alias, self-package and console uses.
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { checkForbiddenImports } from "./rules.ts";
+import { checkConsole, checkForbiddenImports } from "./rules.ts";
 import { snapshotOf, type Violation } from "./sources.ts";
 
 // Runs a call and returns its answer, or a marker when it throws, so a missing behaviour fails on the comparison.
@@ -17,6 +17,10 @@ function answer<T>(call: () => T): T | "THROWN" {
 function places(result: Violation[] | "THROWN"): "THROWN" | (string | number)[][] {
   if (result === "THROWN") return "THROWN";
   return result.map((v) => [v.code, v.file, v.line]);
+}
+
+function consoleViolation(file: string, line: number): Violation {
+  return { code: "ARCH_CONSOLE", file, line, message: "use the logger from src/observability" };
 }
 
 test("C-9455d3fd: seed, test and alias imports are refused", () => {
@@ -56,5 +60,34 @@ test("C-6ae206c9 C-9455d3fd: look-alike and test-file imports pass", () => {
       ),
     ),
     [["ARCH_FORBIDDEN_IMPORT", "src/api/z.ts", 1]],
+  );
+});
+
+test("C-5fe3458c: console uses are refused", () => {
+  const snapshot = snapshotOf({
+    "src/api/a.ts": '\n\n\n\nconsole.log("x");\n',
+    "src/core/b.ts": 'globalThis.console.error(e);\nconsole["warn"](1);\n',
+    "src/db/c.ts": 'import { log } from "node:console";\n',
+  });
+
+  assert.deepEqual(answer(() => checkConsole(snapshot)), [
+    consoleViolation("src/api/a.ts", 5),
+    consoleViolation("src/core/b.ts", 1),
+    consoleViolation("src/core/b.ts", 2),
+    consoleViolation("src/db/c.ts", 1),
+  ]);
+});
+
+test("C-78fc80d1: console look-alikes and test files pass", () => {
+  const snapshot = snapshotOf({
+    "src/api/a.test.ts": "console.log(1);\n",
+    "src/api/b.ts":
+      'const o = { console: 1 };\nconst c = x.console;\nconst t = "console.log";\n',
+  });
+
+  assert.deepEqual(answer(() => checkConsole(snapshot)), []);
+  assert.deepEqual(
+    answer(() => checkConsole(snapshotOf({ "src/api/c.ts": "console.log(1);\n" }))),
+    [consoleViolation("src/api/c.ts", 1)],
   );
 });
