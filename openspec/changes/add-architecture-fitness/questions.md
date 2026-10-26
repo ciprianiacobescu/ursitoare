@@ -21,6 +21,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Finding F-a985c7e4: task 2.1: modules.ts is not the graph the rules check |
 | Q-009 | answered | none | verdict | Finding F-ed69f6e7: The egress pin is not checked when a pinned module row is missing |
 | Q-010 | answered | none | verdict | Finding F-85a00370: A default import with all-type named specifiers is treated as type-only |
+| Q-011 | open | none | verdict | Finding F-3c3edcf1: task 2.1: the rules read a second copy of the graph, not test/arch/modules.ts |
+| Q-012 | open | none | verdict | Finding F-6db2196c: Secret scan narrowed to skip every .l4 path |
 <!-- l4:index:end -->
 
 ---
@@ -324,3 +326,54 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ### Answer
 <!-- write below this line -->
 reject The finding is correct and the repository shows it. namedBindingsAreTypeOnly in test/arch/sources.ts returns true when the clause is not itself type-only but its named bindings are a non-empty NamedImports list whose elements all carry the type modifier; it never looks at the ImportClause's default binding name. So for import https, { type Agent } from "node:https"; the clause has a default value binding, yet the ref is marked typeOnly, and checkNetwork in test/arch/rules.ts skips every ref whose typeOnly is true, so the import of node:https from a non-egress module is not reported, and the same holds for worker_threads. Design decision 3 makes a declaration type-only only for import type, export type from, an import type node, and a declaration with only named specifiers, at least one, all type-modified; a declaration with a default binding is not such a declaration and is a value import. WHEN collectImports reads an import declaration that has a default binding and named specifiers that are all type-modified, such as import https, { type Agent } from "node:https"; in src/api/a.ts THEN the ref has typeOnly false and checkNetwork reports ARCH_NETWORK_IMPORT at that line with message node:https is allowed only in observability, identity and gateway; call through src/gateway.
+
+---
+
+## Q-011: Finding F-3c3edcf1: task 2.1: the rules read a second copy of the graph, not test/arch/modules.ts
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 5, verifier
+
+### Context
+The judge raised a major finding in round 5, and no deterministic check confirms it (criterion C-90199ce0).
+
+Title: task 2.1: the rules read a second copy of the graph, not test/arch/modules.ts
+Detail: test/arch/modules.ts holds a literal MODULES, but test/arch/rules.ts defines its own literal `export const MODULES` and uses it as the default for checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll. rules.ts never imports modules.ts. The implementer's note that modules.ts re-exports MODULES is wrong. Design decision 13 and the proposal say a later unit adds a module or edge by editing test/arch/modules.ts, yet such an edit would change nothing the rules enforce, and the messages still point at test/arch/modules.ts. modules.test.ts checks one copy while the rules use the other, so the two can drift silently.
+Suggested fix: Keep one graph: have rules.ts import MODULES from ./modules.ts, or have modules.ts re-export it from a single definition, and add a test that the rules' default graph is the modules.ts object.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-90199ce0 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-012: Finding F-6db2196c: Secret scan narrowed to skip every .l4 path
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 5, verifier
+
+### Context
+The judge raised a major finding in round 5, and no deterministic check confirms it (criterion C-eea53b80).
+
+Title: Secret scan narrowed to skip every .l4 path
+Detail: listScannableFiles drops any path that is `.l4`, starts with `.l4/` or contains `/.l4/`. The requirement says every tracked and untracked-not-ignored file outside seed/ is scanned. The implementer added this so the repo test would pass on a harness evidence file, which requirement C-eea53b80 says calls for a blocker instead. A real key committed under any .l4 directory now goes unreported.
+Suggested fix: Remove isHarnessPath and raise a blocker naming the harness file. Alternatively, get a reviewed spec decision that excludes .l4, add it to the scenario, and back it with a test.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-eea53b80 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
