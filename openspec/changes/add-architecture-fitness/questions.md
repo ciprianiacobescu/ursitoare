@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Finding F-a985c7e4: task 2.1: modules.ts is not the graph the rules check |
 | Q-009 | answered | none | verdict | Finding F-ed69f6e7: The egress pin is not checked when a pinned module row is missing |
 | Q-010 | answered | none | verdict | Finding F-85a00370: A default import with all-type named specifiers is treated as type-only |
-| Q-011 | open | none | verdict | Finding F-3c3edcf1: task 2.1: the rules read a second copy of the graph, not test/arch/modules.ts |
+| Q-011 | answered | none | verdict | Finding F-3c3edcf1: task 2.1: the rules read a second copy of the graph, not test/arch/modules.ts |
 | Q-012 | open | none | verdict | Finding F-6db2196c: Secret scan narrowed to skip every .l4 path |
 <!-- l4:index:end -->
 
@@ -331,7 +331,7 @@ reject The finding is correct and the repository shows it. namedBindingsAreTypeO
 
 ## Q-011: Finding F-3c3edcf1: task 2.1: the rules read a second copy of the graph, not test/arch/modules.ts
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The finding is factually right: test/arch/rules.ts:17 defines its own export const MODULES and imports only from typescript and ./sources.ts (lines 2-5), while test/arch/modules.ts:3 holds a second literal; checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll default to the rules.ts copy
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -353,6 +353,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept: the same duplicate graph as Q-007 and Q-008, waived for this unit for the same reason: the base-test replay cannot load test/arch/modules.ts from rules.ts in this unit. A follow-up right after the merge makes rules.ts read MODULES from test/arch/modules.ts, drops the second literal and the stale scaffold header.
 ---
 
 ## Q-012: Finding F-6db2196c: Secret scan narrowed to skip every .l4 path
