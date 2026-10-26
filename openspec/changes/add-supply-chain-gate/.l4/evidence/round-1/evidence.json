@@ -1,0 +1,111 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "node_modules/.pnpm/<dir>/node_modules",
+      "@scope/name",
+      "web/node_modules",
+      "e2e/.venv/lib/python<minor>/site-packages/<name>-<version>.dist-info/METADATA",
+      "test/arch/licence-policy.ts",
+      "dist/pnpm.cjs",
+      "web/.npmrc",
+      "web",
+      "test/arch/licence-rules.ts",
+      "<repoRoot>/node_modules/.pnpm",
+      "<dir>/node_modules",
+      "e2e/.venv",
+      "test/arch/licences.test.ts",
+      "node_modules/.pnpm",
+      "web/package.json",
+      "docs/decisions/0002",
+      "**/licences.test.ts",
+      "**/[A-Za-z0-9.+-]+",
+      "**/[\"MIT\",\"CC0-1.0\"]",
+      "**/[\"Apache-2.0+\"]",
+      "**/lock.yaml",
+      "**/package.json",
+      "**/[]",
+      "<venvDir>/lib/python*/site-packages/*.dist-info/METADATA",
+      "**/*",
+      "**/^\\s*-\\s+value",
+      "**/LICENSE.txt",
+      "module <dir>",
+      "module <repoRoot>",
+      "module <venvDir>",
+      "module @scope",
+      "module dist",
+      "module docs",
+      "module e2e",
+      "module node_modules",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-supply-chain-gate/.l4/ledger/r-20261026T1203Z-cac6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-supply-chain-gate/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/arch/licence-policy.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/arch/licence-rules.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/arch/licences.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: test/arch/licence-policy.ts, test/arch/licence-rules.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "test/arch/licence-policy.ts",
+      "test/arch/licence-rules.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 156,
+      "passed": 156,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 58,
+      "new_passed": 58,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
