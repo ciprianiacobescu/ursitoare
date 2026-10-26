@@ -46,3 +46,4 @@
 {"at":"2026-10-26T14:02:40Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"Delegate: add-db-foundation retried with an implementer note (TS red needs AssertionError: wrap happy-path tests in assert.doesNotThrow)","type":"plan.resumed"}
 {"at":"2026-10-26T14:03:50Z","attempt":1,"cost_usd":0.951213,"runs":3,"type":"plan.charged","unit":"openspec:add-db-foundation"}
 {"at":"2026-10-26T14:03:50Z","run":"r-20261026T1403Z-88d4","type":"unit.dispatched","unit":"openspec:add-db-foundation"}
+{"at":"2026-10-26T16:05:33Z","detail":"the repository CI is still running on the hand-off commit 39aa790658 (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"39aa79065801e6204e6daa815be5d9f15edcd608","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-db-foundation"}
