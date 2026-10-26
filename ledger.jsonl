@@ -69,3 +69,5 @@
 {"at":"2026-10-26T20:19:07Z","run":"r-20261026T2019Z-2739","type":"unit.dispatched","unit":"openspec:add-architecture-fitness"}
 {"at":"2026-10-26T20:40:34Z","detail":"awaiting_human: no new answers (verdicts open: Q-011, Q-012) (escalated to a person: Q-011, Q-012)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-architecture-fitness"}
 {"at":"2026-10-26T20:44:02Z","by":"harness","reason":"the cause is gone: openspec:add-architecture-fitness is awaiting_human","type":"plan.resumed"}
+{"at":"2026-10-26T20:44:04Z","attempt":1,"cost_usd":15.556204,"runs":5,"type":"plan.charged","unit":"openspec:add-architecture-fitness"}
+{"at":"2026-10-26T20:44:04Z","run":"r-20261026T2044Z-50e9","type":"unit.dispatched","unit":"openspec:add-architecture-fitness"}
