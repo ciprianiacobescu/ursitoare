@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: test/arch/repo.test.ts:30 networkViolation prepends the name to the full message
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the answer would unfreeze test/arch/repo.test.ts of task 5.1 (delegate.unfreeze is false)
 - **Blocking tasks:** 5.1
 - **Kind:** technical
 - **Asked:** 2026-10-26T17:20Z by deepseek, run r-20261026T1619Z-8dc6, task 5.1
