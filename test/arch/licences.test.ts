@@ -14,6 +14,7 @@ import {
   checkLicences,
   checkPolicy,
   decideVenvScan,
+  findForbiddenImports,
   formatLicenceViolation,
   formatLicenceViolations,
   npmLicenceOf,
@@ -1245,4 +1246,46 @@ test("C-79c32cd5 C-67d87882 the repository runs no install hooks", () => {
       detail: "runs code at install time",
     },
   ]);
+});
+
+test("C-ce1eedc7 findForbiddenImports reports imports, dynamic imports, require and fetch", () => {
+  const source = [
+    'import https from "node:https";',
+    "async function run() {",
+    '  const m = await import("undici");',
+    '  require("child_process");',
+    "  await fetch(url);",
+    "}",
+  ].join("\n");
+  assert.deepEqual(answer(() => findForbiddenImports(source)), ["node:https", "undici", "child_process", "fetch"]);
+});
+
+test("C-ed8723d5 findForbiddenImports ignores text inside comments and literals", () => {
+  const clean = [
+    'import fs from "node:fs";',
+    "// uses fetch(url) never",
+    `const s = 'require("child_process")';`,
+    'const t = "await fetch(url)";',
+    'const u = `import("undici")`;',
+    '/* require("node:http") */',
+  ].join("\n");
+  assert.deepEqual(answer(() => findForbiddenImports(clean)), []);
+  assert.deepEqual(
+    answer(() => findForbiddenImports(`${clean}\nimport http from "node:http";`)),
+    ["node:http"],
+    "a real import beside the text is still found",
+  );
+});
+
+test("C-115a4581 C-ce1eedc7 the licence gate reads files only", () => {
+  const repoRoot = fileURLToPath(new URL("../../", import.meta.url));
+  assert.deepEqual(
+    answer(() => findForbiddenImports('import childProcess from "node:child_process";')),
+    ["node:child_process"],
+    "a forbidden import in source is reported",
+  );
+  for (const relative of ["test/arch/licence-rules.ts", "test/arch/licence-policy.ts"]) {
+    const source = fs.readFileSync(path.join(repoRoot, relative), "utf8");
+    assert.deepEqual(answer(() => findForbiddenImports(source)), [], `${relative} reads files only`);
+  }
 });
