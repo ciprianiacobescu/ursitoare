@@ -5,6 +5,7 @@ import path from "node:path";
 import { after, test } from "node:test";
 
 import {
+  collectImports,
   formatViolation,
   readSnapshot,
   resolveSpecifier,
@@ -81,6 +82,65 @@ test("C-18aa910d resolveSpecifier resolves relative imports against the importin
   assert.equal(answer(() => resolveSpecifier(from, "./routes/x.ts")), "src/api/routes/x.ts");
   assert.equal(answer(() => resolveSpecifier(from, "fastify")), null);
   assert.equal(answer(() => resolveSpecifier(from, "../../../outside.ts")), null);
+});
+
+test("C-b5e05684 import forms are found with their lines, type-only and dynamic flags", () => {
+  const text = [
+    'import a from "x";',
+    'import type { B } from "y";',
+    'import { type C, type D } from "z";',
+    'import {} from "w";',
+    'import "v";',
+    'export * from "u";',
+    'export type { E } from "t";',
+    'const m = await import("s");',
+    'type F = import("r").G;',
+    'await import(name);',
+  ].join("\n");
+  const refs = answer(() => collectImports({ path: "src/api/a.ts", text }));
+  assert.deepEqual(
+    answer(() =>
+      refs === "THROWN"
+        ? "THROWN"
+        : refs.map((r) => [r.line, r.specifier, r.typeOnly, r.dynamic]),
+    ),
+    [
+      [1, "x", false, false],
+      [2, "y", true, false],
+      [3, "z", true, false],
+      [4, "w", false, false],
+      [5, "v", false, false],
+      [6, "u", false, false],
+      [7, "t", true, false],
+      [8, "s", false, true],
+      [9, "r", true, false],
+      [10, null, false, true],
+    ],
+  );
+});
+
+test("C-2073476a require forms are found as value imports with their flags", () => {
+  const text = [
+    'const a = require("x");',
+    'import b = require("y");',
+    'import type C = require("z");',
+    "require(name);",
+    'const d = obj.require("w");',
+  ].join("\n");
+  const refs = answer(() => collectImports({ path: "src/api/a.cts", text }));
+  assert.deepEqual(
+    answer(() =>
+      refs === "THROWN"
+        ? "THROWN"
+        : refs.map((r) => [r.line, r.specifier, r.typeOnly, r.dynamic]),
+    ),
+    [
+      [1, "x", false, true],
+      [2, "y", false, false],
+      [3, "z", true, false],
+      [4, null, false, true],
+    ],
+  );
 });
 
 test("C-f0665065 readSnapshot reads the source files of a real directory without symlinks", () => {
