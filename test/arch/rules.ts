@@ -469,8 +469,62 @@ export function checkForbiddenImports(s: Snapshot): Violation[] {
   return sortViolations(violations);
 }
 
-export function checkConsole(_s: Snapshot): Violation[] {
-  throw new Error("not implemented");
+const CONSOLE_SPECIFIERS: readonly string[] = ["console", "node:console"];
+
+function consoleViolation(file: string, line: number): Violation {
+  return {
+    code: "ARCH_CONSOLE",
+    file,
+    line,
+    message: "use the logger from src/observability",
+  };
+}
+
+function isConsoleObject(node: ts.Expression): boolean {
+  if (ts.isIdentifier(node)) return node.text === "console";
+  return (
+    ts.isPropertyAccessExpression(node) &&
+    ts.isIdentifier(node.expression) &&
+    node.expression.text === "globalThis" &&
+    node.name.text === "console"
+  );
+}
+
+function consoleUses(file: SourceFile): Violation[] {
+  const source = ts.createSourceFile(file.path, file.text, ts.ScriptTarget.Latest, true);
+  const violations: Violation[] = [];
+  const lineOf = (node: ts.Node): number =>
+    source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1;
+
+  const visit = (node: ts.Node): void => {
+    if (
+      (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) &&
+      isConsoleObject(node.expression)
+    ) {
+      violations.push(consoleViolation(file.path, lineOf(node)));
+    }
+    ts.forEachChild(node, visit);
+  };
+
+  ts.forEachChild(source, visit);
+  return violations;
+}
+
+export function checkConsole(s: Snapshot): Violation[] {
+  const violations: Violation[] = [];
+
+  for (const file of s.files) {
+    if (!file.path.startsWith("src/") || isTestFile(file.path)) continue;
+    for (const ref of collectImports(file)) {
+      if (ref.typeOnly) continue;
+      if (ref.specifier !== null && CONSOLE_SPECIFIERS.includes(ref.specifier)) {
+        violations.push(consoleViolation(file.path, ref.line));
+      }
+    }
+    violations.push(...consoleUses(file));
+  }
+
+  return sortViolations(violations);
 }
 
 export function checkProcessEnv(_s: Snapshot): Violation[] {
