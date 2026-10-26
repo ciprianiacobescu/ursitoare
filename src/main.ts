@@ -133,6 +133,22 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     return null;
   }
 
+  if (deps.configureServer !== undefined) {
+    try {
+      await deps.configureServer(server);
+    } catch (error) {
+      await server.close().catch(() => undefined);
+      await database?.close().catch(() => undefined);
+      const code = (error as { code?: unknown } | null)?.code;
+      bootstrap.fatal(
+        { code: typeof code === "string" ? code : "SERVER_HOOK_FAILED" },
+        "startup failed",
+      );
+      exit(1);
+      return null;
+    }
+  }
+
   let bound: number;
   try {
     bound = await listen(server, config.port, config.host);
