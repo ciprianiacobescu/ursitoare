@@ -332,6 +332,7 @@ reject The finding is correct and the repository shows it. namedBindingsAreTypeO
 ## Q-011: Finding F-3c3edcf1: task 2.1: the rules read a second copy of the graph, not test/arch/modules.ts
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The finding is factually right: test/arch/rules.ts:17 defines its own export const MODULES and imports only from typescript and ./sources.ts (lines 2-5), while test/arch/modules.ts:3 holds a second literal; checkGraphIntegrity, checkModuleGraph, checkNetwork and checkAll default to the rules.ts copy
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 5, verifier
