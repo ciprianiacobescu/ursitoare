@@ -151,6 +151,7 @@ function importTypeArgument(argument: ts.TypeNode): ts.LiteralTypeNode | undefin
 
 function namedBindingsAreTypeOnly(node: ts.ImportClause | ts.ExportDeclaration): boolean {
   if (node.isTypeOnly) return true;
+  if (ts.isImportClause(node) && node.name !== undefined) return false;
   const bindings = ts.isImportClause(node) ? node.namedBindings : node.exportClause;
   if (bindings === undefined || !ts.isNamedImports(bindings) && !ts.isNamedExports(bindings)) {
     return false;
