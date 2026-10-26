@@ -21,6 +21,10 @@ read from the L4 v0.4.30 source (v0.4.31 and v0.4.32 change none of them), decid
 4. **Green cannot change test or support files.** After green, every support-glob file is reset to its red content
    (new ones are deleted) and every other test-glob path goes back to the base, unless the task is `[test-infra]`.
    L4's default test globs include `**/test/**`, which makes every file under `test/` a test path.
+5. **Each criterion needs an assertion failure** (added 2026-10-26, read from v0.4.32 `implementer/tdd.py` and
+   `discrimination.no_assertion_failure`). L4 recognises stubs only in Python, so in a TypeScript red step every
+   criterion it traces needs at least one new test whose failure kind is `assertion`. A stub's `NotImplementedError`
+   does not count, and the step fails as `vacuous`. add-db-foundation's task 1.1 failed seven red attempts this way.
 
 ## Decisions
 
@@ -36,6 +40,9 @@ read from the L4 v0.4.30 source (v0.4.31 and v0.4.32 change none of them), decid
   allowlist and exceptions) are support files: a red step or a person changes them, never green.
 - **Rules for spec authors and implementers** (also in `AGENTS.md`):
   - A stub throws `new Error("not implemented")`.
+  - Each criterion has at least one red test that fails by assertion. A test whose call reaches a stub wraps it in
+    `assert.doesNotThrow(() => { ... })` or `await assert.doesNotReject(async () => { ... })`, so the stub's error
+    reaches the report as an `AssertionError` (`src/observability/logger.test.ts`).
   - A test name contains no `.`, `[` or `::`, because L4 cuts a name at its last `.`.
   - Every task adds at least one Node test. A task that adds only a browser journey is rejected in red, because the
     red step runs only the test gate.
