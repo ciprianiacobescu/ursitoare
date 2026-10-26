@@ -152,6 +152,44 @@ test("C-851f3c7c: inconsistent graphs are reported", () => {
   }
 });
 
+test("C-851f3c7c: a graph without a pinned module row reports the missing egress pin", () => {
+  const fixtures: { modules: Record<string, ModuleRule>; label: string }[] = [
+    { modules: { a: { allowed: ["b"] }, b: { allowed: ["a"] } }, label: "cycle" },
+    { modules: { a: { allowed: ["zzz"] } }, label: "unknown name" },
+    { modules: { a: { allowed: ["a"] } }, label: "self reference" },
+    { modules: { a: { allowed: ["b", "b"] }, b: { allowed: [] } }, label: "duplicate" },
+  ];
+  for (const { modules, label } of fixtures) {
+    const result = answer(() => checkGraphIntegrity(modules));
+    assert.ok(Array.isArray(result), `${label}: expected a list of violations`);
+    for (const pinned of ["observability", "identity", "gateway"]) {
+      assert.ok(
+        result.some(
+          (v) =>
+            v.code === "ARCH_GRAPH_INVALID" &&
+            v.message.includes(pinned) &&
+            /egress|pin/i.test(v.message),
+        ),
+        `${label}: expected an egress-pin violation for ${pinned}, got ${JSON.stringify(result)}`,
+      );
+    }
+  }
+
+  const withoutGateway = copyOf(MODULES);
+  delete withoutGateway.gateway;
+  const result = answer(() => checkGraphIntegrity(withoutGateway));
+  assert.ok(Array.isArray(result), `expected a list of violations, got ${String(result)}`);
+  assert.ok(
+    result.some(
+      (v) =>
+        v.code === "ARCH_GRAPH_INVALID" &&
+        v.message.includes("gateway") &&
+        /egress|pin/i.test(v.message),
+    ),
+    `expected a missing egress-pin violation for gateway, got ${JSON.stringify(result)}`,
+  );
+});
+
 test("C-6923119c: a new egress capability is refused", () => {
   const withDbEgress = copyOf(MODULES);
   withDbEgress.db = { allowed: ruleOf(withDbEgress, "db").allowed, egress: "tools" };
