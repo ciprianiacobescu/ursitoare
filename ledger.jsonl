@@ -50,3 +50,4 @@
 {"at":"2026-10-26T16:16:38Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-db-foundation can go on","type":"plan.resumed"}
 {"at":"2026-10-26T16:16:45Z","head":"39aa79065801e6204e6daa815be5d9f15edcd608","pr":5,"target_before":"6c9571af8dcf3137bba40615a90d88eb589cdae3","type":"unit.merge_requested","unit":"openspec:add-db-foundation"}
 {"at":"2026-10-26T16:16:53Z","ci":"not_run","head":"39aa79065801e6204e6daa815be5d9f15edcd608","merge_commit":"6c02ef8249fbfe4cf102ea0423aef451107b4994","method":"squash","pr":5,"raced":false,"type":"unit.merged","unit":"openspec:add-db-foundation"}
+{"at":"2026-10-26T16:16:59Z","branch":"l4/openspec/add-db-foundation","head":"39aa79065801e6204e6daa815be5d9f15edcd608","type":"unit.branch_deleted","unit":"openspec:add-db-foundation"}
