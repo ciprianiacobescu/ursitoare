@@ -76,10 +76,15 @@ jobs:
       # L4's e2e gate runs Playwright in a sandbox that mounts this cache read-only (doctor ENV-007), so the browser is
       # installed here on the runner, as e2e.yml does (doctor CI-003). The pin equals e2e/uv.lock's playwright and L4's
       # PLAYWRIGHT_VERSION (1.63.0); the path is L4's cache root (L4_CACHE, else XDG_CACHE_HOME/l4, else ~/.cache/l4).
+      # The runner image already has Chromium's libraries; --with-deps only added fonts there, and the runner's apt mirror
+      # has served them at ~27 kB/s (14 min). So the system packages are installed only when the browser fails to launch.
       - name: Chromium for the e2e gate
         run: |
-          PLAYWRIGHT_BROWSERS_PATH="${L4_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/l4}/shared/ms-playwright" \
-            uvx --from playwright==1.63.0 playwright install --with-deps chromium
+          export PLAYWRIGHT_BROWSERS_PATH="${L4_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/l4}/shared/ms-playwright"
+          uvx --from playwright==1.63.0 playwright install chromium
+          if ! uvx --from playwright==1.63.0 python -c "from playwright.sync_api import sync_playwright as s; p = s().start(); p.chromium.launch().close(); p.stop()"; then
+            uvx --from playwright==1.63.0 playwright install-deps chromium
+          fi
       - name: doctor
         run: l4 doctor --ci --fix || l4 ci map-exit $?
       - name: save agent CLI cache
