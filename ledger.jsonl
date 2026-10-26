@@ -84,3 +84,5 @@
 {"at":"2026-10-26T20:59:19Z","run":"r-20261026T2059Z-f582","type":"unit.dispatched","unit":"openspec:add-tenancy-foundation"}
 {"at":"2026-10-26T21:59:37Z","attempt":1,"cost_usd":3.23165,"runs":2,"type":"plan.charged","unit":"openspec:add-tenancy-foundation"}
 {"at":"2026-10-26T21:59:37Z","run":"r-20261026T2159Z-7973","type":"unit.dispatched","unit":"openspec:add-tenancy-foundation"}
+{"at":"2026-10-26T22:06:50Z","attempt":1,"cost_usd":5.080361,"runs":3,"type":"plan.charged","unit":"openspec:add-tenancy-foundation"}
+{"at":"2026-10-26T22:06:50Z","run":"r-20261026T2206Z-46cf","type":"unit.dispatched","unit":"openspec:add-tenancy-foundation"}
