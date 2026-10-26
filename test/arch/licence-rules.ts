@@ -3,6 +3,8 @@
 import fs, { type Dirent } from "node:fs";
 import path from "node:path";
 
+import { PYPI_CLASSIFIER_SPDX } from "./licence-policy.ts";
+
 export interface LicenceException {
   ecosystem: "npm" | "pypi";
   name: string;
@@ -115,8 +117,85 @@ export function npmLicenceOf(packageJson: unknown): LicenceReading {
   return { licence: null, terms: null };
 }
 
-export function pythonLicenceOf(_metadata: string): LicenceReading {
-  throw new Error("not implemented");
+function pythonMetadataHeaders(metadata: string): Map<string, string[]> {
+  const headers = new Map<string, string[]>();
+  let lastKey: string | null = null;
+  for (const raw of metadata.split("\n")) {
+    const line = raw.endsWith("\r") ? raw.slice(0, -1) : raw;
+    if (/^\s*$/.test(line)) break;
+    if (/^[ \t]/.test(line)) {
+      if (lastKey !== null) {
+        const values = headers.get(lastKey);
+        if (values !== undefined && values.length > 0) {
+          values[values.length - 1] = `${values[values.length - 1] ?? ""} ${line.trim()}`.trim();
+        }
+      }
+      continue;
+    }
+    const colon = line.indexOf(":");
+    if (colon < 0) {
+      lastKey = null;
+      continue;
+    }
+    const key = line.slice(0, colon).trim().toLowerCase();
+    const value = line.slice(colon + 1).trim();
+    const values = headers.get(key);
+    if (values === undefined) {
+      headers.set(key, [value]);
+    } else {
+      values.push(value);
+    }
+    lastKey = key;
+  }
+  return headers;
+}
+
+function firstPythonHeader(headers: ReadonlyMap<string, string[]>, key: string): string | null {
+  for (const value of headers.get(key) ?? []) {
+    if (value.trim() !== "") return value.trim();
+  }
+  return null;
+}
+
+export function pythonLicenceOf(metadata: string): LicenceReading {
+  const headers = pythonMetadataHeaders(metadata);
+  const expression = firstPythonHeader(headers, "license-expression");
+  if (expression !== null) {
+    return { licence: expression, terms: parseLicenceExpression(expression) };
+  }
+  const leaves: string[] = [];
+  for (const classifier of headers.get("classifier") ?? []) {
+    const value = classifier.trim();
+    if (!value.startsWith("License :: ")) continue;
+    let leaf = value.slice("License :: ".length);
+    if (leaf.startsWith("OSI Approved :: ")) leaf = leaf.slice("OSI Approved :: ".length);
+    leaf = leaf.trim();
+    if (leaf === "" || leaf === "OSI Approved") continue;
+    if (!leaves.includes(leaf)) leaves.push(leaf);
+  }
+  leaves.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  const license = firstPythonHeader(headers, "license");
+  const parsedTerms = license === null ? null : parseLicenceExpression(license);
+  if (leaves.length > 0 || parsedTerms !== null) {
+    const parts: string[] = [];
+    if (license !== null && parsedTerms !== null) parts.push(license);
+    parts.push(...leaves);
+    const terms: string[] = parsedTerms === null ? [] : [...parsedTerms];
+    let unmapped = false;
+    for (const leaf of leaves) {
+      const mapped = PYPI_CLASSIFIER_SPDX[leaf];
+      if (mapped === undefined) {
+        unmapped = true;
+        continue;
+      }
+      if (!terms.includes(mapped)) terms.push(mapped);
+    }
+    return { licence: parts.join("; "), terms: unmapped ? null : terms };
+  }
+  if (license !== null) {
+    return { licence: license, terms: null };
+  }
+  return { licence: null, terms: null };
 }
 
 export function scanNpmStore(repoRoot: string): InstalledPackage[] {
@@ -187,8 +266,61 @@ export function scanNpmStore(repoRoot: string): InstalledPackage[] {
   return [...found.values()].sort((a, b) => `${a.name}@${a.version}`.localeCompare(`${b.name}@${b.version}`));
 }
 
-export function scanPythonVenv(_venvDir: string): InstalledPackage[] {
-  throw new Error("not implemented");
+export function scanPythonVenv(venvDir: string): InstalledPackage[] {
+  const libDir = path.join(venvDir, "lib");
+  let pythonDirs: Dirent[];
+  try {
+    pythonDirs = fs.readdirSync(libDir, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+  const found = new Map<string, InstalledPackage>();
+  for (const pythonDir of pythonDirs) {
+    if (!pythonDir.isDirectory() || !pythonDir.name.startsWith("python")) continue;
+    const sitePackages = path.join(libDir, pythonDir.name, "site-packages");
+    let entries: Dirent[];
+    try {
+      entries = fs.readdirSync(sitePackages, { withFileTypes: true });
+    } catch {
+      continue;
+    }
+    for (const entry of entries) {
+      if (!entry.isDirectory() || !entry.name.endsWith(".dist-info")) continue;
+      const infoDir = path.join(sitePackages, entry.name);
+      const base = entry.name.slice(0, -".dist-info".length);
+      let metadata: string | null;
+      try {
+        metadata = fs.readFileSync(path.join(infoDir, "METADATA"), "utf8");
+      } catch {
+        metadata = null;
+      }
+      let name: string | null = null;
+      let version: string | null = null;
+      let licence: string | null = null;
+      let terms: readonly string[] | null = null;
+      if (metadata !== null) {
+        const headers = pythonMetadataHeaders(metadata);
+        name = firstPythonHeader(headers, "name");
+        version = firstPythonHeader(headers, "version");
+        const reading = pythonLicenceOf(metadata);
+        licence = reading.licence;
+        terms = reading.terms;
+      }
+      if (name === null || version === null) {
+        const dash = base.lastIndexOf("-");
+        if (name === null) name = dash >= 0 ? base.slice(0, dash) : base;
+        if (version === null) version = dash >= 0 ? base.slice(dash + 1) : "unknown";
+      }
+      const item: InstalledPackage = { ecosystem: "pypi", name, version, licence, terms };
+      const dedup = `${name}@${version}`;
+      if (!found.has(dedup)) found.set(dedup, item);
+    }
+  }
+  return [...found.values()].sort((a, b) => {
+    const byName = a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+    if (byName !== 0) return byName;
+    return a.version < b.version ? -1 : a.version > b.version ? 1 : 0;
+  });
 }
 
 export function checkLicences(packages: readonly InstalledPackage[], policy: LicencePolicy, scope: string): LicenceViolation[] {
