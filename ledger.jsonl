@@ -21,3 +21,4 @@
 {"at":"2026-10-26T11:32:39Z","run":"r-20261026T1132Z-7654","type":"unit.dispatched","unit":"openspec:add-engine-skeleton"}
 {"at":"2026-10-26T12:01:15Z","head":"4fded0db35fcc0227d47dbe868789dc730915bd7","pr":1,"target_before":"f01a0413a890c257db1b4c9baad1155861ecb63e","type":"unit.merge_requested","unit":"openspec:add-engine-skeleton"}
 {"at":"2026-10-26T12:01:21Z","ci":"not_run","head":"4fded0db35fcc0227d47dbe868789dc730915bd7","merge_commit":"f9390c6b5d6228dbb8f789542cb36288b6386bd5","method":"squash","pr":1,"raced":false,"type":"unit.merged","unit":"openspec:add-engine-skeleton"}
+{"at":"2026-10-26T12:01:28Z","branch":"l4/openspec/add-engine-skeleton","head":"4fded0db35fcc0227d47dbe868789dc730915bd7","type":"unit.branch_deleted","unit":"openspec:add-engine-skeleton"}
