@@ -219,3 +219,9 @@ delegate:
   # contradictory red test), as written; never a support file. Owner decision 2026-10-26, after
   # add-architecture-fitness Q-001.
   unfreeze: true
+
+## Owner decision 2026-10-26 ("execute it yourself as my delegate", after add-architecture-fitness Q-003..Q-008): the
+## owner's delegate agent answers questions with `l4 questions`, verdict and harness questions included. L4 has no
+## narrower key: this opens every kind to an agent caller.
+clarifier:
+  answer_by_agents: true
