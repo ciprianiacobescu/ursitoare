@@ -1,5 +1,8 @@
+import { readFileSync } from "node:fs";
+
 import type { LogLevel } from "../core/index.ts";
 import type { Secret, SecretReader } from "./secret.ts";
+import { readSecretValue } from "./secret.ts";
 import { ConfigError } from "./errors.ts";
 
 export type Role = "all" | "api" | "worker" | "sandbox";
@@ -26,6 +29,12 @@ export interface AppConfig {
 const ROLES: readonly Role[] = ["all", "api", "worker", "sandbox"];
 const LOG_LEVELS: readonly LogLevel[] = ["fatal", "error", "warn", "info", "debug", "trace", "silent"];
 const SECRET_SUFFIXES = ["PASSWORD", "SECRET", "TOKEN", "KEY"] as const;
+const ENGINE_KEY_REASON = "key must be at least 64 hex characters or base64 of at least 32 bytes";
+const DATABASE_URL_REASON =
+  "must be a postgres or postgresql URL with a host, no password and only sslmode disable or verify-full";
+const SSL_MODES = ["disable", "verify-full"] as const;
+
+const defaultReadSecret: SecretReader = (path) => readFileSync(path, "utf8");
 
 function unset(env: Env, name: string): boolean {
   const value = env[name];
@@ -129,18 +138,95 @@ function refuseSecretShapedVariables(env: Env): void {
   }
 }
 
-export function loadConfig(env: Env, _readSecret?: SecretReader): AppConfig {
+function isHexKey(value: string): boolean {
+  return /^[0-9a-fA-F]{64,}$/.test(value);
+}
+
+function isBase64Key(value: string): boolean {
+  if (value.length % 4 !== 0 || !/^[A-Za-z0-9+/]+={0,2}$/.test(value)) return false;
+  return Buffer.from(value, "base64").length >= 32;
+}
+
+function readEngineKey(env: Env, readSecret: SecretReader): Secret | null {
+  const name = "URSITOARE_ENGINE_KEY_FILE";
+  if (unset(env, name)) return null;
+  const secret = readSecretValue(name, env[name] as string, readSecret);
+  const value = secret.reveal();
+  if (!isHexKey(value) && !isBase64Key(value)) {
+    throw error(name, ENGINE_KEY_REASON);
+  }
+  return secret;
+}
+
+function isDatabaseUrl(value: string): boolean {
+  let parsed: URL;
+  try {
+    parsed = new URL(value);
+  } catch {
+    return false;
+  }
+  if (parsed.protocol !== "postgres:" && parsed.protocol !== "postgresql:") return false;
+  if (parsed.hostname === "" || parsed.password !== "") return false;
+
+  const parameters = [...parsed.searchParams.entries()];
+  if (parameters.some(([key]) => key === "password")) return false;
+  const sslModes = parameters.filter(([key]) => key === "sslmode");
+  if (sslModes.length !== parameters.length || sslModes.length > 1) return false;
+  const sslMode = sslModes[0]?.[1];
+  if (sslMode !== undefined && !SSL_MODES.includes(sslMode as (typeof SSL_MODES)[number])) return false;
+  return true;
+}
+
+function readDatabaseEndpoint(
+  env: Env,
+  urlVariable: string,
+  passwordVariable: string,
+  readSecret: SecretReader,
+): DatabaseEndpoint | null {
+  if (unset(env, urlVariable)) {
+    if (!unset(env, passwordVariable)) {
+      throw error(passwordVariable, `set only together with ${urlVariable}`);
+    }
+    return null;
+  }
+
+  const url = env[urlVariable] as string;
+  if (!isDatabaseUrl(url)) {
+    throw error(urlVariable, DATABASE_URL_REASON);
+  }
+
+  const password = unset(env, passwordVariable)
+    ? null
+    : readSecretValue(passwordVariable, env[passwordVariable] as string, readSecret);
+  return { url, password };
+}
+
+export function loadConfig(env: Env, readSecret: SecretReader = defaultReadSecret): AppConfig {
   refuseSecretShapedVariables(env);
+  const role = readRole(env);
+  const host = readHost(env);
   const port = readPort(env);
+  const logLevel = readLogLevel(env);
+  const publicBaseUrl = readPublicBaseUrl(env, port);
+  const webDist = readWebDist(env);
+  const shutdownDrainMs = readShutdownDrainMs(env);
+  const engineKey = readEngineKey(env, readSecret);
+  const app = readDatabaseEndpoint(env, "URSITOARE_DATABASE_URL", "URSITOARE_DATABASE_PASSWORD_FILE", readSecret);
+  const owner = readDatabaseEndpoint(
+    env,
+    "URSITOARE_DATABASE_OWNER_URL",
+    "URSITOARE_DATABASE_OWNER_PASSWORD_FILE",
+    readSecret,
+  );
   return {
-    role: readRole(env),
-    host: readHost(env),
+    role,
+    host,
     port,
-    logLevel: readLogLevel(env),
-    publicBaseUrl: readPublicBaseUrl(env, port),
-    webDist: readWebDist(env),
-    shutdownDrainMs: readShutdownDrainMs(env),
-    engineKey: null,
-    database: { app: null, owner: null },
+    logLevel,
+    publicBaseUrl,
+    webDist,
+    shutdownDrainMs,
+    engineKey,
+    database: { app, owner },
   };
 }
