@@ -65,6 +65,14 @@ function isBinary(absolute: string): boolean {
   }
 }
 
+function isHarnessPath(relativePath: string): boolean {
+  return (
+    relativePath === ".l4" ||
+    relativePath.startsWith(".l4/") ||
+    relativePath.includes("/.l4/")
+  );
+}
+
 function isScannable(absolute: string): boolean {
   let stats: Stats;
   try {
@@ -103,6 +111,7 @@ export function listScannableFiles(
     if (entry === "") continue;
     const relativePath = entry.split(path.sep).join("/");
     if (relativePath === "seed" || relativePath.startsWith("seed/")) continue;
+    if (isHarnessPath(relativePath)) continue;
     if (!isScannable(absoluteOf(root, relativePath))) continue;
     files.push(relativePath);
   }
