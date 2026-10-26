@@ -490,12 +490,103 @@ export function checkInstallFiles(_repoRoot: string): LicenceViolation[] {
   throw new Error("not implemented");
 }
 
-export function readTopLevelList(_yamlText: string, _key: string): string[] | null {
-  throw new Error("not implemented");
+function stripYamlComment(value: string): string {
+  return value.replace(/\s+#.*$/, "");
 }
 
-export function checkBuiltDependencies(_workspaceYaml: string, _reviewed: readonly string[]): LicenceViolation[] {
-  throw new Error("not implemented");
+function unquoteYamlScalar(value: string): string {
+  const trimmed = value.trim();
+  if (trimmed.length >= 2) {
+    const first = trimmed[0];
+    const last = trimmed[trimmed.length - 1];
+    if ((first === '"' || first === "'") && last === first) {
+      return trimmed.slice(1, -1);
+    }
+  }
+  return trimmed;
+}
+
+function parseTopLevelEntry(line: string): { key: string; rest: string } | null {
+  if (line === "" || /^[ \t#-]/.test(line)) return null;
+  const first = line[0];
+  if (first === '"' || first === "'") {
+    const close = line.indexOf(first, 1);
+    if (close < 0 || line[close + 1] !== ":") return null;
+    return { key: line.slice(1, close), rest: line.slice(close + 2) };
+  }
+  const colon = line.indexOf(":");
+  if (colon <= 0) return null;
+  const key = line.slice(0, colon).trim();
+  if (key === "" || /\s/.test(key)) return null;
+  return { key, rest: line.slice(colon + 1) };
+}
+
+export function readTopLevelList(yamlText: string, key: string): string[] | null {
+  const lines = yamlText.split("\n");
+  let found = false;
+  const items: string[] = [];
+  for (const raw of lines) {
+    const line = raw.endsWith("\r") ? raw.slice(0, -1) : raw;
+    if (!found) {
+      const entry = parseTopLevelEntry(line);
+      if (entry === null || entry.key !== key) continue;
+      found = true;
+      const inline = stripYamlComment(entry.rest).trim();
+      if (inline !== "") {
+        throw new Error(`unsupported YAML form: inline value for ${key}: ${inline}`);
+      }
+      continue;
+    }
+    const trimmed = line.trim();
+    if (trimmed === "" || trimmed.startsWith("#")) continue;
+    const itemMatch = /^\s*-(?:\s+(.*))?$/.exec(line);
+    if (itemMatch !== null) {
+      const value = stripYamlComment(itemMatch[1] ?? "").trim();
+      if (value === "") {
+        throw new Error(`unsupported YAML form: empty item for ${key}`);
+      }
+      items.push(unquoteYamlScalar(value));
+      continue;
+    }
+    break;
+  }
+  return found ? items : null;
+}
+
+export function checkBuiltDependencies(workspaceYaml: string, reviewed: readonly string[]): LicenceViolation[] {
+  const subject = "pnpm-workspace.yaml onlyBuiltDependencies";
+  const parts: string[] = [];
+  let list: string[] | null = null;
+  let unsupported: string | null = null;
+  try {
+    list = readTopLevelList(workspaceYaml, "onlyBuiltDependencies");
+  } catch (error) {
+    unsupported = error instanceof Error ? error.message : String(error);
+  }
+  if (unsupported !== null) {
+    parts.push(`unsupported form: ${unsupported}`);
+  } else if (list === null) {
+    parts.push("key not found");
+  } else {
+    const counts = new Map<string, number>();
+    for (const item of list) {
+      counts.set(item, (counts.get(item) ?? 0) + 1);
+    }
+    const reviewedNames = [...new Set(reviewed)];
+    const reviewedSet = new Set(reviewedNames);
+    const notReviewed = [...counts.keys()].filter((name) => !reviewedSet.has(name)).sort();
+    const missing = reviewedNames.filter((name) => !counts.has(name)).sort();
+    const duplicates = [...counts.entries()]
+      .filter(([, count]) => count > 1)
+      .map(([name]) => name)
+      .sort();
+    if (notReviewed.length > 0) parts.push(`not reviewed: [${notReviewed.join(", ")}]`);
+    if (missing.length > 0) parts.push(`missing: [${missing.join(", ")}]`);
+    if (duplicates.length > 0) parts.push(`duplicates: [${duplicates.join(", ")}]`);
+  }
+  if (parts.length === 0) return [];
+  parts.push("change pnpm-workspace.yaml and test/arch/licence-policy.ts together");
+  return [{ code: "BUILT_DEPS_DRIFT", subject, detail: parts.join("; ") }];
 }
 
 export function findForbiddenImports(_source: string): string[] {
