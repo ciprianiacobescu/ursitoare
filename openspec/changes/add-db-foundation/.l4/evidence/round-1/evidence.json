@@ -1,0 +1,316 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/db",
+      "test/support",
+      "src/core",
+      "test/support/global-setup.ts",
+      "src/db/migrations",
+      "src/db/roles.ts",
+      "src/db/migrations/0001_base.sql",
+      "src/main.db.test.ts",
+      "docs/decisions/0002",
+      "src/config",
+      "src/api",
+      "src/main.ts",
+      "--test-global-setup=test/support/global-setup.ts",
+      "src/db/{errors,pool,files,migrate,roles,partitions,prepare,health,open,index}.ts",
+      "test/support/pg.ts",
+      "src/db/base.test.ts",
+      "test/support/pg.test.ts",
+      "test/support/global-setup.test.ts",
+      "@types/pg",
+      "src/db/pool.test.ts",
+      "src/db/errors.ts",
+      "src/db/pool.ts",
+      "src/db/index.ts",
+      "postgres://<role>:<password>@127.0.0.1:<port>/<name>",
+      "src/db/files.test.ts",
+      "src/db/files.ts",
+      "src/db/roles.test.ts",
+      "src/db/migrate.test.ts",
+      "src/db/migrate.ts",
+      "src/db/partitions.test.ts",
+      "src/db/prepare.test.ts",
+      "src/db/partitions.ts",
+      "src/db/prepare.ts",
+      "src/core/index.ts",
+      "src/db/health.test.ts",
+      "src/db/health.ts",
+      "src/db/open.test.ts",
+      "postgres://postgres@127.0.0.1:<port>/postgres",
+      "src/db/open.ts",
+      "**/0115_*.sql",
+      "**/PARTITION_*",
+      "**/*_FILE",
+      "**/*.test.ts",
+      "**/opts?",
+      "@embedded-postgres/*",
+      "module --test-global-setup=test",
+      "module @types",
+      "module api",
+      "module config",
+      "module core",
+      "module db",
+      "module docs",
+      "module main",
+      "module main.db.test",
+      "module postgres:",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-db-foundation/.l4/ledger/r-20261026T1345Z-9f1a.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-db-foundation/.l4/ledger/r-20261026T1402Z-3a50.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-db-foundation/.l4/ledger/r-20261026T1403Z-88d4.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-db-foundation/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/db/base.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/db/errors.ts",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/files.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/db/files.ts",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/health.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/db/health.ts",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/index.ts",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrate.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/db/migrate.ts",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0001_base.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/open.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/db/open.ts",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/partitions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/db/partitions.ts",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/pool.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/db/pool.ts",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/prepare.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/db/prepare.ts",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/roles.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/db/roles.ts",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/global-setup.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/global-setup.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/pg.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/pg.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/db/errors.ts, src/db/files.ts, src/db/health.ts, src/db/index.ts, src/db/migrate.ts and 8 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/db/errors.ts",
+      "src/db/files.ts",
+      "src/db/health.ts",
+      "src/db/index.ts",
+      "src/db/migrate.ts",
+      "src/db/open.ts",
+      "src/db/partitions.ts",
+      "src/db/pool.ts",
+      "src/db/prepare.ts",
+      "src/db/roles.ts",
+      "src/main.ts",
+      "test/support/global-setup.ts",
+      "test/support/pg.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 215,
+      "passed": 215,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 59,
+      "new_passed": 59,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

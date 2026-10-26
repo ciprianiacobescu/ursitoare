@@ -3,12 +3,13 @@ import { fileURLToPath } from "node:url";
 import type { FastifyInstance } from "fastify";
 import pino from "pino";
 
-import type { SignalSource } from "./api/index.ts";
-import { buildServer, installGracefulShutdown } from "./api/index.ts";
+import type { HealthRegistry, SignalSource } from "./api/index.ts";
+import { buildServer, createHealthRegistry, installGracefulShutdown } from "./api/index.ts";
 import type { AppConfig } from "./config/index.ts";
 import { ConfigError, loadConfigFromProcess } from "./config/index.ts";
 import { systemIds } from "./core/index.ts";
-import type { openDatabase } from "./db/index.ts";
+import type { Database } from "./db/index.ts";
+import { openDatabase } from "./db/index.ts";
 import type { LogDestination, Logger } from "./observability/index.ts";
 import { createLogger, noopTracer } from "./observability/index.ts";
 
@@ -105,6 +106,16 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
   }
 
   const logger = createLogger({ level: config.logLevel, destination });
+  const health: HealthRegistry = createHealthRegistry();
+
+  let database: Database | null;
+  try {
+    database = await (deps.openDatabase ?? openDatabase)(config, { health, logger });
+  } catch (error) {
+    bootstrap.fatal(fatalFields(error), fatalMessage(error));
+    exit(1);
+    return null;
+  }
 
   let server: FastifyInstance;
   try {
@@ -113,8 +124,10 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
       ids: systemIds,
       logger,
       tracer: noopTracer,
+      health,
     });
   } catch (error) {
+    await database?.close().catch(() => undefined);
     bootstrap.fatal(fatalFields(error), fatalMessage(error));
     exit(1);
     return null;
@@ -125,6 +138,7 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     bound = await listen(server, config.port, config.host);
   } catch (error) {
     await server.close().catch(() => undefined);
+    await database?.close().catch(() => undefined);
     bootstrap.fatal(
       { ...fatalFields(error), host: config.host, port: config.port },
       "startup failed",
@@ -137,7 +151,10 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
   logger.info({ url, role: config.role, host: config.host, port: bound }, "ursitoare listening");
 
   installGracefulShutdown({
-    close: () => server.close(),
+    close: async () => {
+      await database?.close();
+      await server.close();
+    },
     drainTimeoutMs: config.shutdownDrainMs,
     exit,
     logger,
