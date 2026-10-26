@@ -1,0 +1,14 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-engine-skeleton",
+  "round": 1,
+  "findings": [
+    "F-22a9abae"
+  ],
+  "chores": [
+    "F-22a9abae"
+  ],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": []
+}
