@@ -19,3 +19,4 @@
 {"at":"2026-10-26T11:24:18Z","run":"r-20261026T1124Z-41df","type":"unit.dispatched","unit":"openspec:add-engine-skeleton"}
 {"at":"2026-10-26T11:32:39Z","attempt":1,"cost_usd":1.70393,"runs":4,"type":"plan.charged","unit":"openspec:add-engine-skeleton"}
 {"at":"2026-10-26T11:32:39Z","run":"r-20261026T1132Z-7654","type":"unit.dispatched","unit":"openspec:add-engine-skeleton"}
+{"at":"2026-10-26T12:01:15Z","head":"4fded0db35fcc0227d47dbe868789dc730915bd7","pr":1,"target_before":"f01a0413a890c257db1b4c9baad1155861ecb63e","type":"unit.merge_requested","unit":"openspec:add-engine-skeleton"}
