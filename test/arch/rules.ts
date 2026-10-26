@@ -261,6 +261,14 @@ export function checkGraphIntegrity(modules: Record<string, ModuleRule> = MODULE
     }
   }
 
+  for (const [name, pinned] of Object.entries(PINNED_EGRESS)) {
+    if (!Object.hasOwn(modules, name)) {
+      violations.push(
+        graphViolation(`${name} is missing from test/arch/modules.ts; the egress pin is ${pinned}`),
+      );
+    }
+  }
+
   const cycle = cycleIn(modules, names);
   if (cycle !== null) {
     violations.push(graphViolation(`cycle: ${cycle.join(" -> ")}`));
