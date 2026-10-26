@@ -33,3 +33,6 @@
 {"at":"2026-10-26T13:37:37Z","head":"df4b9a2814ccc4cbe07ef27d31b8a72a3398c57e","pr":3,"target_before":"9592053888faff7cf544590205cdae761f04569e","type":"unit.merge_requested","unit":"openspec:add-supply-chain-gate"}
 {"at":"2026-10-26T13:37:43Z","ci":"not_run","head":"df4b9a2814ccc4cbe07ef27d31b8a72a3398c57e","merge_commit":"60f26678e286f0ebb6ed4be5cff7d73f2a2345ed","method":"squash","pr":3,"raced":false,"type":"unit.merged","unit":"openspec:add-supply-chain-gate"}
 {"at":"2026-10-26T13:37:49Z","branch":"l4/openspec/add-supply-chain-gate","head":"df4b9a2814ccc4cbe07ef27d31b8a72a3398c57e","type":"unit.branch_deleted","unit":"openspec:add-supply-chain-gate"}
+{"at":"2026-10-26T13:38:07Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"60f26678e286f0ebb6ed4be5cff7d73f2a2345ed","status":"pass","type":"unit.postcheck","unit":"openspec:add-supply-chain-gate"}
+{"at":"2026-10-26T13:38:07Z","revision":"60f26678e286f0ebb6ed4be5cff7d73f2a2345ed","type":"unit.integrated","unit":"openspec:add-supply-chain-gate"}
+{"at":"2026-10-26T13:38:07Z","attempt":1,"cost_usd":1.535411,"runs":1,"type":"plan.charged","unit":"openspec:add-supply-chain-gate"}
