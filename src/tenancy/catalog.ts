@@ -1,7 +1,7 @@
 import type { QueryResultRow } from "pg";
 import type pg from "pg";
 
-import { ROLE_APP } from "../db/index.ts";
+import { ROLE_APP, ROLE_OWNER } from "../db/index.ts";
 
 export const CATALOG_GLOBAL_TABLES: readonly string[] = [
   "schema_migration",
@@ -35,6 +35,19 @@ interface ObjectRow extends QueryResultRow {
 
 interface AppRoleRow extends QueryResultRow {
   oid: string | null;
+  rolsuper: boolean;
+  rolbypassrls: boolean;
+}
+
+interface FlagRow extends QueryResultRow {
+  flag: boolean;
+}
+
+interface DefinerFunctionRow extends QueryResultRow {
+  object: string;
+  owner_ok: boolean;
+  public_execute: boolean;
+  proconfig: string[] | null;
 }
 
 const TENANT_PREDICATE = "(tenant_id = current_setting(''app.tenant_id''::text, true))";
@@ -141,6 +154,96 @@ SELECT format('ursitoare.%s', c.relname) AS object
 HAVING count(v.oid) = 0
     OR bool_or(NOT v.ok)`;
 
+const TABLE_PRIVILEGES =
+  "SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER";
+const COLUMN_PRIVILEGES = "SELECT,INSERT,UPDATE,REFERENCES";
+
+const PRIVILEGED_RELATION = `(has_table_privilege($1::oid, c.oid, '${TABLE_PRIVILEGES}')
+  OR has_any_column_privilege($1::oid, c.oid, '${COLUMN_PRIVILEGES}'))`;
+
+const ROUTE_TABLE_OPEN = `
+SELECT format('ursitoare.%s', c.relname) AS object
+  FROM pg_class c
+  JOIN pg_namespace n ON n.oid = c.relnamespace
+ WHERE n.nspname = 'ursitoare'
+   AND c.relname = 'tenant_route'
+   AND ${PRIVILEGED_RELATION}`;
+
+const PARTITION_OPEN_TO_APP = `
+SELECT format('ursitoare.%s', c.relname) AS object
+  FROM pg_class c
+  JOIN pg_namespace n ON n.oid = c.relnamespace
+ WHERE n.nspname = 'ursitoare'
+   AND c.relispartition
+   AND ${PRIVILEGED_RELATION}`;
+
+const VIEW_OPEN_TO_APP = `
+SELECT format('ursitoare.%s', c.relname) AS object
+  FROM pg_class c
+  JOIN pg_namespace n ON n.oid = c.relnamespace
+ WHERE n.nspname = 'ursitoare'
+   AND c.relkind IN ('v', 'm', 'f')
+   AND NOT (c.relkind = 'v'
+            AND c.reloptions IS NOT NULL
+            AND ('security_invoker=true' = ANY(c.reloptions)
+                 OR 'security_invoker=on' = ANY(c.reloptions)))
+   AND ${PRIVILEGED_RELATION}`;
+
+const DEFINER_FUNCTIONS = `
+SELECT format('%I.%I(%s)', 'ursitoare', p.proname, pg_get_function_identity_arguments(p.oid)) AS object,
+       p.proowner = $1::oid AS owner_ok,
+       EXISTS (
+         SELECT 1
+           FROM aclexplode(coalesce(p.proacl, acldefault('f', p.proowner))) AS a
+          WHERE a.grantee = 0
+            AND a.privilege_type = 'EXECUTE') AS public_execute,
+       p.proconfig
+  FROM pg_proc p
+  JOIN pg_namespace n ON n.oid = p.pronamespace
+ WHERE n.nspname = 'ursitoare'
+   AND p.prosecdef`;
+
+const APP_ROLE_PRIVILEGED = `
+SELECT (
+  EXISTS (
+    SELECT 1
+      FROM pg_roles a
+     WHERE a.oid = $1::oid
+       AND (a.rolsuper OR a.rolbypassrls))
+  OR EXISTS (
+    SELECT 1
+      FROM pg_roles o
+     WHERE o.oid <> $1::oid
+       AND (o.rolname = $2 OR o.rolsuper OR o.rolbypassrls)
+       AND pg_has_role($1::oid, o.oid, 'MEMBER'))
+) AS flag`;
+
+const APP_ROLE_OWNS_RELATION = `
+SELECT EXISTS (
+  SELECT 1
+    FROM pg_class c
+   WHERE c.relowner = $1::oid) AS flag`;
+
+const SEARCH_PATH_NAMES = new Set(["pg_catalog", "ursitoare", "pg_temp"]);
+
+function searchPathIsSafe(proconfig: string[] | null): boolean {
+  if (proconfig === null) {
+    return false;
+  }
+  const entry = proconfig.find((item) => item.startsWith("search_path="));
+  if (entry === undefined) {
+    return false;
+  }
+  const names = entry
+    .slice("search_path=".length)
+    .split(",")
+    .map((name) => name.trim());
+  if (names.length === 0 || names[names.length - 1] !== "pg_temp") {
+    return false;
+  }
+  return names.every((name) => SEARCH_PATH_NAMES.has(name));
+}
+
 function sortViolations(violations: CatalogViolation[]): CatalogViolation[] {
   return violations.sort((left, right) => {
     if (left.rule !== right.rule) {
@@ -168,11 +271,13 @@ export async function checkTenancyCatalog(
   opts?: { appRole?: string; ownerRole?: string },
 ): Promise<CatalogViolation[]> {
   const appRole = opts?.appRole ?? ROLE_APP;
+  const ownerRole = opts?.ownerRole ?? ROLE_OWNER;
   const app = await db.query<AppRoleRow>(
-    "SELECT oid::text AS oid FROM pg_roles WHERE rolname = $1",
+    "SELECT oid::text AS oid, rolsuper, rolbypassrls FROM pg_roles WHERE rolname = $1",
     [appRole],
   );
-  const appOid = app.rows[0]?.oid ?? null;
+  const appRow = app.rows[0];
+  const appOid = appRow?.oid ?? null;
   const allowlist = [...CATALOG_GLOBAL_TABLES];
 
   const violations: CatalogViolation[] = [];
@@ -194,6 +299,47 @@ export async function checkTenancyCatalog(
   violations.push(
     ...(await ruleViolations(db, "no_tenant_policy", NO_TENANT_POLICY, [allowlist, appOid])),
   );
+
+  const owner = await db.query<AppRoleRow>(
+    "SELECT oid::text AS oid, rolsuper, rolbypassrls FROM pg_roles WHERE rolname = $1",
+    [ownerRole],
+  );
+  const ownerOid = owner.rows[0]?.oid ?? null;
+
+  const functions = await db.query<DefinerFunctionRow>(DEFINER_FUNCTIONS, [ownerOid]);
+  for (const row of functions.rows) {
+    if (!row.owner_ok || row.public_execute || !searchPathIsSafe(row.proconfig)) {
+      violations.push({ rule: "definer_function_unsafe", object: row.object });
+    }
+  }
+
+  if (appOid === null) {
+    violations.push({ rule: "app_role_missing", object: appRole });
+  } else {
+    if (appRow !== undefined && (appRow.rolsuper || appRow.rolbypassrls)) {
+      violations.push({ rule: "app_role_privileged", object: appRole });
+    } else {
+      const privileged = await db.query<FlagRow>(APP_ROLE_PRIVILEGED, [appOid, ownerRole]);
+      if (privileged.rows[0]?.flag === true) {
+        violations.push({ rule: "app_role_privileged", object: appRole });
+      }
+    }
+
+    const owns = await db.query<FlagRow>(APP_ROLE_OWNS_RELATION, [appOid]);
+    if (owns.rows[0]?.flag === true) {
+      violations.push({ rule: "app_role_owns_relation", object: appRole });
+    }
+
+    violations.push(
+      ...(await ruleViolations(db, "route_table_open", ROUTE_TABLE_OPEN, [appOid])),
+    );
+    violations.push(
+      ...(await ruleViolations(db, "partition_open_to_app", PARTITION_OPEN_TO_APP, [appOid])),
+    );
+    violations.push(
+      ...(await ruleViolations(db, "view_open_to_app", VIEW_OPEN_TO_APP, [appOid])),
+    );
+  }
 
   const seen = new Set<string>();
   const distinct: CatalogViolation[] = [];
