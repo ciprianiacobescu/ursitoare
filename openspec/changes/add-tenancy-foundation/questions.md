@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Finding F-9d433ef5: A failed tenant reset after a successful COMMIT rejects although the writes were committed |
-| Q-002 | open | none | verdict | Finding F-a449516e: App-role membership in pg_read_all_data / pg_write_all_data is not reported |
+| Q-002 | answered | none | verdict | Finding F-a449516e: App-role membership in pg_read_all_data / pg_write_all_data is not reported |
 <!-- l4:index:end -->
 
 ---
@@ -48,7 +48,8 @@ accept The finding is waived. The design already decides this case: a failed res
 
 ## Q-002: Finding F-a449516e: App-role membership in pg_read_all_data / pg_write_all_data is not reported
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -70,3 +71,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived. The requirement "The runtime role is unprivileged" names a closed list of role conditions: missing, superuser, BYPASSRLS, owning a relation, or membership in ursitoare_owner or in a superuser or BYPASSRLS role. The checker implements exactly that list, and membership in pg_read_all_data or pg_write_all_data is not in it, which is why no scenario pins it down. The project assigns stray memberships of the app role to a different layer: the database specification requires ensureRoles to revoke every membership of the app role, and its repair scenario uses GRANT pg_read_all_data TO ursitoare_app as the very case that must be undone; roles.ts revokes each pg_auth_members row of the app role. The migration precondition and the health check use the same three membership conditions as the catalog checker, so the rule set is a deliberate project decision, not an omission of this unit. The judge's claim that has_table_privilege reports the predefined-role grant inconsistently is a hedge with no evidence; route_table_open checks tenant_route with has_table_privilege and has_any_column_privilege, which is how the specification defines "an app-role privilege on tenant_route". Adding a new role rule would extend the checker beyond its specification.
