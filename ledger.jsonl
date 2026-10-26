@@ -11,3 +11,5 @@
 {"actor":"agent","agent_key":true,"at":"2026-10-26T09:29:45Z","by":"the+github@ciprianiacobescu.com","extend":{"cost_usd":150.0},"limits_after":{"attempts":3,"cost_usd":225.0,"deadline":null,"runs":35},"limits_before":{"attempts":3,"cost_usd":75.0,"deadline":null,"runs":35},"marker":"CLAUDECODE","reason":"Owner instruction 2026-10-26 (delegate raises limits): readiness reviews used 64.73 of the 75 limit before any unit ran; +150 is an estimate for 7 units","type":"plan.extended"}
 {"at":"2026-10-26T09:30:25Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-engine-skeleton"}
 {"at":"2026-10-26T09:30:25Z","run":"r-20261026T0930Z-3e3f","type":"unit.dispatched","unit":"openspec:add-engine-skeleton"}
+{"at":"2026-10-26T11:11:01Z","attempt":1,"cost_usd":1.70393,"runs":2,"type":"plan.charged","unit":"openspec:add-engine-skeleton"}
+{"at":"2026-10-26T11:11:01Z","run":"r-20261026T1111Z-3b02","type":"unit.dispatched","unit":"openspec:add-engine-skeleton"}
