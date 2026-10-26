@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-26T22:20:00Z",
+  "integrated_revision": "6f96d4f6957527bdade0b51f4af471c92d29cb81",
+  "merge_commit": "6f96d4f6957527bdade0b51f4af471c92d29cb81",
+  "plan_digest": "7c2df2bf58862787",
+  "plan_id": "m0",
+  "postcheck": "pass",
+  "pr": 9,
+  "receipt_id": "m0/openspec:add-tenancy-foundation/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "d51de185106deb9ff06047ac7afc92034a6a51bb",
+  "spec_digest": "7cb17201ece2a50b",
+  "target": "main",
+  "unit_id": "openspec:add-tenancy-foundation"
+}
