@@ -7,8 +7,10 @@ import { sequentialIds } from "../core/index.ts";
 import type { IdSource } from "../core/index.ts";
 import { healthPayload } from "../health.ts";
 import { createLogger, noopTracer } from "../observability/index.ts";
-import type { LogDestination } from "../observability/index.ts";
+import type { LogDestination, Span, SpanValue, Tracer } from "../observability/index.ts";
 import { ApiError, toErrorResponse } from "./errors.ts";
+import { createHealthRegistry } from "./health.ts";
+import type { HealthCheck, HealthRegistry, HealthStatus } from "./health.ts";
 import { buildServer } from "./server.ts";
 import type { ServerDeps } from "./server.ts";
 
@@ -37,15 +39,61 @@ function capture(): { destination: LogDestination; lines: string[] } {
   };
 }
 
-function testDeps(options?: { ids?: IdSource }): { deps: ServerDeps; lines: string[] } {
+interface TestDepsOptions {
+  ids?: IdSource;
+  tracer?: Tracer;
+  health?: HealthRegistry;
+  healthCheckTimeoutMs?: number;
+}
+
+function testDeps(options?: TestDepsOptions): { deps: ServerDeps; lines: string[] } {
   const { destination, lines } = capture();
   const deps: ServerDeps = {
     version: "0.0.0",
     ids: options?.ids ?? sequentialIds(100),
     logger: createLogger({ level: "info", destination }),
-    tracer: noopTracer,
+    tracer: options?.tracer ?? noopTracer,
+    ...(options?.health === undefined ? {} : { health: options.health }),
+    ...(options?.healthCheckTimeoutMs === undefined
+      ? {}
+      : { healthCheckTimeoutMs: options.healthCheckTimeoutMs }),
   };
   return { deps, lines };
+}
+
+interface RecordedSpan {
+  name: string;
+  attributes: Record<string, SpanValue>;
+  ends: number;
+}
+
+function recordingTracer(): { tracer: Tracer; spans: RecordedSpan[] } {
+  const spans: RecordedSpan[] = [];
+  return {
+    spans,
+    tracer: {
+      startSpan(name: string, attrs?: Readonly<Record<string, SpanValue>>): Span {
+        const span: RecordedSpan = { name, attributes: { ...(attrs ?? {}) }, ends: 0 };
+        spans.push(span);
+        return {
+          setAttribute(key: string, value: SpanValue): void {
+            span.attributes[key] = value;
+          },
+          end(): void {
+            span.ends += 1;
+          },
+        };
+      },
+    },
+  };
+}
+
+function logged(lines: readonly string[]): Record<string, unknown>[] {
+  return lines.map((line) => parse(line));
+}
+
+function healthWarn(lines: readonly string[]): Record<string, unknown> | undefined {
+  return logged(lines).find((line) => line["msg"] === "health check failed");
 }
 
 async function build(deps: ServerDeps): Promise<FastifyInstance> {
@@ -421,4 +469,185 @@ test("C-64866f0f a 404 and a thrown error both carry the request id", async () =
   });
   assert.equal(thrown.statusCode, 500);
   assert.equal(header(thrown, "x-request-id"), "abc-1");
+});
+
+test("C-3c17bb81 a recording tracer holds one ended http.request span per request", async () => {
+  const { tracer, spans } = recordingTracer();
+  const { deps } = testDeps({ tracer });
+  const server = await build(deps);
+
+  const health = await inject(server, { method: "GET", url: "/health" });
+  assert.equal(health.statusCode, 200);
+
+  const missing = await inject(server, { method: "GET", url: "/nope" });
+  assert.equal(missing.statusCode, 404);
+
+  assert.equal(spans.length, 2, "one span per request");
+  assert.deepEqual(
+    spans.map((span) => span.name),
+    ["http.request", "http.request"],
+  );
+  assert.deepEqual(spans[0]?.attributes, {
+    "http.method": "GET",
+    "http.route": "/health",
+    "http.status_code": 200,
+  });
+  assert.deepEqual(spans[1]?.attributes, {
+    "http.method": "GET",
+    "http.route": "unmatched",
+    "http.status_code": 404,
+  });
+  assert.deepEqual(
+    spans.map((span) => span.ends),
+    [1, 1],
+  );
+});
+
+test("C-595eb185 a failing tracer logs a warning and the request still succeeds", async () => {
+  const tracer: Tracer = {
+    startSpan(): Span {
+      throw new Error("tracer unavailable");
+    },
+  };
+  const { deps, lines } = testDeps({ tracer });
+  const server = await build(deps);
+
+  const health = await inject(server, { method: "GET", url: "/health" });
+  assert.equal(health.statusCode, 200);
+
+  const warning = logged(lines).find((line) => line["msg"] === "tracer failed");
+  assert.ok(warning, "a warn line named tracer failed was logged");
+});
+
+test("C-14452135 GET /health with no checks reports ok and healthPayload is unchanged", async () => {
+  const { deps } = testDeps();
+  const server = await build(deps);
+
+  const response = await inject(server, { method: "GET", url: "/health" });
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(jsonBody(response), { status: "ok", version: "0.0.0", checks: {} });
+  assert.equal(header(response, "cache-control"), "no-store");
+
+  assert.equal(typeof healthPayload, "function");
+  const payload: { status: "ok"; version: string } = healthPayload("1.2.3");
+  assert.deepEqual(payload, { status: "ok", version: "1.2.3" });
+});
+
+test("C-14452135 GET /health reports passing checks by name", async () => {
+  const registry = createHealthRegistry();
+  registry.registerHealthCheck("db", async () => "ok");
+  registry.registerHealthCheck("cache", async () => "ok");
+  const { deps } = testDeps({ health: registry });
+  const server = await build(deps);
+
+  const response = await inject(server, { method: "GET", url: "/health" });
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(jsonBody(response), {
+    status: "ok",
+    version: "0.0.0",
+    checks: { db: "ok", cache: "ok" },
+  });
+});
+
+test("C-ce3d89ea the health request log holds the route without the query token", async () => {
+  const { deps, lines } = testDeps();
+  const server = await build(deps);
+
+  const response = await inject(server, { method: "GET", url: "/health?token=abc" });
+  assert.equal(response.statusCode, 200);
+
+  const incoming = logged(lines).find((line) => line["msg"] === "incoming request");
+  assert.ok(incoming, "the incoming request was logged");
+  assert.deepEqual(record(incoming["req"]), { method: "GET", url: "/health" });
+  assert.ok(!lines.some((line) => line.includes("abc")), "no log line contains the query token");
+});
+
+test("C-609c36a3 GET /health reports a failing check without leaking its content", async () => {
+  const registry = createHealthRegistry();
+  registry.registerHealthCheck("db", async () => "fail");
+  registry.registerHealthCheck("cache", async () => "ok");
+  const { deps, lines } = testDeps({ health: registry });
+  const server = await build(deps);
+
+  const response = await inject(server, { method: "GET", url: "/health" });
+  assert.equal(response.statusCode, 503);
+  assert.deepEqual(jsonBody(response), {
+    status: "fail",
+    version: "0.0.0",
+    checks: { db: "fail", cache: "ok" },
+  });
+
+  const warning = healthWarn(lines);
+  assert.ok(warning, "the failing check was logged");
+  assert.equal(warning["check"], "db");
+  assert.equal(warning["reason"], "returned_fail");
+});
+
+test("C-609c36a3 GET /health reports a throwing check without its message", async () => {
+  const registry = createHealthRegistry();
+  registry.registerHealthCheck("db", async () => {
+    throw new Error("postgres://u:pw@h/db refused");
+  });
+  registry.registerHealthCheck("cache", async () => "ok");
+  const { deps, lines } = testDeps({ health: registry });
+  const server = await build(deps);
+
+  const response = await inject(server, { method: "GET", url: "/health" });
+  assert.equal(response.statusCode, 503);
+  assert.deepEqual(jsonBody(response), {
+    status: "fail",
+    version: "0.0.0",
+    checks: { db: "fail", cache: "ok" },
+  });
+  assert.ok(!response.body.includes("pw"), "the response does not leak the error message");
+
+  const warning = healthWarn(lines);
+  assert.ok(warning, "the failing check was logged");
+  assert.equal(warning["check"], "db");
+  assert.equal(warning["reason"], "threw");
+  assert.ok(!lines.some((line) => line.includes("pw")), "no log line leaks the error message");
+});
+
+test("C-609c36a3 GET /health reports a hanging check as a timeout", async () => {
+  const registry = createHealthRegistry();
+  const hanging: HealthCheck = () => new Promise<HealthStatus>(() => undefined);
+  registry.registerHealthCheck("db", hanging);
+  registry.registerHealthCheck("cache", async () => "ok");
+  const { deps, lines } = testDeps({ health: registry, healthCheckTimeoutMs: 10 });
+  const server = await build(deps);
+
+  const response = await inject(server, { method: "GET", url: "/health" });
+  assert.equal(response.statusCode, 503);
+  assert.deepEqual(jsonBody(response), {
+    status: "fail",
+    version: "0.0.0",
+    checks: { db: "fail", cache: "ok" },
+  });
+
+  const warning = healthWarn(lines);
+  assert.ok(warning, "the failing check was logged");
+  assert.equal(warning["check"], "db");
+  assert.equal(warning["reason"], "timeout");
+});
+
+test("C-609c36a3 GET /health reports a junk check result as invalid", async () => {
+  const registry = createHealthRegistry();
+  const junk = (async () => "maybe") as unknown as HealthCheck;
+  registry.registerHealthCheck("db", junk);
+  registry.registerHealthCheck("cache", async () => "ok");
+  const { deps, lines } = testDeps({ health: registry });
+  const server = await build(deps);
+
+  const response = await inject(server, { method: "GET", url: "/health" });
+  assert.equal(response.statusCode, 503);
+  assert.deepEqual(jsonBody(response), {
+    status: "fail",
+    version: "0.0.0",
+    checks: { db: "fail", cache: "ok" },
+  });
+
+  const warning = healthWarn(lines);
+  assert.ok(warning, "the failing check was logged");
+  assert.equal(warning["check"], "db");
+  assert.equal(warning["reason"], "invalid_result");
 });
