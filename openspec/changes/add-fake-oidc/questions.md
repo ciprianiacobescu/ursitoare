@@ -13,6 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.4 | technical | test/support/fake-oidc/tokens.test.ts:182: signature-flaw tokens are compared to a base token carrying a nonce they never receive |
 | Q-002 | accepted | 2.1 | technical | test/support/fake-oidc/server.test.ts:154 and :353 request a doubled realm JWKS path |
+| Q-003 | open | 2.2 | technical | test/support/fake-oidc/authorize.test.ts:45 and :88 double the /realms/ursitoare prefix in the authorization URL |
 <!-- l4:index:end -->
 
 ---
@@ -61,6 +62,29 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `test/support/fake-oidc/server.test.ts`: change `${fake.issuer}${PROTOCOL}/certs` to `${fake.url}${PROTOCOL}/certs` in jwksOf (line 154) and in C-a715e6d5 (line 353).
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-003: test/support/fake-oidc/authorize.test.ts:45 and :88 double the /realms/ursitoare prefix in the authorization URL
+
+- **Status:** open
+- **Blocking tasks:** 2.2
+- **Kind:** technical
+- **Asked:** 2026-10-27T12:42Z by deepseek, run r-20261027T1230Z-07f9, task 2.2
+
+### Context
+Line 45 (authUrl) and line 88 build the request as `${fake.issuer}${AUTH_PATH}` where AUTH_PATH = "/realms/ursitoare/protocol/openid-connect/auth". The provider's issuer is already `${fake.url}/realms/ursitoare` (asserted green in server.test.ts:168 and required by the spec), so the request path becomes /realms/ursitoare/realms/ursitoare/protocol/openid-connect/auth. The task requires the auth route at /realms/ursitoare/protocol/openid-connect/auth, and line 100 asserts the form action is exactly `${AUTH_PATH}?${query}` (single realm), so the same test demands two different paths. No legitimate handler can satisfy both. The request URLs should use fake.url (the server origin) instead of fake.issuer.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `test/support/fake-oidc/authorize.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-fake-oidc`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `test/support/fake-oidc/authorize.test.ts`: on line 45 change `${fake.issuer}${AUTH_PATH}` to `${fake.url}${AUTH_PATH}` and on line 88 make the same change to `${fake.url}${AUTH_PATH}`; leave the action assertion at line 100 unchanged.
+
+### Clarifier suggestion
+Edit `test/support/fake-oidc/authorize.test.ts`: on line 45 change `${fake.issuer}${AUTH_PATH}` to `${fake.url}${AUTH_PATH}` and on line 88 make the same change to `${fake.url}${AUTH_PATH}`; leave the action assertion at line 100 unchanged.
 
 ### Answer
 <!-- write below this line -->
