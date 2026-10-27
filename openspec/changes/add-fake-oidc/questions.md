@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | accepted | 2.1 | technical | test/support/fake-oidc/server.test.ts:154 and :353 request a doubled realm JWKS path |
 | Q-003 | accepted | 2.2 | technical | test/support/fake-oidc/authorize.test.ts:45 and :88 double the /realms/ursitoare prefix in the authorization URL |
 | Q-004 | answered | none | verdict | Criterion C-d4e4e5a6 (test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Protocol errors go back to the client): accept as satisfied? |
-| Q-005 | open | none | verdict | Finding F-818a6c14: task 3.1: the jwks keys check inspects only the first key, not 'at least one' RS256 key |
+| Q-005 | answered | none | verdict | Finding F-818a6c14: task 3.1: the jwks keys check inspects only the first key, not 'at least one' RS256 key |
 <!-- l4:index:end -->
 
 ---
@@ -129,7 +129,8 @@ accept The criterion is satisfied. The authorization handler answers each protoc
 
 ## Q-005: Finding F-818a6c14: task 3.1: the jwks keys check inspects only the first key, not 'at least one' RS256 key
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -150,3 +151,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding holds. Task 3.1 check 2 says the JWKS must hold at least one key with alg RS256 and non-empty kid, n and e, and the spec says the contract suite must pass on real Keycloak as well as on the fake. checkJwks in contract.ts takes keys[0] and asserts alg RS256 and the fields on that single key, so a JWKS whose first entry is a non-RS256 key (as Keycloak publishes an RSA-OAEP encryption key beside the signing key) fails the check although a valid RS256 key is present. The check must search the array for an RS256 key instead of inspecting the first entry. WHEN the jwks keys check fetches a JWKS whose keys array holds a valid RS256 key with non-empty kid, n and e at any position, with other keys of another alg before it THEN the check resolves, and it still rejects with an AssertionError when no key of the array has alg RS256 with non-empty kid, n and e.
