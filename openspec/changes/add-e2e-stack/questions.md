@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 5.2 | technical | test/support/e2e-stack/stack.db.test.ts:340 counts nested Postgres PG_VERSION directories |
 | Q-002 | answered | none | verdict | Criterion C-67438cd6 (e2e-stack › fresh_state resets the stack on the fake profile › Faults and state cleared before a test): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-ef0357b4 (e2e-stack › fresh_state resets the stack on the fake profile › Stack profile and unreachable control): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-ef0357b4 (e2e-stack › fresh_state resets the stack on the fake profile › Stack profile and unreachable control): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-0828b57f (e2e-stack › The browser gate sees the database and not the control routes › Health and control paths in the browser gate): accept as satisfied? |
 <!-- l4:index:end -->
 
@@ -79,7 +79,8 @@ accept The two tests the judge set aside check the scenario exactly as written. 
 
 ## Q-003: Criterion C-ef0357b4 (e2e-stack › fresh_state resets the stack on the fake profile › Stack profile and unreachable control): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 5, verifier
@@ -106,6 +107,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The two tests the judge set aside check the scenario as written. test_fresh_state_is_a_noop_on_the_stack_profile sets E2E_PROFILE to stack and E2E_CONTROL_URL to http://127.0.0.1:1, then requests fresh_state and asserts it returns None. Port 1 refuses connections, so any request from the fixture would raise RuntimeError through the URLError branch and fail the test; a clean return therefore proves no request was made. test_fresh_state_reports_an_unreachable_control_url sets the profile to fake with the same URL, asserts that requesting fresh_state raises RuntimeError, and asserts the URL is in the message. The fixture in e2e/conftest.py returns early when the profile is stack, otherwise posts a bodyless /reset and converts a URLError into a RuntimeError whose message names the URL. The tests were ignored only for lacking a red or audit record, not for any gap in their assertions, so the criterion is satisfied as it stands.
 ---
 
 ## Q-004: Criterion C-0828b57f (e2e-stack › The browser gate sees the database and not the control routes › Health and control paths in the browser gate): accept as satisfied?
