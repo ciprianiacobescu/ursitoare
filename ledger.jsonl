@@ -41,3 +41,4 @@
 {"at":"2026-10-27T19:42:22Z","run":"r-20261027T1942Z-f5dd","type":"unit.dispatched","unit":"openspec:add-audit-chain"}
 {"at":"2026-10-27T19:51:54Z","attempt":1,"cost_usd":12.434367,"runs":5,"type":"plan.charged","unit":"openspec:add-audit-chain"}
 {"at":"2026-10-27T19:51:54Z","run":"r-20261027T1951Z-f3c5","type":"unit.dispatched","unit":"openspec:add-audit-chain"}
+{"at":"2026-10-27T20:20:34Z","detail":"the repository CI is still running on the hand-off commit d53d74bcbc (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"d53d74bcbcdd8d88341e12002c86ddbb1719dded","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-audit-chain"}
