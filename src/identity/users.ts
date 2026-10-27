@@ -195,10 +195,48 @@ export async function listUsers(
 }
 
 export async function createServiceAccount(
-  _tx: TenantTx,
-  _ctx: TenantContext,
-  _input: { displayName: string; ownerUserId: string },
-  _opts?: IdentityOptions,
+  tx: TenantTx,
+  ctx: TenantContext,
+  input: { displayName: string; ownerUserId: string },
+  opts?: IdentityOptions,
 ): Promise<User> {
-  throw new Error("not implemented");
+  const ids = opts?.ids ?? systemIds;
+  const clock = opts?.clock ?? systemClock;
+  if (
+    typeof input.displayName !== "string" ||
+    input.displayName.length > 200 ||
+    !input.displayName.isWellFormed() ||
+    input.displayName.includes("\u0000")
+  ) {
+    throw identityError("IDENTITY_INVALID");
+  }
+  const displayName = input.displayName.trim();
+  if (displayName === "" || displayName.length > 200) throw identityError("IDENTITY_INVALID");
+  if (typeof input.ownerUserId !== "string" || !ID_PATTERN.test(input.ownerUserId)) {
+    throw identityError("IDENTITY_INVALID");
+  }
+  await assertTenantMatches(tx, ctx);
+  const owner = await tx.query<{ kind: UserKind; state: UserState }>(
+    `SELECT kind, state FROM ursitoare."user" WHERE tenant_id = $1 AND user_id = $2 FOR SHARE`,
+    [ctx.tenantId, input.ownerUserId],
+  );
+  const ownerRow = owner.rows[0];
+  if (ownerRow === undefined || ownerRow.kind !== "human" || ownerRow.state !== "active") {
+    throw identityError("IDENTITY_OWNER_INVALID");
+  }
+  const userId = ids.next("svc");
+  const now = clock.now();
+  await tx.query(
+    `INSERT INTO ursitoare."user" (tenant_id, user_id, kind, owner_user_id, display_name, email, state, created_at, updated_at)
+     VALUES ($1, $2, 'service', $3, $4, NULL, 'active', $5, $5)`,
+    [ctx.tenantId, userId, input.ownerUserId, displayName, now],
+  );
+  return {
+    userId,
+    kind: "service",
+    ownerUserId: input.ownerUserId,
+    displayName,
+    email: null,
+    state: "active",
+  };
 }
