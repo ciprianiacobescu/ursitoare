@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Hold H-c85bdd94: UI criterion C-b2a74658 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-c2167f30: UI criterion C-62803105 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-e0cb8f86: UI criterion C-1dc68043 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-4f97b0f0: UI criterion C-946ba56d has no end-to-end test (fails_at_head); see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-4f97b0f0: UI criterion C-946ba56d has no end-to-end test (fails_at_head); see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-657e3f25: UI criterion C-a91f316f has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-86a068a1: UI criterion C-31ad3638 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-cae5cbd4: UI criterion C-56d1014e has no end-to-end test (not_testable); see the generated UI tests table |
@@ -170,7 +170,8 @@ accept The hold may be waived. Criterion C-1dc68043 is the scenario "The classif
 
 ## Q-007: Hold H-4f97b0f0: UI criterion C-946ba56d has no end-to-end test (fails_at_head); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -186,6 +187,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-946ba56d is the scenario "Unknown API paths" of the requirement "Unknown API and root paths answer the JSON 404", which asks that GET /api/v1/does-not-exist, GET /API/v1/x, GET /api, GET /health/extra and POST /api/v1/x all answer 404 with a JSON content type and the exact body { "error": { "code": "NOT_FOUND", "message": "Route not found" } }. The generated end-to-end test failed at the head because it was written against the wrong body: it expected the message "Not found", while the specification, the engine's not-found handler in src/api/server.ts and the wildcard route in src/api/web.ts all use "Route not found". Its failure therefore shows a defect of the generated test, not of the code. The scenario is implemented exactly by the Node test in src/api/web.test.ts, which registers the web app on a valid distDir, sends the five requests and asserts 404, an application/json content type and deep equality with the exact envelope for each, and that test passed in the latest test report. The served stack is also proven in the browser: e2e/test_m0_skeleton.py requests /api/v1/does-not-exist through the real engine and asserts a 404 JSON answer with error.code NOT_FOUND, and that journey test passed. The design's test plan assigns engine behaviour to Node tests with server.inject and reserves the browser journey for the .tsx files. A missing generated end-to-end test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-008: Hold H-657e3f25: UI criterion C-a91f316f has no end-to-end test (not_testable); see the generated UI tests table
