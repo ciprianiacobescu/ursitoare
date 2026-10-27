@@ -15,6 +15,9 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      # The served origin, exported as L4's e2e gate does: the tests L4 generates (e2e/test_l4_c_*.py) read it directly.
+      L4_E2E_BASE_URL: http://127.0.0.1:39080
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: set up node
@@ -36,7 +39,7 @@ jobs:
       - name: serve and test
         run: |
           pnpm run e2e:serve > e2e-serve.log 2>&1 &
-          for i in $(seq 1 120); do curl -sf http://127.0.0.1:39080/health > /dev/null && break; sleep 1; done
+          for i in $(seq 1 120); do curl -sf "$L4_E2E_BASE_URL/health" > /dev/null && break; sleep 1; done
           pnpm run e2e
       - name: server log on failure
         if: failure()
