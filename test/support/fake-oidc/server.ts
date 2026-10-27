@@ -1,6 +1,7 @@
 import http from "node:http";
 import type { IncomingHttpHeaders, IncomingMessage, Server, ServerResponse } from "node:http";
 
+import { AUTHORIZATION_PATH, authorizeGet, authorizePost } from "./authorize.ts";
 import { createProvider, parseRedirectUri } from "./provider.ts";
 import type { Provider } from "./provider.ts";
 import { FakeOidcError } from "./types.ts";
@@ -24,6 +25,7 @@ export type Reply = Readonly<{
 export type ParsedRequest = Readonly<{
   method: string;
   path: string;
+  rawQuery: string;
   query: Readonly<Record<string, string>>;
   form: Readonly<Record<string, string>>;
   headers: IncomingHttpHeaders;
@@ -61,6 +63,8 @@ function discoveryDocument(provider: Provider): Record<string, unknown> {
 const ROUTES: Record<string, Handler> = {
   [`GET ${DISCOVERY_PATH}`]: (provider) => jsonReply(discoveryDocument(provider)),
   [`GET ${CERTS_PATH}`]: (provider) => jsonReply(provider.keys.jwks()),
+  [`GET ${AUTHORIZATION_PATH}`]: authorizeGet,
+  [`POST ${AUTHORIZATION_PATH}`]: authorizePost,
 };
 
 function methodsFor(path: string): string[] {
@@ -167,10 +171,12 @@ async function handle(
   const method = request.method ?? "GET";
   const url = new URL(request.url ?? "/", provider.url);
   const path = url.pathname;
+  const rawQuery = url.search.startsWith("?") ? url.search.slice(1) : "";
   const query = firstValues(url.searchParams);
   let parsed: ParsedRequest = {
     method,
     path,
+    rawQuery,
     query,
     form: {},
     headers: request.headers,
@@ -188,7 +194,15 @@ async function handle(
 
     const body = await readBody(request);
     const form = body.tooLarge ? {} : formValues(request.headers["content-type"], body.body);
-    parsed = { method, path, query, form, headers: request.headers, body: body.body };
+    parsed = {
+      method,
+      path,
+      rawQuery,
+      query,
+      form,
+      headers: request.headers,
+      body: body.body,
+    };
 
     if (body.tooLarge) {
       const reply = jsonReply({ error: "invalid_request" }, 413);

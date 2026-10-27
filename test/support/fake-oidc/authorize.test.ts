@@ -42,7 +42,7 @@ function queryOf(params: AuthParams): string {
 }
 
 function authUrl(fake: FakeOidc, params: AuthParams): string {
-  return `${fake.issuer}${AUTH_PATH}?${queryOf(params)}`;
+  return `${fake.url}${AUTH_PATH}?${queryOf(params)}`;
 }
 
 function getAuth(fake: FakeOidc, params: AuthParams): Promise<Response> {
@@ -85,7 +85,7 @@ test("C-7e2314fa authorization GET renders the accessible Keycloak form for a va
     const fake = await startFake();
     const params = validParams();
     const query = queryOf(params);
-    const response = await fetch(`${fake.issuer}${AUTH_PATH}?${query}`, {
+    const response = await fetch(`${fake.url}${AUTH_PATH}?${query}`, {
       redirect: "manual",
     });
 
