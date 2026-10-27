@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.4 | technical | test/support/fake-oidc/tokens.test.ts:182: signature-flaw tokens are compared to a base token carrying a nonce they never receive |
-| Q-002 | open | 2.1 | technical | test/support/fake-oidc/server.test.ts:154 and :353 request a doubled realm JWKS path |
+| Q-002 | accepted | 2.1 | technical | test/support/fake-oidc/server.test.ts:154 and :353 request a doubled realm JWKS path |
 <!-- l4:index:end -->
 
 ---
@@ -44,7 +44,8 @@ Edit `test/support/fake-oidc/tokens.test.ts`: change line 182 from `    const ba
 
 ## Q-002: test/support/fake-oidc/server.test.ts:154 and :353 request a doubled realm JWKS path
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 2.1
 - **Kind:** technical
 - **Asked:** 2026-10-27T12:28Z by deepseek, run r-20261027T1208Z-1537, task 2.1
