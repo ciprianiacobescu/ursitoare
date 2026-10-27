@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Hold H-e0cb8f86: UI criterion C-1dc68043 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-4f97b0f0: UI criterion C-946ba56d has no end-to-end test (fails_at_head); see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-657e3f25: UI criterion C-a91f316f has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-86a068a1: UI criterion C-31ad3638 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-86a068a1: UI criterion C-31ad3638 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-cae5cbd4: UI criterion C-56d1014e has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-198b895a: UI criterion C-967db51d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-9bf1501b: UI criterion C-1b33755d has no end-to-end test (not_testable); see the generated UI tests table |
@@ -214,7 +214,8 @@ accept The hold may be waived. Criterion C-a91f316f is the scenario "Non-GET on 
 
 ## Q-009: Hold H-86a068a1: UI criterion C-31ad3638 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -230,6 +231,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-31ad3638 is the scenario "Missing then built" of the requirement "A missing build is reported and does not stop the engine". The specification writes it against an engine whose distDir does not exist, then is created empty, then receives index.html, and it also reads the return value of the in-process helper isWebBuilt for each of the three states. A browser journey against the served e2e stack cannot remove or create files in the engine's web build directory and cannot call an in-process TypeScript function, so no end-to-end test can exercise the scenario; the design's test plan assigns engine behaviour to Node tests that build a temp dist and use server.inject, and reserves the browser journey for the .tsx files. The Node test in src/api/web.test.ts implements the scenario exactly and passed in the latest test report: with a missing distDir it asserts GET / answers 503 with error.code WEB_NOT_BUILT, the exact details.hint, the four security headers and no directory path in the body, asserts GET /health answers 200, asserts isWebBuilt is false for the missing directory, false for an empty one and true once index.html is written, and asserts the next GET / answers 200 with the file's bytes. The implementation in src/api/web.ts checks the disk on every request through isWebBuilt, which never throws and requires a readable index.html under the real path of distDir, and throws the 503 WEB_NOT_BUILT ApiError with the hint when the check fails. The built half of the outcome is also proven over the served stack: e2e/test_m0_skeleton.py opens / through the real engine, asserts status 200 and sees the heading "Ursitoare" and "Engine healthy". A missing generated end-to-end test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-010: Hold H-cae5cbd4: UI criterion C-56d1014e has no end-to-end test (not_testable); see the generated UI tests table
