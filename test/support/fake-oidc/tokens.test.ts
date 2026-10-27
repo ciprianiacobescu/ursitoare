@@ -179,7 +179,7 @@ test("C-4b89bf6e signature flaws produce none HS256 unknown kid and foreign key 
   assert.doesNotThrow(() => {
     const keys = createKeyRing();
     const ctx = context(keys);
-    const base = payloadOf(mintJwt(ctx, { nonce: "n-2" }));
+    const base = payloadOf(mintJwt(ctx, {}));
     const currentJwk = keys.current().jwk;
 
     const noneToken = mintJwt(ctx, { flaw: "alg_none" });
