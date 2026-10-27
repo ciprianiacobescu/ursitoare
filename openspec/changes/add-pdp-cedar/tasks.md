@@ -1,7 +1,7 @@
 ## 1. Values and digests
 
 - [x] 1.1 Write `src/pdp/values.test.ts` first (the scenarios "Entity references and uids", "Decimals do not round" and "The host is the parsed host"; `formatUid(null as never)` is `(invalid)`), then implement `entityRef`, `toDecimal`, `hostOf` and `formatUid` in `src/pdp/values.ts` (exported through `src/pdp/index.ts`) as in design decision 10, implementing requirement "Value helpers build exact Cedar values"
-- [ ] 1.2 Write `src/pdp/digest.test.ts` first (the scenarios "Canonical form", "Unsupported values", "A request digest" with its known answer, and "A request that cannot be serialised still has a digest"), then implement `canonicalJson`, `sha256Hex` and `requestDigest` in `src/pdp/digest.ts` as in design decision 8 (the fallback is the fixed digest of design decision 8 for any throw, `null` included, and reads nothing from the request; `policySetVersionOf` stays a stub until task 2.2), implementing requirement "Request digests are canonical"
+- [x] 1.2 Write `src/pdp/digest.test.ts` first (the scenarios "Canonical form", "Unsupported values", "A request digest" with its known answer, and "A request that cannot be serialised still has a digest"), then implement `canonicalJson`, `sha256Hex` and `requestDigest` in `src/pdp/digest.ts` as in design decision 8 (the fallback is the fixed digest of design decision 8 for any throw, `null` included, and reads nothing from the request; `policySetVersionOf` stays a stub until task 2.2), implementing requirement "Request digests are canonical"
 
 ## 2. Loading a policy set
 
