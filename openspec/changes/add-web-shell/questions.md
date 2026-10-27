@@ -28,7 +28,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-015 | answered | none | verdict | Hold H-a427f9a7: UI criterion C-76b2dd3e has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-dcbf4ab9: UI criterion C-0a8a6d93 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-a5fb16c6: UI criterion C-5e6db9ca has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-018 | open | none | verdict | Hold H-e9471b87: UI criterion C-5752eaaf has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-018 | answered | none | verdict | Hold H-e9471b87: UI criterion C-5752eaaf has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-019 | open | none | verdict | Hold H-cf11d880: UI criterion C-34823202 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-020 | open | none | verdict | Hold H-e4c11a36: UI criterion C-abaa85a3 has no end-to-end test (writer_failed); see the generated UI tests table |
 | Q-021 | open | none | verdict | Hold H-ea19cf93: UI criterion C-b5ce03f4 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -412,7 +412,7 @@ accept The hold may be waived. Criterion C-5e6db9ca is the scenario "Refusals" o
 
 ## Q-018: Hold H-e9471b87: UI criterion C-5752eaaf has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.66 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -429,6 +429,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-5752eaaf is the scenario "Reserved roots match whole segments" of the requirement "Feature registry". It registers /apis, /healthz, /auth and /auth/other on a new registry; the built app registers none of them. I read the test: it registers the four and asserts list() ids apis healthz auth other. It is proven by the Node test web/src/app/features.test.ts "C-5752eaaf reserved roots match whole segments only". It passed at the head and failed by assertion at red (proof red_assertion, adequate, in the round-1 traceability), and the judge and S1 passed the criterion. A missing generated UI test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-019: Hold H-cf11d880: UI criterion C-34823202 has no end-to-end test (not_testable); see the generated UI tests table
