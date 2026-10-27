@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.1 | technical | src/db/prepare.test.ts:100 first.partitions expects only the audit_event window, so adding migration 0110 breaks it |
 | Q-002 | answered | none | verdict | Finding F-5a5184d6: check rejects when a getter inside principal, resource, an entity or egress throws |
-| Q-003 | open | none | verdict | Criterion C-b4a29f2d (policy-engine › A request carries at most 24 entities › A huge attribute): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-b4a29f2d (policy-engine › A request carries at most 24 entities › A huge attribute): accept as satisfied? |
 | Q-004 | open | none | verdict | Finding F-2fc9e5f3: M8 malformed-policy test does not use design.md's M8 text |
 <!-- l4:index:end -->
 
@@ -74,7 +74,8 @@ reject The finding is correct and stands. In guardRequest only the five top-leve
 
 ## Q-003: Criterion C-b4a29f2d (policy-engine › A request carries at most 24 entities › A huge attribute): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -101,6 +102,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The tracing test builds the base request, replaces the Tool entity's effect attribute with a string of 300,000 characters, calls check, and asserts that the decision is deny, that errors deep-equals ["PDP_REQUEST_TOO_LARGE"] and that reasons is empty; the latest report lists it as passed. The only clause the test does not assert is the value of MAX_REQUEST_CHARS, and the repository settles that directly: values.ts exports it as 262144, and guards.ts compares the length of JSON.stringify of the context and entities against it, returning PDP_REQUEST_TOO_LARGE before the action, entity and Cedar evaluation steps, which runCheck turns into a deny with that single error and no reasons.
 ---
 
 ## Q-004: Finding F-2fc9e5f3: M8 malformed-policy test does not use design.md's M8 text
