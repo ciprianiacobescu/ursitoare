@@ -124,3 +124,5 @@
 {"at":"2026-10-27T02:47:09Z","revision":"978e6926595630862011492726efa6b24c12c60b","type":"unit.integrated","unit":"openspec:add-e2e-stack"}
 {"at":"2026-10-27T02:47:09Z","attempt":1,"cost_usd":7.73189,"runs":6,"type":"plan.charged","unit":"openspec:add-e2e-stack"}
 {"at":"2026-10-27T02:48:32Z","branch":"l4/archive/openspec/add-e2e-stack","head":"72b82cdbb423653f9c38a086f7fd30fdf8d6e4df","type":"unit.branch_deleted","unit":"openspec:add-e2e-stack"}
+{"at":"2026-10-27T02:48:33Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-web-shell"}
+{"at":"2026-10-27T02:48:33Z","run":"r-20261027T0248Z-c394","type":"unit.dispatched","unit":"openspec:add-web-shell"}
