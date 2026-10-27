@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | 5.2 | technical | test/support/e2e-stack/stack.db.test.ts:340 counts nested Postgres PG_VERSION directories |
 | Q-002 | answered | none | verdict | Criterion C-67438cd6 (e2e-stack › fresh_state resets the stack on the fake profile › Faults and state cleared before a test): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-ef0357b4 (e2e-stack › fresh_state resets the stack on the fake profile › Stack profile and unreachable control): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-0828b57f (e2e-stack › The browser gate sees the database and not the control routes › Health and control paths in the browser gate): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-0828b57f (e2e-stack › The browser gate sees the database and not the control routes › Health and control paths in the browser gate): accept as satisfied? |
 <!-- l4:index:end -->
 
 ---
@@ -112,7 +112,8 @@ accept The two tests the judge set aside check the scenario as written. test_fre
 
 ## Q-004: Criterion C-0828b57f (e2e-stack › The browser gate sees the database and not the control routes › Health and control paths in the browser gate): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 5, verifier
@@ -139,3 +140,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The two tests the judge set aside check the scenario as written. test_health_reports_database_ok loads base_url/health through the page and asserts status 200, status ok and checks.db ok. test_control_paths_are_not_on_the_engine_port sends POST /reset, POST /faults and DELETE /faults to base_url, each built as urllib.request.Request(url, method=...) with no data and no headers, so no body and no Content-Type; the helper reads status and body from the caught HTTPError, catches nothing else, so a refused connection raises URLError and fails the test, and any status other than 404 fails the assertion; the body must carry error.code NOT_FOUND. e2e/test_health.py::test_health_reports_ok is still the bootstrap smoke test asserting 200, status ok and a string version, which the served engine also satisfies. The tests were ignored only for lacking a red or audit record, not for any gap in their assertions. One note outside this scenario: no test in the file calls pytest.skip on a non-fake profile, though the requirement sentence asks for it; that clause is not part of this criterion and these two tests do not depend on the control listener.
