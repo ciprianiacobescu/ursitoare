@@ -1,8 +1,16 @@
+import { timingSafeEqual } from "node:crypto";
 import { withTenantTx, type TenantContext, type TenantPool } from "../tenancy/index.ts";
 import { AuditError } from "./errors.ts";
 import { GENESIS_HASH, chainHash } from "./hash.ts";
 import type { AuditOrigin } from "./hash.ts";
+import { anchorMac } from "./mac.ts";
 import type { KeyMaterial } from "./mac.ts";
+
+interface AnchorRow {
+  seq_text: string;
+  hash: Buffer;
+  mac: Buffer;
+}
 
 export interface ChainReport {
   ok: boolean;
@@ -41,7 +49,21 @@ export async function verifyChain(
   if (!Number.isInteger(batchSize) || batchSize < 1 || batchSize > 5000) {
     throw new AuditError("AUDIT_OPTIONS_INVALID", "audit options are invalid", { reason: "bad_batch_size" });
   }
+  const engineKey = opts?.engineKey;
+  if (engineKey !== undefined) {
+    anchorMac(engineKey, ctx.tenantId, 1n, "0".repeat(64));
+  }
   return withTenantTx(pool, ctx, async (tx) => {
+    let anchors: AnchorRow[] = [];
+    if (engineKey !== undefined) {
+      const anchorRes = await tx.query<AnchorRow>(
+        "SELECT seq::text AS seq_text, hash, mac FROM ursitoare.audit_anchor WHERE tenant_id = $1 AND seq >= $2::bigint ORDER BY seq",
+        [ctx.tenantId, fromSeq.toString()],
+      );
+      anchors = anchorRes.rows;
+    }
+    const anchorSeqs = new Set(anchors.map((a) => a.seq_text));
+    const walkedHashes = new Map<string, Buffer>();
     const headRes = await tx.query<{ seq_text: string; hash: Buffer }>(
       "SELECT seq::text AS seq_text, hash FROM ursitoare.audit_head WHERE tenant_id = $1",
       [ctx.tenantId],
@@ -96,6 +118,9 @@ export async function verifyChain(
         expected = seq + 1n;
         prev = row.hash;
         lastHash = row.hash;
+        if (anchorSeqs.has(row.seq_text)) {
+          walkedHashes.set(row.seq_text, row.hash);
+        }
         cursorSeq = row.seq_text;
         cursorAt = row.at_text;
       }
@@ -112,6 +137,17 @@ export async function verifyChain(
         }
         if (lastHash === null || !lastHash.equals(head.hash)) {
           return { ok: false, checked, firstBadSeq: headSeq, reason: "hash" };
+        }
+      }
+    }
+    if (engineKey !== undefined) {
+      for (const anchor of anchors) {
+        const seq = BigInt(anchor.seq_text);
+        const walked = walkedHashes.get(anchor.seq_text);
+        const expectedMac = Buffer.from(anchorMac(engineKey, ctx.tenantId, seq, anchor.hash.toString("hex")), "hex");
+        const macOk = anchor.mac.length === expectedMac.length && timingSafeEqual(anchor.mac, expectedMac);
+        if (!macOk || walked === undefined || !walked.equals(anchor.hash)) {
+          return { ok: false, checked, firstBadSeq: seq, reason: "anchor" };
         }
       }
     }
