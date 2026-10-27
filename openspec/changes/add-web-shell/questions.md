@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Hold H-86a068a1: UI criterion C-31ad3638 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-cae5cbd4: UI criterion C-56d1014e has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-198b895a: UI criterion C-967db51d has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-9bf1501b: UI criterion C-1b33755d has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-9bf1501b: UI criterion C-1b33755d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-c1376ce6: UI criterion C-2c3a693b has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-c24d6b2b: UI criterion C-12290cf5 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-a427f9a7: UI criterion C-76b2dd3e has no end-to-end test (not_testable); see the generated UI tests table |
@@ -280,7 +280,8 @@ accept The hold may be waived. Criterion C-967db51d is the scenario "Bad registr
 
 ## Q-012: Hold H-9bf1501b: UI criterion C-1b33755d has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -296,6 +297,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-1b33755d is the scenario "Unbuilt directory warns once" of the requirement "The composition root serves the web app". The specification writes it against main run in process with an injected loadConfig whose webDist is an empty temp directory and a captured log destination, and asks that exactly one captured log line has code WEB_NOT_BUILT with the exact message and no path, that GET / answers 503 WEB_NOT_BUILT, that GET /health answers 200, and that a second run with a built directory logs no such line. A browser journey against the served e2e stack cannot start the engine with a chosen web directory, cannot read the engine's log output and cannot start a second engine, so no end-to-end test can exercise the scenario; the design's test plan assigns engine behaviour to Node tests beside the code and reserves the browser journey for the .tsx files. The Node test in src/main.web.test.ts implements the scenario exactly and passed in the latest test report: it runs main with an empty temp webDist and a capturing destination, asserts exactly one WEB_NOT_BUILT line with the message web app is not built; run pnpm run build or set URSITOARE_WEB_DIST, asserts no log line holds the directory path, asserts GET / answers 503 with error.code WEB_NOT_BUILT and GET /health answers 200 with status ok, then runs main again with a built directory and asserts GET / answers 200 with the file and no WEB_NOT_BUILT line was logged. The implementation in src/main.ts calls isWebBuilt once after registerWebApp and logs one warn line with code WEB_NOT_BUILT and that exact message, without the path. The built half of the requirement is also proven over the served stack by e2e/test_m0_skeleton.py, which opens / through the real engine, asserts status 200 and sees the heading Ursitoare and Engine healthy. A missing generated end-to-end test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-013: Hold H-c1376ce6: UI criterion C-2c3a693b has no end-to-end test (not_testable); see the generated UI tests table
