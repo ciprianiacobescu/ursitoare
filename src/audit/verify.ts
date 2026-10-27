@@ -1,6 +1,7 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
-import type { TenantContext, TenantPool } from "../tenancy/index.ts";
+import { withTenantTx, type TenantContext, type TenantPool } from "../tenancy/index.ts";
+import { AuditError } from "./errors.ts";
+import { GENESIS_HASH, chainHash } from "./hash.ts";
+import type { AuditOrigin } from "./hash.ts";
 import type { KeyMaterial } from "./mac.ts";
 
 export interface ChainReport {
@@ -10,10 +11,110 @@ export interface ChainReport {
   reason?: "hash" | "gap" | "anchor";
 }
 
+interface EventRow {
+  seq_text: string;
+  at_text: string;
+  prev_hash: Buffer;
+  hash: Buffer;
+  event_type: string;
+  actor: unknown;
+  target: unknown;
+  payload: unknown;
+  origin: AuditOrigin;
+  mk_trace_id: string | null;
+  mk_request_id: string | null;
+  mk_jti: string | null;
+}
+
+const AT_FORMAT = `to_char(at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')`;
+
 export async function verifyChain(
-  _pool: TenantPool,
-  _ctx: TenantContext,
-  _opts?: { fromSeq?: bigint; engineKey?: KeyMaterial; batchSize?: number },
+  pool: TenantPool,
+  ctx: TenantContext,
+  opts?: { fromSeq?: bigint; engineKey?: KeyMaterial; batchSize?: number },
 ): Promise<ChainReport> {
-  throw new Error("not implemented");
+  const fromSeq = opts?.fromSeq ?? 1n;
+  if (typeof fromSeq !== "bigint" || fromSeq < 1n) {
+    throw new AuditError("AUDIT_OPTIONS_INVALID", "audit options are invalid", { reason: "bad_from_seq" });
+  }
+  const batchSize = opts?.batchSize ?? 500;
+  if (!Number.isInteger(batchSize) || batchSize < 1 || batchSize > 5000) {
+    throw new AuditError("AUDIT_OPTIONS_INVALID", "audit options are invalid", { reason: "bad_batch_size" });
+  }
+  return withTenantTx(pool, ctx, async (tx) => {
+    const headRes = await tx.query<{ seq_text: string; hash: Buffer }>(
+      "SELECT seq::text AS seq_text, hash FROM ursitoare.audit_head WHERE tenant_id = $1",
+      [ctx.tenantId],
+    );
+    const head = headRes.rows[0];
+
+    let prev: Buffer | null = GENESIS_HASH;
+    if (fromSeq > 1n) {
+      const before = await tx.query<{ hash: Buffer }>(
+        "SELECT hash FROM ursitoare.audit_event WHERE tenant_id = $1 AND seq = $2::bigint ORDER BY at LIMIT 1",
+        [ctx.tenantId, (fromSeq - 1n).toString()],
+      );
+      prev = before.rows[0]?.hash ?? null;
+    }
+
+    let checked = 0;
+    let expected = fromSeq;
+    let cursorSeq = (fromSeq - 1n).toString();
+    let cursorAt: string | null = null;
+    let lastHash: Buffer | null = null;
+    for (;;) {
+      const res: { rows: EventRow[] } = await tx.query<EventRow>(
+        `SELECT seq::text AS seq_text, ${AT_FORMAT} AS at_text, prev_hash, hash, event_type, actor, target, payload, origin, mk_trace_id, mk_request_id, mk_jti
+         FROM ursitoare.audit_event
+         WHERE tenant_id = $1 AND (seq > $2::bigint OR (seq = $2::bigint AND $3::timestamptz IS NOT NULL AND at > $3::timestamptz))
+         ORDER BY seq, at LIMIT $4`,
+        [ctx.tenantId, cursorSeq, cursorAt, batchSize],
+      );
+      for (const row of res.rows) {
+        const seq = BigInt(row.seq_text);
+        if (seq !== expected) {
+          return { ok: false, checked, firstBadSeq: expected, reason: "gap" };
+        }
+        const prevOk = (prev ?? row.prev_hash).equals(row.prev_hash);
+        const computed = chainHash(row.prev_hash, {
+          tenantId: ctx.tenantId,
+          seq,
+          at: row.at_text,
+          eventType: row.event_type,
+          actor: row.actor,
+          target: row.target,
+          payload: row.payload,
+          origin: row.origin,
+          mkTraceId: row.mk_trace_id,
+          mkRequestId: row.mk_request_id,
+          mkJti: row.mk_jti,
+        });
+        if (!prevOk || !computed.equals(row.hash)) {
+          return { ok: false, checked, firstBadSeq: seq, reason: "hash" };
+        }
+        checked += 1;
+        expected = seq + 1n;
+        prev = row.hash;
+        lastHash = row.hash;
+        cursorSeq = row.seq_text;
+        cursorAt = row.at_text;
+      }
+      if (res.rows.length < batchSize) {
+        break;
+      }
+    }
+
+    if (head !== undefined) {
+      const headSeq = BigInt(head.seq_text);
+      if (headSeq >= fromSeq) {
+        if (headSeq >= expected) {
+          return { ok: false, checked, firstBadSeq: expected, reason: "gap" };
+        }
+        if (lastHash === null || !lastHash.equals(head.hash)) {
+          return { ok: false, checked, firstBadSeq: headSeq, reason: "hash" };
+        }
+      }
+    }
+    return { ok: true, checked };
+  });
 }
