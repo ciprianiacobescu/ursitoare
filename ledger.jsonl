@@ -119,3 +119,4 @@
 {"at":"2026-10-27T02:46:12Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-e2e-stack can go on","type":"plan.resumed"}
 {"at":"2026-10-27T02:46:17Z","head":"a9574137a1e001d30ced7959e056fe1f0bd7522a","pr":11,"target_before":"a53398fc5130b573609047b209e714758fda5de9","type":"unit.merge_requested","unit":"openspec:add-e2e-stack"}
 {"at":"2026-10-27T02:46:22Z","ci":"not_run","head":"a9574137a1e001d30ced7959e056fe1f0bd7522a","merge_commit":"978e6926595630862011492726efa6b24c12c60b","method":"squash","pr":11,"raced":false,"type":"unit.merged","unit":"openspec:add-e2e-stack"}
+{"at":"2026-10-27T02:46:27Z","branch":"l4/openspec/add-e2e-stack","head":"a9574137a1e001d30ced7959e056fe1f0bd7522a","type":"unit.branch_deleted","unit":"openspec:add-e2e-stack"}
