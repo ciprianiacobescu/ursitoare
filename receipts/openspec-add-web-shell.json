@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-27T06:19:46Z",
+  "integrated_revision": "cfe5e662ec11765bab048ec8f03dbbc57eb90248",
+  "merge_commit": "cfe5e662ec11765bab048ec8f03dbbc57eb90248",
+  "plan_digest": "7c2df2bf58862787",
+  "plan_id": "m0",
+  "postcheck": "pass",
+  "pr": 13,
+  "receipt_id": "m0/openspec:add-web-shell/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "8db6286a4e24cb809bb639fb1b026d6e92ff6dab",
+  "spec_digest": "73e8f764b6a34382",
+  "target": "main",
+  "unit_id": "openspec:add-web-shell"
+}
