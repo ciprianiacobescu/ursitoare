@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Finding F-0447fea8: task 5.2: a head below the walked tip is reported as a hash failure instead of passing |
 | Q-003 | answered | none | verdict | Finding F-934c3d86: task 5.1: a stored row that canonicalEvent cannot hash makes verifyChain throw instead of reporting hash |
 | Q-004 | answered | none | verdict | Finding F-1abb4766: task 5.1 is ticked as already satisfied, but its text is not done |
-| Q-005 | open | none | verdict | Finding F-2a235267: task 5.2 is ticked as already satisfied, but its text is not done |
+| Q-005 | answered | none | verdict | Finding F-2a235267: task 5.2 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
 ---
@@ -131,7 +131,8 @@ reject The finding is correct. Task 5.1 of tasks.md says that chainHash not equa
 
 ## Q-005: Finding F-2a235267: task 5.2 is ticked as already satisfied, but its text is not done
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -151,3 +152,4 @@ This finding cites no criterion: end the reason with one sentence WHEN <the situ
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct. Task 5.2 says that after the walk a head whose seq is below tipSeq passes, and design.md says the head is read before the walk so that appends during a verification are not tail loss. In src/audit/verify.ts the head check only separates the case headSeq at or above expected, which gives gap; for every other head seq at or above fromSeq it compares the hash of the last walked row with the head's hash and returns reason hash at headSeq. When the head seq is below the tip these two hashes belong to different events and differ on an intact chain, so an append committed between the head read and the walk makes a valid chain fail with reason hash at the head's seq. The fix belongs in production code: compare the head hash only when the head seq equals the tip, and let a head below the tip pass. WHEN verifyChain walks an intact chain whose head row holds a seq at or above fromSeq but below the last walked seq THEN it returns ok true with checked equal to the number of walked events, while a head seq equal to the tip with a different hash still returns reason hash at the tip's seq and a head seq above the tip still returns gap at the tip plus one.
