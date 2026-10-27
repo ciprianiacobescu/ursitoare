@@ -1,10 +1,12 @@
 import type { Clock, IdSource } from "../core/index.ts";
 import type { Logger } from "../observability/index.ts";
 import { cedar } from "./cedar.ts";
+import { guardRequest } from "./guards.ts";
 import type { Decision, PolicyRequest } from "./types.ts";
 
 export interface CheckOptions {
   readonly policySetVersion: string;
+  readonly actions: readonly string[];
   readonly preparsedPolicySetId: string;
   readonly preparsedSchemaName: string;
   readonly clock: Clock;
@@ -77,6 +79,11 @@ export async function runCheck(req: PolicyRequest, opts: CheckOptions): Promise<
     decidedAt,
     policySetVersion: opts.policySetVersion,
   };
+
+  const guard = guardRequest(req, opts.actions);
+  if (guard !== undefined) {
+    return denied(state, [], [guard]);
+  }
 
   try {
     const answer = cedar.statefulIsAuthorized({

@@ -46,6 +46,7 @@ export async function createPdp(opts: {
     check(req: PolicyRequest): Promise<Decision> {
       return runCheck(req, {
         policySetVersion,
+        actions: loaded.actions,
         preparsedPolicySetId,
         preparsedSchemaName,
         clock: opts.clock,
