@@ -46,27 +46,38 @@ function delay(ms: number): Promise<void> {
   });
 }
 
+// The e2e stack's engine and control defaults (test/support/e2e-stack/stack.ts): a free-port pick must never hand
+// them to an embedded cluster or another test server, which would take them before the stack binds.
+const RESERVED_PORTS: ReadonlySet<number> = new Set([39080, 39081]);
+
 export function freePort(): Promise<number> {
   return new Promise((resolve, reject) => {
-    const server = createServer();
-    server.once("error", reject);
-    server.listen(0, "127.0.0.1", () => {
-      const address = server.address();
-      if (address === null || typeof address === "string") {
-        server.close(() => {
-          reject(new Error("could not reserve a loopback port"));
-        });
-        return;
-      }
-      const port = address.port;
-      server.close((error) => {
-        if (error) {
-          reject(error);
+    const attempt = (): void => {
+      const server = createServer();
+      server.once("error", reject);
+      server.listen(0, "127.0.0.1", () => {
+        const address = server.address();
+        if (address === null || typeof address === "string") {
+          server.close(() => {
+            reject(new Error("could not reserve a loopback port"));
+          });
           return;
         }
-        resolve(port);
+        const port = address.port;
+        server.close((error) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          if (RESERVED_PORTS.has(port)) {
+            attempt();
+            return;
+          }
+          resolve(port);
+        });
       });
-    });
+    };
+    attempt();
   });
 }
 
