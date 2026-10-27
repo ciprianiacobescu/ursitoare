@@ -25,6 +25,13 @@ read from the L4 v0.4.30 source (v0.4.31 and v0.4.32 change none of them), decid
    `discrimination.no_assertion_failure`). L4 recognises stubs only in Python, so in a TypeScript red step every
    criterion it traces needs at least one new test whose failure kind is `assertion`. A stub's `NotImplementedError`
    does not count, and the step fails as `vacuous`. add-db-foundation's task 1.1 failed seven red attempts this way.
+6. **Red sees no browser test** (added 2026-10-27, read from v0.4.32 `implementer/tdd.py` and
+   `implementer/result.py` `check_criteria`). Red runs only `gates.test`, and every criterion the step lists in
+   `criteria_ids` needs a new test in that gate's report. An OpenSpec task has no requirement links, so red requires
+   no criterion it does not list. A criterion that only `e2e/` tests check therefore fails red whenever it is listed.
+   add-e2e-stack's task 5.3 failed seven red attempts on three models this way. The verifier merges the e2e report
+   into traceability, and its extra-proof step gives such a test its red proof. That part is inferred from
+   `verifier/ladder.py`, not yet seen in a run.
 
 ## Decisions
 
