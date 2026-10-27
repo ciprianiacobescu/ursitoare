@@ -148,11 +148,21 @@ export async function upsertUserFromClaims(
 }
 
 export async function getUser(
-  _tx: TenantTx,
-  _ctx: TenantContext,
-  _userId: string,
+  tx: TenantTx,
+  ctx: TenantContext,
+  userId: string,
 ): Promise<User | null> {
-  throw new Error("not implemented");
+  await assertTenantMatches(tx, ctx);
+  if (typeof userId !== "string" || !ID_PATTERN.test(userId)) {
+    throw identityError("IDENTITY_INVALID");
+  }
+  const res = await tx.query<UserRow>(
+    `SELECT user_id, kind, owner_user_id, display_name, email, state FROM ursitoare."user"
+     WHERE tenant_id = $1 AND user_id = $2`,
+    [ctx.tenantId, userId],
+  );
+  const row = res.rows[0];
+  return row === undefined ? null : toUser(row);
 }
 
 export async function listUsers(

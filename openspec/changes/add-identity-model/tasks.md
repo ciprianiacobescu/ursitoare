@@ -20,7 +20,7 @@
 
 ## 6. Reading users
 
-- [ ] 6.1 Write `src/identity/users.test.ts` first (users created with `upsertUserFromClaims` and `sequentialIds()`; the scenarios "Get" and "Pages" of "Users are read within the tenant", and the `getUser` and `listUsers` cases of "Wrong or missing tenant", the raw transaction being `BEGIN`/`ROLLBACK` on `await db.appPool.connect()`), then implement `getUser` and `listUsers` and the `UserPage` type in `src/identity/users.ts` as in design.md § Interfaces (`assertTenantMatches`, the id pattern `^[A-Za-z0-9_-]{1,64}$`, limit and `after` validation, `LIMIT limit + 1` with `COLLATE "C"`), exported through `src/identity/index.ts`, implementing requirements "Users are read within the tenant" and "User functions refuse a transaction of another tenant"
+- [x] 6.1 Write `src/identity/users.test.ts` first (users created with `upsertUserFromClaims` and `sequentialIds()`; the scenarios "Get" and "Pages" of "Users are read within the tenant", and the `getUser` and `listUsers` cases of "Wrong or missing tenant", the raw transaction being `BEGIN`/`ROLLBACK` on `await db.appPool.connect()`), then implement `getUser` and `listUsers` and the `UserPage` type in `src/identity/users.ts` as in design.md § Interfaces (`assertTenantMatches`, the id pattern `^[A-Za-z0-9_-]{1,64}$`, limit and `after` validation, `LIMIT limit + 1` with `COLLATE "C"`), exported through `src/identity/index.ts`, implementing requirements "Users are read within the tenant" and "User functions refuse a transaction of another tenant"
 
 ## 7. Service accounts
 

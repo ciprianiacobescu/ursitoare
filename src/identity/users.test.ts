@@ -47,7 +47,7 @@ test("C-569586e2 Get", async () => {
   try {
     const { a, b } = await seedTwoTenants(db);
     const alice = await signIn(db, a, "sub-alice");
-    const mallory = await signIn(db, b, "sub-mallory");
+    const mallory = await signIn(db, b, "sub-mallory", sequentialIds(7));
     const got = await withTenantTx(db.appPool, a, async (tx) => {
       let own: User | null = null;
       await assert.doesNotReject(async () => {
