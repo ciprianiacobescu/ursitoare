@@ -162,6 +162,29 @@ test("C-e7ed48e1: the file list covers tracked and untracked files only", () => 
   );
 });
 
+test("C-6690b581: the secret scan skips harness .l4 folders but scans the owner's .l4 files", () => {
+  const dir = tempDir();
+  const secretLine = "sk-" + "x".repeat(32);
+
+  git(dir, "init");
+
+  const ownerFiles = [".l4/config.yaml", ".l4/plans/p1.json"];
+  const harnessFiles = [
+    "openspec/changes/x/.l4/evidence/round-1/verdict.json",
+    "openspec/changes/archive/2026-10-26-x/.l4/ledger/r.jsonl",
+  ];
+  for (const file of [...ownerFiles, ...harnessFiles]) {
+    writeFile(dir, file, secretLine + "\n");
+    git(dir, "add", file);
+  }
+
+  const found = answer(() => scanRepository(dir));
+  assert.deepEqual(
+    answer(() => (found === "THROWN" ? "THROWN" : sortViolations(found))),
+    [secret("sk_key", ".l4/config.yaml", 1), secret("sk_key", ".l4/plans/p1.json", 1)],
+  );
+});
+
 test("C-bb0edd4e: an unavailable git fails the scan loudly", () => {
   const dir = tempDir();
 
