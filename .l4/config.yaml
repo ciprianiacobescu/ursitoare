@@ -148,9 +148,11 @@ roles:
   # Writes the e2e test of a UI criterion (under web/**) that no test proves: verifier step 5; without a writer such a
   # gap holds the unit for a person. Chosen per unit independent of the implementer's vendor, as the judges are.
   # Delegate choice 2026-10-25: Sonnet first, codex when the implementer is claude-sonnet; gemini-judge until codex
-  # has its key (2026-10-26).
+  # has its key (2026-10-26). claude-judge (Opus) writes it for a claude-sonnet unit while verifier.independence is
+  # different_model (owner decision 2026-10-27); it comes before gemini-judge, whose failed hello stops the plan.
   verifier_agent:
   - claude-sonnet
+  - claude-judge
   - gemini-judge
   - codex-judge
   # Unattended runs: the delegate answers implementer questions read-only and escalates what it cannot check. It runs
@@ -164,6 +166,14 @@ implementer:
   # file itself saw its rules (browser-only criteria, assertion-failing red tests), and add-e2e-stack 5.3 and
   # add-web-shell 6.4 each spent seven red attempts on them.
   include_agents_md: true
+
+# Owner decision 2026-10-27, temporary: the OpenCode Go plan hit its weekly usage limit, so every opencode-go profile
+# (deepseek, glm, gemini-judge) fails its hello and claude-sonnet implements alone. Under the default
+# different_vendor no judge was left (claude-judge is Anthropic, codex-judge has no key) and plan m1 stopped on
+# add-audit-chain. different_model lets claude-judge (claude-opus-5-5) judge claude-sonnet's work. Revert this block
+# and claude-judge's verifier_agent entry once Go answers again, in a window with no unit verifying or in review.
+verifier:
+  independence: different_model
 
 forge:
   type: github
