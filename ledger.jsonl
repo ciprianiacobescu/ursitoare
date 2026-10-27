@@ -56,3 +56,4 @@
 {"at":"2026-10-27T21:17:24Z","run":"r-20261027T2117Z-4eb4","type":"unit.dispatched","unit":"openspec:add-identity-model"}
 {"at":"2026-10-27T21:43:03Z","detail":"the repository CI is still running on the hand-off commit d864ddc88c (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"d864ddc88cb05aea2ddf6853a29de768f920933f","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-identity-model"}
 {"at":"2026-10-27T22:04:40Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-identity-model can go on","type":"plan.resumed"}
+{"at":"2026-10-27T22:04:44Z","head":"d864ddc88cb05aea2ddf6853a29de768f920933f","pr":20,"target_before":"3ba285348d1c8f3bd8d7b5294cf9a3f0ff7e69ba","type":"unit.merge_requested","unit":"openspec:add-identity-model"}
