@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Hold H-9e76d931: UI criterion C-ba861867 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-002 | answered | none | verdict | Hold H-b4253062: UI criterion C-61225ade has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-003 | open | none | verdict | Hold H-19960e47: UI criterion C-383b59d1 has no end-to-end test (fails_at_head); see the generated UI tests table |
+| Q-003 | answered | none | verdict | Hold H-19960e47: UI criterion C-383b59d1 has no end-to-end test (fails_at_head); see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-c85bdd94: UI criterion C-b2a74658 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-c2167f30: UI criterion C-62803105 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-e0cb8f86: UI criterion C-1dc68043 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -82,7 +82,8 @@ accept The hold may be waived. Criterion C-61225ade is the scenario "A handler c
 
 ## Q-003: Hold H-19960e47: UI criterion C-383b59d1 has no end-to-end test (fails_at_head); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -98,6 +99,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-383b59d1 is the scenario "Files, types and cache" of the requirement "The engine serves the web build". The specification writes it against a test-made distDir that holds index.html, assets/index-Ab3dEf9Z.js and favicon.svg, and asks for the exact content types and cache-control values of those three files plus a HEAD answer on the script. The served e2e stack cannot reproduce that fixture: the real web build has no favicon.svg (there is no web/public directory and web/index.html references only the module script) and its asset hash is whatever Vite produces, so no browser journey can request the files the scenario names. The design's test plan assigns engine behaviour to Node tests that build a temp dist and use server.inject, while the browser journey proves the .tsx files. The Node test in src/api/web.test.ts implements the scenario exactly and passed in the latest test report: it creates the three files, asserts text/html with no-store, text/javascript with the immutable policy, image/svg+xml with no-cache, and a HEAD answer with status 200, the same two headers and an empty body. The real build is also proven in the browser: the M0 journey loads the page under the strict CSP and nosniff and sees "Engine healthy" rendered, which requires the hashed module script to be served with a JavaScript type, and the hashed-asset rule matches Vite's eight-character hash as design decision 8 records. A missing generated end-to-end test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-004: Hold H-c85bdd94: UI criterion C-b2a74658 has no end-to-end test (not_testable); see the generated UI tests table
