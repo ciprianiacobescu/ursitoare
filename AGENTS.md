@@ -68,7 +68,10 @@ delegates; only `identity` talks to the OIDC provider; only `observability` expo
 - Database tests use the shared embedded Postgres from `test/support/` (no Docker anywhere in the gates).
 - Fakes for Keycloak (OIDC), the Mintkey proxy, LLM providers, MCP servers and n8n live in `test/support/`; each
   has a contract test. Test-support files change only in a task that names them.
-- Browser tests are Python pytest-playwright under `e2e/` (`docs/testing.md`). Use role and label locators.
+- Browser tests are Python pytest-playwright under `e2e/` (`docs/testing.md`). Use role and label locators. A red
+  step runs only the Node gate, so its `criteria_ids` lists only ids that its new Node tests trace. Tag a browser test
+  with `@pytest.mark.l4("C-…")`, but leave a criterion that only browser tests check out of `criteria_ids`: the e2e
+  gate traces it at verification.
 - No sleeps or wall-clock assertions without a tolerance; inject the clock.
 
 ## Security checklist for every change
