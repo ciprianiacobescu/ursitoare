@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: e2e/test_e2e_stack.py:17-19,40-42 — the red test requires editing this frozen test file
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The question comes from a fix task (openspec/changes/add-e2e-stack-fix-2/tasks.md, "## 1. Fix", task 1.1 for FB-001/F-2596eba0) and its only possible answer is an edit to a test file, e2e/test_e2e_stack.py, which the harness holds frozen; such an unfreeze is a person's commit, not a delegate answer.
 - **Blocking tasks:** 1.1
 - **Kind:** technical
 - **Asked:** 2026-10-27T01:38Z by deepseek, run r-20261027T0132Z-6440, task 1.1
