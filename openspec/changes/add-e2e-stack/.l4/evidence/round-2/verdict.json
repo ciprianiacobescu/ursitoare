@@ -1,0 +1,636 @@
+{
+  "schema": "l4/verdict@1",
+  "round": 2,
+  "verdict": "FAIL",
+  "base_sha": "a53398fc5130b573609047b209e714758fda5de9",
+  "head_sha": "9965067738a082f3ffff753832ec64cc9c59ed7d",
+  "steps": [
+    {
+      "step": "0",
+      "name": "preconditions",
+      "status": "ok",
+      "seconds": 0.6,
+      "note": "base main@a53398fc51 contained"
+    },
+    {
+      "step": "1",
+      "name": "integrity",
+      "status": "failed",
+      "seconds": 0.5,
+      "note": "a skip or xfail marker was added (+2 unfrozen by human answers); scope: 38 changed file(s)"
+    },
+    {
+      "step": "2",
+      "name": "build",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "3",
+      "name": "tests",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "4",
+      "name": "traceability",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "4a",
+      "name": "audit sampling",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "5",
+      "name": "ui test generation",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "6",
+      "name": "quality",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "8",
+      "name": "s1 judge",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "9",
+      "name": "judge",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "10",
+      "name": "aggregation",
+      "status": "ok",
+      "seconds": 0.0,
+      "note": "FAIL"
+    }
+  ],
+  "gates": [],
+  "criteria": [],
+  "findings": [
+    {
+      "severity": "blocker",
+      "title": "a skip or xfail marker was added",
+      "detail": "e2e/test_e2e_stack.py::_require_fake_profile, e2e/test_e2e_stack.py::injected_fault",
+      "source": "deterministic",
+      "criterion": null,
+      "log": null,
+      "spec_gap": false,
+      "suggested_fix": "",
+      "id": "F-5758ac1b",
+      "feedback": null
+    }
+  ],
+  "holds": [],
+  "subject_sha": "9965067738a082f3ffff753832ec64cc9c59ed7d",
+  "family_criteria": [],
+  "reused_from": null,
+  "integrity": {
+    "checks": [
+      {
+        "name": "protected paths",
+        "status": "ok",
+        "note": "no protected path differs from the base"
+      },
+      {
+        "name": "pre-existing tests",
+        "status": "failed",
+        "note": "2 test file(s) compared with the base"
+      },
+      {
+        "name": "red-green freeze",
+        "status": "ok",
+        "note": "11 task(s): red and green compared (+1 unfrozen by a delegate or an agent) (+1 opened by task text)"
+      },
+      {
+        "name": "test path freeze",
+        "status": "ok",
+        "note": "12 harness step commit(s) checked"
+      },
+      {
+        "name": "content scan",
+        "status": "ok",
+        "note": "no result-manipulating construct in the changed support and runner files"
+      },
+      {
+        "name": "gate configuration",
+        "status": "skipped",
+        "note": "no gate or runner configuration file changed"
+      },
+      {
+        "name": "test awareness",
+        "status": "ok",
+        "note": "no production line reacts to the test run"
+      },
+      {
+        "name": "suppressions",
+        "status": "skipped",
+        "note": "not checked: python only; changed files outside it: src/main.configure.test.ts, src/main.ts, test/arch/control-routes.test.ts, test/arch/control-routes.ts, test/support/e2e-stack/control.test.ts (+17 more)"
+      },
+      {
+        "name": "tdd history",
+        "status": "ok",
+        "note": "11 task(s); red tests passing at head: step 3"
+      },
+      {
+        "name": "pre-existing tests still pass",
+        "status": "skipped",
+        "note": "step 1 already failed"
+      }
+    ],
+    "findings": [
+      {
+        "severity": "blocker",
+        "title": "a skip or xfail marker was added",
+        "detail": "e2e/test_e2e_stack.py::_require_fake_profile, e2e/test_e2e_stack.py::injected_fault",
+        "source": "deterministic",
+        "criterion": null,
+        "log": null,
+        "spec_gap": false,
+        "suggested_fix": "",
+        "id": "F-5758ac1b",
+        "feedback": null
+      }
+    ],
+    "declared": [],
+    "human_protected": [],
+    "human_tests": [],
+    "unfrozen": [
+      "test/support/e2e-stack/stack.db.test.ts (task 5.2, unfrozen by Q-001 (agent))",
+      "e2e/conftest.py (task 5.3, opened by its text, plan:m0@a1d38222ff9fb862)"
+    ],
+    "human_suppressions": [],
+    "human_scan": [],
+    "human_config": [],
+    "allowed_tests": [],
+    "mocked_support": [],
+    "base_tests": null,
+    "test_awareness": []
+  },
+  "trace": [],
+  "audit": [],
+  "generated": [],
+  "s1": [],
+  "evidence": {
+    "schema": "l4/evidence@1",
+    "holds": [],
+    "items": {},
+    "scope": {
+      "declared": [
+        "parts/NN-<name>.ts",
+        "engine/engine.key",
+        "<dataDir>/app-password",
+        "URSITOARE_DATABASE_URL=postgres://ursitoare_app@127.0.0.1:<port>/ursitoare_e2e",
+        "application/json",
+        "dist/index.js",
+        "test/support/e2e-stack",
+        "src",
+        "src/main.ts",
+        "test/support/e2e-stack/main.ts",
+        "e2e/conftest.py",
+        "e2e/test_health.py",
+        "e2e/pyproject.toml",
+        "http://127.0.0.1:39080/health",
+        "test/support/e2e-stack/{part,discover,faults,reset,control,stack,database-part}.ts",
+        "test/arch/control-routes.ts",
+        "test/support/e2e-stack/parts/10-database.ts",
+        "test/support/e2e-stack/main.test.ts",
+        "test/arch/control-routes.test.ts",
+        "src/main.configure.test.ts",
+        "e2e/test_e2e_stack.py",
+        "http://127.0.0.1",
+        "docs/decisions/0002",
+        "test/arch/sources.ts",
+        "test/arch/<rule>.ts",
+        "test/support/e2e-stack/part.test.ts",
+        "test/support/e2e-stack/part.ts",
+        "test/support/e2e-stack/discover.test.ts",
+        "test/support/e2e-stack/discover.ts",
+        "test/support/e2e-stack/faults.test.ts",
+        "test/support/e2e-stack/faults.ts",
+        "test/support/e2e-stack/reset.test.ts",
+        "test/support/e2e-stack/reset.ts",
+        "test/support/e2e-stack/control.test.ts",
+        "test/support/e2e-stack/control.ts",
+        "test/support/e2e-stack/database-part.test.ts",
+        "test/support/e2e-stack/database-part.ts",
+        "test/support/e2e-stack/stack.test.ts",
+        "test/support/e2e-stack/stack.ts",
+        "test/support/e2e-stack/stack.db.test.ts",
+        "{\"method\":\"GET\",\"url\":\"/health\",\"status\":503}",
+        "**/*_FILE",
+        "**/*.test.ts",
+        "**/reset.ts",
+        "**/control.ts",
+        "**/E2E_*",
+        "**/stack.ts",
+        "**/discover.ts",
+        "**/CONFIG_*",
+        "**/stack.db.test.ts",
+        "**/package.json",
+        "**/?",
+        "**/*",
+        "**/ursitoare-e2e-*",
+        "module <dataDir>",
+        "module URSITOARE_DATABASE_URL=postgres:",
+        "module application",
+        "module dist",
+        "module docs",
+        "module e2e",
+        "module engine",
+        "module http:",
+        "module main",
+        "module main.configure.test",
+        "module parts",
+        "module test",
+        "module {\"method\":\"GET\",\"url\":\""
+      ],
+      "skipped": false,
+      "note": "",
+      "holds": [],
+      "files": [
+        {
+          "path": "e2e/conftest.py",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "e2e/test_e2e_stack.py",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack-fix-1/.l4/fix.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack-fix-1/.openspec.yaml",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack-fix-1/proposal.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack-fix-1/tasks.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack/.l4/evidence/round-1/evidence.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack/.l4/evidence/round-1/verdict.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack/.l4/evidence/round-1/verification.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack/.l4/ledger/r-20261026T2221Z-da09.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack/.l4/ledger/r-20261026T2348Z-9953.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack/.l4/ledger/r-20261027T0055Z-7c8b.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack/.l4/ledger/r-20261027T0056Z-a73b.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack/questions.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack/tasks.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-e2e-stack/verification.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "src/main.configure.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "src/main.ts",
+          "module": "main",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/arch/control-routes.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/arch/control-routes.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/support/e2e-stack/control.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/support/e2e-stack/control.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/support/e2e-stack/database-part.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/support/e2e-stack/database-part.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/support/e2e-stack/discover.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/support/e2e-stack/discover.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/support/e2e-stack/faults.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/support/e2e-stack/faults.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/support/e2e-stack/main.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/support/e2e-stack/main.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/support/e2e-stack/part.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/support/e2e-stack/part.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/support/e2e-stack/parts/10-database.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/support/e2e-stack/reset.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/support/e2e-stack/reset.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "test/support/e2e-stack/stack.db.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/support/e2e-stack/stack.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "test/support/e2e-stack/stack.ts",
+          "module": "test",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        }
+      ]
+    },
+    "diff_coverage": null,
+    "tests_ran": null
+  },
+  "human": [],
+  "fix": {
+    "action": "escalate",
+    "ordinal": 1,
+    "tasks": [],
+    "not_converted": [],
+    "reason": "round 2 failed the same way as round 1: finding F-5758ac1b",
+    "plan": null,
+    "code": "same_failure"
+  },
+  "judge_verdict": null,
+  "cx_runs": {},
+  "tests": {},
+  "red_green": {
+    "test.support.e2e-stack.part.test.ts::C-89fc2527 E2eStackError carries its code, details and cause": "1.1",
+    "test.support.e2e-stack.part.test.ts::C-89fc2527 registry lists parts in registration order and returns a copy": "1.1",
+    "test.support.e2e-stack.part.test.ts::C-89fc2527 registry rejects a bad name, the engine name and a string start as invalid": "1.1",
+    "test.support.e2e-stack.part.test.ts::C-89fc2527 registry rejects a duplicate name and keeps its list": "1.1",
+    "test.support.e2e-stack.discover.test.ts::C-4c698dd6 discovery rejects a directory that does not exist naming the directory": "1.2",
+    "test.support.e2e-stack.discover.test.ts::C-4c698dd6 discovery rejects invalid part files naming the file": "1.2",
+    "test.support.e2e-stack.discover.test.ts::C-71b5758c discovery returns parts in file name order and never imports test files": "1.2",
+    "test.support.e2e-stack.discover.test.ts::C-907d77a5 discovery rejects a repeated name naming the later file": "1.2",
+    "test.support.e2e-stack.discover.test.ts::C-907d77a5 discovery rejects a repeated prefix naming the later file": "1.2",
+    "src.main.configure.test.ts::C-7778e3c9 main treats a throwing configureServer as a startup failure without the message": "2.1",
+    "src.main.configure.test.ts::C-ea25f674 main runs configureServer before listening and serves its hook": "2.1",
+    "test.support.e2e-stack.faults.test.ts::C-14cae224 FaultInvalidError carries its code, reason and message": "3.1",
+    "test.support.e2e-stack.faults.test.ts::C-14cae224 parseFault names the first failing field of an invalid fault": "3.1",
+    "test.support.e2e-stack.faults.test.ts::C-14cae224 the 101st distinct fault is refused with too_many and the table is unchanged": "3.1",
+    "test.support.e2e-stack.faults.test.ts::C-346ddf48 a status fault answers the injected envelope and clear restores the route": "3.1",
+    "test.support.e2e-stack.faults.test.ts::C-9383903b a prefix delay sleeps once for the matching request, which continues, and a replacement answers 500": "3.1",
+    "test.support.e2e-stack.faults.test.ts::C-9383903b an exact fault matches its method and the path before the query only, first match wins": "3.1",
+    "test.support.e2e-stack.faults.test.ts::C-9383903b parseFault accepts exact, prefix, delay and status faults": "3.1",
+    "test.support.e2e-stack.reset.test.ts::C-20bba381 a rejecting seed rejects STACK_RESET_FAILED naming the part and the next reset still runs": "3.2",
+    "test.support.e2e-stack.reset.test.ts::C-20bba381 a reset clears the faults before seeding every part in order and probing the engine": "3.2",
+    "test.support.e2e-stack.reset.test.ts::C-20bba381 seedAll seeds every part in order without clearing faults or probing the engine": "3.2",
+    "test.support.e2e-stack.reset.test.ts::C-20bba381 two resets started together seed serially with a maximum concurrency of one": "3.2",
+    "test.support.e2e-stack.reset.test.ts::C-c3238bfc five unhealthy probes reject STACK_RESET_FAILED for the engine after exactly five calls without a timer": "3.2",
+    "test.support.e2e-stack.reset.test.ts::C-c3238bfc reset retries the health probe until it answers true, using three calls": "3.2",
+    "test.support.e2e-stack.control.test.ts::C-14cae224 malformed fault JSON answers 400 FAULT_INVALID with reason bad_json and leaves the table unchanged": "3.3",
+    "test.support.e2e-stack.control.test.ts::C-182af5d3 the control server binds loopback and refuses a foreign Host or any Origin without calling reset": "3.3",
+    "test.support.e2e-stack.control.test.ts::C-20bba381 a rejecting reset answers 500 with the engine envelope and the failing part": "3.3",
+    "test.support.e2e-stack.control.test.ts::C-2d6b948a chunked and declared large bodies are refused with 413 and connection close": "3.3",
+    "test.support.e2e-stack.control.test.ts::C-67fb8681 routing and body limits answer method, route, media type and size errors and ignore reset bodies": "3.3",
+    "test.support.e2e-stack.database-part.test.ts::C-4c698dd6 discovery rejects misnamed or invalid part files and a missing directory": "4.1",
+    "test.support.e2e-stack.database-part.test.ts::C-71b5758c discovery returns parts in file-name order and never imports test files": "4.1",
+    "test.support.e2e-stack.database-part.test.ts::C-89fc2527 the registry keeps order, returns a copy and rejects invalid or duplicate parts": "4.1",
+    "test.support.e2e-stack.database-part.test.ts::C-907d77a5 discovery rejects a repeated prefix or name naming the later file": "4.1",
+    "test.support.e2e-stack.database-part.test.ts::C-c3092640 C-fe09bf7e the database part seeds the tenant and closes its cluster": "4.1",
+    "test.support.e2e-stack.database-part.test.ts::C-fe09bf7e a database start with a missing data directory rejects and leaves no cluster": "4.1",
+    "test.support.e2e-stack.stack.test.ts::C-20bba381 resets re-run seeds serially and answer 500 for a rejecting seed before recovering": "5.1",
+    "test.support.e2e-stack.stack.test.ts::C-346ddf48 a fault posted to the control listener fails the engine route until it is deleted": "5.1",
+    "test.support.e2e-stack.stack.test.ts::C-66ec4c4e a busy engine port rejects STACK_ENGINE_FAILED with the fatal EADDRINUSE line": "5.1",
+    "test.support.e2e-stack.stack.test.ts::C-66ec4c4e invalid options reject before any part starts": "5.1",
+    "test.support.e2e-stack.stack.test.ts::C-90ece4c0 close closes the parts in reverse once, is repeatable and removes the stack directory": "5.1",
+    "test.support.e2e-stack.stack.test.ts::C-97ff4a40 the stack starts parts in order, seeds them, merges env and serves health": "5.1",
+    "test.support.e2e-stack.stack.test.ts::C-a4f37787 a failing part start or first-start seed closes the started parts and opens no port": "5.1",
+    "test.support.e2e-stack.stack.test.ts::C-a4f37787 a part env that collides with a stack key or another part rejects STACK_ENV_CONFLICT": "5.1",
+    "test.support.e2e-stack.stack.test.ts::C-a6eea79b a rejected part close rejects every close with STACK_CLOSE_FAILED and closes once": "5.1",
+    "test.support.e2e-stack.stack.test.ts::C-a6eea79b close waits for a reset whose seed is still blocked": "5.1",
+    "test.support.e2e-stack.stack.db.test.ts::C-23b4de23 a stack starts, resets and closes without a DNS lookup of a name": "5.2",
+    "test.support.e2e-stack.stack.db.test.ts::C-d194233f the stack health reports the migrated database, its tenant and its app sessions": "5.2",
+    "test.support.e2e-stack.stack.db.test.ts::C-dd21514e the engine key and database password are private files that never reach health": "5.2",
+    "test.support.e2e-stack.stack.db.test.ts::C-f55456d0 reset restores the seeded tenant, drops probe state and clears faults": "5.2",
+    "test.support.e2e-stack.stack.db.test.ts::C-fe09bf7e closing the stack stops Postgres and removes its cluster directory": "5.2",
+    "test.support.e2e-stack.main.test.ts::C-23b4de23 the process prints one ready line, serves the database health and stops on SIGTERM": "5.3",
+    "test.support.e2e-stack.main.test.ts::C-23b4de23 the process starts on the default ports 39080 and 39081": "5.3",
+    "test.support.e2e-stack.main.test.ts::C-4e750e4e a bad E2E_PORT and a busy engine port exit 1 with the failure line": "5.3",
+    "test.support.e2e-stack.main.test.ts::C-5f32b081 a signal during the start closes the stack without a ready line": "5.3",
+    "test.arch.control-routes.test.ts::C-6551b89b: control route literals are reported with their file and line, look-alikes and test files are not": "6.1"
+  },
+  "guards": [
+    "guard.test_tamper: e2e/test_e2e_stack.py"
+  ],
+  "prompt_sha256": "",
+  "template": "",
+  "harness_commit": "27c151fd5df8dfc9ac4825e001e97aceaada2691",
+  "judge_calls": 0,
+  "judge_reply": "",
+  "judge_replies": {},
+  "judge_parts": [],
+  "judge_files": [],
+  "judge_followups": [],
+  "judge_split": {},
+  "hold_views": {},
+  "profiles": {
+    "judge": "gemini-judge",
+    "implementer": [
+      "deepseek",
+      "glm",
+      "claude-sonnet"
+    ]
+  },
+  "judge_model": null,
+  "independence": null,
+  "cost_usd": null
+}

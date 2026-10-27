@@ -1,9 +1,9 @@
-# Verification: openspec:add-e2e-stack: FAIL (round 1)
+# Verification: openspec:add-e2e-stack: FAIL (round 2)
 
 traceability: not checked (an earlier step failed)
 
 - Base: `a53398fc5130b573609047b209e714758fda5de9`
-- Head: `dbdefb213f4ea2c9b6757cdc246cddbc9b741562`
+- Head: `9965067738a082f3ffff753832ec64cc9c59ed7d`
 - Implementer profiles: deepseek, glm, claude-sonnet
 - Judge: gemini-judge, 0 call(s), prompt sha256 `-`
 
@@ -11,8 +11,8 @@ traceability: not checked (an earlier step failed)
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base merged: main@a53398fc51 as dbdefb213f (2 commits) |
-| 1 | integrity | failed | 0.5 | a skip or xfail marker was added (+2 unfrozen by human answers); scope: 30 changed file(s) |
+| 0 | preconditions | ok | 0.6 | base main@a53398fc51 contained |
+| 1 | integrity | failed | 0.5 | a skip or xfail marker was added (+2 unfrozen by human answers); scope: 38 changed file(s) |
 | 2 | build | not_run | 0.0 | an earlier step failed |
 | 3 | tests | not_run | 0.0 | an earlier step failed |
 | 4 | traceability | not_run | 0.0 | an earlier step failed |
@@ -30,7 +30,7 @@ traceability: not checked (an earlier step failed)
 | protected paths | ok | no protected path differs from the base |
 | pre-existing tests | failed | 2 test file(s) compared with the base |
 | red-green freeze | ok | 11 task(s): red and green compared (+1 unfrozen by a delegate or an agent) (+1 opened by task text) |
-| test path freeze | ok | 11 harness step commit(s) checked |
+| test path freeze | ok | 12 harness step commit(s) checked |
 | content scan | ok | no result-manipulating construct in the changed support and runner files |
 | gate configuration | skipped | no gate or runner configuration file changed |
 | test awareness | ok | no production line reacts to the test run |
@@ -58,12 +58,20 @@ Nothing needs attention.
 |---|---|---|---|
 | `e2e/conftest.py` |  | relevant | named in the spec |
 | `e2e/test_e2e_stack.py` |  | relevant | new test file |
+| `openspec/changes/add-e2e-stack-fix-1/.l4/fix.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-e2e-stack-fix-1/.openspec.yaml` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-e2e-stack-fix-1/proposal.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-e2e-stack-fix-1/tasks.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-e2e-stack/.l4/evidence/round-1/evidence.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-e2e-stack/.l4/evidence/round-1/verdict.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-e2e-stack/.l4/evidence/round-1/verification.md` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-e2e-stack/.l4/ledger/r-20261026T2221Z-da09.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-e2e-stack/.l4/ledger/r-20261026T2348Z-9953.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-e2e-stack/.l4/ledger/r-20261027T0055Z-7c8b.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-e2e-stack/.l4/ledger/r-20261027T0056Z-a73b.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-e2e-stack/questions.md` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-e2e-stack/tasks.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-e2e-stack/verification.md` |  | none | exempt: harness, spec or documentation path |
 | `src/main.configure.test.ts` |  | relevant | new test file |
 | `src/main.ts` | main | relevant | named in the spec |
 | `test/arch/control-routes.test.ts` |  | relevant | new test file |
@@ -105,8 +113,7 @@ None judged.
 
 ## Fix unit
 
-Fix unit 1 is created for these tasks:
-- F-5758ac1b a skip or xfail marker was added
+Escalated: round 2 failed the same way as round 1: finding F-5758ac1b
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
@@ -160,3 +167,7 @@ Fix unit 1 is created for these tasks:
 - `test.support.e2e-stack.stack.test.ts::C-66ec4c4e a busy engine port rejects STACK_ENGINE_FAILED with the fatal EADDRINUSE line` (task 5.1): not in the report
 - `test.support.e2e-stack.stack.test.ts::C-66ec4c4e invalid options reject before any part starts` (task 5.1): not in the report
 - `test.support.e2e-stack.stack.test.ts::C-90ece4c0 close closes the parts in reverse once, is repeatable and removes the stack directory` (task 5.1): not in the report
+
+## Guard events
+
+- guard.test_tamper: e2e/test_e2e_stack.py
