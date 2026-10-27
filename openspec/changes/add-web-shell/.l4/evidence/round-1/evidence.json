@@ -1,0 +1,375 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "web/index.html",
+      "web/vite.config.ts",
+      "web/src/main.tsx",
+      "web/tsconfig.json",
+      "@fastify/static",
+      "<root>/index.html",
+      "assets",
+      "web/dist/assets/index-sPJnqov5.js",
+      "web/dist",
+      "web/src/features/NN-<name>.tsx",
+      "web/src/features/index.ts",
+      "src/api/web-paths.ts",
+      "image/png",
+      "assets/my-long-name.js",
+      "assets/index-Ab3dEf9Z.js",
+      "e2e/test_m0_skeleton.py",
+      "src/api",
+      "seed",
+      "test",
+      "web/package.json",
+      "e2e/conftest.py",
+      "e2e/test_health.py",
+      "src/api/{security-headers,web-paths,web}.ts",
+      "test/support/e2e-stack/web-part.ts",
+      "web/src/api/client.ts",
+      "web/src/app/{features,routes,health}.ts",
+      "src/api/{security-headers,web-paths,web}.test.ts",
+      "src/main.web.test.ts",
+      "test/support/e2e-stack/web-part.test.ts",
+      "test/support/e2e-stack/parts/20-web.ts",
+      "web/src/api/client.test.ts",
+      "web/src/app/{features.test,reserved-roots.test,routes.test,health.test}.ts",
+      "web/src/app/{App,Shell}.tsx",
+      "web/src/app/shell.css",
+      "web/src/features/{index.ts,10-home.tsx}",
+      "src/api/index.ts",
+      "src/main.ts",
+      "docs/decisions/0002",
+      "a/b<T>",
+      "src/api/security-headers.ts",
+      "src/api/web.ts",
+      "parts/20-web.ts",
+      "web/src/app/features.ts",
+      "web/src/app/routes.ts",
+      "web/src/app/health.ts",
+      "test/support/e2e-stack/stack.ts",
+      "src/api/security-headers.test.ts",
+      "src/api/web-paths.test.ts",
+      "text/html",
+      "text/javascript",
+      "text/css",
+      "text/plain",
+      "image/svg+xml",
+      "image/<ext>",
+      "image/jpeg",
+      "image/x-icon",
+      "font/<ext>",
+      "application/manifest+json",
+      "src/api/web.test.ts",
+      ":",
+      "web/src/app/features.test.ts",
+      "web/src/app/reserved-roots.test.ts",
+      "web/src/app/routes.test.ts",
+      "web/src/app/Shell.tsx",
+      "web/src/app/App.tsx",
+      "web/src/features/10-home.tsx",
+      "<h1>Ursitoare</h1>",
+      "app/shell.css",
+      "features/index.ts",
+      "web/src/app/health.test.ts",
+      "**/?",
+      "**/index.html",
+      "**/[A-Za-z0-9_.-]+",
+      "**/[A-Za-z0-9_-]",
+      "**/shell.css",
+      "**/client.ts",
+      "**/features.ts",
+      "**/routes.ts",
+      "**/*.test.ts",
+      "**/link.txt",
+      "**/secret.txt",
+      "web/src/**/*.test.ts",
+      "**/^[a-z][a-z0-9-]{0,39}$",
+      "**/[A-Za-z0-9_~-]+",
+      "**/*",
+      "**/^[a-z][a-z0-9_.:-]{0,63}$",
+      "module <h1>Ursitoare<",
+      "module <root>",
+      "module @fastify",
+      "module a",
+      "module api",
+      "module app",
+      "module application",
+      "module assets",
+      "module docs",
+      "module e2e",
+      "module features",
+      "module font",
+      "module health",
+      "module image",
+      "module main",
+      "module main.web.test",
+      "module parts",
+      "module test",
+      "module text",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m0_skeleton.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-shell/.l4/ledger/r-20261027T0248Z-c394.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-shell/.l4/ledger/r-20261027T0438Z-bee7.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-shell/.l4/ledger/r-20261027T0440Z-a72a.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-shell/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/security-headers.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/security-headers.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/web-paths.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/web-paths.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/web.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/web.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.web.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/parts/20-web.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/web-part.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/web-part.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/api/client.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/api/client.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/app/App.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/app/Shell.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/app/features.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/app/features.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/app/health.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/app/health.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/app/reserved-roots.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/app/routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/app/routes.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/app/shell.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/features/10-home.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/features/index.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/main.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/security-headers.ts, src/api/web-paths.ts, src/api/web.ts, src/main.ts, test/support/e2e-stack/parts/20-web.ts and 10 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/security-headers.ts",
+      "src/api/web-paths.ts",
+      "src/api/web.ts",
+      "src/main.ts",
+      "test/support/e2e-stack/parts/20-web.ts",
+      "test/support/e2e-stack/web-part.ts",
+      "web/src/api/client.ts",
+      "web/src/app/App.tsx",
+      "web/src/app/Shell.tsx",
+      "web/src/app/features.ts",
+      "web/src/app/health.ts",
+      "web/src/app/routes.ts",
+      "web/src/features/10-home.tsx",
+      "web/src/features/index.ts",
+      "web/src/main.tsx"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 408,
+      "passed": 408,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 47,
+      "new_passed": 47,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

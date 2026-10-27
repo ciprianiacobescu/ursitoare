@@ -1,14 +1,15 @@
-// Bootstrap placeholder: the web-shell change (openspec change add-web-shell) replaces this entry with the app shell.
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+
+import "./app/shell.css";
+import "./features/index.ts";
+import { App } from "./app/App.tsx";
 
 const root = document.getElementById("root");
 if (root) {
   createRoot(root).render(
     <StrictMode>
-      <main>
-        <h1>Ursitoare</h1>
-      </main>
+      <App />
     </StrictMode>,
   );
 }
