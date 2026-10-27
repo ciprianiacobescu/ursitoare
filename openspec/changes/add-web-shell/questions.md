@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | none | verdict | Hold H-9e76d931: UI criterion C-ba861867 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-002 | answered | none | verdict | Hold H-b4253062: UI criterion C-61225ade has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-003 | answered | none | verdict | Hold H-19960e47: UI criterion C-383b59d1 has no end-to-end test (fails_at_head); see the generated UI tests table |
-| Q-004 | open | none | verdict | Hold H-c85bdd94: UI criterion C-b2a74658 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-004 | answered | none | verdict | Hold H-c85bdd94: UI criterion C-b2a74658 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-c2167f30: UI criterion C-62803105 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-e0cb8f86: UI criterion C-1dc68043 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-4f97b0f0: UI criterion C-946ba56d has no end-to-end test (fails_at_head); see the generated UI tests table |
@@ -104,7 +104,8 @@ accept The hold may be waived. Criterion C-383b59d1 is the scenario "Files, type
 
 ## Q-004: Hold H-c85bdd94: UI criterion C-b2a74658 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -120,6 +121,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-b2a74658 is the scenario "Names, types and cache policy" of the requirement "The engine serves the web build". The specification writes it as direct calls of the pure helpers isAssetName, contentTypeFor and cacheControlFor on synthetic names such as a.cd, LOGO.PNG and assets/index-Ab3dEf9Z1.js, none of which exist in the served web build and none of which a browser can call, so no end-to-end test can exercise the scenario. The design's test plan assigns engine logic to Node tests beside the code and reserves the browser journey for the .tsx files. The Node test in src/api/web-paths.test.ts implements the scenario exactly: it asserts the eight isAssetName results, the seven contentTypeFor results and the nine cacheControlFor results the specification lists, and all three tests passed in the latest test report. The observable outcome these helpers serve is also proven over the served stack: the M0 journey loads the built page under the strict content security policy and sees "Engine healthy" rendered, which requires the hashed module script to be classified, typed and served correctly. A missing generated end-to-end test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-005: Hold H-c2167f30: UI criterion C-62803105 has no end-to-end test (not_testable); see the generated UI tests table
