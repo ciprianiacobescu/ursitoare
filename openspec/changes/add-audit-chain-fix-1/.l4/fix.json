@@ -1,0 +1,15 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-audit-chain",
+  "round": 1,
+  "findings": [
+    "F-0447fea8",
+    "F-934c3d86",
+    "F-1abb4766",
+    "F-2a235267"
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": []
+}

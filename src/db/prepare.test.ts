@@ -97,7 +97,13 @@ test("C-58e0ebf0 prepareDatabase migrates first and then creates the partition w
     const clock = { now: () => new Date("2026-10-15T12:00:00Z") };
     const first = await resolved(() => prepareDatabase(database.pool, clock));
     assert.deepEqual(first.applied, expectedApplied);
-    assert.deepEqual(first.partitions, []);
+    assert.deepEqual(first.partitions, [
+      "ursitoare.audit_event_p202609",
+      "ursitoare.audit_event_p202610",
+      "ursitoare.audit_event_p202611",
+      "ursitoare.audit_event_p202612",
+      "ursitoare.audit_event_p202701",
+    ]);
 
     await database.pool.query(
       "CREATE TABLE ursitoare.pt_month (at timestamptz) PARTITION BY RANGE (at)",
