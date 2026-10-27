@@ -4,6 +4,7 @@ import type { IncomingHttpHeaders, IncomingMessage, Server, ServerResponse } fro
 import { AUTHORIZATION_PATH, authorizeGet, authorizePost } from "./authorize.ts";
 import { createProvider, parseRedirectUri } from "./provider.ts";
 import type { Provider } from "./provider.ts";
+import { TOKEN_PATH, tokenPost } from "./token.ts";
 import { FakeOidcError } from "./types.ts";
 import type { FakeOidc, RecordedRequest } from "./types.ts";
 
@@ -65,6 +66,7 @@ const ROUTES: Record<string, Handler> = {
   [`GET ${CERTS_PATH}`]: (provider) => jsonReply(provider.keys.jwks()),
   [`GET ${AUTHORIZATION_PATH}`]: authorizeGet,
   [`POST ${AUTHORIZATION_PATH}`]: authorizePost,
+  [`POST ${TOKEN_PATH}`]: tokenPost,
 };
 
 function methodsFor(path: string): string[] {
