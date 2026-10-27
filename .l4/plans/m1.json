@@ -1,0 +1,96 @@
+{
+  "schema": "l4/delivery-plan@1",
+  "plan_id": "m1",
+  "target": "main",
+  "merge": "auto",
+  "limits": {
+    "max_cost_usd": 250,
+    "max_unit_attempts": 3,
+    "max_runs": 60
+  },
+  "external_dependencies": [],
+  "exclude": [],
+  "batches": [
+    {
+      "id": "m1-identity-and-policy",
+      "acceptance_profile": "none",
+      "depends_on": [],
+      "units": [
+        {
+          "id": "openspec:add-fake-oidc",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-audit-chain",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-identity-model",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-pdp-cedar",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-policy-catalogue",
+          "depends_on": [
+            "openspec:add-pdp-cedar"
+          ]
+        },
+        {
+          "id": "openspec:add-oidc-login",
+          "depends_on": [
+            "openspec:add-audit-chain",
+            "openspec:add-fake-oidc",
+            "openspec:add-identity-model"
+          ]
+        },
+        {
+          "id": "openspec:add-api-pep",
+          "depends_on": [
+            "openspec:add-audit-chain",
+            "openspec:add-identity-model",
+            "openspec:add-oidc-login",
+            "openspec:add-pdp-cedar",
+            "openspec:add-policy-catalogue"
+          ]
+        },
+        {
+          "id": "openspec:add-api-conventions",
+          "depends_on": [
+            "openspec:add-api-pep"
+          ]
+        },
+        {
+          "id": "openspec:add-web-ui-kit",
+          "depends_on": [
+            "openspec:add-api-pep"
+          ]
+        },
+        {
+          "id": "openspec:add-web-data-kit",
+          "depends_on": [
+            "openspec:add-api-conventions",
+            "openspec:add-web-ui-kit"
+          ]
+        },
+        {
+          "id": "openspec:add-web-sign-in",
+          "depends_on": [
+            "openspec:add-api-conventions",
+            "openspec:add-api-pep",
+            "openspec:add-audit-chain",
+            "openspec:add-fake-oidc",
+            "openspec:add-identity-model",
+            "openspec:add-oidc-login",
+            "openspec:add-pdp-cedar",
+            "openspec:add-policy-catalogue",
+            "openspec:add-web-data-kit",
+            "openspec:add-web-ui-kit"
+          ]
+        }
+      ]
+    }
+  ]
+}

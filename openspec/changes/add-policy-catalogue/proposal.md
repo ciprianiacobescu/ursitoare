@@ -54,20 +54,7 @@ Also given (shapes in design.md): `ActivateFlowContext`, `ApproveTaskContext`, `
 - From `add-engine-skeleton`: `Clock`, `IdSource` (`src/core`); `Logger`, `createLogger` (`src/observability`); `fixedClock`, `sequentialIds` in tests.
 - From `add-tenancy-foundation`: `TENANT_ID_PATTERN` (`src/tenancy`).
 
-Shapes of the delivered names (declarations from the merged code, main@fb48c96):
-
-```ts
-// add-engine-skeleton (src/core)
-interface Clock { now(): Date }
-interface IdSource { next(prefix: string): string }
-function fixedClock(iso: string): Clock
-function sequentialIds(seed?: number): IdSource
-// add-engine-skeleton (src/observability)
-type Logger = PinoLogger
-function createLogger(opts: { level: LogLevel; destination?: LogDestination; clock?: Clock }): Logger
-// add-tenancy-foundation (src/tenancy)
-const TENANT_ID_PATTERN: RegExp
-```
+Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@fb48c96, checked line by line).
 
 ## Out of scope
 

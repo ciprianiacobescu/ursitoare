@@ -38,15 +38,7 @@ Paths below are under `web/src/kit/data/`.
 - From `add-web-ui-kit` (under `web/src/kit/`): `KitError(code: KitErrorCode, message: string)` (code `KIT_PROP_INVALID`); `messageFor(code: string): string`; `FALLBACK_MESSAGE: string`; `EmptyState(props: EmptyStateProps & { children?: ReactNode })`; `LoadingState(props: { label?: string })`; `ErrorPanel(props: { error: unknown })`; `KeyBinding { keys: string; effect: string }`; `parseTokens(css: string): StringMap`; `findRawColours(css: string): SourceHit[]`; `findInlineStyleUse(source: string): SourceHit[]`; `tokens.css` (`--ui-*`), `theme.css` (`.ui-button`, `.ui-visually-hidden`).
 - From `add-api-conventions` (wire contract, no import): list query `limit` (1 to 200, default 50) and `cursor`; answer `{ items, next_cursor: string | null }`; error codes `CURSOR_INVALID`, `VALIDATION_FAILED` with `details: { fields: [{ field, message }] }`.
 
-Shapes of the delivered names (declarations from the merged code, main@fb48c96):
-
-```ts
-// add-web-shell (web/src/api/client.ts)
-class ApiRequestError extends Error { readonly status: number; readonly code: string; readonly details: unknown; readonly requestId: string | null; constructor(status: number, code: string, message: string, opts?: { details?: unknown; requestId?: string | null; cause?: unknown }) }
-type QueryValue = string | number | boolean | undefined
-interface RequestOptions { query?: Readonly<Record<string, QueryValue>>; headers?: Readonly<Record<string, string>>; signal?: AbortSignal; body?: unknown }
-interface ApiClient { request<T>(method: string, path: string, opts?: RequestOptions): Promise<T>; get<T>(path: string, opts?: Omit<RequestOptions, "body">): Promise<T>; post<T>(path: string, body?: unknown, opts?: Omit<RequestOptions, "body">): Promise<T>; put<T>(path: string, body?: unknown, opts?: Omit<RequestOptions, "body">): Promise<T>; patch<T>(path: string, body?: unknown, opts?: Omit<RequestOptions, "body">): Promise<T>; delete<T>(path: string, opts?: Omit<RequestOptions, "body">): Promise<T> }
-```
+Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@fb48c96, checked line by line).
 
 ## Out of scope
 
