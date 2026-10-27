@@ -1,0 +1,106 @@
+## Why
+
+Milestone M1 ends with a person signing in and seeing who they are. The engine can authenticate (`add-oidc-login`), decide (`add-api-pep`) and describe the session (`GET /api/v1/me`), but the web app has no sign-in page, no user or tenant in the header, no sign-out, no CSRF header and no reaction when a session dies. This unit adds them and proves the M1 outcome in a browser: two tenants that cannot see each other, a 401 without a session, a session that ends on sign-out.
+
+Observable result: `/sign-in` (also the target of every refusal, `/sign-in?error=<code>`) shows the heading "Sign in", the catalogue text of the error code in an alert and one button "Sign in" that goes to `/auth/oidc/login?return_to=<path>`. After the identity provider returns, the header of every page shows "Signed in as Alice Example", "Tenant: E2E tenant" and a "Sign out" button; `mallory`, in another browser context, sees "Tenant B" and nothing of alice's tenant. "Sign out" posts `/auth/oidc/logout` with the `X-CSRF-Token` header, follows the returned redirect and lands on `/sign-in`; then `GET /api/v1/me` answers 401 `UNAUTHENTICATED`. The web session client adds `X-CSRF-Token` to every non-GET request and, on a 401 `UNAUTHENTICATED` envelope, sends the user to `/sign-in?error=SESSION_ENDED&return_to=<current path>`. The e2e stack gains a part that creates tenant B and a seed-data route, so `e2e/test_m1_sign_in.py` signs in through the offline fake provider. Both buttons are in tab order with a visible focus ring.
+
+## What Changes
+
+- `web/src/auth/`: pure logic (`return-to.ts`, `messages.ts`, `session-fetch.ts`, `sign-out.ts`, `session-client.ts`, `account.ts`, `sign-in-page.ts`) with Node tests; thin parts (`browser-session.ts`, `use-session.ts`, `AccountMenu.tsx`, `SignInPage.tsx`, `auth.css`); the feature file `web/src/features/15-sign-in.tsx` (path `/sign-in`, collected by the existing glob).
+- `web/src/app/Shell.tsx`: renders `<AccountMenu />` in the header (its only change here).
+- `test/support/e2e-stack/`: `tenant-b-part.ts` with `parts/27-tenant-b.ts` (tenant "Tenant B", profile `solo`, organisation `org-b`, the seed users), `seed-data.ts`, `GET /seed` in `control.ts` (loopback, same guards as `/reset`), the wiring in `stack.ts`.
+- `e2e/conftest.py`: fixture `users`, helper `login(page, user, path="/sign-in")`. `e2e/test_m1_sign_in.py`: the closing journey.
+
+## Impact
+
+- **Depends on:** `add-engine-skeleton` (envelope, `main`, `fixedClock`); `add-db-foundation` (`createPool`, `withTestDatabase`); `add-tenancy-foundation` (`TenantContext`, `ensureDefaultTenant`, table `ursitoare.tenant`, `TENANT_B_ID`); `add-e2e-stack` (parts, `databaseApi`, `E2E_TENANT_NAME`, `startE2eStack`, `startControlServer`, `fresh_state`); `add-web-shell` (`createApiClient`, `ApiRequestError`, `FeatureSpec`, feature glob, `Shell.tsx`, `test_m0_skeleton.py`); `add-fake-oidc` (`FakeOidc`, `decodeJwt`, the login form); `add-identity-model` (`provisionTenantIdp`, `resolveTenantForToken`, display name from the `name` claim); `add-oidc-login` (the three routes, the ten `/sign-in?error=` codes, `oidcPart`, `oidcApi`, `completeFakeLogin`); `add-api-pep` (`GET /api/v1/me`, 401 and 403 envelopes); `add-pdp-cedar`, `add-policy-catalogue` (the permit of `read_self` that fills `capabilities`); `add-audit-chain` (the chain that refusals of `add-oidc-login` write to; no symbol used); `add-api-conventions` (error-code registry: this unit adds no API code); `add-web-ui-kit` (messages, `ErrorPanel`, `LoadingState`, `toast`, `capabilityLoader`, `assert_accessible`, `ui-button`); `add-web-data-kit` (ordering only: closing unit of M1, no symbol used).
+- **Files implemented** (scaffold stubs; constants `""` or `[]`, `browserSession` an object whose `signOut` throws and whose `api` and `logout` are objects with throwing methods): the files listed under Interfaces given except `15-sign-in.tsx`. **Created:** `web/src/features/15-sign-in.tsx`, `web/src/auth/auth.css`, a `*.test.ts` beside each pure-logic `.ts` of `web/src/auth/` (and `auth-css.test.ts`), `test/support/e2e-stack/{seed-data,tenant-b-part,control.seed,stack.seed}.test.ts`, `parts/27-tenant-b.ts`, `e2e/test_m1_sign_in.py`. **Changed:** `web/src/app/Shell.tsx` (task 3.1), `test/support/e2e-stack/control.ts` (4.3), `test/support/e2e-stack/stack.ts` and `e2e/conftest.py` (4.4). No existing test changes; the M0 and web-kit journeys must keep passing.
+- **Migrations, tables, API endpoints, env vars, dependencies:** none. The only new route is `GET /seed` on the loopback control listener of the e2e stack, never on the engine.
+- Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them. Not scaffolded, because they change existing files: the `seedData` member and `GET /seed` of `control.ts`, the `stack.ts` wiring, the `conftest.py` additions and the `Shell.tsx` line.
+
+**Interfaces given** (exact members of the named types: design.md § Interfaces)
+
+- `web/src/auth/return-to.ts`: `SIGN_IN_PATH`, `LOGIN_PATH`, `LOGOUT_PATH: string`; `LocationLike`; `safeReturnTo(raw: unknown): string`; `loginUrl(returnTo: unknown): string`; `signInUrl(opts?: { error?: string; returnTo?: unknown }): string`; `parseSignInSearch(search: string): { error: string | null; returnTo: string }`; `redirectToSignIn(location: LocationLike): boolean`
+- `web/src/auth/messages.ts`: `SIGN_IN_ERROR_CODES: readonly string[]`; `SIGN_IN_MESSAGES: Readonly<Record<string, string>>`; `registerSignInMessages(): void`
+- `web/src/auth/session-fetch.ts`: `CSRF_HEADER: string`; `isStateChanging(method: string | undefined): boolean`; `withCsrfHeader(inner: typeof fetch, csrfToken: () => Promise<string | null>): typeof fetch`; `withSessionEnd(inner: typeof fetch, onEnded: () => void): typeof fetch`
+- `web/src/auth/sign-out.ts`: `SignOutResult`; `isCsrfFailure(error: unknown): boolean`; `safeRedirect(value: unknown): string`; `signOut(deps: { client: Pick<ApiClient, "post">; loader: Pick<CapabilityLoader, "load" | "reset"> }): Promise<SignOutResult>`
+- `web/src/auth/session-client.ts`: `SessionEnv`; `BrowserSession`; `csrfTokenFrom(loader: Pick<CapabilityLoader, "load">): () => Promise<string | null>`; `createBrowserSession(env: SessionEnv): BrowserSession`; `browser-session.ts`: `browserSession: BrowserSession`
+- `web/src/auth/account.ts`: `AccountView`; `accountView(state: CapabilityState | null, location: Pick<LocationLike, "pathname" | "search">): AccountView`. `sign-in-page.ts`: `SignInView`; `signInView(search: string, state: CapabilityState | null): SignInView`. `use-session.ts`: `useSession(): CapabilityState | null`
+- `AccountMenu.tsx`: `AccountMenu(): ReactNode`; `SignInPage.tsx`: `SignInPage(): ReactNode`; `web/src/features/15-sign-in.tsx`: `feature: FeatureSpec` (created in task 3.2, never a stub: a stub feature would break the registry)
+- `test/support/e2e-stack/seed-data.ts`: `SEED_PATH: string`; `SeedSource`; `collectSeedData(handles: ReadonlyMap<string, PartHandle>): Record<string, unknown>`
+- `test/support/e2e-stack/tenant-b-part.ts`: `TENANT_B_NAME`, `TENANT_B_ORGANIZATION: string`; `SeedUser`; `seedUsersOf(fake: Pick<FakeOidc, "passwordOf" | "mintToken">): Record<string, SeedUser>`; `tenantBPart: E2eStackPart`; `parts/27-tenant-b.ts`: `export { tenantBPart as part } from "../tenant-b-part.ts";`
+- `test/support/e2e-stack/control.ts`: `startControlServer(deps: { port: number; faults: FaultTable; reset(): Promise<void>; seedData?(): Readonly<Record<string, unknown>> }): Promise<ControlServer>` (new optional member); route `GET /seed`
+- `e2e/conftest.py`: fixture `users` (`dict[str, dict[str, str]]`); `login(page, user, path="/sign-in") -> None`
+
+**Interfaces taken**
+
+- `add-web-shell`: `ApiRequestError(status: number, code: string, message: string, opts?: { details?: unknown; requestId?: string | null; cause?: unknown })`; `ApiClient.post<T>(path: string, body?: unknown, opts?: Omit<RequestOptions, "body">): Promise<T>` and `get`; `createApiClient(opts?: { baseUrl?: string; fetch?: typeof globalThis.fetch }): ApiClient` (`baseUrl` default `/api/v1`); `FeatureSpec { id: string; path: string; navLabel?: string; capability?: string; element: ReactNode }`.
+- `add-web-ui-kit`: `messageFor(code: string): string`; `registerMessages(messages: StringMap): void`; `FALLBACK_MESSAGE: string`; `ErrorPanel(props: { error: unknown })`; `LoadingState(props: { label?: string })`; `toast(spec: { kind: "info" | "success" | "error"; message: string }): string`; `capabilityLoader: CapabilityLoader` (`load(signal?: AbortSignal): Promise<CapabilityState>`, `reset(): void`); `CapabilityState = { status: "signed_out" } | { status: "failed"; code: string } | { status: "ready"; me: Me }`; `Me` (`user.displayName`, `tenant.name`, `csrfToken`: strings); `findRawColours(css: string): SourceHit[]`; `parseTokens(css: string): StringMap`; `assert_accessible(page) -> None`.
+- `add-api-pep` (HTTP): `GET /api/v1/me` answering `{ user, tenant, capabilities, csrfToken }` (each call rotates the token) or 401 `UNAUTHENTICATED`. `add-oidc-login`: `oidcPart: E2eStackPart`; `oidcApi(handles: ReadonlyMap<string, PartHandle>): { fake: FakeOidc }` (`STACK_PART_MISSING` without the handle); `completeFakeLogin(fake: FakeOidc, authorizationUrl: string, username: string): Promise<string>`; HTTP `GET /auth/oidc/login`, `GET /auth/oidc/callback`, `POST /auth/oidc/logout` (200 `{ redirect }`, 401 `UNAUTHENTICATED`, 403 `OIDC_CSRF_INVALID`).
+- `add-identity-model`: `provisionTenantIdp(ownerPool: TenantPool, ctx: TenantContext, idp: { issuer: string; organization: string }, opts?: { ids?: IdSource; clock?: Clock }): Promise<void>`. `add-fake-oidc`: `FakeOidc { readonly issuer: string; passwordOf(username: string): string; mintToken(opts: MintOptions): string }`; `decodeJwt(token: string): DecodedJwt`.
+- `add-e2e-stack`: `E2eStackPart { name: string; start(ctx: PartContext): Promise<PartHandle>; seed?(ctx: PartContext): Promise<void> }`; `PartHandle { readonly env: Readonly<Record<string, string>>; readonly api?: unknown; close(): Promise<void> }`; `E2eStackError(code, message, details?, options?)`; `databaseApi(handles): { host; port; database; ownerUrl }`; `E2E_TENANT_NAME`; `startE2eStack(opts?): Promise<E2eStack>`; `FaultTable`; `ControlServer`; `discoverParts(dir?): Promise<E2eStackPart[]>`; `fresh_state`; `DEFAULT_CONTROL_URL`.
+- `add-tenancy-foundation`: `TenantContext { readonly tenantId: string; readonly reviewProfile: "solo" | "team" }`; `TenantPool`; `ensureDefaultTenant(pool: TenantPool, name: string, opts?: EnsureTenantOptions): Promise<TenantContext>`; `withTenantTx<T>(pool: TenantPool, ctx: TenantContext, fn: (tx: TenantTx) => Promise<T>): Promise<T>`; `TENANT_B_ID`. `add-identity-model`: `resolveTenantForToken(pool: TenantPool, claims: { issuer: string; organization: unknown }): Promise<TenantContext>`. `add-db-foundation`: `createPool(source: string | EndpointLike, opts?: PoolOptions): pg.Pool`; `withTestDatabase(opts?: { migrated?: boolean; cluster?: TestCluster }): Promise<TestDatabase>` (`ownerPool`, `appPool`, `name`, `ownerUrl`). `add-engine-skeleton`: `fixedClock(iso: string): Clock`.
+- `add-e2e-stack` (test control): `startControlServer(deps: { port: number; faults: FaultTable; reset(): Promise<void> }): Promise<ControlServer>` (extended here); `createFaultTable(opts?: { sleep?: (ms: number) => Promise<void> }): FaultTable`; `ControlServer = Readonly<{ url: string; close(): Promise<void> }>`.
+
+Shapes of the delivered names (declarations from the merged code, main@fb48c96):
+
+```ts
+// add-web-shell (web/src/api/client.ts)
+class ApiRequestError extends Error { readonly status: number; readonly code: string; readonly details: unknown; readonly requestId: string | null; constructor(status: number, code: string, message: string, opts?: { details?: unknown; requestId?: string | null; cause?: unknown }); }
+type QueryValue = string | number | boolean | undefined;
+interface RequestOptions { query?: Readonly<Record<string, QueryValue>>; headers?: Readonly<Record<string, string>>; signal?: AbortSignal; body?: unknown; }
+interface ApiClient { request<T>(method: string, path: string, opts?: RequestOptions): Promise<T>; get<T>(path: string, opts?: Omit<RequestOptions, "body">): Promise<T>; post<T>(path: string, body?: unknown, opts?: Omit<RequestOptions, "body">): Promise<T>; put<T>(path: string, body?: unknown, opts?: Omit<RequestOptions, "body">): Promise<T>; patch<T>(path: string, body?: unknown, opts?: Omit<RequestOptions, "body">): Promise<T>; delete<T>(path: string, opts?: Omit<RequestOptions, "body">): Promise<T>; }
+interface ApiClientOptions { baseUrl?: string; fetch?: typeof globalThis.fetch; }
+function createApiClient(opts?: ApiClientOptions): ApiClient;
+// add-web-shell (web/src/app/features.ts)
+interface FeatureSpec { id: string; path: string; navLabel?: string; capability?: string; element: ReactNode; }
+// add-engine-skeleton (src/core)
+interface Clock { now(): Date; }
+function fixedClock(iso: string): Clock;
+interface IdSource { next(prefix: string): string; }
+// add-db-foundation (src/db/pool.ts)
+interface EndpointLike { url: string; password: { reveal(): string; } | null; }
+interface PoolOptions { max?: number; connectionTimeoutMs?: number; idleTimeoutMs?: number; statementTimeoutMs?: number; applicationName?: string; onError?: (err: Error) => void; }
+function createPool(source: string | EndpointLike, opts?: PoolOptions): pg.Pool;
+// add-db-foundation (test/support/pg.ts)
+interface TestCluster { host: string; port: number; adminUrl: string; ownerPassword: string; appPassword: string; template: string; }
+interface TestDatabase { name: string; ownerUrl: string; appUrl: string; ownerEndpoint: EndpointLike; appEndpoint: EndpointLike; ownerPool: pg.Pool; appPool: pg.Pool; close(): Promise<void>; }
+function withTestDatabase(opts?: { migrated?: boolean; cluster?: TestCluster; }): Promise<TestDatabase>;
+// add-tenancy-foundation (src/tenancy)
+type ReviewProfile = "solo" | "team";
+interface TenantContext { readonly tenantId: string; readonly reviewProfile: ReviewProfile; }
+type TenantPool = Pick<pg.Pool, "connect">;
+type TenantTx = Pick<pg.PoolClient, "query">;
+function withTenantTx<T>(pool: TenantPool, ctx: TenantContext, fn: (tx: TenantTx) => Promise<T>): Promise<T>;
+interface EnsureTenantOptions { ids?: IdSource; clock?: Clock; }
+function ensureDefaultTenant(pool: TenantPool, name: string, opts?: EnsureTenantOptions): Promise<TenantContext>;
+// add-tenancy-foundation (test/support/tenants.ts)
+const TENANT_B_ID: string;
+// add-e2e-stack (test/support/e2e-stack/part.ts)
+class E2eStackError extends Error { code: string; details: Readonly<Record<string, string | number | string[]>>; constructor(code: string, message: string, details?: Record<string, string | number | string[]>, options?: { cause?: unknown }); }
+interface PartHandle { readonly env: Readonly<Record<string, string>>; readonly api?: unknown; close(): Promise<void>; }
+type PartContext = Readonly<{ name: string; dataDir: string; engineOrigin: string; controlOrigin: string; env: Readonly<Record<string, string>>; handles: ReadonlyMap<string, PartHandle>; }>;
+interface E2eStackPart { name: string; start(ctx: PartContext): Promise<PartHandle>; seed?(ctx: PartContext): Promise<void>; }
+// add-e2e-stack (test/support/e2e-stack/database-part.ts)
+const E2E_TENANT_NAME: string;
+type DatabaseApi = Readonly<{ host: "127.0.0.1"; port: number; database: string; ownerUrl: string; }>;
+function databaseApi(handles: ReadonlyMap<string, PartHandle>): DatabaseApi;
+// add-e2e-stack (test/support/e2e-stack/stack.ts, discover.ts)
+type E2eStack = Readonly<{ url: string; controlUrl: string; handles: ReadonlyMap<string, PartHandle>; close(): Promise<void>; }>;
+interface StackOptions { port?: number; controlPort?: number; dataDir?: string; parts?: readonly E2eStackPart[]; log?: boolean; }
+function startE2eStack(opts?: StackOptions): Promise<E2eStack>;
+function discoverParts(dir?: string): Promise<E2eStackPart[]>;
+// add-e2e-stack (test/support/e2e-stack/faults.ts, control.ts)
+interface Fault { method: string; url: string; delayMs?: number; status?: number; }
+interface FaultTable { add(fault: Fault): void; clear(): void; list(): Fault[]; hook(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply | undefined>; }
+function createFaultTable(opts?: { sleep?: (ms: number) => Promise<void>; }): FaultTable;
+type ControlServer = Readonly<{ url: string; close(): Promise<void>; }>;
+function startControlServer(deps: { port: number; faults: FaultTable; reset(): Promise<void>; }): Promise<ControlServer>;
+```
+
+`fresh_state` and `DEFAULT_CONTROL_URL` are Python in `e2e/conftest.py` (merged code): fixture `fresh_state() -> None` (POSTs `/reset` on `E2E_CONTROL_URL`, default `DEFAULT_CONTROL_URL`; a no-op when `E2E_PROFILE` is `stack`) and `DEFAULT_CONTROL_URL = "http://127.0.0.1:39081"`.
+
+
+## Out of scope
+
+Roles, teams and group-based capabilities (`add-roles-and-memberships`); any page other than sign-in; redirecting an anonymous visitor away from a public page; idle warnings and session renewal; tenant switching; registering API error codes (`add-api-conventions`); a server route that takes a non-GET session request (none exists in M1, so the CSRF-header journey uses the logout route, design.md decision 2); the stack-profile `login` against real Keycloak (`add-stack-seeding`); changes to the OIDC routes, sessions or the PEP.
