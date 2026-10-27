@@ -2,9 +2,10 @@
 
 export class FakeOidcError extends Error {
   readonly code: string;
-  constructor(_code: string, message: string, _options?: { cause?: unknown }) {
-    super(message);
-    throw new Error("not implemented");
+  constructor(code: string, message: string, options?: { cause?: unknown }) {
+    super(message, options);
+    this.code = code;
+    this.name = "FakeOidcError";
   }
 }
 
