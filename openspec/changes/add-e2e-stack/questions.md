@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 5.2 | technical | test/support/e2e-stack/stack.db.test.ts:340 counts nested Postgres PG_VERSION directories |
-| Q-002 | open | none | verdict | Criterion C-67438cd6 (e2e-stack › fresh_state resets the stack on the fake profile › Faults and state cleared before a test): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-67438cd6 (e2e-stack › fresh_state resets the stack on the fake profile › Faults and state cleared before a test): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-ef0357b4 (e2e-stack › fresh_state resets the stack on the fake profile › Stack profile and unreachable control): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-0828b57f (e2e-stack › The browser gate sees the database and not the control routes › Health and control paths in the browser gate): accept as satisfied? |
 <!-- l4:index:end -->
@@ -46,7 +46,8 @@ Take option 1. Edit `test/support/e2e-stack/stack.db.test.ts`: at line 339 repla
 
 ## Q-002: Criterion C-67438cd6 (e2e-stack › fresh_state resets the stack on the fake profile › Faults and state cleared before a test): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 5, verifier
@@ -73,6 +74,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The two tests the judge set aside check the scenario exactly as written. The injected_fault fixture posts a GET /health 503 fault to the control URL and asserts 204, and its teardown sends DELETE /faults and asserts 204. test_injected_fault_fails_the_route takes only that fixture, loads /health through the page and asserts 503 with error.code FAULT_INJECTED, which is the "without fresh_state" branch. test_fresh_state_clears_faults takes injected_fault and then fresh_state, in that order, so the fault is installed before the reset runs, then loads /health and asserts 200 with status ok and checks.db ok. The fresh_state fixture in e2e/conftest.py posts a bodyless /reset to E2E_CONTROL_URL on the fake profile, and the reset clears faults by design. The only reason the tests were ignored is the absence of a red or audit record, not any gap in their assertions, so the criterion is satisfied as it stands.
 ---
 
 ## Q-003: Criterion C-ef0357b4 (e2e-stack › fresh_state resets the stack on the fake profile › Stack profile and unreachable control): accept as satisfied?
