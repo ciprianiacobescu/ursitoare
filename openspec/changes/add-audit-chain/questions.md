@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | 3.1 | technical | src/db/prepare.test.ts:100 expects no partitions after migrating |
 | Q-002 | answered | none | verdict | Finding F-0447fea8: task 5.2: a head below the walked tip is reported as a hash failure instead of passing |
 | Q-003 | answered | none | verdict | Finding F-934c3d86: task 5.1: a stored row that canonicalEvent cannot hash makes verifyChain throw instead of reporting hash |
-| Q-004 | open | none | verdict | Finding F-1abb4766: task 5.1 is ticked as already satisfied, but its text is not done |
+| Q-004 | answered | none | verdict | Finding F-1abb4766: task 5.1 is ticked as already satisfied, but its text is not done |
 | Q-005 | open | none | verdict | Finding F-2a235267: task 5.2 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
@@ -105,7 +105,8 @@ reject The finding is correct. Task 5.1 says that chainHash not equal to the sto
 
 ## Q-004: Finding F-1abb4766: task 5.1 is ticked as already satisfied, but its text is not done
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -125,6 +126,7 @@ This finding cites no criterion: end the reason with one sentence WHEN <the situ
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct. Task 5.1 of tasks.md says that chainHash not equal to the stored hash, or canonicalEvent throwing, gives reason hash, and the specification's requirement says verifyChain returns ok false with reason hash or gap whenever a stored row's hash does not equal chainHash of the stored row. In src/audit/verify.ts the walk calls chainHash on each row directly, with no try/catch, so an AuditError thrown by canonicalEvent (bad_at when the stored at text does not match the six-fraction-digit pattern, or AUDIT_CANONICAL_INVALID when a value read back cannot be canonicalized) propagates out of withTenantTx and verifyChain rejects instead of reporting that row. The fix belongs in production code: catch a throw from chainHash for a walked row and report it as a hash failure at that row's seq. WHEN verifyChain walks a stored event row for which chainHash or canonicalEvent throws THEN verifyChain resolves with ok false, checked equal to the number of rows verified before it, firstBadSeq equal to that row's seq and reason hash, and does not reject.
 ---
 
 ## Q-005: Finding F-2a235267: task 5.2 is ticked as already satisfied, but its text is not done
