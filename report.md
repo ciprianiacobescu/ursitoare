@@ -1,12 +1,12 @@
 # Delivery plan m0
 
-- Status: stopped
+- Status: completed
 - Repository: https://github.com/ciprianiacobescu/ursitoare
-- Target: main at b31f357a4e94c6928cf3c89f7b90ce53d3fa370c
+- Target: main at fb48c96118e4575c65b6e61193cb7b538a4116b2
 - Merge: auto
 - No promotion target is set. Promotion was not performed.
-- Written: 2026-10-27T04:37:26Z
-- Stopped: unit_halted (openspec:add-web-shell): task 6.4: max_task_attempts (3) reached in red on deepseek (2), glm (2), claude-sonnet (3); last failure: vacuous: C-1542e67b (none of its tests fails by assertion: web.src.app.health.test.ts::C-1542e67b: a recheck goes from unavailable to busy to healthy with focus on the status); a test must asser
+- Written: 2026-10-27T06:22:44Z
+- Completed at: fb48c96118e4575c65b6e61193cb7b538a4116b2
 
 ## Units
 
@@ -53,18 +53,18 @@
 - Usage: $7.73, 6 run(s), 1 attempt(s)
 
 ### openspec:add-web-shell
-- Result: not integrated
-- Pull request: <forge>/ciprianiacobescu/ursitoare/pull/13
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $1.18, 1 run(s), 1 attempt(s)
+- Result: integrated at cfe5e662ec11765bab048ec8f03dbbc57eb90248
+- Pull request: 13
+- Merge commit: cfe5e662ec11765bab048ec8f03dbbc57eb90248
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $16.83, 5 run(s), 1 attempt(s)
 
 ## Batches
 
-- m0-walking-skeleton (profile none): not checked
+- m0-walking-skeleton (profile none): accepted at fb48c96118e4575c65b6e61193cb7b538a4116b2
 
 ## Usage
 
-- Cost: $101.24
+- Cost: $116.89
 - Of which the readiness review: $64.73
-- Runs that dispatched a unit: 23
+- Runs that dispatched a unit: 27
