@@ -65,3 +65,5 @@
 {"at":"2026-10-27T22:07:17Z","branch":"l4/archive/openspec/add-identity-model","head":"89de0acdfd92835390546e0fc10ce200151407b6","type":"unit.branch_deleted","unit":"openspec:add-identity-model"}
 {"at":"2026-10-27T22:07:20Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-pdp-cedar"}
 {"at":"2026-10-27T22:07:20Z","run":"r-20261027T2207Z-8356","type":"unit.dispatched","unit":"openspec:add-pdp-cedar"}
+{"at":"2026-10-27T23:18:27Z","attempt":1,"cost_usd":1.380056,"runs":2,"type":"plan.charged","unit":"openspec:add-pdp-cedar"}
+{"at":"2026-10-27T23:18:27Z","run":"r-20261027T2318Z-5d3f","type":"unit.dispatched","unit":"openspec:add-pdp-cedar"}
