@@ -23,3 +23,6 @@
 {"at":"2026-10-27T13:55:50Z","head":"03bad24aee05fde10e5b49d10dcf647eb82040da","pr":16,"target_before":"5481c0d388607a42ec2b37d6fed0e3596138dd80","type":"unit.merge_requested","unit":"openspec:add-fake-oidc"}
 {"at":"2026-10-27T13:55:54Z","ci":"not_run","head":"03bad24aee05fde10e5b49d10dcf647eb82040da","merge_commit":"8d921119af16ae664409b4f7e71b995e1ab2003d","method":"squash","pr":16,"raced":false,"type":"unit.merged","unit":"openspec:add-fake-oidc"}
 {"at":"2026-10-27T13:55:59Z","branch":"l4/openspec/add-fake-oidc","head":"03bad24aee05fde10e5b49d10dcf647eb82040da","type":"unit.branch_deleted","unit":"openspec:add-fake-oidc"}
+{"at":"2026-10-27T13:56:39Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"8d921119af16ae664409b4f7e71b995e1ab2003d","status":"pass","type":"unit.postcheck","unit":"openspec:add-fake-oidc"}
+{"at":"2026-10-27T13:56:39Z","revision":"8d921119af16ae664409b4f7e71b995e1ab2003d","type":"unit.integrated","unit":"openspec:add-fake-oidc"}
+{"at":"2026-10-27T13:56:39Z","attempt":1,"cost_usd":9.312635,"runs":5,"type":"plan.charged","unit":"openspec:add-fake-oidc"}

@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-27T13:56:39Z",
+  "integrated_revision": "8d921119af16ae664409b4f7e71b995e1ab2003d",
+  "merge_commit": "8d921119af16ae664409b4f7e71b995e1ab2003d",
+  "plan_digest": "11f838df12453fb7",
+  "plan_id": "m1",
+  "postcheck": "pass",
+  "pr": 16,
+  "receipt_id": "m1/openspec:add-fake-oidc/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "03bad24aee05fde10e5b49d10dcf647eb82040da",
+  "spec_digest": "faa3c523c33946b2",
+  "target": "main",
+  "unit_id": "openspec:add-fake-oidc"
+}
