@@ -140,3 +140,4 @@
 {"at":"2026-10-27T06:06:23Z","attempt":1,"cost_usd":16.826154,"runs":5,"type":"plan.charged","unit":"openspec:add-web-shell"}
 {"at":"2026-10-27T06:06:23Z","run":"r-20261027T0606Z-f5f4","type":"unit.dispatched","unit":"openspec:add-web-shell"}
 {"at":"2026-10-27T06:08:18Z","detail":"the repository CI is still running on the hand-off commit 8db6286a4e (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"8db6286a4e24cb809bb639fb1b026d6e92ff6dab","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-web-shell"}
+{"at":"2026-10-27T06:18:48Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-web-shell can go on","type":"plan.resumed"}
