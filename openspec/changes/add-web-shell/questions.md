@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Hold H-19960e47: UI criterion C-383b59d1 has no end-to-end test (fails_at_head); see the generated UI tests table |
 | Q-004 | answered | none | verdict | Hold H-c85bdd94: UI criterion C-b2a74658 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-c2167f30: UI criterion C-62803105 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-006 | open | none | verdict | Hold H-e0cb8f86: UI criterion C-1dc68043 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-e0cb8f86: UI criterion C-1dc68043 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-4f97b0f0: UI criterion C-946ba56d has no end-to-end test (fails_at_head); see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-657e3f25: UI criterion C-a91f316f has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-86a068a1: UI criterion C-31ad3638 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -148,7 +148,8 @@ accept The hold may be waived. Criterion C-62803105 is the scenario "Unknown ext
 
 ## Q-006: Hold H-e0cb8f86: UI criterion C-1dc68043 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -164,6 +165,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-1dc68043 is the scenario "The classifier on raw strings" of the requirement "Static file requests stay inside the web build". The specification writes it as direct calls of the pure function classifyWebPath on thirteen raw strings such as /a/../b, /%zz, /x%2fy and /%61pi/x and asks for the exact WebTarget kinds and segments it returns. A browser journey against the served e2e stack cannot call an in-process TypeScript function and cannot observe a returned discriminated union, so no end-to-end test can exercise the scenario; the design's test plan assigns engine logic to Node tests beside the code and reserves the browser journey for the .tsx files. The Node test in src/api/web-paths.test.ts implements the scenario exactly: it asserts with deepEqual all thirteen results the specification lists, spa, file ["flows"], refused three times, reserved four times, file ["auth","other"], reserved, refused and file ["assets","a.js"], and it passed in the latest test report. The implementation in src/api/web-paths.ts decodes each segment once, refuses a decode failure, dot segments, slashes, backslashes and control characters, matches lower-cased reserved roots and refuses a leading dot. The observable outcome the classifier serves is also proven over the served stack: e2e/test_m0_skeleton.py sends the raw encoded traversal path /%2e%2e%2f%2e%2e%2fetc/passwd and asserts a 404 JSON NOT_FOUND, and requests /api/v1/does-not-exist and asserts a 404 JSON NOT_FOUND rather than HTML. A missing generated end-to-end test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-007: Hold H-4f97b0f0: UI criterion C-946ba56d has no end-to-end test (fails_at_head); see the generated UI tests table
