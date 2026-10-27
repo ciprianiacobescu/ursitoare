@@ -1,15 +1,23 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 import type { Clock, IdSource } from "../core/index.ts";
 import type { Logger } from "../observability/index.ts";
-import type { Pdp, PolicySource } from "./types.ts";
+import { runCheck } from "./check.ts";
+import { loadPolicySet } from "./load.ts";
+import type { Decision, Pdp, PolicyRequest, PolicySource } from "./types.ts";
 
-export async function createPdp(_opts: {
+export async function createPdp(opts: {
   schema: string;
   policies: PolicySource[];
   clock: Clock;
   ids: IdSource;
   logger: Logger;
 }): Promise<Pdp> {
-  throw new Error("not implemented");
+  const loaded = loadPolicySet({ schema: opts.schema, policies: opts.policies });
+  return {
+    policySetVersion: "",
+    actions: loaded.actions,
+    policies: loaded.policies,
+    check(req: PolicyRequest): Promise<Decision> {
+      return runCheck(req);
+    },
+  };
 }
