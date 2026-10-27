@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | technical | e2e/test_e2e_stack.py:17-19,40-42 — the red test requires editing this frozen test file |
+| Q-001 | answered | 1.1 | technical | e2e/test_e2e_stack.py:17-19,40-42 — the red test requires editing this frozen test file |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: e2e/test_e2e_stack.py:17-19,40-42 — the red test requires editing this frozen test file
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The question comes from a fix task (openspec/changes/add-e2e-stack-fix-2/tasks.md, "## 1. Fix", task 1.1 for FB-001/F-2596eba0) and its only possible answer is an edit to a test file, e2e/test_e2e_stack.py, which the harness holds frozen; such an unfreeze is a person's commit, not a delegate answer.
 - **Blocking tasks:** 1.1
 - **Kind:** technical
@@ -38,3 +38,4 @@ Edit `e2e/test_e2e_stack.py`: delete the `_require_fake_profile` function defini
 
 ### Answer
 <!-- write below this line -->
+Take option 1. Edit `e2e/test_e2e_stack.py`: delete the `_require_fake_profile` function (lines 17-19) and its six call lines, and delete the `if e2e_profile != "fake": pytest.skip(...)` guard (lines 41-42) of the `injected_fault` fixture. Keep the `e2e_profile` parameters, test names, `@pytest.mark.l4` markers and every assertion unchanged, and change nothing else in the file. This is the change FB-001 asks for. L4 integrity rejects any skip that a harness commit adds (F-5758ac1b, rounds 1 and 2). Profile selection belongs to the `stack` marker (`-m "not stack"` in e2e/pyproject.toml), and the stack-profile run is outside this unit, so removing the guards changes nothing on the fake profile that every gate runs.
