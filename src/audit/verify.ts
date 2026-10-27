@@ -98,20 +98,25 @@ export async function verifyChain(
           return { ok: false, checked, firstBadSeq: expected, reason: "gap" };
         }
         const prevOk = (prev ?? row.prev_hash).equals(row.prev_hash);
-        const computed = chainHash(row.prev_hash, {
-          tenantId: ctx.tenantId,
-          seq,
-          at: row.at_text,
-          eventType: row.event_type,
-          actor: row.actor,
-          target: row.target,
-          payload: row.payload,
-          origin: row.origin,
-          mkTraceId: row.mk_trace_id,
-          mkRequestId: row.mk_request_id,
-          mkJti: row.mk_jti,
-        });
-        if (!prevOk || !computed.equals(row.hash)) {
+        let computed: Buffer | null;
+        try {
+          computed = chainHash(row.prev_hash, {
+            tenantId: ctx.tenantId,
+            seq,
+            at: row.at_text,
+            eventType: row.event_type,
+            actor: row.actor,
+            target: row.target,
+            payload: row.payload,
+            origin: row.origin,
+            mkTraceId: row.mk_trace_id,
+            mkRequestId: row.mk_request_id,
+            mkJti: row.mk_jti,
+          });
+        } catch {
+          computed = null;
+        }
+        if (!prevOk || computed === null || !computed.equals(row.hash)) {
           return { ok: false, checked, firstBadSeq: seq, reason: "hash" };
         }
         checked += 1;
