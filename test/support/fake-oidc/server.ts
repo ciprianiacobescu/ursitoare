@@ -4,6 +4,7 @@ import type { IncomingHttpHeaders, IncomingMessage, Server, ServerResponse } fro
 import { AUTHORIZATION_PATH, authorizeGet, authorizePost } from "./authorize.ts";
 import { createProvider, parseRedirectUri } from "./provider.ts";
 import type { Provider } from "./provider.ts";
+import { LOGOUT_PATH, USERINFO_PATH, logoutGet, userinfoGet, userinfoPost } from "./session.ts";
 import { TOKEN_PATH, tokenPost } from "./token.ts";
 import { FakeOidcError } from "./types.ts";
 import type { FakeOidc, RecordedRequest } from "./types.ts";
@@ -67,6 +68,9 @@ const ROUTES: Record<string, Handler> = {
   [`GET ${AUTHORIZATION_PATH}`]: authorizeGet,
   [`POST ${AUTHORIZATION_PATH}`]: authorizePost,
   [`POST ${TOKEN_PATH}`]: tokenPost,
+  [`GET ${USERINFO_PATH}`]: userinfoGet,
+  [`POST ${USERINFO_PATH}`]: userinfoPost,
+  [`GET ${LOGOUT_PATH}`]: logoutGet,
 };
 
 function methodsFor(path: string): string[] {
