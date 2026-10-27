@@ -1,0 +1,203 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/core",
+      "src/db",
+      "test/support/pg.ts",
+      "src/db/migrations/NNNN_<name>.sql",
+      "src/tenancy/index.ts",
+      "test/support/tenants.ts",
+      "src/identity",
+      "src/tenancy",
+      "src/identity/index.ts",
+      "src/db/migrations/0100_identity.sql",
+      "src/tenancy/catalog.test.ts",
+      "https://idp.example/realms/ursitoare",
+      "docs/decisions/0002",
+      "src/identity/text.ts",
+      "src/identity/errors.ts",
+      "src/identity/{errors,text,route,tenant-idp,users,index}.ts",
+      "src/identity/{route,schema,provision,resolve,upsert,users,service}.test.ts",
+      "test/arch/modules.ts",
+      "src/identity/route.test.ts",
+      "src/identity/route.ts",
+      "src/identity/schema.test.ts",
+      "src/identity/provision.test.ts",
+      "src/identity/tenant-idp.ts",
+      "src/identity/resolve.test.ts",
+      "src/identity/upsert.test.ts",
+      "src/identity/users.ts",
+      "src/identity/users.test.ts",
+      "src/identity/service.test.ts",
+      "**/[]",
+      "**/^[A-Za-z0-9_-]{1,64}$",
+      "**/index.ts",
+      "**/text.ts",
+      "**/errors.ts",
+      "**/*.test.ts",
+      "**/[",
+      "module core",
+      "module db",
+      "module docs",
+      "module https:",
+      "module identity",
+      "module tenancy",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-identity-model/.l4/ledger/r-20261027T2033Z-992f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-identity-model/.l4/ledger/r-20261027T2117Z-4eb4.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-identity-model/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-identity-model/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/db/migrations/0100_identity.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/errors.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/provision.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/resolve.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/route.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/route.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/service.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/tenant-idp.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/text.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/upsert.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/users.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/users.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/identity/errors.ts, src/identity/route.ts, src/identity/tenant-idp.ts, src/identity/text.ts, src/identity/users.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/identity/errors.ts",
+      "src/identity/route.ts",
+      "src/identity/tenant-idp.ts",
+      "src/identity/text.ts",
+      "src/identity/users.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 596,
+      "passed": 596,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 35,
+      "new_passed": 35,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
