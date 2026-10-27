@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.1 | technical | src/db/prepare.test.ts:100 first.partitions expects only the audit_event window, so adding migration 0110 breaks it |
+| Q-002 | open | none | verdict | Finding F-5a5184d6: check rejects when a getter inside principal, resource, an entity or egress throws |
 <!-- l4:index:end -->
 
 ---
@@ -35,6 +36,32 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/db/prepare.test.ts`: at the `assert.deepEqual(first.partitions, [...])` starting on line 100, append these five strings after `"ursitoare.audit_event_p202701"`: `"ursitoare.policy_decision_p202609"`, `"ursitoare.policy_decision_p202610"`, `"ursitoare.policy_decision_p202611"`, `"ursitoare.policy_decision_p202612"`, `"ursitoare.policy_decision_p202701"`.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: Finding F-5a5184d6: check rejects when a getter inside principal, resource, an entity or egress throws
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it (criterion C-8e384c2c).
+
+Title: check rejects when a getter inside principal, resource, an entity or egress throws
+Detail: In guardRequest, only the top-level property reads of req sit inside a try. isUid(principal) reads principal["type"], isEntity reads uid/attrs/parents, and validateEgress reads egress["method"] etc., all outside any try. guardRequest is also called outside runCheck's try. So a request whose principal.type, an entity's attrs, or egress.method getter throws makes check reject with that error. The requirement says check SHALL reject only when IdSource or Clock throws. Separately, runCheck reads req.principal/req.context/req.entities a second time for Cedar, so a getter that returns different values on each read can bypass the guard's checks (for example the principal-in-slice check).
+Suggested fix: Wrap guardRequest's whole body in a try that returns PDP_REQUEST_INVALID, and pass the values the guard read (not fresh reads of req) to Cedar and buildPermit.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-8e384c2c as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
 
 ### Answer
 <!-- write below this line -->
