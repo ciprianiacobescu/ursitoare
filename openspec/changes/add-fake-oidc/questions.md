@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 1.4 | technical | test/support/fake-oidc/tokens.test.ts:182: signature-flaw tokens are compared to a base token carrying a nonce they never receive |
 | Q-002 | accepted | 2.1 | technical | test/support/fake-oidc/server.test.ts:154 and :353 request a doubled realm JWKS path |
 | Q-003 | accepted | 2.2 | technical | test/support/fake-oidc/authorize.test.ts:45 and :88 double the /realms/ursitoare prefix in the authorization URL |
-| Q-004 | open | none | verdict | Criterion C-d4e4e5a6 (test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Protocol errors go back to the client): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-d4e4e5a6 (test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Protocol errors go back to the client): accept as satisfied? |
 | Q-005 | open | none | verdict | Finding F-818a6c14: task 3.1: the jwks keys check inspects only the first key, not 'at least one' RS256 key |
 <!-- l4:index:end -->
 
@@ -96,7 +96,8 @@ Edit `test/support/fake-oidc/authorize.test.ts`: on line 45 change `${fake.issue
 
 ## Q-004: Criterion C-d4e4e5a6 (test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Protocol errors go back to the client): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -123,6 +124,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The authorization handler answers each protocol error of the scenario with a 302 to the registered redirect: response_type other than code gives unsupported_response_type, a scope without openid gives invalid_scope, an absent or malformed code_challenge gives invalid_request, and a code_challenge_method other than S256 gives invalid_request. The redirect carries error, error_description and the unchanged state, and never a code, because the error path builds the Location from the registered redirect_uri with only those parameters. The tracing test passed and asserts, for all four cases, the 302 status, the registered redirect origin and path, the expected error value, state s1 unchanged and the absence of code. Its only deviation from the scenario is that it sends an empty code_challenge rather than omitting the parameter; both values take the same invalid_request branch, and the absent case is handled explicitly in the same condition, so the deviation does not leave the behaviour unverified.
 ---
 
 ## Q-005: Finding F-818a6c14: task 3.1: the jwks keys check inspects only the first key, not 'at least one' RS256 key
