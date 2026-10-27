@@ -48,6 +48,8 @@ function policySetVersionOf(schema: string, sources: readonly PolicySource[]): s
 
 Also given: table `ursitoare.policy_decision` (columns in design.md § Data model) and file `src/db/migrations/0110_policy_decision.sql`; `Decision.errors` codes `PDP_REQUEST_INVALID`, `PDP_REQUEST_TOO_LARGE`, `PDP_SLICE_TOO_LARGE`, `PDP_UNKNOWN_ACTION`, `PDP_ENTITY_MISSING`, `PDP_INTERNAL`, `PDP_EVALUATION_ERROR:<policyId>`; log lines `pdp loaded` and `pdp deny on error`.
 
+`recordDecision` checks, in this order and before any query, and refuses the first failing field as `PDP_RECORD_INVALID` with `details.reason`: `tenant_id` (`^[A-Za-z0-9_-]{1,64}$`), `decision` (`allow` or `deny`), `decision_id` (1 to 128 characters), `decided_at` (round-trips through `new Date(x).toISOString()`), `policy_set_version` (64 lower-case hex digits), `reasons` and `errors` (arrays of strings), `run_id` and `node_id` (when given, 1 to 128 characters), `permit` (only on `allow`). So no column CHECK is reached, and `PDP_RECORD_FAILED` means the query itself failed.
+
 **Interfaces taken**
 
 - From `add-engine-skeleton`: `Clock`, `IdSource`, `fixedClock`, `sequentialIds` (`src/core`); `Logger`, `LogDestination`, `createLogger` (`src/observability`).

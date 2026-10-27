@@ -229,4 +229,4 @@ Migration `0110_policy_decision.sql` SHALL create `ursitoare.policy_decision` ra
 
 #### Scenario: Invalid decisions and a failing insert
 - **WHEN** the decision's `decision` is `maybe`, or its `decidedAt` is `yesterday`, or its `policySetVersion` is `abc`, or `ctx.tenantId` is `a/b`; and a `tx` whose `query` rejects with `{code:"57P01",message:"terminating connection postgres://u:ZZ-DSN@h/db"}`
-- **THEN** the first four reject `PDP_RECORD_INVALID` without a query being sent, and the last rejects `PDP_RECORD_FAILED` with `details.sqlstate` `57P01` and a message that does not contain `ZZ-DSN`
+- **THEN** the first four reject `PDP_RECORD_INVALID` (`details.reason` `decision`, `decided_at`, `policy_set_version`, `tenant_id`) with no query sent, and the last rejects `PDP_RECORD_FAILED` with `details.sqlstate` `57P01` and a message that does not contain `ZZ-DSN`
