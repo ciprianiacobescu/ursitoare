@@ -1,0 +1,355 @@
+{
+  "schema": "l4/verdict@1",
+  "round": 2,
+  "verdict": "FAIL",
+  "base_sha": "f4d77b40e649e8b3c7fe5fe96ed9816cd3cedec9",
+  "head_sha": "daed5d68469ae62efaf0f01e081c9c83635a25df",
+  "steps": [
+    {
+      "step": "0",
+      "name": "preconditions",
+      "status": "ok",
+      "seconds": 0.2,
+      "note": "base merged: main@f4d77b40e6 as daed5d6846 (4 commits)"
+    },
+    {
+      "step": "1",
+      "name": "integrity",
+      "status": "failed",
+      "seconds": 0.1,
+      "note": "a protected path was changed; scope: 16 changed file(s)"
+    },
+    {
+      "step": "2",
+      "name": "build",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "3",
+      "name": "tests",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "4",
+      "name": "traceability",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "4a",
+      "name": "audit sampling",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "5",
+      "name": "ui test generation",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "6",
+      "name": "quality",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "8",
+      "name": "s1 judge",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "9",
+      "name": "judge",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "10",
+      "name": "aggregation",
+      "status": "ok",
+      "seconds": 0.0,
+      "note": "FAIL"
+    }
+  ],
+  "gates": [],
+  "criteria": [],
+  "findings": [
+    {
+      "severity": "blocker",
+      "title": "a protected path was changed",
+      "detail": ".serena/memories/harness/ (touched by non-harness commit dced8745e0)",
+      "source": "deterministic",
+      "criterion": null,
+      "log": null,
+      "spec_gap": false,
+      "suggested_fix": "",
+      "id": "F-6e5715a0",
+      "feedback": null
+    }
+  ],
+  "holds": [],
+  "subject_sha": "daed5d68469ae62efaf0f01e081c9c83635a25df",
+  "family_criteria": [],
+  "reused_from": null,
+  "integrity": {
+    "checks": [
+      {
+        "name": "protected paths",
+        "status": "failed",
+        "note": "1 protected path(s) changed"
+      },
+      {
+        "name": "pre-existing tests",
+        "status": "skipped",
+        "note": "no Python test file changed; 1 other test file(s) are checked by the run of pre-existing tests"
+      },
+      {
+        "name": "red-green freeze",
+        "status": "ok",
+        "note": "1 task(s): red and green compared"
+      },
+      {
+        "name": "test path freeze",
+        "status": "ok",
+        "note": "2 harness step commit(s) checked"
+      },
+      {
+        "name": "content scan",
+        "status": "ok",
+        "note": "no result-manipulating construct in the changed support and runner files"
+      },
+      {
+        "name": "gate configuration",
+        "status": "skipped",
+        "note": "no gate or runner configuration file changed"
+      },
+      {
+        "name": "test awareness",
+        "status": "ok",
+        "note": "no production line reacts to the test run"
+      },
+      {
+        "name": "suppressions",
+        "status": "skipped",
+        "note": "not checked: python only; changed files outside it: test/arch/rules.ts, test/arch/secrets.test.ts, test/arch/secrets.ts"
+      },
+      {
+        "name": "tdd history",
+        "status": "ok",
+        "note": "1 task(s); red tests passing at head: step 3"
+      },
+      {
+        "name": "pre-existing tests still pass",
+        "status": "skipped",
+        "note": "step 1 already failed"
+      }
+    ],
+    "findings": [
+      {
+        "severity": "blocker",
+        "title": "a protected path was changed",
+        "detail": ".serena/memories/harness/ (touched by non-harness commit dced8745e0)",
+        "source": "deterministic",
+        "criterion": null,
+        "log": null,
+        "spec_gap": false,
+        "suggested_fix": "",
+        "id": "F-6e5715a0",
+        "feedback": null
+      }
+    ],
+    "declared": [],
+    "human_protected": [],
+    "human_tests": [],
+    "unfrozen": [],
+    "human_suppressions": [],
+    "human_scan": [],
+    "human_config": [],
+    "allowed_tests": [],
+    "mocked_support": [],
+    "base_tests": null,
+    "test_awareness": []
+  },
+  "trace": [],
+  "audit": [],
+  "generated": [],
+  "s1": [],
+  "evidence": {
+    "schema": "l4/evidence@1",
+    "holds": [],
+    "items": {},
+    "scope": {
+      "declared": [],
+      "skipped": true,
+      "note": "the spec names no path or module in backticks: nothing to compare against",
+      "holds": [],
+      "files": [
+        {
+          "path": "openspec/changes/add-architecture-fitness-followup-1/.l4/evidence/round-1/evidence.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-followup-1/.l4/evidence/round-1/verdict.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-followup-1/.l4/evidence/round-1/verification.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-followup-1/.l4/followup.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-followup-1/.l4/ledger/r-20261026T2159Z-20f9.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-followup-1/.l4/ledger/r-20261027T0625Z-b8a7.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-followup-1/.openspec.yaml",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-followup-1/proposal.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-followup-1/questions.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-followup-1/specs/architecture-require-forms/spec.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-followup-1/tasks.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-architecture-fitness-followup-1/verification.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/archive/2026-10-26-add-architecture-fitness/feedback.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "test/arch/rules.ts",
+          "module": "test",
+          "kind": "code",
+          "label": null,
+          "reason": "the spec declares no scope"
+        },
+        {
+          "path": "test/arch/secrets.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": null,
+          "reason": "the spec declares no scope"
+        },
+        {
+          "path": "test/arch/secrets.ts",
+          "module": "test",
+          "kind": "code",
+          "label": null,
+          "reason": "the spec declares no scope"
+        }
+      ]
+    },
+    "diff_coverage": null,
+    "tests_ran": null
+  },
+  "human": [],
+  "fix": {
+    "action": "spawn",
+    "ordinal": 1,
+    "tasks": [
+      "F-6e5715a0 a protected path was changed"
+    ],
+    "not_converted": [],
+    "reason": "",
+    "plan": null,
+    "code": ""
+  },
+  "judge_verdict": null,
+  "cx_runs": {},
+  "tests": {},
+  "red_green": {
+    "test.arch.secrets.test.ts::C-6690b581: the secret scan skips harness .l4 folders but scans the owner's .l4 files": "1.2"
+  },
+  "guards": [],
+  "prompt_sha256": "",
+  "template": "",
+  "harness_commit": "27c151fd5df8dfc9ac4825e001e97aceaada2691",
+  "judge_calls": 0,
+  "judge_reply": "",
+  "judge_replies": {},
+  "judge_parts": [],
+  "judge_files": [],
+  "judge_followups": [],
+  "judge_split": {},
+  "hold_views": {},
+  "profiles": {
+    "judge": "claude-judge",
+    "implementer": [
+      "deepseek"
+    ]
+  },
+  "judge_model": null,
+  "independence": null,
+  "cost_usd": null
+}
