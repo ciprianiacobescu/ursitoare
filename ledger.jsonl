@@ -39,3 +39,5 @@
 {"at":"2026-10-27T19:41:16Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"OpenCode Go weekly usage limit: owner chose verifier.independence different_model (674213c) so claude-judge (Opus) judges claude-sonnet's work until Go answers again","type":"plan.resumed"}
 {"at":"2026-10-27T19:42:22Z","attempt":1,"cost_usd":5.730076,"runs":4,"type":"plan.charged","unit":"openspec:add-audit-chain"}
 {"at":"2026-10-27T19:42:22Z","run":"r-20261027T1942Z-f5dd","type":"unit.dispatched","unit":"openspec:add-audit-chain"}
+{"at":"2026-10-27T19:51:54Z","attempt":1,"cost_usd":12.434367,"runs":5,"type":"plan.charged","unit":"openspec:add-audit-chain"}
+{"at":"2026-10-27T19:51:54Z","run":"r-20261027T1951Z-f3c5","type":"unit.dispatched","unit":"openspec:add-audit-chain"}
