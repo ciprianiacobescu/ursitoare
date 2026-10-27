@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-27T22:05:49Z",
+  "integrated_revision": "02508b1fe9055b50188cfe8f8b122e3a52d9306f",
+  "merge_commit": "02508b1fe9055b50188cfe8f8b122e3a52d9306f",
+  "plan_digest": "11f838df12453fb7",
+  "plan_id": "m1",
+  "postcheck": "pass",
+  "pr": 20,
+  "receipt_id": "m1/openspec:add-identity-model/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "d864ddc88cb05aea2ddf6853a29de768f920933f",
+  "spec_digest": "7c9162dc91e1e565",
+  "target": "main",
+  "unit_id": "openspec:add-identity-model"
+}
