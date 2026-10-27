@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 6.1 | technical | src/identity/users.test.ts:50 gives mallory the same userId as alice |
+| Q-001 | accepted | 6.1 | technical | src/identity/users.test.ts:50 gives mallory the same userId as alice |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/identity/users.test.ts:50 gives mallory the same userId as alice
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 6.1
 - **Kind:** technical
 - **Asked:** 2026-10-27T21:15Z by claude-sonnet, run r-20261027T2033Z-992f, task 6.1
