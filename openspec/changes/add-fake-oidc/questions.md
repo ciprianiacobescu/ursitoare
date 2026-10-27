@@ -14,6 +14,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 1.4 | technical | test/support/fake-oidc/tokens.test.ts:182: signature-flaw tokens are compared to a base token carrying a nonce they never receive |
 | Q-002 | accepted | 2.1 | technical | test/support/fake-oidc/server.test.ts:154 and :353 request a doubled realm JWKS path |
 | Q-003 | accepted | 2.2 | technical | test/support/fake-oidc/authorize.test.ts:45 and :88 double the /realms/ursitoare prefix in the authorization URL |
+| Q-004 | open | none | verdict | Criterion C-d4e4e5a6 (test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Protocol errors go back to the client): accept as satisfied? |
+| Q-005 | open | none | verdict | Finding F-818a6c14: task 3.1: the jwks keys check inspects only the first key, not 'at least one' RS256 key |
 <!-- l4:index:end -->
 
 ---
@@ -86,6 +88,63 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `test/support/fake-oidc/authorize.test.ts`: on line 45 change `${fake.issuer}${AUTH_PATH}` to `${fake.url}${AUTH_PATH}` and on line 88 make the same change to `${fake.url}${AUTH_PATH}`; leave the action assertion at line 100 unchanged.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-004: Criterion C-d4e4e5a6 (test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Protocol errors go back to the client): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-d4e4e5a6 (test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Protocol errors go back to the client)
+
+### Context
+Criterion C-d4e4e5a6 (test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Protocol errors go back to the client) is needs human after round 1.
+
+Scenario:
+\- **WHEN** the query has `code_challenge_method=plain`, or no `code_challenge`, or `response_type=token`, or `scope=profile`
+\- **THEN** each answer is 302 to the registered redirect with `error` `invalid_request`, `invalid_request`, `unsupported_response_type` and `invalid_scope`, `state` unchanged, and no `code` in the `Location`
+
+Why: uncovered: the tests that trace it are inadequate or did not pass
+Judge: pass
+Tracing tests: test.support.fake-oidc.authorize.test.ts::C-d4e4e5a6 protocol errors redirect to the client with the unchanged state and no code (passed, red_assertion, inadequate)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Finding F-818a6c14: task 3.1: the jwks keys check inspects only the first key, not 'at least one' RS256 key
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it (criterion C-34b4df4c).
+
+Title: task 3.1: the jwks keys check inspects only the first key, not 'at least one' RS256 key
+Detail: Task 3.1 check 2 requires that `keys` holds at least one key with `alg` RS256 and a non-empty kid, n and e. checkJwks asserts these on `keys[0]` only. Real Keycloak JWKS often lists an RSA-OAEP encryption key alongside the signing key, so the contract can fail against Keycloak even though a valid RS256 key is present.
+Suggested fix: Find a key with `alg === "RS256"` in `keys` and assert kid, n and e on that key.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-34b4df4c as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
 
 ### Answer
 <!-- write below this line -->
