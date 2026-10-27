@@ -5,7 +5,7 @@ import urllib.error
 import urllib.request
 
 import pytest
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page, Route, expect
 
 CONTENT_SECURITY_POLICY = (
     "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
@@ -88,6 +88,87 @@ def test_landing_page_reports_engine_health(
     assert response.status == 200
     expect(page.get_by_role("heading", name="Ursitoare")).to_be_visible()
     expect(page.get_by_text("Engine healthy")).to_be_visible()
+
+
+def _take_held_route(page: Page, held: list[Route]) -> Route:
+    """Pump Playwright events until the page's route handler has paused the request."""
+    for _ in range(500):
+        if held:
+            return held.pop(0)
+        page.wait_for_timeout(10)
+    raise AssertionError("the health request was not intercepted")
+
+
+@pytest.mark.milestone("M0")
+@pytest.mark.l4("C-1542e67b")
+def test_landing_page_shows_name_and_engine_health(
+    page: Page, base_url: str, fresh_state: None
+) -> None:
+    response = page.goto(f"{base_url}/")
+    assert response is not None
+    assert response.status == 200
+
+    expect(page.get_by_role("heading", name="Ursitoare")).to_be_visible()
+    expect(page.get_by_role("status")).to_have_text("Engine healthy")
+
+
+@pytest.mark.milestone("M0")
+@pytest.mark.l4("C-1542e67b")
+def test_landing_page_health_states(
+    page: Page, base_url: str, fresh_state: None
+) -> None:
+    held: list[Route] = []
+
+    def hold(route: Route) -> None:
+        held.append(route)
+
+    page.route("**/health", hold)
+    page.goto(f"{base_url}/")
+    status = page.get_by_role("status")
+    expect(status).to_have_text("Checking engine health")
+
+    _take_held_route(page, held).fulfill(
+        status=200,
+        content_type="application/json",
+        body=json.dumps({"status": "ok"}),
+    )
+    expect(status).to_have_text("Engine healthy")
+    page.unroute("**/health", hold)
+
+    mode = {"value": "fail"}
+    retry_held: list[Route] = []
+
+    def answer(route: Route) -> None:
+        if mode["value"] == "hold":
+            retry_held.append(route)
+            return
+        route.fulfill(
+            status=503,
+            content_type="application/json",
+            body=json.dumps({"status": "fail"}),
+        )
+
+    page.route("**/health", answer)
+    page.goto(f"{base_url}/")
+    expect(status).to_have_text("Engine unavailable")
+    check_again = page.get_by_role("button", name="Check again")
+    expect(check_again).to_be_visible()
+
+    mode["value"] = "hold"
+    check_again.click()
+    expect(status).to_have_text("Checking engine health")
+    expect(check_again).to_be_visible()
+    expect(check_again).to_have_attribute("aria-disabled", "true")
+    expect(check_again).to_be_focused()
+
+    _take_held_route(page, retry_held).fulfill(
+        status=200,
+        content_type="application/json",
+        body=json.dumps({"status": "ok"}),
+    )
+    expect(status).to_have_text("Engine healthy")
+    expect(check_again).to_have_count(0)
+    expect(status).to_be_focused()
 
 
 @pytest.mark.milestone("M0")
