@@ -129,3 +129,5 @@
 {"at":"2026-10-27T04:37:25Z","attempt":1,"cost_usd":1.183822,"runs":1,"type":"plan.charged","unit":"openspec:add-web-shell"}
 {"at":"2026-10-27T04:37:25Z","detail":"task 6.4: max_task_attempts (3) reached in red on deepseek (2), glm (2), claude-sonnet (3); last failure: vacuous: C-1542e67b (none of its tests fails by assertion: web.src.app.health.test.ts::C-1542e67b: a recheck goes from unavailable to busy to healthy with focus on the status); a test must asser","reason":"unit_halted","type":"plan.stopped","unit":"openspec:add-web-shell"}
 {"at":"2026-10-27T04:39:17Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"Delegate: task 6.4 halted on a browser-only criterion (C-1542e67b) listed in criteria_ids and on bare stub calls; retry 23a6c54 tells the implementer both fixes","type":"plan.resumed"}
+{"at":"2026-10-27T04:40:33Z","attempt":1,"cost_usd":1.183822,"runs":2,"type":"plan.charged","unit":"openspec:add-web-shell"}
+{"at":"2026-10-27T04:40:33Z","run":"r-20261027T0440Z-a72a","type":"unit.dispatched","unit":"openspec:add-web-shell"}
