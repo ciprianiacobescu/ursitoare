@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 3.1 | technical | src/db/prepare.test.ts:100 expects no partitions after migrating |
-| Q-002 | open | none | verdict | Finding F-0447fea8: task 5.2: a head below the walked tip is reported as a hash failure instead of passing |
+| Q-002 | answered | none | verdict | Finding F-0447fea8: task 5.2: a head below the walked tip is reported as a hash failure instead of passing |
 | Q-003 | open | none | verdict | Finding F-934c3d86: task 5.1: a stored row that canonicalEvent cannot hash makes verifyChain throw instead of reporting hash |
 | Q-004 | open | none | verdict | Finding F-1abb4766: task 5.1 is ticked as already satisfied, but its text is not done |
 | Q-005 | open | none | verdict | Finding F-2a235267: task 5.2 is ticked as already satisfied, but its text is not done |
@@ -51,7 +51,8 @@ Why the M0 test changes: its line-100 assertion encoded "no month-partitioned ta
 
 ## Q-002: Finding F-0447fea8: task 5.2: a head below the walked tip is reported as a hash failure instead of passing
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -72,6 +73,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct. Task 5.2 says a head whose seq is below the walked tip passes, and design.md says the head is read before the walk so that appends during a verification are not tail loss. In verify.ts the head check only guards headSeq >= fromSeq and headSeq >= expected; for any head seq between fromSeq and tipSeq - 1 it then compares the tip's hash (lastHash) with the head's hash, which differ for an intact chain, and returns reason hash at the head's seq. withTenantTx opens the transaction with a plain BEGIN, so under read committed an append committed between the head read and the walk makes an intact chain fail. The fix belongs in production code: compare the head hash only when the head seq equals the tip, and let a head below the tip pass. WHEN verifyChain walks an intact chain whose head row holds a seq at or above fromSeq but below the last walked seq THEN it returns ok true with checked equal to the number of walked events, and a head seq equal to the tip with a different hash still returns reason hash at the tip's seq.
 ---
 
 ## Q-003: Finding F-934c3d86: task 5.1: a stored row that canonicalEvent cannot hash makes verifyChain throw instead of reporting hash
