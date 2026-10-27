@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Hold H-9bf1501b: UI criterion C-1b33755d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-c1376ce6: UI criterion C-2c3a693b has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-c24d6b2b: UI criterion C-12290cf5 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-015 | open | none | verdict | Hold H-a427f9a7: UI criterion C-76b2dd3e has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-015 | answered | none | verdict | Hold H-a427f9a7: UI criterion C-76b2dd3e has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-dcbf4ab9: UI criterion C-0a8a6d93 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-a5fb16c6: UI criterion C-5e6db9ca has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-e9471b87: UI criterion C-5752eaaf has no end-to-end test (not_testable); see the generated UI tests table |
@@ -346,7 +346,7 @@ accept The hold may be waived. Criterion C-12290cf5 is the scenario "Success and
 
 ## Q-015: Hold H-a427f9a7: UI criterion C-76b2dd3e has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.66 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -363,6 +363,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-76b2dd3e is the scenario "Envelope, other failures and bad input" of the requirement "ApiClient". It specifies how createApiClient maps an error envelope, a non-envelope failure, a non-JSON 2xx, a rejecting fetch, an AbortError and invalid arguments, through an injected fake fetch; the served engine produces none of these on demand. It is proven by the Node test web/src/api/client.test.ts (six tests named C-76b2dd3e, one per failure kind). It passed at the head and failed by assertion at red (proof red_assertion, adequate, in the round-1 traceability), and the judge and S1 passed the criterion. A missing generated UI test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-016: Hold H-dcbf4ab9: UI criterion C-0a8a6d93 has no end-to-end test (not_testable); see the generated UI tests table
