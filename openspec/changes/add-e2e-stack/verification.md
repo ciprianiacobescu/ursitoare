@@ -1,4 +1,4 @@
-# Verification: openspec:add-e2e-stack: NEEDS_HUMAN (round 5)
+# Verification: openspec:add-e2e-stack: PASS (round 6)
 
 traceability: 29/32 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 29/32 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 1.5 | base main@a53398fc51 contained |
-| 1 | integrity | ok | 26.3 | 10 sub-checks (+2 unfrozen by human answers); scope: 62 changed file(s) |
-| 2 | build | ok | 16.6 |  |
-| 3 | tests | ok | 28.9 |  |
-| 4 | traceability | ok | 0.1 | 29/32 criteria covered |
-| 4a | audit sampling | ok | 114.0 | 2 not_testable, 7 skipped; support files at the base: 14 |
+| 0 | preconditions | reused | 0.0 | reused (round 5) |
+| 1 | integrity | reused | 0.0 | reused (round 5) |
+| 2 | build | reused | 0.0 | reused (round 5) |
+| 3 | tests | reused | 0.0 | reused (round 5) |
+| 4 | traceability | reused | 0.0 | reused (round 5) |
+| 4a | audit sampling | reused | 0.0 | reused (round 5) |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/main.ts, test/arch/control-routes.ts, test/support/e2e-stack/control.ts, test/support/e2e-stack/database-part.ts, test/support/e2e-stack/discover.ts and 7 more |
-| 8 | s1 judge | ok | 2.4 | 32/32 criteria judged by jev |
-| 9 | judge | ok | 579.6 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 5) |
+| 8 | s1 judge | reused | 0.0 | reused (round 5) |
+| 9 | judge | reused | 0.0 | reused (round 5) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -278,6 +278,12 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-c3092640 | not_testable | - | - | The criterion targets TypeScript symbols (databasePart, databaseApi, discoverParts) whose implementation sources are not shown and cannot be imported into a Python pytest test. |
 | C-346ddf48 | not_testable | - | - | The project is a TypeScript HTTP service and no Python module or stack startup source is shown to import and test without network. |
 
+## Answers to verdict questions
+
+- Q-002 accept C-67438cd6 by the delegate (claude-fable-5-1 via claude-code): The two tests the judge set aside check the scenario exactly as written. The injected_fault fixture posts a GET /health 503 fault to the control URL and asserts 204, and its teardown sends DELETE /faults and asserts 204. test_injected_fault_fails_the_route takes only that fixture, loads /health thro...
+- Q-003 accept C-ef0357b4 by the delegate (claude-fable-5-1 via claude-code): The two tests the judge set aside check the scenario as written. test_fresh_state_is_a_noop_on_the_stack_profile sets E2E_PROFILE to stack and E2E_CONTROL_URL to http://127.0.0.1:1, then requests fresh_state and asserts it returns None. Port 1 refuses connections, so any request from the fixture wou...
+- Q-004 accept C-0828b57f by the delegate (claude-fable-5-1 via claude-code): The two tests the judge set aside check the scenario as written. test_health_reports_database_ok loads base_url/health through the page and asserts status 200, status ok and checks.db ok. test_control_paths_are_not_on_the_engine_port sends POST /reset, POST /faults and DELETE /faults to base_url, ea...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -310,9 +316,9 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-23b4de23 | e2e-stack › The stack process starts offline and stops on SIGTERM › Offline start, health, SIGTERM | pass | pass | the judge passed it and a discriminating test passes |
 | C-5f32b081 | e2e-stack › The stack process starts offline and stops on SIGTERM › A signal during the start | pass | pass | the judge passed it and a discriminating test passes |
 | C-4e750e4e | e2e-stack › The stack process starts offline and stops on SIGTERM › Bad variable or busy port | pass | pass | the judge passed it and a discriminating test passes |
-| C-67438cd6 | e2e-stack › fresh_state resets the stack on the fake profile › Faults and state cleared before a test | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-ef0357b4 | e2e-stack › fresh_state resets the stack on the fake profile › Stack profile and unreachable control | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-0828b57f | e2e-stack › The browser gate sees the database and not the control routes › Health and control paths in the browser gate | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-67438cd6 | e2e-stack › fresh_state resets the stack on the fake profile › Faults and state cleared before a test | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The two tests the judge set aside check the scenario exactly as written. The injected_fault fixture posts a GET /health 503 fault to the control URL and asserts 204, and its teardown sends DELETE /faults and asserts 204. test_injected_faul... |
+| C-ef0357b4 | e2e-stack › fresh_state resets the stack on the fake profile › Stack profile and unreachable control | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The two tests the judge set aside check the scenario as written. test_fresh_state_is_a_noop_on_the_stack_profile sets E2E_PROFILE to stack and E2E_CONTROL_URL to http://127.0.0.1:1, then requests fresh_state and asserts it returns None. Po... |
+| C-0828b57f | e2e-stack › The browser gate sees the database and not the control routes › Health and control paths in the browser gate | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The two tests the judge set aside check the scenario as written. test_health_reports_database_ok loads base_url/health through the page and asserts status 200, status ok and checks.db ok. test_control_paths_are_not_on_the_engine_port sends... |
 | C-e23019c4 | e2e-stack › e2e/test_e2e_stack.py calls no pytest.skip — feedback FB-001 › e2e/test_e2e_stack.py calls no pytest.skip | pass | pass | the judge passed it and a discriminating test passes |
 
 ## Findings
@@ -326,7 +332,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Feedback
 
-- FB-001: judged addressed, pending a PASS round: e2e/test_e2e_stack.py:34-128, test/arch/e2e-stack.test.ts:11-41
+- FB-001: addressed at 6c96e14203: e2e/test_e2e_stack.py:34-128, test/arch/e2e-stack.test.ts:11-41
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
