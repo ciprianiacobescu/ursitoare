@@ -1,4 +1,4 @@
-# Verification: openspec:add-pdp-cedar: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-pdp-cedar: FAIL (round 2)
 
 traceability: 48/48 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 48/48 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.4 | base merged: main@f3e4dbb20c as 11f03a741f (1 commit) |
-| 1 | integrity | ok | 42.5 | 10 sub-checks; scope: 30 changed file(s) |
-| 2 | build | ok | 19.4 |  |
-| 3 | tests | ok | 51.1 |  |
-| 4 | traceability | ok | 0.1 | 48/48 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/pdp/cedar.ts, src/pdp/check.ts, src/pdp/digest.ts, src/pdp/engine.ts, src/pdp/errors.ts and 5 more |
-| 8 | s1 judge | ok | 3.7 | 48/48 criteria judged by jev |
-| 9 | judge | ok | 172.0 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -245,6 +245,10 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-f837602a | ok | 0.900 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-2df1f84d | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-002 reject F-5a5184d6 by the delegate (claude-fable-5-1 via claude-code): The finding is correct and stands. In guardRequest only the five top-level reads of req sit inside the try; the validators isUid, isEntity, isPlainObject and validateEgress then read principal.type, principal.id, each entity's uid, attrs and parents, and egress.method and the other five egress field...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -300,13 +304,18 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Findings
 
-- [major, judge] check rejects when a getter inside principal, resource, an entity or egress throws (criterion C-8e384c2c): In guardRequest, only the top-level property reads of req sit inside a try. isUid(principal) reads principal["type"], isEntity reads uid/attrs/parents, and validateEgress reads egress["method"] etc., all outside any try. guardRequest is also called outside runCheck's try. So a request whose principal.type, an entity's attrs, or egress.method getter throws makes check reject with that error. The requirement says check SHALL reject only when IdSource or Clock throws. Separately, runCheck reads req.principal/req.context/req.entities a second time for Cedar, so a getter that returns different valu...
+- [major, human] check rejects when a getter inside principal, resource, an entity or egress throws (criterion C-8e384c2c): In guardRequest, only the top-level property reads of req sit inside a try. isUid(principal) reads principal["type"], isEntity reads uid/attrs/parents, and validateEgress reads egress["method"] etc., all outside any try. guardRequest is also called outside runCheck's try. So a request whose principal.type, an entity's attrs, or egress.method getter throws makes check reject with that error. The requirement says check SHALL reject only when IdSource or Clock throws. Separately, runCheck reads req.principal/req.context/req.entities a second time for Cedar, so a getter that returns different valu...
 - [minor, judge] M8 malformed test uses a different policy from design.md (criterion C-50748953): design.md M8 is `permit (principal, action == Action::"reed", resource);`. The test has `action == Action::"read", resource == Action::"reed"`, so it never exercises an unknown action in the action scope.
 - [minor, judge] Limit constants are not asserted by tests (criterion C-b4a29f2d): The scenarios state that MAX_SLICE_ENTITIES is 24 and MAX_REQUEST_CHARS is 262144, but guards.test.ts only checks the behaviour and never asserts the exported constants.
 - [minor, judge] canonicalJson depth boundary (spec gap) (criterion C-1366d87a): An object or array at depth 64 (root at depth 0) is accepted, so 65 nested containers serialise and 66 throw. Whether 65 levels counts as "deeper than 64 levels" is not pinned down.
 - [minor, judge] Egress host port is not range-checked (spec gap) (criterion C-97a803d9): HOST_PATTERN allows any 1 to 5 digit port, so a.test:99999 or a.test:0 is a valid egress and gets copied into the permit.
 - [minor, judge] toDecimal accepts values whose toFixed form is exponential or outside the Cedar decimal range (spec gap) (criterion C-d886fc50): toDecimal only checks Number(n.toFixed(4)) === n. For |n| >= 1e21, toFixed returns exponent notation ("1e+21"), which round-trips, so toDecimal returns arg "1e+21". Cedar's decimal() cannot parse that, and values above about 9.2e14 are also out of Cedar's decimal range. No scenario covers these inputs.
 - [minor, judge] the judge called a test inadequate (criterion C-50748953): src.pdp.malformed.test.ts::C-50748953 M8 malformed policy is refused
+
+## Fix unit
+
+Fix unit 1 is created for these tasks:
+- F-5a5184d6 check rejects when a getter inside principal, resource, an entity or egress throws
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
