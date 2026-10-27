@@ -1,9 +1,9 @@
-# Verification: openspec:add-e2e-stack: FAIL (round 2)
+# Verification: openspec:add-e2e-stack: FAIL (round 3)
 
 traceability: not checked (an earlier step failed)
 
 - Base: `a53398fc5130b573609047b209e714758fda5de9`
-- Head: `9965067738a082f3ffff753832ec64cc9c59ed7d`
+- Head: `9c56c3ae8a79ca6942b925239164229b65e47b9d`
 - Implementer profiles: deepseek, glm, claude-sonnet
 - Judge: gemini-judge, 0 call(s), prompt sha256 `-`
 
@@ -11,8 +11,8 @@ traceability: not checked (an earlier step failed)
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.6 | base main@a53398fc51 contained |
-| 1 | integrity | failed | 0.5 | a skip or xfail marker was added (+2 unfrozen by human answers); scope: 38 changed file(s) |
+| 0 | preconditions | failed | 0.5 | base main@a53398fc51 contained; Feedback FB-001 (behaviour): e2e/test_e2e_stack.py calls no pytest.skip |
+| 1 | integrity | not_run | 0.0 | an earlier step failed |
 | 2 | build | not_run | 0.0 | an earlier step failed |
 | 3 | tests | not_run | 0.0 | an earlier step failed |
 | 4 | traceability | not_run | 0.0 | an earlier step failed |
@@ -23,97 +23,18 @@ traceability: not checked (an earlier step failed)
 | 9 | judge | not_run | 0.0 | an earlier step failed |
 | 10 | aggregation | ok | 0.0 | FAIL |
 
-## Integrity
-
-| Check | Status | Note |
-|---|---|---|
-| protected paths | ok | no protected path differs from the base |
-| pre-existing tests | failed | 2 test file(s) compared with the base |
-| red-green freeze | ok | 11 task(s): red and green compared (+1 unfrozen by a delegate or an agent) (+1 opened by task text) |
-| test path freeze | ok | 12 harness step commit(s) checked |
-| content scan | ok | no result-manipulating construct in the changed support and runner files |
-| gate configuration | skipped | no gate or runner configuration file changed |
-| test awareness | ok | no production line reacts to the test run |
-| suppressions | skipped | not checked: python only; changed files outside it: src/main.configure.test.ts, src/main.ts, test/arch/control-routes.test.ts, test/arch/control-routes.ts, test/support/e2e-stack/control.test.ts (+17 more) |
-| tdd history | ok | 11 task(s); red tests passing at head: step 3 |
-| pre-existing tests still pass | skipped | step 1 already failed |
-
-## Tests unfrozen by human answers (allowed, L4-IMP-002)
-
-- e2e/conftest.py (task 5.3, opened by its text, plan:m0@a1d38222ff9fb862)
-
-## Tests unfrozen by a delegate or an agent (allowed, L4-IMP-002)
-
-- test/support/e2e-stack/stack.db.test.ts (task 5.2, unfrozen by Q-001 (agent))
-
-## Evidence
-
-### Needs attention
-
-Nothing needs attention.
-
-### Files
-
-| Path | Module | Label | Why |
-|---|---|---|---|
-| `e2e/conftest.py` |  | relevant | named in the spec |
-| `e2e/test_e2e_stack.py` |  | relevant | new test file |
-| `openspec/changes/add-e2e-stack-fix-1/.l4/fix.json` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack-fix-1/.openspec.yaml` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack-fix-1/proposal.md` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack-fix-1/tasks.md` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack/.l4/evidence/round-1/evidence.json` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack/.l4/evidence/round-1/verdict.json` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack/.l4/evidence/round-1/verification.md` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack/.l4/ledger/r-20261026T2221Z-da09.jsonl` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack/.l4/ledger/r-20261026T2348Z-9953.jsonl` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack/.l4/ledger/r-20261027T0055Z-7c8b.jsonl` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack/.l4/ledger/r-20261027T0056Z-a73b.jsonl` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack/questions.md` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack/tasks.md` |  | none | exempt: harness, spec or documentation path |
-| `openspec/changes/add-e2e-stack/verification.md` |  | none | exempt: harness, spec or documentation path |
-| `src/main.configure.test.ts` |  | relevant | new test file |
-| `src/main.ts` | main | relevant | named in the spec |
-| `test/arch/control-routes.test.ts` |  | relevant | new test file |
-| `test/arch/control-routes.ts` | test | relevant | named in the spec |
-| `test/support/e2e-stack/control.test.ts` |  | relevant | new test file |
-| `test/support/e2e-stack/control.ts` | test | relevant | named in the spec |
-| `test/support/e2e-stack/database-part.test.ts` |  | relevant | new test file |
-| `test/support/e2e-stack/database-part.ts` | test | relevant | named in the spec |
-| `test/support/e2e-stack/discover.test.ts` |  | relevant | new test file |
-| `test/support/e2e-stack/discover.ts` | test | relevant | named in the spec |
-| `test/support/e2e-stack/faults.test.ts` |  | relevant | new test file |
-| `test/support/e2e-stack/faults.ts` | test | relevant | named in the spec |
-| `test/support/e2e-stack/main.test.ts` |  | relevant | new test file |
-| `test/support/e2e-stack/main.ts` | test | relevant | named in the spec |
-| `test/support/e2e-stack/part.test.ts` |  | relevant | new test file |
-| `test/support/e2e-stack/part.ts` | test | relevant | named in the spec |
-| `test/support/e2e-stack/parts/10-database.ts` | test | relevant | named in the spec |
-| `test/support/e2e-stack/reset.test.ts` |  | relevant | new test file |
-| `test/support/e2e-stack/reset.ts` | test | relevant | named in the spec |
-| `test/support/e2e-stack/stack.db.test.ts` |  | relevant | new test file |
-| `test/support/e2e-stack/stack.test.ts` |  | relevant | new test file |
-| `test/support/e2e-stack/stack.ts` | test | relevant | named in the spec |
-
-### Changed functions
-
-Diff coverage not run.
-
-### Tests
-
-Tests-ran check not run.
-
 ## Criteria
 
 None judged.
 
 ## Findings
 
-- [blocker, deterministic] a skip or xfail marker was added: e2e/test_e2e_stack.py::_require_fake_profile, e2e/test_e2e_stack.py::injected_fault
+- [major, feedback] Feedback FB-001 (behaviour): e2e/test_e2e_stack.py calls no pytest.skip: Remove the two profile guards: the pytest.skip in _require_fake_profile (drop the helper and its six calls) and the pytest.skip in the injected_fault fixture. L4 integrity rejects any skip call or marker that a harness commit adds (F-5758ac1b, rounds 1 and 2), so the spec sentence "call pytest.skip when it is not fake" cannot be met by any harness commit. Profile selection belongs to markers (e2e/pyproject.toml has `stack` with addopts -m "not stack"), and the stack-profile run is out of this unit scope (proposal.md). Keep the e2e_profile parameters, test names, l4 markers and every assertion ...
 
 ## Fix unit
 
-Escalated: round 2 failed the same way as round 1: finding F-5758ac1b
+Fix unit 2 is created for these tasks:
+- F-2596eba0 Feedback FB-001 (behaviour): e2e/test_e2e_stack.py calls no pytest.skip
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
