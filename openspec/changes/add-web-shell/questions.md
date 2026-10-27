@@ -324,6 +324,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ## Q-014: Hold H-c24d6b2b: UI criterion C-12290cf5 has no end-to-end test (not_testable); see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.66 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
