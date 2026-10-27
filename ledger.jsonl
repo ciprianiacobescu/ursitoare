@@ -43,3 +43,4 @@
 {"at":"2026-10-27T19:51:54Z","run":"r-20261027T1951Z-f3c5","type":"unit.dispatched","unit":"openspec:add-audit-chain"}
 {"at":"2026-10-27T20:20:34Z","detail":"the repository CI is still running on the hand-off commit d53d74bcbc (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"d53d74bcbcdd8d88341e12002c86ddbb1719dded","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-audit-chain"}
 {"at":"2026-10-27T20:30:50Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-audit-chain can go on","type":"plan.resumed"}
+{"at":"2026-10-27T20:30:55Z","head":"d53d74bcbcdd8d88341e12002c86ddbb1719dded","pr":18,"target_before":"674213c8e6eef65013b8eb692187722af8b42e27","type":"unit.merge_requested","unit":"openspec:add-audit-chain"}
