@@ -95,6 +95,10 @@ export interface MainDeps {
   exit: (code: number) => void;
   openDatabase?: typeof openDatabase;
   configureServer?: (server: FastifyInstance) => void | Promise<void>;
+  inspectServers?: (s: {
+    public: FastifyInstance;
+    internal: FastifyInstance;
+  }) => void | Promise<void>;
 }
 
 export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer | null> {
