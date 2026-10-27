@@ -55,3 +55,12 @@ function createFaultTable(opts?: { sleep?: (ms: number) => Promise<void>; }): Fa
 type ControlServer = Readonly<{ url: string; close(): Promise<void>; }>;
 function startControlServer(deps: { port: number; faults: FaultTable; reset(): Promise<void>; }): Promise<ControlServer>;
 ```
+
+## Facts from the merged code
+
+At main@bd7f38e.
+
+- `src/db/migrations/0002_tenancy.sql:7` is `ALTER TABLE ursitoare.tenant ENABLE ROW LEVEL SECURITY;` with no `FORCE`, and no migration forces it. The table's owner therefore bypasses its policy, so a raw owner `INSERT` into `ursitoare.tenant` (task 4.2) works without `app.tenant_id` or `withTenantTx`.
+- `src/tenancy/catalog.ts:6` `CATALOG_GLOBAL_TABLES` is `["schema_migration", "tenant", "tenant_route"]` (asserted in `src/tenancy/catalog.test.ts:112`), which exempts `tenant` from the `rls_not_forced` rule.
+- `src/tenancy/bootstrap.ts:71-73`: `ensureDefaultTenant` itself reads `ursitoare.tenant` with a raw owner query.
+- `src/tenancy/bootstrap.ts:71-84`: `ensureDefaultTenant` first runs `SELECT tenant_id, review_profile FROM ursitoare.tenant WHERE name = $1` and returns that tenant when found; only when no tenant of that name exists and another tenant does, it throws `TENANT_DEFAULT_CONFLICT`. A re-seed after tenant B exists finds the default tenant by name and succeeds, whether or not `/reset` removed tenant B.

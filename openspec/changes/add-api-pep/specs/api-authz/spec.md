@@ -95,7 +95,7 @@ A route with `resource` SHALL load it after validation with the principal set, a
 - **THEN** the answers are 404 `NOT_FOUND` with no new row, 403 with a `deny` row whose `reasons` hold `platform-cross-tenant-forbid`, 409 `FLOW_LOCKED`, and 500 `INTERNAL` whose body lacks `boom`
 
 ### Requirement: A list route never returns items the principal cannot read
-A route with `listFilter` SHALL send only items the filter admits: an `item` filter removes the others from `items`, and a `sql` filter route whose handler did not request `listPredicate` SHALL answer 500 `INTERNAL` with no data.
+A route with `listFilter` SHALL send only items the filter admits: an `item` filter removes the others from `items`, and a `sql` filter route whose handler did not request `listPredicate` SHALL answer 500 `INTERNAL` with no data. The filter acts only on the handler's own 2xx payload: an error envelope (401, 403, 404, 503, or an `ApiError` the handler throws) passes unchanged, and a 2xx payload that is a string, a Buffer, a stream or null (Fastify skips `preSerialization` for these) SHALL answer 500 `INTERNAL` with no data.
 
 #### Scenario: Item filter
 - **WHEN** a route with `canRead: (p, item) => item.team === "finance"` returns `{ items: [{ id: 1, team: "finance" }, { id: 2, team: "ops" }], next_cursor: "c1" }`, then `{ items: [] }`, then a bare array
@@ -104,6 +104,14 @@ A route with `listFilter` SHALL send only items the filter admits: an `item` fil
 #### Scenario: Sql filter
 - **WHEN** a route with `predicate: (p, first) => ({ sql: "owner_team = ANY($" + first + ")", values: [p.teams] })` has a handler returning `{ items: [], where: listPredicate(request, 2) }`, another that never calls `listPredicate`, and a route without a sql filter whose handler calls it inside a `try`
 - **THEN** the answers are 200 with `where` equal to `{ sql: "owner_team = ANY($2)", values: [[]] }`, 500 `INTERNAL` with no `items` in the body, and a caught `RouteDefinitionError` `ROUTE_DEF_INVALID` with `details.reason` `no_sql_filter`
+
+#### Scenario: Error replies pass unchanged
+- **WHEN** an `item` filter route `GET /api/v1/test/items` (action `read_flow`, `canRead: () => false`, handler returning `{ items: [{ id: 1 }] }`) gets no cookie; then alice's cookie under an engine without a tenant permit; then, under a permit-all engine, a `sql` filter route whose handler never calls `listPredicate` and throws `ApiError(409, "FLOW_LOCKED", "Flow is locked")`; then the same item route on a server whose `PepDeps.pool` is null
+- **THEN** the answers are 401 `{ "error": { "code": "UNAUTHENTICATED", "message": "Authentication required" } }`, 403 `FORBIDDEN` with `details.decisionId`, 409 `FLOW_LOCKED` and 503 `AUTHZ_UNAVAILABLE`, none of them 500 `INTERNAL`
+
+#### Scenario: Other 2xx payloads refuse
+- **WHEN** the handler of an `item` filter route returns the string `"secret"`, and the handler of a `sql` filter route returns `Buffer.from("secret")`, both called by alice under a permit-all engine
+- **THEN** both answers are 500 `INTERNAL` whose body does not contain `secret`
 
 ### Requirement: The internal listener serves only service-token routes and opens only with routes
 `buildInternalServer` SHALL accept only `service_token` routes and serve no `/health`; `URSITOARE_INTERNAL_PORT` (default 8090, never the public port) SHALL choose its port; and `main` SHALL listen on it, bound to `config.host`, only when it has routes.
@@ -140,7 +148,7 @@ A route with `listFilter` SHALL send only items the filter admits: an `item` fil
 
 #### Scenario: The real engine
 - **WHEN** `main` runs (port 0, `database` `{ app: null, owner: null }`) with an `inspectServers` that keeps both servers
-- **THEN** `checkRouteCoverage` is `[]` for both; the public server's defined routes are exactly `GET /health`, `GET /*`, `GET /api/v1/me` (`session`, `read_self`), `GET /auth/oidc/login`, `GET /auth/oidc/callback` and `POST /auth/oidc/logout`; the internal server has none
+- **THEN** `checkRouteCoverage` is `[]` for both; the public server's defined routes include `GET /health`, `GET /*`, `GET /api/v1/me` (`session`, `read_self`), `GET /auth/oidc/login`, `GET /auth/oidc/callback` and `POST /auth/oidc/logout` (a later unit's route is covered by `checkRouteCoverage`, not listed here); the internal server has none
 
 ### Requirement: GET /api/v1/me reports the user, tenant, capabilities and a CSRF token
 `GET /api/v1/me` SHALL, for a session and the PEP action `read_self`, answer `{ user: { id, displayName, email }, tenant: { id, name, reviewProfile }, capabilities, csrfToken }` where `capabilities` is `engine.allowedActions(principal, ACTION_NAMES)` and `csrfToken` is freshly issued.

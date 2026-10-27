@@ -28,6 +28,7 @@ interface Egress { method: string; host: string; path: string; bodyDigest: strin
 type Permit = Egress
 interface PolicyRequest { principal: EntityUid; action: string; resource: EntityUid; context: Record<string, unknown>; entities: Entity[]; egress?: Egress }
 interface Decision { decision: "allow" | "deny"; decisionId: string; decidedAt: string; reasons: string[]; errors: string[]; policySetVersion: string; permit?: Permit }
+// actions sorted ascending, policies sorted by id (code-unit order, as Array.prototype.sort)
 interface Pdp { readonly policySetVersion: string; readonly actions: readonly string[]; readonly policies: readonly { id: string; layer: PolicyLayer }[]; check(req: PolicyRequest): Promise<Decision> }
 function createPdp(opts: { schema: string; policies: PolicySource[]; clock: Clock; ids: IdSource; logger: Logger }): Promise<Pdp>
 type PdpErrorCode = "PDP_OPTIONS_INVALID" | "PDP_SCHEMA_INVALID" | "PDP_POLICY_INVALID" | "PDP_DUPLICATE_ID" | "PDP_RECORD_INVALID" | "PDP_RECORD_FAILED"

@@ -144,7 +144,7 @@ The in-process Cedar decision point: it loads a strictly validated policy set, a
 - **THEN** each decision is `deny` with `errors` `["PDP_REQUEST_INVALID"]` and no `permit`; `ttlSeconds` 3600 (`MAX_PERMIT_TTL_SECONDS`) and host `127.0.0.1:39080` are allowed
 
 ### Requirement: Request digests are canonical
-`canonicalJson` SHALL serialise plain data with object keys sorted, omit `undefined` properties and refuse anything else that JSON cannot carry, and `requestDigest` SHALL be the SHA-256 hex of the canonical JSON of the request's six fields.
+`canonicalJson` SHALL serialise plain data with object keys sorted, omit `undefined` properties and refuse anything else that JSON cannot carry, and `requestDigest` SHALL be the SHA-256 hex of the canonical JSON of the request's six fields, or of the text `(invalid request)` when the request cannot be read or serialised.
 
 #### Scenario: Canonical form
 - **WHEN** `canonicalJson({b:1,a:[2,{d:null,c:"x"}],e:undefined})` runs
@@ -159,8 +159,8 @@ The in-process Cedar decision point: it loads a strictly validated policy set, a
 - **THEN** the result is `d509c5be45e2f1c03edbba166c6de537dcd669d297f23cbb9eb538fe3a8be716`; an extra top-level property does not change it; adding `egress` or reordering `entities` does
 
 #### Scenario: A request that cannot be serialised still has a digest
-- **WHEN** `requestDigest` runs on two requests with a `bigint` in `context`, the same action, principal and resource
-- **THEN** both return the same 64 lower-case hex characters
+- **WHEN** `requestDigest` runs on a request with a `bigint` in `context`, on one whose `context` getter throws `new Error("boom")`, and on `null`
+- **THEN** each returns `2f600a98a05b66eadd93b11605e6f82102236a634f91a7fa74df0dea6da97caf`, the SHA-256 hex of the text `(invalid request)`
 
 ### Requirement: Value helpers build exact Cedar values
 `entityRef`, `toDecimal`, `hostOf` and `formatUid` SHALL build Cedar entity references, four-digit decimals without rounding, the host the WHATWG URL parser sees, and the log text of an entity uid.
@@ -193,7 +193,7 @@ Migration `0110_policy_decision.sql` SHALL create `ursitoare.policy_decision` ra
 - **THEN** both reject with `23514`
 
 ### Requirement: recordDecision appends one row per decision
-`recordDecision` SHALL insert the decision in the transaction's tenant with the request's action, principal, resource and digest, the optional run and node ids and the permit, bounded to the column limits, return `true` for a new row and `false` for a decision already recorded, and refuse an invalid decision with `PDP_RECORD_INVALID` and a failing insert with `PDP_RECORD_FAILED`.
+`recordDecision` SHALL insert the decision in the transaction's tenant with the request's action, principal, resource and digest, the optional run and node ids and the permit, bounded to the column limits, return `true` for a new row and `false` for a decision already recorded, and record a denied request that is not a request with `action` `""`, `(invalid)` for an unreadable uid and the fallback digest, refuse an invalid decision with `PDP_RECORD_INVALID` and a failing insert with `PDP_RECORD_FAILED`.
 
 #### Scenario: A full row
 - **WHEN** an allowed `send` with egress is checked (clock `2026-10-25T09:00:00Z`) and recorded under tenant A with `{runId:"run_1",nodeId:"n1"}`
@@ -222,6 +222,10 @@ Migration `0110_policy_decision.sql` SHALL create `ursitoare.policy_decision` ra
 #### Scenario: Hostile text is bounded
 - **WHEN** a denied request has a resource id of 10,000 characters and an action of 5,000 characters holding `\u0000`
 - **THEN** the row is stored, with `resource` of exactly 512 characters, `action` of exactly 128 and without NUL, each ending in `#` and the first 16 hex digits of the SHA-256 of the text it was cut from (`formatUid(req.resource)`; the action after NUL became U+FFFD)
+
+#### Scenario: A request that is not a request is still recorded
+- **WHEN** `check` runs on `null` and on the base request with a `context` getter that throws `new Error("boom")`, and each decision is recorded under tenant A
+- **THEN** both decisions are `deny` with `errors` `["PDP_REQUEST_INVALID"]`, both calls return `true`, and tenant A reads two such rows with `request_digest` `2f600a98a05b66eadd93b11605e6f82102236a634f91a7fa74df0dea6da97caf`; the row for `null` has `action` `""` and `principal` and `resource` `(invalid)`, the other `action` `read`, `User::"alice"` and `Doc::"d1"`
 
 #### Scenario: Invalid decisions and a failing insert
 - **WHEN** the decision's `decision` is `maybe`, or its `decidedAt` is `yesterday`, or its `policySetVersion` is `abc`, or `ctx.tenantId` is `a/b`; and a `tx` whose `query` rejects with `{code:"57P01",message:"terminating connection postgres://u:ZZ-DSN@h/db"}`

@@ -67,3 +67,12 @@ function snapshotOf(files: Record<string, string>): Snapshot
 function readSnapshot(root?: string): Snapshot
 function sortViolations(vs: Violation[]): Violation[]
 ```
+
+## Facts from the merged code
+
+Read at main@bd7f38e. In non-test `src`, `new ApiError(` is constructed with a literal code at exactly these three places, so the M0 contribution to the scan of `checkApiErrorCodes` is `NOT_FOUND` and `WEB_NOT_BUILT`:
+
+- `src/api/web.ts:134`: `return new ApiError(404, "NOT_FOUND", "Route not found");`
+- `src/api/web.ts:138`: `return new ApiError(503, "WEB_NOT_BUILT", "Web app is not built", {`
+- `src/api/server.ts:23`: `const NOT_FOUND_RESPONSE = toErrorResponse(new ApiError(404, "NOT_FOUND", "Route not found"));`
+- `src/api/web.ts:163`: `throw new WebAppError("WEB_APP_DUPLICATE", "the web app is already registered on this server");` is a `WebAppError`, not an `ApiError`, so the scan does not see it and `WEB_APP_DUPLICATE` is not in the registry.

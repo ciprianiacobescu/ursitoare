@@ -1,11 +1,11 @@
 ## Purpose
 
-The tamper-evident audit log: a hash chain per tenant over canonical JSON, gapless sequences, append-only storage, signed head anchors and a verifier.
+Tamper-evident audit log: one hash chain per tenant.
 
 ## ADDED Requirements
 
 ### Requirement: One canonicalization function
-`canonicalize(value)` SHALL return the RFC 8785 text of a JSON value (keys sorted by UTF-16 code units, no whitespace, numbers in ECMAScript form, `-0` as `0`, a bigint within the safe-integer range as a number) and SHALL throw `AuditError` `AUDIT_CANONICAL_INVALID` with `details.reason` for anything it cannot write exactly. The writer and the verifier use this one function.
+`canonicalize(value)` SHALL return the RFC 8785 text of a JSON value (`-0` as `0`, a bigint within the safe-integer range as a number) and SHALL throw `AuditError` `AUDIT_CANONICAL_INVALID` with `details.reason` for anything it cannot write exactly.
 
 #### Scenario: RFC 8785 vectors
 - **WHEN** `canonicalize` gets `JSON.parse` of the RFC 8785 section 3.2.4 text `{"numbers":[333333333.33333329, 1E30, 4.50, 2e-3, 0.000000000000000000000000001],"string":"\u20ac$\u000F\u000aA'\u0042\u0022\u005c\\\"\/","literals":[null,true,false]}`, an object with the keys `"\u20ac"`, `"\r"`, `"\ufb33"`, `"1"`, `"\ud83d\ude00"`, `"\u0080"`, `"\u00f6"`, and `{ m: 2n ** 53n - 1n, a: -0 }`
@@ -49,19 +49,23 @@ Migration `0080_audit.sql` SHALL create `audit_event` (monthly range partitions 
 - **THEN** `to_regclass` finds the three tables and `ursitoare.audit_event_default`, the ledger holds version `80` named `audit`, the comment of `audit_event` is `partition: month`, all three force row-level security, `ursitoare_app` has `INSERT` and `SELECT` but not `UPDATE`, `DELETE` or `TRUNCATE` on events and anchors, only column `UPDATE` of `seq` and `hash` on `audit_head`, and no `SELECT` on the default partition, and `checkTenancyCatalog(db.ownerPool)` resolves `[]`
 
 #### Scenario: Nobody can change or remove
-- **WHEN** after `seedTwoTenants(db)` the app pool inserts (raw SQL) a head row, its update to seq 1, one event and one anchor of tenant `a`; the app role then runs, each in its own `withTenantTx`, `UPDATE`, `DELETE` and `TRUNCATE` on `audit_event`, `DELETE` and `UPDATE ... SET tenant_id` on `audit_head`, `UPDATE` on `audit_anchor`; and the owner, with `app.tenant_id` set, runs `UPDATE` and `DELETE` on `audit_event`, `audit_event_default`, a partition made by `ensurePartitions`, and `audit_anchor`
-- **THEN** the app role's statements reject with `{ code: "42501" }`, the owner's with `{ code: "U0801" }`, and the rows are unchanged
+- **WHEN** after `seedTwoTenants(db)` and `ensurePartitions(db.ownerPool, fixedClock("2031-03-15T00:00:00Z"))`, the app pool inserts for `a`: a head row (seq 0, 32 zero bytes); the head advanced to seq 1 with hash 32 bytes of `0x11`, event seq 1 at `2031-03-20T00:00:00Z` (in `audit_event_p203103`); the head advanced to seq 2 with 32 bytes of `0x22`, event seq 2 at `2019-06-01T00:00:00Z` (in `audit_event_default`); an anchor at seq 2; the app role runs, each in its own `withTenantTx`, `UPDATE`, `DELETE` and `TRUNCATE` on `audit_event`, `DELETE` and `UPDATE ... SET tenant_id` on `audit_head`, `UPDATE` on `audit_anchor`; and the owner, each in its own transaction with `app.tenant_id` set to `tenant_a`, runs `UPDATE` and `DELETE` on each of `audit_event`, `audit_event_default`, `audit_event_p203103` and `audit_anchor`
+- **THEN** the app statements reject with `{ code: "42501" }`, the owner's eight with `{ code: "U0801" }`, and the rows are unchanged
 
 #### Scenario: An event must match the head
-- **WHEN** the app role, as `a`, inserts seq 1 while the head is seq 0; advances the head to seq 1 with hash `H` and inserts seq 1 with hash `H`, then with another hash; and as `b` inserts an event whose `tenant_id` is `tenant_a`
-- **THEN** the first, third and fourth reject with `{ code: "U0802" }`, the second succeeds; `origin` `"x"`, an `mk_jti` with origin `ursitoare`, a 31-byte hash or seq 0 reject with `{ code: "23514" }`
+- **WHEN** after `seedTwoTenants(db)`, with `base` = `{ tenant_id: "tenant_a", seq: 1, at: "2031-03-31T00:00:00Z", prev_hash: 32 zero bytes, hash: H (32 bytes of 0x11), event_type: "a.b", actor: {"kind":"user","id":"u_1"} }`, the app role runs, each in its own `withTenantTx`: as `a` a head row (seq 0, 32 zero bytes) and `base`; the head advanced to seq 1, hash `H`, and `base`; `base` with hash 32 bytes of `0x22`, with a 31-byte hash; as `b` `base`; as `a` (head at seq 1, `H`) `base` with a 31-byte `prev_hash`, with `origin` `"x"`, with `mk_jti` `"j"`; as `b` a head row (seq 0, 32 zero bytes), then `base` with `tenant_id` `tenant_b`, seq 0, hash 32 zero bytes
+- **THEN** the inserts at head seq 0, with hash `0x22` bytes, with the 31-byte hash and by `b` for `tenant_a` reject with `{ code: "U0802" }`; the insert after the advance succeeds; the 31-byte `prev_hash`, `origin` `"x"`, `mk_jti` and seq 0 inserts reject with `{ code: "23514" }`
 
 ### Requirement: Appending is gapless inside the caller's transaction
-`appendAudit(tx, ctx, event, opts?)` SHALL, in the caller's transaction, lock the tenant's head row, store the event with `seq` one above the head, `prev_hash` the head's hash and `hash = chainHash(prev_hash, record)`, advance the head, and return `{ seq, hash }` (lowercase hex); a rollback SHALL leave no gap, and `at` SHALL be the injected clock's time, which decides the monthly UTC partition (or `audit_event_default`).
+`appendAudit(tx, ctx, event, opts?)` SHALL, in the caller's transaction, lock the tenant's head row, store the event with `seq` one above the head, `prev_hash` the head's hash and `hash = chainHash(prev_hash, record)`, advance the head, and return `{ seq, hash }` (lowercase hex); a rollback SHALL leave no gap, and `at` SHALL be the injected clock's time, read once per append, hashed and stored, which decides the monthly UTC partition (or `audit_event_default`).
 
 #### Scenario: First and second event
 - **WHEN** with `fixedClock("2031-03-31T23:59:59.999Z")`, `{ eventType: "role.granted", actor: { kind: "user", id: "u_1" }, target: { kind: "role", id: "r_1" }, payload: { b: 2, a: [true, null, "x"] } }` is appended for `TENANT_A_ID`, then with `fixedClock("2031-04-01T00:00:00.000Z")` `{ eventType: "role.revoked", actor: { kind: "user", id: "u_1" } }`, in two `withTenantTx` calls
 - **THEN** the results are `{ seq: 1n, hash: H1 }` and `{ seq: 2n, hash: H2 }` (hex above); the rows hold `prev_hash` 32 zero bytes and H1, `at` the clocks' times
+
+#### Scenario: One clock read per append
+- **WHEN** with a clock whose `now()` returns `2031-03-31T12:00:00.000Z` plus 1 ms per call, `{ eventType: "role.granted", actor: { kind: "user", id: "u_1" } }` is appended for `TENANT_A_ID` twice (two `withTenantTx` calls), then `verifyChain(db.appPool, a)` runs
+- **THEN** the stored rows' `at.toISOString()` are `2031-03-31T12:00:00.000Z` and `2031-03-31T12:00:00.001Z`, and the report is `{ ok: true, checked: 2 }`
 
 #### Scenario: Rollback leaves no gap
 - **WHEN** one event is committed, a second `appendAudit` runs in a transaction that then throws, and a third is appended
@@ -99,7 +103,7 @@ Migration `0080_audit.sql` SHALL create `audit_event` (monthly range partitions 
 
 #### Scenario: Empty and valid chains
 - **WHEN** `verifyChain(db.appPool, a)` runs before any event, then after 7 appended events with `batchSize` `3` and with the default; and with `fromSeq` `0n`, `1`, or `batchSize` `0`, `5001`
-- **THEN** the first three results are exactly `{ ok: true, checked: 0 }`, `{ ok: true, checked: 7 }` twice; the others reject with `AUDIT_OPTIONS_INVALID` (`details.reason` `bad_from_seq`, `bad_batch_size`) before any query
+- **THEN** the first three results are `{ ok: true, checked: 0 }`, `{ ok: true, checked: 7 }` twice; the others reject with `AUDIT_OPTIONS_INVALID` (`details.reason` `bad_from_seq`, `bad_batch_size`) before any query
 
 #### Scenario: A changed field
 - **WHEN** on a chain of 7 the owner, in a transaction with `app.tenant_id` set, runs `ALTER TABLE ursitoare.audit_event DISABLE TRIGGER audit_event_append_only` and changes seq 4: one byte of `hash`; one byte of `prev_hash`; `at` by one microsecond; `event_type`; the actor id; a payload leaf; `origin`
@@ -114,7 +118,7 @@ Migration `0080_audit.sql` SHALL create `audit_event` (monthly range partitions 
 - **THEN** the results are `{ ok: false, checked: 6, firstBadSeq: 7n, reason: "gap" }`, `{ ok: false, checked: 7, firstBadSeq: 7n, reason: "hash" }`, `{ ok: true, checked: 3 }`, `{ ok: true, checked: 0 }` and `{ ok: false, checked: 1, firstBadSeq: 2n, reason: "hash" }`
 
 ### Requirement: Writer and verifier agree on random events
-A chain written by `appendAudit` for random events SHALL verify, and a change of one byte of any stored hashed field SHALL be reported by `verifyChain` as a `hash` failure at that event.
+A chain of random events written by `appendAudit` SHALL verify, and a one-byte change of any stored hashed field SHALL be reported by `verifyChain` as a `hash` failure at that event.
 
 #### Scenario: Round trip of seeded random JSON
 - **WHEN** a seeded generator makes 300 JSON values (strings with quotes, backslashes, control characters, `é`, U+2028, an emoji; numbers `0.1`, `1e21`, `5e-324`, `-0`, `2 ** 53`), each is canonicalized, parsed, canonicalized again, and 12 chains of 6 events with such payloads are appended

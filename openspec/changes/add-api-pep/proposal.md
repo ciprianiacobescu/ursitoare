@@ -48,6 +48,8 @@ function getTenantProfile(tx: TenantTx, ctx: TenantContext): Promise<{ tenantId:
 function createTestSession(db: TestDatabase, ctx: TenantContext, subject: string, clock: Clock): Promise<{ cookie: string; userId: string; csrfToken: string }>
 ```
 
+**Routes and codes this unit gives `add-api-conventions`** (`DefinedRoute.errors` is the declared codes plus the implied ones, sorted and unique): `GET /api/v1/me` declares `errors: []` and lists `AUTHZ_UNAVAILABLE`, `FORBIDDEN`, `UNAUTHENTICATED`; `GET /health`, `GET /auth/oidc/login`, `GET /auth/oidc/callback` and `POST /auth/oidc/logout` list `[]`; `GET /*` lists `NOT_FOUND`, `WEB_NOT_BUILT`. The literal codes this unit's non-test `src` builds with `new ApiError(` are exactly `UNAUTHENTICATED`, `FORBIDDEN`, `CSRF_INVALID`, `AUTHZ_UNAVAILABLE` and `NOT_FOUND`; the `ROUTE_*` codes belong to `RouteDefinitionError` (an `Error`, not an `ApiError`) and are not envelope codes.
+
 **Interfaces taken:**
 
 - From `add-engine-skeleton`: `buildServer`, `ServerDeps`, `ApiError`, `Clock`, `systemClock`, `Env`, `ConfigError`, `AppConfig`, `loadConfig`, `main`, `MainDeps`.

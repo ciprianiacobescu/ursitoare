@@ -1,11 +1,11 @@
 ## Purpose
 
-A Keycloak-26-shaped OIDC provider for the test gates, plus the protocol contract suite that also runs against real Keycloak. It lets identity code and browser journeys run with no Docker, network or secret, and gives negative tests a source of precisely broken tokens.
+A Keycloak-26-shaped OIDC provider for the test gates, plus the protocol contract suite that also runs against real Keycloak. It lets identity code and browser journeys run with no Docker, external identity provider or secret, and gives negative tests a source of precisely broken tokens.
 
 ## ADDED Requirements
 
 ### Requirement: The provider binds loopback only and stops cleanly
-`startFakeOidc(opts?)` SHALL listen only on a loopback host, answer only requests whose `Host` header names that loopback address and port, and stop completely on `close()`.
+`startFakeOidc(opts?)` SHALL listen only on a loopback host, answer only requests whose `Host` header names that loopback address and port, refuse a request body over 65536 bytes on any route, and stop completely on `close()`.
 
 #### Scenario: Default start
 - **WHEN** `startFakeOidc()` resolves and `GET {issuer}/.well-known/openid-configuration` is sent
@@ -18,6 +18,14 @@ A Keycloak-26-shaped OIDC provider for the test gates, plus the protocol contrac
 #### Scenario: Foreign Host header, unknown path, wrong method
 - **WHEN** a raw `node:http` request carries `Host: evil.example:<port>`, then `GET /nope` and `POST` to the discovery path are sent
 - **THEN** the answers are 400 `{"error":"invalid_request"}`, 404 `{"error":"not_found"}` and 405 with `Allow: GET`
+
+#### Scenario: Oversized body
+- **WHEN** a raw `node:http` `POST` with `content-type: application/x-www-form-urlencoded` and a body of 65537 bytes is sent to the token path, and again to the authorization path, then a `POST` to `/nope` whose body is `x=` followed by `a` up to exactly 65536 bytes
+- **THEN** the first two answers are 413 `{"error":"invalid_request"}` and their sockets close after the answer; the third is 404 `{"error":"not_found"}` (exactly 65536 bytes is within the limit)
+
+#### Scenario: Registering redirects
+- **WHEN** `registerRedirect` is called with `"javascript:x"`, `"ftp://127.0.0.1:9/cb"`, `"http://u:p@127.0.0.1:9/cb"` and `"http://127.0.0.1:9/cb#f"`, then with `("http://127.0.0.1:9/cb", { clientId: "nope" })` and `("http://127.0.0.1:9/bye", { clientId: "nope", postLogout: true })`, then with `("http://127.0.0.1:9/bye", { clientId: "ursitoare-mcp", postLogout: true })`
+- **THEN** the first four throw `FakeOidcError` `FAKE_OIDC_BAD_REDIRECT`, the next two throw `FAKE_OIDC_UNKNOWN_CLIENT`, and the last returns without throwing
 
 #### Scenario: Close is idempotent and complete
 - **WHEN** a keep-alive connection is open and `close()` is called twice
@@ -43,7 +51,7 @@ The authorization endpoint SHALL render, for a valid request, an HTML form with 
 
 #### Scenario: Labels and structure
 - **WHEN** a valid authorization request is sent with `GET`
-- **THEN** the answer is 200 `text/html`; `<html lang="en">`, a `<title>` and one `<h1>` exist; `<label for="username">Username or email</label>` matches `<input id="username" name="username">`; `<label for="password">Password</label>` matches `<input id="password" name="password" type="password">`; `<button type="submit">Sign In</button>` exists; the form has `method="post"` and `id="kc-form-login"`
+- **THEN** the answer is 200 `text/html`; `<html lang="en">`, a `<title>` and one `<h1>` exist; the page contains these exact strings: `<form id="kc-form-login" method="post" action="` (followed by the escaped request path and raw query), `<label for="username">Username or email</label>`, `<input id="username" name="username" type="text" autocomplete="username">`, `<label for="password">Password</label>`, `<input id="password" name="password" type="password" autocomplete="current-password">` and `<button id="kc-login" type="submit">Sign In</button>`
 
 #### Scenario: Escaping and no echo
 - **WHEN** `renderLoginPage({ action: "/a?x=1&y=2", username: "\"><script>1</script>", error: "<b>" })` runs
@@ -60,13 +68,17 @@ The endpoint at `/realms/ursitoare/protocol/openid-connect/auth` SHALL check `cl
 - **WHEN** `redirect_uri` is the registered value plus `/`, plus `?x=1`, or `https://evil.example/cb`, or `client_id` is `nope`
 - **THEN** each answer is 400 `text/html` containing `Invalid parameter: redirect_uri` or `Invalid parameter: client_id`, with no `Location` header and no form
 
+#### Scenario: Redirects are stored as given, per client
+- **WHEN** `registerRedirect("http://127.0.0.1:9")` and `registerRedirect("http://127.0.0.1:9/m", { clientId: "ursitoare-mcp" })` were called, and valid authorization requests are sent with `client_id` and `redirect_uri` of (`ursitoare-engine`, `http://127.0.0.1:9`), (`ursitoare-engine`, `http://127.0.0.1:9/`), (`ursitoare-engine`, `http://127.0.0.1:9/m`) and (`ursitoare-mcp`, `http://127.0.0.1:9/m`)
+- **THEN** the answers are 200 with the form, 400 `Invalid parameter: redirect_uri`, 400 `Invalid parameter: redirect_uri` and 200 with the form
+
 #### Scenario: Protocol errors go back to the client
 - **WHEN** the query has `code_challenge_method=plain`, or no `code_challenge`, or `response_type=token`, or `scope=profile`
 - **THEN** each answer is 302 to the registered redirect with `error` `invalid_request`, `invalid_request`, `unsupported_response_type` and `invalid_scope`, `state` unchanged, and no `code` in the `Location`
 
 #### Scenario: Wrong password and unknown user look alike
 - **WHEN** alice posts a wrong password, and `eve` posts any password
-- **THEN** both answers are 200 with the identical message `Invalid username or password.` in an element with `role="alert"`, the username input holds the submitted name, and neither has a `Location` header
+- **THEN** both answers are 200 and contain `<p id="input-error" role="alert">Invalid username or password.</p>`, the username input is `<input id="username" name="username" type="text" autocomplete="username" value="alice">` (`value="eve"` for eve), and neither has a `Location` header
 
 ### Requirement: The token endpoint exchanges a code once, with PKCE and client authentication
 The token endpoint SHALL accept `grant_type=authorization_code` only, verify the PKCE S256 verifier, authenticate the confidential client with `client_secret_basic`, accept a code once within 60 seconds of the injected clock, and require the exact `redirect_uri`.
@@ -92,8 +104,8 @@ The token endpoint SHALL accept `grant_type=authorization_code` only, verify the
 - **THEN** the first three answers are 401 `invalid_client` with `WWW-Authenticate: Basic realm="ursitoare"` and the fourth is 400 `invalid_grant`
 
 #### Scenario: Bad requests
-- **WHEN** `grant_type=password` is posted, then a JSON body, then a body of 65537 bytes, then a form without `code`
-- **THEN** the answers are 400 `unsupported_grant_type`, 400 `invalid_request`, 413 `invalid_request` and 400 `invalid_request`
+- **WHEN** `grant_type=password` is posted, then a JSON body, then a form without `code`
+- **THEN** the answers are 400 `unsupported_grant_type`, 400 `invalid_request` and 400 `invalid_request`
 
 #### Scenario: Public client
 - **WHEN** a code for `ursitoare-mcp` is posted with `client_id` in the body, no secret and the right verifier, and `clientSecret("ursitoare-mcp")` is called
@@ -182,7 +194,7 @@ Passwords and client secrets SHALL be random per start, readable only through `p
 `oidcContract(baseUrl, credentials)` SHALL return named checks that use only HTTP against `baseUrl` (the issuer), so that the same checks pass on the fake and on real Keycloak.
 
 #### Scenario: All checks pass on the fake
-- **WHEN** the fake is started, `registerRedirect` is called and `oidcContract(fake.issuer, credentials)` is run check by check
+- **WHEN** the fake is started, `registerRedirect("http://127.0.0.1:9/cb")` is called and `oidcContract(fake.issuer, credentials)` is run check by check with `credentials` = `{ clientId: "ursitoare-engine", clientSecret: clientSecret("ursitoare-engine"), redirectUri: "http://127.0.0.1:9/cb", username: "alice", password: passwordOf("alice"), organization: "org-a", groups: ["ursitoare-authors", "team-finance"] }`
 - **THEN** the names are `discovery document`, `jwks keys`, `code flow with PKCE`, `claims of the id token`, `userinfo with the access token`, `wrong password shows the error`, `plain PKCE is refused`, `code is single use`, `redirect uri must match exactly`, `logout ends the session`, and every `run()` resolves
 
 #### Scenario: A broken provider fails

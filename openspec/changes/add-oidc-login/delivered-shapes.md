@@ -84,3 +84,10 @@ function databaseApi(handles: ReadonlyMap<string, PartHandle>): DatabaseApi;
 // add-e2e-stack (test/support/e2e-stack/discover.ts)
 function discoverParts(dir?: string): Promise<E2eStackPart[]>;
 ```
+
+## Facts from the merged code
+
+Checked at main@bd7f38e.
+
+- `test/support/e2e-stack/stack.ts:88-97`: `stackEnvironment(enginePort, engineKeyFile)` returns `URSITOARE_ROLE: "all"`, `URSITOARE_HOST: "127.0.0.1"`, `URSITOARE_PORT`, ``URSITOARE_PUBLIC_BASE_URL: `http://127.0.0.1:${enginePort}` ``, `URSITOARE_LOG_LEVEL`, `URSITOARE_SHUTDOWN_DRAIN_MS` and `URSITOARE_ENGINE_KEY_FILE: engineKeyFile`. The stack engine therefore has an engine key file and a public base URL equal to the engine origin.
+- `test/support/e2e-stack/database-part.ts:106`: the database part sets `URSITOARE_DATABASE_URL: roleUrl(cluster, ROLE_APP, null, E2E_DATABASE)`. The stack engine therefore has a database URL.

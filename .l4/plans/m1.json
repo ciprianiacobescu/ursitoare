@@ -59,7 +59,8 @@
         {
           "id": "openspec:add-api-conventions",
           "depends_on": [
-            "openspec:add-api-pep"
+            "openspec:add-api-pep",
+            "openspec:add-oidc-login"
           ]
         },
         {

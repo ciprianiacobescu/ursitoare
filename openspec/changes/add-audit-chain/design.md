@@ -1,17 +1,17 @@
 ## Context
 
-Architecture §9.6 and §6: one hash chain per tenant, one canonicalization function for writer and verifier, an append-only table that retention expires by dropping partitions. The module `audit` may import `core`, `db`, `tenancy` and `observability` (already in `test/arch/modules.ts`); this unit imports only `src/core` and `src/tenancy`, uses `node:crypto` and adds no dependency or module edge.
+Architecture §9.6 and §6: one hash chain per tenant, one canonicalization function for writer and verifier, an append-only table that retention expires by dropping partitions. `src/audit` imports only `src/core`, `src/tenancy` and `node:crypto`; no dependency or module edge is added.
 
-Interfaces used, restated exactly from the dependencies:
+Interfaces used:
 
-- `add-engine-skeleton`, `src/core`: `interface Clock { now(): Date }`, `fixedClock(iso: string): Clock`, `systemClock: Clock`.
-- `add-db-foundation`: `ensurePartitions(ownerPool: pg.Pool, clock: { now(): Date }, opts?: { monthsBack?: number; monthsAhead?: number }): Promise<{ created: string[]; skipped: string[] }>` creates UTC partitions `ursitoare.<table>_pYYYYMM` for tables commented `partition: month` (1 month back, 3 ahead by default), never touching DEFAULT. `withTestDatabase(opts?: { migrated?: boolean; cluster?: TestCluster }): Promise<TestDatabase>` (`ownerPool`, `appPool`; roles `ursitoare_owner`, `ursitoare_app`) clones a template migrated by `prepareDatabase`, so it holds `0080_audit.sql`; migrations run as the owner, one transaction per file.
-- `add-tenancy-foundation`: `interface TenantContext { readonly tenantId: string; readonly reviewProfile: "solo" | "team" }`, `type TenantPool = Pick<pg.Pool, "connect">`, `type TenantTx = Pick<pg.PoolClient, "query">`, `withTenantTx<T>(pool: TenantPool, ctx: TenantContext, fn: (tx: TenantTx) => Promise<T>): Promise<T>` (one transaction, `set_config('app.tenant_id', ctx.tenantId, true)`); `test/support/tenants.ts`: `TENANT_A_ID` (`"tenant_a"`), `seedTwoTenants(db: TestDatabase): Promise<{ a: TenantContext; b: TenantContext }>`; `checkTenancyCatalog(db: Pick<pg.Pool, "query">, opts?: { appRole?: string; ownerRole?: string }): Promise<CatalogViolation[]>` (tenant-leading keys, forced RLS, a policy naming `app.tenant_id`, no app privilege on leaves).
+- `add-engine-skeleton`, `src/core`: `Clock`, `fixedClock`, `systemClock`.
+- `add-db-foundation`: `ensurePartitions(ownerPool, clock, opts?)` creates UTC partitions `ursitoare.<table>_pYYYYMM` for tables commented `partition: month` (1 month back, 3 ahead by default), never touching DEFAULT. `withTestDatabase(opts?)` (`ownerPool`, `appPool`; roles `ursitoare_owner`, `ursitoare_app`) clones a template migrated by `prepareDatabase`, so it holds `0080_audit.sql`; migrations run as the owner, one transaction per file.
+- `add-tenancy-foundation`: `TenantContext { tenantId; reviewProfile }`, `TenantPool`, `TenantTx`, `withTenantTx(pool, ctx, fn)` (one transaction, `set_config('app.tenant_id', ctx.tenantId, true)`); `test/support/tenants.ts`: `TENANT_A_ID` (`"tenant_a"`), `seedTwoTenants(db)`; `checkTenancyCatalog(db, opts?)` (tenant-leading keys, forced RLS, a policy naming `app.tenant_id`, no app privilege on leaves). Full signatures: `delivered-shapes.md`.
 
 ## Decisions
 
-1. **Hashed document:** keys `tenant_id`, `seq` (decimal string), `at`, `event_type`, `actor`, `target` (`null` if absent), `payload`, `origin`, `mk_trace_id`, `mk_request_id`, `mk_jti` (`null` if absent). `hash = sha256(prev_hash bytes ‖ utf8(canonicalize(document)))`, returned as lowercase hex; `prev_hash` of seq 1 is `GENESIS_HASH`. Writer and verifier both call `chainHash`.
-2. **`at`** is the injected clock's instant stored as `timestamptz` and hashed as UTC text with six fraction digits (`formatAt`: `toISOString()` with `000` before the `Z`; years 1970 to 9999). The verifier reads `to_char(at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')`, not a `Date`, so one microsecond is seen.
+1. **Hashed document:** keys `tenant_id`, `seq` (decimal string), `at`, `event_type`, `actor`, `target` (`null` if absent), `payload`, `origin`, `mk_trace_id`, `mk_request_id`, `mk_jti` (`null` if absent). `hash = sha256(prev_hash bytes ‖ utf8(canonicalize(document)))`, returned as lowercase hex; `prev_hash` of seq 1 is `GENESIS_HASH`.
+2. **`at`** is the injected clock's instant, read once per append (one `now()` call; the same Date is formatted for the hash and stored), stored as `timestamptz` and hashed as UTC text with six fraction digits (`formatAt`: `toISOString()` with `000` before the `Z`; years 1970 to 9999). The verifier reads `to_char(at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')`, not a `Date`, so one microsecond is seen.
 3. **Gapless sequence:** `appendAudit` checks `current_setting('app.tenant_id', true)` equals `ctx.tenantId`, runs `SELECT seq::text, hash FROM audit_head WHERE tenant_id = $1 FOR UPDATE` (no row: `INSERT ... (tenant_id, 0, 32 zero bytes) ON CONFLICT (tenant_id) DO NOTHING`, then the `SELECT` again), `UPDATE audit_head`, `INSERT INTO audit_event`. The lock lasts until the caller's transaction ends, so a tenant's appends are serialised and a rollback undoes head and event together. The head is updated first so the `BEFORE INSERT` trigger can demand that `NEW.seq` and `NEW.hash` equal it: a direct insert skipping `appendAudit` fails with `U0802`.
 4. **The key `(tenant_id, seq, at)`** must hold the partition column, so two rows may share a `seq`; `verifyChain` reports a repeated or missing `seq` as `gap`.
 5. **Canonical JSON** is RFC 8785, stricter in four places: `undefined` (also as property or element), a string or key holding U+0000 (`jsonb` cannot store it), an ill-formed string, and more than 64 nested containers (a cycle ends there) are refused. A safe-range bigint is written as a number. Only plain objects, arrays and primitives pass. The payload is stored as `jsonb` from its canonical text; reading it back and canonicalizing gives the same text (checked on PostgreSQL 18.4).
@@ -135,9 +135,10 @@ Checked on PostgreSQL 18.4: the parent's row triggers are cloned to `audit_event
 |---|---|
 | Empty chain | `verifyChain` `{ ok: true, checked: 0 }`; `anchorHead` `AUDIT_CHAIN_EMPTY` |
 | Deleted first or middle row, repeated `seq` | `gap` at the seq the walk expected |
-| Deleted tail; head hash altered | `gap` at the head's seq; `hash` |
+| Deleted tail with the head left in place; head hash altered | `gap` at the head's seq; `hash` |
 | A stored field, `prev_hash` or `hash` changed | `hash` at that event |
 | Wrong anchor key, altered anchor, anchor past the tip | `anchor` at the anchor's seq |
+| Owner role: `TRUNCATE`; tail, head and newer anchors removed | not detected inside the database (Security 5) |
 | Invalid event, secret key, oversized or non-JSON payload | `AUDIT_EVENT_INVALID`, `AUDIT_PAYLOAD_SECRET`, `AUDIT_CANONICAL_INVALID`; no SQL ran |
 | Transaction not set to `ctx` | `AUDIT_CONTEXT_MISMATCH`; nothing written |
 | Unknown tenant, SQL error, serialization failure | `AUDIT_STORE_FAILED` (SQLSTATE); the caller's transaction is aborted |
@@ -145,23 +146,37 @@ Checked on PostgreSQL 18.4: the parent's row triggers are cloned to `audit_event
 
 ## Security
 
-1. No endpoint is added (`add-audit-api` and `add-audit-sink` add theirs with a PEP action each). The functions take a `TenantContext` from authentication; nothing reads a tenant or actor from a request.
-2. The three tables are tenant-leading with forced RLS; the app role cannot update or delete an event or anchor and a trigger stops every role. Two-tenant scenarios: separate chains, `b` sees none of `a`'s rows, a forged cross-tenant insert fails (`U0802`); `checkTenancyCatalog` stays empty.
+1. No endpoint is added. The functions take a `TenantContext` from authentication; nothing reads a tenant or actor from a request.
+2. The three tables are tenant-leading with forced RLS; the app role cannot update or delete an event or anchor, and a row trigger stops `UPDATE` and `DELETE` of an event or anchor row for every role (not `TRUNCATE`; see 5). Two-tenant scenarios cover separate chains, no cross-tenant read and a forged cross-tenant insert (`U0802`); `checkTenancyCatalog` stays empty.
 3. Inputs are checked at the module boundary (`validateEvent`, `canonicalize`, options); statements are parameterised. A payload may hold untrusted values; it is stored as data, never interpreted, and carries no taint label.
 4. The engine key reaches only `anchorMac`; the derived key stays in memory; no error, `details` or log holds key material or a payload value; the module logs nothing. Secret-named payload keys are refused as defence in depth; callers still redact.
-5. Abuse cases, each a scenario: a direct insert that skips the chain; rewriting history (`U0801`; an owner who disables the trigger is caught by `hash`); deleting rows or the tail (`gap`); swapping the head; altering anchors without the key (`anchor`); another tenant's context; a secret key; an oversized or cyclic payload. Residual: the owner role plus the engine key can rewrite and re-sign.
+5. Abuse cases, each a scenario: a direct insert that skips the chain; rewriting history (`U0801`; with the trigger off, a byte changed in place is caught by `hash`); deleting a row, or a tail whose head is kept (`gap`); swapping the head; altering anchors without the key (`anchor`); another tenant's context; a secret key; an oversized or cyclic payload. Residual, what the owner role can do without the engine key: `TRUNCATE` the tables; or, after disabling the triggers, delete the newest events, rewind or delete the head and delete newer anchors (`verifyChain` cannot detect a tail removed inside the database; that needs an anchor kept outside it, not part of M1); or rewrite an event, recompute the later hashes and delete the anchors from that seq on. The owner plus the engine key can also rewrite and re-sign.
 
 ## Test plan
 
-Node test runner, `*.test.ts` beside each file, `withTestDatabase()`, `fixedClock`, no sleeps; test names have no `.`, `[` or `::`. The migration test first asserts with `assert.ok` that `to_regclass` finds the tables, `to_regprocedure` the two functions and the ledger holds version 80; expected SQL failures are `await assert.rejects(p, { code })`, so red fails by assertion. Known answers (RFC 8785, `chainHash`, `anchorMac`) are fixed strings computed outside the code under test (cross-checked with Python). Tamper helpers sit in the test file: the owner, with `app.tenant_id` set, disables the trigger, changes the row, enables it. `modules.ts` and the e2e stack are untouched.
+Node test runner, `*.test.ts` beside each file, `withTestDatabase()`, `fixedClock`, no sleeps; test names have no `.`, `[` or `::`. Expected SQL failures are `await assert.rejects(p, { code })`, so red fails by assertion. Known answers (RFC 8785, `chainHash`, `anchorMac`) are fixed strings computed outside the code under test; this Python 3 script reproduces them (`json.dumps` with `sort_keys` equals RFC 8785 for these values: ASCII strings, small integers, no floats):
+
+```python
+import hashlib,hmac,json
+c=lambda o:json.dumps(o,sort_keys=True,separators=(',',':')).encode()
+r1={'tenant_id':'tenant_a','seq':'1','at':'2031-03-31T23:59:59.999000Z','event_type':'role.granted','actor':{'kind':'user','id':'u_1'},'target':{'kind':'role','id':'r_1'},'payload':{'b':2,'a':[True,None,'x']},'origin':'ursitoare','mk_trace_id':None,'mk_request_id':None,'mk_jti':None}
+h1=hashlib.sha256(bytes(32)+c(r1)).digest()
+r2={**r1,'seq':'2','at':'2031-04-01T00:00:00.000000Z','event_type':'role.revoked','target':None,'payload':{}}
+h2=hashlib.sha256(h1+c(r2)).digest()
+prk=hmac.new(bytes(32),b'ab'*32,'sha256').digest(); k=hmac.new(prk,b'ursitoare/audit-anchor\x01','sha256').digest()
+mac=hmac.new(k,b'tenant_a|7|'+b'11'*32,'sha256').hexdigest()
+print(c(r1).decode(),h1.hex(),h2.hex(),mac,sep='\n')
+```
+
+It prints the canonical text of `rec1`, H1, H2 and the anchor MAC, equal to the scenarios' values (H1 and H2 share the prefix `e5ca` by chance). Tamper helpers sit in the test file: the owner, with `app.tenant_id` set, disables the trigger, changes the row, enables it.
 
 ## Decisions made while writing
 
-- **`opts?: { clock?: Clock }`** is added to `appendAudit`, `appendAuditCommitted` and `anchorHead` (default `systemClock`): the card has no time source. The roadmap's Audit row should gain `opts?`, and `verifyChain` its options.
+- **`opts?: { clock?: Clock }`** is added to `appendAudit`, `appendAuditCommitted` and `anchorHead` (default `systemClock`): the card has no time source.
 - **`engineKey` is `KeyMaterial { reveal(): string }`,** not `Secret`, because `audit` may not import `config`; `Secret` satisfies it. HKDF takes the UTF-8 bytes of the key text, not decoded hex or base64.
 - **`audit_head` is mutable** (`UPDATE (seq, hash)`): the roadmap's "INSERT and SELECT only" is read as about `audit_event` and `audit_anchor`; a gapless counter needs a mutable head, which holds no audit content.
 - **No foreign key and no `CHECK` on `audit_event.tenant_id`:** RLS `WITH CHECK` and the head-match trigger (the head row has the key to `tenant`) bind it.
 - **Additions:** the head-match trigger and the head check. The head is read before the walk, so appends during a verification are not tail loss; a missing head with events present is not reported (anchors cover it). `fromSeq` trusts the chain before it: the previous hash is the stored hash of row `fromSeq - 1`, or, if absent, the first row's `prev_hash`.
-- **Anchors:** `anchorHead` on an empty chain throws; `verifyChain` ignores anchors without `engineKey`.
-- **`target.kind`** follows the event-type pattern; `mk` is allowed only with origin `mintkey` and its fields are optional.
+- **One clock read per append:** `appendAudit` calls `now()` once and uses that Date for the hash and the stored `at`; two reads could differ by a millisecond and make an untouched row fail `verifyChain`.
+- **Owner limits are stated, not closed:** no `TRUNCATE` trigger, no head or anchor protection. A `TRUNCATE` of a leaf bypasses a parent trigger, so per-leaf triggers would need `ensurePartitions` (add-db-foundation) to change; an anchor outside the database is outside M1. Security 5 lists the limits.
 - **Strictness** beyond RFC 8785, the 32,768-byte payload limit and nesting limit 64 are mine: small rows, and writer and verifier agree through `jsonb`.

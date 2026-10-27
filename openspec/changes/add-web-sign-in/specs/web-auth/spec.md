@@ -105,8 +105,8 @@ The stack part `tenant-b` SHALL create tenant "Tenant B" (review profile `solo`)
 - **THEN** the first result equals `{ users: {} }` and is a new object; the others throw `E2eStackError` with `STACK_PART_INVALID` and `details.key` `users`, `STACK_PART_INVALID` with `details.part`, and `STACK_PART_FAILED` with `details.part`
 
 #### Scenario: Tenant B is created and its organisation provisioned
-- **WHEN** on `withTestDatabase()` with the default tenant, `oidcPart.seed` and `tenantBPart.seed` run twice, `resolveTenantForToken` gets the fake's issuer with `["org-b"]` and with `["org-a"]`, and `tenantBPart.start` runs once without the `oidc` handle and once without the `database` handle
-- **THEN** `org-b` resolves to `tenant_b` with `reviewProfile` `solo`, `org-a` to the default tenant; `ursitoare.tenant` read as tenant B holds one row named `Tenant B` and `tenant_idp` one row; both starts reject with `STACK_PART_MISSING`
+- **WHEN** on `withTestDatabase()` with the default tenant, `oidcPart.seed` and `tenantBPart.seed` run twice (the second `oidcPart.seed` runs while `tenant_b` exists), `ensureDefaultTenant(db.ownerPool, E2E_TENANT_NAME)` runs once more, `resolveTenantForToken` gets the fake's issuer with `["org-b"]` and with `["org-a"]`, and `tenantBPart.start` runs once without the `oidc` handle and once without the `database` handle
+- **THEN** no seed rejects, and the last `ensureDefaultTenant` returns the same `tenantId` as the first, without `TENANT_DEFAULT_CONFLICT`; `org-b` resolves to `tenant_b` with `reviewProfile` `solo`, `org-a` to the default tenant; `ursitoare.tenant` read as tenant B holds one row named `Tenant B` and `tenant_idp` one row; both starts reject with `STACK_PART_MISSING`
 
 #### Scenario: Seed users come from the fake
 - **WHEN** `seedUsersOf(fake)` runs, and `tenantBPart.start` returns its handle and `handle.api.seedData()` runs

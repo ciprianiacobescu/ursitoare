@@ -63,7 +63,7 @@ The web app SHALL fetch `GET /api/v1/me` once per page load and pass its `capabi
 
 #### Scenario: The nav in the browser
 - **WHEN** the journey opens `/` signed out; then with `/api/v1/me` answered 503 `AUTHZ_UNAVAILABLE`; then with it answered 200 with `capabilities: ["read_flow"]`
-- **THEN** one `/api/v1/me` request is made each time; the first answer is 401, and in all three the navigation "Main" holds the link "Home"; the second shows the notice above in the live region and no notice appears in the first and third
+- **THEN** one `/api/v1/me` request is made each time; the first answer is 401, and in all three the navigation "Main" holds the link "Home"; the second shows the notice above in one region with `aria-live="polite"` and no `role`, clicking its "Dismiss" button removes it and focus is then on `main`, and no notice appears in the first and third
 
 ### Requirement: Empty and loading states are announced and validated
 The kit SHALL provide `EmptyState`, with a heading at a chosen level, and `LoadingState`, with `role="status"` and `aria-busy="true"`, from models that refuse invalid properties.
@@ -129,7 +129,7 @@ The kit SHALL show toasts through one `aria-live="polite"` region mounted once i
 The kit SHALL document the keyboard behaviour of every component in `KEYBOARD`, and a component file without an entry SHALL fail the test run.
 
 #### Scenario: Documentation matches the component files
-- **WHEN** `KEYBOARD` is compared with the `.tsx` files of `web/src/kit`
+- **WHEN** `KEYBOARD` is compared with the `.tsx` files that are direct children of `web/src/kit` (listed with `readdirSync(dir)` without `recursive`; files in subfolders such as `web/src/kit/data/` are not counted)
 - **THEN** the sorted keys equal the file names without `.tsx` (`ConfirmDialog`, `EmptyState`, `ErrorPanel`, `LoadingState`, `ToastRegion`), and every entry has at least one binding whose `keys` and `effect` are non-blank
 
 ### Requirement: assert_accessible fails a journey on serious or critical axe violations, offline

@@ -92,19 +92,19 @@ The engine SHALL read `URSITOARE_OIDC_ISSUER`, `URSITOARE_OIDC_CLIENT_ID` (defau
 - **THEN** the answer is 302 to `/sign-in?error=OIDC_EXCHANGE_FAILED` and the session count is still one
 
 ### Requirement: A refusal is a redirect with a stable code, audited once the tenant is known
-Every failed callback SHALL answer 302 to `/sign-in?error=<code>`, clear the login cookie, log a warning without token, claim or cookie values and, when a validated token named the tenant, append `auth.login_refused` with payload `{ code }` to that tenant's audit chain.
+Every failed callback SHALL answer 302 to `/sign-in?error=<code>`, clear the login cookie, log a warning without token, claim or cookie values and, once `resolveTenantForToken` has named the tenant from a validated token, append `auth.login_refused` with payload `{ code }` to that tenant's audit chain; a failed append is logged and the answer stays the same.
 
 #### Scenario: Causes and codes
-- **WHEN** the callback gets: no login cookie, an altered cookie, a cookie older than 601 s, a wrong `state`, no `state`, no `code`, `error=access_denied` with the right state and with a wrong one, a closed provider, flawed ID tokens (`wrong_aud`, `alg_none`, `wrong_nonce`, `expired`), `two_organizations`, an organization with no tenant, a disabled alice, a pool whose `connect` fails
-- **THEN** the codes are `OIDC_LOGIN_EXPIRED` (x3), `OIDC_STATE_MISMATCH`, `OIDC_BAD_REQUEST` (x2), `OIDC_EXCHANGE_FAILED`, `OIDC_STATE_MISMATCH`, `OIDC_PROVIDER_UNAVAILABLE`, `OIDC_TOKEN_INVALID` (x4), `OIDC_UNKNOWN_TENANT` (x2), `OIDC_USER_DISABLED`, `OIDC_INTERNAL`; every answer clears `ursitoare_login` and creates no session
+- **WHEN** the callback gets: no login cookie, an altered cookie, a cookie older than 601 s, a wrong `state`, no `state`, no `code`, `error=access_denied` with the right state and with a wrong one, a closed provider, flawed ID tokens (`wrong_aud`, `alg_none`, `wrong_nonce`, `expired`), `two_organizations`, an organization with no tenant, a disabled alice, a token whose `sub` is ` s` (a space, then `s`; signed by a test 2048-bit RSA key that the test's `deps.fetch` adds to the JWKS answer, every other claim valid for `org-a`), a pool whose first `connect` fails
+- **THEN** the codes are `OIDC_LOGIN_EXPIRED` (x3), `OIDC_STATE_MISMATCH`, `OIDC_BAD_REQUEST` (x2), `OIDC_EXCHANGE_FAILED`, `OIDC_STATE_MISMATCH`, `OIDC_PROVIDER_UNAVAILABLE`, `OIDC_TOKEN_INVALID` (x4), `OIDC_UNKNOWN_TENANT` (x2), `OIDC_USER_DISABLED`, `OIDC_TOKEN_INVALID` (the `IDENTITY_INVALID` of the padded `sub`), `OIDC_INTERNAL`; every answer clears `ursitoare_login` and creates no session
 
 #### Scenario: Audited when the tenant is known
-- **WHEN** alice is disabled by the owner and logs in, and an unknown organization and a `wrong_aud` token are refused
-- **THEN** tenant A's chain holds one `auth.login_refused` event with actor `{ kind: "system", id: "oidc" }` and payload `{ code: "OIDC_USER_DISABLED" }` and `verifyChain` is ok; tenant B's chain is empty and the other two refusals appended nothing
+- **WHEN** alice is disabled by the owner and logs in; the padded-`sub` token is refused for `org-a`; mallory (org-b) logs in on a pool wrapper whose second `connect` rejects `Error("boom")` and passes every other call to `db.appPool`; an unknown organization, a `wrong_aud` token and a login on a pool whose first `connect` rejects are refused
+- **THEN** tenant A's chain holds two `auth.login_refused` events, in order with payloads `{ code: "OIDC_USER_DISABLED" }` and `{ code: "OIDC_TOKEN_INVALID" }`; tenant B's chain holds one with payload `{ code: "OIDC_INTERNAL" }`; every event has actor `{ kind: "system", id: "oidc" }` and `verifyChain` is ok for both; those last three appended nothing
 
 #### Scenario: No values in logs, a failing audit
-- **WHEN** the refusals above run with a capturing logger, and for a disabled user the second `connect` of the pool fails
-- **THEN** the log lines hold `code` and `reason` but not the code, `state`, cookie, ID token or email; the second case still answers the same 302 and logs the failure
+- **WHEN** the refusals above run with a capturing logger, and for a disabled alice the third `connect` of the pool wrapper fails (the first is `resolveTenantForToken`, the second the transaction of the upsert, the third `appendAuditCommitted`)
+- **THEN** the log lines hold `code` and `reason` but not the code, `state`, cookie, ID token or email; the failing-audit case answers 302 to `/sign-in?error=OIDC_USER_DISABLED`, logs one `error` line with message `sign-in audit failed` and appends no event
 
 ### Requirement: The session table is tenant-leading and narrowly granted
 Migration `0120_sessions.sql` SHALL create `ursitoare.session` with `tenant_id` leading its primary key, forced row-level security on `app.tenant_id`, a tenant-scoped foreign key to the user, and grant the app role only `SELECT`, `INSERT` and `UPDATE (last_seen_at, csrf_token_hash, revoked_at)`.

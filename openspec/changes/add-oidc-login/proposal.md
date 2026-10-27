@@ -61,7 +61,7 @@ const oidcPart: E2eStackPart; function oidcApi(handles: ReadonlyMap<string, Part
 - From `add-fake-oidc`: `startFakeOidc`, `FakeOidc`.
 - From `add-e2e-stack`: `E2eStackPart`, `PartContext`, `PartHandle`, `E2eStackError`, `databaseApi`, `E2E_TENANT_NAME`, `discoverParts`.
 
-Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@fb48c96, checked line by line).
+Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@fb48c96, checked line by line), and its section `Facts from the merged code` (main@bd7f38e).
 
 ## Out of scope
 

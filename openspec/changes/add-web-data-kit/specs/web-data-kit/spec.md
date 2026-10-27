@@ -1,6 +1,6 @@
 ## Purpose
 
-The web data kit gives later screens a paged list, a form whose errors reach the right field, and a renderer from a small JSON Schema to an accessible form, all on the API's cursor contract and error envelope.
+A paged list, per-field form errors and a JSON Schema renderer on the API's cursor contract.
 
 ## ADDED Requirements
 
@@ -49,16 +49,16 @@ A cursor list SHALL keep its rows when a page fails and offer a retry, restart f
 `dataTableModel`, `tableView` and `focusAfterChange` SHALL describe a table with a caption, headers with `scope`, an empty state when there are no rows and no next page, and a loading state while the first page loads.
 
 #### Scenario: The model
-- **WHEN** `dataTableModel` gets `{ caption: " Flows ", columns: [{ key: "name", header: " Name ", rowHeader: true }, { key: "state", header: "State" }] }`, and an empty caption, no columns, a duplicate key
+- **WHEN** `dataTableModel` gets `{ caption: " Flows ", columns: [{ key: "name", header: " Name ", rowHeader: true }, { key: "state", header: "State" }] }`, and an empty caption, a 73-character caption, no columns, a duplicate key
 - **THEN** the first has `caption` "Flows", `loadingLabel` "Loading Flows", `emptyTitle` "Nothing to show" and the columns `{ key: "name", header: "Name", scope: "col", cellTag: "th", cellScope: "row" }` and `{ key: "state", header: "State", scope: "col", cellTag: "td", cellScope: null }`; each bad spec throws `KitError` `KIT_PROP_INVALID`
 
 #### Scenario: The view for every state
 - **WHEN** `tableView` gets (1) `idle`; (2) `loading`, no items; (3) `loading`, 2 items; (4) `loaded`, none, no cursor; (5) `loaded`, none, cursor "c1"; (6) `loaded`, 3 items, cursor "c1"; (7) `error` (503 `ApiRequestError`), none; (8) `error` (`CURSOR_INVALID`), 2 items
-- **THEN** (`body`, `rowCount`, `loadMore`, `retry`, `showError`) are (1) `none`, 0, `hidden`, `hidden`, false; (2) `loading`, 0, `hidden`, `hidden`, false; (3) `rows`, 2, `busy`, `hidden`, false; (4) `empty`, 0, `hidden`, `hidden`, false; (5) `rows`, 0, `enabled`, `hidden`, false; (6) `rows`, 3, `enabled`, `hidden`, false; (7) `none`, 0, `hidden`, `again`, true; (8) `rows`, 2, `hidden`, `restart`, true; `announcement` is "Loading more rows" for (3), "No rows on this page. Load more to continue." for (5), "3 rows shown" for (6), else ""; `loadMoreLabel` is "Load more"; `retryLabel` is "Try again" for (7), "Start over" for (8), else null
+- **THEN** (`body`, `rowCount`, `loadMore`, `retry`, `showError`) are (1) `none`, 0, `hidden`, `hidden`, false; (2) `loading`, 0, `hidden`, `hidden`, false; (3) `rows`, 2, `busy`, `hidden`, false; (4) `empty`, 0, `hidden`, `hidden`, false; (5) `rows`, 0, `enabled`, `hidden`, false; (6) `rows`, 3, `enabled`, `hidden`, false; (7) `none`, 0, `hidden`, `again`, true; (8) `rows`, 2, `hidden`, `restart`, true; `load` is true for (1) only; `announcement` is "Loading more rows" for (3), "No rows on this page. Load more to continue." for (5), "3 rows shown" for (6), else ""; `loadMoreLabel` is "Load more"; `retryLabel` is "Try again" for (7), "Start over" for (8), else null
 
 #### Scenario: Where focus goes
-- **WHEN** `focusAfterChange` gets (`loading` 2 items, `loaded` 3 items no cursor), (`loading` 2 items, `error`)
-- **THEN** the results are `table`, `retry`
+- **WHEN** `focusAfterChange` gets, as (previous, next), (`loading` 2 items, `loaded` 3 items no cursor), (`loading` 2 items, `error`), (`error` 2 items, `loading` 2 items), (`error` none, `loading` none), (`loading` none, `loaded` 2 items cursor "c1"), (`loading` 2 items, `loaded` 4 items cursor "c2")
+- **THEN** `table`, `retry`, `table`, `table`, `none`, `none`
 
 ### Requirement: Envelope errors map to field messages
 `mapEnvelopeErrors` SHALL map `VALIDATION_FAILED` `details.fields` to a message per form field, put entries for unknown fields or other contexts into one form-level message, and never show the server's text for another error.
@@ -73,7 +73,7 @@ A cursor list SHALL keep its rows when a page fails and offer a retry, restart f
 
 #### Scenario: Hostile and oversized text
 - **WHEN** a field message is `<img src=x onerror=alert(1)>` or 300 characters; and an entry has the field `body/__proto__`
-- **THEN** the field texts are the `<img ...>` text unchanged (it is rendered as text) and 199 characters then `…`; the `__proto__` entry goes to `$form`, and the result has no own `__proto__`
+- **THEN** the field texts are the `<img ...>` text unchanged and 199 characters then `…`; the `__proto__` entry goes to `$form`, and the result has no own `__proto__`
 
 ### Requirement: Fields link their hint and error, and focus goes to the first invalid field
 `fieldModel` SHALL give a field a label, a control id, hint and error ids and an `aria-describedby` value, and `focusTargetFor` SHALL name the first invalid field as the focus target on submit.
@@ -86,9 +86,9 @@ A cursor list SHALL keep its rows when a page fails and offer a retry, restart f
 - **WHEN** `isFieldName` gets `"title"`, `"due_date"`, `"1x"`, `"a-b"`, `"__proto__"`, `5`; `fieldModel` gets a bad name, a blank label, prefix `"a b"`; `formModel` gets a blank label, a duplicate field
 - **THEN** `isFieldName` is true for the first two, false for the rest; every `fieldModel` and `formModel` call throws `KitError` `KIT_PROP_INVALID`
 
-#### Scenario: The form model and focus target
-- **WHEN** `formModel` gets `{ label: " New task ", submitLabel: "Save", fields: ["title", "due"], errors: { due: "Required", $form: "Not saved" } }` and the same with `busy: true`; `focusTargetFor` gets (`["title", "due", "tags"]`, `{ due: "Required", tags: "x" }`), (`["title"]`, `{ $form: "x" }`), (`["title"]`, `{ other: "x" }`)
-- **THEN** the models are `{ label: "New task", submitLabel: "Save", submit: "enabled", formError: "Not saved", invalidFields: ["due"] }` and the same with `submit` "busy"; the targets are the field `due`, the form, none
+#### Scenario: The form model, focus target and attempts
+- **WHEN** `formModel` gets `{ label: " New task ", submitLabel: "Save", fields: ["title", "due"], errors: { due: "Required", $form: "Not saved" } }` and the same with `busy: true`; `focusTargetFor` gets (`["title", "due", "tags"]`, `{ due: "Required", tags: "x" }`), (`["title"]`, `{ $form: "x" }`), (`["title"]`, `{ other: "x" }`); `attemptFocus` gets, as (attempt, focused, submit, fields, errors), (2, 1, `"busy"`, `["title", "due"]`, `{ due: "Required" }`), (2, 1, `"enabled"`, `["title", "due"]`, `{ title: "Required" }`), (0, 0, `"enabled"`, `["title"]`, `{ title: "Required" }`)
+- **THEN** the models are `{ label: "New task", submitLabel: "Save", submit: "enabled", formError: "Not saved", invalidFields: ["due"] }` and the same with `submit` "busy"; the targets are the field `due`, the form, none; the attempt results are `{ target: { kind: "none" }, focused: 1 }` (the errors of attempt 1 are not used), `{ target: { kind: "field", name: "title" }, focused: 2 }`, `{ target: { kind: "none" }, focused: 0 }`
 
 ### Requirement: SchemaForm renders the supported JSON Schema subset as typed fields
 `schemaToFields` SHALL turn an object schema of string, number, integer, boolean, enum and array-of-string properties (`required`, `minLength`, `maxLength`, `minimum`, `maximum`, `pattern`, `description` as hint) into typed fields.
@@ -106,11 +106,11 @@ A cursor list SHALL keep its rows when a page fails and offer a retry, restart f
 
 #### Scenario: Unsupported properties
 - **WHEN** `schemaToFields` gets an object schema with properties `a` `{ type: "string", format: "email" }`, `b` `{ type: "object" }`, `c` `{}`, `d` `{ type: "string", pattern: "(" }`, `e` `true`, `f` `{ type: "array", items: { type: "number" } }`, `g` `{ type: "string", enum: [1, 2] }`
-- **THEN** seven `unsupported` fields come back in that order with reasons `keyword "format" is not supported`, `type "object" is not supported`, `the property has no type`, `pattern is not a valid expression`, `the property schema must be an object`, `array items must be strings`, `enum must hold 1 to 100 distinct text values of 1 to 200 characters`; each `error` is `Unsupported: ` and its reason
+- **THEN** seven `unsupported` fields in that order, with reasons `keyword "format" is not supported`, `type "object" is not supported`, `the property has no type`, `pattern is not a valid expression`, `the property schema must be an object`, `array items must be strings`, `enum must hold 1 to 100 distinct text values of 1 to 200 characters`; each `error` is `Unsupported: ` and its reason
 
-#### Scenario: Names and required
-- **WHEN** `schemaToFields` gets `{ type: "object", required: ["ghost"] }` and the object parsed from `{"type":"object","properties":{"__proto__":{"type":"string"}}}`
-- **THEN** the first gives one `unsupported` field `ghost` (`a required property has no schema`); the second one with `the property name is not supported`; no prototype changes
+#### Scenario: Names, required and bounds
+- **WHEN** `schemaToFields` gets `{ type: "object", required: ["ghost"] }`, and the object parsed from JSON with `required` `["ghost","ghost"]` and the properties `__proto__`, `a-b` and `""`, each `{"type":"string"}`, `N` `{"type":"string","title":"  "}` and `k` `{"type":"string","K":1}`, where `N` is `aBcD` repeated 16 times and `K` is 600 `x`
+- **THEN** the first gives one `unsupported` field `ghost` (`a required property has no schema`); the second no problems and six fields in that order: `__proto__`, `a-b` and `""` are `unsupported` with `the property name is not supported` (the third labelled "Field 3"); `N` is a `string` field whose `label` has 80 characters, starts `A bc da bc d` and ends `bc da…`; `k` is `unsupported` with `keyword "` + 39 `x` + `…` + `" is not supported`; one `unsupported` `ghost`; every `error` has at most 500 characters; `fieldModel` (prefix `f1`) and `formModel` accept the fields that are not `unsupported`; no prototype changes
 
 #### Scenario: Root problems
 - **WHEN** `schemaToFields` gets `null`, `{ type: "array" }`, `{ type: "object", allOf: [], properties: { a: { type: "boolean" } } }`, `{ type: "object", additionalProperties: {} }`, an object schema with 101 properties, and `{ type: "object" }`

@@ -91,7 +91,7 @@ The identity tables SHALL reject, by `CHECK` and tenant-scoped foreign keys, a h
 - **THEN** the first three reject with `IDENTITY_NO_ORGANIZATION`, `IDENTITY_NO_ORGANIZATION`, `IDENTITY_AMBIGUOUS_ORGANIZATION` and `connect` is never called; the last rejects with `code` `"ECONNREFUSED"`, not an `IdentityError`
 
 ### Requirement: The first sign-in creates a human user and its IdP link
-`upsertUserFromClaims(tx, ctx, claims, opts?)` SHALL, when `(issuer, subject)` is not linked in the tenant, create an active human user and its `idp_link` in the caller's transaction and return the `User`, naming it from `name`, else `preferredUsername`, else `email`, else `subject`, and never linking by email.
+`upsertUserFromClaims(tx, ctx, claims, opts?)` SHALL, when `(issuer, subject)` is not linked in the tenant, create an active human user and its `idp_link` in the caller's transaction and return the `User`, naming it from `name`, else `preferredUsername`, else `email`, else `subject` (each cut to 200 code points, then trimmed again), and never linking by email.
 
 #### Scenario: First sign-in
 - **WHEN** `withTenantTx(db.appPool, a, tx => upsertUserFromClaims(tx, a, { issuer: ISS, subject: "sub-alice", email: "alice@example.test", name: "Alice A", preferredUsername: "alice" }, { ids: sequentialIds(), clock: fixedClock("2026-10-25T08:00:00Z") }))` runs
@@ -100,6 +100,10 @@ The identity tables SHALL reject, by `CHECK` and tenant-scoped foreign keys, a h
 #### Scenario: Display name fallbacks
 - **WHEN** five new subjects sign in under `a` with claims: `sub-1` `{ name: "  Bo  ", preferredUsername: "bo" }`, `sub-2` `{ preferredUsername: "cy" }`, `sub-3` `{ email: "di@example.test" }`, `sub-4` none of the optional claims, and `sub-5` `{ name }` of 300 `x` characters
 - **THEN** the display names are `"Bo"`, `"cy"`, `"di@example.test"`, `"sub-4"` and 200 `x` characters
+
+#### Scenario: Display name cut to 200 code points
+- **WHEN** under `a` at `2026-10-25T08:00:00Z` new subjects sign in: `sub-6` with `name` of 199 `x`, one space and `"tail"`; `sub-7` with `name` of 199 `x`, U+1F600 and `"z"`; `sub-8` with no optional claims and `subject` of 199 `s`, one space and 50 `t`; then `sub-6` signs in at `09:00` with the same name, and at `10:00` with `name` of 199 `y`, one space and `"tail"`
+- **THEN** no call throws; the stored and returned display names are 199 `x`, 199 `x` followed by U+1F600 (200 code points) and 199 `s`; the `09:00` call returns the same user with `updated_at` still `08:00`; the `10:00` call returns display name 199 `y` with `updated_at` `10:00`
 
 #### Scenario: Same subject in two tenants, same email under a new subject
 - **WHEN** the same `(ISS, "sub-alice")` signs in under `a` and under `b`, then `(ISS, "sub-eve")` with `email` `"alice@example.test"` signs in under `a`

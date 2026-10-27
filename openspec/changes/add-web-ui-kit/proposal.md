@@ -9,15 +9,15 @@ Observable result: the built app loads `tokens.css` and `theme.css` from `/asset
 - `web/src/kit`: `tokens.css`, `theme.css`; `contrast.ts` (WCAG ratio, token and theme checks, the inline-style scan); `messages.ts`; `states.ts`, `error-panel.ts`, `confirm.ts`, `toast.ts`, `capabilities.ts`, `keyboard.ts` (the logic, each with Node tests); `use-visible-nav.ts`; the thin components `EmptyState`, `LoadingState`, `ErrorPanel`, `ConfirmDialog`, `ToastRegion`.
 - `web/src/app/Shell.tsx` builds its nav from `useVisibleNav()` and mounts `ToastRegion` once; `web/src/main.tsx` imports the two CSS files.
 - `e2e/conftest.py`: `assert_accessible(page)`; `e2e/test_m1_web_kit.py`; four existing tests of `e2e/test_m0_skeleton.py` call the helper.
-- Root `package.json`: exact devDependency `axe-core` 4.14.0 (MPL-2.0, already an allowed licence term).
-- `test/support/a11y-setup.ts`: a check that the helper, the dependency and the lockfile agree, and that the helper never loads a script from the network or around the CSP.
+- Root `package.json` and `pnpm-lock.yaml` are not changed: the scaffold installs `axe-core` 4.14.0 as an exact root devDependency (MPL-2.0, already an allowed licence term).
+- `test/support/a11y-setup.ts`: a check that the declared dependency, the installed package and the helper agree, and that the helper never loads a script from the network or around the CSP.
 
 ## Impact
 
 - **Depends on:** `add-web-shell` (U07): the client, the feature registry and `navItems`, `Shell.tsx`, `main.tsx`, `shell.css`, the M0 journeys, and through it the `fresh_state` fixture and the engine's envelope codes. `add-api-pep` (U13): `GET /api/v1/me` and its error codes. `add-supply-chain-gate` (U05): the licence functions and data used by task 9.1; its frozen policy is not changed (design.md, Decisions made while writing).
-- **Files implemented** (stubs from the scaffold): the `.ts` and `.tsx` files listed under Interfaces given. **Files created:** `web/src/kit/{tokens,theme}.css`, a `*.test.ts` beside `contrast`, `messages`, `states`, `error-panel`, `confirm`, `toast`, `capabilities` and `keyboard`, `test/support/a11y-setup.test.ts`, `e2e/test_m1_web_kit.py`. **Files changed:** `web/src/app/Shell.tsx`, `web/src/main.tsx`, `e2e/conftest.py` (task 9.1 only), `e2e/test_m0_skeleton.py`, `package.json` (dependency only), `pnpm-lock.yaml`. `web/src/app/shell.css` changes only to fix an axe finding.
+- **Files implemented** (stubs from the scaffold): the `.ts` and `.tsx` files listed under Interfaces given. **Files created:** `web/src/kit/{tokens,theme}.css`, a `*.test.ts` beside `contrast`, `messages`, `states`, `error-panel`, `confirm`, `toast`, `capabilities` and `keyboard`, `test/support/a11y-setup.test.ts`, `e2e/test_m1_web_kit.py`. **Files changed:** `web/src/app/Shell.tsx`, `web/src/main.tsx`, `e2e/conftest.py` (task 9.1 only), `e2e/test_m0_skeleton.py`. `web/src/app/shell.css` changes only to fix an axe finding.
 - **Migrations, tables, endpoints, env vars:** none. No kit demo route.
-- Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them. `axe-core` is added by task 9.1.
+- Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them. `axe-core` 4.14.0 is installed by the scaffold, not by this change.
 
 **Interfaces given** (exact members of the named types: design.md § Interfaces)
 
