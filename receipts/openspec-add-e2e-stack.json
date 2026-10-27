@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-27T02:47:09Z",
+  "integrated_revision": "978e6926595630862011492726efa6b24c12c60b",
+  "merge_commit": "978e6926595630862011492726efa6b24c12c60b",
+  "plan_digest": "7c2df2bf58862787",
+  "plan_id": "m0",
+  "postcheck": "pass",
+  "pr": 11,
+  "receipt_id": "m0/openspec:add-e2e-stack/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "a9574137a1e001d30ced7959e056fe1f0bd7522a",
+  "spec_digest": "a1d38222ff9fb862",
+  "target": "main",
+  "unit_id": "openspec:add-e2e-stack"
+}
