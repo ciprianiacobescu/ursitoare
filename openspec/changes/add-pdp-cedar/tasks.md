@@ -6,7 +6,7 @@
 ## 2. Loading a policy set
 
 - [x] 2.1 Write `src/pdp/load.test.ts` first (the scenarios "The test set loads", "The message never holds policy text", "A policy without id, and a template, are refused", "A bad schema is refused", "Bad options are refused" and both scenarios of "Policy ids are unique") and `src/pdp/malformed.test.ts` (one test per policy M1 to M8 of design.md § Test plan, each through `createPdp`), then implement `PdpError` in `src/pdp/errors.ts`, the only Cedar import in `src/pdp/cedar.ts`, the stages of design decisions 2 and 3 in `src/pdp/load.ts`, and `createPdp` in `src/pdp/engine.ts` returning a `Pdp` with `actions`, `policies`, a `policySetVersion` of `""` until task 2.2 and a `check` that calls `runCheck` in a new `src/pdp/check.ts`, a stub that throws `new Error("not implemented")` until task 3.1, implementing requirements "Policies are validated strictly at load" and "Policy ids are unique"
-- [ ] 2.2 Write `src/pdp/version.test.ts` first (the scenarios "A known answer" and "Any change changes the version"), then implement `policySetVersionOf` in `src/pdp/digest.ts`, set `Pdp.policySetVersion` in `src/pdp/engine.ts` and log `pdp loaded` there, implementing requirement "The policy set version identifies the loaded set"
+- [x] 2.2 Write `src/pdp/version.test.ts` first (the scenarios "A known answer" and "Any change changes the version"), then implement `policySetVersionOf` in `src/pdp/digest.ts`, set `Pdp.policySetVersion` in `src/pdp/engine.ts` and log `pdp loaded` there, implementing requirement "The policy set version identifies the loaded set"
 
 ## 3. Checking a request
 

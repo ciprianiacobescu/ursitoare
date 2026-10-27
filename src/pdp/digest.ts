@@ -94,6 +94,9 @@ export function requestDigest(req: PolicyRequest): string {
   }
 }
 
-export function policySetVersionOf(_schema: string, _sources: readonly PolicySource[]): string {
-  throw new Error("not implemented");
+export function policySetVersionOf(schema: string, sources: readonly PolicySource[]): string {
+  const sorted = [...sources]
+    .sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0))
+    .map((source) => ({ id: source.id, layer: source.layer, text: source.text }));
+  return sha256Hex(canonicalJson({ schema, sources: sorted }));
 }
