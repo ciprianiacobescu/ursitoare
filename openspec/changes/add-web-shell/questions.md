@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-4f97b0f0: UI criterion C-946ba56d has no end-to-end test (fails_at_head); see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-657e3f25: UI criterion C-a91f316f has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-86a068a1: UI criterion C-31ad3638 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-cae5cbd4: UI criterion C-56d1014e has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-cae5cbd4: UI criterion C-56d1014e has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-198b895a: UI criterion C-967db51d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-9bf1501b: UI criterion C-1b33755d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-c1376ce6: UI criterion C-2c3a693b has no end-to-end test (not_testable); see the generated UI tests table |
@@ -236,7 +236,8 @@ accept The hold may be waived. Criterion C-31ad3638 is the scenario "Missing the
 
 ## Q-010: Hold H-cae5cbd4: UI criterion C-56d1014e has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -252,6 +253,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-56d1014e is the scenario "A directory that is not a web build" of the requirement "A missing build is reported and does not stop the engine". The specification writes it against an engine whose distDir holds only secret.txt and asks that GET /secret.txt and GET /flows both answer 503 WEB_NOT_BUILT with no body containing the text of secret.txt. A browser journey against the served e2e stack cannot replace the engine's web build directory with one that holds only a secret file, so no end-to-end test can exercise the scenario; the design's test plan assigns engine behaviour to Node tests that build a temp dist and use server.inject, and reserves the browser journey for the .tsx files. The Node test in src/api/web.test.ts implements the scenario exactly: it makes a dist directory holding only secret.txt, serves it with buildServer, sends GET /secret.txt and GET /flows and asserts for each a 503 status, error.code WEB_NOT_BUILT and that the body does not include the secret text. The implementation in src/api/web.ts checks isWebBuilt on every file and SPA request before any file is resolved, and isWebBuilt returns false unless index.html under the real path of distDir is a readable regular file, so a directory without a build publishes nothing. The built half of the requirement is also proven over the served stack: e2e/test_m0_skeleton.py opens / through the real engine, asserts status 200 and sees the heading "Ursitoare" and "Engine healthy". A missing generated end-to-end test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-011: Hold H-198b895a: UI criterion C-967db51d has no end-to-end test (not_testable); see the generated UI tests table
