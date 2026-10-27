@@ -103,6 +103,11 @@ test("C-58e0ebf0 prepareDatabase migrates first and then creates the partition w
       "ursitoare.audit_event_p202611",
       "ursitoare.audit_event_p202612",
       "ursitoare.audit_event_p202701",
+      "ursitoare.policy_decision_p202609",
+      "ursitoare.policy_decision_p202610",
+      "ursitoare.policy_decision_p202611",
+      "ursitoare.policy_decision_p202612",
+      "ursitoare.policy_decision_p202701",
     ]);
 
     await database.pool.query(
