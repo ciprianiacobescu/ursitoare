@@ -108,3 +108,4 @@
 {"at":"2026-10-27T00:56:48Z","run":"r-20261027T0056Z-a73b","type":"unit.dispatched","unit":"openspec:add-e2e-stack"}
 {"at":"2026-10-27T01:24:42Z","attempt":1,"cost_usd":3.524699,"runs":3,"type":"plan.charged","unit":"openspec:add-e2e-stack"}
 {"at":"2026-10-27T01:24:42Z","detail":"round 2 failed the same way as round 1: finding F-5758ac1b","reason":"unit_escalated","type":"plan.stopped","unit":"openspec:add-e2e-stack"}
+{"at":"2026-10-27T01:32:22Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"e2e-stack retried with FB-001: its integrity blocker is a spec-required pytest.skip that no harness commit may add; the feedback removes the guards","type":"plan.resumed"}
