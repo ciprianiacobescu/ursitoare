@@ -10,14 +10,14 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | submitted | behaviour | e2e/test_e2e_stack.py:17 | e2e/test_e2e_stack.py calls no pytest.skip |
+| FB-001 | taken | behaviour | e2e/test_e2e_stack.py:17 | e2e/test_e2e_stack.py calls no pytest.skip |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: e2e/test_e2e_stack.py calls no pytest.skip
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** behaviour
 - **Where:** `e2e/test_e2e_stack.py:17-19`
 - **Where:** `e2e/test_e2e_stack.py:40-42`
@@ -47,3 +47,4 @@ Remove the two profile guards: the pytest.skip in _require_fake_profile (drop th
 
 ### Outcome
 <!-- written by the harness -->
+Taken in round 3 into add-e2e-stack-fix-2
