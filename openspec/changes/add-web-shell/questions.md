@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Hold H-b4253062: UI criterion C-61225ade has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-003 | answered | none | verdict | Hold H-19960e47: UI criterion C-383b59d1 has no end-to-end test (fails_at_head); see the generated UI tests table |
 | Q-004 | answered | none | verdict | Hold H-c85bdd94: UI criterion C-b2a74658 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-005 | open | none | verdict | Hold H-c2167f30: UI criterion C-62803105 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-c2167f30: UI criterion C-62803105 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-e0cb8f86: UI criterion C-1dc68043 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-4f97b0f0: UI criterion C-946ba56d has no end-to-end test (fails_at_head); see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-657e3f25: UI criterion C-a91f316f has no end-to-end test (not_testable); see the generated UI tests table |
@@ -126,7 +126,8 @@ accept The hold may be waived. Criterion C-b2a74658 is the scenario "Names, type
 
 ## Q-005: Hold H-c2167f30: UI criterion C-62803105 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -142,6 +143,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-62803105 is the scenario "Unknown extension" of the requirement "The engine serves the web build". The specification writes it against a test-made distDir that holds data.bin and asks that a GET of that file answers the type application/octet-stream with x-content-type-options nosniff. The served e2e stack cannot reproduce that fixture: the real web build is produced by Vite from web/index.html, which references only the module script, there is no web/public directory, and the journey cannot place a file into the engine's distDir, so no browser test can request a file with an unknown extension. The design's test plan assigns engine behaviour to Node tests that build a temp dist and use server.inject, and reserves the browser journey for the .tsx files. The Node test in src/api/web.test.ts implements the scenario exactly and passed in the latest test report: it writes index.html and data.bin into a temp dist, requests /data.bin and asserts status 200, content-type application/octet-stream, x-content-type-options nosniff and the file's bytes. The implementation in src/api/web-paths.ts returns application/octet-stream for a missing or unknown extension, and the nosniff header comes from the security headers hook, which e2e/test_m0_skeleton.py proves over the served stack on GET / and GET /health. A missing generated end-to-end test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-006: Hold H-e0cb8f86: UI criterion C-1dc68043 has no end-to-end test (not_testable); see the generated UI tests table
