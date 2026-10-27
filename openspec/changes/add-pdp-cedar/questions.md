@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 4.1 | technical | src/db/prepare.test.ts:100 first.partitions expects only the audit_event window, so adding migration 0110 breaks it |
+| Q-001 | accepted | 4.1 | technical | src/db/prepare.test.ts:100 first.partitions expects only the audit_event window, so adding migration 0110 breaks it |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/db/prepare.test.ts:100 first.partitions expects only the audit_event window, so adding migration 0110 breaks it
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 4.1
 - **Kind:** technical
 - **Asked:** 2026-10-27T23:16Z by deepseek, run r-20261027T2207Z-8356, task 4.1
