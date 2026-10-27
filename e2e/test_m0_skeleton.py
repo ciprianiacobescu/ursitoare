@@ -88,3 +88,59 @@ def test_landing_page_reports_engine_health(
     assert response.status == 200
     expect(page.get_by_role("heading", name="Ursitoare")).to_be_visible()
     expect(page.get_by_text("Engine healthy")).to_be_visible()
+
+
+@pytest.mark.milestone("M0")
+@pytest.mark.l4("C-60599e6f")
+def test_shell_landmarks_and_skip_link(
+    page: Page, base_url: str, fresh_state: None
+) -> None:
+    console_messages: list[str] = []
+    page_errors: list[object] = []
+    page.on("console", lambda message: console_messages.append(message.text))
+    page.on("pageerror", lambda error: page_errors.append(error))
+
+    response = page.goto(f"{base_url}/")
+    assert response is not None
+    assert response.status == 200
+
+    expect(page.get_by_role("banner")).to_be_visible()
+    navigation = page.get_by_role("navigation", name="Main")
+    expect(navigation).to_be_visible()
+    expect(page.get_by_role("main")).to_be_visible()
+    expect(page.get_by_role("contentinfo")).to_be_visible()
+    expect(page.get_by_role("heading", name="Ursitoare")).to_be_visible()
+
+    skip_link = page.get_by_role("link", name="Skip to content")
+    page.keyboard.press("Tab")
+    expect(skip_link).to_be_focused()
+    expect(skip_link).to_be_in_viewport()
+    outline_style = skip_link.evaluate(
+        "element => getComputedStyle(element).outlineStyle"
+    )
+    assert outline_style != "none", "the focused skip link has a visible outline"
+
+    page.keyboard.press("Enter")
+    expect(page.get_by_role("main")).to_be_focused()
+    expect(navigation.get_by_role("link", name="Home")).to_be_visible()
+
+    assert not any(
+        "Content Security Policy" in message for message in console_messages
+    ), "no console message mentions a Content Security Policy violation"
+    assert page_errors == [], "no page error occurs"
+
+
+@pytest.mark.milestone("M0")
+@pytest.mark.l4("C-0daf92cd")
+def test_deep_link_returns_the_app(
+    page: Page, base_url: str, fresh_state: None
+) -> None:
+    response = page.goto(f"{base_url}/flows")
+    assert response is not None
+    assert response.status == 200
+
+    expect(
+        page.get_by_role("banner").get_by_role("link", name="Ursitoare")
+    ).to_be_visible()
+    expect(page.get_by_role("heading", name="Page not found")).to_be_visible()
+    expect(page).to_have_title("Page not found · Ursitoare")
