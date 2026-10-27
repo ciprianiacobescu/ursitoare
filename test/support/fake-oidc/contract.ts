@@ -245,12 +245,15 @@ async function checkJwks(baseUrl: string, jar: CookieJar): Promise<void> {
   assert.ok(isRecord(body), "the JWKS is not a JSON object");
   const keys = body["keys"];
   assert.ok(Array.isArray(keys) && keys.length > 0, "the JWKS has no keys");
-  const key = keys[0];
-  assert.ok(isRecord(key), "the JWKS key is not an object");
-  assert.equal(key["alg"], "RS256");
-  assert.ok(nonEmptyString(key["kid"]), "the JWKS key has no kid");
-  assert.ok(nonEmptyString(key["n"]), "the JWKS key has no n");
-  assert.ok(nonEmptyString(key["e"]), "the JWKS key has no e");
+  const key = keys.find(
+    (candidate: unknown) =>
+      isRecord(candidate) &&
+      candidate["alg"] === "RS256" &&
+      nonEmptyString(candidate["kid"]) &&
+      nonEmptyString(candidate["n"]) &&
+      nonEmptyString(candidate["e"]),
+  );
+  assert.ok(key !== undefined, "the JWKS has no RS256 key with a kid, n and e");
 }
 
 async function checkCodeFlow(baseUrl: string, jar: CookieJar, credentials: OidcContractCredentials): Promise<void> {
