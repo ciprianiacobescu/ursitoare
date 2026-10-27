@@ -1,4 +1,4 @@
-# Verification: openspec:add-fake-oidc: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-fake-oidc: FAIL (round 2)
 
 traceability: 42/42 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 42/42 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.2 | base main@5481c0d388 contained |
-| 1 | integrity | ok | 24.2 | 10 sub-checks (+3 unfrozen by human answers); scope: 29 changed file(s) |
-| 2 | build | ok | 10.9 |  |
-| 3 | tests | ok | 30.1 |  |
-| 4 | traceability | ok | 0.1 | 42/42 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: test/support/fake-oidc/authorize.ts, test/support/fake-oidc/contract.ts, test/support/fake-oidc/jwt.ts, test/support/fake-oidc/keys.ts, test/support/fake-oidc/login-page.ts and 8 more |
-| 8 | s1 judge | ok | 4.2 | 41/42 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 228.3 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -237,6 +237,11 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-81c01272 | ok | 0.910 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-be50043b | ok | 0.950 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-004 accept C-d4e4e5a6 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. The authorization handler answers each protocol error of the scenario with a 302 to the registered redirect: response_type other than code gives unsupported_response_type, a scope without openid gives invalid_scope, an absent or malformed code_challenge gives invalid_requ...
+- Q-005 reject F-818a6c14 by the delegate (claude-fable-5-1 via claude-code): The finding holds. Task 3.1 check 2 says the JWKS must hold at least one key with alg RS256 and non-empty kid, n and e, and the spec says the contract suite must pass on real Keycloak as well as on the fake. checkJwks in contract.ts takes keys[0] and asserts alg RS256 and the fields on that single k...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -255,7 +260,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-c07974a7 | test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Sign-in succeeds | pass | pass | the judge passed it and a discriminating test passes |
 | C-388a916a | test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Redirect URI and client are matched exactly | pass | pass | the judge passed it and a discriminating test passes |
 | C-63de56cb | test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Redirects are stored as given, per client | pass | pass | the judge passed it and a discriminating test passes |
-| C-d4e4e5a6 | test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Protocol errors go back to the client | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-d4e4e5a6 | test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Protocol errors go back to the client | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. The authorization handler answers each protocol error of the scenario with a 302 to the registered redirect: response_type other than code gives unsupported_response_type, a scope without openid gives invalid_sc... |
 | C-ba36cf88 | test-fake-oidc › The authorization endpoint validates the request and issues a one-use code › Wrong password and unknown user look alike | pass | pass | the judge passed it and a discriminating test passes |
 | C-e78e84c8 | test-fake-oidc › The token endpoint exchanges a code once, with PKCE and client authentication › Confidential exchange | pass | pass | the judge passed it and a discriminating test passes |
 | C-9366113b | test-fake-oidc › The token endpoint exchanges a code once, with PKCE and client authentication › One use, even in parallel | pass | pass | the judge passed it and a discriminating test passes |
@@ -286,7 +291,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Findings
 
-- [major, judge] task 3.1: the jwks keys check inspects only the first key, not 'at least one' RS256 key (criterion C-34b4df4c): Task 3.1 check 2 requires that `keys` holds at least one key with `alg` RS256 and a non-empty kid, n and e. checkJwks asserts these on `keys[0]` only. Real Keycloak JWKS often lists an RSA-OAEP encryption key alongside the signing key, so the contract can fail against Keycloak even though a valid RS256 key is present.
+- [major, human] task 3.1: the jwks keys check inspects only the first key, not 'at least one' RS256 key (criterion C-34b4df4c): Task 3.1 check 2 requires that `keys` holds at least one key with `alg` RS256 and a non-empty kid, n and e. checkJwks asserts these on `keys[0]` only. Real Keycloak JWKS often lists an RSA-OAEP encryption key alongside the signing key, so the contract can fail against Keycloak even though a valid RS256 key is present. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding holds. Task 3.1 check 2 says the JWKS must hold at least one key with alg RS256 and non-empty kid, n and e, and the spec says the contract suite must pass on real Keycloak as well as on the fake. checkJwks ...
 - [minor, judge] Successful and error redirects are re-serialised by URL, so the Location can differ from the registered string (spec gap) (criterion C-63de56cb): redirectReply builds the Location with `new URL(redirectUri)` and `searchParams.set`. A redirect registered as `http://127.0.0.1:9` therefore gets `/` added, and an existing query is re-encoded. The criteria require exact string matching on input but do not pin the output form.
 - [minor, judge] Sign-in POST reads username and password from the query before the form body (spec gap) (criterion C-ba36cf88): param() returns the query value when one exists and falls back to the form only otherwise. A POST with `username` or `password` in the query therefore ignores the posted form value.
 - [minor, judge] verifyRs256 also requires the header kid to equal the JWK kid (spec gap) (criterion C-4b89bf6e): Design decision 5 says verifyRs256 is true for alg RS256 plus a matching signature. The implementation also returns false when the header kid differs from the JWK's kid, so a token signed by the right key under another kid fails. This affects how 'the current key's signature checks' can be shown for the unknown_kid flaw.
@@ -296,6 +301,11 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] mintJwt treats an unknown kind as an ID token (spec gap) (criterion C-940e29ee): mintJwt picks access claims only when kind === "access". Any other value, for example "refresh" cast in, silently gives an ID token, where unknown user, client and flaw all throw.
 - [minor, judge] wrong_nonce without a nonce yields "-mismatch" (spec gap) (criterion C-e5daba08): applyClaimFlaw writes `${nonce ?? ""}-mismatch`, so wrong_nonce with no nonce option gives nonce "-mismatch". No scenario covers it.
 - [minor, judge] the judge called a test inadequate (criterion C-d4e4e5a6): test.support.fake-oidc.authorize.test.ts::C-d4e4e5a6 protocol errors redirect to the client with the unchanged state and no code
+
+## Fix unit
+
+Fix unit 1 is created for these tasks:
+- F-818a6c14 task 3.1: the jwks keys check inspects only the first key, not 'at least one' RS256 key
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
