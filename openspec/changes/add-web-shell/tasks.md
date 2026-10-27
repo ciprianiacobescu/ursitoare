@@ -1,6 +1,6 @@
 ## 1. Security headers
 
-- [ ] 1.1 Write `src/api/security-headers.test.ts` first (it begins with `assert.equal(typeof buildServer, "function")` and `assert.equal(typeof healthPayload, "function")`; the five responses of "Success, error and not-found responses", the handler that sets its own CSP, and a second `registerSecurityHeaders` call), then implement `CONTENT_SECURITY_POLICY`, `SECURITY_HEADERS` and `registerSecurityHeaders(server)` (one root `onSend` hook that sets the four headers and returns the payload; a module-level `WeakSet` of instances makes a repeat a no-op) in `src/api/security-headers.ts`, exported through `src/api/index.ts`, implementing requirement "Every response carries the security headers"
+- [x] 1.1 Write `src/api/security-headers.test.ts` first (it begins with `assert.equal(typeof buildServer, "function")` and `assert.equal(typeof healthPayload, "function")`; the five responses of "Success, error and not-found responses", the handler that sets its own CSP, and a second `registerSecurityHeaders` call), then implement `CONTENT_SECURITY_POLICY`, `SECURITY_HEADERS` and `registerSecurityHeaders(server)` (one root `onSend` hook that sets the four headers and returns the payload; a module-level `WeakSet` of instances makes a repeat a no-op) in `src/api/security-headers.ts`, exported through `src/api/index.ts`, implementing requirement "Every response carries the security headers"
 
 ## 2. Path classification
 
