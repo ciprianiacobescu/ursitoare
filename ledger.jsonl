@@ -148,3 +148,4 @@
 {"at":"2026-10-27T06:19:46Z","revision":"cfe5e662ec11765bab048ec8f03dbbc57eb90248","type":"unit.integrated","unit":"openspec:add-web-shell"}
 {"at":"2026-10-27T06:19:46Z","attempt":1,"cost_usd":16.826154,"runs":5,"type":"plan.charged","unit":"openspec:add-web-shell"}
 {"at":"2026-10-27T06:21:16Z","branch":"l4/archive/openspec/add-web-shell","head":"fb48c96118e4575c65b6e61193cb7b538a4116b2","type":"unit.branch_deleted","unit":"openspec:add-web-shell"}
+{"at":"2026-10-27T06:21:18Z","batch":"m0-walking-skeleton","profile":"none","revision":"fb48c96118e4575c65b6e61193cb7b538a4116b2","type":"batch.accepted"}
