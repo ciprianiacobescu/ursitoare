@@ -2,11 +2,11 @@
 
 - Status: stopped
 - Repository: https://github.com/ciprianiacobescu/ursitoare
-- Target: main at 553cb0cde00c3531272bb47c5785cae834c971bc
+- Target: main at a53398fc5130b573609047b209e714758fda5de9
 - Merge: auto
 - No promotion target is set. Promotion was not performed.
-- Written: 2026-10-27T00:52:08Z
-- Stopped: unit_halted (openspec:add-e2e-stack): task 5.3: max_task_attempts (3) reached in red on deepseek (2), glm (2), claude-sonnet (3); last failure: no new test traces C-0828b57f, C-67438cd6, C-ef0357b4: put the id in the name of each test that checks a criterion, for example it("C-xxxxxxxx: …")
+- Written: 2026-10-27T01:24:42Z
+- Stopped: unit_escalated (openspec:add-e2e-stack): round 2 failed the same way as round 1: finding F-5758ac1b
 
 ## Units
 
@@ -50,7 +50,7 @@
 - Pull request: <forge>/ciprianiacobescu/ursitoare/pull/11
 - Merge commit: none
 - Post-merge check: not run
-- Usage: $3.39, 2 run(s), 1 attempt(s)
+- Usage: $3.52, 3 run(s), 1 attempt(s)
 - Delegate decisions:
   - Q-001 (technical): reply discarded, escalated by the delegate (claude-fable-5-1 via claude-code), $0.99: the reply was discarded: checked spec:spec.md#scenario-close-stops-postgres-a-failed-start-leaves-nothing does not resolve
 
@@ -67,6 +67,6 @@
 
 ## Usage
 
-- Cost: $95.72
+- Cost: $95.85
 - Of which the readiness review: $64.73
-- Runs that dispatched a unit: 18
+- Runs that dispatched a unit: 19

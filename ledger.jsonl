@@ -106,3 +106,5 @@
 {"at":"2026-10-27T00:55:38Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"e2e-stack retried: its red failed only because three browser-gate criteria were cited in a node-only red step; the retry note tells the implementer to leave them to the e2e gate","type":"plan.resumed"}
 {"at":"2026-10-27T00:56:48Z","attempt":1,"cost_usd":3.389263,"runs":3,"type":"plan.charged","unit":"openspec:add-e2e-stack"}
 {"at":"2026-10-27T00:56:48Z","run":"r-20261027T0056Z-a73b","type":"unit.dispatched","unit":"openspec:add-e2e-stack"}
+{"at":"2026-10-27T01:24:42Z","attempt":1,"cost_usd":3.524699,"runs":3,"type":"plan.charged","unit":"openspec:add-e2e-stack"}
+{"at":"2026-10-27T01:24:42Z","detail":"round 2 failed the same way as round 1: finding F-5758ac1b","reason":"unit_escalated","type":"plan.stopped","unit":"openspec:add-e2e-stack"}
