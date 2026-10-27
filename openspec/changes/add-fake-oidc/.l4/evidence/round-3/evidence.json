@@ -1,0 +1,425 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "test/support/README.md",
+      "fake-oidc",
+      "seed/deploy/keycloak-footprint/REPORT.md",
+      "docs/decisions/0002",
+      "test",
+      "node:assert/strict",
+      "src",
+      "seed",
+      "R/protocol/openid-connect",
+      "application/x-www-form-urlencoded",
+      "https://evil.example/cb",
+      "seed/deploy/keycloak-footprint",
+      "import/ursitoare-realm.json",
+      "test/support/fake-oidc/{types,server,jwt,keys,pkce,tokens,login-page,contract}.ts",
+      "test/support/fake-oidc",
+      "test/support/fake-oidc/jwt.test.ts",
+      "test/support/fake-oidc/types.ts",
+      "test/support/fake-oidc/jwt.ts",
+      "test/support/fake-oidc/keys.test.ts",
+      "test/support/fake-oidc/keys.ts",
+      "test/support/fake-oidc/pkce.test.ts",
+      "test/support/fake-oidc/pkce.ts",
+      "test/support/fake-oidc/tokens.test.ts",
+      "test/support/fake-oidc/seed.ts",
+      "test/support/fake-oidc/tokens.ts",
+      "test/support/fake-oidc/login-page.test.ts",
+      "\"><script>1</script>",
+      "test/support/fake-oidc/login-page.ts",
+      "test/support/fake-oidc/server.test.ts",
+      "test/support/fake-oidc/server.ts",
+      "test/support/fake-oidc/provider.ts",
+      "test/support/fake-oidc/authorize.test.ts",
+      "test/support/fake-oidc/authorize.ts",
+      "test/support/fake-oidc/token.test.ts",
+      "test/support/fake-oidc/token.ts",
+      "test/support/fake-oidc/session.test.ts",
+      "test/support/fake-oidc/session.ts",
+      "test/support/fake-oidc/fake-oidc.test.ts",
+      "test/support/fake-oidc/contract.ts",
+      "{baseUrl}/.well-known/openid-configuration",
+      "redirect_uri=https://evil.example/cb",
+      "**/*.test.ts",
+      "**/package.json",
+      "**/provider.ts",
+      "**/authorize.ts",
+      "**/token.ts",
+      "**/session.ts",
+      "**/server.ts",
+      "**/[",
+      "**/[A-Za-z0-9._~-]",
+      "**/[redacted]",
+      "**/jwt.ts",
+      "**/pkce.test.ts",
+      "**/[\"tenant-one\"]",
+      "**/index.ts",
+      "**/jwt.test.ts",
+      "**/keys.test.ts",
+      "**/tokens.test.ts",
+      "**/server.test.ts",
+      "**/authorize.test.ts",
+      "**/token.test.ts",
+      "**/session.test.ts",
+      "**/[credentials.organization]",
+      "module \"><script>1<",
+      "module R",
+      "module application",
+      "module docs",
+      "module https:",
+      "module import",
+      "module node:assert",
+      "module redirect_uri=https:",
+      "module seed",
+      "module test",
+      "module {baseUrl}"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-fake-oidc-fix-1/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc-fix-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc-fix-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc-fix-1/specs/test-fake-oidc/spec.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc-fix-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/.l4/evidence/round-2/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/.l4/evidence/round-2/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/.l4/evidence/round-2/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/.l4/ledger/r-20261027T1141Z-cd31.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/.l4/ledger/r-20261027T1208Z-1537.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/.l4/ledger/r-20261027T1230Z-07f9.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/.l4/ledger/r-20261027T1244Z-7743.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/.l4/ledger/r-20261027T1318Z-75fb.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-oidc/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/fake-oidc/authorize.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-oidc/authorize.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-oidc/contract.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-oidc/contract.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-oidc/fake-oidc.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-oidc/jwt.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-oidc/jwt.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-oidc/keys.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-oidc/keys.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-oidc/login-page.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-oidc/login-page.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-oidc/pkce.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-oidc/pkce.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-oidc/provider.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-oidc/seed.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-oidc/server.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-oidc/server.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-oidc/session.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-oidc/session.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-oidc/token.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-oidc/token.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-oidc/tokens.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-oidc/tokens.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-oidc/types.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: test/support/fake-oidc/authorize.ts, test/support/fake-oidc/contract.ts, test/support/fake-oidc/jwt.ts, test/support/fake-oidc/keys.ts, test/support/fake-oidc/login-page.ts and 8 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "test/support/fake-oidc/authorize.ts",
+      "test/support/fake-oidc/contract.ts",
+      "test/support/fake-oidc/jwt.ts",
+      "test/support/fake-oidc/keys.ts",
+      "test/support/fake-oidc/login-page.ts",
+      "test/support/fake-oidc/pkce.ts",
+      "test/support/fake-oidc/provider.ts",
+      "test/support/fake-oidc/seed.ts",
+      "test/support/fake-oidc/server.ts",
+      "test/support/fake-oidc/session.ts",
+      "test/support/fake-oidc/token.ts",
+      "test/support/fake-oidc/tokens.ts",
+      "test/support/fake-oidc/types.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 496,
+      "passed": 496,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 77,
+      "new_passed": 77,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
