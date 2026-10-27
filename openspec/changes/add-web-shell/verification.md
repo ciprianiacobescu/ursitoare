@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-shell: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-web-shell: PASS (round 2)
 
 traceability: 32/32 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 32/32 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.4 | base merged: main@b31f357a4e as bdc06b7180 (1 commit) |
-| 1 | integrity | ok | 30.1 | 10 sub-checks; scope: 31 changed file(s) |
-| 2 | build | ok | 17.4 |  |
-| 3 | tests | ok | 33.4 |  |
-| 4 | traceability | ok | 0.1 | 28/32 criteria covered |
-| 4a | audit sampling | ok | 36.0 | 2 not_testable, 7 skipped; support files at the base: 11 |
-| 5 | ui test generation | ok | 2842.8 | 11 accepted, 2 fails_at_head, 18 not_testable, 1 writer_failed |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/api/security-headers.ts, src/api/web-paths.ts, src/api/web.ts, src/main.ts, test/support/e2e-stack/parts/20-web.ts and 10 more |
-| 8 | s1 judge | ok | 3.3 | 32/32 criteria judged by jev |
-| 9 | judge | ok | 451.9 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 4a | audit sampling | reused | 0.0 | reused (round 1) |
+| 5 | ui test generation | reused | 0.0 | reused (round 1) |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -262,6 +262,30 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-b5ce03f4 | not_testable | - | - | The criterion specifies TypeScript symbols (discoverParts, webPart, WEB_DIST_PATH) whose source files are not provided in the prompt and cannot be imported as a Python module in pytest. |
 | C-1dc68043 | not_testable | - | - | classifyWebPath is a TypeScript function in src/api/web-paths.ts rather than an importable Python module for pytest, and its interface definition is not included in the shown sources. |
 
+## Answers to verdict questions
+
+- Q-001 accept H-9e76d931 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-ba861867 is the scenario "Success, error and not-found responses" of the requirement "Every response carries the security headers". The specification writes that scenario against a buildServer instance on which the test itself registers a route that throws, a rout...
+- Q-002 accept H-b4253062 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-61225ade is the scenario "A handler cannot weaken them and a second call changes nothing" of the requirement "Every response carries the security headers". The specification writes it against a buildServer instance on which the test registers a route that sets con...
+- Q-003 accept H-19960e47 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-383b59d1 is the scenario "Files, types and cache" of the requirement "The engine serves the web build". The specification writes it against a test-made distDir that holds index.html, assets/index-Ab3dEf9Z.js and favicon.svg, and asks for the exact content types an...
+- Q-004 accept H-c85bdd94 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-b2a74658 is the scenario "Names, types and cache policy" of the requirement "The engine serves the web build". The specification writes it as direct calls of the pure helpers isAssetName, contentTypeFor and cacheControlFor on synthetic names such as a.cd, LOGO.PNG...
+- Q-005 accept H-c2167f30 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-62803105 is the scenario "Unknown extension" of the requirement "The engine serves the web build". The specification writes it against a test-made distDir that holds data.bin and asks that a GET of that file answers the type application/octet-stream with x-content...
+- Q-006 accept H-e0cb8f86 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-1dc68043 is the scenario "The classifier on raw strings" of the requirement "Static file requests stay inside the web build". The specification writes it as direct calls of the pure function classifyWebPath on thirteen raw strings such as /a/../b, /%zz, /x%2fy and...
+- Q-007 accept H-4f97b0f0 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-946ba56d is the scenario "Unknown API paths" of the requirement "Unknown API and root paths answer the JSON 404", which asks that GET /api/v1/does-not-exist, GET /API/v1/x, GET /api, GET /health/extra and POST /api/v1/x all answer 404 with a JSON content type and ...
+- Q-008 accept H-657e3f25 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-a91f316f is the scenario "Non-GET on a client route, and routes added later win" of the requirement "Unknown API and root paths answer the JSON 404". The specification writes it against a buildServer instance on which the test itself sends POST /flows, PUT /flows ...
+- Q-009 accept H-86a068a1 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-31ad3638 is the scenario "Missing then built" of the requirement "A missing build is reported and does not stop the engine". The specification writes it against an engine whose distDir does not exist, then is created empty, then receives index.html, and it also re...
+- Q-010 accept H-cae5cbd4 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-56d1014e is the scenario "A directory that is not a web build" of the requirement "A missing build is reported and does not stop the engine". The specification writes it against an engine whose distDir holds only secret.txt and asks that GET /secret.txt and GET /f...
+- Q-011 accept H-198b895a by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-967db51d is the scenario "Bad registration" of the requirement "A missing build is reported and does not stop the engine". The specification writes it as direct calls of the in-process function registerWebApp with distDir "" and "a\u0000b", and then a valid direct...
+- Q-012 accept H-9bf1501b by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-1b33755d is the scenario "Unbuilt directory warns once" of the requirement "The composition root serves the web app". The specification writes it against main run in process with an injected loadConfig whose webDist is an empty temp directory and a captured log de...
+- Q-013 accept H-c1376ce6 by agent (CLAUDECODE): The hold may be waived. Criterion C-2c3a693b is the scenario "A bad directory stops the start" of the requirement "The composition root serves the web app". It starts main() with an invalid URSITOARE_WEB_DIST and checks the exit code, the single fatal line and that the database closes once; a stack ...
+- Q-014 accept H-c24d6b2b by agent (CLAUDECODE): The hold may be waived. Criterion C-12290cf5 is the scenario "Success and request shape" of the requirement "ApiClient". It specifies the requests createApiClient sends through an injected fake fetch (method, URL, headers, JSON body, signal); a browser test sees only what the landing page does, not ...
+- Q-015 accept H-a427f9a7 by agent (CLAUDECODE): The hold may be waived. Criterion C-76b2dd3e is the scenario "Envelope, other failures and bad input" of the requirement "ApiClient". It specifies how createApiClient maps an error envelope, a non-envelope failure, a non-JSON 2xx, a rejecting fetch, an AbortError and invalid arguments, through an in...
+- Q-016 accept H-dcbf4ab9 by agent (CLAUDECODE): The hold may be waived. Criterion C-0a8a6d93 is the scenario "Order and filtering" of the requirement "Feature registry". It registers four test features on a new registry and reads list() and nav() with and without a capability set; the built app has one feature and no capability input, so no brows...
+- Q-017 accept H-a5fb16c6 by agent (CLAUDECODE): The hold may be waived. Criterion C-5e6db9ca is the scenario "Refusals" of the requirement "Feature registry". It feeds fifteen invalid, duplicate and reserved registrations and expects FeatureError codes; registrations happen at build time in code, not through the browser. It is proven by the Node ...
+- Q-018 accept H-e9471b87 by agent (CLAUDECODE): The hold may be waived. Criterion C-5752eaaf is the scenario "Reserved roots match whole segments" of the requirement "Feature registry". It registers /apis, /healthz, /auth and /auth/other on a new registry; the built app registers none of them. I read the test: it registers the four and asserts li...
+- Q-019 accept H-cf11d880 by agent (CLAUDECODE): The hold may be waived. Criterion C-34823202 is the scenario "The web reserved roots equal the engine's" of the requirement "Feature registry". It compares two source constants (web/src/app/features.ts and src/api/web-paths.ts), which no browser can observe. I read the test: it asserts the web list ...
+- Q-020 accept H-e4c11a36 by agent (CLAUDECODE): The hold may be waived. Criterion C-abaa85a3 is the scenario "The view for each state" of the requirement "The landing page reports engine health". The writer timed out, and the scenario is the pure function healthView on six inputs. I read web/src/app/health.ts and the test: healthView gives button...
+- Q-021 accept H-ea19cf93 by agent (CLAUDECODE): The hold may be waived. Criterion C-b5ce03f4 is the scenario "The part" of the requirement "The offline stack serves the built app and the journey passes". It calls discoverParts and the web part's start with a hand-made context and checks the order and WEB_DIST_PATH; those are internal APIs of the ...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -342,30 +366,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-b5ce03f4): No end-to-end test traces criterion C-b5ce03f4 (web-shell › The offline stack serves the built app and the journey passes › The part); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-3dda369f): The end-to-end test test_m0_skeleton::test_encoded_traversal_is_refused, test_m0_skeleton::test_landing_page_reports_engine_health[chromium], test_m0_skeleton::test_security_headers_on_every_response[chromium] (+1 more) traces criterion C-3dda369f (web-shell › The offline stack serves the built app and the journey passes › The M0 journey), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, judge] Protocol-relative baseUrl in createApiClient is not pinned down by the specification (spec gap) (criterion C-76b2dd3e): createApiClient rejects a path starting with '//' (such as '//evil.test/x') with RangeError, but for baseUrl it only checks that non-empty values start with '/'. A protocol-relative baseUrl such as '//evil.test' passes that check and produces '//evil.test/x'.
-
-## Needs a human
-
-- UI criterion C-ba861867 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-61225ade has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-383b59d1 has no end-to-end test (fails_at_head); see the generated UI tests table
-- UI criterion C-b2a74658 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-62803105 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-1dc68043 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-946ba56d has no end-to-end test (fails_at_head); see the generated UI tests table
-- UI criterion C-a91f316f has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-31ad3638 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-56d1014e has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-967db51d has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-1b33755d has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-2c3a693b has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-12290cf5 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-76b2dd3e has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-0a8a6d93 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-5e6db9ca has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-5752eaaf has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-34823202 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-abaa85a3 has no end-to-end test (writer_failed); see the generated UI tests table
-- UI criterion C-b5ce03f4 has no end-to-end test (not_testable); see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
