@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-657e3f25: UI criterion C-a91f316f has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-86a068a1: UI criterion C-31ad3638 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-cae5cbd4: UI criterion C-56d1014e has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-198b895a: UI criterion C-967db51d has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-198b895a: UI criterion C-967db51d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-9bf1501b: UI criterion C-1b33755d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-c1376ce6: UI criterion C-2c3a693b has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-c24d6b2b: UI criterion C-12290cf5 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -258,7 +258,8 @@ accept The hold may be waived. Criterion C-56d1014e is the scenario "A directory
 
 ## Q-011: Hold H-198b895a: UI criterion C-967db51d has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -274,6 +275,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-967db51d is the scenario "Bad registration" of the requirement "A missing build is reported and does not stop the engine". The specification writes it as direct calls of the in-process function registerWebApp with distDir "" and "a\u0000b", and then a valid directory twice on one instance, and asks that the first two throw WebAppError WEB_DIST_INVALID and the second valid call throws WEB_APP_DUPLICATE. A browser journey against the served e2e stack cannot call a TypeScript registration function on the running engine's Fastify instance and cannot observe a thrown error, so no end-to-end test can exercise the scenario; the design's test plan assigns engine behaviour to Node tests beside the code with buildServer and reserves the browser journey for the .tsx files. The Node test in src/api/web.test.ts implements the scenario exactly: it calls registerWebApp with the two invalid values and asserts each throws a WebAppError with code WEB_DIST_INVALID, then registers a valid temp dist once without a throw and asserts the second call throws a WebAppError with code WEB_APP_DUPLICATE, and that test passed in the latest test report. The implementation in src/api/web.ts refuses an empty or NUL-containing distDir with WEB_DIST_INVALID and guards a second registration on one instance with a WeakSet that throws WEB_APP_DUPLICATE. The engine-level consequence of a bad directory is covered by the separate main scenario "A bad directory stops the start". A missing generated end-to-end test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-012: Hold H-9bf1501b: UI criterion C-1b33755d has no end-to-end test (not_testable); see the generated UI tests table
