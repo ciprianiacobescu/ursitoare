@@ -135,7 +135,7 @@ export async function verifyChain(
         if (headSeq >= expected) {
           return { ok: false, checked, firstBadSeq: expected, reason: "gap" };
         }
-        if (lastHash === null || !lastHash.equals(head.hash)) {
+        if (headSeq === expected - 1n && (lastHash === null || !lastHash.equals(head.hash))) {
           return { ok: false, checked, firstBadSeq: headSeq, reason: "hash" };
         }
       }
