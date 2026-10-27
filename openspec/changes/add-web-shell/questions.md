@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Hold H-9e76d931: UI criterion C-ba861867 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-002 | open | none | verdict | Hold H-b4253062: UI criterion C-61225ade has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-002 | answered | none | verdict | Hold H-b4253062: UI criterion C-61225ade has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-003 | open | none | verdict | Hold H-19960e47: UI criterion C-383b59d1 has no end-to-end test (fails_at_head); see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-c85bdd94: UI criterion C-b2a74658 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-c2167f30: UI criterion C-62803105 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -60,7 +60,8 @@ accept The hold may be waived. Criterion C-ba861867 is the scenario "Success, er
 
 ## Q-002: Hold H-b4253062: UI criterion C-61225ade has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -76,6 +77,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-61225ade is the scenario "A handler cannot weaken them and a second call changes nothing" of the requirement "Every response carries the security headers". The specification writes it against a buildServer instance on which the test registers a route that sets content-security-policy to * and calls registerSecurityHeaders twice, and it also reads the exported SECURITY_HEADERS constant. A browser journey against the served e2e stack can register no route and reach no in-process constant, so the scenario cannot be an end-to-end test, and the design's test plan assigns engine behaviour to Node tests with server.inject while the journey proves the .tsx files. The Node test in src/api/security-headers.test.ts implements the scenario exactly: it installs the hook twice, registers the spoofing route, asserts the response carries the exact policy as one string value, and asserts SECURITY_HEADERS x-frame-options is DENY. The implementation guards the second call with a WeakSet and replaces the handler's header in a root onSend hook. The end-to-end outcome of the requirement is also proven over the served stack by e2e/test_m0_skeleton.py, which asserts the four exact headers on GET / and GET /health. A missing generated UI test leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-003: Hold H-19960e47: UI criterion C-383b59d1 has no end-to-end test (fails_at_head); see the generated UI tests table
