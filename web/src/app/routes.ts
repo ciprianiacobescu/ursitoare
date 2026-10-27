@@ -1,10 +1,16 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this module implements it.
 import type { Feature } from "./features.ts";
 
-export function routeTable(_features: readonly Feature[]): readonly { id: string; path: string }[] {
-  throw new Error("not implemented");
+const NOT_FOUND_ID = "not-found";
+const NOT_FOUND_TITLE = "Page not found · Ursitoare";
+const PRODUCT_TITLE = "Ursitoare";
+
+export function routeTable(features: readonly Feature[]): readonly { id: string; path: string }[] {
+  return [
+    ...features.map((feature) => ({ id: feature.id, path: feature.path })),
+    { id: NOT_FOUND_ID, path: "*" },
+  ];
 }
 
-export function pageTitle(_routeId: string): string {
-  throw new Error("not implemented");
+export function pageTitle(routeId: string): string {
+  return routeId === NOT_FOUND_ID ? NOT_FOUND_TITLE : PRODUCT_TITLE;
 }

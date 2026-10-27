@@ -1,0 +1,76 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: -9999px;
+  padding: 0.5rem 1rem;
+  background: Canvas;
+  color: CanvasText;
+}
+
+.skip-link:focus {
+  left: 0;
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+}
+
+.app-banner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid currentColor;
+}
+
+.app-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.app-nav ul {
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-nav a {
+  text-decoration: none;
+}
+
+.app-nav a[aria-current="page"] {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+main {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+main:focus {
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+}
+
+.app-footer {
+  padding: 0.75rem 1.5rem;
+  border-top: 1px solid currentColor;
+}

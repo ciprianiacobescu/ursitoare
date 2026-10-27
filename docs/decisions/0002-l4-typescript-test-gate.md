@@ -25,6 +25,19 @@ read from the L4 v0.4.30 source (v0.4.31 and v0.4.32 change none of them), decid
    `discrimination.no_assertion_failure`). L4 recognises stubs only in Python, so in a TypeScript red step every
    criterion it traces needs at least one new test whose failure kind is `assertion`. A stub's `NotImplementedError`
    does not count, and the step fails as `vacuous`. add-db-foundation's task 1.1 failed seven red attempts this way.
+6. **Red sees no browser test** (added 2026-10-27, read from v0.4.32 `implementer/tdd.py` and
+   `implementer/result.py` `check_criteria`). Red runs only `gates.test`, and every criterion the step lists in
+   `criteria_ids` needs a new test in that gate's report. An OpenSpec task has no requirement links, so red requires
+   no criterion it does not list. A criterion that only `e2e/` tests check therefore fails red whenever it is listed.
+   add-e2e-stack's task 5.3 failed seven red attempts on three models this way. The verifier does not credit such a
+   criterion either (seen in add-e2e-stack round 5). Its e2e tests are "ignored as evidence: no proof that it
+   discriminates (no red, audit or generated record)", so each such criterion comes back as a verdict question
+   ("uncovered"). The owner's delegate reads the tests and answers it.
+7. **No skip in a harness commit** (added 2026-10-27, read from v0.4.32 `verifier/integrity.py`). Integrity blocks
+   every skip, skipif or xfail marker and every `pytest.skip` or `pytest.xfail` call that a harness commit adds to a
+   test-glob file, new tests included, and `e2e/**` is a test glob here. Only a person's commit is exempt. A spec
+   therefore selects tests by marker (`stack`, `-m`) or fails loudly; it never asks for a skip. add-e2e-stack
+   escalated on its own "call `pytest.skip` when it is not `fake`" until feedback removed the guards.
 
 ## Decisions
 

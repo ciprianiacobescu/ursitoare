@@ -1,11 +1,17 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this module implements it.
+import { fileURLToPath } from "node:url";
+
 import type { E2eStackPart, PartHandle } from "./part.ts";
 
-export const WEB_DIST_PATH: string = "";
+export const WEB_DIST_PATH: string = fileURLToPath(
+  new URL("../../../web/dist", import.meta.url),
+);
 
 export const webPart: E2eStackPart = {
   name: "web",
   start(): Promise<PartHandle> {
-    throw new Error("not implemented");
+    return Promise.resolve({
+      env: { URSITOARE_WEB_DIST: WEB_DIST_PATH },
+      close: (): Promise<void> => Promise.resolve(),
+    });
   },
 };
