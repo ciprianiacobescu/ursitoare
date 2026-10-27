@@ -52,3 +52,5 @@
 {"at":"2026-10-27T20:33:30Z","branch":"l4/archive/openspec/add-audit-chain","head":"3ba285348d1c8f3bd8d7b5294cf9a3f0ff7e69ba","type":"unit.branch_deleted","unit":"openspec:add-audit-chain"}
 {"at":"2026-10-27T20:33:32Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-identity-model"}
 {"at":"2026-10-27T20:33:32Z","run":"r-20261027T2033Z-992f","type":"unit.dispatched","unit":"openspec:add-identity-model"}
+{"at":"2026-10-27T21:17:24Z","attempt":1,"cost_usd":4.863788,"runs":2,"type":"plan.charged","unit":"openspec:add-identity-model"}
+{"at":"2026-10-27T21:17:24Z","run":"r-20261027T2117Z-4eb4","type":"unit.dispatched","unit":"openspec:add-identity-model"}
