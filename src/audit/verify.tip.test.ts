@@ -101,6 +101,39 @@ test("C-707dcf8b a changed head hash is a hash failure at the tip", async () => 
   }
 });
 
+const LAG_HEAD =
+  "UPDATE ursitoare.audit_head SET seq = 5, hash = (SELECT hash FROM ursitoare.audit_event WHERE tenant_id = 'tenant_a' AND seq = 5) WHERE tenant_id = 'tenant_a'";
+
+test("C-c8eb7dcb C-42e60f96 a head below the walked tip passes on an intact chain", async () => {
+  const db = await withTestDatabase();
+  try {
+    const { a } = await seedTwoTenants(db);
+    await makeChain(db, a, 7);
+    await ownerSql(db, a.tenantId, LAG_HEAD);
+    assert.deepEqual(await report(db, a), { ok: true, checked: 7 });
+  } finally {
+    await db.close();
+  }
+});
+
+test("C-707dcf8b a head below the tip passes with fromSeq and a changed head hash at the tip still fails", async () => {
+  const db = await withTestDatabase();
+  try {
+    const { a } = await seedTwoTenants(db);
+    await makeChain(db, a, 7);
+    await ownerSql(db, a.tenantId, LAG_HEAD);
+    assert.deepEqual(await report(db, a, { fromSeq: 3n }), { ok: true, checked: 5 });
+    await ownerSql(
+      db,
+      a.tenantId,
+      "UPDATE ursitoare.audit_head SET seq = 7, hash = set_byte(hash, 3, get_byte(hash, 3) # 1) WHERE tenant_id = 'tenant_a'",
+    );
+    assert.deepEqual(await report(db, a), { ok: false, checked: 7, firstBadSeq: 7n, reason: "hash" });
+  } finally {
+    await db.close();
+  }
+});
+
 test("C-707dcf8b part-way verification trusts the chain before fromSeq", async () => {
   const db = await withTestDatabase();
   try {
