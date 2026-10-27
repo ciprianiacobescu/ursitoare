@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied? |
 <!-- l4:index:end -->
 
 ---
@@ -84,7 +84,7 @@ accept: a conduct criterion, as on the parent unit. On this unit checkAll(readSn
 
 ## Q-003: Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -111,3 +111,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept: a conduct criterion, as on the parent unit. On this unit checkAll(readSnapshot()) is empty: test/arch/repo.test.ts asserts it equals [] and the test gate passed 394 of 394 at round 1. The diff from main (17152e6) changes only test/arch/rules.ts, test/arch/secrets.ts and test/arch/secrets.test.ts besides its openspec folder: nothing under src/ or test/support/, no owner file, and test/arch/modules.ts is unchanged. No violation was reported, so there was no false positive to fix in a rule and no blocker was raised.
