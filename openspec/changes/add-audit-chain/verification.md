@@ -1,4 +1,4 @@
-# Verification: openspec:add-audit-chain: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-audit-chain: FAIL (round 2)
 
 traceability: 29/29 criteria covered by a discriminating test
 
@@ -17,17 +17,17 @@ traceability: 29/29 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base merged: main@674213c8e6 as 9c1841636a (1 commit) |
-| 1 | integrity | ok | 33.3 | 10 sub-checks; scope: 27 changed file(s) |
-| 2 | build | ok | 14.5 |  |
-| 3 | tests | ok | 36.0 |  |
-| 4 | traceability | ok | 0.1 | 29/29 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/audit/anchor.ts, src/audit/append.ts, src/audit/canonical.ts, src/audit/errors.ts, src/audit/event.ts and 3 more |
-| 8 | s1 judge | ok | 3.3 | 29/29 criteria judged by jev |
-| 9 | judge | ok | 214.7 | 3 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -201,6 +201,13 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-2437f60b | ok | 0.940 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-97d0b64b | ok | 0.940 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-002 reject F-0447fea8 by the delegate (claude-fable-5-1 via claude-code): The finding is correct. Task 5.2 says a head whose seq is below the walked tip passes, and design.md says the head is read before the walk so that appends during a verification are not tail loss. In verify.ts the head check only guards headSeq >= fromSeq and headSeq >= expected; for any head seq bet...
+- Q-003 reject F-934c3d86 by the delegate (claude-fable-5-1 via claude-code): The finding is correct. Task 5.1 says that chainHash not equal to the stored hash, or canonicalEvent throwing, gives reason hash, and the spec's requirement says verifyChain returns ok false with reason hash or gap whenever a stored row's hash does not equal chainHash of that row. In verify.ts the w...
+- Q-004 reject F-1abb4766 by the delegate (claude-fable-5-1 via claude-code): The finding is correct. Task 5.1 of tasks.md says that chainHash not equal to the stored hash, or canonicalEvent throwing, gives reason hash, and the specification's requirement says verifyChain returns ok false with reason hash or gap whenever a stored row's hash does not equal chainHash of the sto...
+- Q-005 reject F-2a235267 by the delegate (claude-fable-5-1 via claude-code): The finding is correct. Task 5.2 says that after the walk a head whose seq is below tipSeq passes, and design.md says the head is read before the walk so that appends during a verification are not tail loss. In src/audit/verify.ts the head check only separates the case headSeq at or above expected, ...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -240,12 +247,20 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] Secret-key depth is the first hit in sorted key order, not the shallowest (spec gap) (criterion C-a4f784d0): secretDepth walks the parsed canonical payload depth-first in sorted key order and returns the first hit. For {a:{password:1}, password:1} it reports depth 2, although a depth-1 secret key exists. The spec does not pin down which depth to report when there are several hits.
 - [minor, judge] Size check runs before the secret-key scan (spec gap) (criterion C-f2814e48): A payload over 32,768 canonical bytes that also holds a secret-named key is refused with AUDIT_EVENT_INVALID payload_too_large, not AUDIT_PAYLOAD_SECRET. No scenario fixes this precedence.
 - [minor, judge] An unknown property takes precedence over a bad eventType (spec gap) (criterion C-f2814e48): validateEvent checks for unknown keys before eventType, so an input with both an extra property and eventType "Flow" gets unknown_property.
-- [major, judge] task 5.2: a head below the walked tip is reported as a hash failure instead of passing (criterion C-707dcf8b): Task 5.2 says a head whose seq is below the walked tip (tipSeq = expected - 1n) passes. In verify.ts, when headSeq < expected the code goes on to `if (lastHash === null || !lastHash.equals(head.hash)) return { ..., firstBadSeq: headSeq, reason: "hash" }`. lastHash is the tip's hash, not the head's, so a head below the tip always fails. The head is read in a separate statement before the walk. Unless withTenantTx uses a snapshot isolation level, an append committed between the head read and the walk makes an intact chain report a `hash` failure. That contradicts design.md: 'appends during a ver...
-- [major, judge] task 5.1: a stored row that canonicalEvent cannot hash makes verifyChain throw instead of reporting hash (criterion C-d5bb5978): Task 5.1 says chainHash not matching the stored hash, or canonicalEvent throwing, gives `hash`. verify.ts calls chainHash without a try/catch. An owner edit that canonicalEvent cannot hash makes verifyChain reject with an AuditError instead of returning {ok:false, reason:'hash'}. Two examples: `at` in year 10000, where to_char gives a five-digit year and the six-digit-fraction regex fails; and a payload number beyond the double range, where node-pg parses it as Infinity.
+- [major, human] task 5.2: a head below the walked tip is reported as a hash failure instead of passing (criterion C-707dcf8b): Task 5.2 says a head whose seq is below the walked tip (tipSeq = expected - 1n) passes. In verify.ts, when headSeq < expected the code goes on to `if (lastHash === null || !lastHash.equals(head.hash)) return { ..., firstBadSeq: headSeq, reason: "hash" }`. lastHash is the tip's hash, not the head's, so a head below the tip always fails. The head is read in a separate statement before the walk. Unless withTenantTx uses a snapshot isolation level, an append committed between the head read and the walk makes an intact chain report a `hash` failure. That contradicts design.md: 'appends during a ver...
+- [major, human] task 5.1: a stored row that canonicalEvent cannot hash makes verifyChain throw instead of reporting hash (criterion C-d5bb5978): Task 5.1 says chainHash not matching the stored hash, or canonicalEvent throwing, gives `hash`. verify.ts calls chainHash without a try/catch. An owner edit that canonicalEvent cannot hash makes verifyChain reject with an AuditError instead of returning {ok:false, reason:'hash'}. Two examples: `at` in year 10000, where to_char gives a five-digit year and the six-digit-fraction regex fails; and a payload number beyond the double range, where node-pg parses it as Infinity. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding is correct. Task 5.1 says that chainHash not equal...
 - [minor, judge] Unspecified: head seq below the visible tip (spec gap) (criterion C-707dcf8b): No scenario covers a head whose seq is below the last event the walk sees. That can happen through an owner rewind of the head or a concurrent append. Reasonable implementations differ: pass, or report hash at the head seq.
 - [minor, judge] Unspecified: stored event whose fields canonicalEvent refuses (spec gap) (criterion C-d5bb5978): No scenario covers a stored row whose `at` year is above 9999 or whose jsonb number is outside the double range. The committed code throws instead of returning a report.
-- [major, judge] task 5.1 is ticked as already satisfied, but its text is not done: src/audit/verify.ts implements the walk, gap and hash checks and option validation. However, the task text says canonicalEvent throwing gives `hash`, and the chainHash call is not caught, so it throws instead. property.test.ts is not in this part.
-- [major, judge] task 5.2 is ticked as already satisfied, but its text is not done: src/audit/verify.ts head check: the task says a head seq below tipSeq passes, but the code reports `hash` at headSeq whenever lastHash differs from head.hash, which is always the case when the head is below the tip.
+- [major, human] task 5.1 is ticked as already satisfied, but its text is not done: src/audit/verify.ts implements the walk, gap and hash checks and option validation. However, the task text says canonicalEvent throwing gives `hash`, and the chainHash call is not caught, so it throws instead. property.test.ts is not in this part. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding is correct. Task 5.1 of tasks.md says that chainHash not equal to the stored hash, or canonicalEvent throwing, gives reason hash, and the specification's requirement says verifyChain returns ok false with reason hash or gap whenever a stored row's hash does not equal chainHash ...
+- [major, human] task 5.2 is ticked as already satisfied, but its text is not done: src/audit/verify.ts head check: the task says a head seq below tipSeq passes, but the code reports `hash` at headSeq whenever lastHash differs from head.hash, which is always the case when the head is below the tip. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding is correct. Task 5.2 says that after the walk a head whose seq is below tipSeq passes, and design.md says the head is read before the walk so that appends during a verification are not tail loss. In src/audit/verify.ts the head check only separates the case headSeq at or above expected, which gives gap; for e...
+
+## Fix unit
+
+Fix unit 1 is created for these tasks:
+- F-0447fea8 task 5.2: a head below the walked tip is reported as a hash failure instead of passing
+- F-934c3d86 task 5.1: a stored row that canonicalEvent cannot hash makes verifyChain throw instead of reporti...
+- F-1abb4766 task 5.1 is ticked as already satisfied, but its text is not done
+- F-2a235267 task 5.2 is ticked as already satisfied, but its text is not done
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
