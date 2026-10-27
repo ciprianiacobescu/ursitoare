@@ -20,3 +20,4 @@
 {"at":"2026-10-27T13:18:21Z","run":"r-20261027T1318Z-75fb","type":"unit.dispatched","unit":"openspec:add-fake-oidc"}
 {"at":"2026-10-27T13:32:43Z","detail":"the repository CI is still running on the hand-off commit 03bad24aee (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"03bad24aee05fde10e5b49d10dcf647eb82040da","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-fake-oidc"}
 {"at":"2026-10-27T13:55:44Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-fake-oidc can go on","type":"plan.resumed"}
+{"at":"2026-10-27T13:55:50Z","head":"03bad24aee05fde10e5b49d10dcf647eb82040da","pr":16,"target_before":"5481c0d388607a42ec2b37d6fed0e3596138dd80","type":"unit.merge_requested","unit":"openspec:add-fake-oidc"}
