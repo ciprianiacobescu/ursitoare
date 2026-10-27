@@ -4,7 +4,7 @@ import type { EntityUid } from "./types.ts";
 
 export const MAX_SLICE_ENTITIES: number = 24;
 export const MAX_REQUEST_CHARS: number = 262144;
-export const MAX_PERMIT_TTL_SECONDS: number = 0;
+export const MAX_PERMIT_TTL_SECONDS: number = 3600;
 
 export function formatUid(uid: EntityUid): string {
   if (

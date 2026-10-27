@@ -2,7 +2,8 @@ import type { Clock, IdSource } from "../core/index.ts";
 import type { Logger } from "../observability/index.ts";
 import { cedar } from "./cedar.ts";
 import { guardRequest } from "./guards.ts";
-import type { Decision, PolicyRequest } from "./types.ts";
+import { buildPermit, validateEgress } from "./permit.ts";
+import type { Decision, Permit, PolicyRequest } from "./types.ts";
 
 export interface CheckOptions {
   readonly policySetVersion: string;
@@ -71,6 +72,19 @@ function interpret(
   return denied(state, reasons, errors);
 }
 
+function allowPermit(req: PolicyRequest): Permit | undefined {
+  let egress: unknown;
+  try {
+    egress = req.egress;
+  } catch {
+    return undefined;
+  }
+  if (!validateEgress(egress)) {
+    return undefined;
+  }
+  return buildPermit(egress);
+}
+
 export async function runCheck(req: PolicyRequest, opts: CheckOptions): Promise<Decision> {
   const decisionId = opts.ids.next("dec");
   const decidedAt = opts.clock.now().toISOString();
@@ -96,7 +110,12 @@ export async function runCheck(req: PolicyRequest, opts: CheckOptions): Promise<
       preparsedSchemaName: opts.preparsedSchemaName,
       validateRequest: true,
     });
-    return interpret(state, answer, opts.logger);
+    const decision = interpret(state, answer, opts.logger);
+    if (decision.decision !== "allow") {
+      return decision;
+    }
+    const permit = allowPermit(req);
+    return permit === undefined ? decision : { ...decision, permit };
   } catch (err) {
     opts.logger.error({ err }, "pdp internal error");
     return denied(state, [], ["PDP_INTERNAL"]);

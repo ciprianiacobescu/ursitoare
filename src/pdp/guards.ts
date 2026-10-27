@@ -1,3 +1,4 @@
+import { validateEgress } from "./permit.ts";
 import type { Entity, EntityUid } from "./types.ts";
 import { MAX_REQUEST_CHARS, MAX_SLICE_ENTITIES } from "./values.ts";
 
@@ -106,6 +107,16 @@ export function guardRequest(req: unknown, actions: readonly string[]): string |
       return "PDP_REQUEST_INVALID";
     }
     seen.add(key);
+  }
+
+  let egress: unknown;
+  try {
+    egress = req["egress"];
+  } catch {
+    return "PDP_REQUEST_INVALID";
+  }
+  if (egress !== undefined && !validateEgress(egress)) {
+    return "PDP_REQUEST_INVALID";
   }
 
   return undefined;
