@@ -2,3 +2,4 @@
 {"ts": "2026-10-27T13:59:20.627182Z", "run_id": "r-20261027T1359Z-355d", "unit": "openspec:add-fake-oidc", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 16, "merge_commit": "8d921119af16ae664409b4f7e71b995e1ab2003d"}
 {"ts": "2026-10-27T13:59:28.336371Z", "run_id": "r-20261027T1359Z-355d", "unit": "openspec:add-fake-oidc", "seq": 3, "type": "archive.opened", "number": 17, "url": "<forge>/ciprianiacobescu/ursitoare/pull/17", "branch": "l4/archive/openspec/add-fake-oidc", "head": "4f93639ab24f24460259b486cbdf8cd866771dcb"}
 {"ts": "2026-10-27T13:59:30.673969Z", "run_id": "r-20261027T1359Z-355d", "unit": "openspec:add-fake-oidc", "seq": 4, "type": "archive.merged", "head": "4f93639ab24f24460259b486cbdf8cd866771dcb", "number": 17}
+{"ts": "2026-10-27T13:59:32.852245Z", "run_id": "r-20261027T1359Z-355d", "unit": "openspec:add-fake-oidc", "seq": 5, "type": "run.finished", "exit_code": 0}
