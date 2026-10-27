@@ -54,3 +54,4 @@
 {"at":"2026-10-27T20:33:32Z","run":"r-20261027T2033Z-992f","type":"unit.dispatched","unit":"openspec:add-identity-model"}
 {"at":"2026-10-27T21:17:24Z","attempt":1,"cost_usd":4.863788,"runs":2,"type":"plan.charged","unit":"openspec:add-identity-model"}
 {"at":"2026-10-27T21:17:24Z","run":"r-20261027T2117Z-4eb4","type":"unit.dispatched","unit":"openspec:add-identity-model"}
+{"at":"2026-10-27T21:43:03Z","detail":"the repository CI is still running on the hand-off commit d864ddc88c (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"d864ddc88cb05aea2ddf6853a29de768f920933f","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-identity-model"}
