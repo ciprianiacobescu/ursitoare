@@ -31,7 +31,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-018 | answered | none | verdict | Hold H-e9471b87: UI criterion C-5752eaaf has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-019 | answered | none | verdict | Hold H-cf11d880: UI criterion C-34823202 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-020 | answered | none | verdict | Hold H-e4c11a36: UI criterion C-abaa85a3 has no end-to-end test (writer_failed); see the generated UI tests table |
-| Q-021 | open | none | verdict | Hold H-ea19cf93: UI criterion C-b5ce03f4 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-021 | answered | none | verdict | Hold H-ea19cf93: UI criterion C-b5ce03f4 has no end-to-end test (not_testable); see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -478,7 +478,7 @@ accept The hold may be waived. Criterion C-abaa85a3 is the scenario "The view fo
 
 ## Q-021: Hold H-ea19cf93: UI criterion C-b5ce03f4 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.66 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -495,3 +495,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-b5ce03f4 is the scenario "The part" of the requirement "The offline stack serves the built app and the journey passes". It calls discoverParts and the web part's start with a hand-made context and checks the order and WEB_DIST_PATH; those are internal APIs of the e2e harness, and the served stack itself is what every accepted browser test runs against. It is proven by the Node test test/support/e2e-stack/web-part.test.ts "C-b5ce03f4 the web part is discovered after the database and hands the built web directory to the engine". It passed at the head and failed by assertion at red (proof red_assertion, adequate, in the round-1 traceability), and the judge and S1 passed the criterion. A missing generated UI test therefore leaves no behaviour of this criterion unproved.
