@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Hold H-cae5cbd4: UI criterion C-56d1014e has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-198b895a: UI criterion C-967db51d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-9bf1501b: UI criterion C-1b33755d has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-c1376ce6: UI criterion C-2c3a693b has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-c1376ce6: UI criterion C-2c3a693b has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-c24d6b2b: UI criterion C-12290cf5 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-a427f9a7: UI criterion C-76b2dd3e has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-dcbf4ab9: UI criterion C-0a8a6d93 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -302,7 +302,7 @@ accept The hold may be waived. Criterion C-1b33755d is the scenario "Unbuilt dir
 
 ## Q-013: Hold H-c1376ce6: UI criterion C-2c3a693b has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.66 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -319,6 +319,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-2c3a693b is the scenario "A bad directory stops the start" of the requirement "The composition root serves the web app". It starts main() with an invalid URSITOARE_WEB_DIST and checks the exit code, the single fatal line and that the database closes once; a stack that fails to start cannot be driven by a browser. I read the test: it asserts exit [1], one fatal line with code WEB_DIST_INVALID and msg "startup failed", and no path in that line. It is proven by the Node test src/main.web.test.ts "C-2c3a693b main fails startup for an invalid web directory and closes the database once". It passed at the head and failed by assertion at red (proof red_assertion, adequate, in the round-1 traceability), and the judge and S1 passed the criterion. A missing generated UI test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-014: Hold H-c24d6b2b: UI criterion C-12290cf5 has no end-to-end test (not_testable); see the generated UI tests table
