@@ -1,10 +1,18 @@
+import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { FastifyInstance } from "fastify";
 import pino from "pino";
 
 import type { HealthRegistry, SignalSource } from "./api/index.ts";
-import { buildServer, createHealthRegistry, installGracefulShutdown } from "./api/index.ts";
+import {
+  buildServer,
+  createHealthRegistry,
+  DEFAULT_WEB_DIST,
+  installGracefulShutdown,
+  isWebBuilt,
+  registerWebApp,
+} from "./api/index.ts";
 import type { AppConfig } from "./config/index.ts";
 import { ConfigError, loadConfigFromProcess } from "./config/index.ts";
 import { systemIds } from "./core/index.ts";
@@ -131,6 +139,28 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     bootstrap.fatal(fatalFields(error), fatalMessage(error));
     exit(1);
     return null;
+  }
+
+  const distDir = resolve(config.webDist ?? DEFAULT_WEB_DIST);
+  try {
+    registerWebApp(server, { distDir });
+  } catch (error) {
+    await server.close().catch(() => undefined);
+    await database?.close().catch(() => undefined);
+    const code = (error as { code?: unknown } | null)?.code;
+    bootstrap.fatal(
+      { code: typeof code === "string" ? code : "STARTUP_FAILED" },
+      "startup failed",
+    );
+    exit(1);
+    return null;
+  }
+
+  if (!(await isWebBuilt(distDir))) {
+    logger.warn(
+      { code: "WEB_NOT_BUILT" },
+      "web app is not built; run pnpm run build or set URSITOARE_WEB_DIST",
+    );
   }
 
   if (deps.configureServer !== undefined) {
