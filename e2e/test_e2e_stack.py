@@ -14,11 +14,6 @@ from playwright.sync_api import Page
 DEFAULT_CONTROL_URL = "http://127.0.0.1:39081"
 
 
-def _require_fake_profile(profile: str) -> None:
-    if profile != "fake":
-        pytest.skip("the e2e stack tests need the fake profile")
-
-
 def _control_url() -> str:
     return os.environ.get("E2E_CONTROL_URL") or DEFAULT_CONTROL_URL
 
@@ -38,8 +33,6 @@ def _request(method: str, url: str) -> tuple[int, str]:
 
 @pytest.fixture
 def injected_fault(e2e_profile: str):
-    if e2e_profile != "fake":
-        pytest.skip("the injected fault needs the fake profile")
     url = f"{_control_url()}/faults"
     body = json.dumps({"method": "GET", "url": "/health", "status": 503}).encode("utf-8")
     request = urllib.request.Request(
@@ -61,7 +54,6 @@ def injected_fault(e2e_profile: str):
 @pytest.mark.milestone("M0")
 @pytest.mark.l4("C-0828b57f")
 def test_health_reports_database_ok(page: Page, base_url: str, e2e_profile: str) -> None:
-    _require_fake_profile(e2e_profile)
     response = page.goto(f"{base_url}/health")
     assert response is not None
     assert response.status == 200
@@ -75,7 +67,6 @@ def test_health_reports_database_ok(page: Page, base_url: str, e2e_profile: str)
 def test_control_paths_are_not_on_the_engine_port(
     base_url: str, e2e_profile: str
 ) -> None:
-    _require_fake_profile(e2e_profile)
     for method, path in (
         ("POST", "/reset"),
         ("POST", "/faults"),
@@ -91,7 +82,6 @@ def test_control_paths_are_not_on_the_engine_port(
 def test_injected_fault_fails_the_route(
     page: Page, base_url: str, e2e_profile: str, injected_fault: None
 ) -> None:
-    _require_fake_profile(e2e_profile)
     response = page.goto(f"{base_url}/health")
     assert response is not None
     assert response.status == 503
@@ -107,7 +97,6 @@ def test_fresh_state_clears_faults(
     injected_fault: None,
     fresh_state: None,
 ) -> None:
-    _require_fake_profile(e2e_profile)
     response = page.goto(f"{base_url}/health")
     assert response is not None
     assert response.status == 200
@@ -121,7 +110,6 @@ def test_fresh_state_clears_faults(
 def test_fresh_state_is_a_noop_on_the_stack_profile(
     e2e_profile: str, monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest
 ) -> None:
-    _require_fake_profile(e2e_profile)
     monkeypatch.setenv("E2E_PROFILE", "stack")
     monkeypatch.setenv("E2E_CONTROL_URL", "http://127.0.0.1:1")
     assert request.getfixturevalue("fresh_state") is None
@@ -132,7 +120,6 @@ def test_fresh_state_is_a_noop_on_the_stack_profile(
 def test_fresh_state_reports_an_unreachable_control_url(
     e2e_profile: str, monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest
 ) -> None:
-    _require_fake_profile(e2e_profile)
     url = "http://127.0.0.1:1"
     monkeypatch.setenv("E2E_PROFILE", "fake")
     monkeypatch.setenv("E2E_CONTROL_URL", url)
