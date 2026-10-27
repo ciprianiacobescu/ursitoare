@@ -1,10 +1,11 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
 import { systemClock } from "../core/index.ts";
-import { TenancyError, registerTenantRoute, withTenantTx } from "../tenancy/index.ts";
+import { TenancyError, registerTenantRoute, resolveTenantBy, withTenantTx } from "../tenancy/index.ts";
 import type { TenantContext, TenantPool } from "../tenancy/index.ts";
 import { identityError } from "./errors.ts";
-import { IDP_ROUTE_KIND, idpRouteKey } from "./route.ts";
+import { IDP_ROUTE_KIND, idpRouteKey, organizationFromClaim } from "./route.ts";
+import { requireText } from "./text.ts";
 import type { IdentityOptions } from "./users.ts";
 
 export interface IdpPair {
@@ -41,8 +42,17 @@ export async function provisionTenantIdp(
 }
 
 export async function resolveTenantForToken(
-  _pool: TenantPool,
-  _claims: { issuer: string; organization: unknown },
+  pool: TenantPool,
+  claims: { issuer: string; organization: unknown },
 ): Promise<TenantContext> {
-  throw new Error("not implemented");
+  const organization = organizationFromClaim(claims.organization);
+  let issuer: string;
+  try {
+    issuer = requireText(claims.issuer, 2048);
+  } catch {
+    throw identityError("IDENTITY_UNKNOWN_TENANT");
+  }
+  const ctx = await resolveTenantBy(pool, IDP_ROUTE_KIND, idpRouteKey(issuer, organization));
+  if (ctx === null) throw identityError("IDENTITY_UNKNOWN_TENANT");
+  return ctx;
 }
