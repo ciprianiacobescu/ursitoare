@@ -2,8 +2,8 @@ import type { Clock, IdSource } from "../core/index.ts";
 import type { Logger } from "../observability/index.ts";
 import { cedar } from "./cedar.ts";
 import { guardRequest } from "./guards.ts";
-import { buildPermit, validateEgress } from "./permit.ts";
-import type { Decision, Permit, PolicyRequest } from "./types.ts";
+import { buildPermit } from "./permit.ts";
+import type { Decision, Egress, Permit, PolicyRequest } from "./types.ts";
 
 export interface CheckOptions {
   readonly policySetVersion: string;
@@ -72,17 +72,8 @@ function interpret(
   return denied(state, reasons, errors);
 }
 
-function allowPermit(req: PolicyRequest): Permit | undefined {
-  let egress: unknown;
-  try {
-    egress = req.egress;
-  } catch {
-    return undefined;
-  }
-  if (!validateEgress(egress)) {
-    return undefined;
-  }
-  return buildPermit(egress);
+function allowPermit(egress: Egress | undefined): Permit | undefined {
+  return egress === undefined ? undefined : buildPermit(egress);
 }
 
 export async function runCheck(req: PolicyRequest, opts: CheckOptions): Promise<Decision> {
@@ -95,17 +86,18 @@ export async function runCheck(req: PolicyRequest, opts: CheckOptions): Promise<
   };
 
   const guard = guardRequest(req, opts.actions);
-  if (guard !== undefined) {
-    return denied(state, [], [guard]);
+  if (!guard.ok) {
+    return denied(state, [], [guard.code]);
   }
+  const request = guard.request;
 
   try {
     const answer = cedar.statefulIsAuthorized({
-      principal: req.principal,
-      action: { type: "Action", id: req.action },
-      resource: req.resource,
-      context: req.context as cedar.Context,
-      entities: req.entities as cedar.EntityJson[],
+      principal: request.principal,
+      action: { type: "Action", id: request.action },
+      resource: request.resource,
+      context: request.context as cedar.Context,
+      entities: request.entities as cedar.EntityJson[],
       preparsedPolicySetId: opts.preparsedPolicySetId,
       preparsedSchemaName: opts.preparsedSchemaName,
       validateRequest: true,
@@ -114,7 +106,7 @@ export async function runCheck(req: PolicyRequest, opts: CheckOptions): Promise<
     if (decision.decision !== "allow") {
       return decision;
     }
-    const permit = allowPermit(req);
+    const permit = allowPermit(request.egress);
     return permit === undefined ? decision : { ...decision, permit };
   } catch (err) {
     opts.logger.error({ err }, "pdp internal error");
