@@ -1,9 +1,15 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
+import { createHash, timingSafeEqual } from "node:crypto";
 
-export function pkceChallengeS256(_verifier: string): string {
-  throw new Error("not implemented");
+const VERIFIER_PATTERN = /^[A-Za-z0-9._~-]{43,128}$/;
+
+export function pkceChallengeS256(verifier: string): string {
+  return createHash("sha256").update(verifier, "utf8").digest("base64url");
 }
 
-export function verifyPkce(_verifier: string, _challenge: string): boolean {
-  throw new Error("not implemented");
+export function verifyPkce(verifier: string, challenge: string): boolean {
+  if (!VERIFIER_PATTERN.test(verifier)) return false;
+  const expected = Buffer.from(pkceChallengeS256(verifier), "utf8");
+  const actual = Buffer.from(challenge, "utf8");
+  if (expected.length !== actual.length) return false;
+  return timingSafeEqual(expected, actual);
 }
