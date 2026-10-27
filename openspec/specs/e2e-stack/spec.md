@@ -156,7 +156,7 @@ No non-test file under `src/` SHALL register `/reset` or `/faults`, and `test/ar
 - **THEN** the first returns without any request; the second raises `RuntimeError` whose message contains the URL
 
 ### Requirement: The browser gate sees the database and not the control routes
-The served engine SHALL report `checks.db` `"ok"` on `GET /health` and SHALL answer 404 `NOT_FOUND` to the control paths on its own port; each test of `e2e/test_e2e_stack.py` SHALL take the `e2e_profile` fixture and call `pytest.skip` when it is not `"fake"` (unset means `fake`).
+The served engine SHALL report `checks.db` `"ok"` on `GET /health` and SHALL answer 404 `NOT_FOUND` to the control paths on its own port; each test of `e2e/test_e2e_stack.py` SHALL take the `e2e_profile` fixture and run on the fake profile (unset means `fake`), with no `pytest.skip` (requirement FB-001 below; a test that needs the real stack is marked `stack`, which the default `-m "not stack"` deselects).
 
 #### Scenario: Health and control paths in the browser gate
 - **WHEN** `e2e/test_e2e_stack.py` loads `<base_url>/health` and sends `POST /reset`, `POST /faults` and `DELETE /faults` to `<base_url>`, each as a bodyless `urllib.request.Request(url, method=...)` (no `data`, no `Content-Type`), reading status and body from the caught `urllib.error.HTTPError`
