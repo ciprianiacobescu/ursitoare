@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Hold H-198b895a: UI criterion C-967db51d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-9bf1501b: UI criterion C-1b33755d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-c1376ce6: UI criterion C-2c3a693b has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-014 | open | none | verdict | Hold H-c24d6b2b: UI criterion C-12290cf5 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-014 | answered | none | verdict | Hold H-c24d6b2b: UI criterion C-12290cf5 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-a427f9a7: UI criterion C-76b2dd3e has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-dcbf4ab9: UI criterion C-0a8a6d93 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-a5fb16c6: UI criterion C-5e6db9ca has no end-to-end test (not_testable); see the generated UI tests table |
@@ -324,7 +324,7 @@ accept The hold may be waived. Criterion C-2c3a693b is the scenario "A bad direc
 
 ## Q-014: Hold H-c24d6b2b: UI criterion C-12290cf5 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.66 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -341,6 +341,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-12290cf5 is the scenario "Success and request shape" of the requirement "ApiClient". It specifies the requests createApiClient sends through an injected fake fetch (method, URL, headers, JSON body, signal); a browser test sees only what the landing page does, not each call shape. It is proven by the Node test web/src/api/client.test.ts (three tests named C-12290cf5: JSON requests to the same origin; caller headers and the abort signal; put, patch and delete). It passed at the head and failed by assertion at red (proof red_assertion, adequate, in the round-1 traceability), and the judge and S1 passed the criterion. A missing generated UI test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-015: Hold H-a427f9a7: UI criterion C-76b2dd3e has no end-to-end test (not_testable); see the generated UI tests table
