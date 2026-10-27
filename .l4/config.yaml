@@ -160,6 +160,10 @@ roles:
 implementer:
   escalate_after: 2
   max_task_attempts: 3
+  # Delegate choice 2026-10-27: AGENTS.md joins every implementer prompt. Without it only an agent CLI that reads the
+  # file itself saw its rules (browser-only criteria, assertion-failing red tests), and add-e2e-stack 5.3 and
+  # add-web-shell 6.4 each spent seven red attempts on them.
+  include_agents_md: true
 
 forge:
   type: github
