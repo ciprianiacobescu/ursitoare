@@ -1,5 +1,3 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 export type AuditErrorCode =
   | "AUDIT_EVENT_INVALID"
   | "AUDIT_CANONICAL_INVALID"
@@ -15,13 +13,22 @@ export type AuditErrorCode =
 export class AuditError extends Error {
   readonly code: AuditErrorCode;
   readonly details: Readonly<Record<string, string | number>>;
-  constructor(_code: AuditErrorCode, message: string, _details?: Record<string, string | number>) {
+
+  constructor(code: AuditErrorCode, message: string, details: Record<string, string | number> = {}) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "AuditError";
+    this.code = code;
+    this.details = details;
   }
 }
 
 // Module-internal: not exported from index.ts.
-export function wrapStoreError(_err: unknown): unknown {
-  throw new Error("not implemented");
+export function wrapStoreError(err: unknown): unknown {
+  if (typeof err === "object" && err !== null && "code" in err) {
+    const code = (err as { code: unknown }).code;
+    if (typeof code === "string" && /^[0-9A-Z]{5}$/.test(code)) {
+      return new AuditError("AUDIT_STORE_FAILED", "audit store failed", { sqlstate: code });
+    }
+  }
+  return err;
 }
