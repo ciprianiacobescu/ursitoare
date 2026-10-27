@@ -151,7 +151,7 @@ function assertThrowsFakeOidcError(call: () => unknown, code: string): void {
 }
 
 async function jwksOf(fake: FakeOidc): Promise<Jwk[]> {
-  const response = await fetch(`${fake.issuer}${PROTOCOL}/certs`);
+  const response = await fetch(`${fake.url}${PROTOCOL}/certs`);
   assert.equal(response.status, 200);
   const body = (await response.json()) as { keys: Jwk[] };
   return body.keys;
@@ -350,7 +350,7 @@ test("C-a715e6d5 the JWKS holds one RS256 key that verifies a minted token and i
     assert.equal(discovery.headers.get("cache-control"), "no-store");
     await discovery.text();
 
-    const certs = await fetch(`${fake.issuer}${PROTOCOL}/certs`);
+    const certs = await fetch(`${fake.url}${PROTOCOL}/certs`);
     assert.equal(certs.status, 200);
     assert.equal(certs.headers.get("cache-control"), "no-store");
     const body = (await certs.json()) as { keys: Jwk[] };
