@@ -145,9 +145,25 @@ function send(reply: { header(name: string, value: string): unknown }, type: str
   reply.header("cache-control", cache);
 }
 
+const webRegistered = new WeakSet<FastifyInstance>();
+
+function assertValidDistDir(distDir: string): void {
+  if (distDir.length === 0 || distDir.includes("\u0000")) {
+    throw new WebAppError(
+      "WEB_DIST_INVALID",
+      "distDir must be a non-empty path without NUL characters",
+    );
+  }
+}
+
 export function registerWebApp(server: FastifyInstance, opts: WebAppOptions): void {
-  registerSecurityHeaders(server);
   const distDir = opts.distDir;
+  assertValidDistDir(distDir);
+  if (webRegistered.has(server)) {
+    throw new WebAppError("WEB_APP_DUPLICATE", "the web app is already registered on this server");
+  }
+  webRegistered.add(server);
+  registerSecurityHeaders(server);
   const lateRoutes = new Map<string, LateRouteHandler>();
   interceptLateRoutes(server, lateRoutes);
 
