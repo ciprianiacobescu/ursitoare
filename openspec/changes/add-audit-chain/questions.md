@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: src/db/prepare.test.ts:100 expects no partitions after migrating
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The repository confirms the conflict: prepareDatabase returns ensurePartitions' created names, every table commented "partition: month" gets five partitions, and the spec requires that comment on audit_event, so prepare.test.ts line 100 cannot stay []. But the fix is an edit to an existing test of a
 - **Blocking tasks:** 3.1
 - **Kind:** technical
 - **Asked:** 2026-10-27T14:45Z by claude-sonnet, run r-20261027T1359Z-b357, task 3.1
