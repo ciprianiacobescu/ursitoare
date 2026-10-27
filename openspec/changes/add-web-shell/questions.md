@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Hold H-9e76d931: UI criterion C-ba861867 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-001 | answered | none | verdict | Hold H-9e76d931: UI criterion C-ba861867 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-002 | open | none | verdict | Hold H-b4253062: UI criterion C-61225ade has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-003 | open | none | verdict | Hold H-19960e47: UI criterion C-383b59d1 has no end-to-end test (fails_at_head); see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-c85bdd94: UI criterion C-b2a74658 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -38,7 +38,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Hold H-9e76d931: UI criterion C-ba861867 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -54,6 +55,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-ba861867 is the scenario "Success, error and not-found responses" of the requirement "Every response carries the security headers". The specification writes that scenario against a buildServer instance on which the test itself registers a route that throws, a route that throws ApiError(401, "AUTH_REQUIRED", "x") and a POST with an invalid JSON body. Those routes do not exist in the served e2e stack, so no Playwright journey can exercise the scenario, and the design's test plan assigns engine behaviour to Node tests with server.inject while the browser journey proves the .tsx files. The scenario is implemented exactly by the Node test in src/api/security-headers.test.ts, which registers the three routes and asserts the four exact header values and the absence of unsafe-inline and unsafe-eval on all five responses. The end-to-end outcome the requirement is about is also proven over the served stack: e2e/test_m0_skeleton.py asserts the four exact headers on GET / and GET /health through the browser, as the M0 journey scenario demands. A missing generated UI test therefore leaves no behaviour of this criterion unproved.
 ---
 
 ## Q-002: Hold H-b4253062: UI criterion C-61225ade has no end-to-end test (not_testable); see the generated UI tests table
