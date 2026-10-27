@@ -13,6 +13,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.1 | technical | src/db/prepare.test.ts:100 first.partitions expects only the audit_event window, so adding migration 0110 breaks it |
 | Q-002 | answered | none | verdict | Finding F-5a5184d6: check rejects when a getter inside principal, resource, an entity or egress throws |
+| Q-003 | open | none | verdict | Criterion C-b4a29f2d (policy-engine › A request carries at most 24 entities › A huge attribute): accept as satisfied? |
+| Q-004 | open | none | verdict | Finding F-2fc9e5f3: M8 malformed-policy test does not use design.md's M8 text |
 <!-- l4:index:end -->
 
 ---
@@ -67,3 +69,60 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ### Answer
 <!-- write below this line -->
 reject The finding is correct and stands. In guardRequest only the five top-level reads of req sit inside the try; the validators isUid, isEntity, isPlainObject and validateEgress then read principal.type, principal.id, each entity's uid, attrs and parents, and egress.method and the other five egress fields outside any try. runCheck calls guardRequest before its own try, and createPdp's check returns runCheck directly with no further guard, so a getter that throws on any of those nested properties propagates out of check as a rejection. The requirement "A check denies on any error" says check SHALL reject only when the injected IdSource or Clock throws, and design.md repeats that only a throwing IdSource or Clock makes check reject and that a request with a getter that throws anything is a denied request that is still recorded. The double read is also real: after the guard passes, runCheck reads req.principal, req.action, req.resource, req.context and req.entities again for Cedar, and allowPermit reads req.egress a third time, so a getter returning different values per read can pass the principal-in-slice, duplicate and size checks with one value and hand Cedar another. WHEN check runs on a request in which a getter of principal, resource, context, any entity or any of its fields, or egress throws, or returns different values on successive reads THEN check resolves with deny and errors ["PDP_REQUEST_INVALID"] and never rejects, and the values passed to Cedar and to the permit are the ones the guard validated.
+
+---
+
+## Q-003: Criterion C-b4a29f2d (policy-engine › A request carries at most 24 entities › A huge attribute): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-b4a29f2d (policy-engine › A request carries at most 24 entities › A huge attribute)
+
+### Context
+Criterion C-b4a29f2d (policy-engine › A request carries at most 24 entities › A huge attribute) is needs human after round 3.
+
+Scenario:
+\- **WHEN** an entity attribute holds 300,000 characters
+\- **THEN** the decision is `deny` with `errors` `["PDP_REQUEST_TOO_LARGE"]`; `MAX_REQUEST_CHARS` is 262144
+
+Why: uncovered: the tests that trace it are inadequate or did not pass
+Judge: insufficient_evidence
+Tracing tests: src.pdp.guards.test.ts::C-b4a29f2d a huge attribute (passed, red_assertion, inadequate)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Finding F-2fc9e5f3: M8 malformed-policy test does not use design.md's M8 text
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+The judge raised a major finding in round 3, and no deterministic check confirms it (criterion C-50748953).
+
+Title: M8 malformed-policy test does not use design.md's M8 text
+Detail: design.md § Test plan defines M8 as `permit (principal, action == Action::"reed", resource);`. The M8 entry in malformed.test.ts tests `permit (principal, action == Action::"read", resource == Action::"reed");`, a different fault: an action entity in the resource slot, not an unknown action in the action scope. The scenario as specified is therefore untested.
+Suggested fix: Change the M8 text to `@id("bad") permit (principal, action == Action::"reed", resource);`.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-50748953 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
