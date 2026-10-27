@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 3.1 | technical | src/db/prepare.test.ts:100 expects no partitions after migrating |
+| Q-001 | answered | 3.1 | technical | src/db/prepare.test.ts:100 expects no partitions after migrating |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/db/prepare.test.ts:100 expects no partitions after migrating
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The repository confirms the conflict: prepareDatabase returns ensurePartitions' created names, every table commented "partition: month" gets five partitions, and the spec requires that comment on audit_event, so prepare.test.ts line 100 cannot stay []. But the fix is an edit to an existing test of a
 - **Blocking tasks:** 3.1
 - **Kind:** technical
@@ -37,3 +37,8 @@ Edit `src/db/prepare.test.ts`: at line 100 expect `first.partitions` to equal th
 
 ### Answer
 <!-- write below this line -->
+Edit `src/db/prepare.test.ts` (test C-58e0ebf0), and only that existing test: at line 100 replace `assert.deepEqual(first.partitions, [])` with an expectation of exactly these five names, in this order: `ursitoare.audit_event_p202609`, `ursitoare.audit_event_p202610`, `ursitoare.audit_event_p202611`, `ursitoare.audit_event_p202612`, `ursitoare.audit_event_p202701`. Reason: the test's clock is fixed at 2026-10-15T12:00:00Z, `ensurePartitions` makes 1 month back and 3 ahead for every table commented `partition: month` and sorts `created`, and `0080_audit.sql` must give `audit_event` that comment.
+
+Leave the `second.partitions` expectation (lines 118-124) unchanged: `created` lists only the partitions that call made, the audit partitions already exist after the first call, so the second call creates only the five `pt_month` partitions. Change nothing else in the file and no other existing test (the tests of `ensurePartitions` itself build bare databases without migrations and are unaffected).
+
+Why the M0 test changes: its line-100 assertion encoded "no month-partitioned table is migrated yet", which this unit's required migration ends; the proposal's "no existing test changes" missed it.
