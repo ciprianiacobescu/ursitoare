@@ -12,6 +12,10 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 3.1 | technical | src/db/prepare.test.ts:100 expects no partitions after migrating |
+| Q-002 | open | none | verdict | Finding F-0447fea8: task 5.2: a head below the walked tip is reported as a hash failure instead of passing |
+| Q-003 | open | none | verdict | Finding F-934c3d86: task 5.1: a stored row that canonicalEvent cannot hash makes verifyChain throw instead of reporting hash |
+| Q-004 | open | none | verdict | Finding F-1abb4766: task 5.1 is ticked as already satisfied, but its text is not done |
+| Q-005 | open | none | verdict | Finding F-2a235267: task 5.2 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
 ---
@@ -42,3 +46,102 @@ Edit `src/db/prepare.test.ts` (test C-58e0ebf0), and only that existing test: at
 Leave the `second.partitions` expectation (lines 118-124) unchanged: `created` lists only the partitions that call made, the audit partitions already exist after the first call, so the second call creates only the five `pt_month` partitions. Change nothing else in the file and no other existing test (the tests of `ensurePartitions` itself build bare databases without migrations and are unaffected).
 
 Why the M0 test changes: its line-100 assertion encoded "no month-partitioned table is migrated yet", which this unit's required migration ends; the proposal's "no existing test changes" missed it.
+
+---
+
+## Q-002: Finding F-0447fea8: task 5.2: a head below the walked tip is reported as a hash failure instead of passing
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it (criterion C-707dcf8b).
+
+Title: task 5.2: a head below the walked tip is reported as a hash failure instead of passing
+Detail: Task 5.2 says a head whose seq is below the walked tip (tipSeq = expected - 1n) passes. In verify.ts, when headSeq < expected the code goes on to `if (lastHash === null || !lastHash.equals(head.hash)) return { ..., firstBadSeq: headSeq, reason: "hash" }`. lastHash is the tip's hash, not the head's, so a head below the tip always fails. The head is read in a separate statement before the walk. Unless withTenantTx uses a snapshot isolation level, an append committed between the head read and the walk makes an intact chain report a `hash` failure. That contradicts design.md: 'appends during a verification are not tail loss'.
+Suggested fix: Compare head.hash only when headSeq === expected - 1n, and let headSeq < expected - 1n pass.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-707dcf8b as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-003: Finding F-934c3d86: task 5.1: a stored row that canonicalEvent cannot hash makes verifyChain throw instead of reporting hash
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it (criterion C-d5bb5978).
+
+Title: task 5.1: a stored row that canonicalEvent cannot hash makes verifyChain throw instead of reporting hash
+Detail: Task 5.1 says chainHash not matching the stored hash, or canonicalEvent throwing, gives `hash`. verify.ts calls chainHash without a try/catch. An owner edit that canonicalEvent cannot hash makes verifyChain reject with an AuditError instead of returning {ok:false, reason:'hash'}. Two examples: `at` in year 10000, where to_char gives a five-digit year and the six-digit-fraction regex fails; and a payload number beyond the double range, where node-pg parses it as Infinity.
+Suggested fix: Wrap the chainHash call in try/catch and return { ok: false, checked, firstBadSeq: seq, reason: "hash" } when it throws.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-d5bb5978 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Finding F-1abb4766: task 5.1 is ticked as already satisfied, but its text is not done
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it.
+
+Title: task 5.1 is ticked as already satisfied, but its text is not done
+Detail: src/audit/verify.ts implements the walk, gap and hash checks and option validation. However, the task text says canonicalEvent throwing gives `hash`, and the chainHash call is not caught, so it throws instead. property.test.ts is not in this part.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+This finding cites no criterion: end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals, or no fix can be made from the reject.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Finding F-2a235267: task 5.2 is ticked as already satisfied, but its text is not done
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it.
+
+Title: task 5.2 is ticked as already satisfied, but its text is not done
+Detail: src/audit/verify.ts head check: the task says a head seq below tipSeq passes, but the code reports `hash` at headSeq whenever lastHash differs from head.hash, which is always the case when the head is below the tip.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+This finding cites no criterion: end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals, or no fix can be made from the reject.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->

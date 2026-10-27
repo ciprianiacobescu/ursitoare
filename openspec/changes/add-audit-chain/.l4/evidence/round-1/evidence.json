@@ -1,0 +1,281 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/audit",
+      "src/core",
+      "src/tenancy",
+      "test/support/tenants.ts",
+      "src/audit/index.ts",
+      "src/db/migrations/0080_audit.sql",
+      "docs/decisions/0002",
+      "test/support/pg.ts",
+      "src/audit/{errors,canonical,hash,event,append,mac,verify,anchor,index}.ts",
+      "src/audit/{canonical,hash,event,schema,append,committed,verify,property,verify.tip,mac,anchor,verify.anchor}.test.ts",
+      "src/db",
+      "src/audit/canonical.test.ts",
+      "src/audit/errors.ts",
+      "src/audit/canonical.ts",
+      "src/audit/hash.test.ts",
+      "src/audit/hash.ts",
+      "src/audit/event.test.ts",
+      "src/audit/event.ts",
+      "src/audit/schema.test.ts",
+      "src/audit/append.test.ts",
+      "src/audit/append.ts",
+      "src/audit/committed.test.ts",
+      "src/audit/verify.test.ts",
+      "src/audit/property.test.ts",
+      "src/audit/verify.ts",
+      "src/audit/verify.tip.test.ts",
+      "src/audit/mac.test.ts",
+      "src/audit/anchor.test.ts",
+      "src/audit/mac.ts",
+      "src/audit/anchor.ts",
+      "src/audit/verify.anchor.test.ts",
+      "**/index.ts",
+      "**/errors.ts",
+      "**/^[a-z][a-z0-9_.]{0,63}$",
+      "**/^[\\x21-\\x7e]{1,200}$",
+      "**/*.test.ts",
+      "**/[",
+      "**/package.json",
+      "**/mk*",
+      "**/mac.ts",
+      "**/^[0-9a-f]{64}$",
+      "module audit",
+      "module core",
+      "module db",
+      "module docs",
+      "module tenancy",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-audit-chain/.l4/ledger/r-20261027T1359Z-b357.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-chain/.l4/ledger/r-20261027T1517Z-7f3e.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-chain/.l4/ledger/r-20261027T1554Z-788e.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-chain/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-chain/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/audit/anchor.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/anchor.ts",
+        "module": "audit",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/audit/append.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/append.ts",
+        "module": "audit",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/audit/canonical.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/canonical.ts",
+        "module": "audit",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/audit/committed.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/errors.ts",
+        "module": "audit",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/audit/event.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/event.ts",
+        "module": "audit",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/audit/hash.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/hash.ts",
+        "module": "audit",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/audit/mac.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/mac.ts",
+        "module": "audit",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/audit/property.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/verify.anchor.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/verify.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/verify.tip.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/verify.ts",
+        "module": "audit",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0080_audit.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/prepare.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/audit/anchor.ts, src/audit/append.ts, src/audit/canonical.ts, src/audit/errors.ts, src/audit/event.ts and 3 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/audit/anchor.ts",
+      "src/audit/append.ts",
+      "src/audit/canonical.ts",
+      "src/audit/errors.ts",
+      "src/audit/event.ts",
+      "src/audit/hash.ts",
+      "src/audit/mac.ts",
+      "src/audit/verify.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 557,
+      "passed": 557,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 61,
+      "new_passed": 61,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
