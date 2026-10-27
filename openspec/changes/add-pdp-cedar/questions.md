@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.1 | technical | src/db/prepare.test.ts:100 first.partitions expects only the audit_event window, so adding migration 0110 breaks it |
-| Q-002 | open | none | verdict | Finding F-5a5184d6: check rejects when a getter inside principal, resource, an entity or egress throws |
+| Q-002 | answered | none | verdict | Finding F-5a5184d6: check rejects when a getter inside principal, resource, an entity or egress throws |
 <!-- l4:index:end -->
 
 ---
@@ -44,7 +44,8 @@ Edit `src/db/prepare.test.ts`: at the `assert.deepEqual(first.partitions, [...])
 
 ## Q-002: Finding F-5a5184d6: check rejects when a getter inside principal, resource, an entity or egress throws
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -65,3 +66,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct and stands. In guardRequest only the five top-level reads of req sit inside the try; the validators isUid, isEntity, isPlainObject and validateEgress then read principal.type, principal.id, each entity's uid, attrs and parents, and egress.method and the other five egress fields outside any try. runCheck calls guardRequest before its own try, and createPdp's check returns runCheck directly with no further guard, so a getter that throws on any of those nested properties propagates out of check as a rejection. The requirement "A check denies on any error" says check SHALL reject only when the injected IdSource or Clock throws, and design.md repeats that only a throwing IdSource or Clock makes check reject and that a request with a getter that throws anything is a denied request that is still recorded. The double read is also real: after the guard passes, runCheck reads req.principal, req.action, req.resource, req.context and req.entities again for Cedar, and allowPermit reads req.egress a third time, so a getter returning different values per read can pass the principal-in-slice, duplicate and size checks with one value and hand Cedar another. WHEN check runs on a request in which a getter of principal, resource, context, any entity or any of its fields, or egress throws, or returns different values on successive reads THEN check resolves with deny and errors ["PDP_REQUEST_INVALID"] and never rejects, and the values passed to Cedar and to the permit are the ones the guard validated.
