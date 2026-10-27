@@ -12,7 +12,7 @@ import type { FastifyInstance } from "fastify";
 import { sequentialIds } from "../core/index.ts";
 import { createLogger, noopTracer } from "../observability/index.ts";
 import { buildServer } from "./server.ts";
-import { DEFAULT_WEB_DIST, isWebBuilt, registerWebApp } from "./web.ts";
+import { DEFAULT_WEB_DIST, WebAppError, isWebBuilt, registerWebApp } from "./web.ts";
 
 const CONTENT_SECURITY_POLICY =
   "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'";
@@ -68,6 +68,15 @@ async function serve(distDir: string): Promise<FastifyInstance> {
     "registerWebApp must install the web app",
   );
   return resolved;
+}
+
+async function freshServer(): Promise<FastifyInstance> {
+  return buildServer({
+    version: "0.0.0",
+    ids: sequentialIds(1),
+    logger: createLogger({ level: "silent" }),
+    tracer: noopTracer,
+  });
 }
 
 async function webBuilt(distDir: string): Promise<boolean> {
@@ -395,4 +404,50 @@ test("C-0548f9d4 raw socket traversal forms answer 404 and never read the secret
       `GET ${path} does not publish the secret`,
     );
   }
+});
+
+test("C-967db51d bad registration is refused and a second valid call is a duplicate", async (t) => {
+  const root = await tempRoot();
+  const distDir = await makeDist(root, { "index.html": INDEX_HTML });
+  const server = await freshServer();
+  t.after(async () => {
+    await server.close();
+    await rm(root, { recursive: true, force: true });
+  });
+
+  for (const invalid of ["", "a\u0000b"]) {
+    assert.throws(
+      () => {
+        registerWebApp(server, { distDir: invalid });
+      },
+      (error: unknown): boolean => {
+        assert.ok(error instanceof WebAppError, "the refusal is a WebAppError");
+        assert.equal(error.code, "WEB_DIST_INVALID", "an invalid directory is refused");
+        return true;
+      },
+      "an invalid distDir throws WebAppError WEB_DIST_INVALID",
+    );
+  }
+
+  assert.doesNotThrow(
+    () => {
+      registerWebApp(server, { distDir });
+    },
+    "the first valid registration is accepted",
+  );
+  assert.throws(
+    () => {
+      registerWebApp(server, { distDir });
+    },
+    (error: unknown): boolean => {
+      assert.ok(error instanceof WebAppError, "the second call is a WebAppError");
+      assert.equal(error.code, "WEB_APP_DUPLICATE", "a second valid call is a duplicate");
+      return true;
+    },
+    "a second valid registration throws WebAppError WEB_APP_DUPLICATE",
+  );
+
+  const home = await server.inject({ method: "GET", url: "/" });
+  assert.equal(home.statusCode, 200, "the first valid registration serves the web app");
+  assert.equal(home.body, INDEX_HTML);
 });
