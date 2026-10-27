@@ -2,11 +2,11 @@
 
 - Status: stopped
 - Repository: https://github.com/ciprianiacobescu/ursitoare
-- Target: main at a53398fc5130b573609047b209e714758fda5de9
+- Target: main at b31f357a4e94c6928cf3c89f7b90ce53d3fa370c
 - Merge: auto
 - No promotion target is set. Promotion was not performed.
-- Written: 2026-10-27T01:24:42Z
-- Stopped: unit_escalated (openspec:add-e2e-stack): round 2 failed the same way as round 1: finding F-5758ac1b
+- Written: 2026-10-27T04:37:26Z
+- Stopped: unit_halted (openspec:add-web-shell): task 6.4: max_task_attempts (3) reached in red on deepseek (2), glm (2), claude-sonnet (3); last failure: vacuous: C-1542e67b (none of its tests fails by assertion: web.src.app.health.test.ts::C-1542e67b: a recheck goes from unavailable to busy to healthy with focus on the status); a test must asser
 
 ## Units
 
@@ -46,20 +46,18 @@
 - Usage: $5.08, 3 run(s), 1 attempt(s)
 
 ### openspec:add-e2e-stack
-- Result: not integrated
-- Pull request: <forge>/ciprianiacobescu/ursitoare/pull/11
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $3.52, 3 run(s), 1 attempt(s)
-- Delegate decisions:
-  - Q-001 (technical): reply discarded, escalated by the delegate (claude-fable-5-1 via claude-code), $0.99: the reply was discarded: checked spec:spec.md#scenario-close-stops-postgres-a-failed-start-leaves-nothing does not resolve
+- Result: integrated at 978e6926595630862011492726efa6b24c12c60b
+- Pull request: 11
+- Merge commit: 978e6926595630862011492726efa6b24c12c60b
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $7.73, 6 run(s), 1 attempt(s)
 
 ### openspec:add-web-shell
 - Result: not integrated
-- Pull request: none
+- Pull request: <forge>/ciprianiacobescu/ursitoare/pull/13
 - Merge commit: none
 - Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Usage: $1.18, 1 run(s), 1 attempt(s)
 
 ## Batches
 
@@ -67,6 +65,6 @@
 
 ## Usage
 
-- Cost: $95.85
+- Cost: $101.24
 - Of which the readiness review: $64.73
-- Runs that dispatched a unit: 19
+- Runs that dispatched a unit: 23
