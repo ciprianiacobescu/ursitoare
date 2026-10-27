@@ -46,3 +46,6 @@
 {"at":"2026-10-27T20:30:55Z","head":"d53d74bcbcdd8d88341e12002c86ddbb1719dded","pr":18,"target_before":"674213c8e6eef65013b8eb692187722af8b42e27","type":"unit.merge_requested","unit":"openspec:add-audit-chain"}
 {"at":"2026-10-27T20:31:02Z","ci":"not_run","head":"d53d74bcbcdd8d88341e12002c86ddbb1719dded","merge_commit":"cbf30917585909aaad451ba14b62d58ab4de2ea6","method":"squash","pr":18,"raced":false,"type":"unit.merged","unit":"openspec:add-audit-chain"}
 {"at":"2026-10-27T20:31:09Z","branch":"l4/openspec/add-audit-chain","head":"d53d74bcbcdd8d88341e12002c86ddbb1719dded","type":"unit.branch_deleted","unit":"openspec:add-audit-chain"}
+{"at":"2026-10-27T20:31:49Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"cbf30917585909aaad451ba14b62d58ab4de2ea6","status":"pass","type":"unit.postcheck","unit":"openspec:add-audit-chain"}
+{"at":"2026-10-27T20:31:49Z","revision":"cbf30917585909aaad451ba14b62d58ab4de2ea6","type":"unit.integrated","unit":"openspec:add-audit-chain"}
+{"at":"2026-10-27T20:31:49Z","attempt":1,"cost_usd":16.550137,"runs":5,"type":"plan.charged","unit":"openspec:add-audit-chain"}

@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-27T20:31:49Z",
+  "integrated_revision": "cbf30917585909aaad451ba14b62d58ab4de2ea6",
+  "merge_commit": "cbf30917585909aaad451ba14b62d58ab4de2ea6",
+  "plan_digest": "11f838df12453fb7",
+  "plan_id": "m1",
+  "postcheck": "pass",
+  "pr": 18,
+  "receipt_id": "m1/openspec:add-audit-chain/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "d53d74bcbcdd8d88341e12002c86ddbb1719dded",
+  "spec_digest": "60dc6613e0f57f02",
+  "target": "main",
+  "unit_id": "openspec:add-audit-chain"
+}
