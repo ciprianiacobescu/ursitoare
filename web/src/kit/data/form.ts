@@ -20,10 +20,25 @@ export interface FormModel {
 
 export type FocusTarget = { kind: "field"; name: string } | { kind: "form" } | { kind: "none" };
 
+export interface AttemptFocus {
+  target: FocusTarget;
+  focused: number;
+}
+
 export function formModel(_spec: FormSpec): FormModel {
   throw new Error("not implemented");
 }
 
 export function focusTargetFor(_fields: readonly string[], _errors: FormErrors): FocusTarget {
+  throw new Error("not implemented");
+}
+
+export function attemptFocus(
+  _attempt: number,
+  _focused: number,
+  _submit: FormModel["submit"],
+  _fields: readonly string[],
+  _errors: FormErrors,
+): AttemptFocus {
   throw new Error("not implemented");
 }

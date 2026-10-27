@@ -38,6 +38,7 @@ export interface TableView {
   retryLabel: string | null;
   showError: boolean;
   announcement: string;
+  load: boolean;
 }
 
 export type TableFocus = "table" | "retry" | "none";
