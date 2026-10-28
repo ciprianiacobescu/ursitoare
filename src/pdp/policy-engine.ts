@@ -1,6 +1,7 @@
 import type { Clock, IdSource } from "../core/index.ts";
 import type { Logger } from "../observability/index.ts";
 import type { ActionName } from "./actions.ts";
+import { allowedActions } from "./capabilities.ts";
 import type { ToolArgType } from "./cedar-schema.ts";
 import { buildSchema } from "./cedar-schema.ts";
 import { createPdp } from "./engine.ts";
@@ -60,8 +61,8 @@ export async function createPolicyEngine(opts: PolicyEngineOptions): Promise<Pol
   });
   const engine: PolicyEngine = {
     ...pdp,
-    allowedActions(_principal: PrincipalEntity, _actions: readonly ActionName[]): Promise<ActionName[]> {
-      throw new Error("not implemented");
+    allowedActions(principal: PrincipalEntity, actions: readonly ActionName[]) {
+      return allowedActions(pdp, opts.logger, principal, actions);
     },
   };
   return Object.freeze(engine);

@@ -16,4 +16,4 @@
 
 ## 4. Capabilities
 
-- [ ] 4.1 Write `src/pdp/capabilities.test.ts` first (all scenarios of "allowedActions lists the capabilities of a principal"; the log scenarios use a `createLogger` at level `warn` with a capturing `LogDestination`, and the failing-dependency one an `IdSource` whose `next` throws), then implement `probeRequest` and the probe loop in `src/pdp/capabilities.ts` as in design decision 8, and replace the throwing `allowedActions` in `src/pdp/policy-engine.ts` with a call to it, implementing requirement "allowedActions lists the capabilities of a principal"
+- [x] 4.1 Write `src/pdp/capabilities.test.ts` first (all scenarios of "allowedActions lists the capabilities of a principal"; the log scenarios use a `createLogger` at level `warn` with a capturing `LogDestination`, and the failing-dependency one an `IdSource` whose `next` throws), then implement `probeRequest` and the probe loop in `src/pdp/capabilities.ts` as in design decision 8, and replace the throwing `allowedActions` in `src/pdp/policy-engine.ts` with a call to it, implementing requirement "allowedActions lists the capabilities of a principal"
