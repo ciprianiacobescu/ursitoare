@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-28T19:15:50Z",
+  "integrated_revision": "ce5e6f64f88b21410cebed69fcc647b2613f7277",
+  "merge_commit": "ce5e6f64f88b21410cebed69fcc647b2613f7277",
+  "plan_digest": "11f838df12453fb7",
+  "plan_id": "m1",
+  "postcheck": "pass",
+  "pr": 22,
+  "receipt_id": "m1/openspec:add-pdp-cedar/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "687fd785125c618458a1a1e3ac4bbc8d950e57c2",
+  "spec_digest": "5181b221b2dc6174",
+  "target": "main",
+  "unit_id": "openspec:add-pdp-cedar"
+}
