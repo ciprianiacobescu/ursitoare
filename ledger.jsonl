@@ -103,3 +103,4 @@
 {"at":"2026-10-28T21:16:48Z","branch":"l4/archive/openspec/add-policy-catalogue","head":"273ebc52f297da56d2e43e6739157c3e17e75f5f","type":"unit.branch_deleted","unit":"openspec:add-policy-catalogue"}
 {"at":"2026-10-28T21:16:49Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-oidc-login"}
 {"at":"2026-10-28T21:16:49Z","run":"r-20261028T2116Z-5ed1","type":"unit.dispatched","unit":"openspec:add-oidc-login"}
+{"at":"2026-10-28T21:52:27Z","detail":"awaiting_human: no new answers (open: Q-001) (escalated to a person: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-oidc-login"}
