@@ -78,3 +78,4 @@
 {"at":"2026-10-28T18:28:35Z","attempt":1,"cost_usd":9.808121,"runs":6,"type":"plan.charged","unit":"openspec:add-pdp-cedar"}
 {"at":"2026-10-28T18:28:35Z","run":"r-20261028T1828Z-a92a","type":"unit.dispatched","unit":"openspec:add-pdp-cedar"}
 {"at":"2026-10-28T18:37:51Z","detail":"the repository CI is still running on the hand-off commit 687fd78512 (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"687fd785125c618458a1a1e3ac4bbc8d950e57c2","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-pdp-cedar"}
+{"at":"2026-10-28T19:14:30Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-pdp-cedar can go on","type":"plan.resumed"}
