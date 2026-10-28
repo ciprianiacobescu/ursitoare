@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | harness | Task 1.1: the test chore discrimination check could not decide |
+| Q-001 | answered | 1.1 | harness | Task 1.1: the test chore discrimination check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 1.1: the test chore discrimination check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 1.1
 - **Kind:** harness
 - **Asked:** 2026-10-28T18:25Z by glm, run r-20261028T1818Z-7356, task 1.1
@@ -92,3 +93,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: The check could not run for a structural reason, not for a fault of the change: the discrimination check varies Python production files only, while this project's test gate is pnpm run test over Node *.test.ts files and the task changed only a TypeScript test file, so a retry would end the same way. I read the whole saved change. Its two tests call createPdp with the exact M8 text of design.md § Test plan as the only policy of source m-src and assert, inside assert.rejects, that the rejection is a PdpError with code PDP_POLICY_INVALID, details.stage validate, details.ids ["bad"], message PDP_POLICY_INVALID: validate bad, and not the parse stage with ids ["m-src"]. createPdp calls loadPolicySet, whose strictValidate stage is the only place that fails with stage validate and the policy id, so a stub that resolves, a loader that skips validation, or one that reports the source id would fail these tests by assertion. The tests discriminate and are the kind of Node test AGENTS.md asks for. Counting them on the evidence of the real run is safe: the replay still runs every gate, and a failing gate uses the accept up.
