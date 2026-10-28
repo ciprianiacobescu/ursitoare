@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: src/identity/oidc/client.test.ts:36 configFor hard-codes the client secret
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path src/identity/oidc/client.test.ts of task 4.1; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 4.1
 - **Kind:** technical
 - **Asked:** 2026-10-28T21:49Z by deepseek-free, run r-20261028T2116Z-5ed1, task 4.1
