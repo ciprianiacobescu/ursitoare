@@ -72,6 +72,7 @@ Edit `src/identity/oidc/login.test.ts`: replace `assert.equal(location.origin, f
 ## Q-003: src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path src/main.oidc.test.ts of task 7.1; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 7.1
 - **Kind:** technical
 - **Asked:** 2026-10-28T23:53Z by glm, run r-20261028T2235Z-216c, task 7.1
