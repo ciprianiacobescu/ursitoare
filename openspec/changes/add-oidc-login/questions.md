@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.1 | technical | src/identity/oidc/client.test.ts:36 configFor hard-codes the client secret |
-| Q-002 | open | 6.1 | technical | src/identity/oidc/login.test.ts:130-131 authorizationParams asserts an impossible URL origin and path |
+| Q-002 | accepted | 6.1 | technical | src/identity/oidc/login.test.ts:130-131 authorizationParams asserts an impossible URL origin and path |
 <!-- l4:index:end -->
 
 ---
@@ -44,7 +44,8 @@ Edit `src/identity/oidc/client.test.ts`: change line 33 to `function configFor(i
 
 ## Q-002: src/identity/oidc/login.test.ts:130-131 authorizationParams asserts an impossible URL origin and path
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 6.1
 - **Kind:** technical
 - **Asked:** 2026-10-28T22:33Z by deepseek-free, run r-20261028T2156Z-19b4, task 6.1
