@@ -1,0 +1,251 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/pdp",
+      "test/arch/modules.ts",
+      "src/pdp/cedar-schema.ts",
+      "src/pdp/platform.ts",
+      "src/pdp/fragments.ts",
+      "src/pdp/policy-engine.ts",
+      "src/pdp/capabilities.ts",
+      "test/support/policy-samples.ts",
+      "src/pdp/contexts.ts",
+      "src/pdp/actions.ts",
+      "<tenant>/<id>",
+      "docs/decisions/0002",
+      "@cedar-policy/cedar-wasm",
+      "src/pdp/{actions,cedar-schema,principal,fragments,cross-tenant,policy-engine,egress,agent,platform,capabilities}.test.ts",
+      "src/pdp/index.ts",
+      "src/core",
+      "src/observability",
+      "src/tenancy",
+      "src/pdp/actions.test.ts",
+      "src/pdp/cedar-schema.test.ts",
+      "src/pdp/principal.test.ts",
+      "src/pdp/principal.ts",
+      "src/pdp/fragments.test.ts",
+      "node:fs/promises",
+      "src/pdp/cross-tenant.test.ts",
+      "src/pdp/policy-engine.test.ts",
+      "src/pdp/egress.test.ts",
+      "src/pdp/agent.test.ts",
+      "src/pdp/platform.test.ts",
+      "src/pdp/capabilities.test.ts",
+      "**/[Tenant]",
+      "**/[Flow]",
+      "**/[Task]",
+      "**/[Block]",
+      "**/^[a-z][a-z0-9_]{0,63}$",
+      "<srcDir>/<module>/policy/*.cedar",
+      "**/*.cedar",
+      "^[A-Za-z0-9][A-Za-z0-9_./-]{0,127}$",
+      "**/ACTIONS[a].capability",
+      "**/[userEntity",
+      "**/[]",
+      "**/ACTIONS[action].resources",
+      "**/?",
+      "**/T[]",
+      "**/platform.ts",
+      "**/actions.ts",
+      "**/principal.ts",
+      "**/fragments.ts",
+      "**/capabilities.ts",
+      "module <srcDir>",
+      "module <tenant>",
+      "module @cedar-policy",
+      "module core",
+      "module docs",
+      "module node:fs",
+      "module observability",
+      "module pdp",
+      "module tenancy",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-policy-catalogue/.l4/ledger/r-20261028T1917Z-b418.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-policy-catalogue/.l4/ledger/r-20261028T1931Z-6a5c.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-policy-catalogue/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/pdp/actions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/actions.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/agent.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/capabilities.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/capabilities.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/cedar-schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/cedar-schema.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/cross-tenant.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/egress.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/fragments.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/fragments.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/platform.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/platform.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/policy-engine.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/policy-engine.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/principal.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/principal.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/policy-samples.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/pdp/actions.ts, src/pdp/capabilities.ts, src/pdp/cedar-schema.ts, src/pdp/fragments.ts, src/pdp/platform.ts and 3 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/pdp/actions.ts",
+      "src/pdp/capabilities.ts",
+      "src/pdp/cedar-schema.ts",
+      "src/pdp/fragments.ts",
+      "src/pdp/platform.ts",
+      "src/pdp/policy-engine.ts",
+      "src/pdp/principal.ts",
+      "test/support/policy-samples.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 719,
+      "passed": 719,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 64,
+      "new_passed": 64,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
