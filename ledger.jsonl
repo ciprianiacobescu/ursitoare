@@ -93,3 +93,4 @@
 {"at":"2026-10-28T20:44:11Z","attempt":1,"cost_usd":2.510512,"runs":3,"type":"plan.charged","unit":"openspec:add-policy-catalogue"}
 {"at":"2026-10-28T20:44:11Z","run":"r-20261028T2044Z-452c","type":"unit.dispatched","unit":"openspec:add-policy-catalogue"}
 {"at":"2026-10-28T20:58:09Z","detail":"the repository CI is still running on the hand-off commit e43db8fbb0 (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"e43db8fbb064e7ae1952b34a391b43db9255409a","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-policy-catalogue"}
+{"at":"2026-10-28T21:13:54Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-policy-catalogue can go on","type":"plan.resumed"}
