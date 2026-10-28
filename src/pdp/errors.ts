@@ -1,5 +1,3 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 export type PdpErrorCode =
   | "PDP_OPTIONS_INVALID"
   | "PDP_SCHEMA_INVALID"
@@ -11,12 +9,15 @@ export type PdpErrorCode =
 export class PdpError extends Error {
   readonly code: PdpErrorCode;
   readonly details: Readonly<Record<string, string | readonly string[]>>;
+
   constructor(
-    _code: PdpErrorCode,
+    code: PdpErrorCode,
     message: string,
-    _details?: Record<string, string | readonly string[]>,
+    details: Record<string, string | readonly string[]> = {},
   ) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "PdpError";
+    this.code = code;
+    this.details = details;
   }
 }

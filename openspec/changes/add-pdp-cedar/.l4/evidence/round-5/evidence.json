@@ -1,0 +1,522 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/pdp",
+      "test/arch/modules.ts",
+      "seed/policy-cedar/src",
+      "@cedar-policy/cedar-wasm",
+      "src/pdp/cedar.ts",
+      "src/pdp/permit.ts",
+      "src/pdp/digest.ts",
+      "src/pdp/values.ts",
+      "src/db/migrations/0110_policy_decision.sql",
+      "src/core",
+      "docs/decisions/0002",
+      "src/pdp/{index,types,errors,values,digest,engine,log}.ts",
+      "src/pdp/{cedar,load,check,guards,permit}.ts",
+      "src/pdp/{values,digest,load,malformed,version,check,limits,guards,permit,schema,log,log.tenant,log.partition,log.guard}.test.ts",
+      "src/observability",
+      "src/db",
+      "test/support/pg.ts",
+      "src/tenancy",
+      "test/support/tenants.ts",
+      "src/pdp/values.test.ts",
+      "src/pdp/index.ts",
+      "src/pdp/digest.test.ts",
+      "src/pdp/load.test.ts",
+      "src/pdp/malformed.test.ts",
+      "src/pdp/errors.ts",
+      "src/pdp/load.ts",
+      "src/pdp/engine.ts",
+      "src/pdp/check.ts",
+      "src/pdp/version.test.ts",
+      "src/pdp/check.test.ts",
+      "src/pdp/limits.test.ts",
+      "src/pdp/guards.test.ts",
+      "src/pdp/guards.ts",
+      "src/pdp/permit.test.ts",
+      "src/pdp/schema.test.ts",
+      "src/pdp/log.test.ts",
+      "src/pdp/log.tenant.test.ts",
+      "src/pdp/log.partition.test.ts",
+      "src/pdp/log.ts",
+      "src/pdp/log.guard.test.ts",
+      "**/cedar.ts",
+      "**/engine.ts",
+      "**/malformed.ts",
+      "**/^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$",
+      "^[A-Za-z0-9][A-Za-z0-9_./-]{0,127}$",
+      "**/^[A-Z]{3,10}$",
+      "**/^[a-z0-9.-]{1,253}",
+      "^/[\\x21-\\x7e]{0,2047}$",
+      "**/^[0-9a-f]{64}$",
+      "**/^[A-Za-z0-9._:-]{1,128}$",
+      "**/schema.test.ts",
+      "**/[Role",
+      "**/^[A-Za-z0-9_-]{1,64}$",
+      "module @cedar-policy",
+      "module core",
+      "module db",
+      "module docs",
+      "module observability",
+      "module pdp",
+      "module seed",
+      "module tenancy",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-pdp-cedar-fix-1/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar-fix-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar-fix-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar-fix-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar-fix-2/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar-fix-2/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar-fix-2/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar-fix-2/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar-fix-2/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/evidence/round-2/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/evidence/round-2/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/evidence/round-2/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/evidence/round-3/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/evidence/round-3/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/evidence/round-3/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/evidence/round-4/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/evidence/round-4/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/evidence/round-4/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/ledger/r-20261027T2207Z-8356.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/ledger/r-20261027T2318Z-5d3f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/ledger/r-20261027T2346Z-8fbd.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/ledger/r-20261028T0001Z-66b2.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/ledger/r-20261028T1816Z-f7cc.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/ledger/r-20261028T1818Z-7356.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/.l4/ledger/r-20261028T1828Z-a92a.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-pdp-cedar/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/db/migrations/0110_policy_decision.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/prepare.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/cedar.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/check.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/check.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/digest.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/digest.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/engine.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/errors.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/getter.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/guards.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/guards.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/limits.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/load.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/load.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/log.guard.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/log.partition.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/log.tenant.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/log.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/log.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/malformed.m8.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/malformed.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/permit.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/permit.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/values.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/values.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/version.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/pdp/cedar.ts, src/pdp/check.ts, src/pdp/digest.ts, src/pdp/engine.ts, src/pdp/errors.ts and 5 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/pdp/cedar.ts",
+      "src/pdp/check.ts",
+      "src/pdp/digest.ts",
+      "src/pdp/engine.ts",
+      "src/pdp/errors.ts",
+      "src/pdp/guards.ts",
+      "src/pdp/load.ts",
+      "src/pdp/log.ts",
+      "src/pdp/permit.ts",
+      "src/pdp/values.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 655,
+      "passed": 655,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 57,
+      "new_passed": 57,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

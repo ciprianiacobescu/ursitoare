@@ -1,0 +1,16 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-pdp-cedar",
+  "round": 2,
+  "findings": [
+    "F-2fc9e5f3"
+  ],
+  "chores": [
+    "F-2fc9e5f3"
+  ],
+  "test_chores": [
+    "F-2fc9e5f3"
+  ],
+  "refactors": [],
+  "retakes": []
+}
