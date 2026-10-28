@@ -127,8 +127,8 @@ function authorizationParams(response: InjectedResponse, fake: FakeOidc): URLSea
   assert.equal(response.statusCode, 302);
   assert.equal(header(response, "cache-control"), "no-store");
   const location = new URL(header(response, "location"));
-  assert.equal(location.origin, fake.issuer);
-  assert.equal(location.pathname, "/protocol/openid-connect/auth");
+  assert.equal(location.origin, new URL(fake.issuer).origin);
+  assert.equal(location.pathname, new URL(fake.issuer).pathname + "/protocol/openid-connect/auth");
   return location.searchParams;
 }
 
