@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Finding F-e12398b4: An unreadable or non-directory policy directory is skipped silently |
+| Q-001 | answered | none | verdict | Finding F-e12398b4: An unreadable or non-directory policy directory is skipped silently |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Finding F-e12398b4: An unreadable or non-directory policy directory is skipped silently
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -40,3 +41,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct and the specification does not allow the behaviour. In loadPolicyFragments the readdir of each module's policy directory is wrapped in a try/catch whose only action is continue, so every error is treated like a missing directory: a policy directory that exists but cannot be read, or a policy entry that is a regular file, drops all of that module's fragments and the engine loads without them. The requirement "Policy fragments are loaded from module directories" says the loader SHALL refuse a directory or file it cannot use rather than skip it, design decision 6 refuses unusable entries because a forbid must never be skipped silently, and the failure cases say a bad srcDir or fragment file makes createPolicyEngine reject with nothing half-loaded. A module whose forbids live in a policy directory the process cannot read is exactly the case these sentences guard against. Only a policy path that does not exist at all may be skipped, because the "Nothing to load" scenario requires beta/ with no policy to yield an empty result; the fix must keep that distinction (treat ENOENT as absent, anything else as a refusal), and the regular-file case is the one a test can create portably. WHEN <srcDir>/<module>/policy exists but is not a directory or cannot be read THEN loadPolicyFragments rejects with PdpError code PDP_OPTIONS_INVALID instead of resolving without that module's fragments, while a module with no policy path at all still contributes nothing.
