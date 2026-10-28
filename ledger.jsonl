@@ -90,3 +90,5 @@
 {"at":"2026-10-28T19:17:46Z","run":"r-20261028T1917Z-b418","type":"unit.dispatched","unit":"openspec:add-policy-catalogue"}
 {"at":"2026-10-28T19:31:50Z","attempt":1,"cost_usd":0.0,"runs":2,"type":"plan.charged","unit":"openspec:add-policy-catalogue"}
 {"at":"2026-10-28T19:31:50Z","run":"r-20261028T1931Z-6a5c","type":"unit.dispatched","unit":"openspec:add-policy-catalogue"}
+{"at":"2026-10-28T20:44:11Z","attempt":1,"cost_usd":2.510512,"runs":3,"type":"plan.charged","unit":"openspec:add-policy-catalogue"}
+{"at":"2026-10-28T20:44:11Z","run":"r-20261028T2044Z-452c","type":"unit.dispatched","unit":"openspec:add-policy-catalogue"}
