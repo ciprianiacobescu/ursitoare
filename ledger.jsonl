@@ -73,3 +73,5 @@
 {"at":"2026-10-28T00:01:58Z","run":"r-20261028T0001Z-66b2","type":"unit.dispatched","unit":"openspec:add-pdp-cedar"}
 {"at":"2026-10-28T00:18:19Z","detail":"task 1.1: max_task_attempts (3) reached in single; last failure: none of the tests you added looks at the answer: they pass when the project's functions answer their zero value and on the unit's base code (src.pdp.malformed-design.test.ts::C-50748953 M8 names an undeclared action in the action scope","reason":"unit_halted","type":"plan.stopped","unit":"openspec:add-pdp-cedar"}
 {"at":"2026-10-28T18:16:37Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"pdp-cedar's halt cause is fixed upstream in L4 0.4.37 (pinned at 8fb5214); the unit was retried and is fixing again","type":"plan.resumed"}
+{"at":"2026-10-28T18:18:09Z","attempt":1,"cost_usd":8.190238,"runs":5,"type":"plan.charged","unit":"openspec:add-pdp-cedar"}
+{"at":"2026-10-28T18:18:09Z","run":"r-20261028T1818Z-7356","type":"unit.dispatched","unit":"openspec:add-pdp-cedar"}
