@@ -81,3 +81,4 @@
 {"at":"2026-10-28T19:14:30Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-pdp-cedar can go on","type":"plan.resumed"}
 {"at":"2026-10-28T19:14:38Z","head":"687fd785125c618458a1a1e3ac4bbc8d950e57c2","pr":22,"target_before":"8fb5214a883e426132b4aec8b341d5c36cbc70c5","type":"unit.merge_requested","unit":"openspec:add-pdp-cedar"}
 {"at":"2026-10-28T19:14:47Z","ci":"not_run","head":"687fd785125c618458a1a1e3ac4bbc8d950e57c2","merge_commit":"ce5e6f64f88b21410cebed69fcc647b2613f7277","method":"squash","pr":22,"raced":false,"type":"unit.merged","unit":"openspec:add-pdp-cedar"}
+{"at":"2026-10-28T19:14:55Z","branch":"l4/openspec/add-pdp-cedar","head":"687fd785125c618458a1a1e3ac4bbc8d950e57c2","type":"unit.branch_deleted","unit":"openspec:add-pdp-cedar"}
