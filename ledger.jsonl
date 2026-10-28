@@ -75,3 +75,5 @@
 {"at":"2026-10-28T18:16:37Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"pdp-cedar's halt cause is fixed upstream in L4 0.4.37 (pinned at 8fb5214); the unit was retried and is fixing again","type":"plan.resumed"}
 {"at":"2026-10-28T18:18:09Z","attempt":1,"cost_usd":8.190238,"runs":5,"type":"plan.charged","unit":"openspec:add-pdp-cedar"}
 {"at":"2026-10-28T18:18:09Z","run":"r-20261028T1818Z-7356","type":"unit.dispatched","unit":"openspec:add-pdp-cedar"}
+{"at":"2026-10-28T18:28:35Z","attempt":1,"cost_usd":9.808121,"runs":6,"type":"plan.charged","unit":"openspec:add-pdp-cedar"}
+{"at":"2026-10-28T18:28:35Z","run":"r-20261028T1828Z-a92a","type":"unit.dispatched","unit":"openspec:add-pdp-cedar"}
