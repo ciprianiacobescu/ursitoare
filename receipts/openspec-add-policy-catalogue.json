@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-28T21:15:14Z",
+  "integrated_revision": "6b3a8967359d1bba7429bbe3b4aa9f217ca21c92",
+  "merge_commit": "6b3a8967359d1bba7429bbe3b4aa9f217ca21c92",
+  "plan_digest": "11f838df12453fb7",
+  "plan_id": "m1",
+  "postcheck": "pass",
+  "pr": 24,
+  "receipt_id": "m1/openspec:add-policy-catalogue/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "e43db8fbb064e7ae1952b34a391b43db9255409a",
+  "spec_digest": "3ab9876268aa280d",
+  "target": "main",
+  "unit_id": "openspec:add-policy-catalogue"
+}
