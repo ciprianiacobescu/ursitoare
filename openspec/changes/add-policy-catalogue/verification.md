@@ -1,4 +1,4 @@
-# Verification: openspec:add-policy-catalogue: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-policy-catalogue: FAIL (round 2)
 
 traceability: 42/42 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 42/42 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base main@e226f8c73e contained |
-| 1 | integrity | ok | 34.0 | 10 sub-checks; scope: 21 changed file(s) |
-| 2 | build | ok | 12.1 |  |
-| 3 | tests | ok | 41.0 |  |
-| 4 | traceability | ok | 0.1 | 42/42 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/pdp/actions.ts, src/pdp/capabilities.ts, src/pdp/cedar-schema.ts, src/pdp/fragments.ts, src/pdp/platform.ts and 3 more |
-| 8 | s1 judge | ok | 4.4 | 41/42 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 86.1 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -188,6 +188,10 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-80ff48ba | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-bf86a21c | ok | 0.940 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-001 reject F-e12398b4 by the delegate (claude-fable-5-1 via claude-code): The finding is correct and the specification does not allow the behaviour. In loadPolicyFragments the readdir of each module's policy directory is wrapped in a try/catch whose only action is continue, so every error is treated like a missing directory: a policy directory that exists but cannot be re...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -237,9 +241,14 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Findings
 
-- [major, judge] An unreadable or non-directory policy directory is skipped silently (spec gap) (criterion C-510115a3): loadPolicyFragments wraps readdir of <module>/policy in try/catch and does `continue` on any error, so a policy directory that exists but cannot be read (EACCES), or a `policy` that is a regular file, drops every fragment in it without an error. Design decision 6 refuses unusable entries 'because a forbid must never be skipped silently'; no scenario covers an unreadable policy directory.
+- [major, human] An unreadable or non-directory policy directory is skipped silently (spec gap) (criterion C-510115a3): loadPolicyFragments wraps readdir of <module>/policy in try/catch and does `continue` on any error, so a policy directory that exists but cannot be read (EACCES), or a `policy` that is a regular file, drops every fragment in it without an error. Design decision 6 refuses unusable entries 'because a forbid must never be skipped silently'; no scenario covers an unreadable policy directory. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding is correct and the specification does not allow the behaviour. In loadPolicyFragments the readdir of each module's policy directory is ...
 - [minor, judge] allowedActions can reject for a principal whose getters change between reads (spec gap) (criterion C-c19eaf0b): allowedActions validates the principal, then probeRequest validates it again and userEntity reads `roles`/`teams` a third time. A roles getter that returns a valid array on the first two reads and a non-iterable afterwards makes `new Set(p.roles)` throw inside the async function, so allowedActions rejects. The requirement says it never rejects; no scenario covers a getter whose value changes.
 - [minor, judge] sampleRequest leaves out run_initiator in the invoke_llm context (criterion C-11f08103): Design decision 9 says the fixed context has `run_initiator` set to the principal. contextFor for invoke_llm does not include it. It is optional in the schema, so the request is still valid.
+
+## Fix unit
+
+Fix unit 1 is created for these tasks:
+- F-e12398b4 An unreadable or non-directory policy directory is skipped silently
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
