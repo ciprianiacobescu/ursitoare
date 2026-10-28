@@ -42,8 +42,13 @@ export async function loadPolicyFragments(srcDir: string): Promise<PolicySource[
     let entries: Dirent<string>[];
     try {
       entries = await readdir(join(srcDir, moduleName, POLICY_DIR), { withFileTypes: true });
-    } catch {
-      continue;
+    } catch (error: unknown) {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+        continue;
+      }
+      throw new PdpError("PDP_OPTIONS_INVALID", `PDP_OPTIONS_INVALID: options src_dir ${idPrefix}`, {
+        reason: "src_dir",
+      });
     }
     for (const entry of entries) {
       if (!entry.name.endsWith(CEDAR_SUFFIX)) {
