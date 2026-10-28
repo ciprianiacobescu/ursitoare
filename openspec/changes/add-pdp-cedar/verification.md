@@ -1,4 +1,4 @@
-# Verification: openspec:add-pdp-cedar: NEEDS_HUMAN (round 3)
+# Verification: openspec:add-pdp-cedar: FAIL (round 4)
 
 traceability: 48/48 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 48/48 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.4 | base main@f3e4dbb20c contained |
-| 1 | integrity | ok | 29.4 | 10 sub-checks; scope: 43 changed file(s) |
-| 2 | build | ok | 11.7 |  |
-| 3 | tests | ok | 37.6 |  |
-| 4 | traceability | ok | 0.1 | 48/48 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 3) |
+| 1 | integrity | reused | 0.0 | reused (round 3) |
+| 2 | build | reused | 0.0 | reused (round 3) |
+| 3 | tests | reused | 0.0 | reused (round 3) |
+| 4 | traceability | reused | 0.0 | reused (round 3) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/pdp/cedar.ts, src/pdp/check.ts, src/pdp/digest.ts, src/pdp/engine.ts, src/pdp/errors.ts and 5 more |
-| 8 | s1 judge | ok | 5.6 | 48/48 criteria judged by jev |
-| 9 | judge | ok | 188.2 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 3) |
+| 8 | s1 judge | reused | 0.0 | reused (round 3) |
+| 9 | judge | reused | 0.0 | reused (round 3) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -262,6 +262,11 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-f837602a | ok | 0.910 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-2df1f84d | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-003 accept C-b4a29f2d by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The tracing test builds the base request, replaces the Tool entity's effect attribute with a string of 300,000 characters, calls check, and asserts that the decision is deny, that errors deep-equals ["PDP_REQUEST_TOO_LARGE"] and that reasons is empty; the lat...
+- Q-004 reject F-2fc9e5f3 by the delegate (claude-fable-5-1 via claude-code): The finding is correct and stands. design.md § Test plan defines M8 as permit (principal, action == Action::"reed", resource);, an unknown action in the action scope, and the scenario "Each malformed policy is refused" says each of M1 to M8 of design.md is loaded as the only policy of source m-src a...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -286,7 +291,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-e4b4b8c8 | policy-engine › A check denies on any error › A failing dependency rejects | pass | pass | the judge passed it and a discriminating test passes |
 | C-5ddb14ef | policy-engine › A request carries at most 24 entities › The limit is 24 | pass | pass | the judge passed it and a discriminating test passes |
 | C-2d7c0fab | policy-engine › A request carries at most 24 entities › The array length is counted | pass | pass | the judge passed it and a discriminating test passes |
-| C-b4a29f2d | policy-engine › A request carries at most 24 entities › A huge attribute | insufficient_evidence | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-b4a29f2d | policy-engine › A request carries at most 24 entities › A huge attribute | insufficient_evidence | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The tracing test builds the base request, replaces the Tool entity's effect attribute with a string of 300,000 characters, calls check, and asserts that the decision is deny, that errors deep-equals... |
 | C-be9c698f | policy-engine › A decision explains itself › Ids and time | pass | pass | the judge passed it and a discriminating test passes |
 | C-e5a037ca | policy-engine › A decision explains itself › Allow, forbid and default deny | pass | pass | the judge passed it and a discriminating test passes |
 | C-1642bb70 | policy-engine › A decision explains itself › Reasons are sorted | pass | pass | the judge passed it and a discriminating test passes |
@@ -317,7 +322,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Findings
 
-- [major, judge] M8 malformed-policy test does not use design.md's M8 text (criterion C-50748953): design.md § Test plan defines M8 as `permit (principal, action == Action::"reed", resource);`. The M8 entry in malformed.test.ts tests `permit (principal, action == Action::"read", resource == Action::"reed");`, a different fault: an action entity in the resource slot, not an unknown action in the action scope. The scenario as specified is therefore untested.
+- [major, human] M8 malformed-policy test does not use design.md's M8 text (criterion C-50748953): design.md § Test plan defines M8 as `permit (principal, action == Action::"reed", resource);`. The M8 entry in malformed.test.ts tests `permit (principal, action == Action::"read", resource == Action::"reed");`, a different fault: an action entity in the resource slot, not an unknown action in the action scope. The scenario as specified is therefore untested. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding is correct and stands. design.md § Test plan defines M8 as permit (principal, action == Action::"reed", resource);, an unknown action in the action scope, and the s...
 - [minor, judge] Request is deep-copied twice before the slice and size limits apply (criterion C-2d7c0fab): guardRequest snapshots the whole request, every element of `entities` included, twice before it checks `entities.length > 24` or the serialised size. An oversized slice is still fully copied before it is denied.
 - [minor, judge] Deeply nested request values are denied as invalid (spec gap) (criterion C-8e384c2c): snapshotValue throws for nesting deeper than 64 levels below a request field, so such a request is denied with PDP_REQUEST_INVALID. No scenario pins this down.
 - [minor, judge] egress: null is treated as present and invalid (spec gap) (criterion C-97a803d9): hasEgress is `egress !== undefined`, so `egress: null` fails validateEgress and the request is denied, rather than treated as having no egress.
@@ -326,6 +331,11 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] toDecimal accepts magnitudes Cedar decimal cannot hold (spec gap) (criterion C-d886fc50): toDecimal checks only that n.toFixed(4) round-trips to n. For n >= 1e21, toFixed returns exponent notation ("1e+21"), and Number("1e+21") === n, so the function returns arg "1e+21". That is not a Cedar decimal literal. Values above Cedar's decimal range (about 9.2e14) pass the same way. No scenario pins down the behaviour for large values.
 - [minor, judge] the judge called a test inadequate (criterion C-50748953): src.pdp.malformed.test.ts::C-50748953 M8 malformed policy is refused
 - [minor, judge] the judge called a test inadequate (criterion C-b4a29f2d): src.pdp.guards.test.ts::C-b4a29f2d a huge attribute
+
+## Fix unit
+
+Fix unit 2 is created for these tasks:
+- F-2fc9e5f3 M8 malformed-policy test does not use design.md's M8 text
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
