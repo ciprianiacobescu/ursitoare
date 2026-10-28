@@ -107,3 +107,5 @@
 {"at":"2026-10-28T21:56:18Z","by":"harness","reason":"the cause is gone: openspec:add-oidc-login is awaiting_human","type":"plan.resumed"}
 {"at":"2026-10-28T21:56:21Z","attempt":1,"cost_usd":1.21926,"runs":2,"type":"plan.charged","unit":"openspec:add-oidc-login"}
 {"at":"2026-10-28T21:56:21Z","run":"r-20261028T2156Z-19b4","type":"unit.dispatched","unit":"openspec:add-oidc-login"}
+{"at":"2026-10-28T22:35:22Z","attempt":1,"cost_usd":2.174685,"runs":3,"type":"plan.charged","unit":"openspec:add-oidc-login"}
+{"at":"2026-10-28T22:35:22Z","run":"r-20261028T2235Z-216c","type":"unit.dispatched","unit":"openspec:add-oidc-login"}
