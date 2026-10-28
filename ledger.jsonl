@@ -88,3 +88,5 @@
 {"at":"2026-10-28T19:17:44Z","branch":"l4/archive/openspec/add-pdp-cedar","head":"e226f8c73ee98d168e58b80ba6bffe4d321ca16a","type":"unit.branch_deleted","unit":"openspec:add-pdp-cedar"}
 {"at":"2026-10-28T19:17:46Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-policy-catalogue"}
 {"at":"2026-10-28T19:17:46Z","run":"r-20261028T1917Z-b418","type":"unit.dispatched","unit":"openspec:add-policy-catalogue"}
+{"at":"2026-10-28T19:31:50Z","attempt":1,"cost_usd":0.0,"runs":2,"type":"plan.charged","unit":"openspec:add-policy-catalogue"}
+{"at":"2026-10-28T19:31:50Z","run":"r-20261028T1931Z-6a5c","type":"unit.dispatched","unit":"openspec:add-policy-catalogue"}
