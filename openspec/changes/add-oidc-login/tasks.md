@@ -4,7 +4,7 @@
 
 ## 2. The session table
 
-- [ ] 2.1 Write `src/identity/oidc/schema.test.ts` first (`withTestDatabase()`, `seedTwoTenants(db)`; each test starts with `assert.ok` on `to_regclass('ursitoare.session')` and the ledger row `version = 120`, `name = 'sessions'`; the owner seeds a `"user"` and one `session` row per tenant through `withTenantTx(db.ownerPool, ...)`; each forbidden statement is its own `withTenantTx(db.appPool, a, ...)` call with `await assert.rejects(p, { code: "42501" })`; scenario "Objects, catalog and privileges"), then create `src/db/migrations/0120_sessions.sql` exactly as in design.md § Data model, implementing requirement "The session table is tenant-leading and narrowly granted"
+- [x] 2.1 Write `src/identity/oidc/schema.test.ts` first (`withTestDatabase()`, `seedTwoTenants(db)`; each test starts with `assert.ok` on `to_regclass('ursitoare.session')` and the ledger row `version = 120`, `name = 'sessions'`; the owner seeds a `"user"` and one `session` row per tenant through `withTenantTx(db.ownerPool, ...)`; each forbidden statement is its own `withTenantTx(db.appPool, a, ...)` call with `await assert.rejects(p, { code: "42501" })`; scenario "Objects, catalog and privileges"), then create `src/db/migrations/0120_sessions.sql` exactly as in design.md § Data model, implementing requirement "The session table is tenant-leading and narrowly granted"
 
 ## 3. Errors, cookies and return_to
 
