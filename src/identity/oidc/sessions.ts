@@ -1,4 +1,8 @@
-import { randomBytes as cryptoRandomBytes } from "node:crypto";
+import {
+  createHash,
+  randomBytes as cryptoRandomBytes,
+  timingSafeEqual,
+} from "node:crypto";
 
 import { systemClock, type Clock } from "../../core/index.ts";
 import {
@@ -218,18 +222,62 @@ export async function revokeSession(
   });
 }
 
+function sessionHashOf(session: SessionContext): Buffer {
+  const hash = Buffer.from(session.sessionRef, "hex");
+  if (hash.length !== 32) {
+    throw new OidcError("SESSION_INVALID", "the session reference is malformed");
+  }
+  return hash;
+}
+
+function tokenDigest(token: string): Buffer {
+  return createHash("sha256").update(token, "utf8").digest();
+}
+
 export async function issueCsrfToken(
-  _pool: TenantPool,
-  _session: SessionContext,
-  _opts?: OidcOptions,
+  pool: TenantPool,
+  session: SessionContext,
+  opts?: OidcOptions,
 ): Promise<string> {
-  throw new Error("not implemented");
+  const sessionHash = sessionHashOf(session);
+  const token = randomValue(opts, 32).toString("base64url");
+  const digest = tokenDigest(token);
+
+  const updated = await withTenantTx(pool, session.tenant, async (tx) => {
+    const result = await tx.query(
+      `UPDATE ursitoare.session SET csrf_token_hash = $3
+        WHERE tenant_id = $1 AND session_id_hash = $2 AND revoked_at IS NULL`,
+      [session.tenant.tenantId, sessionHash, digest],
+    );
+    return (result.rowCount ?? 0) > 0;
+  });
+
+  if (!updated) {
+    throw new OidcError("SESSION_NOT_FOUND", "the session no longer exists");
+  }
+  return token;
 }
 
 export async function verifyCsrfToken(
-  _pool: TenantPool,
-  _session: SessionContext,
-  _token: string | undefined,
+  pool: TenantPool,
+  session: SessionContext,
+  token: string | undefined,
 ): Promise<boolean> {
-  throw new Error("not implemented");
+  if (typeof token !== "string" || token.length === 0) return false;
+  const sessionHash = sessionHashOf(session);
+  const digest = tokenDigest(token);
+
+  return withTenantTx(pool, session.tenant, async (tx) => {
+    const result = await tx.query<{ csrf_token_hash: Buffer; revoked_at: Date | null }>(
+      `SELECT csrf_token_hash, revoked_at
+         FROM ursitoare.session
+        WHERE tenant_id = $1 AND session_id_hash = $2`,
+      [session.tenant.tenantId, sessionHash],
+    );
+    const row = result.rows[0];
+    if (row === undefined || row.revoked_at !== null) return false;
+    const stored = row.csrf_token_hash;
+    if (stored.length !== digest.length) return false;
+    return timingSafeEqual(stored, digest);
+  });
 }

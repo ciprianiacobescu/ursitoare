@@ -7,6 +7,7 @@ import { createOidcClient } from "./client.ts";
 import type { OidcConfigShape } from "./config-shape.ts";
 import { OidcError } from "./errors.ts";
 import { registerLoginRoute } from "./login.ts";
+import { registerLogoutRoute } from "./logout.ts";
 
 export interface OidcRoutesDeps {
   config: OidcConfigShape | null;
@@ -63,6 +64,15 @@ export function registerOidcRoutes(server: FastifyInstance, deps: OidcRoutesDeps
   });
 
   registerCallbackRoute(server, {
+    config: deps.config,
+    client,
+    publicBaseUrl: deps.publicBaseUrl,
+    pool: deps.pool,
+    engineKey: deps.engineKey,
+    clock: deps.clock,
+  });
+
+  registerLogoutRoute(server, {
     config: deps.config,
     client,
     publicBaseUrl: deps.publicBaseUrl,
