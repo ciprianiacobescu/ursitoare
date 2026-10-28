@@ -13,6 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.1 | technical | src/identity/oidc/client.test.ts:36 configFor hard-codes the client secret |
 | Q-002 | accepted | 6.1 | technical | src/identity/oidc/login.test.ts:130-131 authorizationParams asserts an impossible URL origin and path |
+| Q-003 | open | 7.1 | technical | src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued |
 <!-- l4:index:end -->
 
 ---
@@ -62,6 +63,27 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/identity/oidc/login.test.ts`: replace `assert.equal(location.origin, fake.issuer);` with `assert.equal(location.origin, new URL(fake.issuer).origin);` and replace `assert.equal(location.pathname, "/protocol/openid-connect/auth");` with `assert.equal(location.pathname, new URL(fake.issuer).pathname + "/protocol/openid-connect/auth");`
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-003: src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued
+
+- **Status:** open
+- **Blocking tasks:** 7.1
+- **Kind:** technical
+- **Asked:** 2026-10-28T23:53Z by glm, run r-20261028T2235Z-216c, task 7.1
+
+### Context
+The frozen red test C-6370f2de (src/main.oidc.test.ts:149) must sign alice in over real HTTP and reach /flows. writeSecretFiles (src/main.oidc.test.ts:55-63) writes a random value (`randomBytes(24).toString("base64url")`) into `files.clientSecretFile`, and bootEnv hands that file to loadConfig, so the engine exchanges the code with `client_secret_basic` using a secret the fake never issued: startFakeOidc draws a fresh 32-byte secret for the confidential client `ursitoare-engine` (test/support/fake-oidc/provider.ts:114-118, seed.ts:58-61), and the fake's token endpoint authenticates by `secretMatches(secret, client.secret)` (test/support/fake-oidc/token.ts:36-38, 60-87), answering 401 invalid_client. I verified this by reproduction: the callback therefore always refuses with `OIDC_EXCHANGE_FAILED` and redirects to /sign-in, so the assertions at lines 220-235 (Location `/flows`, `ursitoare_session` cookie) can never hold; 752 of 753 tests pass, this one fails. This is the same contradiction already accepted for task 4.1 (Q-001). The half-wired test C-3e029f2d never exchanges a code, so it passes either way.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/main.oidc.test.ts`, write an answer that names its path exactly as written here or run `l4 questions accept Q-NNN --unit add-oidc-login`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit src/main.oidc.test.ts: change line 55 to `async function writeSecretFiles(dbPassword: string, clientSecret = randomBytes(24).toString("base64url")): Promise<SecretFiles> {`, change line 63 to `await writeFile(files.clientSecretFile, clientSecret);`, and change line 155 in the C-6370f2de test from `const files = await writeSecretFiles(password.reveal());` to `const files = await writeSecretFiles(password.reveal(), fake.clientSecret("ursitoare-engine"));`
+2. Alternative: edit src/main.oidc.test.ts, in the C-6370f2de test only, after `const files = await writeSecretFiles(password.reveal());` add `await writeFile(files.clientSecretFile, fake.clientSecret("ursitoare-engine"));`
 
 ### Answer
 <!-- write below this line -->
