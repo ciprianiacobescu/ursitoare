@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 4.1 | technical | src/db/prepare.test.ts:100 first.partitions expects only the audit_event window, so adding migration 0110 breaks it |
 | Q-002 | answered | none | verdict | Finding F-5a5184d6: check rejects when a getter inside principal, resource, an entity or egress throws |
 | Q-003 | answered | none | verdict | Criterion C-b4a29f2d (policy-engine › A request carries at most 24 entities › A huge attribute): accept as satisfied? |
-| Q-004 | open | none | verdict | Finding F-2fc9e5f3: M8 malformed-policy test does not use design.md's M8 text |
+| Q-004 | answered | none | verdict | Finding F-2fc9e5f3: M8 malformed-policy test does not use design.md's M8 text |
 <!-- l4:index:end -->
 
 ---
@@ -107,7 +107,8 @@ accept The criterion is satisfied as it stands. The tracing test builds the base
 
 ## Q-004: Finding F-2fc9e5f3: M8 malformed-policy test does not use design.md's M8 text
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -128,3 +129,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct and stands. design.md § Test plan defines M8 as permit (principal, action == Action::"reed", resource);, an unknown action in the action scope, and the scenario "Each malformed policy is refused" says each of M1 to M8 of design.md is loaded as the only policy of source m-src and rejected with PDP_POLICY_INVALID, stage validate and ids ["bad"]. The M8 entry of the malformed-policy test instead loads @id("bad") permit (principal, action == Action::"read", resource == Action::"reed");, which keeps the declared action read and puts an action entity in the resource slot. That is a different validation fault, so the unknown-action case the design names is never exercised, and the later add-policy-catalogue change relies on exactly that case being refused at stage validate with the policy id. The fix is to replace the M8 text with the design's text; the other entries M1 to M7 already match design.md word for word. WHEN the only policy of source m-src is @id("bad") permit (principal, action == Action::"reed", resource); THEN createPdp rejects with PdpError code PDP_POLICY_INVALID, details.stage validate and details.ids ["bad"], and the malformed-policy test's M8 entry uses that exact policy text.
