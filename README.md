@@ -5,8 +5,11 @@ steps (LLM extract, decide, generate; agents). Every outbound call is checked by
 credential broker, so neither the engine's flows nor its LLMs ever hold a credential. Humans and LLMs author flows
 as YAML; review, not the LLM, is the activation gate.
 
-**Status:** Phase 1 has not started. This repository holds the toolchain, the L4 harness setup and the full set of
-Phase-1 OpenSpec changes. The engine is built one change at a time by the L4 harness.
+**Status:** Phase 1 is under way and the engine is not usable yet. Milestone M0 (the engine skeleton, database,
+tenancy, supply-chain and architecture gates, the e2e stack and the web shell) is complete; M1 (OIDC sign-in, the
+policy check and the audit chain) is being built. The first milestone a person can use end to end is M11; see
+`docs/roadmap.md`. This repository holds the toolchain, the L4 harness setup and the Phase-1 OpenSpec changes, and
+the L4 harness builds the engine one change at a time.
 
 | Where | What |
 |---|---|
