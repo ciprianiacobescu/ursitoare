@@ -82,7 +82,8 @@ order of their edges, one at a time.
   a part returns the env and `*_FILE` paths the engine needs, and the crash harness (U32) boots its child engines from
   the same parts. The web app grows through feature files `web/src/features/NN-<name>.tsx` collected by `registerFeature` (U07) and `stepRenderers` (U37); the interpreter through
   `registerNodeRuntime` (U33); policy through per-module fragments `src/<module>/policy/*.cedar` (U11b); the CLI through
-  its command registry (U20); architecture rules are added as `test/arch/<rule>.ts` with its test (U04's `Violation` with an `ARCH_*` code); the module graph lives in `test/arch/modules.ts` (U04); a unit that needs a new module or
+  its command registry (U20), where a unit adding CLI commands edits `src/cli/builtin.ts` in a named task
+  (`registry.registerCommand(name, command)`) and two such units in one milestone need a depends_on edge; architecture rules are added as `test/arch/<rule>.ts` with its test (U04's `Violation` with an `ARCH_*` code); the module graph lives in `test/arch/modules.ts` (U04); a unit that needs a new module or
   edge changes it in its red step and says why in its design. A unit that changes what the engine needs at boot, or what
   journeys need seeded, names the part file it adds.
 - **Testability:** every requirement has scenarios for success, bad input, absence and dependency failure; time and
@@ -111,7 +112,7 @@ order of their edges, one at a time.
   `0001_base.sql` and U03 `0002_tenancy.sql`; from M1 a unit's version is 10 × its unit number, plus 5 for a `b` suffix and
   6 for `c` (U08 `0080_audit.sql`, U11b `0115_<topic>.sql`). Versions are unique, gaps are allowed, pending files apply in
   ascending order. Only `prepareDatabase` (U02: migrate, then ensurePartitions) applies them: the test global setup, the
-  e2e database part, and the deployment migration job (U59). The engine process never holds the owner credentials.
+  e2e database part, and the one-shot owner job (U59). The engine process never holds the owner credentials.
 - **Public repository:** no secret, and no description of an unfixed vulnerability in any dependency, in any spec.
 
 ## Unit catalogue
@@ -152,10 +153,10 @@ All units start as `planned`.
 
 | U | Change id | Cap | Module | Scope | Depends on | Exit | Seed | Status |
 |---|---|---|---|---|---|---|---|---|
-| U17 | `add-roles-and-memberships` | `identity-rbac` | `identity` | `role`, `team`, `membership`, `idp_group_map`; default roles at tenant bootstrap (`tenant_admin`, `author`, `approver`, `auditor`); the configured bootstrap admin group (default `ursitoare-admins`) mapped once, audited; token groups become memberships at sign-in; roles and teams as Cedar parents; memberships come from mapped IdP groups; a direct role grant exists only for service accounts (U18) and through the audited break-glass `grant-role` (U20); no self-elevation; e2e part `parts/30-rbac.ts` seeds the group mappings (`ursitoare-authors` → `author`, `ursitoare-approvers` → `approver`, `team-finance` → team `finance`) in tenants A and B | U10, U11b, U12 | 18 | — | planned |
+| U17 | `add-roles-and-memberships` | `identity-rbac` | `identity`, `api` | `role`, `team`, `membership`, `idp_group_map`; default roles at tenant bootstrap (`tenant_admin`, `author`, `approver`, `auditor`); the configured bootstrap admin group (default `ursitoare-admins`) mapped once, audited; token groups become memberships at sign-in; roles and teams as Cedar parents; memberships come from mapped IdP groups; a direct role grant exists only for service accounts (U18) and through the audited break-glass `grant-role` (U20); no self-elevation; e2e part `parts/30-rbac.ts` seeds the group mappings (`ursitoare-authors` → `author`, `ursitoare-approvers` → `approver`, `team-finance` → team `finance`) in tenants A and B | U10, U11b, U12 | 18 | — | planned |
 | U18 | `add-admin-api` | `admin-api` | `api`, `identity` | `/api/v1/users`, `/service-accounts`, `/roles`, `/teams`, `/idp-group-map`, `/users/{id}/idp-links` under `manage_users_roles`; an audit event per action; `PUT /api/v1/tenant/review-profile` under `manage_tenant`, audited, returning a warning when a solo tenant has two or more human members | U08, U13, U14, U17 | — | — | planned |
-| U19 | `add-audit-api` | `audit-api` | `api`, `audit` | `GET /api/v1/audit`, `/audit/verify`, `/policy-decisions` under `read_audit` | U08, U11b, U13, U14 | — | — | planned |
-| U20 | `add-admin-cli` | `ops-cli` | `cli` | `src/cli`: `ursitoare admin` with a command registry: `bootstrap-admin --group`, `grant-role`, `verify-audit`, `list-users`; owner-role connection only here; every command audited; the registry also holds top-level commands that need no database (`ursitoare init-secrets`) | U08, U17 | — | — | planned |
+| U19 | `add-audit-api` | `audit-api`, `audit-verification` | `api`, `audit`, `pdp` | `GET /api/v1/audit`, `/audit/verify`, `/policy-decisions` under `read_audit` | U08, U11b, U13, U14, U18 | — | — | planned |
+| U20 | `add-admin-cli` | `ops-cli` | `cli`, `config` | `src/cli`: `ursitoare admin` with a command registry: `bootstrap-admin --group`, `grant-role`, `revoke-role`, `verify-audit`, `list-users`; owner-role connection only here; every command audited; the registry also holds top-level commands that need no database (`ursitoare init-secrets`) | U08, U17 | — | — | planned |
 | U21 | `add-web-admin` | `web-admin` | `web` | Users, roles, teams, group mappings, the audit log with its verification status; journey `test_m2_admin.py` (carol maps a group; alice sees a 403 page with the decision id). **Closing** | U15–U20 | — | — | planned |
 
 ### M3 Flow authoring
@@ -224,8 +225,8 @@ All units start as `planned`.
 | U | Change id | Cap | Module | Scope | Depends on | Exit | Seed | Status |
 |---|---|---|---|---|---|---|---|---|
 | U57 | `add-init-secrets` | `deploy-secrets` | `cli` | `ursitoare init-secrets --dir <path>`: `.env` (mode 0600) and `secrets/*` (engine key, KEK, signing seed, service tokens, Keycloak admin, database and OIDC client secrets, the first user's one-time password), every value non-empty, never overwrites; keys are text of at least 32 characters; registered as a top-level command in U20's registry; the engine key is 64 hex characters | U01, U20 | 12 (part) | `deploy/mintkey-footprint/gen-secrets.sh` | planned |
-| U58 | `add-keycloak-realm` | `deploy-keycloak` | — | The realm (organisation, `ursitoare-engine` and `ursitoare-mcp` clients, group mapper, `ursitoare-admins` holding the first user) rendered from the generated secrets; its init script; a test against the fake OIDC claim contract; the `idp-external` profile | U09, U17, U57 | 19 (part) | `deploy/keycloak-footprint` | planned |
-| U59 | `add-hobbyist-compose` | `deploy-compose` | — | The engine image (`URSITOARE_ROLE`; runs from source with `src/db/migrations`; no test support or fakes inside, tested), `deploy/compose.yaml` with exactly six long-running containers, the §4.3 limits, networks with egress only from the proxy, published ports (the Mintkey vault's port is published to no host port); a static test of these rules; `docs/deploy.md` and `docs/operations.md` (backup and restore of KEK, seed, vault file and `.env`; LAN access; TLS; upgrades); a one-shot migration job runs `prepareDatabase` with the owner credentials before the engine starts (the engine never holds them); the engine container sets `URSITOARE_HOST=0.0.0.0` while the host publish stays `127.0.0.1:8080` | U46, U57, U58 | 10 (static) | `deploy/mintkey-footprint` | planned |
+| U58 | `add-keycloak-realm` | `deploy-keycloak` | — | The realm (organisation, `ursitoare-engine` and `ursitoare-mcp` clients, group mapper emitting plain group names (full path off), as the fake provider does, `ursitoare-admins` holding the first user) rendered from the generated secrets; its init script; a test against the fake OIDC claim contract; the `idp-external` profile | U09, U17, U57 | 19 (part) | `deploy/keycloak-footprint` | planned |
+| U59 | `add-hobbyist-compose` | `deploy-compose` | — | The engine image (`URSITOARE_ROLE`; runs from source with `src/db/migrations`; no test support or fakes inside, tested), `deploy/compose.yaml` with exactly six long-running containers, the §4.3 limits, networks with egress only from the proxy, published ports (the Mintkey vault's port is published to no host port); a static test of these rules; `docs/deploy.md` and `docs/operations.md` (backup and restore of KEK, seed, vault file and `.env`; LAN access; TLS; upgrades); a one-shot owner job runs `prepareDatabase` with the owner credentials, then `admin bootstrap-admin` (U20), before the engine starts (the engine never holds the credentials); the engine container sets `URSITOARE_HOST=0.0.0.0` while the host publish stays `127.0.0.1:8080` | U46, U57, U58 | 10 (static) | `deploy/mintkey-footprint` | planned |
 | U60 | `add-audit-sink` | `audit-sink` | `api`, `audit` | The internal listener (`buildInternalServer`, `service_token`): `POST /v1/internal/audit/emit` appends broker and proxy events with `origin = mintkey`, 2xx only after commit; it accepts the broker's and the proxy's service tokens, which differ; route kind `mintkey_tenant`; the reconciliation job; e2e part `parts/70-internal.ts` (service token file) | U08, U13, U45, U50 | — | `deploy/mintkey-footprint/audit_sink.py` | planned |
 | U61 | `add-stack-overlay` | `e2e-stack` | — | `deploy/compose.e2e.yaml` (a fakes container behind the proxy, network aliases under `fake.test`), a test realm overlay (journey users with their groups, organisation B), `scripts/stack-e2e.sh` (up, reset the engine database never the vault, run, stop) | U45b, U57, U58, U59, U60 | — | — | planned |
 | U61b | `add-stack-seeding` | `e2e-stack-seeding` | — | `login` against real Keycloak and the API-driven seed fixtures for the stack profile in `e2e/conftest.py` (the fake profile keeps `fresh_state`); local origins flagged | U16, U56, U61 | — | — | planned |
@@ -366,7 +367,7 @@ Each unit's spec defines its interfaces in full; this table fixes the names so t
 | Gateway | `requestToken(permit)`, `send(permit, request)`; `validateOrigin(url, { local })` (U47); `ServiceResolver { resolve(binding): { serviceId; origin } }` | U46, U48 |
 | Grants | `reconfirmationsFor(oldHash, newHash)` | U49 |
 | Authority | `diffAuthority(oldVersion, newVersion): AuthorityDiff` (`widens_*` flags) | U65 |
-| CLI | `registerCommand(name, command)` under `ursitoare admin`, `ursitoare flow` and top level | U20 |
+| CLI | `registerCommand(name, command)` under `ursitoare admin`, `ursitoare flow` and top level; a unit adding commands edits `src/cli/builtin.ts` in a named task (`registry.registerCommand(name, command)`), and two such units in one milestone need a depends_on edge | U20 |
 | Run data | `RunRepository`, `StepRepository`, `EnvelopeStore` | U31 |
 | Crash harness | `spawnEngine(opts)`, `kill()`, `restart()`, `withDedicatedCluster()` | U32 |
 | Step context | `StepContext` | U33 |
@@ -383,13 +384,13 @@ sub-directories are internal, and other modules import only its `index.ts`. `src
 | Module | May import | Egress | Owner units |
 |---|---|---|---|
 | `core` | — | — | U01 |
-| `config` | `core` | — | U01, U32 |
+| `config` | `core` | — | U01, U20, U32 |
 | `observability` | `core`, `config` | `otlp` | U01, U96 |
 | `db` | `core`, `config`, `observability` | — | U02, U97 |
 | `tenancy` | `core`, `db` | — | U03 |
 | `audit` | `core`, `db`, `tenancy`, `observability` | — | U08, U19, U60 |
 | `identity` | `core`, `config`, `db`, `tenancy`, `audit`, `observability` | `oidc` | U10, U12, U17, U18, U79 |
-| `pdp` | `core`, `db`, `tenancy`, `observability` | — | U11, U11b, U69 |
+| `pdp` | `core`, `db`, `tenancy`, `observability` | — | U11, U11b, U19, U69 |
 | `authoring` | `core` | — | U22, U23, U25, U41 |
 | `authority` | `core`, `authoring`, `grants` | — | U65, U91 |
 | `registry` | `core`, `db`, `tenancy`, `audit`, `authoring`, `pdp`, `identity` | — | U26, U27, U71 |
@@ -410,7 +411,7 @@ sub-directories are internal, and other modules import only its `index.ts`. `src
 | `eval` | `core`, `db`, `tenancy`, `durable`, `interpreter`, `runs`, `registry` | — | U93 |
 | `mcp` | `core`, `identity`, `pdp`, `registry`, `runs`, `interpreter`, `publish` | — | U89 |
 | `templates` | `authoring` | — | U81 |
-| `api` | every module except `sandbox`, `runtimes` and `cli` | — | U01, U07, U13, U14, U18, U19, U35, U36, U51, U60, U67, U77, U84, U91 |
+| `api` | every module except `sandbox`, `runtimes` and `cli` | — | U01, U07, U13, U14, U17, U18, U19, U35, U36, U51, U60, U67, U77, U84, U91 |
 | `cli` | every module `api` may import, plus `db` owner access | — | U20, U25, U35, U57, U97 |
 
 ## Deferred to Phase 2 (architecture §13)
@@ -434,3 +435,6 @@ TypeScript authoring surface (`seed/format-ts`).
 | `x-api-key` inbound on the broker for gateway-style providers | U63 | Adapters rely on the proxy's credential injection |
 | Licences allowlisted beyond ADR-15's wording: BlueOak-1.0.0 (minimatch), PSF-2.0, MPL-2.0 (lightningcss, a Vite build-time tool; nothing MPL ships in the engine image) | U05 | Allowed; owner or counsel to confirm |
 | How a new TypeScript symbol exists at red (`docs/decisions/0002`) | every unit's execution, not its spec | Decided: scaffold per milestone now, L4 change later |
+| No unit writes audit head anchors: `anchorHead` has no caller, so `verifyChain` checks only anchor rows that exist | U19, U20, U21 (verification status) | Verification covers only the hash chain, and says so (`anchorsVerified: 0`), until a unit writes anchors |
+| Disabling a user suspends, not ends, open sessions: add-oidc-login revokes one session at a time and `resolveSession` gives null while the user is not active | U18, U21 | Disable suspends open sessions and enable restores them; a per-user session revocation is needed |
+| add-api-conventions' frozen test `src/api/error-codes.test.ts::C-96e47324 The registry` checks exactly its entries | every unit that adds an error code (U18 first) | Each such unit names that test in a task and changes it |

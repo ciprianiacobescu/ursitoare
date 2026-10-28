@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-web-admin
 
-The names this change takes from merged code (proposal.md, "Interfaces taken"), as declared on main@e226f8c with `export` dropped. The code is the truth; this file shows its shapes to the readiness judge.
+The names this change takes from merged code ("Interfaces taken"), as declared on main@e226f8c with `export` dropped; the code is the truth.
 
 ```ts
 // add-web-shell (web/src/api/client.ts)
