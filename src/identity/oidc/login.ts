@@ -12,15 +12,15 @@ import { createSealer } from "./seal.ts";
 
 export const LOGIN_COOKIE = "ursitoare_login";
 
-const LOGIN_INFO = "ursitoare/login";
-const LOGIN_COOKIE_PATH = "/auth/oidc";
-const LOGIN_COOKIE_MAX_AGE_S = 600;
+export const LOGIN_INFO = "ursitoare/login";
+export const LOGIN_COOKIE_PATH = "/auth/oidc";
+export const LOGIN_COOKIE_MAX_AGE_S = 600;
 const LOGIN_TTL_MS = LOGIN_COOKIE_MAX_AGE_S * 1000;
 const RANDOM_BYTES = 32;
 const SCOPE = "openid profile email organization";
 const SIGN_IN_PATH = "/sign-in";
 
-interface LoginState {
+export interface LoginState {
   v: 1;
   state: string;
   nonce: string;

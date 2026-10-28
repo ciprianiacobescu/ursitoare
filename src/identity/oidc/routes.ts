@@ -2,6 +2,7 @@ import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
 import type { Clock } from "../../core/index.ts";
 import type { TenantPool } from "../../tenancy/index.ts";
+import { registerCallbackRoute } from "./callback.ts";
 import { createOidcClient } from "./client.ts";
 import type { OidcConfigShape } from "./config-shape.ts";
 import { OidcError } from "./errors.ts";
@@ -57,6 +58,15 @@ export function registerOidcRoutes(server: FastifyInstance, deps: OidcRoutesDeps
     config: deps.config,
     client,
     publicBaseUrl: deps.publicBaseUrl,
+    engineKey: deps.engineKey,
+    clock: deps.clock,
+  });
+
+  registerCallbackRoute(server, {
+    config: deps.config,
+    client,
+    publicBaseUrl: deps.publicBaseUrl,
+    pool: deps.pool,
     engineKey: deps.engineKey,
     clock: deps.clock,
   });
