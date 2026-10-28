@@ -28,12 +28,12 @@ function mutableClock(start: Date): MutableClock {
   };
 }
 
-function configFor(issuer: string): {
+function configFor(issuer: string, clientSecret = "client-secret"): {
   issuer: string;
   clientId: string;
   clientSecret: Secret;
 } {
-  return { issuer, clientId: "ursitoare-engine", clientSecret: new Secret("client-secret") };
+  return { issuer, clientId: "ursitoare-engine", clientSecret: new Secret(clientSecret) };
 }
 
 function json(body: unknown, status = 200): Response {
@@ -259,7 +259,7 @@ test("C-5a0077b2 Code exchange", async () => {
     const fake = await startFakeOidc({ now: () => clock.now() });
     try {
       fake.registerRedirect(REDIRECT_URI);
-      const client = createOidcClient({ config: configFor(fake.issuer), clock });
+      const client = createOidcClient({ config: configFor(fake.issuer, fake.clientSecret("ursitoare-engine")), clock });
 
       const verifier = randomBytes(32).toString("base64url");
       const code = await loginCode(fake, verifier);
