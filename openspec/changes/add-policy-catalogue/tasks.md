@@ -5,7 +5,7 @@
 
 ## 2. Principals and fragments
 
-- [ ] 2.1 Write `src/pdp/principal.test.ts` first (the three scenarios of "Principals and tenants become Cedar entities"), then implement `PrincipalEntity`, `isPrincipalEntity`, `scopedId`, `userEntity` and `tenantEntity` in `src/pdp/principal.ts` as in design decision 5 (`TENANT_ID_PATTERN` from `src/tenancy`, `entityRef` from `src/pdp`), implementing requirement "Principals and tenants become Cedar entities"
+- [x] 2.1 Write `src/pdp/principal.test.ts` first (the three scenarios of "Principals and tenants become Cedar entities"), then implement `PrincipalEntity`, `isPrincipalEntity`, `scopedId`, `userEntity` and `tenantEntity` in `src/pdp/principal.ts` as in design decision 5 (`TENANT_ID_PATTERN` from `src/tenancy`, `entityRef` from `src/pdp`), implementing requirement "Principals and tenants become Cedar entities"
 - [ ] 2.2 Write `src/pdp/fragments.test.ts` first (the five scenarios of "Policy fragments are loaded from module directories"; each builds its tree in a directory from `mkdtemp(join(tmpdir(), "pdp-src-"))` and removes it in `after`), then implement `loadPolicyFragments` and `defaultSrcDir` in `src/pdp/fragments.ts` as in design decision 6 (`node:fs/promises` `readdir` with `withFileTypes`, `readFile`; ids sorted by UTF-16 code units; the refusals `src_dir` and `fragment_name`), implementing requirement "Policy fragments are loaded from module directories"
 
 ## 3. The platform layer and the engine
