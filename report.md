@@ -2,11 +2,11 @@
 
 - Status: stopped
 - Repository: https://github.com/ciprianiacobescu/ursitoare
-- Target: main at 4f93639ab24f24460259b486cbdf8cd866771dcb
+- Target: main at f3e4dbb20ca4c6bdede8562c7fbb0b38ef9d963d
 - Merge: auto
 - No promotion target is set. Promotion was not performed.
-- Written: 2026-10-27T15:58:24Z
-- Stopped: capacity_needs_fix (openspec:add-audit-chain): openspec:add-audit-chain waits for capacity and no profile of the judges chain is cooling, so only a fix ends the wait: claude-judge (constraint): judge profile claude-judge and implementer profile claude-sonnet share the vendor; gemini-judge (hello): opencode did not answer within 60 s (hello step); an OpenCode v2 daemon or a login prompt can cause this: run l4 doctor; codex-judge (auth): CODEX_API_KEY is not set. Renew the secret the profile reads (for example OPENCODE_API_KEY), or install the binary; then l4 yolo resume m1 --reason TEXT
+- Written: 2026-10-28T00:18:19Z
+- Stopped: unit_halted (openspec:add-pdp-cedar): task 1.1: max_task_attempts (3) reached in single; last failure: none of the tests you added looks at the answer: they pass when the project's functions answer their zero value and on the unit's base code (src.pdp.malformed-design.test.ts::C-50748953 M8 names an undeclared action in the action scope
 
 ## Units
 
@@ -18,27 +18,30 @@
 - Usage: $9.31, 5 run(s), 1 attempt(s)
 
 ### openspec:add-audit-chain
-- Result: not integrated
-- Pull request: <forge>/ciprianiacobescu/ursitoare/pull/18
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $5.73, 3 run(s), 1 attempt(s)
-- Delegate decisions:
-  - Q-001 (technical): escalated by the delegate (claude-fable-5-1 via claude-code), $1.56: The repository confirms the conflict: prepareDatabase returns ensurePartitions' created names, every table commented "partition: month" gets five partitions, and the spec requires that comment on audit_event, so prepare.test.ts line 100 cannot stay []. But the fix is an edit to an existing test of a
+- Result: integrated at cbf30917585909aaad451ba14b62d58ab4de2ea6
+- Pull request: 18
+- Merge commit: cbf30917585909aaad451ba14b62d58ab4de2ea6
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $16.55, 5 run(s), 1 attempt(s)
 
 ### openspec:add-identity-model
-- Result: not integrated
-- Pull request: none
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Result: integrated at 02508b1fe9055b50188cfe8f8b122e3a52d9306f
+- Pull request: 20
+- Merge commit: 02508b1fe9055b50188cfe8f8b122e3a52d9306f
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $6.08, 2 run(s), 1 attempt(s)
 
 ### openspec:add-pdp-cedar
 - Result: not integrated
-- Pull request: none
+- Pull request: <forge>/ciprianiacobescu/ursitoare/pull/22
 - Merge commit: none
 - Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Usage: $8.19, 4 run(s), 1 attempt(s)
+- Delegate decisions:
+  - Q-003 (verdict): accept by the delegate (claude-fable-5-1 via claude-code), $1.05
+  - Q-004 (verdict): reject by the delegate (claude-fable-5-1 via claude-code), $0.87
+  - Q-002 (verdict): reject by the delegate (claude-fable-5-1 via claude-code), $0.89
+  - Q-001 (technical): accept by the delegate (claude-fable-5-1 via claude-code), $1.08
 
 ### openspec:add-policy-catalogue
 - Result: not integrated
@@ -95,6 +98,6 @@
 
 ## Usage
 
-- Cost: $63.42
+- Cost: $88.51
 - Of which the readiness review: $48.38
-- Runs that dispatched a unit: 8
+- Runs that dispatched a unit: 16
