@@ -42,6 +42,7 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 ## Q-002: src/api/idempotency.test.ts:254 — a JavaScript counter cannot be undone by rolling back the transaction
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path src/api/idempotency.test.ts of task 3.3; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 3.3
 - **Kind:** technical
 - **Asked:** 2026-10-29T14:03Z by glm, run r-20261029T1219Z-7db8, task 3.3
