@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 3.3 | technical | src/api/idempotency.test.ts:162 — the release-refusing wrapper calls the real client's query method unbound |
-| Q-002 | open | 3.3 | technical | src/api/idempotency.test.ts:254 — a JavaScript counter cannot be undone by rolling back the transaction |
+| Q-002 | accepted | 3.3 | technical | src/api/idempotency.test.ts:254 — a JavaScript counter cannot be undone by rolling back the transaction |
 | Q-003 | open | 3.3 | technical | src/api/idempotency.test.ts:219 — response_body::text of a jsonb column cannot yield the compact JSON.stringify text |
 <!-- l4:index:end -->
 
@@ -44,7 +44,7 @@ Edit `src/api/idempotency.test.ts`: change line 162 from `return raw(...args);` 
 
 ## Q-002: src/api/idempotency.test.ts:254 — a JavaScript counter cannot be undone by rolling back the transaction
 
-- **Status:** open
+- **Status:** accepted
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path src/api/idempotency.test.ts of task 3.3; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 3.3
 - **Kind:** technical
@@ -58,6 +58,9 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 ### Options
 1. Edit src/api/idempotency.test.ts: delete the assertion at line 254 (the probe and key-count assertions at lines 248–253 already assert the rollback)
 2. Edit src/api/idempotency.test.ts: change line 254 to `assert.equal(probeCount.n, 1, "fn ran once before the write rolled back");`
+
+### Clarifier suggestion
+Edit `src/api/idempotency.test.ts`: delete the assertion at line 254 (the probe and key-count assertions at lines 248–253 already assert the rollback)
 
 ### Answer
 <!-- write below this line -->
