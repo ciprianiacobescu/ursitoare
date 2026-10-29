@@ -161,3 +161,4 @@
 {"at":"2026-10-29T16:17:46Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"b8674a9428d7fb74619f0b1ae6202353ddaa6607","status":"pass","type":"unit.postcheck","unit":"openspec:add-api-conventions"}
 {"at":"2026-10-29T16:17:46Z","revision":"b8674a9428d7fb74619f0b1ae6202353ddaa6607","type":"unit.integrated","unit":"openspec:add-api-conventions"}
 {"at":"2026-10-29T16:17:46Z","attempt":1,"cost_usd":5.443041,"runs":3,"type":"plan.charged","unit":"openspec:add-api-conventions"}
+{"at":"2026-10-29T16:19:40Z","branch":"l4/archive/openspec/add-api-conventions","head":"d1035610bbc5c88d31d7deaa784721bc011c36a7","type":"unit.branch_deleted","unit":"openspec:add-api-conventions"}
