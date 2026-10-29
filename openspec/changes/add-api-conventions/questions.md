@@ -14,6 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 3.3 | technical | src/api/idempotency.test.ts:162 — the release-refusing wrapper calls the real client's query method unbound |
 | Q-002 | accepted | 3.3 | technical | src/api/idempotency.test.ts:254 — a JavaScript counter cannot be undone by rolling back the transaction |
 | Q-003 | accepted | 3.3 | technical | src/api/idempotency.test.ts:219 — response_body::text of a jsonb column cannot yield the compact JSON.stringify text |
+| Q-004 | open | 3.4 | technical | src/api/idempotent-response.test.ts:215 |
 <!-- l4:index:end -->
 
 ---
@@ -85,6 +86,30 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/api/idempotency.test.ts`: change the expected body strings at lines 219, 274 and 576 from '{"id":"f_1"}' / '{"id":"f_2"}' to the jsonb text form '{"id": "f_1"}' / '{"id": "f_2"}'
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-004: src/api/idempotent-response.test.ts:215
+
+- **Status:** open
+- **Blocking tasks:** 3.4
+- **Kind:** technical
+- **Asked:** 2026-10-29T14:58Z by glm, run r-20261029T1412Z-bf29, task 3.4
+
+### Context
+The frozen red test asserts that the 400 body for a key 'has space' on the respondIdempotent route has details.fields deepEqual [{ field: "headers/idempotency-key" }]. Design decision 5 fixes the key refusal as fields [{ field: "headers/idempotency-key", message: "must be 1 to 128 visible ASCII characters" }] - the shape idempotencyKeyOf throws (asserted by the frozen src/api/idempotency-key.test.ts:62) and withIdempotency throws before any query (asserted by the frozen src/api/idempotency.test.ts:360) - and decision 6 sends a request carrying a key through withIdempotency. deepEqual in node:assert/strict is exact, so the message-bearing entry the design pins makes the assertion fail; honouring the test as written would need a second, message-less refusal thrown only on this route path, diverging from the design's single refusal shape.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/api/idempotency-key.test.ts`, `src/api/idempotency.test.ts`, `src/api/idempotent-response.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-api-conventions`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit src/api/idempotent-response.test.ts: change line 215 from assert.deepEqual(invalid.fields, [{ field: "headers/idempotency-key" }], "the refusal names the header field"); to assert.deepEqual(invalid.fields, [{ field: "headers/idempotency-key", message: "must be 1 to 128 visible ASCII characters" }], "the refusal names the header field");
+2. Edit src/api/idempotent-response.test.ts: change line 215 to assert.ok((invalid.fields ?? []).some((issue) => issue.field === "headers/idempotency-key"), "the refusal names the header field"); so the assertion only checks that the field is named
+
+### Clarifier suggestion
+Edit `src/api/idempotent-response.test.ts`: change line 215 from assert.deepEqual(invalid.fields, [{ field: "headers/idempotency-key" }], "the refusal names the header field"); to assert.deepEqual(invalid.fields, [{ field: "headers/idempotency-key", message: "must be 1 to 128 visible ASCII characters" }], "the refusal names the header field");
 
 ### Answer
 <!-- write below this line -->
