@@ -2,3 +2,4 @@
 {"ts": "2026-10-29T12:19:08.105617Z", "run_id": "r-20261029T1219Z-8d6d", "unit": "openspec:add-api-pep", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 28, "merge_commit": "6f85bb3bd180fee942b4638495e12495299359e9"}
 {"ts": "2026-10-29T12:19:14.106011Z", "run_id": "r-20261029T1219Z-8d6d", "unit": "openspec:add-api-pep", "seq": 3, "type": "archive.opened", "number": 29, "url": "<forge>/ciprianiacobescu/ursitoare/pull/29", "branch": "l4/archive/openspec/add-api-pep", "head": "36314621dfe85e15aa9d5f876e11f8defc535f7f"}
 {"ts": "2026-10-29T12:19:15.772502Z", "run_id": "r-20261029T1219Z-8d6d", "unit": "openspec:add-api-pep", "seq": 4, "type": "archive.merged", "head": "36314621dfe85e15aa9d5f876e11f8defc535f7f", "number": 29}
+{"ts": "2026-10-29T12:19:17.670547Z", "run_id": "r-20261029T1219Z-8d6d", "unit": "openspec:add-api-pep", "seq": 5, "type": "run.finished", "exit_code": 0}
