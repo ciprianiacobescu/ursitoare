@@ -190,3 +190,4 @@
 {"at":"2026-10-29T21:37:50Z","run":"r-20261029T2137Z-34a0","type":"unit.dispatched","unit":"openspec:add-web-ui-kit"}
 {"at":"2026-10-29T21:48:41Z","head":"28a0177b8df15d0e8096d49bda8943714e485956","pr":32,"target_before":"f16558c6dca3050ee88f2f0ab5d2f8aeed9dc49e","type":"unit.merge_requested","unit":"openspec:add-web-ui-kit"}
 {"at":"2026-10-29T21:48:45Z","ci":"not_run","head":"28a0177b8df15d0e8096d49bda8943714e485956","merge_commit":"fe66136ce61d2326270b445e3e2878a645e6f702","method":"squash","pr":32,"raced":false,"type":"unit.merged","unit":"openspec:add-web-ui-kit"}
+{"at":"2026-10-29T21:48:49Z","branch":"l4/openspec/add-web-ui-kit","head":"28a0177b8df15d0e8096d49bda8943714e485956","type":"unit.branch_deleted","unit":"openspec:add-web-ui-kit"}
