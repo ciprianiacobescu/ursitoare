@@ -1,6 +1,7 @@
 import { ApiError } from "./errors.ts";
 
 import type { CursorKey, CursorPosition, CursorScope } from "./cursor.ts";
+import { decodeCursor, encodeCursor } from "./cursor.ts";
 
 const LIMIT_DEFAULT = 50;
 const LIMIT_MIN = 1;
@@ -78,13 +79,31 @@ export function readPage(query: unknown): { limit: number; cursor: string | null
   return { limit, cursor };
 }
 
-export function startAfter(_binding: CursorBinding, _cursor: string | null): CursorPosition | null {
-  throw new Error("not implemented");
+export function startAfter(binding: CursorBinding, cursor: string | null): CursorPosition | null {
+  if (cursor === null) return null;
+  return decodeCursor(binding.key, cursor, { tenantId: binding.tenantId, scope: binding.scope });
+}
+
+function limitArgumentRangeError(): RangeError {
+  return new RangeError("paginate limit must be an integer from 1 to 200");
 }
 
 export function paginate<T>(
-  _rows: readonly T[],
-  _opts: { limit: number; keyOf: (row: T) => CursorPosition; cursor: CursorBinding },
+  rows: readonly T[],
+  opts: { limit: number; keyOf: (row: T) => CursorPosition; cursor: CursorBinding },
 ): Page<T> {
-  throw new Error("not implemented");
+  if (!Number.isInteger(opts.limit) || opts.limit < LIMIT_MIN || opts.limit > LIMIT_MAX) {
+    throw limitArgumentRangeError();
+  }
+  const items: T[] = rows.slice(0, opts.limit);
+  if (rows.length > opts.limit) {
+    const last = items[items.length - 1] as T;
+    const next_cursor = encodeCursor(opts.cursor.key, {
+      tenantId: opts.cursor.tenantId,
+      scope: opts.cursor.scope,
+      position: opts.keyOf(last),
+    });
+    return { items, next_cursor };
+  }
+  return { items, next_cursor: null };
 }
