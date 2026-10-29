@@ -1,0 +1,12 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-web-ui-kit",
+  "round": 2,
+  "findings": [
+    "F-448496f9"
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": []
+}
