@@ -196,3 +196,5 @@
 {"ts": "2026-10-29T21:31:12.386365Z", "run_id": "r-20261029T2108Z-9abe", "unit": "openspec:add-web-ui-kit", "seq": 196, "type": "phase.changed", "from": "verifying", "to": "awaiting_human", "trigger": "verify_needs_human", "exit_code": 11}
 {"ts": "2026-10-29T21:31:15.265149Z", "run_id": "r-20261029T2108Z-9abe", "unit": "openspec:add-web-ui-kit", "seq": 197, "type": "pr.labels", "number": 32, "labels": ["l4:awaiting_human", "l4:needs-answers"]}
 {"ts": "2026-10-29T21:31:18.271110Z", "run_id": "r-20261029T2108Z-9abe", "unit": "openspec:add-web-ui-kit", "seq": 198, "type": "delegate.result", "question": "Q-036", "id": "Q-036", "status": "escalated", "reason": "the delegate's cost cap of the unit is used ($12.41 of $15.00)", "called": false, "tasks": [], "target": "H-1208e5d8", "kind": "verdict"}
+{"ts": "2026-10-29T21:31:18.373997Z", "run_id": "r-20261029T2108Z-9abe", "unit": "openspec:add-web-ui-kit", "seq": 199, "type": "lock.released"}
+{"ts": "2026-10-29T21:31:18.374784Z", "run_id": "r-20261029T2108Z-9abe", "unit": "openspec:add-web-ui-kit", "seq": 200, "type": "run.finished", "exit_code": 11}
