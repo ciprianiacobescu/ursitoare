@@ -151,3 +151,5 @@
 {"at":"2026-10-29T14:12:38Z","by":"harness","reason":"the cause is gone: openspec:add-api-conventions is awaiting_human","type":"plan.resumed"}
 {"at":"2026-10-29T14:12:41Z","attempt":1,"cost_usd":4.175147,"runs":2,"type":"plan.charged","unit":"openspec:add-api-conventions"}
 {"at":"2026-10-29T14:12:41Z","run":"r-20261029T1412Z-bf29","type":"unit.dispatched","unit":"openspec:add-api-conventions"}
+{"at":"2026-10-29T15:00:45Z","attempt":1,"cost_usd":5.443041,"runs":3,"type":"plan.charged","unit":"openspec:add-api-conventions"}
+{"at":"2026-10-29T15:00:45Z","run":"r-20261029T1500Z-34ea","type":"unit.dispatched","unit":"openspec:add-api-conventions"}
