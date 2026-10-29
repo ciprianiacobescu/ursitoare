@@ -148,6 +148,12 @@ textarea,
   text-decoration: underline;
 }
 
+.ui-toast button:hover,
+.ui-toast .ui-button:hover {
+  background: transparent;
+  color: var(--ui-color-toast-text);
+}
+
 .ui-visually-hidden {
   position: absolute;
   width: 1px;
