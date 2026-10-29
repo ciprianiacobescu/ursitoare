@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 3.3 | technical | src/api/idempotency.test.ts:162 — the release-refusing wrapper calls the real client's query method unbound |
 | Q-002 | accepted | 3.3 | technical | src/api/idempotency.test.ts:254 — a JavaScript counter cannot be undone by rolling back the transaction |
-| Q-003 | open | 3.3 | technical | src/api/idempotency.test.ts:219 — response_body::text of a jsonb column cannot yield the compact JSON.stringify text |
+| Q-003 | accepted | 3.3 | technical | src/api/idempotency.test.ts:219 — response_body::text of a jsonb column cannot yield the compact JSON.stringify text |
 <!-- l4:index:end -->
 
 ---
@@ -68,7 +68,7 @@ Edit `src/api/idempotency.test.ts`: delete the assertion at line 254 (the probe 
 
 ## Q-003: src/api/idempotency.test.ts:219 — response_body::text of a jsonb column cannot yield the compact JSON.stringify text
 
-- **Status:** open
+- **Status:** accepted
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path src/api/idempotency.test.ts of task 3.3; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 3.3
 - **Kind:** technical
@@ -82,6 +82,9 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 ### Options
 1. Edit src/api/idempotency.test.ts: change the expected body strings at lines 219, 274 and 576 from '{"id":"f_1"}' / '{"id":"f_2"}' to the jsonb text form '{"id": "f_1"}' / '{"id": "f_2"}'
 2. Edit src/api/idempotency.test.ts: read and compare the parsed value (SELECT response_body without ::text and expect { id: "f_1" } / { id: "f_2" }) instead of comparing text
+
+### Clarifier suggestion
+Edit `src/api/idempotency.test.ts`: change the expected body strings at lines 219, 274 and 576 from '{"id":"f_1"}' / '{"id":"f_2"}' to the jsonb text form '{"id": "f_1"}' / '{"id": "f_2"}'
 
 ### Answer
 <!-- write below this line -->
