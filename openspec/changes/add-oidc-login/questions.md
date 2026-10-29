@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 4.1 | technical | src/identity/oidc/client.test.ts:36 configFor hard-codes the client secret |
 | Q-002 | accepted | 6.1 | technical | src/identity/oidc/login.test.ts:130-131 authorizationParams asserts an impossible URL origin and path |
 | Q-003 | answered | 7.1 | technical | src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued |
-| Q-004 | open | 7.1 | technical | src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued |
+| Q-004 | accepted | 7.1 | technical | src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued |
 <!-- l4:index:end -->
 
 ---
@@ -95,7 +95,8 @@ Option 1 is right: the fixture is wrong, not the engine. It is the same defect a
 
 ## Q-004: src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 7.1
 - **Kind:** technical
 - **Asked:** 2026-10-29T06:02Z by deepseek-free, run r-20261029T0559Z-a74f, task 7.1
