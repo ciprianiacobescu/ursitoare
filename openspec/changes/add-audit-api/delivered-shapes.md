@@ -1,12 +1,12 @@
 # Delivered shapes taken by add-audit-api
 
-The merged names this change takes, as declared on main@e226f8c with `export` dropped.
+The merged names this change takes, as declared on main@cd81ff3 with `export` dropped.
 
 ```ts
 // add-engine-skeleton (src/api/errors.ts)
 class ApiError extends Error { readonly status: number; readonly code: string; readonly details: unknown; constructor(status: number, code: string, message: string, details?: unknown); }
 // add-engine-skeleton (src/api/server.ts)
-interface ServerDeps { readonly version: string; readonly ids: IdSource; readonly logger: Logger; readonly tracer: Tracer; readonly health?: HealthRegistry; readonly healthCheckTimeoutMs?: number; }
+interface ServerDeps { readonly version: string; readonly ids: IdSource; readonly logger: Logger; readonly tracer: Tracer; readonly health?: HealthRegistry; readonly healthCheckTimeoutMs?: number; readonly listener?: "public" | "internal"; }
 function buildServer(deps: ServerDeps): Promise<FastifyInstance>
 // add-engine-skeleton (src/core)
 interface Clock { now(): Date; }
@@ -27,6 +27,8 @@ interface AppConfig {
   readonly shutdownDrainMs: number;
   readonly engineKey: Secret | null;
   readonly database: { readonly app: DatabaseEndpoint | null; readonly owner: DatabaseEndpoint | null };
+  readonly oidc?: OidcConfig;
+  readonly internalPort?: number;
 }
 // add-engine-skeleton (src/main.ts)
 interface MainDeps { loadConfig: () => AppConfig; inspectServers?: (s: { public: FastifyInstance; internal: FastifyInstance }) => void | Promise<void>; /* and destination, signals, exit, openDatabase?, configureServer? */ }
@@ -68,16 +70,16 @@ class PdpError extends Error { readonly code: PdpErrorCode; readonly details: Re
 
 ## Facts from the merged code
 
-Read at main@e226f8c; each bullet quotes the code.
+Read at main@cd81ff3; each bullet quotes the code.
 
-- The server's Ajv does not strip unknown properties; `src/api/server.ts:40`: `ajv: { customOptions: { removeAdditional: false, allErrors: false } },`
+- The server's Ajv does not strip unknown properties; `src/api/server.ts:43`: `ajv: { customOptions: { removeAdditional: false, allErrors: false } },`
 - A schema fault is 400 `VALIDATION_FAILED` with `details.fields`, one `{ field, message }` per issue; an `additionalProperties` fault names the property. `src/api/errors.ts:65-67`: `} else if (keyword === "additionalProperties") {` / `const additional = stringField(params, "additionalProperty");` / `if (additional !== undefined) suffix = `/${additional}`;`, and `:70`: ``return `${context}${instancePath}${suffix}`;`` (`context` is `querystring` for a query).
 - Any other error is answered 500 `INTERNAL`; `src/api/errors.ts` ends `return { status: 500, body: envelope("INTERNAL", INTERNAL_MESSAGE) };`
 - `audit_event` (`src/db/migrations/0080_audit.sql:6-18`): `target jsonb,` (nullable) `payload jsonb NOT NULL DEFAULT '{}'::jsonb,` `origin text NOT NULL DEFAULT 'ursitoare'`, `mk_trace_id text, mk_request_id text, mk_jti text,` `PRIMARY KEY (tenant_id, seq, at)) PARTITION BY RANGE (at);`; `:42`: `GRANT SELECT, INSERT ON TABLE ursitoare.audit_event TO ursitoare_app;`, with forced row-level security on `app.tenant_id`.
-- `policy_decision` (`src/db/migrations/0110_policy_decision.sql:3-12`): `run_id text`, `node_id text` (nullable), `reasons text[] NOT NULL DEFAULT '{}',` `errors text[] NOT NULL DEFAULT '{}',` `permit jsonb` (nullable), `PRIMARY KEY (tenant_id, decision_id, decided_at)`, `GRANT SELECT, INSERT ON TABLE ursitoare.policy_decision TO ursitoare_app;` and forced row-level security.
+- `policy_decision` (`src/db/migrations/0110_policy_decision.sql:3-25`): `run_id text`, `node_id text` (nullable), `reasons text[] NOT NULL DEFAULT '{}',` `errors text[] NOT NULL DEFAULT '{}',` `permit jsonb` (nullable), `PRIMARY KEY (tenant_id, decision_id, decided_at)`, `GRANT SELECT, INSERT ON TABLE ursitoare.policy_decision TO ursitoare_app;` and forced row-level security.
 - `recordDecision` stores `decision.decidedAt` as `decided_at`; `src/pdp/log.ts:13`: `ON CONFLICT (tenant_id, decision_id, decided_at) DO NOTHING`. `principal` and `resource` are stored as `Type::"id"` text (`src/pdp/values.ts:18`: ``return `${uid.type}::${JSON.stringify(uid.id)}`;``).
 - `src/audit/verify.ts:37` formats stored times to microseconds in UTC: ``const AT_FORMAT = `to_char(at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')`;``
-- `AppConfig.engineKey` is `Secret | null` (`src/config/config.ts:25`); `Secret.reveal()` returns the key text (`src/config/secret.ts:17`).
+- `AppConfig.engineKey` is `Secret | null` (`src/config/config.ts:28`); `Secret.reveal()` returns the key text (`src/config/secret.ts:17`).
 - `ursitoare.audit_anchor` (`src/db/migrations/0080_audit.sql:21-27`) has `tenant_id text NOT NULL REFERENCES ursitoare.tenant (tenant_id),` `seq bigint NOT NULL CHECK (seq >= 1),` `hash bytea`, `mac bytea`, `at timestamptz NOT NULL,` `PRIMARY KEY (tenant_id, seq));`; `:43`: `GRANT SELECT, INSERT ON TABLE ursitoare.audit_anchor TO ursitoare_app;`; `:65`: `CREATE TRIGGER audit_anchor_append_only BEFORE UPDATE OR DELETE ON ursitoare.audit_anchor`, so anchors are only inserted.
 - `verifyChain` passes with no anchor at all; `src/audit/verify.ts:60`: `"SELECT seq::text AS seq_text, hash, mac FROM ursitoare.audit_anchor WHERE tenant_id = $1 AND seq >= $2::bigint ORDER BY seq",` selects the anchors, `:149`: `for (const anchor of anchors) {` checks only the rows found, and `:159`: `return { ok: true, checked };`.
 - No code outside tests calls `anchorHead` (`src/audit/anchor.ts:34`: `export async function anchorHead(`): a search of `src`, `test` and `e2e` finds it only in `anchor.ts`, `index.ts`, `anchor.test.ts` and `verify.anchor.test.ts` of `src/audit`.

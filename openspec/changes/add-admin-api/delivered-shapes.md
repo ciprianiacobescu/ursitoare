@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-admin-api
 
-The merged names this change takes (proposal.md, "Interfaces taken"), as declared on main (e226f8c): `tsc --emitDeclarationOnly` output without `export` and `declare`. 
+The merged names this change takes (proposal.md, "Interfaces taken"), as declared on main (cd81ff3): `tsc --emitDeclarationOnly` output without `export` and `declare`. 
 
 ```ts
 // add-engine-skeleton (src/core, src/observability, src/api, src/config, src/main.ts)
@@ -11,7 +11,7 @@ function sequentialIds(seed?: number): IdSource
 function createLogger(opts: { level: LogLevel; destination?: LogDestination; clock?: Clock; }): Logger
 const noopTracer: Tracer
 class ApiError extends Error { readonly status: number; readonly code: string; readonly details: unknown; constructor(status: number, code: string, message: string, details?: unknown); }
-interface ServerDeps { readonly version: string; readonly ids: IdSource; readonly logger: Logger; readonly tracer: Tracer; readonly health?: HealthRegistry; readonly healthCheckTimeoutMs?: number; }
+interface ServerDeps { readonly version: string; readonly ids: IdSource; readonly logger: Logger; readonly tracer: Tracer; readonly health?: HealthRegistry; readonly healthCheckTimeoutMs?: number; readonly listener?: "public" | "internal"; }
 function buildServer(deps: ServerDeps): Promise<FastifyInstance>
 interface AppConfig { readonly engineKey: Secret | null; /* other members omitted */ }
 class Secret { constructor(value: string); reveal(): string; }

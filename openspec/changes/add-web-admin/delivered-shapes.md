@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-web-admin
 
-The names this change takes from merged code ("Interfaces taken"), as declared on main@e226f8c with `export` dropped; the code is the truth.
+The names this change takes from merged code ("Interfaces taken"), as declared on main@cd81ff3 with `export` dropped; the code is the truth.
 
 ```ts
 // add-web-shell (web/src/api/client.ts)
@@ -25,14 +25,14 @@ interface PartHandle { readonly env: Readonly<Record<string, string>>; readonly 
 
 ## Facts from the merged code
 
-At main@e226f8c.
+At main@cd81ff3.
 
 - `web/src/features/index.ts:4` is `const mods = import.meta.glob<{ feature: FeatureSpec }>("./*.tsx", { eager: true });` and line 6 sorts the modules by file name before `registerFeature(mod.feature)`: a new `web/src/features/NN-<name>.tsx` that exports `feature` is registered with no edit to a shared file.
 - `web/src/app/features.ts:4-11` lists the reserved roots `["api"]`, `["health"]`, `["auth", "oidc"]`, `[".well-known"]`, `["hooks"]`, `["callbacks"]`, `["mcp"]`; `/admin` is not among them.
 - `web/src/app/features.ts:135-142` throws `FeatureError("FEATURE_INVALID", ...)` for a `navLabel` when `parsed.dynamic` is true: a feature with a `navLabel` has a static path.
 - `web/src/app/features.ts:181-186` is the nav filter: `if (feature.navLabel === undefined) { continue; }` and `if (feature.capability !== undefined && !capabilities.has(feature.capability)) { continue; }`.
 - `web/src/api/client.ts:100` is `path.includes("?") ||`, inside the check that throws `RangeError`: a query goes in `opts.query`. Lines 162-171 turn a non-2xx `{ error: { code, message } }` answer into `ApiRequestError(response.status, envelope.code, envelope.message, { details: envelope.details, requestId })`; lines 174-175 are `if (text.trim() === "") { return undefined as T; }`: a 204 resolves to `undefined`.
-- `src/api/web.ts:170` is `server.get("/*", async (request, reply) => {`; lines 195-201 answer an asset-named path with not-found and otherwise send `index.html`, so `/admin/users` gets the single-page app.
+- `src/api/web.ts:171-177` is `defineRoute(server, { method: "GET", url: "/*", auth: { kind: "public", reason: "static" }, …, handler: async (request, reply) => {`; lines 202-209 answer an asset-named path with not-found and otherwise send `index.html`, so `/admin/users` gets the single-page app.
 - `test/support/e2e-stack/stack.ts:96` is `URSITOARE_ENGINE_KEY_FILE: engineKeyFile,` and lines 130-131 write `randomBytes(ENGINE_KEY_BYTES).toString("hex")` to `engine.key`: the stack engine has an engine key, so cursors can be issued and signed anchors checked.
 - `web/src/app/App.tsx:10` is `document.title = pageTitle(routeId);`, set by a `DocumentTitle` effect rendered before a feature's element, so a page effect that sets `document.title` runs later and wins.
 - `tsconfig.json` (root) has `"types": ["node"]`, `"include": ["src/**/*.ts", "test/**/*.ts"]` and `"exclude": ["node_modules", "dist", "seed", "web", "e2e"]`: a file under `test/` that imports `web/src/**/*.ts` makes the root typecheck read them under Node's global types.

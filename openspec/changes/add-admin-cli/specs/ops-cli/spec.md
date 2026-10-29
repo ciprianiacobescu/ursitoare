@@ -106,7 +106,7 @@ A `CommandRegistry` SHALL hold commands named by one word, `admin <word>` or `fl
 - **THEN** all exit 0; stdout `revoked tenant_admin from <alice>\n`, `{"result":"absent","userId":"<alice>","roleId":"tenant_admin"}\n` and `not held: author for <alice>\n`; `loadMemberships` gives `{ roles: ["author"], teams: [] }`; the chain holds one `identity.role_revoked` (actor `operator:ops`) and three `cli.command_run` events with payload `{ command: "admin revoke-role", outcome: "ok", userId, roleId, result }`, `result` `revoked`, `absent`, `absent`
 
 #### Scenario: Refusals and isolation
-- **WHEN** each command runs with user `usr_ghost`; role `Bad Role`; no `--user`; no `--role`; and bob of `tenant_b`, who holds `author`, with `--tenant tenant_a --role author`; and `grant-role` with role `ghost`
+- **WHEN** each command runs with user `usr_ghost` (role `author`); role `Bad Role` (user alice); no `--user`; no `--role`; and bob of `tenant_b`, who holds `author`, with `--tenant tenant_a --role author`; and `grant-role` with role `ghost`
 - **THEN** exit and stderr: 1 `RBAC_NOT_FOUND: `, 1 `RBAC_INVALID: `, 2 `CLI_USAGE: missing required option --user`, 2 `CLI_USAGE: missing required option --role`, 1 `RBAC_NOT_FOUND: ` (and `ghost`); the `RBAC_*` runs leave an event `outcome: "refused"` with that code; bob still holds `author`
 
 ### Requirement: admin verify-audit checks the chain and counts anchors

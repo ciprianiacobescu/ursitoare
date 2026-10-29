@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-admin-cli
 
-The merged names this change takes, as declared on main (e226f8c), `export` and `declare` dropped. The code is the truth; this file shows its shapes to the readiness judge. Names from `add-roles-and-memberships` are in that folder's "Interfaces given".
+The merged names this change takes, as declared on main (cd81ff3), `export` and `declare` dropped. The code is the truth; this file shows its shapes to the readiness judge. Names from `add-roles-and-memberships` are in that folder's "Interfaces given".
 
 ```ts
 // add-engine-skeleton (src/core, src/config)
@@ -10,7 +10,7 @@ function fixedClock(iso: string): Clock
 function sequentialIds(seed?: number): IdSource
 type Env = Readonly<Record<string, string | undefined>>
 interface DatabaseEndpoint { readonly url: string; readonly password: Secret | null; }
-interface AppConfig { readonly role: Role; readonly host: string; readonly port: number; readonly logLevel: LogLevel; readonly publicBaseUrl: string; readonly webDist: string | null; readonly shutdownDrainMs: number; readonly engineKey: Secret | null; readonly database: { readonly app: DatabaseEndpoint | null; readonly owner: DatabaseEndpoint | null; }; }
+interface AppConfig { readonly role: Role; readonly host: string; readonly port: number; readonly logLevel: LogLevel; readonly publicBaseUrl: string; readonly webDist: string | null; readonly shutdownDrainMs: number; readonly engineKey: Secret | null; readonly database: { readonly app: DatabaseEndpoint | null; readonly owner: DatabaseEndpoint | null; }; readonly oidc?: OidcConfig; readonly internalPort?: number; }
 type SecretReader = (path: string) => string
 class Secret { constructor(value: string); reveal(): string; toJSON(): string; toString(): string; }
 function loadConfig(env: Env, readSecret?: SecretReader): AppConfig
@@ -57,8 +57,8 @@ function isTestFile(path: string): boolean
 
 ## Facts from the merged code
 
-- `src/config/config.ts:204`: `export function loadConfig(env: Env, readSecret: SecretReader = defaultReadSecret): AppConfig {`; its owner endpoint is `readDatabaseEndpoint(env, "URSITOARE_DATABASE_OWNER_URL", "URSITOARE_DATABASE_OWNER_PASSWORD_FILE", readSecret)` (lines 215-220), `null` when the URL is unset (186-190); `:169` `if (parsed.hostname === "" || parsed.password !== "") return false;` rejects a URL with a password.
-- `src/config/config.ts:136`: ``throw error(name, `secrets are read only from files; set ${name}_FILE`);``; `src/config/errors.ts:8`: ``super(`${variable}: ${reason}`);``, so a `ConfigError` message holds a variable name and a reason, never a value. An empty secret file gives reason `file is missing, unreadable or empty` (`src/config/secret.ts:8`); a bad `URSITOARE_PORT` gives `must be an integer from 1 to 65535` (`readPort`, `config.ts:68`).
+- `src/config/config.ts:209`: `export function loadConfig(env: Env, readSecret: SecretReader = defaultReadSecret): AppConfig {`; its owner endpoint is `readDatabaseEndpoint(env, "URSITOARE_DATABASE_OWNER_URL", "URSITOARE_DATABASE_OWNER_PASSWORD_FILE", readSecret)` (lines 220-225), `null` when the URL is unset (191-195); `:174` `if (parsed.hostname === "" || parsed.password !== "") return false;` rejects a URL with a password.
+- `src/config/config.ts:141`: ``throw error(name, `secrets are read only from files; set ${name}_FILE`);``; `src/config/errors.ts:8`: ``super(`${variable}: ${reason}`);``, so a `ConfigError` message holds a variable name and a reason, never a value. An empty secret file gives reason `file is missing, unreadable or empty` (`src/config/secret.ts:8`); a bad `URSITOARE_PORT` gives `must be an integer from 1 to 65535` (`readPort`, `config.ts:73`, message at `:78`).
 - `src/config/process.ts`: `return loadConfig(process.env);`. `test/arch/rules.ts:790`: `if (moduleNameOf(file.path) === "config") continue;` exempts only `src/config` from the `process.env` rule; `checkConsole` refuses `console` in non-test `src/` files; `loaderViolations` (code `ARCH_DYNAMIC_IMPORT`) refuses a non-literal `import()` in `src/`.
 - `src/db/roles.ts:7`: `export const ROLE_OWNER: string = "ursitoare_owner";`. `test/support/pg.ts:291`: `const ownerEndpoint = endpoint(roleUrl(cluster, ROLE_OWNER, null, name), cluster.ownerPassword);`: the URL has no password, the password is in `endpoint.password`, and `createPool` (`src/db/pool.ts:79-85`) takes it from `source.password`.
 - `src/db/migrations/0002_tenancy.sql:7`: `ALTER TABLE ursitoare.tenant ENABLE ROW LEVEL SECURITY;` (no `FORCE`): the owner reads every tenant row with no tenant setting, and `test/support/tenants.ts:12` inserts tenants on `db.ownerPool` directly. `review_profile` defaults to `'solo'` (`:4`). No migration, `test/support/pg.ts` or `test/support/global-setup.ts` inserts a tenant: `withTestDatabase()` starts with none.

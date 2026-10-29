@@ -91,8 +91,8 @@ Migration `0170_rbac.sql` SHALL create `role`, `team`, `idp_group_map` and `memb
 - **THEN** the results are `RBAC_DIRECT_GRANT_REFUSED`, `"granted"` (event actor `{ kind: "system", id: "operator:cli" }`, payload `{ roleId: "author", via: "operator" }`), `RBAC_ELEVATION`, `"granted"`, `RBAC_ELEVATION`
 
 #### Scenario: Missing, invalid, concurrent, disabled
-- **WHEN** `grantRole` gets user `ghost`, role `ghost`, role `Bad Role`; two `grantRole` calls for the same pair run in parallel transactions; the owner disables `svc`, then enables it; and `revokeRole` is called for an `idp_claim`-only role
-- **THEN** the codes are `RBAC_NOT_FOUND` (x2), `RBAC_INVALID`; the parallel results sorted are `["exists", "granted"]` with one row and one event; `loadMemberships(svc).roles` is `[]` while disabled and `["author"]` after; the revoke gives `false`
+- **WHEN** `grantRole` gets user `ghost`, role `ghost`, role `Bad Role`; `revokeRole` (operator `cli`) gets the same three; two `grantRole` calls for the same pair run in parallel transactions; the owner disables `svc`, then enables it; and `revokeRole` is called for an `idp_claim`-only role
+- **THEN** the codes are `RBAC_NOT_FOUND` (x2), `RBAC_INVALID` for each function; the parallel results sorted are `["exists", "granted"]` with one row and one event; `loadMemberships(svc).roles` is `[]` while disabled and `["author"]` after; the revoke gives `false`
 
 ### Requirement: The bootstrap admin group is mapped once and audited
 `mapBootstrapAdminGroup` SHALL, for a tenant that has no group mapped to `tenant_admin`, map the given group to `tenant_admin` and append `identity.bootstrap_admin_mapped`, and otherwise change nothing; `bootstrapAdminGroup` SHALL give the configured group name, default `ursitoare-admins`.
@@ -143,7 +143,7 @@ The file `src/identity/policy/roles.cedar` SHALL hold exactly four platform-laye
 `rbacPart` SHALL, in `seed`, give every tenant routed to the fake provider's issuer the team `finance`, the mappings `ursitoare-authors` → `author`, `ursitoare-approvers` → `approver`, `team-finance` → team `finance` and `ursitoare-admins` → `tenant_admin`, and SHALL change nothing when seeded again.
 
 #### Scenario: Seed, re-seed, skip
-- **WHEN** the shipped `database` and `oidc` parts start and seed, the test inserts `tenant_b` (provisioned for `org-b` at the fake's issuer) and `tenant_c` (no `tenant_idp` row), `rbacPart.start` and `rbacPart.seed` run twice, and a third call hides `oidcApi` from the handles
+- **WHEN** the shipped `database` and `oidc` parts start and seed, the test inserts `tenant_b` (provisioned for `org-b` at the fake's issuer) and `tenant_c` (no `tenant_idp` row), `rbacPart.start` and `rbacPart.seed` run twice, and a third `rbacPart.seed` gets a new handles map holding only the `database` handle
 - **THEN** the default tenant and `tenant_b` each hold team `finance` and 4 mappings (`RBAC_SEED_MAPPINGS` plus `ursitoare-admins`), `tenant_c` holds none, the second seed appends no event, the handle's `env` is `{}`, and the third call rejects with `STACK_PART_MISSING`
 
 #### Scenario: Discovered in order
