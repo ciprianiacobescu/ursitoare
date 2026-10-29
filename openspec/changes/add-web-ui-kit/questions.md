@@ -778,6 +778,7 @@ accept The unit can go on as it stands: the generated test fails at the head bec
 ## Q-033: Finding F-448496f9: Focus outline on the toast Dismiss button is below 3:1 against the toast background
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.41 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
