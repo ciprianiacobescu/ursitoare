@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.1 | technical | src/identity/oidc/client.test.ts:36 configFor hard-codes the client secret |
 | Q-002 | accepted | 6.1 | technical | src/identity/oidc/login.test.ts:130-131 authorizationParams asserts an impossible URL origin and path |
-| Q-003 | open | 7.1 | technical | src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued |
+| Q-003 | answered | 7.1 | technical | src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued |
 <!-- l4:index:end -->
 
 ---
@@ -71,7 +71,7 @@ Edit `src/identity/oidc/login.test.ts`: replace `assert.equal(location.origin, f
 
 ## Q-003: src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path src/main.oidc.test.ts of task 7.1; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 7.1
 - **Kind:** technical
@@ -88,3 +88,4 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Answer
 <!-- write below this line -->
+Option 1 is right: the fixture is wrong, not the engine. It is the same defect and fix as Q-001 on task 4.1. The fake provider draws its own secret for the confidential client ursitoare-engine and its token endpoint checks it, so for the sign-in test C-6370f2de writeSecretFiles must write fake.clientSecret("ursitoare-engine"), not a random value. Do not change the engine or the fake provider to make the test pass. This answer comes from an agent, and an agent's answer may not name the frozen test file, so the file stays frozen under this answer. Raise this question again on task 7.1 with option 1 first, written exactly in this form: the word Edit, a space, the test file's path (as in this question's title) inside backticks with no spaces, a colon, a space, then the whole change on the same line. Keep the change of option 1: writeSecretFiles takes a second parameter clientSecret that defaults to randomBytes(24).toString("base64url") (line 55) and writes that value to files.clientSecretFile (line 63), and the C-6370f2de test passes fake.clientSecret("ursitoare-engine") as the second argument (line 155). The harness carries an option in that form as the suggested answer, which can then be accepted.
