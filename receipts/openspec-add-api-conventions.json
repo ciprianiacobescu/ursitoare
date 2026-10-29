@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-29T16:17:46Z",
+  "integrated_revision": "b8674a9428d7fb74619f0b1ae6202353ddaa6607",
+  "merge_commit": "b8674a9428d7fb74619f0b1ae6202353ddaa6607",
+  "plan_digest": "11f838df12453fb7",
+  "plan_id": "m1",
+  "postcheck": "pass",
+  "pr": 30,
+  "receipt_id": "m1/openspec:add-api-conventions/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "60fd74083f734c7cb0354c18defd15a4bbc7fde8",
+  "spec_digest": "663aa2fcf94371fe",
+  "target": "main",
+  "unit_id": "openspec:add-api-conventions"
+}
