@@ -43,6 +43,9 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-030 | answered | none | verdict | Hold H-0e29e529: UI criterion C-a1ea941d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-031 | answered | none | verdict | Hold H-d7bde6af: UI criterion C-574fc31a has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-032 | answered | none | verdict | Hold H-addeb9d5: UI criterion C-c5c7028c has no end-to-end test (fails_at_head); see the generated UI tests table |
+| Q-033 | open | none | verdict | Finding F-448496f9: Focus outline on the toast Dismiss button is below 3:1 against the toast background |
+| Q-034 | open | none | verdict | Hold H-8f5a5712: UI criterion C-c5c7028c has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-035 | open | none | verdict | Hold H-45552067: UI criterion C-817bfc8a has no end-to-end test (not_testable); see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -769,3 +772,70 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ### Answer
 <!-- write below this line -->
 accept The unit can go on as it stands: the generated test fails at the head because of its page, not the helper. I ran the task 9.1 assert_accessible body with axe-core 4.14.0 in Chromium: a bare set_content page with no lang and no title fails even with a labelled button, on document-title and html-has-lang (serious), while the same button inside a document with lang and a title returns, and a button without a name there fails with a message holding button-name. That is the defect of Q-001 in the hand-written journey test, and the judge names the same cause for the generated one. The behaviour of criterion C-c5c7028c is answered in Q-003.
+
+---
+
+## Q-033: Finding F-448496f9: Focus outline on the toast Dismiss button is below 3:1 against the toast background
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+The judge raised a major finding in round 3, and no deterministic check confirms it (criterion C-16a71639). It reports behaviour that no scenario pins down.
+
+Title: Focus outline on the toast Dismiss button is below 3:1 against the toast background
+Detail: The global :focus-visible rule draws a var(--ui-color-focus) outline (#1d4ed8) with a 2px offset. Inside a toast that outline sits on --ui-color-toast-bg (#1b1f27), and the ratio is about 2.5:1, below the 3:1 the requirement asks for focus indicators. CONTRAST_PAIRS only checks focus against bg and surface, so no gate catches it.
+Suggested fix: WHEN the Dismiss button inside a toast has keyboard focus THEN its outline is drawn in --ui-color-focus #1d4ed8 over the toast background #1b1f27, a contrast of about 2.5:1.
+The suggested fix describes what the code does now, and a reject does not use it: to pin that behaviour, end the reason with it.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-16a71639 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-034: Hold H-8f5a5712: UI criterion C-c5c7028c has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-c5c7028c has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-035: Hold H-45552067: UI criterion C-817bfc8a has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-817bfc8a has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
