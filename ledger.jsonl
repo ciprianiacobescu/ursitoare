@@ -157,3 +157,4 @@
 {"at":"2026-10-29T16:16:10Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-api-conventions can go on","type":"plan.resumed"}
 {"at":"2026-10-29T16:16:17Z","head":"60fd74083f734c7cb0354c18defd15a4bbc7fde8","pr":30,"target_before":"3133746b66faca2d9a7109a40791b750dc8d47bb","type":"unit.merge_requested","unit":"openspec:add-api-conventions"}
 {"at":"2026-10-29T16:16:24Z","ci":"not_run","head":"60fd74083f734c7cb0354c18defd15a4bbc7fde8","merge_commit":"b8674a9428d7fb74619f0b1ae6202353ddaa6607","method":"squash","pr":30,"raced":false,"type":"unit.merged","unit":"openspec:add-api-conventions"}
+{"at":"2026-10-29T16:16:33Z","branch":"l4/openspec/add-api-conventions","head":"60fd74083f734c7cb0354c18defd15a4bbc7fde8","type":"unit.branch_deleted","unit":"openspec:add-api-conventions"}
