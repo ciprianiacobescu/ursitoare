@@ -6,6 +6,7 @@ import type { Principal, SessionContext } from "../identity/index.ts";
 import type { TenantContext } from "../tenancy/index.ts";
 import { checkCsrf } from "./csrf.ts";
 import { ApiError } from "./errors.ts";
+import { listFilterHooks } from "./list-filter.ts";
 import { decisionPreHandler } from "./pep.ts";
 import type { PepDeps } from "./pep.ts";
 import { auditRefusal } from "./refusal.ts";
@@ -375,8 +376,15 @@ export function defineRoute(server: FastifyInstance, def: RouteDef): void {
     schema: FastifySchema;
     handler: RouteDef["handler"];
     exposeHeadRoute?: boolean;
+    config?: { listFilter: ListFilter };
     onRequest?: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
     preHandler?: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+    preSerialization?: (
+      request: FastifyRequest,
+      reply: FastifyReply,
+      payload: unknown,
+    ) => Promise<unknown>;
+    onSend?: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
   } = {
     method: def.method,
     url: def.url,
@@ -387,6 +395,12 @@ export function defineRoute(server: FastifyInstance, def: RouteDef): void {
     options.exposeHeadRoute = false;
     options.onRequest = authenticationHook(server, def.auth);
     options.preHandler = decisionPreHandler(server, def);
+  }
+  if (def.listFilter !== undefined) {
+    const hooks = listFilterHooks(def.listFilter);
+    options.config = { listFilter: def.listFilter };
+    options.preSerialization = hooks.preSerialization;
+    options.onSend = hooks.onSend;
   }
   try {
     server.route(options);
