@@ -14,6 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 4.1 | technical | src/identity/oidc/client.test.ts:36 configFor hard-codes the client secret |
 | Q-002 | accepted | 6.1 | technical | src/identity/oidc/login.test.ts:130-131 authorizationParams asserts an impossible URL origin and path |
 | Q-003 | answered | 7.1 | technical | src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued |
+| Q-004 | open | 7.1 | technical | src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued |
 <!-- l4:index:end -->
 
 ---
@@ -89,3 +90,27 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 ### Answer
 <!-- write below this line -->
 Option 1 is right: the fixture is wrong, not the engine. It is the same defect and fix as Q-001 on task 4.1. The fake provider draws its own secret for the confidential client ursitoare-engine and its token endpoint checks it, so for the sign-in test C-6370f2de writeSecretFiles must write fake.clientSecret("ursitoare-engine"), not a random value. Do not change the engine or the fake provider to make the test pass. This answer comes from an agent, and an agent's answer may not name the frozen test file, so the file stays frozen under this answer. Raise this question again on task 7.1 with option 1 first, written exactly in this form: the word Edit, a space, the test file's path (as in this question's title) inside backticks with no spaces, a colon, a space, then the whole change on the same line. Keep the change of option 1: writeSecretFiles takes a second parameter clientSecret that defaults to randomBytes(24).toString("base64url") (line 55) and writes that value to files.clientSecretFile (line 63), and the C-6370f2de test passes fake.clientSecret("ursitoare-engine") as the second argument (line 155). The harness carries an option in that form as the suggested answer, which can then be accepted.
+
+---
+
+## Q-004: src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued
+
+- **Status:** open
+- **Blocking tasks:** 7.1
+- **Kind:** technical
+- **Asked:** 2026-10-29T06:02Z by deepseek-free, run r-20261029T0559Z-a74f, task 7.1
+
+### Context
+The frozen test C-6370f2de must sign alice in over real HTTP and reach /flows. writeSecretFiles (lines 55-63) writes randomBytes(24).toString("base64url") into files.clientSecretFile, and bootEnv hands that file to loadConfig, so the engine authenticates the token request with client_secret_basic using a secret the fake never issued. startFakeOidc draws its own random secret for the confidential client ursitoare-engine and its token endpoint authenticates with secretMatches(secret, client.secret), answering 401 invalid_client. The callback therefore always redirects to /sign-in?error=OIDC_EXCHANGE_FAILED, so the assertions for Location /flows and the ursitoare_session cookie at lines 220-235 can never hold. Q-003 already accepted option 1 but the agent answer did not name the frozen path, so it stays frozen; the answer asks to raise it again here with option 1 first in the exact Edit form. The half-wired test C-3e029f2d does not exchange a code and is unaffected.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/main.oidc.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-oidc-login`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/main.oidc.test.ts`: change line 55 to `async function writeSecretFiles(dbPassword: string, clientSecret = randomBytes(24).toString("base64url")): Promise<SecretFiles> {`, change line 63 to `await writeFile(files.clientSecretFile, clientSecret);`, and change line 155 in the C-6370f2de test from `const files = await writeSecretFiles(password.reveal());` to `const files = await writeSecretFiles(password.reveal(), fake.clientSecret("ursitoare-engine"));`
+2. Edit `src/main.oidc.test.ts`: in the C-6370f2de test only, after `const files = await writeSecretFiles(password.reveal());` add `await writeFile(files.clientSecretFile, fake.clientSecret("ursitoare-engine"));`
+
+### Clarifier suggestion
+Edit `src/main.oidc.test.ts`: change line 55 to `async function writeSecretFiles(dbPassword: string, clientSecret = randomBytes(24).toString("base64url")): Promise<SecretFiles> {`, change line 63 to `await writeFile(files.clientSecretFile, clientSecret);`, and change line 155 in the C-6370f2de test from `const files = await writeSecretFiles(password.reveal());` to `const files = await writeSecretFiles(password.reveal(), fake.clientSecret("ursitoare-engine"));`
+
+### Answer
+<!-- write below this line -->
