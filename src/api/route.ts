@@ -4,8 +4,10 @@ import type { ActionName, ResourceType } from "../pdp/index.ts";
 import { ACTIONS } from "../pdp/index.ts";
 import type { Principal, SessionContext } from "../identity/index.ts";
 import type { TenantContext } from "../tenancy/index.ts";
+import { checkCsrf } from "./csrf.ts";
 import { ApiError } from "./errors.ts";
 import type { PepDeps } from "./pep.ts";
+import { auditRefusal } from "./refusal.ts";
 import { sessionVerifier } from "./session-auth.ts";
 import type { UrsitoareRouteState } from "./types.ts";
 
@@ -215,6 +217,44 @@ function authenticationHook(
     request.tenant = result.tenant;
     if (result.session !== undefined) {
       request.sessionContext = result.session;
+    }
+
+    if (auth.kind === "session" && request.method !== "GET" && request.method !== "HEAD") {
+      const session = result.session;
+      if (session === undefined) {
+        request.log.warn(
+          { code: "AUTHZ_UNAVAILABLE", reason: "session_missing" },
+          "request refused",
+        );
+        throw unavailable();
+      }
+
+      let outcome: "ok" | "origin" | "token";
+      try {
+        outcome = await checkCsrf(request, pep.deps, session);
+      } catch {
+        request.log.warn(
+          { code: "AUTHZ_UNAVAILABLE", reason: "csrf_failed" },
+          "request refused",
+        );
+        throw unavailable();
+      }
+
+      if (outcome !== "ok") {
+        await auditRefusal(request, pep.deps, {
+          eventType: "authz.csrf_refused",
+          actor: {
+            kind: result.principal.kind === "service" ? "service" : "user",
+            id: result.principal.userId,
+          },
+          payload: {
+            method: request.method,
+            route: request.routeOptions.url,
+            reason: outcome,
+          },
+        });
+        throw new ApiError(403, "CSRF_INVALID", "CSRF token missing or invalid");
+      }
     }
   };
 }
