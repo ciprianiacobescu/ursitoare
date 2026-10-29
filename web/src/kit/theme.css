@@ -154,6 +154,11 @@ textarea,
   color: var(--ui-color-toast-text);
 }
 
+.ui-toast button:focus-visible,
+.ui-toast .ui-button:focus-visible {
+  outline-color: var(--ui-color-toast-text);
+}
+
 .ui-visually-hidden {
   position: absolute;
   width: 1px;
