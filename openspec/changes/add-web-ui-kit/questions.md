@@ -42,7 +42,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-029 | answered | none | verdict | Hold H-72502a0f: UI criterion C-d9604877 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-030 | answered | none | verdict | Hold H-0e29e529: UI criterion C-a1ea941d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-031 | answered | none | verdict | Hold H-d7bde6af: UI criterion C-574fc31a has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-032 | open | none | verdict | Hold H-addeb9d5: UI criterion C-c5c7028c has no end-to-end test (fails_at_head); see the generated UI tests table |
+| Q-032 | answered | none | verdict | Hold H-addeb9d5: UI criterion C-c5c7028c has no end-to-end test (fails_at_head); see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -750,7 +750,7 @@ accept The hold may be waived. Criterion C-574fc31a is the scenario "The reposit
 
 ## Q-032: Hold H-addeb9d5: UI criterion C-c5c7028c has no end-to-end test (fails_at_head); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.41 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -767,3 +767,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands: the generated test fails at the head because of its page, not the helper. I ran the task 9.1 assert_accessible body with axe-core 4.14.0 in Chromium: a bare set_content page with no lang and no title fails even with a labelled button, on document-title and html-has-lang (serious), while the same button inside a document with lang and a title returns, and a button without a name there fails with a message holding button-name. That is the defect of Q-001 in the hand-written journey test, and the judge names the same cause for the generated one. The behaviour of criterion C-c5c7028c is answered in Q-003.
