@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-01c51033: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-f79f2bc2: UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-6dadab51: UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-df7e1bc7: UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-df7e1bc7: UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-fb25c506: UI criterion C-2f2f685e has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-9e414469: UI criterion C-c175f655 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-c4c6e005: UI criterion C-1688efa8 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -266,7 +266,8 @@ accept The hold may be waived. Criterion C-d365d748 is the scenario "The web sou
 
 ## Q-010: Hold H-df7e1bc7: UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -282,6 +283,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-e2ce7344 is the scenario "Known codes" of the requirement "One catalogue maps API error codes to text": it checks that typeof messageFor is a function and that messageFor, called with each key of BASE_MESSAGES, answers the ten codes of task 2.1 with their catalogue text, each ending with a full stop, 1 to 200 characters long and not containing its own code. Every step is a call to a module export and its return value; the built page exposes neither messageFor nor BASE_MESSAGES, and the design states that no route renders ErrorPanel or any other consumer of the catalogue in this unit, so no end-to-end test can observe the whole catalogue. The Node test in web/src/kit/messages.test.ts asserts each value of the scenario: the sorted keys equal the ten codes of task 2.1, each BASE_MESSAGES entry and each messageFor answer equal the task 2.1 text, and every text ends with a full stop, is 1 to 200 characters and does not contain its code. That test passed in the latest report, and the catalogue in messages.ts holds exactly those ten codes with those texts. The browser proves the one message a page shows in this unit, the AUTHZ_UNAVAILABLE notice, through the nav journey. The criterion is checked where it can be, and the unit can go on as it stands.
 ---
 
 ## Q-011: Hold H-fb25c506: UI criterion C-2f2f685e has no end-to-end test (not_testable); see the generated UI tests table
