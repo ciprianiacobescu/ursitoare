@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 9.1 | technical | e2e/test_m1_web_kit.py:129 — set_content page without <title>/<html lang> can never pass assert_accessible |
 | Q-002 | accepted | 9.1 | technical | test/support/a11y-setup.test.ts:167 (C-574fc31a) depends on e2e/conftest.py:68, which the frozen-test guard protects |
-| Q-003 | open | none | verdict | Criterion C-c5c7028c (web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-c5c7028c (web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser): accept as satisfied? |
 | Q-004 | answered | none | verdict | Finding F-4e8c6585: Toast Dismiss button turns white-on-white on hover |
 | Q-005 | answered | none | verdict | Hold H-4c6c7bb5: UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-2b729d71: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -97,7 +97,7 @@ Edit `e2e/conftest.py`: replace the stub body of assert_accessible (lines 68-70)
 
 ## Q-003: Criterion C-c5c7028c (web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): I could not verify the criterion from the files alone. The helper in e2e/conftest.py reads axe from node_modules, runs it with WCAG 2.x tags and fails with "<id> (<impact>): <targets>" for serious or critical violations, which would yield a message holding button-name if axe reports that rule at cri
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -125,6 +125,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands; I checked it in a browser, not from the files alone. With axe-core 4.14.0 in Chromium and the assert_accessible body of task 9.1, a page with lang and a title holding a labelled button returns, and the same page holding a button without a name fails with "accessibility violations: button-name (critical): button", a message that holds button-name. A bare set_content page with no lang and no title fails both cases with document-title and html-has-lang (serious), which is why the journey tests wrap the button in a minimal document (Q-001). The tracing test checks only that the second case fails, not that its message holds button-name; that is a weak test, not a missing behaviour, and is left for a tests feedback after the merge rather than a fix unit whose red test could not fail.
 ---
 
 ## Q-004: Finding F-4e8c6585: Toast Dismiss button turns white-on-white on hover
