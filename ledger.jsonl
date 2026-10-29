@@ -134,3 +134,5 @@
 {"at":"2026-10-29T07:35:47Z","by":"harness","reason":"the cause is gone: openspec:add-api-pep is awaiting_human","type":"plan.resumed"}
 {"at":"2026-10-29T07:35:49Z","attempt":1,"cost_usd":1.273351,"runs":2,"type":"plan.charged","unit":"openspec:add-api-pep"}
 {"at":"2026-10-29T07:35:49Z","run":"r-20261029T0735Z-b17c","type":"unit.dispatched","unit":"openspec:add-api-pep"}
+{"at":"2026-10-29T09:47:04Z","attempt":1,"cost_usd":1.650927,"runs":3,"type":"plan.charged","unit":"openspec:add-api-pep"}
+{"at":"2026-10-29T09:47:04Z","run":"r-20261029T0947Z-5526","type":"unit.dispatched","unit":"openspec:add-api-pep"}
