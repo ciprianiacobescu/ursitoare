@@ -733,6 +733,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ## Q-032: Hold H-addeb9d5: UI criterion C-c5c7028c has no end-to-end test (fails_at_head); see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.41 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
