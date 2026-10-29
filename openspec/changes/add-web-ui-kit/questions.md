@@ -44,7 +44,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-031 | answered | none | verdict | Hold H-d7bde6af: UI criterion C-574fc31a has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-032 | answered | none | verdict | Hold H-addeb9d5: UI criterion C-c5c7028c has no end-to-end test (fails_at_head); see the generated UI tests table |
 | Q-033 | open | none | verdict | Finding F-448496f9: Focus outline on the toast Dismiss button is below 3:1 against the toast background |
-| Q-034 | open | none | verdict | Hold H-8f5a5712: UI criterion C-c5c7028c has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-034 | answered | none | verdict | Hold H-8f5a5712: UI criterion C-c5c7028c has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-035 | open | none | verdict | Hold H-45552067: UI criterion C-817bfc8a has no end-to-end test (not_testable); see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -804,7 +804,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-034: Hold H-8f5a5712: UI criterion C-c5c7028c has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.41 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -821,6 +821,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. Criterion C-c5c7028c was answered in Q-003 and is now judged pass: I ran the assert_accessible body of task 9.1 with axe-core 4.14.0 in Chromium, and on a page with lang and a title a labelled button returns while a button without a name fails with a message holding button-name. This round the test writer gave up only because it could not find how to import the helper, which is no defect of the unit.
 ---
 
 ## Q-035: Hold H-45552067: UI criterion C-817bfc8a has no end-to-end test (not_testable); see the generated UI tests table
