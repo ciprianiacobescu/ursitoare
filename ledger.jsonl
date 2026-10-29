@@ -130,3 +130,4 @@
 {"at":"2026-10-29T07:11:08Z","branch":"l4/archive/openspec/add-oidc-login","head":"e0bc27bd4b45eee4a4593aaba02382153c78bdbe","type":"unit.branch_deleted","unit":"openspec:add-oidc-login"}
 {"at":"2026-10-29T07:11:09Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-api-pep"}
 {"at":"2026-10-29T07:11:09Z","run":"r-20261029T0711Z-dbf6","type":"unit.dispatched","unit":"openspec:add-api-pep"}
+{"at":"2026-10-29T07:34:15Z","detail":"awaiting_human: no new answers (open: Q-001) (escalated to a person: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-api-pep"}
