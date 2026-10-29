@@ -6,6 +6,7 @@ import type { Principal, SessionContext } from "../identity/index.ts";
 import type { TenantContext } from "../tenancy/index.ts";
 import { checkCsrf } from "./csrf.ts";
 import { ApiError } from "./errors.ts";
+import { decisionPreHandler } from "./pep.ts";
 import type { PepDeps } from "./pep.ts";
 import { auditRefusal } from "./refusal.ts";
 import { sessionVerifier } from "./session-auth.ts";
@@ -375,6 +376,7 @@ export function defineRoute(server: FastifyInstance, def: RouteDef): void {
     handler: RouteDef["handler"];
     exposeHeadRoute?: boolean;
     onRequest?: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+    preHandler?: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
   } = {
     method: def.method,
     url: def.url,
@@ -384,6 +386,7 @@ export function defineRoute(server: FastifyInstance, def: RouteDef): void {
   if (!isPublic(def.auth)) {
     options.exposeHeadRoute = false;
     options.onRequest = authenticationHook(server, def.auth);
+    options.preHandler = decisionPreHandler(server, def);
   }
   try {
     server.route(options);

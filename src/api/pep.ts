@@ -1,9 +1,12 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
 import type { Clock } from "../core/index.ts";
 import type { PolicyEngine } from "../pdp/index.ts";
 import type { TenantPool } from "../tenancy/index.ts";
+import { enforce } from "./decision.ts";
+import { ApiError } from "./errors.ts";
 import { RouteDefinitionError } from "./route.ts";
+import type { RouteDef } from "./route.ts";
 import type { PepState } from "./types.ts";
 
 export interface PepDeps {
@@ -44,4 +47,23 @@ export function installPep(server: FastifyInstance, deps: PepDeps): void {
   }
   const state: PepState = { deps, origin: parsePublicBaseUrl(deps.publicBaseUrl) };
   server.decorate("ursitoarePep", state);
+}
+
+export function decisionPreHandler(
+  server: FastifyInstance,
+  def: RouteDef,
+): (request: FastifyRequest, reply: FastifyReply) => Promise<void> {
+  return async (request) => {
+    const pep = server.ursitoarePep;
+    const tenant = request.tenant;
+    const action = def.action;
+    if (pep === undefined || tenant === undefined || action === undefined) {
+      throw new ApiError(503, "AUTHZ_UNAVAILABLE", "Authorization is unavailable");
+    }
+    await enforce(request, pep.deps, action, {
+      type: "Tenant",
+      id: tenant.tenantId,
+      tenantId: tenant.tenantId,
+    });
+  };
 }
