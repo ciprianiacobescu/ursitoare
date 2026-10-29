@@ -11,6 +11,7 @@ import json
 import os
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 import pytest
 
@@ -63,3 +64,45 @@ def fresh_state() -> None:
         raise _reset_failure(url, error.code, error.read().decode("utf-8")) from error
     except urllib.error.URLError as error:
         raise RuntimeError(f"could not reach the stack control URL {url}: {error}") from error
+
+
+def _axe_source() -> str:
+    """Read the installed axe-core bundle; never fetch it from the network."""
+    bundle = (
+        Path(__file__).resolve().parent.parent
+        / "node_modules"
+        / "axe-core"
+        / "axe.min.js"
+    )
+    try:
+        return bundle.read_text(encoding="utf-8")
+    except OSError:
+        pytest.fail("axe-core is not installed: run pnpm install")
+
+
+AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]
+AXE_BLOCKING_IMPACTS = ("serious", "critical")
+
+
+def assert_accessible(page) -> None:
+    """Run axe-core against the page, offline and without weakening its CSP."""
+    if page.evaluate("typeof window.axe") == "undefined":
+        page.evaluate(_axe_source())
+    found = page.evaluate(
+        """async (tags) => { const r = await window.axe.run(document, { runOnly: { type: "tag", values: tags } });
+        return r.violations.map((v) => ({ id: v.id, impact: v.impact, targets: v.nodes.map((n) => n.target.join(" ")) })); }""",
+        AXE_TAGS,
+    )
+    blocking = sorted(
+        (v for v in found if v["impact"] in AXE_BLOCKING_IMPACTS),
+        key=lambda v: v["id"],
+    )
+    if blocking:
+        pytest.fail(
+            "accessibility violations: "
+            + "; ".join(
+                f'{v["id"]} ({v["impact"]}): {", ".join(v["targets"][:3])}'
+                for v in blocking
+            ),
+            pytrace=False,
+        )
