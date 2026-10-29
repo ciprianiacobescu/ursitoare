@@ -1,5 +1,6 @@
 import { Link, NavLink, Outlet } from "react-router";
 
+import { ToastRegion } from "../kit/ToastRegion.tsx";
 import { navItems } from "./features.ts";
 
 export function Shell() {
@@ -26,6 +27,7 @@ export function Shell() {
         <Outlet />
       </main>
       <footer className="app-footer">Ursitoare workflow engine</footer>
+      <ToastRegion />
     </div>
   );
 }
