@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-ui-kit: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-web-ui-kit: FAIL (round 2)
 
 traceability: 29/30 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 29/30 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base merged: main@f16558c6dc as f4cea31e9a (2 commits) |
-| 1 | integrity | ok | 69.8 | 10 sub-checks (+2 unfrozen by human answers); scope: 38 changed file(s) |
-| 2 | build | ok | 22.5 |  |
-| 3 | tests | ok | 77.8 |  |
-| 4 | traceability | ok | 0.1 | 27/30 criteria covered |
-| 4a | audit sampling | ok | 16.1 | 2 not_testable, 7 skipped; support files at the base: 12 |
-| 5 | ui test generation | ok | 275.6 | 2 accepted, 1 fails_at_head, 27 not_testable |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: test/support/a11y-setup.ts, web/src/app/Shell.tsx, web/src/kit/ConfirmDialog.tsx, web/src/kit/EmptyState.tsx, web/src/kit/ErrorPanel.tsx and 13 more |
-| 8 | s1 judge | ok | 2.2 | 30/30 criteria judged by jev |
-| 9 | judge | ok | 181.3 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 4a | audit sampling | reused | 0.0 | reused (round 1) |
+| 5 | ui test generation | reused | 0.0 | reused (round 1) |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -277,6 +277,39 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-63a759ac | not_testable | - | - | The code under test is TypeScript (visibleNav, capabilityNotice) tested with Node; a pytest test cannot import or call it, and no Python interface is shown. |
 | C-ab614782 | not_testable | - | - | dialogOutcome is a TypeScript function in web/src/kit/confirm.ts with no Python interface for pytest to import; repo layout and Node test setup are not shown. |
 
+## Answers to verdict questions
+
+- Q-003 accept C-c5c7028c by agent (CLAUDECODE): The criterion is satisfied as it stands; I checked it in a browser, not from the files alone. With axe-core 4.14.0 in Chromium and the assert_accessible body of task 9.1, a page with lang and a title holding a labelled button returns, and the same page holding a button without a name fails with "acc...
+- Q-004 reject F-4e8c6585 by the delegate (claude-fable-5-1 via claude-code): The finding is correct. The Dismiss button in ToastRegion carries the class ui-button, and theme.css gives .ui-button:hover (specificity 0,2,0) a background of var(--ui-color-bg), which tokens.css sets to #ffffff. The rule .ui-toast button (specificity 0,1,1) sets the colour to var(--ui-color-toast-...
+- Q-005 accept H-4c6c7bb5 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-cb608bfb is the scenario "Contrast maths and colour parsing": it exercises the pure functions contrastRatio and parseHexColour and the KitError thrown for a non-hex argument. None of that is rendered or reachable from the browser; the spec scenario names only func...
+- Q-006 accept H-2b729d71 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-16a71639 is the scenario "The real tokens meet WCAG AA": it reads tokens.css, parses it with parseTokens, and checks CONTRAST_PAIRS, checkTokenContrast and the six-digit hex form of every colour token. Every step of the scenario is a function call on a file and it...
+- Q-007 accept H-01c51033 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-4f003820 is the scenario "A weak, missing or malformed token is reported": it calls checkTokenContrast on the real tokens with --ui-color-text weakened to #777777, then without --ui-color-focus, then with --ui-color-border set to red, and checks the failure ids, r...
+- Q-008 accept H-f79f2bc2 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-92d9ac35 is the scenario "The theme uses only tokens": it reads the source file theme.css, asserts that findRawColours reports nothing on it and that it holds :focus-visible, prefers-reduced-motion and the six kit classes, and then runs findRawColours on a five-li...
+- Q-009 accept H-6dadab51 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-d365d748 is the scenario "The web sources have no inline styles": it calls findInlineStyleUse on a four-line sample and expects lines 1, 2 and 3 reported, then runs it over every .tsx file under web/src and over web/index.html and expects nothing. Every step is a ...
+- Q-010 accept H-df7e1bc7 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-e2ce7344 is the scenario "Known codes" of the requirement "One catalogue maps API error codes to text": it checks that typeof messageFor is a function and that messageFor, called with each key of BASE_MESSAGES, answers the ten codes of task 2.1 with their catalogu...
+- Q-011 accept H-fb25c506 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-2f2f685e is the scenario "Unknown codes use the fallback" of the requirement "One catalogue maps API error codes to text": messageFor, called with "NO_SUCH_CODE", "", "forbidden", "constructor" and "__proto__", must answer FALLBACK_MESSAGE every time. Every step i...
+- Q-012 accept H-9e414469 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-c175f655 is the scenario "Later units register codes" of the requirement "One catalogue maps API error codes to text": registerMessages is called twice with the same TEST_ONLY_FLOW_LOCKED entry, then with a duplicate FORBIDDEN text, a changed text for the register...
+- Q-013 accept H-c4c6e005 by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. Criterion C-1688efa8 is the scenario "Parsing the answer" of the requirement "The nav shows only the entries the user's capabilities allow": parseMe gets a valid body with capabilities ["read_flow", "Bad Cap", 5, "read_flow"], then bodies with capabilities as a string, withou...
+- Q-014 accept H-560ac014 by agent (CLAUDECODE): The hold may be waived. Criterion C-30ed04fb is the scenario "The loader outcomes": every step is the capability loader's load() and reset() on a fake client, a pure call and its return value, which no page shows. Its inputs (a fake API client) cannot be given to the running app, so a browser test c...
+- Q-015 accept H-ae010e47 by agent (CLAUDECODE): The hold may be waived. Criterion C-0dae9ed5 is the scenario "Concurrent callers and abort": every step is the capability loader's load() on a fake client and an aborted signal, a pure call and its return value, which no page shows. Its inputs (a fake API client and an aborted signal) cannot be give...
+- Q-016 accept H-5049f1f6 by agent (CLAUDECODE): The hold may be waived. Criterion C-63a759ac is the scenario "Filtering and the notice": every step is visibleNav and capabilityNotice on hand-made states and a registry, a pure call and its return value, which no page shows. Its inputs (a hand-made registry with entries a, b and c) cannot be given ...
+- Q-017 accept H-b1fcc4d1 by agent (CLAUDECODE): The hold may be waived. Criterion C-af45d5fe is the scenario "The models": every step is emptyStateModel and loadingStateModel, a pure call and its return value, which no page shows. The design's paragraph "DOM behaviour and its check" places this check in that function, says no route renders ErrorP...
+- Q-018 accept H-fc3f4be7 by agent (CLAUDECODE): The hold may be waived. Criterion C-844ec099 is the scenario "Invalid properties": every step is emptyStateModel and loadingStateModel with invalid properties, a pure call and its return value, which no page shows. The design's paragraph "DOM behaviour and its check" places this check in that functi...
+- Q-019 accept H-05b93ca5 by agent (CLAUDECODE): The hold may be waived. Criterion C-c0db9325 is the scenario "The model by status": every step is errorPanelModel on ApiRequestError values, a pure call and its return value, which no page shows. The design's paragraph "DOM behaviour and its check" places this check in that function, says no route r...
+- Q-020 accept H-59ec0374 by agent (CLAUDECODE): The hold may be waived. Criterion C-38740f97 is the scenario "A decision id is shown only when it is well formed": every step is errorPanelModel on ApiRequestError values, a pure call and its return value, which no page shows. The design's paragraph "DOM behaviour and its check" places this check in...
+- Q-021 accept H-ca25c180 by agent (CLAUDECODE): The hold may be waived. Criterion C-b735b791 is the scenario "Copying": every step is copyText on fake clipboards and copyNotice, a pure call and its return value, which no page shows. The design's paragraph "DOM behaviour and its check" places this check in that function, says no route renders Erro...
+- Q-022 accept H-223efcbe by agent (CLAUDECODE): The hold may be waived. Criterion C-c149362f is the scenario "The model": every step is confirmDialogModel, a pure call and its return value, which no page shows. The design's paragraph "DOM behaviour and its check" places this check in that function, says no route renders ErrorPanel, ConfirmDialog,...
+- Q-023 accept H-b19cf330 by agent (CLAUDECODE): The hold may be waived. Criterion C-51e7abfc is the scenario "The confirm button must name the action": every step is confirmDialogModel, a pure call and its return value, which no page shows. The design's paragraph "DOM behaviour and its check" places this check in that function, says no route rend...
+- Q-024 accept H-c9b87e6e by agent (CLAUDECODE): The hold may be waived. Criterion C-ab614782 is the scenario "Only the exact value confirms": every step is dialogOutcome, a pure call and its return value, which no page shows. The design's paragraph "DOM behaviour and its check" places this check in that function, says no route renders ErrorPanel,...
+- Q-025 accept H-da07a80f by agent (CLAUDECODE): The hold may be waived. Criterion C-0b8be44d is the scenario "Expiry by the clock": every step is a toast queue on a KitClock, a pure call and its return value, which no page shows. Its inputs (a fake KitClock) cannot be given to the running app, so a browser test cannot express the scenario. Its No...
+- Q-026 accept H-2d42146d by agent (CLAUDECODE): The hold may be waived. Criterion C-278586d8 is the scenario "Duplicates, limits and invalid specs": every step is push and createToastQueue on a toast queue, a pure call and its return value, which no page shows. Its inputs (queues with chosen limits) cannot be given to the running app, so a browse...
+- Q-027 accept H-af0cdc46 by agent (CLAUDECODE): The hold may be waived. Criterion C-c3a242d6 is the scenario "Subscribers and stable snapshots": every step is subscribe, push, dismiss and list on a toast queue, a pure call and its return value, which no page shows. Its inputs (throwing and unsubscribing subscribers) cannot be given to the running...
+- Q-028 accept H-d560b43e by agent (CLAUDECODE): The hold may be waived. Criterion C-16e957dd is the scenario "Focus after a dismissal and the default queue": every step is focusAfterDismiss, toast and dismissToast on the default queue, a pure call and its return value, which no page shows. Its inputs (chosen toast id lists) cannot be given to the...
+- Q-029 accept H-72502a0f by agent (CLAUDECODE): The hold may be waived. Criterion C-d9604877 is the scenario "Documentation matches the component files": every step is a comparison of KEYBOARD with the kit's file names, a comparison of source files, which no page shows. Its inputs (the kit's source file names) cannot be given to the running app, ...
+- Q-030 accept H-0e29e529 by agent (CLAUDECODE): The hold may be waived. Criterion C-a1ea941d is the scenario "The setup check": every step is checkAccessibilitySetup on throwaway roots, a Node check of the repository's files, which no page shows. Its inputs (throwaway repository roots) cannot be given to the running app, so a browser test cannot ...
+- Q-031 accept H-d7bde6af by agent (CLAUDECODE): The hold may be waived. Criterion C-574fc31a is the scenario "The repository is set up and axe-core's licence is allowed": every step is checkAccessibilitySetup, scanNpmStore and checkLicences on the repository, a Node check of the repository's files and installed packages, which no page shows. Its ...
+- Q-032 accept H-addeb9d5 by agent (CLAUDECODE): The unit can go on as it stands: the generated test fails at the head because of its page, not the helper. I ran the task 9.1 assert_accessible body with axe-core 4.14.0 in Chromium: a bare set_content page with no lang and no title fails even with a labelled button, on document-title and html-has-l...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -309,7 +342,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-d9604877 | web-kit › Every component documents its keyboard behaviour › Documentation matches the component files | pass | pass | the judge passed it and a discriminating test passes |
 | C-a1ea941d | web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The setup check | pass | pass | the judge passed it and a discriminating test passes |
 | C-574fc31a | web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The repository is set up and axe-core's licence is allowed | pass | pass | the judge passed it and a discriminating test passes |
-| C-c5c7028c | web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-c5c7028c | web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser | pass | pass | accepted by agent (CLAUDECODE): The criterion is satisfied as it stands; I checked it in a browser, not from the files alone. With axe-core 4.14.0 in Chromium and the assert_accessible body of task 9.1, a page with lang and a title holding a labelled button returns, and the same page holding a butto... |
 | C-5bbabdc1 | web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The M0 pages pass | pass | pass | the judge passed it and a discriminating test passes |
 
 ## Findings
@@ -356,41 +389,15 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] task 7.1: e2e test names differ from the task text (criterion C-f6d2569a): Task 7.1 names test_signed_out_nav_lists_home, test_me_failure_shows_one_notice and test_me_success_keeps_the_nav; the diff names them test_c_f6d2569a_signed_out_nav_lists_home and so on. The two 9.1 tests in the same file also take no fresh_state, while 7.1 says every test in the file does.
 - [minor, judge] The ASSERT_ACCESSIBLE_UNSAFE checks are substring tests over the whole conftest.py (spec gap) (criterion C-a1ea941d): checkAccessibilitySetup flags add_script_tag or bypass_csp anywhere in the file, including comments and other fixtures, and it accepts the words serious and critical appearing anywhere, even if the helper does not use them as blocking impacts.
 - [minor, judge] A blank text for an already registered code is reported as invalid, not as a duplicate (spec gap) (criterion C-c175f655): registerMessages validates every entry before it checks for duplicates, so { FORBIDDEN: " " } throws KIT_MESSAGE_INVALID. An implementation that checks duplicates first would throw KIT_MESSAGE_DUPLICATE.
-- [major, judge] Toast Dismiss button turns white-on-white on hover (criterion C-92d9ac35): The Dismiss button in ToastRegion carries class ui-button. On hover, `.ui-button:hover` (specificity 0,2,0) beats `.ui-toast button` (0,1,1) and sets the background to var(--ui-color-bg) (#ffffff), while `.ui-toast button` keeps color var(--ui-color-toast-text) (#ffffff). The label becomes invisible on hover, which breaks the WCAG AA contrast that the toast-text-on-toast-bg pair is meant to give. axe does not see hover states, so no gate catches it.
+- [major, human] Toast Dismiss button turns white-on-white on hover (criterion C-92d9ac35): The Dismiss button in ToastRegion carries class ui-button. On hover, `.ui-button:hover` (specificity 0,2,0) beats `.ui-toast button` (0,1,1) and sets the background to var(--ui-color-bg) (#ffffff), while `.ui-toast button` keeps color var(--ui-color-toast-text) (#ffffff). The label becomes invisible on hover, which breaks the WCAG AA contrast that the toast-text-on-toast-bg pair is meant to give. axe does not see hover states, so no gate catches it. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding is correct. The Dismiss button in ToastRegion carries the class ui-butto...
 - [minor, judge] A toast can get stuck if its timer fires before Date.now() reaches expiresAt (criterion C-0b8be44d): ToastRegion schedules expire() once for nextExpiry. If expire() then removes nothing, for example because a browser with reduced timer precision rounds Date.now() down, there is no commit and no re-render. nextExpiry stays the same, the effect does not re-run, and the info or success toast never expires.
 - [minor, judge] A repeated push takes the new spec's duration, even null (spec gap) (criterion C-278586d8): A duplicate push recomputes expiresAt from the new spec. A repeat with durationMs null makes a previously expiring toast permanent, and a repeat of an error with durationMs 1000 makes a persistent error expire. The item keeps its position in the list.
 - [minor, judge] maxVisible overflow also drops persistent error toasts (spec gap) (criterion C-278586d8): A push beyond maxVisible drops the oldest item whatever its kind, so an error toast, which should persist until dismissed (WCAG 2.2.1, design.md), can vanish without being dismissed. An implementation that drops the oldest non-error item would behave differently.
 
-## Needs a human
+## Fix unit
 
-- UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-2f2f685e has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-c175f655 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-1688efa8 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-30ed04fb has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-0dae9ed5 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-63a759ac has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-af45d5fe has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-844ec099 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-c0db9325 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-38740f97 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-b735b791 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-c149362f has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-51e7abfc has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-ab614782 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-0b8be44d has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-278586d8 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-c3a242d6 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-16e957dd has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-d9604877 has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-a1ea941d has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-574fc31a has no end-to-end test (not_testable); see the generated UI tests table
-- UI criterion C-c5c7028c has no end-to-end test (fails_at_head); see the generated UI tests table
+Fix unit 1 is created for these tasks:
+- F-4e8c6585 Toast Dismiss button turns white-on-white on hover
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
