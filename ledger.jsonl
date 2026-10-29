@@ -145,3 +145,5 @@
 {"at":"2026-10-29T12:18:01Z","revision":"6f85bb3bd180fee942b4638495e12495299359e9","type":"unit.integrated","unit":"openspec:add-api-pep"}
 {"at":"2026-10-29T12:18:01Z","attempt":1,"cost_usd":1.895602,"runs":3,"type":"plan.charged","unit":"openspec:add-api-pep"}
 {"at":"2026-10-29T12:19:24Z","branch":"l4/archive/openspec/add-api-pep","head":"36314621dfe85e15aa9d5f876e11f8defc535f7f","type":"unit.branch_deleted","unit":"openspec:add-api-pep"}
+{"at":"2026-10-29T12:19:26Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-api-conventions"}
+{"at":"2026-10-29T12:19:26Z","run":"r-20261029T1219Z-7db8","type":"unit.dispatched","unit":"openspec:add-api-conventions"}
