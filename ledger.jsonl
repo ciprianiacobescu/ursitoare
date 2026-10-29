@@ -180,3 +180,4 @@
 {"at":"2026-10-29T20:44:41Z","by":"harness","reason":"the cause is gone: openspec:add-web-ui-kit is awaiting_human","type":"plan.resumed"}
 {"at":"2026-10-29T20:44:43Z","attempt":1,"cost_usd":17.215662,"runs":7,"type":"plan.charged","unit":"openspec:add-web-ui-kit"}
 {"at":"2026-10-29T20:44:43Z","run":"r-20261029T2044Z-1984","type":"unit.dispatched","unit":"openspec:add-web-ui-kit"}
+{"at":"2026-10-29T21:04:35Z","detail":"awaiting_human: no new answers (verdicts open: Q-033, Q-034, Q-035) (escalated to a person: Q-033, Q-034, Q-035)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-ui-kit"}
