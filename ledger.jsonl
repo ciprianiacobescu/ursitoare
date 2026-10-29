@@ -121,3 +121,4 @@
 {"at":"2026-10-29T06:35:34Z","run":"r-20261029T0635Z-75e3","type":"unit.dispatched","unit":"openspec:add-oidc-login"}
 {"at":"2026-10-29T06:51:42Z","detail":"the repository CI is still running on the hand-off commit 4c3ab9e7ce (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"4c3ab9e7cef811a4328434469ce68027cf1323d7","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-oidc-login"}
 {"at":"2026-10-29T07:08:03Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-oidc-login can go on","type":"plan.resumed"}
+{"at":"2026-10-29T07:08:07Z","head":"4c3ab9e7cef811a4328434469ce68027cf1323d7","pr":26,"target_before":"7d42351e900dd490ae80a57dfccb1d7ecef1e710","type":"unit.merge_requested","unit":"openspec:add-oidc-login"}
