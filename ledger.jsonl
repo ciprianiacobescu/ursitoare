@@ -136,3 +136,4 @@
 {"at":"2026-10-29T07:35:49Z","run":"r-20261029T0735Z-b17c","type":"unit.dispatched","unit":"openspec:add-api-pep"}
 {"at":"2026-10-29T09:47:04Z","attempt":1,"cost_usd":1.650927,"runs":3,"type":"plan.charged","unit":"openspec:add-api-pep"}
 {"at":"2026-10-29T09:47:04Z","run":"r-20261029T0947Z-5526","type":"unit.dispatched","unit":"openspec:add-api-pep"}
+{"at":"2026-10-29T11:58:59Z","detail":"the repository CI is still running on the hand-off commit 4b0f42ed8c (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"4b0f42ed8c8cde5e19f1180ae91a7c766f80bd2b","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-api-pep"}
