@@ -117,3 +117,5 @@
 {"at":"2026-10-29T06:05:22Z","run":"r-20261029T0605Z-ba64","type":"unit.dispatched","unit":"openspec:add-oidc-login"}
 {"at":"2026-10-29T06:33:51Z","detail":"awaiting_human: no new answers (open: Q-005) (escalated to a person: Q-005)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-oidc-login"}
 {"at":"2026-10-29T06:35:32Z","by":"harness","reason":"the cause is gone: openspec:add-oidc-login is awaiting_human","type":"plan.resumed"}
+{"at":"2026-10-29T06:35:34Z","attempt":1,"cost_usd":7.302785,"runs":6,"type":"plan.charged","unit":"openspec:add-oidc-login"}
+{"at":"2026-10-29T06:35:34Z","run":"r-20261029T0635Z-75e3","type":"unit.dispatched","unit":"openspec:add-oidc-login"}
