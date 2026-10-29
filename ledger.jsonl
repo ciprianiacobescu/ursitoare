@@ -141,3 +141,6 @@
 {"at":"2026-10-29T12:16:36Z","head":"4b0f42ed8c8cde5e19f1180ae91a7c766f80bd2b","pr":28,"target_before":"e0bc27bd4b45eee4a4593aaba02382153c78bdbe","type":"unit.merge_requested","unit":"openspec:add-api-pep"}
 {"at":"2026-10-29T12:16:41Z","ci":"not_run","head":"4b0f42ed8c8cde5e19f1180ae91a7c766f80bd2b","merge_commit":"6f85bb3bd180fee942b4638495e12495299359e9","method":"squash","pr":28,"raced":false,"type":"unit.merged","unit":"openspec:add-api-pep"}
 {"at":"2026-10-29T12:16:47Z","branch":"l4/openspec/add-api-pep","head":"4b0f42ed8c8cde5e19f1180ae91a7c766f80bd2b","type":"unit.branch_deleted","unit":"openspec:add-api-pep"}
+{"at":"2026-10-29T12:18:01Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"6f85bb3bd180fee942b4638495e12495299359e9","status":"pass","type":"unit.postcheck","unit":"openspec:add-api-pep"}
+{"at":"2026-10-29T12:18:01Z","revision":"6f85bb3bd180fee942b4638495e12495299359e9","type":"unit.integrated","unit":"openspec:add-api-pep"}
+{"at":"2026-10-29T12:18:01Z","attempt":1,"cost_usd":1.895602,"runs":3,"type":"plan.charged","unit":"openspec:add-api-pep"}

@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-29T12:18:01Z",
+  "integrated_revision": "6f85bb3bd180fee942b4638495e12495299359e9",
+  "merge_commit": "6f85bb3bd180fee942b4638495e12495299359e9",
+  "plan_digest": "11f838df12453fb7",
+  "plan_id": "m1",
+  "postcheck": "pass",
+  "pr": 28,
+  "receipt_id": "m1/openspec:add-api-pep/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "4b0f42ed8c8cde5e19f1180ae91a7c766f80bd2b",
+  "spec_digest": "3638c6b23e6ad91d",
+  "target": "main",
+  "unit_id": "openspec:add-api-pep"
+}
