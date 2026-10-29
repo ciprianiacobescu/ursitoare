@@ -44,6 +44,7 @@ Edit `e2e/test_m1_web_kit.py`: in test_assert_accessible_accepts_a_named_button 
 ## Q-002: test/support/a11y-setup.test.ts:167 (C-574fc31a) depends on e2e/conftest.py:68, which the frozen-test guard protects
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the answer would unfreeze e2e/conftest.py of task 9.1, a test-support file: a person's change (delegate.unfreeze opens test files only)
 - **Blocking tasks:** 9.1
 - **Kind:** technical
 - **Asked:** 2026-10-29T20:02Z by glm, run r-20261029T1943Z-8995, task 9.1
