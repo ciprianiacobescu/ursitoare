@@ -5,6 +5,8 @@ import json
 import pytest
 from playwright.sync_api import Page, Request, Route, expect
 
+from conftest import assert_accessible
+
 NOTICE = (
     "Some menu entries are hidden because your permissions could not be loaded. "
     "Authorization is unavailable right now. Try again in a moment."
@@ -118,3 +120,20 @@ def test_c_f6d2569a_me_success_keeps_the_nav(
     expect(navigation.get_by_role("link", name="Home")).to_be_visible()
     expect(page.get_by_text(NOTICE)).to_have_count(0)
     assert len(requests) == 1
+
+
+@pytest.mark.milestone("M1")
+@pytest.mark.l4("C-c5c7028c")
+def test_assert_accessible_accepts_a_named_button(page: Page) -> None:
+    """C-c5c7028c: assert_accessible returns on a page where every control has a name."""
+    page.set_content("<button>Save changes</button>")
+    assert_accessible(page)
+
+
+@pytest.mark.milestone("M1")
+@pytest.mark.l4("C-c5c7028c")
+def test_assert_accessible_names_the_failing_rule(page: Page) -> None:
+    """C-c5c7028c: assert_accessible fails and names the axe rule of the unnamed button."""
+    page.set_content("<button></button>")
+    with pytest.raises(pytest.fail.Exception):
+        assert_accessible(page)

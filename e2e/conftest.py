@@ -63,3 +63,8 @@ def fresh_state() -> None:
         raise _reset_failure(url, error.code, error.read().decode("utf-8")) from error
     except urllib.error.URLError as error:
         raise RuntimeError(f"could not reach the stack control URL {url}: {error}") from error
+
+
+def assert_accessible(page) -> None:
+    """Stub (task 9.1 red step): implemented in the green step of this task."""
+    raise NotImplementedError
