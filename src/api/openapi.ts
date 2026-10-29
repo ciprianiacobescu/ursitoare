@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 
 import { ERROR_CODES } from "./error-codes.ts";
+import { defineRoute, listDefinedRoutes } from "./route.ts";
 import type { DefinedRoute } from "./route.ts";
 
 const API_METHODS = new Set<string>(["GET", "POST", "PUT", "PATCH", "DELETE"]);
@@ -224,6 +225,13 @@ export function renderOpenApi(doc: unknown): string {
   return `${JSON.stringify(sortValue(doc), null, 2)}\n`;
 }
 
-export function registerOpenApiRoute(_server: FastifyInstance, _opts: { version: string }): void {
-  throw new Error("not implemented");
+export function registerOpenApiRoute(server: FastifyInstance, opts: { version: string }): void {
+  defineRoute(server, {
+    method: "GET",
+    url: "/api/v1/openapi.json",
+    auth: { kind: "public", reason: "static" },
+    schema: {},
+    errors: [],
+    handler: async () => buildOpenApiDocument(listDefinedRoutes(server), { version: opts.version }),
+  });
 }
