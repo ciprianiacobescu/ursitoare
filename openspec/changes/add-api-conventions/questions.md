@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 3.3 | technical | src/api/idempotency.test.ts:162 — the release-refusing wrapper calls the real client's query method unbound |
 | Q-002 | accepted | 3.3 | technical | src/api/idempotency.test.ts:254 — a JavaScript counter cannot be undone by rolling back the transaction |
 | Q-003 | accepted | 3.3 | technical | src/api/idempotency.test.ts:219 — response_body::text of a jsonb column cannot yield the compact JSON.stringify text |
-| Q-004 | open | 3.4 | technical | src/api/idempotent-response.test.ts:215 |
+| Q-004 | accepted | 3.4 | technical | src/api/idempotent-response.test.ts:215 |
 <!-- l4:index:end -->
 
 ---
@@ -94,7 +94,8 @@ Edit `src/api/idempotency.test.ts`: change the expected body strings at lines 21
 
 ## Q-004: src/api/idempotent-response.test.ts:215
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.4
 - **Kind:** technical
 - **Asked:** 2026-10-29T14:58Z by glm, run r-20261029T1412Z-bf29, task 3.4
