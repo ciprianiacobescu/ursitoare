@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | open | none | verdict | Criterion C-c5c7028c (web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser): accept as satisfied? |
 | Q-004 | answered | none | verdict | Finding F-4e8c6585: Toast Dismiss button turns white-on-white on hover |
 | Q-005 | answered | none | verdict | Hold H-4c6c7bb5: UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-006 | open | none | verdict | Hold H-2b729d71: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-2b729d71: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-01c51033: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-f79f2bc2: UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-6dadab51: UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -178,7 +178,8 @@ accept The hold may be waived. Criterion C-cb608bfb is the scenario "Contrast ma
 
 ## Q-006: Hold H-2b729d71: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -194,6 +195,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-16a71639 is the scenario "The real tokens meet WCAG AA": it reads tokens.css, parses it with parseTokens, and checks CONTRAST_PAIRS, checkTokenContrast and the six-digit hex form of every colour token. Every step of the scenario is a function call on a file and its return value; nothing in it is a user-visible browser behaviour, so an end-to-end test cannot express it. The Node test in web/src/kit/contrast.test.ts asserts each value of the scenario (sixteen pairs in design order, ids text-on-bg first and focus-on-surface last, checkTokenContrast returning an empty array, every colour token six-digit hex) and passed in the latest report. The design's test plan assigns exactly this split: the Node tests check the token maths, and the browser proves the theme through axe contrast on real pages, which the four page tests of e2e/test_m0_skeleton.py do by calling assert_accessible after their last step. The criterion is checked where it can be, and the unit can go on as it stands.
 ---
 
 ## Q-007: Hold H-01c51033: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table
