@@ -35,7 +35,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-022 | answered | none | verdict | Hold H-223efcbe: UI criterion C-c149362f has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-023 | answered | none | verdict | Hold H-b19cf330: UI criterion C-51e7abfc has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-024 | answered | none | verdict | Hold H-c9b87e6e: UI criterion C-ab614782 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-025 | open | none | verdict | Hold H-da07a80f: UI criterion C-0b8be44d has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-025 | answered | none | verdict | Hold H-da07a80f: UI criterion C-0b8be44d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-026 | open | none | verdict | Hold H-2d42146d: UI criterion C-278586d8 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-027 | open | none | verdict | Hold H-af0cdc46: UI criterion C-c3a242d6 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-028 | open | none | verdict | Hold H-d560b43e: UI criterion C-16e957dd has no end-to-end test (not_testable); see the generated UI tests table |
@@ -596,7 +596,7 @@ accept The hold may be waived. Criterion C-ab614782 is the scenario "Only the ex
 
 ## Q-025: Hold H-da07a80f: UI criterion C-0b8be44d has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.41 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -613,6 +613,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-0b8be44d is the scenario "Expiry by the clock": every step is a toast queue on a KitClock, a pure call and its return value, which no page shows. Its inputs (a fake KitClock) cannot be given to the running app, so a browser test cannot express the scenario. Its Node test is traced in the traceability table as covered, passed with a red assertion, so the behaviour is proven; the unit only counts it as UI-facing because it changed files under web/.
 ---
 
 ## Q-026: Hold H-2d42146d: UI criterion C-278586d8 has no end-to-end test (not_testable); see the generated UI tests table
