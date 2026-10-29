@@ -13,6 +13,36 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 9.1 | technical | e2e/test_m1_web_kit.py:129 — set_content page without <title>/<html lang> can never pass assert_accessible |
 | Q-002 | accepted | 9.1 | technical | test/support/a11y-setup.test.ts:167 (C-574fc31a) depends on e2e/conftest.py:68, which the frozen-test guard protects |
+| Q-003 | open | none | verdict | Criterion C-c5c7028c (web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser): accept as satisfied? |
+| Q-004 | open | none | verdict | Finding F-4e8c6585: Toast Dismiss button turns white-on-white on hover |
+| Q-005 | open | none | verdict | Hold H-4c6c7bb5: UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-006 | open | none | verdict | Hold H-2b729d71: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-007 | open | none | verdict | Hold H-01c51033: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-008 | open | none | verdict | Hold H-f79f2bc2: UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-009 | open | none | verdict | Hold H-6dadab51: UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-010 | open | none | verdict | Hold H-df7e1bc7: UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-011 | open | none | verdict | Hold H-fb25c506: UI criterion C-2f2f685e has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-012 | open | none | verdict | Hold H-9e414469: UI criterion C-c175f655 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-013 | open | none | verdict | Hold H-c4c6e005: UI criterion C-1688efa8 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-014 | open | none | verdict | Hold H-560ac014: UI criterion C-30ed04fb has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-015 | open | none | verdict | Hold H-ae010e47: UI criterion C-0dae9ed5 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-016 | open | none | verdict | Hold H-5049f1f6: UI criterion C-63a759ac has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-017 | open | none | verdict | Hold H-b1fcc4d1: UI criterion C-af45d5fe has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-018 | open | none | verdict | Hold H-fc3f4be7: UI criterion C-844ec099 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-019 | open | none | verdict | Hold H-05b93ca5: UI criterion C-c0db9325 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-020 | open | none | verdict | Hold H-59ec0374: UI criterion C-38740f97 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-021 | open | none | verdict | Hold H-ca25c180: UI criterion C-b735b791 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-022 | open | none | verdict | Hold H-223efcbe: UI criterion C-c149362f has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-023 | open | none | verdict | Hold H-b19cf330: UI criterion C-51e7abfc has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-024 | open | none | verdict | Hold H-c9b87e6e: UI criterion C-ab614782 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-025 | open | none | verdict | Hold H-da07a80f: UI criterion C-0b8be44d has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-026 | open | none | verdict | Hold H-2d42146d: UI criterion C-278586d8 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-027 | open | none | verdict | Hold H-af0cdc46: UI criterion C-c3a242d6 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-028 | open | none | verdict | Hold H-d560b43e: UI criterion C-16e957dd has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-029 | open | none | verdict | Hold H-72502a0f: UI criterion C-d9604877 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-030 | open | none | verdict | Hold H-0e29e529: UI criterion C-a1ea941d has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-031 | open | none | verdict | Hold H-d7bde6af: UI criterion C-574fc31a has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-032 | open | none | verdict | Hold H-addeb9d5: UI criterion C-c5c7028c has no end-to-end test (fails_at_head); see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -59,6 +89,623 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `e2e/conftest.py`: replace the stub body of assert_accessible (lines 68-70) with the implementation of task 9.1: add 'from pathlib import Path' to the imports, add a module function _axe_source() that reads Path(__file__).resolve().parent.parent / 'node_modules' / 'axe-core' / 'axe.min.js' as utf8 and calls pytest.fail("axe-core is not installed: run pnpm install") on OSError, add the lines AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] and AXE_BLOCKING_IMPACTS = ("serious", "critical"), and give assert_accessible the exact body shown in tasks.md task 9.1 (inject _axe_source() when window.axe is undefined, run window.axe.run with runOnly type tag over AXE_TAGS, and pytest.fail with the joined 'id (impact): targets' list when a violation has impact serious or critical); every other existing statement (module docstring, imports, base_url, e2e_profile, _reset_failure, fresh_state) stays.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-003: Criterion C-c5c7028c (web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-c5c7028c (web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser)
+
+### Context
+Criterion C-c5c7028c (web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser) is needs human after round 1.
+
+Scenario:
+\- **WHEN** the journey calls `assert_accessible(page)` on a loaded page with a labelled button, and on a page with a button without a name
+\- **THEN** the first returns and the second fails the test with a message that holds `button-name`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m1_web_kit::test_assert_accessible_accepts_a_named_button[chromium] (no proof that it discriminates (no red, audit or generated record)); test_m1_web_kit::test_assert_accessible_names_the_failing_rule[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Finding F-4e8c6585: Toast Dismiss button turns white-on-white on hover
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it (criterion C-92d9ac35).
+
+Title: Toast Dismiss button turns white-on-white on hover
+Detail: The Dismiss button in ToastRegion carries class ui-button. On hover, `.ui-button:hover` (specificity 0,2,0) beats `.ui-toast button` (0,1,1) and sets the background to var(--ui-color-bg) (#ffffff), while `.ui-toast button` keeps color var(--ui-color-toast-text) (#ffffff). The label becomes invisible on hover, which breaks the WCAG AA contrast that the toast-text-on-toast-bg pair is meant to give. axe does not see hover states, so no gate catches it.
+Suggested fix: Add a `.ui-toast button:hover` rule (or `.ui-toast .ui-button:hover`) that keeps a transparent background or uses toast colours.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-92d9ac35 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Hold H-4c6c7bb5: UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-006: Hold H-2b729d71: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-007: Hold H-01c51033: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-008: Hold H-f79f2bc2: UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-009: Hold H-6dadab51: UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-010: Hold H-df7e1bc7: UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-011: Hold H-fb25c506: UI criterion C-2f2f685e has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-2f2f685e has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-012: Hold H-9e414469: UI criterion C-c175f655 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-c175f655 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-013: Hold H-c4c6e005: UI criterion C-1688efa8 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-1688efa8 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-014: Hold H-560ac014: UI criterion C-30ed04fb has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-30ed04fb has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-015: Hold H-ae010e47: UI criterion C-0dae9ed5 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-0dae9ed5 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-016: Hold H-5049f1f6: UI criterion C-63a759ac has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-63a759ac has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-017: Hold H-b1fcc4d1: UI criterion C-af45d5fe has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-af45d5fe has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-018: Hold H-fc3f4be7: UI criterion C-844ec099 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-844ec099 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-019: Hold H-05b93ca5: UI criterion C-c0db9325 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-c0db9325 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-020: Hold H-59ec0374: UI criterion C-38740f97 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-38740f97 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-021: Hold H-ca25c180: UI criterion C-b735b791 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-b735b791 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-022: Hold H-223efcbe: UI criterion C-c149362f has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-c149362f has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-023: Hold H-b19cf330: UI criterion C-51e7abfc has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-51e7abfc has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-024: Hold H-c9b87e6e: UI criterion C-ab614782 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-ab614782 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-025: Hold H-da07a80f: UI criterion C-0b8be44d has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-0b8be44d has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-026: Hold H-2d42146d: UI criterion C-278586d8 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-278586d8 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-027: Hold H-af0cdc46: UI criterion C-c3a242d6 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-c3a242d6 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-028: Hold H-d560b43e: UI criterion C-16e957dd has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-16e957dd has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-029: Hold H-72502a0f: UI criterion C-d9604877 has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-d9604877 has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-030: Hold H-0e29e529: UI criterion C-a1ea941d has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-a1ea941d has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-031: Hold H-d7bde6af: UI criterion C-574fc31a has no end-to-end test (not_testable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-574fc31a has no end-to-end test (not_testable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-032: Hold H-addeb9d5: UI criterion C-c5c7028c has no end-to-end test (fails_at_head); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-c5c7028c has no end-to-end test (fails_at_head); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
 
 ### Answer
 <!-- write below this line -->
