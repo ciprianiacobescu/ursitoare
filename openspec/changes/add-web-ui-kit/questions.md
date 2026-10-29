@@ -31,7 +31,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-018 | answered | none | verdict | Hold H-fc3f4be7: UI criterion C-844ec099 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-019 | answered | none | verdict | Hold H-05b93ca5: UI criterion C-c0db9325 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-020 | answered | none | verdict | Hold H-59ec0374: UI criterion C-38740f97 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-021 | open | none | verdict | Hold H-ca25c180: UI criterion C-b735b791 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-021 | answered | none | verdict | Hold H-ca25c180: UI criterion C-b735b791 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-022 | open | none | verdict | Hold H-223efcbe: UI criterion C-c149362f has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-023 | open | none | verdict | Hold H-b19cf330: UI criterion C-51e7abfc has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-024 | open | none | verdict | Hold H-c9b87e6e: UI criterion C-ab614782 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -508,7 +508,7 @@ accept The hold may be waived. Criterion C-38740f97 is the scenario "A decision 
 
 ## Q-021: Hold H-ca25c180: UI criterion C-b735b791 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.41 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -525,6 +525,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-b735b791 is the scenario "Copying": every step is copyText on fake clipboards and copyNotice, a pure call and its return value, which no page shows. The design's paragraph "DOM behaviour and its check" places this check in that function, says no route renders ErrorPanel, ConfirmDialog, EmptyState or LoadingState yet, and leaves the remaining markup to the units that mount it. Its Node test is traced in the traceability table as covered, passed with a red assertion, so the behaviour is proven; the unit only counts it as UI-facing because it changed files under web/.
 ---
 
 ## Q-022: Hold H-223efcbe: UI criterion C-c149362f has no end-to-end test (not_testable); see the generated UI tests table
