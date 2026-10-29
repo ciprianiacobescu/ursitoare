@@ -712,6 +712,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ## Q-031: Hold H-d7bde6af: UI criterion C-574fc31a has no end-to-end test (not_testable); see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.41 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
