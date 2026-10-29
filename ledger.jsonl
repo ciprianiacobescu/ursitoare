@@ -169,3 +169,4 @@
 {"at":"2026-10-29T19:43:50Z","attempt":1,"cost_usd":1.655284,"runs":3,"type":"plan.charged","unit":"openspec:add-web-ui-kit"}
 {"at":"2026-10-29T19:43:50Z","run":"r-20261029T1943Z-8995","type":"unit.dispatched","unit":"openspec:add-web-ui-kit"}
 {"at":"2026-10-29T20:05:18Z","detail":"awaiting_human: no new answers (open: Q-002) (escalated to a person: Q-002)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-ui-kit"}
+{"at":"2026-10-29T20:09:42Z","by":"harness","reason":"the cause is gone: openspec:add-web-ui-kit is awaiting_human","type":"plan.resumed"}
