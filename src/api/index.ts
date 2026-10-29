@@ -30,3 +30,4 @@ export {
   RouteDefinitionError,
 } from "./route.ts";
 export type { PepDeps } from "./pep.ts";
+export { buildInternalServer } from "./internal.ts";
