@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 9.1 | technical | e2e/test_m1_web_kit.py:129 — set_content page without <title>/<html lang> can never pass assert_accessible |
 | Q-002 | accepted | 9.1 | technical | test/support/a11y-setup.test.ts:167 (C-574fc31a) depends on e2e/conftest.py:68, which the frozen-test guard protects |
 | Q-003 | open | none | verdict | Criterion C-c5c7028c (web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser): accept as satisfied? |
-| Q-004 | open | none | verdict | Finding F-4e8c6585: Toast Dismiss button turns white-on-white on hover |
+| Q-004 | answered | none | verdict | Finding F-4e8c6585: Toast Dismiss button turns white-on-white on hover |
 | Q-005 | open | none | verdict | Hold H-4c6c7bb5: UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-2b729d71: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-01c51033: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -129,7 +129,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-004: Finding F-4e8c6585: Toast Dismiss button turns white-on-white on hover
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -150,6 +151,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct. The Dismiss button in ToastRegion carries the class ui-button, and theme.css gives .ui-button:hover (specificity 0,2,0) a background of var(--ui-color-bg), which tokens.css sets to #ffffff. The rule .ui-toast button (specificity 0,1,1) sets the colour to var(--ui-color-toast-text), also #ffffff, and its transparent background loses to the hover rule. So while the pointer hovers the Dismiss button of a toast, its label is white on white, which contradicts the requirement that the theme meets WCAG AA contrast and defeats the toast-text-on-toast-bg pair of design decision 3. axe does not evaluate hover states, so no gate catches it, and this is a real accessibility defect that a user of the toast will meet on every dismissal. The fix belongs in theme.css only, with colours still taken from var(--ui-color-*) tokens so that findRawColours stays empty. WHEN the pointer hovers the Dismiss button inside a toast THEN the button keeps a transparent or toast-background colour under its toast-text-coloured label so that the label and its background still reach a contrast ratio of at least 4.5:1.
 ---
 
 ## Q-005: Hold H-4c6c7bb5: UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table
