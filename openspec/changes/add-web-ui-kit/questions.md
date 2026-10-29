@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 9.1 | technical | e2e/test_m1_web_kit.py:129 — set_content page without <title>/<html lang> can never pass assert_accessible |
-| Q-002 | open | 9.1 | technical | test/support/a11y-setup.test.ts:167 (C-574fc31a) depends on e2e/conftest.py:68, which the frozen-test guard protects |
+| Q-002 | accepted | 9.1 | technical | test/support/a11y-setup.test.ts:167 (C-574fc31a) depends on e2e/conftest.py:68, which the frozen-test guard protects |
 <!-- l4:index:end -->
 
 ---
@@ -43,7 +43,7 @@ Edit `e2e/test_m1_web_kit.py`: in test_assert_accessible_accepts_a_named_button 
 
 ## Q-002: test/support/a11y-setup.test.ts:167 (C-574fc31a) depends on e2e/conftest.py:68, which the frozen-test guard protects
 
-- **Status:** open
+- **Status:** accepted
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the answer would unfreeze e2e/conftest.py of task 9.1, a test-support file: a person's change (delegate.unfreeze opens test files only)
 - **Blocking tasks:** 9.1
 - **Kind:** technical
