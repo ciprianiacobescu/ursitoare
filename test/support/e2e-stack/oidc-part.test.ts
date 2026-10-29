@@ -8,7 +8,7 @@ import { after, test } from "node:test";
 
 import { loadConfig } from "../../../src/config/index.ts";
 import { resolveTenantForToken } from "../../../src/identity/index.ts";
-import { ensureDefaultTenant } from "../../../src/tenancy/index.ts";
+import { ensureDefaultTenant, withTenantTx } from "../../../src/tenancy/index.ts";
 
 import { E2E_TENANT_NAME } from "./database-part.ts";
 import { PARTS_DIR, discoverParts } from "./discover.ts";
@@ -192,13 +192,17 @@ test("C-f8d77e43 the oidc part starts seeds the default tenant and closes", asyn
     );
     assert.deepEqual(tenantA, tenant, "org-a at the fake maps to the default tenant");
 
-    const idps = await db.ownerPool.query<{
-      tenant_id: string;
-      issuer: string;
-      organization: string;
-    }>("SELECT tenant_id, issuer, organization FROM ursitoare.tenant_idp");
+    const idps = await withTenantTx(db.ownerPool, tenant, async (tx) =>
+      (
+        await tx.query<{
+          tenant_id: string;
+          issuer: string;
+          organization: string;
+        }>("SELECT tenant_id, issuer, organization FROM ursitoare.tenant_idp")
+      ).rows,
+    );
     assert.deepEqual(
-      idps.rows,
+      idps,
       [{ tenant_id: tenant.tenantId, issuer: fake.issuer, organization: "org-a" }],
       "the seed provisions one tenant_idp row",
     );
