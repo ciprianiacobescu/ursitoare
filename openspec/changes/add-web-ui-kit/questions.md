@@ -46,6 +46,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-033 | answered | none | verdict | Finding F-448496f9: Focus outline on the toast Dismiss button is below 3:1 against the toast background |
 | Q-034 | answered | none | verdict | Hold H-8f5a5712: UI criterion C-c5c7028c has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-035 | answered | none | verdict | Hold H-45552067: UI criterion C-817bfc8a has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-036 | open | none | verdict | Hold H-1208e5d8: UI criterion C-c5c7028c has no end-to-end test (uncollectable); see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -845,3 +846,24 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ### Answer
 <!-- write below this line -->
 accept The unit can go on as it stands. Criterion C-817bfc8a, the white-on-white hover regression, is covered by its Node test (covered, passed with a red assertion in the traceability table), which checks that the toast Dismiss button keeps the toast background and text colour on hover in the theme rules. The test writer marked it not_testable only because it found no route that shows a toast; the stylesheet rule it would check is the one the Node test reads.
+
+---
+
+## Q-036: Hold H-1208e5d8: UI criterion C-c5c7028c has no end-to-end test (uncollectable); see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 5, verifier
+
+### Context
+After round 5 the verifier cannot decide on its own: UI criterion C-c5c7028c has no end-to-end test (uncollectable); see the generated UI tests table
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
