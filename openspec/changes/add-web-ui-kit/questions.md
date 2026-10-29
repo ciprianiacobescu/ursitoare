@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-013 | answered | none | verdict | Hold H-c4c6e005: UI criterion C-1688efa8 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-560ac014: UI criterion C-30ed04fb has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-ae010e47: UI criterion C-0dae9ed5 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-016 | open | none | verdict | Hold H-5049f1f6: UI criterion C-63a759ac has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-016 | answered | none | verdict | Hold H-5049f1f6: UI criterion C-63a759ac has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-b1fcc4d1: UI criterion C-af45d5fe has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-fc3f4be7: UI criterion C-844ec099 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-019 | open | none | verdict | Hold H-05b93ca5: UI criterion C-c0db9325 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -398,7 +398,7 @@ accept The hold may be waived. Criterion C-0dae9ed5 is the scenario "Concurrent 
 
 ## Q-016: Hold H-5049f1f6: UI criterion C-63a759ac has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.41 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -415,6 +415,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-63a759ac is the scenario "Filtering and the notice": every step is visibleNav and capabilityNotice on hand-made states and a registry, a pure call and its return value, which no page shows. Its inputs (a hand-made registry with entries a, b and c) cannot be given to the running app, so a browser test cannot express the scenario. Its Node test is traced in the traceability table as covered, passed with a red assertion, so the behaviour is proven; the unit only counts it as UI-facing because it changed files under web/.
 ---
 
 ## Q-017: Hold H-b1fcc4d1: UI criterion C-af45d5fe has no end-to-end test (not_testable); see the generated UI tests table
