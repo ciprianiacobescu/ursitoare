@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | accepted | 9.1 | technical | test/support/a11y-setup.test.ts:167 (C-574fc31a) depends on e2e/conftest.py:68, which the frozen-test guard protects |
 | Q-003 | open | none | verdict | Criterion C-c5c7028c (web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser): accept as satisfied? |
 | Q-004 | answered | none | verdict | Finding F-4e8c6585: Toast Dismiss button turns white-on-white on hover |
-| Q-005 | open | none | verdict | Hold H-4c6c7bb5: UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-4c6c7bb5: UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-2b729d71: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-01c51033: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-f79f2bc2: UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -156,7 +156,8 @@ reject The finding is correct. The Dismiss button in ToastRegion carries the cla
 
 ## Q-005: Hold H-4c6c7bb5: UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -172,6 +173,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-cb608bfb is the scenario "Contrast maths and colour parsing": it exercises the pure functions contrastRatio and parseHexColour and the KitError thrown for a non-hex argument. None of that is rendered or reachable from the browser; the spec scenario names only function calls and their return values, and the design's test plan assigns the contrast maths to Node tests while the browser proves the theme through axe contrast on real pages. The Node test in web/src/kit/contrast.test.ts asserts every value of the scenario (the four ratios within 0.01, the four parse results, and the KIT_TOKEN_INVALID throw) and passed in the latest report, so the criterion is checked where it can be. An end-to-end test for it is not possible and not needed, and the unit can go on as it stands.
 ---
 
 ## Q-006: Hold H-2b729d71: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table
