@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: src/api/route.test.ts:75: GET /health makes the listDefinedRoutes assertion outdated
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path src/api/coverage.test.ts of task 2.1; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 2.1
 - **Kind:** technical
 - **Asked:** 2026-10-29T07:31Z by deepseek-free, run r-20261029T0711Z-dbf6, task 2.1
