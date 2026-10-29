@@ -14,6 +14,7 @@ export {
   respondIdempotent,
 } from "./idempotency.ts";
 export type { IdempotentResponse } from "./idempotency.ts";
+export { buildOpenApiDocument, renderOpenApi, registerOpenApiRoute } from "./openapi.ts";
 export type { ErrorEnvelope } from "./errors.ts";
 export type { HealthStatus, HealthCheck, HealthReport, HealthRegistry } from "./health.ts";
 export { HealthCheckError, createHealthRegistry } from "./health.ts";
