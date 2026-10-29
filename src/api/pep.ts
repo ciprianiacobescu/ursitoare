@@ -6,7 +6,7 @@ import type { TenantPool } from "../tenancy/index.ts";
 import { enforce } from "./decision.ts";
 import { ApiError } from "./errors.ts";
 import { RouteDefinitionError } from "./route.ts";
-import type { RouteDef } from "./route.ts";
+import type { ResourceRef, RouteDef } from "./route.ts";
 import type { PepState } from "./types.ts";
 
 export interface PepDeps {
@@ -60,10 +60,20 @@ export function decisionPreHandler(
     if (pep === undefined || tenant === undefined || action === undefined) {
       throw new ApiError(503, "AUTHZ_UNAVAILABLE", "Authorization is unavailable");
     }
-    await enforce(request, pep.deps, action, {
-      type: "Tenant",
-      id: tenant.tenantId,
-      tenantId: tenant.tenantId,
-    });
+    let ref: ResourceRef;
+    if (def.resource !== undefined) {
+      const loaded = await def.resource(request);
+      if (loaded === null) {
+        throw new ApiError(404, "NOT_FOUND", "Resource not found");
+      }
+      ref = loaded;
+    } else {
+      ref = {
+        type: "Tenant",
+        id: tenant.tenantId,
+        tenantId: tenant.tenantId,
+      };
+    }
+    await enforce(request, pep.deps, action, ref);
   };
 }
