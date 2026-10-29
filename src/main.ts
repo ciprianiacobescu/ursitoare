@@ -16,6 +16,7 @@ import {
   isWebBuilt,
   listDefinedRoutes,
   registerMeRoute,
+  registerOpenApiRoute,
   registerWebApp,
 } from "./api/index.ts";
 import type { AppConfig } from "./config/index.ts";
@@ -203,6 +204,7 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     };
     installPep(server, pep);
     registerMeRoute(server, pep);
+    registerOpenApiRoute(server, { version: VERSION });
     await definePublicRoutes(server, "oidc", (scoped) =>
       registerOidcRoutes(scoped, {
         config: config.oidc ?? null,
