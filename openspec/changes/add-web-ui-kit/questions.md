@@ -98,6 +98,7 @@ Edit `e2e/conftest.py`: replace the stub body of assert_accessible (lines 68-70)
 ## Q-003: Criterion C-c5c7028c (web-kit › assert_accessible fails a journey on serious or critical axe violations, offline › The helper in a browser): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): I could not verify the criterion from the files alone. The helper in e2e/conftest.py reads axe from node_modules, runs it with WCAG 2.x tags and fails with "<id> (<impact>): <targets>" for serious or critical violations, which would yield a message holding button-name if axe reports that rule at cri
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
