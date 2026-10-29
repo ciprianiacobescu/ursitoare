@@ -38,7 +38,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-025 | answered | none | verdict | Hold H-da07a80f: UI criterion C-0b8be44d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-026 | answered | none | verdict | Hold H-2d42146d: UI criterion C-278586d8 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-027 | answered | none | verdict | Hold H-af0cdc46: UI criterion C-c3a242d6 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-028 | open | none | verdict | Hold H-d560b43e: UI criterion C-16e957dd has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-028 | answered | none | verdict | Hold H-d560b43e: UI criterion C-16e957dd has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-029 | open | none | verdict | Hold H-72502a0f: UI criterion C-d9604877 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-030 | open | none | verdict | Hold H-0e29e529: UI criterion C-a1ea941d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-031 | open | none | verdict | Hold H-d7bde6af: UI criterion C-574fc31a has no end-to-end test (not_testable); see the generated UI tests table |
@@ -662,7 +662,7 @@ accept The hold may be waived. Criterion C-c3a242d6 is the scenario "Subscribers
 
 ## Q-028: Hold H-d560b43e: UI criterion C-16e957dd has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.41 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -679,6 +679,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-16e957dd is the scenario "Focus after a dismissal and the default queue": every step is focusAfterDismiss, toast and dismissToast on the default queue, a pure call and its return value, which no page shows. Its inputs (chosen toast id lists) cannot be given to the running app, so a browser test cannot express the scenario. Its Node test is traced in the traceability table as covered, passed with a red assertion, so the behaviour is proven; the unit only counts it as UI-facing because it changed files under web/.
 ---
 
 ## Q-029: Hold H-72502a0f: UI criterion C-d9604877 has no end-to-end test (not_testable); see the generated UI tests table
