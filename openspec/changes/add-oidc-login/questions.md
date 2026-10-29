@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | accepted | 6.1 | technical | src/identity/oidc/login.test.ts:130-131 authorizationParams asserts an impossible URL origin and path |
 | Q-003 | answered | 7.1 | technical | src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued |
 | Q-004 | accepted | 7.1 | technical | src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued |
-| Q-005 | open | 7.2 | technical | test/support/e2e-stack/oidc-part.test.ts:195-204 a bare owner-pool SELECT of tenant_idp cannot see committed rows under FORCE RLS |
+| Q-005 | accepted | 7.2 | technical | test/support/e2e-stack/oidc-part.test.ts:195-204 a bare owner-pool SELECT of tenant_idp cannot see committed rows under FORCE RLS |
 <!-- l4:index:end -->
 
 ---
@@ -121,7 +121,7 @@ Edit `src/main.oidc.test.ts`: change line 55 to `async function writeSecretFiles
 
 ## Q-005: test/support/e2e-stack/oidc-part.test.ts:195-204 a bare owner-pool SELECT of tenant_idp cannot see committed rows under FORCE RLS
 
-- **Status:** open
+- **Status:** accepted
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path test/support/e2e-stack/oidc-part.test.ts of task 7.2; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 7.2
 - **Kind:** technical
