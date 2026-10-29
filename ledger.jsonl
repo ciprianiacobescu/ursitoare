@@ -155,3 +155,4 @@
 {"at":"2026-10-29T15:00:45Z","run":"r-20261029T1500Z-34ea","type":"unit.dispatched","unit":"openspec:add-api-conventions"}
 {"at":"2026-10-29T15:57:27Z","detail":"the repository CI is still running on the hand-off commit 60fd74083f (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"60fd74083f734c7cb0354c18defd15a4bbc7fde8","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-api-conventions"}
 {"at":"2026-10-29T16:16:10Z","by":"harness","reason":"the cause is gone: the merge of openspec:add-api-conventions can go on","type":"plan.resumed"}
+{"at":"2026-10-29T16:16:17Z","head":"60fd74083f734c7cb0354c18defd15a4bbc7fde8","pr":30,"target_before":"3133746b66faca2d9a7109a40791b750dc8d47bb","type":"unit.merge_requested","unit":"openspec:add-api-conventions"}
