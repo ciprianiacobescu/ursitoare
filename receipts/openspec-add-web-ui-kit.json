@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-29T21:50:13Z",
+  "integrated_revision": "fe66136ce61d2326270b445e3e2878a645e6f702",
+  "merge_commit": "fe66136ce61d2326270b445e3e2878a645e6f702",
+  "plan_digest": "11f838df12453fb7",
+  "plan_id": "m1",
+  "postcheck": "pass",
+  "pr": 32,
+  "receipt_id": "m1/openspec:add-web-ui-kit/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "28a0177b8df15d0e8096d49bda8943714e485956",
+  "spec_digest": "f21891c52e3d0b9e",
+  "target": "main",
+  "unit_id": "openspec:add-web-ui-kit"
+}
