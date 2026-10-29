@@ -126,7 +126,10 @@ def test_c_f6d2569a_me_success_keeps_the_nav(
 @pytest.mark.l4("C-c5c7028c")
 def test_assert_accessible_accepts_a_named_button(page: Page) -> None:
     """C-c5c7028c: assert_accessible returns on a page where every control has a name."""
-    page.set_content("<button>Save changes</button>")
+    page.set_content(
+        '<html lang="en"><head><title>Kit check</title></head>'
+        "<body><button>Save changes</button></body></html>"
+    )
     assert_accessible(page)
 
 
@@ -134,6 +137,9 @@ def test_assert_accessible_accepts_a_named_button(page: Page) -> None:
 @pytest.mark.l4("C-c5c7028c")
 def test_assert_accessible_names_the_failing_rule(page: Page) -> None:
     """C-c5c7028c: assert_accessible fails and names the axe rule of the unnamed button."""
-    page.set_content("<button></button>")
+    page.set_content(
+        '<html lang="en"><head><title>Kit check</title></head>'
+        "<body><button></button></body></html>"
+    )
     with pytest.raises(pytest.fail.Exception):
         assert_accessible(page)
