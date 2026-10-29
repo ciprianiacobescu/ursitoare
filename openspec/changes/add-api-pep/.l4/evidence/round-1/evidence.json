@@ -1,0 +1,432 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/api/server.ts",
+      "src/api/errors.ts",
+      "src/api",
+      "src/api/web.ts",
+      "src/identity",
+      "src/pdp",
+      "src/tenancy",
+      "src/core",
+      "src/config",
+      "test/support/pg.ts",
+      "src/main.api.test.ts",
+      "src/api/session-auth.ts",
+      "docs/decisions/0002",
+      "src/api/index.ts",
+      "src/main.ts",
+      "test/arch/modules.ts",
+      "src/api/{route,pep,coverage,public-group,internal,me,list-filter}.ts",
+      "src/config/internal.ts",
+      "src/tenancy/profile.ts",
+      "test/support/api-session.ts",
+      "src/api/{types,session-auth,csrf,refusal,decision}.ts",
+      "src/api/{server,web,index}.ts",
+      "src/config/{config,index}.ts",
+      "src/tenancy/index.ts",
+      "src/api/route.test.ts",
+      "src/api/route.ts",
+      "src/api/types.ts",
+      "src/api/coverage.test.ts",
+      "src/api/coverage.ts",
+      "src/api/pep.test.ts",
+      "src/api/pep.ts",
+      "src/api/csrf.test.ts",
+      "src/api/csrf.ts",
+      "src/api/refusal.ts",
+      "src/api/decision.test.ts",
+      "src/api/decision.ts",
+      "src/api/resource.test.ts",
+      "src/api/list-filter.test.ts",
+      "src/api/list-filter.ts",
+      "src/api/public-group.test.ts",
+      "src/api/web.classify.test.ts",
+      "src/api/public-group.ts",
+      "src/config/internal.test.ts",
+      "src/api/internal.test.ts",
+      "src/config/index.ts",
+      "src/config/config.ts",
+      "src/api/internal.ts",
+      "src/tenancy/profile.test.ts",
+      "src/api/me.test.ts",
+      "src/api/me.ts",
+      "**/FST_ERR_CTP*",
+      "**/^[a-z][a-z0-9_.]{0,63}$",
+      "**/route.ts",
+      "**/pep.ts",
+      "**/types.ts",
+      "**/request.principal?",
+      "**/tenant?",
+      "**/sessionContext?",
+      "**/ursitoarePep?",
+      "**/csrf.ts",
+      "**/refusal.ts",
+      "**/decision.ts",
+      "**/coverage.ts",
+      "**/internal.ts",
+      "**/me.ts",
+      "**/index.ts",
+      "**/[]",
+      "**/*.test.ts",
+      "**/invoke_*",
+      "**/ROUTE_*",
+      "^/[\\x21-\\x7e]*$",
+      "**/?",
+      "**/^[A-Z][A-Z0-9_]{0,63}$",
+      "**/^[a-z][a-z0-9_]{0,31}$",
+      "**/index.html",
+      "**/^[0-9]{1,5}$",
+      "module api",
+      "module config",
+      "module core",
+      "module docs",
+      "module identity",
+      "module main",
+      "module main.api.test",
+      "module pdp",
+      "module tenancy",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-api-pep/.l4/ledger/r-20261029T0711Z-dbf6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-api-pep/.l4/ledger/r-20261029T0735Z-b17c.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-api-pep/.l4/ledger/r-20261029T0947Z-5526.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-api-pep/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-api-pep/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/coverage.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/coverage.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/csrf.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/csrf.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/decision.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/decision.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/internal.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/internal.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/list-filter.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/list-filter.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/me.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/me.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/pep.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/pep.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/public-group.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/public-group.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/refusal.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/resource.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/route.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/route.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/server.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/session-auth.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/types.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/web.classify.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/web.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/config.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/index.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/internal.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/config/internal.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.api.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/index.ts",
+        "module": "tenancy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/profile.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tenancy/profile.ts",
+        "module": "tenancy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/api-session.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/coverage.ts, src/api/csrf.ts, src/api/decision.ts, src/api/index.ts, src/api/internal.ts and 17 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/coverage.ts",
+      "src/api/csrf.ts",
+      "src/api/decision.ts",
+      "src/api/index.ts",
+      "src/api/internal.ts",
+      "src/api/list-filter.ts",
+      "src/api/me.ts",
+      "src/api/pep.ts",
+      "src/api/public-group.ts",
+      "src/api/refusal.ts",
+      "src/api/route.ts",
+      "src/api/server.ts",
+      "src/api/session-auth.ts",
+      "src/api/types.ts",
+      "src/api/web.ts",
+      "src/config/config.ts",
+      "src/config/index.ts",
+      "src/config/internal.ts",
+      "src/main.ts",
+      "src/tenancy/index.ts",
+      "src/tenancy/profile.ts",
+      "test/support/api-session.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 818,
+      "passed": 818,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 37,
+      "new_passed": 37,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

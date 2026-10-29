@@ -13,3 +13,26 @@ export type { WebTarget } from "./web-paths.ts";
 export { RESERVED_ROOTS, classifyWebPath } from "./web-paths.ts";
 export type { WebAppOptions, WebAppErrorCode } from "./web.ts";
 export { WebAppError, DEFAULT_WEB_DIST, registerWebApp, isWebBuilt } from "./web.ts";
+export type {
+  PublicReason,
+  AuthKind,
+  ResourceRef,
+  SqlPredicate,
+  ListFilter,
+  RouteDef,
+  AuthVerifier,
+  DefinedRoute,
+} from "./route.ts";
+export {
+  defineRoute,
+  listDefinedRoutes,
+  registerAuthVerifier,
+  RouteDefinitionError,
+} from "./route.ts";
+export type { PepDeps } from "./pep.ts";
+export { installPep } from "./pep.ts";
+export { registerMeRoute } from "./me.ts";
+export { definePublicRoutes } from "./public-group.ts";
+export { checkRouteCoverage } from "./coverage.ts";
+export { listPredicate } from "./list-filter.ts";
+export { buildInternalServer } from "./internal.ts";
