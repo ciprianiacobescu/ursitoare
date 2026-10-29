@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 2.1 | technical | src/api/route.test.ts:75: GET /health makes the listDefinedRoutes assertion outdated |
+| Q-001 | accepted | 2.1 | technical | src/api/route.test.ts:75: GET /health makes the listDefinedRoutes assertion outdated |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/api/route.test.ts:75: GET /health makes the listDefinedRoutes assertion outdated
 
-- **Status:** open
+- **Status:** accepted
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path src/api/coverage.test.ts of task 2.1; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 2.1
 - **Kind:** technical
