@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-29T07:09:21Z",
+  "integrated_revision": "a10fb0e3811383d9a703a593d269a3ffa254a8c5",
+  "merge_commit": "a10fb0e3811383d9a703a593d269a3ffa254a8c5",
+  "plan_digest": "11f838df12453fb7",
+  "plan_id": "m1",
+  "postcheck": "pass",
+  "pr": 26,
+  "receipt_id": "m1/openspec:add-oidc-login/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "4c3ab9e7cef811a4328434469ce68027cf1323d7",
+  "spec_digest": "e492433ea3bc3d53",
+  "target": "main",
+  "unit_id": "openspec:add-oidc-login"
+}
