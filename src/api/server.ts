@@ -7,6 +7,8 @@ import type { Logger, Span, Tracer } from "../observability/index.ts";
 import { ApiError, toErrorResponse } from "./errors.ts";
 import { createHealthRegistry } from "./health.ts";
 import type { HealthRegistry } from "./health.ts";
+import { defineRoute } from "./route.ts";
+import type { UrsitoareRouteState } from "./types.ts";
 
 export interface ServerDeps {
   readonly version: string;
@@ -15,6 +17,7 @@ export interface ServerDeps {
   readonly tracer: Tracer;
   readonly health?: HealthRegistry;
   readonly healthCheckTimeoutMs?: number;
+  readonly listener?: "public" | "internal";
 }
 
 const REQUEST_ID_PATTERN = /^[A-Za-z0-9._-]{1,64}$/;
@@ -38,6 +41,21 @@ export function buildServer(deps: ServerDeps): Promise<FastifyInstance> {
     },
     return503OnClosing: false,
     ajv: { customOptions: { removeAdditional: false, allErrors: false } },
+  });
+
+  const routes: UrsitoareRouteState = {
+    listener: deps.listener ?? "public",
+    defined: [],
+    observed: [],
+  };
+  server.decorate("ursitoareRoutes", routes);
+  server.addHook("onRoute", (routeOptions) => {
+    const methods = Array.isArray(routeOptions.method)
+      ? routeOptions.method
+      : [routeOptions.method];
+    for (const method of methods) {
+      routes.observed.push({ method, url: routeOptions.url });
+    }
   });
 
   server.addHook("onRequest", async (request) => {
@@ -68,24 +86,33 @@ export function buildServer(deps: ServerDeps): Promise<FastifyInstance> {
     reply.header("x-request-id", request.id);
   });
 
-  server.get("/health", async (request, reply) => {
-    const timeoutMs = deps.healthCheckTimeoutMs ?? DEFAULT_HEALTH_CHECK_TIMEOUT_MS;
-    const report = await health.run(timeoutMs);
+  if (routes.listener !== "internal") {
+    defineRoute(server, {
+      method: "GET",
+      url: "/health",
+      auth: { kind: "public", reason: "health" },
+      schema: {},
+      errors: [],
+      handler: async (request, reply) => {
+        const timeoutMs = deps.healthCheckTimeoutMs ?? DEFAULT_HEALTH_CHECK_TIMEOUT_MS;
+        const report = await health.run(timeoutMs);
 
-    for (const failure of report.failures) {
-      request.log.warn(
-        { check: failure.name, reason: failure.reason },
-        "health check failed",
-      );
-    }
+        for (const failure of report.failures) {
+          request.log.warn(
+            { check: failure.name, reason: failure.reason },
+            "health check failed",
+          );
+        }
 
-    reply.header("cache-control", "no-store");
-    if (report.status === "ok") {
-      return { ...healthPayload(deps.version), checks: report.checks };
-    }
-    reply.code(503);
-    return { status: "fail", version: deps.version, checks: report.checks };
-  });
+        reply.header("cache-control", "no-store");
+        if (report.status === "ok") {
+          return { ...healthPayload(deps.version), checks: report.checks };
+        }
+        reply.code(503);
+        return { status: "fail", version: deps.version, checks: report.checks };
+      },
+    });
+  }
 
   server.setErrorHandler((error, request, reply) => {
     const mapped = toErrorResponse(error);

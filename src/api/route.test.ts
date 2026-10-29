@@ -75,6 +75,15 @@ test("C-5a782e1a a public route registers and answers", async () => {
   assert.deepEqual(listDefinedRoutes(server), [
     {
       method: "GET",
+      url: "/health",
+      auth: { kind: "public", reason: "health" },
+      action: null,
+      errors: [],
+      schema: {},
+      listener: "public",
+    },
+    {
+      method: "GET",
       url: "/ping",
       auth: { kind: "public", reason: "well_known" },
       action: null,
@@ -190,7 +199,7 @@ test("C-b74fec9d a non-public route needs a known action", async () => {
 
   assert.deepEqual(
     listDefinedRoutes(server).map((route) => route.url),
-    ["/api/v1/test/self"],
+    ["/health", "/api/v1/test/self"],
   );
 
   await server.close();
@@ -278,7 +287,10 @@ test("C-1788d011 bad definitions are refused with their reason", async () => {
     { reason: "auth" },
   );
 
-  assert.deepEqual(listDefinedRoutes(server), []);
+  assert.deepEqual(
+    listDefinedRoutes(server).filter((route) => route.url !== "/health"),
+    [],
+  );
   for (const url of ["/x", "/api/v1/test/route", "/api/v1/test/resource-without-action"]) {
     const response = await server.inject({ method: "GET", url });
     assert.equal(response.statusCode, 404);
