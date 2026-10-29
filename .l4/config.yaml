@@ -183,11 +183,11 @@ roles:
   - delegate-fable
 implementer:
   escalate_after: 2
+  max_task_attempts: 3
   # Delegate choice 2026-10-29: from 17:33Z deepseek-free hung on every call of add-web-ui-kit (seven idle timeouts in
-  # a row, most with no token at all; the hello still passed). Two such attempts used 2 of 3 attempts, leaving glm one
-  # try and claude-sonnet none; 5 gives glm two and claude-sonnet the last. A 5m idle timeout halves the 20 minutes a
-  # task lost to the hangs before glm took it.
-  max_task_attempts: 5
+  # a row, most with no token at all; the hello still passed), and each task lost 20 minutes to two such attempts
+  # before it moved to glm. A 5m idle timeout halves that. Failures count per phase and per profile (escalate_after for
+  # a profile with a successor, max_task_attempts for the last), so the hangs never took glm's or claude-sonnet's tries.
   idle_timeout: 5m
   # Delegate choice 2026-10-27: AGENTS.md joins every implementer prompt. Without it only an agent CLI that reads the
   # file itself saw its rules (browser-only criteria, assertion-failing red tests), and add-e2e-stack 5.3 and
