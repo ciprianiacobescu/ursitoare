@@ -852,6 +852,7 @@ accept The unit can go on as it stands. Criterion C-817bfc8a, the white-on-white
 ## Q-036: Hold H-1208e5d8: UI criterion C-c5c7028c has no end-to-end test (uncollectable); see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.41 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 5, verifier
