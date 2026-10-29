@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-4c6c7bb5: UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-2b729d71: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-01c51033: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-f79f2bc2: UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-f79f2bc2: UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-6dadab51: UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-df7e1bc7: UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-fb25c506: UI criterion C-2f2f685e has no end-to-end test (not_testable); see the generated UI tests table |
@@ -222,7 +222,8 @@ accept The hold may be waived. Criterion C-4f003820 is the scenario "A weak, mis
 
 ## Q-008: Hold H-f79f2bc2: UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -238,6 +239,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-92d9ac35 is the scenario "The theme uses only tokens": it reads the source file theme.css, asserts that findRawColours reports nothing on it and that it holds :focus-visible, prefers-reduced-motion and the six kit classes, and then runs findRawColours on a five-line sample and expects lines 1 and 2 only. Every step is a scan of a source file or a pure function call on a string and its return value; the browser never exposes findRawColours, and the bundled stylesheet does not show whether the source theme took its colours from tokens, so no end-to-end test can observe the behaviour. The Node test in web/src/kit/contrast.test.ts asserts each value of the scenario (empty result on the real theme, every required selector and class present, and exactly lines 1 and 2 reported on the sample) and passed in the latest report, and theme.css does hold :focus-visible, prefers-reduced-motion and all six classes. The design's test plan assigns exactly this split: Node tests check the theme source and the browser proves the theme through axe contrast on real pages, which the four page tests of e2e/test_m0_skeleton.py do by calling assert_accessible. The criterion is checked where it can be, and the unit can go on as it stands.
 ---
 
 ## Q-009: Hold H-6dadab51: UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table
