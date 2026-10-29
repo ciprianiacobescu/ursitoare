@@ -219,10 +219,41 @@ export async function withIdempotency(
 }
 
 export async function respondIdempotent(
-  _deps: { pool: TenantPool; clock: Clock },
-  _req: FastifyRequest,
-  _reply: FastifyReply,
-  _fn: (tx: TenantTx) => Promise<IdempotentResponse>,
+  deps: { pool: TenantPool; clock: Clock },
+  req: FastifyRequest,
+  reply: FastifyReply,
+  fn: (tx: TenantTx) => Promise<IdempotentResponse>,
 ): Promise<FastifyReply> {
-  throw new Error("not implemented");
+  const principal = req.principal;
+  const tenant = req.tenant;
+  if (principal === undefined || tenant === undefined) {
+    throw new Error("respondIdempotent requires an authenticated principal and tenant");
+  }
+
+  const key = idempotencyKeyOf(req);
+  if (key === null) {
+    const result = await withTenantTx(deps.pool, tenant, fn);
+    reply.code(result.status).send(result.body);
+    return reply;
+  }
+
+  const digest = requestDigestOf({
+    method: req.method,
+    route: req.routeOptions.url ?? req.url,
+    params: req.params,
+    query: req.query,
+    body: req.body,
+  });
+  const result = await withIdempotency(
+    { pool: deps.pool, tenant, clock: deps.clock },
+    { userId: principal.userId },
+    key,
+    digest,
+    fn,
+  );
+  if (result.replayed) {
+    reply.header("Idempotent-Replayed", "true");
+  }
+  reply.code(result.status).send(result.body);
+  return reply;
 }

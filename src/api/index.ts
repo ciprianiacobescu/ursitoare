@@ -6,7 +6,13 @@ export type { CursorPosition, KeyMaterial, CursorKey, CursorScope } from "./curs
 export { deriveCursorKey, encodeCursor, decodeCursor } from "./cursor.ts";
 export type { Page, CursorBinding } from "./pagination.ts";
 export { PAGE_QUERY_SCHEMA, readPage, startAfter, paginate } from "./pagination.ts";
-export { IDEMPOTENCY_HEADER_SCHEMA, idempotencyKeyOf, requestDigestOf, withIdempotency } from "./idempotency.ts";
+export {
+  IDEMPOTENCY_HEADER_SCHEMA,
+  idempotencyKeyOf,
+  requestDigestOf,
+  withIdempotency,
+  respondIdempotent,
+} from "./idempotency.ts";
 export type { IdempotentResponse } from "./idempotency.ts";
 export type { ErrorEnvelope } from "./errors.ts";
 export type { HealthStatus, HealthCheck, HealthReport, HealthRegistry } from "./health.ts";

@@ -212,7 +212,7 @@ test("C-5d258a1a an invalid key a blocked key and a missing principal each refus
     const invalid = envelopeOf(await injectWrite(server, WRITE_URL, { part: "x" }, "has space"));
     assert.equal(invalid.status, 400, "the invalid key refuses with 400");
     assert.equal(invalid.code, "VALIDATION_FAILED", "the invalid key refuses as VALIDATION_FAILED");
-    assert.deepEqual(invalid.fields, [{ field: "headers/idempotency-key" }], "the refusal names the header field");
+    assert.deepEqual(invalid.fields, [{ field: "headers/idempotency-key", message: "must be 1 to 128 visible ASCII characters" }], "the refusal names the header field");
     assert.equal(calls.n, 0, "the refused key starts no write");
 
     const blocked = injectWrite(server, WRITE_URL, { part: "y" }, "kg");
