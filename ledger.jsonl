@@ -172,3 +172,5 @@
 {"at":"2026-10-29T20:09:42Z","by":"harness","reason":"the cause is gone: openspec:add-web-ui-kit is awaiting_human","type":"plan.resumed"}
 {"at":"2026-10-29T20:09:44Z","attempt":1,"cost_usd":2.729547,"runs":4,"type":"plan.charged","unit":"openspec:add-web-ui-kit"}
 {"at":"2026-10-29T20:09:44Z","run":"r-20261029T2009Z-d59b","type":"unit.dispatched","unit":"openspec:add-web-ui-kit"}
+{"at":"2026-10-29T20:33:04Z","attempt":1,"cost_usd":11.491624,"runs":5,"type":"plan.charged","unit":"openspec:add-web-ui-kit"}
+{"at":"2026-10-29T20:33:04Z","run":"r-20261029T2033Z-5460","type":"unit.dispatched","unit":"openspec:add-web-ui-kit"}
