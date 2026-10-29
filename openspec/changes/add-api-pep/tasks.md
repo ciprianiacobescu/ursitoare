@@ -33,7 +33,7 @@
 
 ## 9. Tenant profile
 
-- [ ] 9.1 Write `src/tenancy/profile.test.ts` first (scenario "Own and foreign tenant" with `withTestDatabase()` and `seedTwoTenants(db)`, asserting first with `assert.ok` that `to_regclass('ursitoare.tenant')` exists), then implement `getTenantProfile(tx, ctx)` in `src/tenancy/profile.ts` (`SELECT tenant_id, name, review_profile FROM ursitoare.tenant WHERE tenant_id = $1`, no row is `null`; exported from `src/tenancy/index.ts`), implementing requirement "A tenant profile is read under row-level security"
+- [x] 9.1 Write `src/tenancy/profile.test.ts` first (scenario "Own and foreign tenant" with `withTestDatabase()` and `seedTwoTenants(db)`, asserting first with `assert.ok` that `to_regclass('ursitoare.tenant')` exists), then implement `getTenantProfile(tx, ctx)` in `src/tenancy/profile.ts` (`SELECT tenant_id, name, review_profile FROM ursitoare.tenant WHERE tenant_id = $1`, no row is `null`; exported from `src/tenancy/index.ts`), implementing requirement "A tenant profile is read under row-level security"
 
 ## 10. `GET /api/v1/me`
 

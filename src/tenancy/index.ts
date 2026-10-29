@@ -12,3 +12,4 @@ export type { RouteRegistration } from "./routes.ts";
 export { registerTenantRoute, unregisterTenantRoute, resolveTenantBy } from "./routes.ts";
 export type { CatalogRule, CatalogViolation } from "./catalog.ts";
 export { CATALOG_GLOBAL_TABLES, checkTenancyCatalog } from "./catalog.ts";
+export { getTenantProfile } from "./profile.ts";
