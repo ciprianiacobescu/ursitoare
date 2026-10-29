@@ -46,7 +46,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-033 | answered | none | verdict | Finding F-448496f9: Focus outline on the toast Dismiss button is below 3:1 against the toast background |
 | Q-034 | answered | none | verdict | Hold H-8f5a5712: UI criterion C-c5c7028c has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-035 | answered | none | verdict | Hold H-45552067: UI criterion C-817bfc8a has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-036 | open | none | verdict | Hold H-1208e5d8: UI criterion C-c5c7028c has no end-to-end test (uncollectable); see the generated UI tests table |
+| Q-036 | answered | none | verdict | Hold H-1208e5d8: UI criterion C-c5c7028c has no end-to-end test (uncollectable); see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -851,7 +851,7 @@ accept The unit can go on as it stands. Criterion C-817bfc8a, the white-on-white
 
 ## Q-036: Hold H-1208e5d8: UI criterion C-c5c7028c has no end-to-end test (uncollectable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.41 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -868,3 +868,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. Criterion C-c5c7028c was answered in Q-003 and is judged pass: I ran the assert_accessible body of task 9.1 with axe-core 4.14.0 in Chromium, and on a page with lang and a title a labelled button returns while a button without a name fails with a message holding button-name. The generated test cannot be collected at the merge base because assert_accessible is new in this unit, so no generated test of it can show a base failure; that is no defect of the unit.
