@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Hold H-2b729d71: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-01c51033: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-f79f2bc2: UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-6dadab51: UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-6dadab51: UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-df7e1bc7: UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-fb25c506: UI criterion C-2f2f685e has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-9e414469: UI criterion C-c175f655 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -244,7 +244,8 @@ accept The hold may be waived. Criterion C-92d9ac35 is the scenario "The theme u
 
 ## Q-009: Hold H-6dadab51: UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -260,6 +261,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-d365d748 is the scenario "The web sources have no inline styles": it calls findInlineStyleUse on a four-line sample and expects lines 1, 2 and 3 reported, then runs it over every .tsx file under web/src and over web/index.html and expects nothing. Every step is a pure function call on source text or a scan of repository source files and its return value; the browser never exposes findInlineStyleUse, and a rendered page does not show whether its source files held a style attribute or a style element, so no end-to-end test can observe the behaviour. The Node test in web/src/kit/contrast.test.ts asserts each value of the scenario (lines 1, 2 and 3 on the sample; an empty result for every .tsx file walked recursively under web/src and for web/index.html, each first asserted to exist) and passed in the latest report. The design's test plan assigns exactly this split: contrast.test.ts walks web/src for .tsx files, and the browser proves the theme through axe contrast on real pages with no Content Security Policy message, which the four page tests of e2e/test_m0_skeleton.py do by calling assert_accessible. The criterion is checked where it can be, and the unit can go on as it stands.
 ---
 
 ## Q-010: Hold H-df7e1bc7: UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table
