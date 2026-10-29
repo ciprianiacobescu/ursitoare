@@ -21,6 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: src/api/idempotency.test.ts:162 — the release-refusing wrapper calls the real client's query method unbound
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path src/api/idempotency.test.ts of task 3.3; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 3.3
 - **Kind:** technical
 - **Asked:** 2026-10-29T14:03Z by glm, run r-20261029T1219Z-7db8, task 3.3
