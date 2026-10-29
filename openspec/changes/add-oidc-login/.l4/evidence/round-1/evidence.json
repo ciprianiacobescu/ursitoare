@@ -1,0 +1,430 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/config/secret.ts",
+      "src/api",
+      "src/config/oidc.ts",
+      "src/config/config.ts",
+      "${publicBaseUrl}/auth/oidc/callback",
+      "ursitoare/session-hint",
+      "post_logout_redirect_uri=${publicBaseUrl}/sign-in",
+      "${publicBaseUrl}/sign-in",
+      "parts/25-oidc.ts",
+      "<dataDir>/client-secret",
+      "src/db/migrations/0120_sessions.sql",
+      "src/identity/oidc",
+      "http://127.0.0.1",
+      "src/main.oidc.test.ts",
+      "http://keycloak:8080/realms/ursitoare",
+      "docs/decisions/0002",
+      "src/config/index.ts",
+      "test/arch/modules.ts",
+      "src/identity/oidc/{errors,cookies,return-to,seal,client,id-token,sessions,principal,login,callback,logout,routes}.ts",
+      "src/identity/index.ts",
+      "test/support/oidc-login.ts",
+      "test/support/e2e-stack/oidc-part.ts",
+      "test/support/e2e-stack/parts/25-oidc.ts",
+      "src/main.ts",
+      "src/config/oidc.test.ts",
+      "src/identity/oidc/schema.test.ts",
+      "src/identity/oidc/cookies.test.ts",
+      "src/identity/oidc/return-to.test.ts",
+      "Path=/auth/oidc",
+      "src/identity/oidc/errors.ts",
+      "src/identity/oidc/cookies.ts",
+      "src/identity/oidc/return-to.ts",
+      "src/identity/oidc/client.test.ts",
+      "src/identity/oidc/client.ts",
+      "src/identity/oidc/id-token.test.ts",
+      "src/identity/oidc/id-token.ts",
+      "src/identity/oidc/sessions.test.ts",
+      "src/identity/oidc/sessions.ts",
+      "src/identity/oidc/principal.ts",
+      "src/identity/oidc/login.test.ts",
+      "src/identity/oidc/routes.ts",
+      "src/identity/oidc/login.ts",
+      "src/identity/oidc/seal.ts",
+      "ursitoare/login",
+      "src/identity/oidc/callback.test.ts",
+      "src/identity/oidc/callback.ts",
+      "src/identity/oidc/refusals.test.ts",
+      "src/identity/oidc/csrf.test.ts",
+      "src/identity/oidc/logout.test.ts",
+      "src/identity/oidc/logout.ts",
+      "test/support/e2e-stack/oidc-part.test.ts",
+      "**/^[a-z][a-z0-9_.]{0,63}$",
+      "src/identity/oidc/*.ts",
+      "**/index.ts",
+      "**/*.localhost",
+      "**/^[A-Za-z0-9_-]{43}$",
+      "**/stack.ts",
+      "**/*.test.ts",
+      "**/package.json",
+      "**/oidc.ts",
+      "**/^[A-Za-z0-9._-]{1,128}$",
+      "**/[A-Za-z0-9_.~-]*",
+      "**/[A-Za-z0-9_]+",
+      "**/routes.ts",
+      "**/callback.test.ts",
+      "module ${publicBaseUrl}",
+      "module <dataDir>",
+      "module Path=",
+      "module api",
+      "module config",
+      "module db",
+      "module docs",
+      "module http:",
+      "module identity",
+      "module main",
+      "module main.oidc.test",
+      "module parts",
+      "module post_logout_redirect_uri=${publicBaseUrl}",
+      "module test",
+      "module ursitoare"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-oidc-login/.l4/ledger/r-20261028T2116Z-5ed1.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login/.l4/ledger/r-20261028T2156Z-19b4.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login/.l4/ledger/r-20261028T2235Z-216c.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login/.l4/ledger/r-20261029T0559Z-a74f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login/.l4/ledger/r-20261029T0605Z-ba64.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login/.l4/ledger/r-20261029T0635Z-75e3.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/config/config.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/index.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/oidc.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/config/oidc.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0120_sessions.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/callback.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/callback.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/client.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/client.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/cookies.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/cookies.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/csrf.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/errors.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/id-token.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/id-token.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/login.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/login.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/logout.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/logout.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/principal.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/refusals.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/return-to.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/return-to.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/routes.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/seal.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/sessions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/sessions.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.oidc.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/oidc-part.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/oidc-part.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/parts/25-oidc.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/oidc-login.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/config/config.ts, src/config/index.ts, src/config/oidc.ts, src/identity/oidc/callback.ts, src/identity/oidc/client.ts and 14 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/config/config.ts",
+      "src/config/index.ts",
+      "src/config/oidc.ts",
+      "src/identity/oidc/callback.ts",
+      "src/identity/oidc/client.ts",
+      "src/identity/oidc/cookies.ts",
+      "src/identity/oidc/errors.ts",
+      "src/identity/oidc/id-token.ts",
+      "src/identity/oidc/login.ts",
+      "src/identity/oidc/logout.ts",
+      "src/identity/oidc/principal.ts",
+      "src/identity/oidc/return-to.ts",
+      "src/identity/oidc/routes.ts",
+      "src/identity/oidc/seal.ts",
+      "src/identity/oidc/sessions.ts",
+      "src/main.ts",
+      "test/support/e2e-stack/oidc-part.ts",
+      "test/support/e2e-stack/parts/25-oidc.ts",
+      "test/support/oidc-login.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 781,
+      "passed": 781,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 60,
+      "new_passed": 60,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
