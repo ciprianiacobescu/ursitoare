@@ -15,6 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | accepted | 6.1 | technical | src/identity/oidc/login.test.ts:130-131 authorizationParams asserts an impossible URL origin and path |
 | Q-003 | answered | 7.1 | technical | src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued |
 | Q-004 | accepted | 7.1 | technical | src/main.oidc.test.ts:55-63 writeSecretFiles seeds a client secret the fake provider never issued |
+| Q-005 | open | 7.2 | technical | test/support/e2e-stack/oidc-part.test.ts:195-204 a bare owner-pool SELECT of tenant_idp cannot see committed rows under FORCE RLS |
 <!-- l4:index:end -->
 
 ---
@@ -112,6 +113,30 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/main.oidc.test.ts`: change line 55 to `async function writeSecretFiles(dbPassword: string, clientSecret = randomBytes(24).toString("base64url")): Promise<SecretFiles> {`, change line 63 to `await writeFile(files.clientSecretFile, clientSecret);`, and change line 155 in the C-6370f2de test from `const files = await writeSecretFiles(password.reveal());` to `const files = await writeSecretFiles(password.reveal(), fake.clientSecret("ursitoare-engine"));`
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-005: test/support/e2e-stack/oidc-part.test.ts:195-204 a bare owner-pool SELECT of tenant_idp cannot see committed rows under FORCE RLS
+
+- **Status:** open
+- **Blocking tasks:** 7.2
+- **Kind:** technical
+- **Asked:** 2026-10-29T06:30Z by glm, run r-20261029T0605Z-ba64, task 7.2
+
+### Context
+The assertion `assert.deepEqual(idps.rows, [{ tenant_id, issuer: fake.issuer, organization: "org-a" }])` runs `db.ownerPool.query("SELECT tenant_id, issuer, organization FROM ursitoare.tenant_idp")` with no tenant context. The seed demonstrably provisions the row: read through `withTenantTx(db.ownerPool, tenant, ...)` (the way src/identity/provision.test.ts:16-24 reads the same table) the SELECT returns exactly the expected row, `resolveTenantForToken` (oidc-part.test.ts:190-193) maps the issuer and ["org-a"] to the default tenant, and the assertion at line 200 fails only because the SELECT returns []. Ursitoare.tenant_idp has FORCE ROW LEVEL SECURITY (src/db/migrations/0100_identity.sql:38-40) with policy `tenant_id = current_setting('app.tenant_id', true)`, the test connection user is ursitoare_owner with NOBYPASSRLS (src/db/roles.ts:12), and `current_setting('app.tenant_id', true)` is '' on a bare pooled connection, so the row is deterministically invisible to that query no matter how the part's seed implements provisions - I verified this empirically with a scratch script, and the frozen red test cannot pass for any implementation.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/identity/provision.test.ts`, `test/support/e2e-stack/oidc-part.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-oidc-login`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `test/support/e2e-stack/oidc-part.test.ts`: at lines 195-204 read the row through the tenant context, replacing the bare `await db.ownerPool.query<{ tenant_id: string; issuer: string; organization: string }>("SELECT tenant_id, issuer, organization FROM ursitoare.tenant_idp")` with `await withTenantTx(db.ownerPool, tenant, async (tx) => (await tx.query<{ tenant_id: string; issuer: string; organization: string }>("SELECT tenant_id, issuer, organization FROM ursitoare.tenant_idp")).rows)` (importing `withTenantTx` from src/tenancy/index.ts like src/identity/provision.test.ts does) and keep the same deepEqual against `tenant.tenantId`, the fake's issuer and `org-a`.
+2. Edit `test/support/e2e-stack/oidc-part.test.ts`: drop the second SELECT-based assertion and instead assert `tenant_idp` indirectly through the already-passing checks at lines 189-193 (the one-row `resolveTenantForToken` mapping and the tenant_idp route it resolves), which is what proved the seed idempotently provisioned exactly one idp row for the default tenant.
+
+### Clarifier suggestion
+Edit `test/support/e2e-stack/oidc-part.test.ts`: at lines 195-204 read the row through the tenant context, replacing the bare `await db.ownerPool.query<{ tenant_id: string; issuer: string; organization: string }>("SELECT tenant_id, issuer, organization FROM ursitoare.tenant_idp")` with `await withTenantTx(db.ownerPool, tenant, async (tx) => (await tx.query<{ tenant_id: string; issuer: string; organization: string }>("SELECT tenant_id, issuer, organization FROM ursitoare.tenant_idp")).rows)` (importing `withTenantTx` from src/tenancy/index.ts like src/identity/provision.test.ts does) and keep the same deepEqual against `tenant.tenantId`, the fake's issuer and `org-a`.
 
 ### Answer
 <!-- write below this line -->
