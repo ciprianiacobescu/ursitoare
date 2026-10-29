@@ -1,6 +1,7 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this module implements it.
 
 export { ApiError } from "./errors.ts";
+export { ERROR_CODES, isRegisteredCode, unregisteredRouteErrors } from "./error-codes.ts";
 export type { ErrorEnvelope } from "./errors.ts";
 export type { HealthStatus, HealthCheck, HealthReport, HealthRegistry } from "./health.ts";
 export { HealthCheckError, createHealthRegistry } from "./health.ts";
