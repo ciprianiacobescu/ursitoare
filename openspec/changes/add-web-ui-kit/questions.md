@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Hold H-df7e1bc7: UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-fb25c506: UI criterion C-2f2f685e has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-9e414469: UI criterion C-c175f655 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-c4c6e005: UI criterion C-1688efa8 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-c4c6e005: UI criterion C-1688efa8 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-560ac014: UI criterion C-30ed04fb has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-ae010e47: UI criterion C-0dae9ed5 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-5049f1f6: UI criterion C-63a759ac has no end-to-end test (not_testable); see the generated UI tests table |
@@ -332,7 +332,8 @@ accept The hold may be waived. Criterion C-c175f655 is the scenario "Later units
 
 ## Q-013: Hold H-c4c6e005: UI criterion C-1688efa8 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -348,6 +349,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-1688efa8 is the scenario "Parsing the answer" of the requirement "The nav shows only the entries the user's capabilities allow": parseMe gets a valid body with capabilities ["read_flow", "Bad Cap", 5, "read_flow"], then bodies with capabilities as a string, without csrfToken, with reviewProfile "x", and the value null, and must give a Set holding only read_flow for the first and null for the other four. Every step is a call to a module export and its return value. The built page does not expose parseMe, no .tsx or Python file in the repository references it, and the only route that reaches it is the shell's one GET /api/v1/me call, whose user-visible outcomes (the nav signed out, on a 503 and on a valid answer) are the separate scenario "The nav in the browser" and are proven by the three nav journeys of e2e/test_m1_web_kit.py. The Node test in web/src/kit/capabilities.test.ts asserts each value of the scenario: the valid body parses with capabilities equal to new Set(["read_flow"]), and each of the four invalid bodies gives null, and that test passed in the latest report. The implementation in capabilities.ts checks the record shape, the user and tenant fields, the reviewProfile value and the csrfToken, and keeps only string capabilities matching the pattern, so the scenario's values follow from the code as written. The design's test plan assigns the loader and parsing to Node tests with a fake client and the nav to the browser. The criterion is checked where it can be, and the unit can go on as it stands.
 ---
 
 ## Q-014: Hold H-560ac014: UI criterion C-30ed04fb has no end-to-end test (not_testable); see the generated UI tests table
