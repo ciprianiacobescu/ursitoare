@@ -132,3 +132,5 @@
 {"at":"2026-10-29T07:11:09Z","run":"r-20261029T0711Z-dbf6","type":"unit.dispatched","unit":"openspec:add-api-pep"}
 {"at":"2026-10-29T07:34:15Z","detail":"awaiting_human: no new answers (open: Q-001) (escalated to a person: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-api-pep"}
 {"at":"2026-10-29T07:35:47Z","by":"harness","reason":"the cause is gone: openspec:add-api-pep is awaiting_human","type":"plan.resumed"}
+{"at":"2026-10-29T07:35:49Z","attempt":1,"cost_usd":1.273351,"runs":2,"type":"plan.charged","unit":"openspec:add-api-pep"}
+{"at":"2026-10-29T07:35:49Z","run":"r-20261029T0735Z-b17c","type":"unit.dispatched","unit":"openspec:add-api-pep"}
