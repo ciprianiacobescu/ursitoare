@@ -122,6 +122,7 @@ Edit `src/main.oidc.test.ts`: change line 55 to `async function writeSecretFiles
 ## Q-005: test/support/e2e-stack/oidc-part.test.ts:195-204 a bare owner-pool SELECT of tenant_idp cannot see committed rows under FORCE RLS
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path test/support/e2e-stack/oidc-part.test.ts of task 7.2; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 7.2
 - **Kind:** technical
 - **Asked:** 2026-10-29T06:30Z by glm, run r-20261029T0605Z-ba64, task 7.2
