@@ -4,7 +4,9 @@ import type { ActionName, ResourceType } from "../pdp/index.ts";
 import { ACTIONS } from "../pdp/index.ts";
 import type { Principal, SessionContext } from "../identity/index.ts";
 import type { TenantContext } from "../tenancy/index.ts";
+import { ApiError } from "./errors.ts";
 import type { PepDeps } from "./pep.ts";
+import { sessionVerifier } from "./session-auth.ts";
 import type { UrsitoareRouteState } from "./types.ts";
 
 export type PublicReason = "health" | "oidc" | "static" | "well_known";
@@ -162,9 +164,59 @@ function routeState(server: FastifyInstance): UrsitoareRouteState {
 
 export function verifierFor(kind: Exclude<AuthKind["kind"], "public">): AuthVerifier | undefined {
   if (kind === "session") {
-    return undefined;
+    return sessionVerifier;
   }
   return authVerifiers.get(kind);
+}
+
+function unavailable(): ApiError {
+  return new ApiError(503, "AUTHZ_UNAVAILABLE", "Authorization is unavailable");
+}
+
+function authenticationHook(
+  server: FastifyInstance,
+  auth: Exclude<AuthKind, { kind: "public" }>,
+): (request: FastifyRequest, reply: FastifyReply) => Promise<void> {
+  return async (request, reply) => {
+    reply.header("cache-control", "no-store");
+    const pep = server.ursitoarePep;
+    if (pep === undefined || pep.deps.pool === null || pep.deps.engine === null) {
+      throw unavailable();
+    }
+
+    let result: Awaited<ReturnType<AuthVerifier>>;
+    try {
+      const verifier = verifierFor(auth.kind);
+      if (verifier === undefined) {
+        throw new Error("authentication kind is not wired");
+      }
+      result = await verifier(request, auth, pep.deps);
+    } catch {
+      request.log.warn(
+        { code: "AUTHZ_UNAVAILABLE", reason: "verifier_failed" },
+        "request refused",
+      );
+      throw unavailable();
+    }
+
+    if (result === null) {
+      request.log.warn({ code: "UNAUTHENTICATED" }, "request refused");
+      throw new ApiError(401, "UNAUTHENTICATED", "Authentication required");
+    }
+    if (result.principal.tenantId !== result.tenant.tenantId) {
+      request.log.warn(
+        { code: "AUTHZ_UNAVAILABLE", reason: "tenant_mismatch" },
+        "request refused",
+      );
+      throw unavailable();
+    }
+
+    request.principal = result.principal;
+    request.tenant = result.tenant;
+    if (result.session !== undefined) {
+      request.sessionContext = result.session;
+    }
+  };
 }
 
 function impliedErrors(def: RouteDef): readonly string[] {
@@ -282,6 +334,7 @@ export function defineRoute(server: FastifyInstance, def: RouteDef): void {
     schema: FastifySchema;
     handler: RouteDef["handler"];
     exposeHeadRoute?: boolean;
+    onRequest?: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
   } = {
     method: def.method,
     url: def.url,
@@ -290,6 +343,7 @@ export function defineRoute(server: FastifyInstance, def: RouteDef): void {
   };
   if (!isPublic(def.auth)) {
     options.exposeHeadRoute = false;
+    options.onRequest = authenticationHook(server, def.auth);
   }
   try {
     server.route(options);
