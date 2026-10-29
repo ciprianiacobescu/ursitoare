@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Finding F-4e8c6585: Toast Dismiss button turns white-on-white on hover |
 | Q-005 | answered | none | verdict | Hold H-4c6c7bb5: UI criterion C-cb608bfb has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-2b729d71: UI criterion C-16a71639 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-01c51033: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-01c51033: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-f79f2bc2: UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-6dadab51: UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-df7e1bc7: UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -200,7 +200,8 @@ accept The hold may be waived. Criterion C-16a71639 is the scenario "The real to
 
 ## Q-007: Hold H-01c51033: UI criterion C-4f003820 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -216,6 +217,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-4f003820 is the scenario "A weak, missing or malformed token is reported": it calls checkTokenContrast on the real tokens with --ui-color-text weakened to #777777, then without --ui-color-focus, then with --ui-color-border set to red, and checks the failure ids, ratios and minimums it returns. Every step is a function call on a token map and its return value; the browser app does not expose checkTokenContrast and never runs it, so no end-to-end test can observe the behaviour. The Node test in web/src/kit/contrast.test.ts asserts each value of the scenario (text-on-bg and text-on-surface with min 4.5 and ratio below 4.5; focus-on-bg and focus-on-surface with min 3 and ratio 0; border-on-bg and border-on-surface with min 3 and ratio 0) and passed in the latest report. The design's test plan assigns exactly this split: Node tests check the token maths and the browser proves the theme through axe contrast on real pages, which the four page tests of e2e/test_m0_skeleton.py do. The criterion is checked where it can be, and the unit can go on as it stands.
 ---
 
 ## Q-008: Hold H-f79f2bc2: UI criterion C-92d9ac35 has no end-to-end test (not_testable); see the generated UI tests table
