@@ -119,3 +119,4 @@
 {"at":"2026-10-29T06:35:32Z","by":"harness","reason":"the cause is gone: openspec:add-oidc-login is awaiting_human","type":"plan.resumed"}
 {"at":"2026-10-29T06:35:34Z","attempt":1,"cost_usd":7.302785,"runs":6,"type":"plan.charged","unit":"openspec:add-oidc-login"}
 {"at":"2026-10-29T06:35:34Z","run":"r-20261029T0635Z-75e3","type":"unit.dispatched","unit":"openspec:add-oidc-login"}
+{"at":"2026-10-29T06:51:42Z","detail":"the repository CI is still running on the hand-off commit 4c3ab9e7ce (no CI of the repository is listed for it yet, and it was handed off less than 10 minutes ago): the plan merges when it is green","head":"4c3ab9e7cef811a4328434469ce68027cf1323d7","reason":"merge_not_ready","type":"plan.waiting","unit":"openspec:add-oidc-login"}
