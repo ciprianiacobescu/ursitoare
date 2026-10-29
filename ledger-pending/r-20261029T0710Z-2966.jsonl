@@ -2,3 +2,4 @@
 {"ts": "2026-10-29T07:10:47.193731Z", "run_id": "r-20261029T0710Z-2966", "unit": "openspec:add-oidc-login", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 26, "merge_commit": "a10fb0e3811383d9a703a593d269a3ffa254a8c5"}
 {"ts": "2026-10-29T07:10:55.434279Z", "run_id": "r-20261029T0710Z-2966", "unit": "openspec:add-oidc-login", "seq": 3, "type": "archive.opened", "number": 27, "url": "<forge>/ciprianiacobescu/ursitoare/pull/27", "branch": "l4/archive/openspec/add-oidc-login", "head": "e0bc27bd4b45eee4a4593aaba02382153c78bdbe"}
 {"ts": "2026-10-29T07:10:57.779339Z", "run_id": "r-20261029T0710Z-2966", "unit": "openspec:add-oidc-login", "seq": 4, "type": "archive.merged", "head": "e0bc27bd4b45eee4a4593aaba02382153c78bdbe", "number": 27}
+{"ts": "2026-10-29T07:11:00.131785Z", "run_id": "r-20261029T0710Z-2966", "unit": "openspec:add-oidc-login", "seq": 5, "type": "run.finished", "exit_code": 0}
