@@ -30,4 +30,9 @@ export {
   RouteDefinitionError,
 } from "./route.ts";
 export type { PepDeps } from "./pep.ts";
+export { installPep } from "./pep.ts";
+export { registerMeRoute } from "./me.ts";
+export { definePublicRoutes } from "./public-group.ts";
+export { checkRouteCoverage } from "./coverage.ts";
+export { listPredicate } from "./list-filter.ts";
 export { buildInternalServer } from "./internal.ts";

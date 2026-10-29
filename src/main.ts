@@ -4,23 +4,29 @@ import { fileURLToPath } from "node:url";
 import type { FastifyInstance } from "fastify";
 import pino from "pino";
 
-import type { HealthRegistry, SignalSource } from "./api/index.ts";
+import type { HealthRegistry, PepDeps, SignalSource } from "./api/index.ts";
 import {
+  buildInternalServer,
   buildServer,
   createHealthRegistry,
   DEFAULT_WEB_DIST,
+  definePublicRoutes,
   installGracefulShutdown,
+  installPep,
   isWebBuilt,
+  listDefinedRoutes,
+  registerMeRoute,
   registerWebApp,
 } from "./api/index.ts";
 import type { AppConfig } from "./config/index.ts";
-import { ConfigError, loadConfigFromProcess } from "./config/index.ts";
+import { ConfigError, loadConfigFromProcess, parseInternalPort } from "./config/index.ts";
 import { systemClock, systemIds } from "./core/index.ts";
 import type { Database } from "./db/index.ts";
 import { openDatabase } from "./db/index.ts";
 import { registerOidcRoutes } from "./identity/index.ts";
 import type { LogDestination, Logger } from "./observability/index.ts";
 import { createLogger, noopTracer } from "./observability/index.ts";
+import { createPolicyEngine, defaultSrcDir } from "./pdp/index.ts";
 
 export const VERSION = "0.0.0";
 
@@ -184,17 +190,38 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     }
   }
 
-  // OIDC routes (add-oidc-login): registration may refuse a half-wired engine with
-  // OidcError OIDC_NOT_CONFIGURED; a throw follows the existing startup-failure path.
+  let internal: FastifyInstance | undefined;
   try {
-    registerOidcRoutes(server, {
-      config: config.oidc ?? null,
-      publicBaseUrl: config.publicBaseUrl,
+    const engine = database
+      ? await createPolicyEngine({ srcDir: defaultSrcDir(), clock: systemClock, ids: systemIds, logger })
+      : null;
+    const pep: PepDeps = {
       pool: database?.appPool ?? null,
-      engineKey: config.engineKey,
+      engine,
       clock: systemClock,
+      publicBaseUrl: config.publicBaseUrl,
+    };
+    installPep(server, pep);
+    registerMeRoute(server, pep);
+    await definePublicRoutes(server, "oidc", (scoped) =>
+      registerOidcRoutes(scoped, {
+        config: config.oidc ?? null,
+        publicBaseUrl: config.publicBaseUrl,
+        pool: database?.appPool ?? null,
+        engineKey: config.engineKey,
+        clock: systemClock,
+      }),
+    );
+    internal = await buildInternalServer({
+      version: VERSION,
+      ids: systemIds,
+      logger,
+      tracer: noopTracer,
+      pep,
     });
+    await deps.inspectServers?.({ public: server, internal });
   } catch (error) {
+    await internal?.close().catch(() => undefined);
     await server.close().catch(() => undefined);
     await database?.close().catch(() => undefined);
     bootstrap.fatal(fatalFields(error), fatalMessage(error));
@@ -202,12 +229,17 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     return null;
   }
 
+  const closeAll = async (): Promise<void> => {
+    await server.close().catch(() => undefined);
+    await internal?.close().catch(() => undefined);
+    await database?.close().catch(() => undefined);
+  };
+
   let bound: number;
   try {
     bound = await listen(server, config.port, config.host);
   } catch (error) {
-    await server.close().catch(() => undefined);
-    await database?.close().catch(() => undefined);
+    await closeAll();
     bootstrap.fatal(
       { ...fatalFields(error), host: config.host, port: config.port },
       "startup failed",
@@ -216,14 +248,31 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     return null;
   }
 
+  const internalPort = config.internalPort ?? parseInternalPort({}, config.port);
+  if (listDefinedRoutes(internal).length > 0) {
+    let internalBound: number;
+    try {
+      internalBound = await listen(internal, internalPort, config.host);
+    } catch (error) {
+      await closeAll();
+      bootstrap.fatal(
+        { ...fatalFields(error), host: config.host, port: internalPort },
+        "startup failed",
+      );
+      exit(1);
+      return null;
+    }
+    logger.info(
+      { role: config.role, host: config.host, port: internalBound },
+      "internal listener listening",
+    );
+  }
+
   const url = `http://${formatHost(config.host)}:${bound}`;
   logger.info({ url, role: config.role, host: config.host, port: bound }, "ursitoare listening");
 
   installGracefulShutdown({
-    close: async () => {
-      await database?.close();
-      await server.close();
-    },
+    close: closeAll,
     drainTimeoutMs: config.shutdownDrainMs,
     exit,
     logger,
@@ -232,9 +281,7 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
 
   return {
     url,
-    close: async () => {
-      await server.close();
-    },
+    close: closeAll,
   };
 }
 
