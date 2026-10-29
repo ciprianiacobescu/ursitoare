@@ -43,7 +43,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-030 | answered | none | verdict | Hold H-0e29e529: UI criterion C-a1ea941d has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-031 | answered | none | verdict | Hold H-d7bde6af: UI criterion C-574fc31a has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-032 | answered | none | verdict | Hold H-addeb9d5: UI criterion C-c5c7028c has no end-to-end test (fails_at_head); see the generated UI tests table |
-| Q-033 | open | none | verdict | Finding F-448496f9: Focus outline on the toast Dismiss button is below 3:1 against the toast background |
+| Q-033 | answered | none | verdict | Finding F-448496f9: Focus outline on the toast Dismiss button is below 3:1 against the toast background |
 | Q-034 | answered | none | verdict | Hold H-8f5a5712: UI criterion C-c5c7028c has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-035 | answered | none | verdict | Hold H-45552067: UI criterion C-817bfc8a has no end-to-end test (not_testable); see the generated UI tests table |
 <!-- l4:index:end -->
@@ -777,7 +777,7 @@ accept The unit can go on as it stands: the generated test fails at the head bec
 
 ## Q-033: Finding F-448496f9: Focus outline on the toast Dismiss button is below 3:1 against the toast background
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.41 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -800,6 +800,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct and is a WCAG AA defect: the global :focus-visible outline uses --ui-color-focus #1d4ed8, and inside a toast it is drawn (2px offset) over --ui-color-toast-bg #1b1f27, a contrast of 2.46:1, below the 3:1 the requirement sets for focus (and WCAG 1.4.11 for focus indicators); theme.css has no rule that changes the outline inside a toast. Keep CONTRAST_PAIRS at its 16 pairs, which a frozen scenario pins; fix it in theme.css with an outline colour for focus inside a toast that has at least 3:1 against the toast background, for example --ui-color-toast-text (#ffffff, 16.5:1), with no new token. WHEN the Dismiss button inside a toast has keyboard focus THEN its focus outline colour has a contrast of at least 3:1 against --ui-color-toast-bg.
 ---
 
 ## Q-034: Hold H-8f5a5712: UI criterion C-c5c7028c has no end-to-end test (not_testable); see the generated UI tests table
