@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 9.1 | technical | e2e/test_m1_web_kit.py:129 — set_content page without <title>/<html lang> can never pass assert_accessible |
+| Q-001 | accepted | 9.1 | technical | e2e/test_m1_web_kit.py:129 — set_content page without <title>/<html lang> can never pass assert_accessible |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: e2e/test_m1_web_kit.py:129 — set_content page without <title>/<html lang> can never pass assert_accessible
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 9.1
 - **Kind:** technical
 - **Asked:** 2026-10-29T19:40Z by glm, run r-20261029T1856Z-fd8d, task 9.1
