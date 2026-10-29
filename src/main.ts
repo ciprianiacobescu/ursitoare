@@ -15,9 +15,10 @@ import {
 } from "./api/index.ts";
 import type { AppConfig } from "./config/index.ts";
 import { ConfigError, loadConfigFromProcess } from "./config/index.ts";
-import { systemIds } from "./core/index.ts";
+import { systemClock, systemIds } from "./core/index.ts";
 import type { Database } from "./db/index.ts";
 import { openDatabase } from "./db/index.ts";
+import { registerOidcRoutes } from "./identity/index.ts";
 import type { LogDestination, Logger } from "./observability/index.ts";
 import { createLogger, noopTracer } from "./observability/index.ts";
 
@@ -181,6 +182,24 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
       exit(1);
       return null;
     }
+  }
+
+  // OIDC routes (add-oidc-login): registration may refuse a half-wired engine with
+  // OidcError OIDC_NOT_CONFIGURED; a throw follows the existing startup-failure path.
+  try {
+    registerOidcRoutes(server, {
+      config: config.oidc ?? null,
+      publicBaseUrl: config.publicBaseUrl,
+      pool: database?.appPool ?? null,
+      engineKey: config.engineKey,
+      clock: systemClock,
+    });
+  } catch (error) {
+    await server.close().catch(() => undefined);
+    await database?.close().catch(() => undefined);
+    bootstrap.fatal(fatalFields(error), fatalMessage(error));
+    exit(1);
+    return null;
   }
 
   let bound: number;

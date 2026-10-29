@@ -52,7 +52,10 @@ function fatalLines(lines: readonly string[]): Record<string, unknown>[] {
     .filter((line) => line["level"] === 60);
 }
 
-async function writeSecretFiles(dbPassword: string): Promise<SecretFiles> {
+async function writeSecretFiles(
+  dbPassword: string,
+  clientSecret = randomBytes(24).toString("base64url"),
+): Promise<SecretFiles> {
   const dir = await mkdtemp(join(tmpdir(), "ursitoare-oidc-"));
   const files: SecretFiles = {
     engineKeyFile: join(dir, "engine-key"),
@@ -60,7 +63,7 @@ async function writeSecretFiles(dbPassword: string): Promise<SecretFiles> {
     databasePasswordFile: join(dir, "database-password"),
   };
   await writeFile(files.engineKeyFile, randomBytes(32).toString("hex"));
-  await writeFile(files.clientSecretFile, randomBytes(24).toString("base64url"));
+  await writeFile(files.clientSecretFile, clientSecret);
   await writeFile(files.databasePasswordFile, dbPassword);
   return files;
 }
@@ -152,7 +155,10 @@ test("C-6370f2de main signs alice in over real HTTP and stays healthy", async ()
   const port = await freePort();
   const password = db.appEndpoint.password;
   assert.ok(password !== null, "the app endpoint carries the password");
-  const files = await writeSecretFiles(password.reveal());
+  const files = await writeSecretFiles(
+    password.reveal(),
+    fake.clientSecret("ursitoare-engine"),
+  );
   const baseUrl = `http://127.0.0.1:${port}`;
   const env = bootEnv(port, fake.issuer, db, files);
 
