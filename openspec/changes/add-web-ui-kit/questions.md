@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Hold H-6dadab51: UI criterion C-d365d748 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-df7e1bc7: UI criterion C-e2ce7344 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-fb25c506: UI criterion C-2f2f685e has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-9e414469: UI criterion C-c175f655 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-9e414469: UI criterion C-c175f655 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-c4c6e005: UI criterion C-1688efa8 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-560ac014: UI criterion C-30ed04fb has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-ae010e47: UI criterion C-0dae9ed5 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -310,7 +310,8 @@ accept The hold may be waived. Criterion C-2f2f685e is the scenario "Unknown cod
 
 ## Q-012: Hold H-9e414469: UI criterion C-c175f655 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -326,6 +327,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-c175f655 is the scenario "Later units register codes" of the requirement "One catalogue maps API error codes to text": registerMessages is called twice with the same TEST_ONLY_FLOW_LOCKED entry, then with a duplicate FORBIDDEN text, a changed text for the registered code, a malformed code, a blank text and a mixed batch, and the scenario expects the catalogue text, KIT_MESSAGE_DUPLICATE and KIT_MESSAGE_INVALID throws, and the fallback for TEST_ONLY_NEW. Every step is a call to a module export and its thrown error or return value. The built page exposes neither registerMessages nor messageFor, no .tsx file under web/src calls registerMessages, and the design states that no route renders ErrorPanel or any other consumer of the catalogue in this unit, so no end-to-end test can register a code in the browser and observe the result. The Node test in web/src/kit/messages.test.ts asserts each value of the scenario: the two registrations succeed, messageFor answers "This flow is locked.", the third and fourth calls throw KitError KIT_MESSAGE_DUPLICATE, the fifth and sixth KIT_MESSAGE_INVALID, the seventh KIT_MESSAGE_DUPLICATE, and messageFor("TEST_ONLY_NEW") is the fallback text. That test passed in the latest report. The implementation in messages.ts validates every entry, then checks duplicates against the Map, and only then writes, so a batch with one duplicate registers nothing, as the scenario requires. The design's test plan assigns this check to Node tests, and the browser proves the one message a page shows in this unit, the AUTHZ_UNAVAILABLE notice, through the nav journey. The criterion is checked where it can be, and the unit can go on as it stands.
 ---
 
 ## Q-013: Hold H-c4c6e005: UI criterion C-1688efa8 has no end-to-end test (not_testable); see the generated UI tests table
