@@ -252,6 +252,9 @@ delegate:
   # contradictory red test), as written; never a support file. Owner decision 2026-10-26, after
   # add-architecture-fitness Q-001.
   unfreeze: true
+  # A web unit's verification asks about 30 verdict questions at about $1.80 an answer (add-web-sign-in round 3: the
+  # default $15 cap ran out after 7 of 32); the plan-wide share (plan_cost_share 0.25) still bounds the total.
+  max_cost_usd_per_unit: 50.0
 
 ## Owner decision 2026-10-26 ("execute it yourself as my delegate", after add-architecture-fitness Q-003..Q-008): the
 ## owner's delegate agent answers questions with `l4 questions`, verdict and harness questions included. L4 has no
