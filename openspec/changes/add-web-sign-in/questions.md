@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Criterion C-67c1baa1 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-6e84f9b2 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A post without the CSRF header is refused): accept as satisfied? |
 | Q-007 | answered | none | verdict | Criterion C-4faae006 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The return path is kept): accept as satisfied? |
-| Q-008 | open | none | verdict | Criterion C-a76b8eac (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable): accept as satisfied? |
+| Q-008 | answered | none | verdict | Criterion C-a76b8eac (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable): accept as satisfied? |
 | Q-009 | answered | none | verdict | Hold H-545ec45b: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-e3f87d2a: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-2023e80e: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table |
@@ -272,7 +272,7 @@ accept The criterion is satisfied as it stands. The browser test for C-4faae006 
 
 ## Q-008: Criterion C-a76b8eac (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -299,6 +299,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Checked against the scenario step by step: e2e/test_m1_sign_in.py::test_c_a76b8eac_the_sign_in_and_sign_out_buttons_are_keyboard_reachable (marked @pytest.mark.l4("C-a76b8eac")) on /sign-in signed out, presses Tab up to 15 times until "Sign in" (exact) is focused and asserts outlineStyle not none and outlineWidth at least 2; then signs alice in and does the same for the banner's "Sign out", which is the scenario's WHEN and THEN as written. The e2e and unit gates passed at head 601ca1f (985 of 985 tests, verification round 3). At base main@9dbc21e it cannot pass: /sign-in is first registered by this unit's web/src/features/15-sign-in.tsx and signInView and accountView are scaffold stubs that throw, so login() cannot sign in.
 ---
 
 ## Q-009: Hold H-545ec45b: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table
