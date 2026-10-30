@@ -222,3 +222,4 @@
 {"at":"2026-10-30T04:34:42Z","by":"harness","reason":"the cause is gone: openspec:add-web-sign-in is awaiting_human","type":"plan.resumed"}
 {"at":"2026-10-30T04:34:43Z","attempt":1,"cost_usd":1.867452,"runs":2,"type":"plan.charged","unit":"openspec:add-web-sign-in"}
 {"at":"2026-10-30T04:34:43Z","run":"r-20261030T0434Z-57e9","type":"unit.dispatched","unit":"openspec:add-web-sign-in"}
+{"actor":"agent","agent_key":true,"at":"2026-10-30T06:37:39Z","by":"the+github@ciprianiacobescu.com","extend":{"runs":15},"limits_after":{"attempts":3,"cost_usd":350.0,"deadline":null,"runs":75},"limits_before":{"attempts":3,"cost_usd":350.0,"deadline":null,"runs":60},"marker":"CLAUDECODE","reason":"Delegate: web-sign-in (last M1 unit) has tasks 4.3-4.4 plus verification left; raise runs so the plan does not stop on the run limit.","type":"plan.extended"}
