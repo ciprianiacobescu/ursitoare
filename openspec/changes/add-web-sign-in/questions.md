@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Criterion C-6e84f9b2 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A post without the CSRF header is refused): accept as satisfied? |
 | Q-007 | answered | none | verdict | Criterion C-4faae006 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The return path is kept): accept as satisfied? |
 | Q-008 | open | none | verdict | Criterion C-a76b8eac (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable): accept as satisfied? |
-| Q-009 | open | none | verdict | Hold H-545ec45b: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-545ec45b: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-e3f87d2a: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-2023e80e: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-d7fe3aa5: UI criterion C-22c98964 has no end-to-end test; see the generated UI tests table |
@@ -303,7 +303,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-009: Hold H-545ec45b: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -322,6 +323,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived: criterion C-01e427f8 is not a browser criterion. Its scenario calls registerSignInMessages twice and messageFor for each code of SIGN_IN_ERROR_CODES, checks the order of the ten codes, the pairwise distinct texts of 1 to 200 characters, that each answer equals its SIGN_IN_MESSAGES entry and differs from FALLBACK_MESSAGE, and that UNKNOWN_ERROR gives the fallback. None of those names is reachable from a web page, so the generated end-to-end writer was right to report it as not testable through the browser, and that is not a defect. The Node test in web/src/auth/messages.test.ts asserts every clause of the scenario word for word and passed in the latest report, and the implementation in web/src/auth/messages.ts holds the ten codes in the specified order, the twelve texts, and a registerSignInMessages that delegates to the kit's registerMessages, which is idempotent because re-registering an identical text is allowed. The feature file 15-sign-in.tsx calls registerSignInMessages at load, and the user-visible part of the catalogue is already proved in the browser by the M1 journey, which opens /sign-in?error=OIDC_USER_DISABLED and asserts the alert text "Your account is disabled. Ask an administrator." The pending lint failure concerns an unused assignment in stack.seed.test.ts and does not touch this criterion.
 ---
 
 ## Q-010: Hold H-e3f87d2a: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table
