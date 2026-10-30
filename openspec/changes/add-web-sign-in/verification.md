@@ -1,9 +1,9 @@
-# Verification: openspec:add-web-sign-in: FAIL (round 1)
+# Verification: openspec:add-web-sign-in: FAIL (round 2)
 
 traceability: not checked (an earlier step failed)
 
 - Base: `9dbc21eb8ded038c8fe75330591aa547d831d160`
-- Head: `b35997b1aae2e62ba4c5a5c213153ea4376a8048`
+- Head: `79d747ed89408e6cc1b4d11892131ccba11702e6`
 - Implementer profiles: deepseek-free, glm, claude-sonnet
 - Judge: mimo-judge, 0 call(s), prompt sha256 `-`
 
@@ -11,10 +11,10 @@ traceability: not checked (an earlier step failed)
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.4 | base main@9dbc21eb8d contained |
-| 1 | integrity | ok | 70.3 | 10 sub-checks; scope: 38 changed file(s) |
-| 2 | build | ok | 23.3 |  |
-| 3 | tests | failed | 168.4 | `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` failed: exit code 1; failing: test_m1_sign_in::test_c_4faae006_the_return_path_is_kept[chromium], test_m1_sign_in::test_c_ee431615_the_sign_in_page_shows_the_error_and_is_ac... |
+| 0 | preconditions | ok | 0.8 | base main@9dbc21eb8d contained |
+| 1 | integrity | ok | 70.6 | 10 sub-checks; scope: 46 changed file(s) |
+| 2 | build | ok | 23.2 |  |
+| 3 | tests | failed | 92.4 | `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` failed: exit code 1; failing: test_m1_sign_in::test_c_4faae006_the_return_path_is_kept[chromium]; test_m1_sign_in::test_c_4faae006_the_return_path_is_kept[chromium] |
 | 4 | traceability | not_run | 0.0 | an earlier step failed |
 | 4a | audit sampling | not_run | 0.0 | an earlier step failed |
 | 5 | ui test generation | not_run | 0.0 | an earlier step failed |
@@ -27,13 +27,13 @@ traceability: not checked (an earlier step failed)
 
 | Gate | Status | Command | Log |
 |---|---|---|---|
-| setup | pass | `pnpm install --frozen-lockfile` | .l4-out/gates/r-20261030T0434Z-57e9/063-setup.log |
-| setup | pass | `uv sync --project e2e --frozen` | .l4-out/gates/r-20261030T0434Z-57e9/064-setup.log |
-| build | pass | `pnpm run build` | .l4-out/gates/r-20261030T0434Z-57e9/065-build.log |
-| lint | pass | `pnpm run lint` | .l4-out/gates/r-20261030T0434Z-57e9/066-lint.log |
-| typecheck | pass | `pnpm run typecheck` | .l4-out/gates/r-20261030T0434Z-57e9/067-typecheck.log |
-| test | pass | `pnpm run test` | .l4-out/gates/r-20261030T0434Z-57e9/068-test.log |
-| e2e | fail | `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` | .l4-out/gates/r-20261030T0434Z-57e9/069-e2e.log |
+| setup | pass | `pnpm install --frozen-lockfile` | .l4-out/gates/r-20261030T0434Z-57e9/096-setup.log |
+| setup | pass | `uv sync --project e2e --frozen` | .l4-out/gates/r-20261030T0434Z-57e9/097-setup.log |
+| build | pass | `pnpm run build` | .l4-out/gates/r-20261030T0434Z-57e9/098-build.log |
+| lint | pass | `pnpm run lint` | .l4-out/gates/r-20261030T0434Z-57e9/099-lint.log |
+| typecheck | pass | `pnpm run typecheck` | .l4-out/gates/r-20261030T0434Z-57e9/100-typecheck.log |
+| test | pass | `pnpm run test` | .l4-out/gates/r-20261030T0434Z-57e9/101-test.log |
+| e2e | fail | `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` | .l4-out/gates/r-20261030T0434Z-57e9/102-e2e.log |
 
 ## Integrity
 
@@ -42,7 +42,7 @@ traceability: not checked (an earlier step failed)
 | protected paths | ok | no protected path differs from the base |
 | pre-existing tests | ok | 2 test file(s) compared with the base; 1 other test file(s) are checked by the run of pre-existing tests |
 | red-green freeze | ok | 11 task(s): red and green compared |
-| test path freeze | ok | 11 harness step commit(s) checked |
+| test path freeze | ok | 13 harness step commit(s) checked |
 | content scan | ok | no result-manipulating construct in the changed support and runner files |
 | gate configuration | skipped | no gate or runner configuration file changed |
 | test awareness | ok | no production line reacts to the test run |
@@ -58,7 +58,7 @@ traceability: not checked (an earlier step failed)
 
 ### Needs attention
 
-- blocker: new tests failed: test_m1_sign_in::test_c_4faae006_the_return_path_is_kept[chromium], test_m1_sign_in::test_c_ee431615_the_sign_in_page_shows_the_error_and_is_accessible[chromium]
+- blocker: new tests failed: test_m1_sign_in::test_c_4faae006_the_return_path_is_kept[chromium]
 
 ### Files
 
@@ -66,10 +66,18 @@ traceability: not checked (an earlier step failed)
 |---|---|---|---|
 | `e2e/conftest.py` |  | relevant | named in the spec |
 | `e2e/test_m1_sign_in.py` |  | relevant | new test file |
+| `openspec/changes/add-web-sign-in-fix-1/.l4/fix.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-sign-in-fix-1/.openspec.yaml` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-sign-in-fix-1/proposal.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-sign-in-fix-1/tasks.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-sign-in/.l4/evidence/round-1/evidence.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-sign-in/.l4/evidence/round-1/verdict.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-sign-in/.l4/evidence/round-1/verification.md` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-web-sign-in/.l4/ledger/r-20261030T0247Z-7d77.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-web-sign-in/.l4/ledger/r-20261030T0434Z-57e9.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-web-sign-in/questions.md` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-web-sign-in/tasks.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-sign-in/verification.md` |  | none | exempt: harness, spec or documentation path |
 | `test/support/e2e-stack/control.seed.test.ts` |  | relevant | new test file |
 | `test/support/e2e-stack/control.ts` | test | relevant | named in the spec |
 | `test/support/e2e-stack/parts/27-tenant-b.ts` | test | relevant | named in the spec |
@@ -109,8 +117,8 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ### Tests
 
-982 of 985 passed, 3 failed, 0 errored, 0 skipped.
-31 of 33 new tests passed.
+984 of 985 passed, 1 failed, 0 errored, 0 skipped.
+32 of 33 new tests passed.
 
 ## Criteria
 
@@ -118,12 +126,12 @@ None judged.
 
 ## Findings
 
-- [blocker, deterministic] e2e gate failed: `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` failed: exit code 1; failing: test_m1_sign_in::test_c_4faae006_the_return_path_is_kept[chromium], test_m1_sign_in::test_c_ee431615_the_sign_in_page_shows_the_error_and_is_accessible[chromium] Log: `.l4-out/gates/r-20261030T0434Z-57e9/069-e2e.log`.
-- [blocker, deterministic] new tests failed: test_m1_sign_in::test_c_4faae006_the_return_path_is_kept[chromium], test_m1_sign_in::test_c_ee431615_the_sign_in_page_shows_the_error_and_is_accessible[chromium]
+- [blocker, deterministic] e2e gate failed: `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` failed: exit code 1; failing: test_m1_sign_in::test_c_4faae006_the_return_path_is_kept[chromium] Log: `.l4-out/gates/r-20261030T0434Z-57e9/102-e2e.log`.
+- [blocker, deterministic] new tests failed: test_m1_sign_in::test_c_4faae006_the_return_path_is_kept[chromium]
 
 ## Fix unit
 
-Fix unit 1 is created for these tasks:
+Fix unit 2 is created for these tasks:
 - F-22a9abae e2e gate failed
 - F-7e9a81fb new tests failed
 
@@ -154,3 +162,8 @@ Fix unit 1 is created for these tasks:
 - `web.src.auth.sign-out.test.ts::C-4b09fc8c sign out refreshes a stale token once` (task 2.2): passed
 - `web.src.auth.sign-out.test.ts::C-77971a2d sign out reports what failed` (task 2.2): passed
 - `web.src.auth.sign-out.test.ts::C-eb130cb7 sign out follows only a safe redirect` (task 2.2): passed
+
+## Guard events
+
+- guard.test_tamper: e2e/test_m1_sign_in.py
+- guard.test_tamper: e2e/test_m1_sign_in.py
