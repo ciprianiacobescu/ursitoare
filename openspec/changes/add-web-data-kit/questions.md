@@ -47,7 +47,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-034 | answered | none | verdict | Hold H-da5c95d0: UI criterion C-ab5cf141 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-035 | answered | none | verdict | Hold H-b3bec5d6: UI criterion C-852bb719 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-036 | answered | none | verdict | Hold H-d3c23a86: UI criterion C-247ad9d2 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-037 | open | none | verdict | Hold H-e860473b: UI criterion C-a0904f4d has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-037 | answered | none | verdict | Hold H-e860473b: UI criterion C-a0904f4d has no end-to-end test (not_testable); see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -856,7 +856,7 @@ accept The hold may be waived. Criterion C-247ad9d2 is the regression scenario "
 
 ## Q-037: Hold H-e860473b: UI criterion C-a0904f4d has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.77 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -873,3 +873,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-a0904f4d is the scenario of finding F-d49cb373 "task 4.1: an enum property without type is not rendered as an enum": the return value of schemaToFields, which no page shows. parseProperty now makes a property with its own enum and no type an enum field, a property with neither keeps the reason "the property has no type", and its Node test (C-a0904f4d schemaToFields treats an enum without type as a text enum) passed with a red assertion. design.md "Browser coverage, stated plainly" says no page uses these components and add-web-ui-kit rules out a kit demo route, so this unit has no journey; the first consumers (add-web-admin for DataTable, add-web-task-inbox for SchemaForm) prove the markup with assert_accessible(page).
