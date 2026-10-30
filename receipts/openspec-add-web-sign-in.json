@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-30T21:37:32Z",
+  "integrated_revision": "4a909bd26a52ff6327d479f5f6b87b43f4e98f62",
+  "merge_commit": "4a909bd26a52ff6327d479f5f6b87b43f4e98f62",
+  "plan_digest": "11f838df12453fb7",
+  "plan_id": "m1",
+  "postcheck": "pass",
+  "pr": 36,
+  "receipt_id": "m1/openspec:add-web-sign-in/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "b5f17ba826dfa0dc67488f2d833613b807265566",
+  "spec_digest": "a5858f501e178402",
+  "target": "main",
+  "unit_id": "openspec:add-web-sign-in"
+}
