@@ -2,3 +2,4 @@
 {"ts": "2026-10-30T21:39:06.532452Z", "run_id": "r-20261030T2139Z-4544", "unit": "openspec:add-web-sign-in", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 36, "merge_commit": "4a909bd26a52ff6327d479f5f6b87b43f4e98f62"}
 {"ts": "2026-10-30T21:39:15.194220Z", "run_id": "r-20261030T2139Z-4544", "unit": "openspec:add-web-sign-in", "seq": 3, "type": "archive.opened", "number": 37, "url": "<forge>/ciprianiacobescu/ursitoare/pull/37", "branch": "l4/archive/openspec/add-web-sign-in", "head": "bda30d2e63003ce84aa04fbe30a0830fe28f7133"}
 {"ts": "2026-10-30T21:39:17.250021Z", "run_id": "r-20261030T2139Z-4544", "unit": "openspec:add-web-sign-in", "seq": 4, "type": "archive.merged", "head": "bda30d2e63003ce84aa04fbe30a0830fe28f7133", "number": 37}
+{"ts": "2026-10-30T21:39:19.395423Z", "run_id": "r-20261030T2139Z-4544", "unit": "openspec:add-web-sign-in", "seq": 5, "type": "run.finished", "exit_code": 0}
