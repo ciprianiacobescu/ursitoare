@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-d115a25a (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Alice signs in and the header shows user and tenant): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-a699ddc9 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Two tenants stay apart): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-c3f18eb0 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A request without a session is unauthenticated): accept as satisfied? |
-| Q-005 | open | none | verdict | Criterion C-67c1baa1 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session): accept as satisfied? |
+| Q-005 | answered | none | verdict | Criterion C-67c1baa1 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-6e84f9b2 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A post without the CSRF header is refused): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-4faae006 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The return path is kept): accept as satisfied? |
 | Q-008 | open | none | verdict | Criterion C-a76b8eac (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable): accept as satisfied? |
@@ -173,7 +173,8 @@ accept The criterion is satisfied as it stands. The browser test for C-c3f18eb0 
 
 ## Q-005: Criterion C-67c1baa1 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -200,6 +201,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The browser test for C-67c1baa1 signs alice in, clicks the "Sign out" button inside the banner, then asserts that the button "Sign in" (exact name) is visible, that the path of the page URL is /sign-in, and that page.request.get("/api/v1/me") answers 401: every clause of the scenario, word for word. The production code backs each step: AccountMenu renders the "Sign out" button and on a redirect result calls window.location.assign with the returned URL; signOut posts /auth/oidc/logout through the CSRF-adding logout client, resets the loader and returns the provider redirect only when safeRedirect allows it, otherwise /sign-in; the server logout route revokes the session, clears the session cookie and sets post_logout_redirect_uri to <publicBaseUrl>/sign-in, and the fake provider's logout endpoint answers 302 to that URI. The Node test stack.seed.test.ts proves on the real stack that after a logout with the CSRF header the same cookie gets 401 from /api/v1/me. The browser test passed in the latest run; the verifier ignored it only for the missing red record and the failed generated-test writer, neither of which is a defect of the code or of the test's assertions. The pending lint failure concerns an unused assignment in stack.seed.test.ts and does not touch this criterion.
 ---
 
 ## Q-006: Criterion C-6e84f9b2 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A post without the CSRF header is refused): accept as satisfied?
