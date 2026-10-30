@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-98c49746 (web-data-kit › A cursor list loads one page at a time and appends the next › Page size and subscribers): accept as satisfied? |
 | Q-002 | answered | none | verdict | Finding F-27dc58cb: Load more after an empty page unmounts the focused button |
-| Q-003 | open | none | verdict | Finding F-78d50e72: An unsupported property `c` comes back with an empty name |
+| Q-003 | answered | none | verdict | Finding F-78d50e72: An unsupported property `c` comes back with an empty name |
 | Q-004 | answered | none | verdict | Finding F-4c79e0be: task 1.1: no-op calls and loads do not settle with the request in flight |
 | Q-005 | open | none | verdict | Finding F-d49cb373: task 4.1: an enum property without type is not rendered as an enum |
 | Q-006 | answered | none | verdict | Hold H-fe461ce5: UI criterion C-4ad6d2b9 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -113,7 +113,7 @@ reject This replaces the delegate's answer, which is right but covers the view o
 
 ## Q-003: Finding F-78d50e72: An unsupported property `c` comes back with an empty name
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The finding is confirmed in the code: parseProperty in web/src/kit/data/schema-fields.ts (line 283-288) deliberately overrides a valid name with "" when the property has no type, so property c is returned with name "" and label "Field 3", and nothing identifies it as c; this is at odds with design D
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -136,6 +136,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject Confirmed: for a property without a type parseProperty (schema-fields.ts:283-287) blanks the name and replaces the label with "Field <i+1>", and SchemaForm shows that label above the unsupported error (SchemaForm.tsx:83-89), so the reader cannot tell which property is wrong. Task 4.1 makes an unsupported field's label its cleaned name, "Field <i+1>" only when the name is blank. This unit's test C-78331251 (schema-fields.test.ts:113) pins the blank name and no test pins this label, so fix the label only and leave the name as it is. WHEN schemaToFields gets the schema of scenario "Unsupported properties" THEN the field of c has the label "C" and the reason "the property has no type", and the other six fields keep their names, labels and reasons.
 ---
 
 ## Q-004: Finding F-4c79e0be: task 1.1: no-op calls and loads do not settle with the request in flight
