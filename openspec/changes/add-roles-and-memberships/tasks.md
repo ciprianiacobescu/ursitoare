@@ -1,6 +1,6 @@
 ## 1. The schema
 
-- [ ] 1.1 Write `src/identity/rbac/schema.test.ts` first (each test begins with `assert.ok` on `to_regclass` of the four tables and the ledger row `version = 170`, `name = 'rbac'`; each forbidden app statement is its own `withTenantTx(db.appPool, a, ...)` with `await assert.rejects(p, { code: "42501" })`), then create `src/db/migrations/0170_rbac.sql` exactly as in design.md § Data model and implement `DEFAULT_ROLES` (`["tenant_admin", "author", "approver", "auditor"]`), `DEFAULT_BOOTSTRAP_ADMIN_GROUP` (`"ursitoare-admins"`) and `BOOTSTRAP_ADMIN_GROUP_ENV` (`"URSITOARE_BOOTSTRAP_ADMIN_GROUP"`) in `src/identity/rbac/names.ts`, implementing requirements "Every tenant has the four default roles" and "The rbac tables are tenant-leading and narrowly granted"
+- [x] 1.1 Write `src/identity/rbac/schema.test.ts` first (each test begins with `assert.ok` on `to_regclass` of the four tables and the ledger row `version = 170`, `name = 'rbac'`; each forbidden app statement is its own `withTenantTx(db.appPool, a, ...)` with `await assert.rejects(p, { code: "42501" })`), then create `src/db/migrations/0170_rbac.sql` exactly as in design.md § Data model and implement `DEFAULT_ROLES` (`["tenant_admin", "author", "approver", "auditor"]`), `DEFAULT_BOOTSTRAP_ADMIN_GROUP` (`"ursitoare-admins"`) and `BOOTSTRAP_ADMIN_GROUP_ENV` (`"URSITOARE_BOOTSTRAP_ADMIN_GROUP"`) in `src/identity/rbac/names.ts`, implementing requirements "Every tenant has the four default roles" and "The rbac tables are tenant-leading and narrowly granted"
 
 ## 2. Roles and teams
 
