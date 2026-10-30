@@ -274,28 +274,34 @@ function parseProperty(
   }
 
   const hasType = Object.hasOwn(property, "type");
+  const hasEnum = Object.hasOwn(property, "enum");
   const type = property["type"];
 
-  if (Object.hasOwn(property, "enum") && hasType && type !== "string") {
+  if (hasEnum && hasType && type !== "string") {
     return unsupportedField(base, "enum is supported for text values only");
   }
 
-  if (!hasType) {
+  if (!hasType && !hasEnum) {
     return unsupportedField(
       { ...base, name: "" },
       "the property has no type",
     );
   }
 
-  if (typeof type !== "string") {
-    return unsupportedField(base, "type must be a single name");
-  }
+  let kind: string;
+  if (!hasType) {
+    kind = "enum";
+  } else {
+    if (typeof type !== "string") {
+      return unsupportedField(base, "type must be a single name");
+    }
 
-  if (!ALLOWED_TYPES.has(type)) {
-    return unsupportedField(base, `type "${quoted(type)}" is not supported`);
-  }
+    if (!ALLOWED_TYPES.has(type)) {
+      return unsupportedField(base, `type "${quoted(type)}" is not supported`);
+    }
 
-  const kind = type === "string" && Object.hasOwn(property, "enum") ? "enum" : type;
+    kind = type === "string" && hasEnum ? "enum" : type;
+  }
 
   const keywordProblem = firstUnsupportedKeyword(property, keywordsFor(kind), "");
   if (keywordProblem !== null) return unsupportedField(base, keywordProblem);
