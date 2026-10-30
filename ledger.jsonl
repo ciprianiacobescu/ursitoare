@@ -216,3 +216,5 @@
 {"at":"2026-10-30T02:46:12Z","revision":"10727a2ed0e7e363c45e4122d62ba221f2866f22","type":"unit.integrated","unit":"openspec:add-web-data-kit"}
 {"at":"2026-10-30T02:46:12Z","attempt":1,"cost_usd":27.662717,"runs":6,"type":"plan.charged","unit":"openspec:add-web-data-kit"}
 {"at":"2026-10-30T02:47:47Z","branch":"l4/archive/openspec/add-web-data-kit","head":"9dbc21eb8ded038c8fe75330591aa547d831d160","type":"unit.branch_deleted","unit":"openspec:add-web-data-kit"}
+{"at":"2026-10-30T02:47:49Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-web-sign-in"}
+{"at":"2026-10-30T02:47:49Z","run":"r-20261030T0247Z-7d77","type":"unit.dispatched","unit":"openspec:add-web-sign-in"}
