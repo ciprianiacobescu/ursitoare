@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Hold H-e3f87d2a: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-2023e80e: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-d7fe3aa5: UI criterion C-22c98964 has no end-to-end test; see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-2135a2da: UI criterion C-023c2efe has no end-to-end test; see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-2135a2da: UI criterion C-023c2efe has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-8928b203: UI criterion C-5368eb23 has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-f279e66d: UI criterion C-3809dcd7 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-aa40376f: UI criterion C-b4adf358 has no end-to-end test; see the generated UI tests table |
@@ -404,7 +404,7 @@ accept C-22c98964's scenario checks the six return values of the pure function s
 
 ## Q-013: Hold H-2135a2da: UI criterion C-023c2efe has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.51 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -424,6 +424,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-023c2efe's scenario checks withCsrfHeader around a recording fetch and isStateChanging; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/session-fetch.test.ts C-023c2efe traces it with a red-assertion proof and passes at head. The e2e and unit gates passed at head 601ca1f (985 of 985 tests, verification round 3).
 ---
 
 ## Q-014: Hold H-8928b203: UI criterion C-5368eb23 has no end-to-end test; see the generated UI tests table
