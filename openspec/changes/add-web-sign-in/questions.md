@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Criterion C-a76b8eac (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable): accept as satisfied? |
 | Q-009 | answered | none | verdict | Hold H-545ec45b: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-e3f87d2a: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-2023e80e: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-2023e80e: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-d7fe3aa5: UI criterion C-22c98964 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-2135a2da: UI criterion C-023c2efe has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-8928b203: UI criterion C-5368eb23 has no end-to-end test; see the generated UI tests table |
@@ -354,7 +354,7 @@ accept C-e78811f4's scenario checks the exact twelve entries of SIGN_IN_MESSAGES
 
 ## Q-011: Hold H-2023e80e: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.51 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -374,6 +374,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-cef4634b's scenario checks the return values of loginUrl and signInUrl for hostile inputs; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/return-to.test.ts C-cef4634b traces it with a red-assertion proof and passes at head. The e2e and unit gates passed at head 601ca1f (985 of 985 tests, verification round 3).
 ---
 
 ## Q-012: Hold H-d7fe3aa5: UI criterion C-22c98964 has no end-to-end test; see the generated UI tests table
