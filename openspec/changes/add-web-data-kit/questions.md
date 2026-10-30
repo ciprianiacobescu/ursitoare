@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Hold H-1632d223: UI criterion C-629f74f4 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-78854961: UI criterion C-d83105ac has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-e3eeb0c7: UI criterion C-bea5ecec has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-014 | open | none | verdict | Hold H-5ffc170f: UI criterion C-df0a8688 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-014 | answered | none | verdict | Hold H-5ffc170f: UI criterion C-df0a8688 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-9e6818f7: UI criterion C-686289b8 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-6c2adf23: UI criterion C-3bc08473 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-d3cb390d: UI criterion C-56d95a76 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -366,7 +366,7 @@ accept The hold may be waived. Criterion C-bea5ecec is the scenario "Bad body, i
 
 ## Q-014: Hold H-5ffc170f: UI criterion C-df0a8688 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -382,6 +382,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-df0a8688 is the scenario "The model": a call of the kit's functions and its return value, which no page shows. design.md "Browser coverage, stated plainly" says no page uses these components and add-web-ui-kit rules out a kit demo route, so this unit has no journey; what decides the DOM is in .ts and proved in Node, and the first consumers (add-web-task-inbox for SchemaForm, add-web-admin for DataTable) prove the markup with assert_accessible(page). Its Node test is traced as covered and passed with a red assertion.
 ---
 
 ## Q-015: Hold H-9e6818f7: UI criterion C-686289b8 has no end-to-end test (not_testable); see the generated UI tests table
