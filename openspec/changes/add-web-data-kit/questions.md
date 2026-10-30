@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-98c49746 (web-data-kit › A cursor list loads one page at a time and appends the next › Page size and subscribers): accept as satisfied? |
+| Q-001 | answered | none | verdict | Criterion C-98c49746 (web-data-kit › A cursor list loads one page at a time and appends the next › Page size and subscribers): accept as satisfied? |
 | Q-002 | answered | none | verdict | Finding F-27dc58cb: Load more after an empty page unmounts the focused button |
 | Q-003 | open | none | verdict | Finding F-78d50e72: An unsupported property `c` comes back with an empty name |
 | Q-004 | answered | none | verdict | Finding F-4c79e0be: task 1.1: no-op calls and loads do not settle with the request in flight |
@@ -50,7 +50,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-98c49746 (web-data-kit › A cursor list loads one page at a time and appends the next › Page size and subscribers): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -77,6 +78,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as the code stands. createCursorList rejects a pageSize that is not an integer or lies outside 1 to 200 with a KitError of code KIT_PROP_INVALID, so 0, 201 and 1.5 throw and 200 is accepted, and a list without pageSize falls back to DEFAULT_PAGE_SIZE, which is 50, so its first request carries limit 50. commit calls every listener from a copy of the set inside a try block that swallows a throwing listener, so the second subscriber is called for every change even when the first throws. getState returns the snapshot variable itself, which only commit reassigns, so two reads without a change are the same object. The tracing test asserts the three rejected sizes, the accepted 200, the default limit and the second subscriber's calls past a throwing first subscriber; it does not assert the object identity of two getState reads, which the judge called inadequate, but that clause is plain from the implementation and adding the assertion would change a frozen test. The listener call at sign-up is an addition the specification neither asks for nor forbids and the frozen test relies on it.
 ---
 
 ## Q-002: Finding F-27dc58cb: Load more after an empty page unmounts the focused button
