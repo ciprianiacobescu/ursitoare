@@ -34,7 +34,7 @@ def test_c_ee431615_the_sign_in_page_shows_the_error_and_is_accessible(
 ) -> None:
     page.goto("/sign-in?error=OIDC_USER_DISABLED")
 
-    expect(page.get_by_role("heading", name="Sign in")).to_be_visible()
+    expect(page.get_by_role("heading", name="Sign in", exact=True)).to_be_visible()
     expect(page.get_by_role("alert").filter(has_text=DISABLED_TEXT)).to_be_visible()
     expect(page.get_by_role("button", name="Sign in", exact=True)).to_have_count(1)
     assert_accessible(page)
@@ -134,7 +134,7 @@ def test_c_4faae006_the_return_path_is_kept(
 ) -> None:
     login(page, users["alice"], "/sign-in?error=SESSION_ENDED&return_to=%2Fflows")
 
-    expect(page).to_have_url(lambda url: urlparse(url).path == "/flows")
+    page.wait_for_url(lambda url: urlparse(url).path == "/flows")
     expect(page.get_by_role("banner")).to_contain_text("Alice Example")
 
 

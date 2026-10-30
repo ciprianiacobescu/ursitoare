@@ -45,7 +45,7 @@ export function SignInPage(): ReactNode {
     <div className="auth-page">
       <h1>Sign in</h1>
       {view.errorCode === null ? null : (
-        <ErrorPanel error={new ApiRequestError(400, view.errorCode, "Sign-in refused")} />
+        <ErrorPanel error={new ApiRequestError(401, view.errorCode, "Sign-in refused")} />
       )}
       <p>Use your organization account to open Ursitoare.</p>
       <button
