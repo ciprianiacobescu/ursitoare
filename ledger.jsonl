@@ -227,3 +227,4 @@
 {"at":"2026-10-30T19:21:36Z","run":"r-20261030T1921Z-1d9a","type":"unit.dispatched","unit":"openspec:add-web-sign-in"}
 {"at":"2026-10-30T21:16:24Z","attempt":1,"cost_usd":10.77517,"runs":4,"type":"plan.charged","unit":"openspec:add-web-sign-in"}
 {"at":"2026-10-30T21:16:24Z","run":"r-20261030T2116Z-1bb1","type":"unit.dispatched","unit":"openspec:add-web-sign-in"}
+{"at":"2026-10-30T21:21:54Z","detail":"awaiting_human: no new answers (verdicts open: Q-008, Q-010, Q-011, Q-012, Q-013, Q-014, Q-015, Q-016, Q-017, Q-018, Q-019, Q-020, Q-021, Q-022, Q-023, Q-024, Q-025, Q-026, Q-027, Q-028, Q-029, Q-030, Q-031, Q-032, Q-033) (escalated to a person: Q-010, Q-011, Q-012, Q-013, Q-014, Q-015, Q-016, Q-017, Q-018, Q-019, Q-020, Q-021, Q-022, Q-023, Q-024, Q-025, Q-026, Q-027, Q-028, Q-029, Q-030, Q-031, Q-032, Q-033)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-sign-in"}
