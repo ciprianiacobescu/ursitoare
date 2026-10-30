@@ -20,11 +20,7 @@ REST routes for a tenant administrator to manage users, service accounts, roles,
 - **THEN** the list holds only zed, the next four answer 404 `NOT_FOUND`, the last 400 `VALIDATION_FAILED`, and tenant A's rows are unchanged
 
 ### Requirement: Admin errors are registered codes
-`ERROR_CODES` SHALL hold six more entries, and `adminApiError` SHALL turn the errors of `add-roles-and-memberships` and `add-identity-model` and the `AdminError` codes that a route can return into `ApiError` answers with them, passing every other error through.
-
-#### Scenario: The registry
-- **WHEN** `ERROR_CODES` is read
-- **THEN** it has the 16 entries of `add-api-conventions` and these six, each registered: `ALREADY_EXISTS 409 "Resource already exists"`, `IN_USE 409 "Resource is in use"`, `ELEVATION_REFUSED 403 "Role cannot be granted by this principal"`, `UNKNOWN_ISSUER 422 "Issuer is not routed to this tenant"`, `OPERATION_REFUSED 422 "Operation is refused"`, `ENGINE_KEY_REQUIRED 503 "Paging needs the engine key (URSITOARE_ENGINE_KEY_FILE)"`
+`ERROR_CODES` SHALL hold six more entries (scenario "The registry" of the requirement "Every error code is registered", modified in `specs/api-conventions/spec.md`), and `adminApiError` SHALL turn the errors of `add-roles-and-memberships` and `add-identity-model` and the `AdminError` codes that a route can return into `ApiError` answers with them, passing every other error through.
 
 #### Scenario: The mapping
 - **WHEN** `adminApiError` gets `RbacError` and `AdminError` and `IdentityError` instances of `RBAC_INVALID`, `IDENTITY_INVALID`, `ADMIN_INVALID`, `RBAC_NOT_FOUND`, `ADMIN_NOT_FOUND`, `RBAC_EXISTS`, `ADMIN_EXISTS`, `RBAC_IN_USE`, `RBAC_ELEVATION`, `RBAC_UNKNOWN_ISSUER`, `ADMIN_UNKNOWN_ISSUER`, `ADMIN_SELF_DISABLE`, `ADMIN_WRONG_KIND`, `IDENTITY_OWNER_INVALID`
