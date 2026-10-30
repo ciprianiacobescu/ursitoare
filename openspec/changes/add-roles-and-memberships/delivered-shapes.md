@@ -53,6 +53,30 @@ function discoverParts(dir?: string): Promise<E2eStackPart[]>
 // add-fake-oidc (test/support/fake-oidc/types.ts)
 function startFakeOidc(opts?: { port?: number; host?: string; now?: () => Date; redirectUri?: string; }): Promise<FakeOidc>
 interface FakeOidc { readonly issuer: string; readonly url: string; clientSecret(clientId: string): string; passwordOf(username: string): string; mintToken(opts: MintOptions): string; rotateSigningKey(): void; registerRedirect(uri: string, opts?: { clientId?: string; postLogout?: boolean; }): void; requests(): RecordedRequest[]; close(): Promise<void>; }
+// add-oidc-login (src/identity/oidc/principal.ts, sessions.ts, routes.ts)
+interface Principal { tenantId: string; userId: string; kind: "human" | "service"; sessionId?: string; roles: string[]; teams: string[]; actorChain: string[]; }
+function principalOf(session: SessionContext): Principal
+interface SessionContext { tenant: TenantContext; userId: string; sessionRef: string; endSessionHint: string | null; }
+function createSession(tx: TenantTx, ctx: TenantContext, input: { userId: string; endSessionHint?: string; }, opts?: OidcOptions): Promise<{ sessionId: string; }>
+function registerOidcRoutes(server: FastifyInstance, deps: OidcRoutesDeps): void
+// add-oidc-login (test/support/oidc-login.ts, test/support/e2e-stack/oidc-part.ts)
+function completeFakeLogin(fake: FakeOidc, authorizationUrl: string, username: string): Promise<string>
+const oidcPart: E2eStackPart
+function oidcApi(handles: ReadonlyMap<string, PartHandle>): { fake: FakeOidc; }
+// add-api-pep (src/api/pep.ts, me.ts, route.ts; test/support/api-session.ts)
+interface PepDeps { pool: TenantPool | null; engine: PolicyEngine | null; clock: Clock; publicBaseUrl: string; }
+function installPep(server: FastifyInstance, deps: PepDeps): void
+function registerMeRoute(server: FastifyInstance, deps: PepDeps): void
+function defineRoute(server: FastifyInstance, def: RouteDef): void
+function createTestSession(db: TestDatabase, ctx: TenantContext, subject: string, clock: Clock): Promise<{ cookie: string; userId: string; csrfToken: string; }>
+// add-policy-catalogue (src/pdp/policy-engine.ts, principal.ts, fragments.ts)
+interface PolicyEngineOptions { srcDir: string; tenantPolicies?: readonly PolicySource[]; toolArgs?: Readonly<Record<string, ToolArgType>> | undefined; clock: Clock; ids: IdSource; logger: Logger; }
+interface PolicyEngine extends Pdp { allowedActions(principal: PrincipalEntity, actions: readonly ActionName[]): Promise<ActionName[]>; }
+function createPolicyEngine(opts: PolicyEngineOptions): Promise<PolicyEngine>
+interface PrincipalEntity { readonly tenantId: string; readonly userId: string; readonly kind: "human" | "service"; readonly roles: readonly string[]; readonly teams: readonly string[]; }
+function userEntity(p: PrincipalEntity): Entity
+function tenantEntity(tenantId: string): Entity
+function defaultSrcDir(): string
 ```
 
 ## Facts from the merged code
@@ -68,3 +92,9 @@ interface FakeOidc { readonly issuer: string; readonly url: string; clientSecret
 - `test/support/e2e-stack/database-part.ts:39,54-55,159`: `const states = new WeakMap<PartHandle, DatabaseState>();` and `databaseApi` uses `const state = handle === undefined ? undefined : states.get(handle);`, so only the handle `databasePart` made works; its `seed` runs `await ensureDefaultTenant(ownerPool, E2E_TENANT_NAME, {`. The stack seeds parts in file-name order after start and again on every reset (`reset.ts`).
 - `test/arch/rules.ts:377` (`checkModuleGraph`): `if (isTestFile(file.path)) continue;`, so a `*.test.ts` file may import any module; `test/arch/modules.ts:10-13`: `identity: { allowed: ["core", "config", "db", "tenancy", "audit", "observability"], egress: "oidc" }`.
 - `src/pdp/load.ts:146` and `212-214`: `const id = json.json.annotations?.["id"];` and `const policies = [...byId.entries()].map(([id, entry]) => ({ id, layer: entry.layer }))` (then sorted by id): `Pdp.policies` lists the `@id` annotation values of the loaded permits, not the fragment source ids.
+
+- `src/identity/oidc/principal.ts:13-23`: `principalOf` returns `{ tenantId: session.tenant.tenantId, userId: session.userId, kind: "human", sessionId: session.sessionRef, roles: [], teams: [], actorChain: [] }`.
+- `src/api/session-auth.ts:15`: the `session` verifier returns `{ principal: principalOf(session), tenant: session.tenant, session }`; `src/api/pep.ts:61`: a verifier that throws becomes `ApiError(503, "AUTHZ_UNAVAILABLE", ...)`. `src/identity/oidc/callback.ts:159-167`: one `withTenantTx` runs `upsertUserFromClaims`, the hint seal and `createSession`; a failure is `OIDC_INTERNAL` (lines 52, 64), audited as `auth.login_refused` (line 196).
+- `src/pdp/policy-engine.ts:57`: `createPolicyEngine` always builds the PDP from `[PLATFORM_SOURCE, ...fragments, ...tenantPolicies]`, and `src/pdp/platform.ts:4-6,16-17` holds `platform-cross-tenant-forbid` (`forbid (principal, action, resource) when { principal.tenant != resource.tenant }`) and `platform-read-self` (`permit (principal, action == Action::"read_self", resource)`). So whatever `srcDir` holds, every principal is allowed `read_self` on its own `Tenant` and every cross-tenant request is denied; `roles.cedar` adds only its four permits.
+- `src/pdp/principal.ts:13-14,31,70-87`: `MAX_ROLES` and `MAX_TEAMS` are 64 (a longer list is no principal); `userEntity` makes each role `Role::"<id>"` and each team `Team::"<tenant>/<team>"` a parent of `User::"<tenant>/<user>"`.
+- `test/support/e2e-stack/oidc-part.ts:27-31,102-112`: `oidcApi` without a started `oidc` handle throws `E2eStackError("STACK_PART_MISSING", ..., { part: "oidc" })`.
