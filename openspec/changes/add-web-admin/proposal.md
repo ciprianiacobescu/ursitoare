@@ -42,7 +42,7 @@ Observable result: carol (`tenant_admin`) sees "Users", "Roles and teams", "Grou
 - From `add-oidc-login`: `completeFakeLogin`; `oidcApi`; `SESSION_COOKIE`.
 - From `add-api-pep` (HTTP): `GET /api/v1/me`; the 403 envelope with a decision id; the event `authz.denied`. From `add-api-conventions` (wire): lists answer `{ items, next_cursor }`; creates honour `Idempotency-Key`.
 
-Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@e226f8c, checked line by line).
+Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@9dbc21e, checked line by line).
 
 ## Out of scope
 
