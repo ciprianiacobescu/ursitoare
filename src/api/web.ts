@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
 import { ApiError } from "./errors.ts";
+import { defineRoute } from "./route.ts";
 import { registerSecurityHeaders } from "./security-headers.ts";
 import { cacheControlFor, classifyWebPath, contentTypeFor, isAssetName } from "./web-paths.ts";
 
@@ -167,38 +168,45 @@ export function registerWebApp(server: FastifyInstance, opts: WebAppOptions): vo
   const lateRoutes = new Map<string, LateRouteHandler>();
   interceptLateRoutes(server, lateRoutes);
 
-  server.get("/*", async (request, reply) => {
-    const late = lateRoutes.get(pathOf(request.url));
-    if (late !== undefined) {
-      return late(request, reply);
-    }
-
-    const target = classifyWebPath(request.url);
-    if (target.kind === "reserved" || target.kind === "refused") {
-      throw notFound();
-    }
-
-    if (!(await isWebBuilt(distDir))) {
-      throw webNotBuilt();
-    }
-
-    const root = await realpath(distDir);
-
-    if (target.kind === "file") {
-      const found = await resolveFile(root, target.segments);
-      if (found !== undefined) {
-        const name = target.segments[target.segments.length - 1] ?? "";
-        const content = await readFile(found);
-        send(reply, contentTypeFor(name), cacheControlFor(target.segments.join("/")));
-        return content;
+  defineRoute(server, {
+    method: "GET",
+    url: "/*",
+    auth: { kind: "public", reason: "static" },
+    schema: {},
+    errors: ["NOT_FOUND", "WEB_NOT_BUILT"],
+    handler: async (request, reply) => {
+      const late = lateRoutes.get(pathOf(request.url));
+      if (late !== undefined) {
+        return late(request, reply);
       }
-      if (isAssetName(target.segments[target.segments.length - 1] ?? "")) {
+
+      const target = classifyWebPath(request.url);
+      if (target.kind === "reserved" || target.kind === "refused") {
         throw notFound();
       }
-    }
 
-    const index = await readFile(join(root, INDEX_HTML));
-    send(reply, contentTypeFor(INDEX_HTML), cacheControlFor(INDEX_HTML));
-    return index;
+      if (!(await isWebBuilt(distDir))) {
+        throw webNotBuilt();
+      }
+
+      const root = await realpath(distDir);
+
+      if (target.kind === "file") {
+        const found = await resolveFile(root, target.segments);
+        if (found !== undefined) {
+          const name = target.segments[target.segments.length - 1] ?? "";
+          const content = await readFile(found);
+          send(reply, contentTypeFor(name), cacheControlFor(target.segments.join("/")));
+          return content;
+        }
+        if (isAssetName(target.segments[target.segments.length - 1] ?? "")) {
+          throw notFound();
+        }
+      }
+
+      const index = await readFile(join(root, INDEX_HTML));
+      send(reply, contentTypeFor(INDEX_HTML), cacheControlFor(INDEX_HTML));
+      return index;
+    },
   });
 }

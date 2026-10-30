@@ -202,10 +202,13 @@ test("C-d194233f the stack health reports the migrated database, its tenant and 
       api.ownerUrl,
       "SELECT tenant_id, name, review_profile FROM ursitoare.tenant",
     );
-    assert.equal(tenants.length, 1, "the seed created exactly one tenant");
-    const tenant = tenants[0];
-    assert.ok(tenant !== undefined, "the tenant row was returned");
-    assert.equal(tenant["review_profile"], "solo", "the seeded tenant is on the solo profile");
+    assert.equal(tenants.length, 2, "the seed created the default tenant and tenant B");
+    const defaultTenant = tenants.find((row) => row["name"] === "E2E tenant");
+    assert.ok(defaultTenant !== undefined, "the default tenant row was returned");
+    assert.equal(defaultTenant["review_profile"], "solo", "the seeded default tenant is on the solo profile");
+    const tenantB = tenants.find((row) => row["name"] === "Tenant B");
+    assert.ok(tenantB !== undefined, "the tenant B row was returned");
+    assert.equal(tenantB["review_profile"], "solo", "the seeded tenant B is on the solo profile");
 
     const sessions = await ownerRows(
       api.ownerUrl,
@@ -271,9 +274,12 @@ test("C-f55456d0 reset restores the seeded tenant, drops probe state and clears 
     const controlUrl = stack.controlUrl;
 
     const before = await ownerRows(api.ownerUrl, "SELECT tenant_id FROM ursitoare.tenant");
-    assert.equal(before.length, 1, "the seed created one tenant before the probe");
-    const seededId = before[0]?.["tenant_id"];
-    assert.equal(typeof seededId, "string", "the seeded tenant id was read");
+    assert.equal(before.length, 2, "the seed created the default tenant and tenant B before the probe");
+    const seededIds = before
+      .map((row) => row["tenant_id"])
+      .filter((id): id is string => typeof id === "string")
+      .sort();
+    assert.equal(seededIds.length, 2, "both seeded tenant ids were read");
 
     await ownerRows(api.ownerUrl, "CREATE TABLE ursitoare.e2e_probe (id integer)");
     await ownerRows(
@@ -315,8 +321,12 @@ test("C-f55456d0 reset restores the seeded tenant, drops probe state and clears 
     assert.equal(probe[0]?.["probe"], null, "the reset dropped the probe table");
 
     const after = await ownerRows(api.ownerUrl, "SELECT tenant_id FROM ursitoare.tenant");
-    assert.equal(after.length, 1, "the reset left only the seeded tenant");
-    assert.equal(after[0]?.["tenant_id"], seededId, "the reset restored the same seeded tenant");
+    assert.equal(after.length, 2, "the reset left the seeded default tenant and tenant B");
+    const afterIds = after
+      .map((row) => row["tenant_id"])
+      .filter((id): id is string => typeof id === "string")
+      .sort();
+    assert.deepEqual(afterIds, seededIds, "the reset restored the same seeded tenants");
 
     const healthy = await fetch(`${stack.url}/health`);
     assert.equal(healthy.status, 200, "the fault no longer applies after reset");

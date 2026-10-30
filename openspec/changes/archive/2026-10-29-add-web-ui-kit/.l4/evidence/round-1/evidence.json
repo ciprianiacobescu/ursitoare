@@ -1,0 +1,437 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "web/src/main.tsx",
+      "app/shell.css",
+      "text/bg",
+      "text/surface",
+      "text-muted/bg",
+      "text-muted/surface",
+      "on-accent/accent",
+      "on-danger/danger",
+      "danger/bg",
+      "danger-text/danger-surface",
+      "success-text/success-surface",
+      "info-text/info-surface",
+      "toast-text/toast-bg",
+      "accent/bg",
+      "border/bg",
+      "border/surface",
+      "focus/bg",
+      "focus/surface",
+      "e2e/pyproject.toml",
+      "<repo>/node_modules/axe-core/axe.min.js",
+      "web/src/kit",
+      "test/support/a11y-setup.ts",
+      "e2e/conftest.py",
+      "web/src",
+      "e2e/test_m1_web_kit.py",
+      "e2e/test_m0_skeleton.py",
+      "web/src/app/shell.css",
+      "web/src/kit/{tokens,theme}.css",
+      "test/support/a11y-setup.test.ts",
+      "web/src/app/Shell.tsx",
+      "docs/decisions/0002",
+      "http://127.0.0.1",
+      "web/src/kit/contrast.test.ts",
+      "web/index.html",
+      "web/src/kit/errors.ts",
+      "web/src/kit/contrast.ts",
+      "web/src/kit/tokens.css",
+      "web/src/kit/theme.css",
+      "kit/tokens.css",
+      "kit/theme.css",
+      "web/src/kit/messages.test.ts",
+      "web/src/kit/messages.ts",
+      "web/src/kit/states.test.ts",
+      "web/src/kit/states.ts",
+      "web/src/kit/EmptyState.tsx",
+      "web/src/kit/LoadingState.tsx",
+      "<span>{label}</span>",
+      "web/src/kit/error-panel.test.ts",
+      "web/src/api/client.ts",
+      "web/src/kit/error-panel.ts",
+      "web/src/kit/ErrorPanel.tsx",
+      "web/src/kit/confirm.test.ts",
+      "web/src/kit/confirm.ts",
+      "web/src/kit/ConfirmDialog.tsx",
+      "web/src/kit/toast.test.ts",
+      "web/src/kit/toast.ts",
+      "web/src/kit/ToastRegion.tsx",
+      "web/src/kit/capabilities.test.ts",
+      "web/src/kit/capabilities.ts",
+      "web/src/kit/use-visible-nav.ts",
+      "web/src/kit/keyboard.test.ts",
+      "web/src/kit/data",
+      "web/src/kit/keyboard.ts",
+      "test/arch/licence-rules.ts",
+      "test/arch/licence-policy.ts",
+      "node_modules/axe-core/axe.min.js",
+      "**/tokens.css",
+      "**/--ui-*",
+      "**/theme.css",
+      "**/.ui-*",
+      "**/^[A-Z][A-Z0-9_]{1,63}$",
+      "**/^[A-Za-z0-9_.:-]{1,128}$",
+      "**/package.json",
+      "**/errors.ts",
+      "**/contrast.ts",
+      "**/messages.ts",
+      "**/states.ts",
+      "**/confirm.ts",
+      "**/toast.ts",
+      "**/capabilities.ts",
+      "**/keyboard.ts",
+      "**/EmptyState.tsx",
+      "**/LoadingState.tsx",
+      "**/ErrorPanel.tsx",
+      "**/ConfirmDialog.tsx",
+      "**/ToastRegion.tsx",
+      "**/*.test.ts",
+      "**/contrast.test.ts",
+      "**/path.py",
+      "**/Shell.tsx",
+      "**/shell.css",
+      "**/^[a-z][a-z0-9_.:-]{0,63}$",
+      "**/devDependencies[\"axe-core\"]",
+      "module <repo>",
+      "module <span>{label}<",
+      "module accent",
+      "module app",
+      "module border",
+      "module danger",
+      "module danger-text",
+      "module docs",
+      "module e2e",
+      "module focus",
+      "module http:",
+      "module info-text",
+      "module kit",
+      "module main",
+      "module node_modules",
+      "module on-accent",
+      "module on-danger",
+      "module success-text",
+      "module test",
+      "module text",
+      "module text-muted",
+      "module toast-text",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/conftest.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "e2e/test_m0_skeleton.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "e2e/test_m1_web_kit.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-ui-kit/.l4/ledger/r-20261029T1619Z-5d8b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ui-kit/.l4/ledger/r-20261029T1856Z-fd8d.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ui-kit/.l4/ledger/r-20261029T1943Z-8995.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ui-kit/.l4/ledger/r-20261029T2009Z-d59b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ui-kit/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ui-kit/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/a11y-setup.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/a11y-setup.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/app/Shell.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/ConfirmDialog.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/EmptyState.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/ErrorPanel.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/LoadingState.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/ToastRegion.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/capabilities.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/capabilities.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/confirm.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/confirm.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/contrast.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/contrast.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/error-panel.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/error-panel.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/errors.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/keyboard.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/keyboard.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/messages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/messages.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/states.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/states.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/theme.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/toast.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/toast.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/tokens.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/use-visible-nav.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/main.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: test/support/a11y-setup.ts, web/src/app/Shell.tsx, web/src/kit/ConfirmDialog.tsx, web/src/kit/EmptyState.tsx, web/src/kit/ErrorPanel.tsx and 13 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "test/support/a11y-setup.ts",
+      "web/src/app/Shell.tsx",
+      "web/src/kit/ConfirmDialog.tsx",
+      "web/src/kit/EmptyState.tsx",
+      "web/src/kit/ErrorPanel.tsx",
+      "web/src/kit/LoadingState.tsx",
+      "web/src/kit/ToastRegion.tsx",
+      "web/src/kit/capabilities.ts",
+      "web/src/kit/confirm.ts",
+      "web/src/kit/contrast.ts",
+      "web/src/kit/error-panel.ts",
+      "web/src/kit/errors.ts",
+      "web/src/kit/keyboard.ts",
+      "web/src/kit/messages.ts",
+      "web/src/kit/states.ts",
+      "web/src/kit/toast.ts",
+      "web/src/kit/use-visible-nav.ts",
+      "web/src/main.tsx"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 890,
+      "passed": 890,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 36,
+      "new_passed": 36,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

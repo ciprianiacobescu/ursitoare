@@ -1,0 +1,2 @@
+{"ts": "2026-10-29T12:19:08.104909Z", "run_id": "r-20261029T1219Z-8d6d", "unit": "openspec:add-api-pep", "seq": 1, "type": "run.started", "harness_version": "0.4.38", "harness_commit": "8aed6e69bf52a63eacf476cfe682a5e8c2714b80", "command": "plan --sweep", "branch": "l4/openspec/add-api-pep"}
+{"ts": "2026-10-29T12:19:08.105617Z", "run_id": "r-20261029T1219Z-8d6d", "unit": "openspec:add-api-pep", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 28, "merge_commit": "6f85bb3bd180fee942b4638495e12495299359e9"}

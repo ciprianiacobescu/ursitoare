@@ -1,5 +1,3 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 export type KitErrorCode =
   | "KIT_PROP_INVALID"
   | "KIT_CONFIRM_LABEL_GENERIC"
@@ -10,8 +8,9 @@ export type KitErrorCode =
 
 export class KitError extends Error {
   readonly code: KitErrorCode;
-  constructor(_code: KitErrorCode, message: string) {
+  constructor(code: KitErrorCode, message: string) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "KitError";
+    this.code = code;
   }
 }

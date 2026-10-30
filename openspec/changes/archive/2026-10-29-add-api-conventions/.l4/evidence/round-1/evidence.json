@@ -1,0 +1,328 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "querystring/limit",
+      "src/db/migrations/NNNN_<name>.sql",
+      "src/main.api.test.ts",
+      "src/api/index.ts",
+      "web/src/features/NN-<name>.tsx",
+      "test/support/openapi-docs.ts",
+      "docs/api/openapi.json",
+      "src/db/migrations/0140_idempotency.sql",
+      "src/api",
+      "src/identity",
+      "src/api/error-codes.ts",
+      "docs/decisions/0002",
+      "src/main.ts",
+      "test/arch/modules.ts",
+      "src/api/{error-codes,cursor,pagination,idempotency,openapi}.ts",
+      "test/arch/{error-codes,web-routes}.ts",
+      "src/api/error-codes.test.ts",
+      "test/arch/error-codes.test.ts",
+      "test/arch/error-codes.ts",
+      "src",
+      "src/api/cursor.test.ts",
+      "src/api/cursor.ts",
+      "src/api/pagination.test.ts",
+      "src/api/pagination.ts",
+      "src/api/paginate.test.ts",
+      "src/api/idempotency-schema.test.ts",
+      "src/api/idempotency-key.test.ts",
+      "src/api/idempotency.ts",
+      "src/api/idempotency.test.ts",
+      "src/api/idempotent-response.test.ts",
+      "test/arch/web-routes.test.ts",
+      "web/src/features",
+      "test/arch/web-routes.ts",
+      "src/api/openapi.test.ts",
+      "src/api/openapi.ts",
+      "src/api/openapi-route.test.ts",
+      "src/main.conventions.test.ts",
+      "<url>/api/v1/openapi.json",
+      "**/[\"api\"]",
+      "**/[\"health\"]",
+      "**/[\"auth\",\"oidc\"]",
+      "**/[\".well-known\"]",
+      "**/[\"hooks\"]",
+      "**/[\"callbacks\"]",
+      "**/[\"mcp\"]",
+      "**/ARCH_*",
+      "src/**/*.ts",
+      "**/^[a-z][a-z0-9_.:-]{0,63}$",
+      "**/^[0-9a-f]{64}$",
+      "**/x-ursitoare-*",
+      "**/*.test.ts",
+      "**/[]",
+      "**/^[0-9]{1,3}$",
+      "**/request.headers[\"idempotency-key\"]",
+      "**/^[!-~]{1,128}$",
+      "**/*.tsx",
+      "**/?",
+      "^web/src/features/[0-9]{2}-[a-z0-9-]+\\.tsx$",
+      "**/schema.params.properties[name]",
+      "module <url>",
+      "module ^web",
+      "module api",
+      "module db",
+      "module docs",
+      "module identity",
+      "module main",
+      "module main.api.test",
+      "module main.conventions.test",
+      "module querystring",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-api-conventions/.l4/ledger/r-20261029T1219Z-7db8.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-api-conventions/.l4/ledger/r-20261029T1412Z-bf29.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-api-conventions/.l4/ledger/r-20261029T1500Z-34ea.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-api-conventions/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-api-conventions/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/cursor.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/cursor.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/error-codes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/error-codes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/idempotency-key.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/idempotency-schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/idempotency.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/idempotency.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/idempotent-response.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/openapi-route.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/openapi.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/openapi.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/paginate.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/pagination.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/pagination.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0140_idempotency.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.conventions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/arch/error-codes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/arch/error-codes.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/arch/web-routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/arch/web-routes.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/openapi-docs.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/cursor.ts, src/api/error-codes.ts, src/api/idempotency.ts, src/api/index.ts, src/api/openapi.ts and 5 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/cursor.ts",
+      "src/api/error-codes.ts",
+      "src/api/idempotency.ts",
+      "src/api/index.ts",
+      "src/api/openapi.ts",
+      "src/api/pagination.ts",
+      "src/main.ts",
+      "test/arch/error-codes.ts",
+      "test/arch/web-routes.ts",
+      "test/support/openapi-docs.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 854,
+      "passed": 854,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 36,
+      "new_passed": 36,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

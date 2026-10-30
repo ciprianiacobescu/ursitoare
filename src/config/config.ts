@@ -4,6 +4,9 @@ import type { LogLevel } from "../core/index.ts";
 import type { Secret, SecretReader } from "./secret.ts";
 import { readSecretValue } from "./secret.ts";
 import { ConfigError } from "./errors.ts";
+import { parseInternalPort } from "./internal.ts";
+import type { OidcConfig } from "./oidc.ts";
+import { loadOidcConfig } from "./oidc.ts";
 
 export type Role = "all" | "api" | "worker" | "sandbox";
 
@@ -24,6 +27,8 @@ export interface AppConfig {
   readonly shutdownDrainMs: number;
   readonly engineKey: Secret | null;
   readonly database: { readonly app: DatabaseEndpoint | null; readonly owner: DatabaseEndpoint | null };
+  readonly oidc?: OidcConfig;
+  readonly internalPort?: number;
 }
 
 const ROLES: readonly Role[] = ["all", "api", "worker", "sandbox"];
@@ -218,7 +223,10 @@ export function loadConfig(env: Env, readSecret: SecretReader = defaultReadSecre
     "URSITOARE_DATABASE_OWNER_PASSWORD_FILE",
     readSecret,
   );
-  return {
+  const database = { app, owner };
+  const oidc = loadOidcConfig(env, readSecret, { engineKey, database });
+  const internalPort = parseInternalPort(env, port);
+  const config: AppConfig = {
     role,
     host,
     port,
@@ -227,6 +235,8 @@ export function loadConfig(env: Env, readSecret: SecretReader = defaultReadSecre
     webDist,
     shutdownDrainMs,
     engineKey,
-    database: { app, owner },
+    database,
+    internalPort,
   };
+  return oidc === undefined ? config : { ...config, oidc };
 }

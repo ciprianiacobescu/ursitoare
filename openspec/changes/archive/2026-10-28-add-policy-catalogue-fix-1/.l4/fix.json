@@ -1,0 +1,12 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-policy-catalogue",
+  "round": 1,
+  "findings": [
+    "F-e12398b4"
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": []
+}

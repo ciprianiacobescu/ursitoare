@@ -4,7 +4,7 @@
 - **Scope:** `web/**`
 - **Source:** verifier round 2
 - **Dedupe key:** ui-criterion-without-e2e-test
-- **Reinforced:** 1 · 2026-10-27
+- **Reinforced:** 3 · 2026-10-30
 A criterion about what a user sees or does needs a browser test that traces it by id (`C-<hex>` in the test name). A unit test does not cover it. Put the browser test in the end-to-end directory (`e2e/`, not under `tests/`, whose gate has no server) and write it with the change, not after the verifier asks.
 
 ## L-c96adcf5 · Guard rule repeated: frozen test

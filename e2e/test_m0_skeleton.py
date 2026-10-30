@@ -7,6 +7,8 @@ import urllib.request
 import pytest
 from playwright.sync_api import Page, Route, expect
 
+from conftest import assert_accessible
+
 CONTENT_SECURITY_POLICY = (
     "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
     "connect-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'none'; "
@@ -101,6 +103,7 @@ def _take_held_route(page: Page, held: list[Route]) -> Route:
 
 @pytest.mark.milestone("M0")
 @pytest.mark.l4("C-1542e67b")
+@pytest.mark.l4("C-5bbabdc1")
 def test_landing_page_shows_name_and_engine_health(
     page: Page, base_url: str, fresh_state: None
 ) -> None:
@@ -110,6 +113,7 @@ def test_landing_page_shows_name_and_engine_health(
 
     expect(page.get_by_role("heading", name="Ursitoare")).to_be_visible()
     expect(page.get_by_role("status")).to_have_text("Engine healthy")
+    assert_accessible(page)
 
 
 @pytest.mark.milestone("M0")
@@ -169,10 +173,12 @@ def test_landing_page_health_states(
     expect(status).to_have_text("Engine healthy")
     expect(check_again).to_have_count(0)
     expect(status).to_be_focused()
+    assert_accessible(page)
 
 
 @pytest.mark.milestone("M0")
 @pytest.mark.l4("C-60599e6f")
+@pytest.mark.l4("C-5bbabdc1")
 def test_shell_landmarks_and_skip_link(
     page: Page, base_url: str, fresh_state: None
 ) -> None:
@@ -209,10 +215,12 @@ def test_shell_landmarks_and_skip_link(
         "Content Security Policy" in message for message in console_messages
     ), "no console message mentions a Content Security Policy violation"
     assert page_errors == [], "no page error occurs"
+    assert_accessible(page)
 
 
 @pytest.mark.milestone("M0")
 @pytest.mark.l4("C-0daf92cd")
+@pytest.mark.l4("C-5bbabdc1")
 def test_deep_link_returns_the_app(
     page: Page, base_url: str, fresh_state: None
 ) -> None:
@@ -225,3 +233,4 @@ def test_deep_link_returns_the_app(
     ).to_be_visible()
     expect(page.get_by_role("heading", name="Page not found")).to_be_visible()
     expect(page).to_have_title("Page not found · Ursitoare")
+    assert_accessible(page)

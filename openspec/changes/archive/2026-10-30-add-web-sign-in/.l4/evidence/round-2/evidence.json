@@ -1,0 +1,457 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "web/src/auth",
+      "web/src/auth/return-to.ts",
+      "web/src/auth/messages.ts",
+      "web/src/auth/session-fetch.ts",
+      "web/src/auth/sign-out.ts",
+      "web/src/auth/session-client.ts",
+      "web/src/auth/account.ts",
+      "web/src/features/15-sign-in.tsx",
+      "test/support/e2e-stack/seed-data.ts",
+      "test/support/e2e-stack/tenant-b-part.ts",
+      "parts/27-tenant-b.ts",
+      "test/support/e2e-stack/control.ts",
+      "e2e/conftest.py",
+      "src",
+      "e2e/test_m1_sign_in.py",
+      "web/src/auth/auth.css",
+      "test/support/e2e-stack/{seed-data,tenant-b-part,control.seed,stack.seed}.test.ts",
+      "web/src/app/Shell.tsx",
+      "test/support/e2e-stack/stack.ts",
+      "docs/decisions/0002",
+      "web/src/auth/messages.test.ts",
+      "web/src/kit/messages.ts",
+      "web/src/auth/return-to.test.ts",
+      "http://x.invalid",
+      "web/src/auth/session-fetch.test.ts",
+      "web/src/auth/sign-out.test.ts",
+      "web/src/api/client.ts",
+      "web/src/auth/session-client.test.ts",
+      "web/src/auth/browser-session.ts",
+      "web/src/kit/capabilities.ts",
+      "web/src/auth/account.test.ts",
+      "web/src/auth/auth-css.test.ts",
+      "web/src/auth/use-session.ts",
+      "web/src/auth/AccountMenu.tsx",
+      "web/src/auth/sign-in-page.test.ts",
+      "web/src/auth/sign-in-page.ts",
+      "web/src/auth/SignInPage.tsx",
+      "test/support/e2e-stack/seed-data.test.ts",
+      "test/support/e2e-stack/tenant-b-part.test.ts",
+      "test/support/tenants.ts",
+      "src/db/migrations/0002_tenancy.sql",
+      "test/support/e2e-stack/parts/27-tenant-b.ts",
+      "test/support/e2e-stack/control.seed.test.ts",
+      "test/support/e2e-stack/stack.seed.test.ts",
+      "**/auth.css",
+      "**/client.ts",
+      "**/^[A-Za-z0-9_-]{1,128}$",
+      "**/?return_to=",
+      "**/stack.ts",
+      "**/AccountMenu.tsx",
+      "**/SignInPage.tsx",
+      "**/[]",
+      "**/?error=",
+      "**/?error",
+      "**/*.test.ts",
+      "**/stack.seed.test.ts",
+      "**/control.ts",
+      "**/Shell.tsx",
+      "**/test_m0_skeleton.py",
+      "**/conftest.py",
+      "**/?",
+      "**/^[A-Z][A-Z0-9_]{1,63}$",
+      "**/account.test.ts",
+      "**/seedData?",
+      "**/user[\"username\"]",
+      "**/user[\"password\"]",
+      "**/user[\"displayName\"]",
+      "module db",
+      "module docs",
+      "module e2e",
+      "module http:",
+      "module parts",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/conftest.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "e2e/test_m1_sign_in.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-sign-in-fix-1/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-sign-in-fix-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-sign-in-fix-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-sign-in-fix-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-sign-in/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-sign-in/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-sign-in/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-sign-in/.l4/ledger/r-20261030T0247Z-7d77.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-sign-in/.l4/ledger/r-20261030T0434Z-57e9.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-sign-in/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-sign-in/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-sign-in/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/e2e-stack/control.seed.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/control.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/parts/27-tenant-b.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/seed-data.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/seed-data.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/stack.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/stack.seed.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/stack.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/tenant-b-part.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/tenant-b-part.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/app/Shell.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/AccountMenu.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/SignInPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/account.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/auth/account.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/auth-css.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/auth/auth.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/browser-session.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/messages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/auth/messages.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/return-to.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/auth/return-to.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/session-client.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/auth/session-client.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/session-fetch.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/auth/session-fetch.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/sign-in-page.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/auth/sign-in-page.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/sign-out.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/auth/sign-out.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/use-session.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/features/15-sign-in.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: test/support/e2e-stack/control.ts, test/support/e2e-stack/parts/27-tenant-b.ts, test/support/e2e-stack/seed-data.ts, test/support/e2e-stack/stack.ts, test/support/e2e-stack/tenant-b-part.ts and 13 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "test/support/e2e-stack/control.ts",
+      "test/support/e2e-stack/parts/27-tenant-b.ts",
+      "test/support/e2e-stack/seed-data.ts",
+      "test/support/e2e-stack/stack.ts",
+      "test/support/e2e-stack/tenant-b-part.ts",
+      "web/src/app/Shell.tsx",
+      "web/src/auth/AccountMenu.tsx",
+      "web/src/auth/SignInPage.tsx",
+      "web/src/auth/account.ts",
+      "web/src/auth/browser-session.ts",
+      "web/src/auth/messages.ts",
+      "web/src/auth/return-to.ts",
+      "web/src/auth/session-client.ts",
+      "web/src/auth/session-fetch.ts",
+      "web/src/auth/sign-in-page.ts",
+      "web/src/auth/sign-out.ts",
+      "web/src/auth/use-session.ts",
+      "web/src/features/15-sign-in.tsx"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 985,
+      "passed": 984,
+      "failed": 1,
+      "errored": 0,
+      "skipped": 0,
+      "new": 33,
+      "new_passed": 32,
+      "skipped_unchanged": []
+    },
+    "findings": [
+      {
+        "severity": "blocker",
+        "title": "new tests failed",
+        "detail": "test_m1_sign_in::test_c_4faae006_the_return_path_is_kept[chromium]"
+      }
+    ]
+  }
+}

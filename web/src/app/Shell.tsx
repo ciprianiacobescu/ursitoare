@@ -1,8 +1,11 @@
 import { Link, NavLink, Outlet } from "react-router";
 
-import { navItems } from "./features.ts";
+import { AccountMenu } from "../auth/AccountMenu.tsx";
+import { ToastRegion } from "../kit/ToastRegion.tsx";
+import { useVisibleNav } from "../kit/use-visible-nav.ts";
 
 export function Shell() {
+  const navEntries = useVisibleNav();
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main">
@@ -14,18 +17,20 @@ export function Shell() {
         </Link>
         <nav aria-label="Main">
           <ul className="app-nav">
-            {navItems().map((item) => (
+            {navEntries.map((item) => (
               <li key={item.id}>
                 <NavLink to={item.path}>{item.label}</NavLink>
               </li>
             ))}
           </ul>
         </nav>
+        <AccountMenu />
       </header>
       <main id="main" tabIndex={-1}>
         <Outlet />
       </main>
       <footer className="app-footer">Ursitoare workflow engine</footer>
+      <ToastRegion />
     </div>
   );
 }

@@ -1,0 +1,20 @@
+.auth-account {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-space-2);
+  margin-inline-start: auto;
+  color: var(--ui-color-text);
+}
+
+.auth-account p {
+  margin: 0;
+}
+
+.auth-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-3);
+  max-width: 32rem;
+  color: var(--ui-color-text);
+}

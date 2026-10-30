@@ -14,6 +14,7 @@ import { discoverParts } from "./discover.ts";
 import type { E2eStackPart, PartContext, PartHandle } from "./part.ts";
 import { E2eStackError } from "./part.ts";
 import { createFaultTable } from "./faults.ts";
+import { collectSeedData } from "./seed-data.ts";
 import { createResetRunner } from "./reset.ts";
 import { freePort } from "../pg.ts";
 
@@ -288,6 +289,7 @@ export async function startE2eStack(opts: StackOptions = {}): Promise<E2eStack> 
       port: ports.controlPort,
       faults,
       reset: trackedReset,
+      seedData: () => collectSeedData(handles),
     });
     controlUrl = control.url;
   } catch (error) {

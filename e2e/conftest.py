@@ -11,8 +11,10 @@ import json
 import os
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 import pytest
+from playwright.sync_api import expect
 
 DEFAULT_BASE_URL = "http://127.0.0.1:39080"
 DEFAULT_CONTROL_URL = "http://127.0.0.1:39081"
@@ -63,3 +65,75 @@ def fresh_state() -> None:
         raise _reset_failure(url, error.code, error.read().decode("utf-8")) from error
     except urllib.error.URLError as error:
         raise RuntimeError(f"could not reach the stack control URL {url}: {error}") from error
+
+
+@pytest.fixture
+def users(e2e_profile: str) -> dict[str, dict[str, str]]:
+    """The seed users of the fake stack (passwords are the fake's per-start values)."""
+    if e2e_profile != "fake":
+        raise RuntimeError(
+            f"the users fixture needs the fake profile, not {e2e_profile!r}"
+        )
+    url = os.environ.get("E2E_CONTROL_URL", DEFAULT_CONTROL_URL)
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    try:
+        with opener.open(f"{url}/seed", timeout=30) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+    except (urllib.error.URLError, json.JSONDecodeError) as error:
+        raise RuntimeError(f"could not read the seed users at {url}/seed: {error}") from error
+    found = payload.get("users") if isinstance(payload, dict) else None
+    if not isinstance(found, dict):
+        raise RuntimeError(f"the seed answer at {url}/seed has no users object")
+    return found
+
+
+def login(page, user: dict[str, str], path: str = "/sign-in") -> None:
+    """Sign in through the engine's Sign in button and the fake provider's form."""
+    page.goto(path)
+    page.get_by_role("button", name="Sign in", exact=True).click()
+    page.get_by_label("Username or email").fill(user["username"])
+    page.get_by_label("Password").fill(user["password"])
+    page.get_by_role("button", name="Sign In", exact=True).click()
+    expect(page.get_by_role("banner")).to_contain_text(user["displayName"])
+
+
+def _axe_source() -> str:
+    """Read the installed axe-core bundle; never fetch it from the network."""
+    bundle = (
+        Path(__file__).resolve().parent.parent
+        / "node_modules"
+        / "axe-core"
+        / "axe.min.js"
+    )
+    try:
+        return bundle.read_text(encoding="utf-8")
+    except OSError:
+        pytest.fail("axe-core is not installed: run pnpm install")
+
+
+AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]
+AXE_BLOCKING_IMPACTS = ("serious", "critical")
+
+
+def assert_accessible(page) -> None:
+    """Run axe-core against the page, offline and without weakening its CSP."""
+    if page.evaluate("typeof window.axe") == "undefined":
+        page.evaluate(_axe_source())
+    found = page.evaluate(
+        """async (tags) => { const r = await window.axe.run(document, { runOnly: { type: "tag", values: tags } });
+        return r.violations.map((v) => ({ id: v.id, impact: v.impact, targets: v.nodes.map((n) => n.target.join(" ")) })); }""",
+        AXE_TAGS,
+    )
+    blocking = sorted(
+        (v for v in found if v["impact"] in AXE_BLOCKING_IMPACTS),
+        key=lambda v: v["id"],
+    )
+    if blocking:
+        pytest.fail(
+            "accessibility violations: "
+            + "; ".join(
+                f'{v["id"]} ({v["impact"]}): {", ".join(v["targets"][:3])}'
+                for v in blocking
+            ),
+            pytrace=False,
+        )

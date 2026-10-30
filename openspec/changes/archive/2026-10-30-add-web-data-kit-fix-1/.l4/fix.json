@@ -1,0 +1,15 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-web-data-kit",
+  "round": 1,
+  "findings": [
+    "F-27dc58cb",
+    "F-78d50e72",
+    "F-4c79e0be",
+    "F-d49cb373"
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": []
+}

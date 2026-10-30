@@ -1,0 +1,30 @@
+:root {
+  --ui-color-bg: #ffffff;
+  --ui-color-surface: #f4f5f7;
+  --ui-color-text: #1b1f27;
+  --ui-color-text-muted: #4b5262;
+  --ui-color-border: #7b8494;
+  --ui-color-focus: #1d4ed8;
+  --ui-color-accent: #1d4ed8;
+  --ui-color-on-accent: #ffffff;
+  --ui-color-danger: #b42318;
+  --ui-color-on-danger: #ffffff;
+  --ui-color-danger-surface: #fef3f2;
+  --ui-color-danger-text: #912018;
+  --ui-color-success-surface: #ecfdf3;
+  --ui-color-success-text: #05603a;
+  --ui-color-info-surface: #eff4ff;
+  --ui-color-info-text: #1a3fa8;
+  --ui-color-toast-bg: #1b1f27;
+  --ui-color-toast-text: #ffffff;
+
+  --ui-space-1: 0.25rem;
+  --ui-space-2: 0.5rem;
+  --ui-space-3: 1rem;
+  --ui-space-4: 1.5rem;
+  --ui-radius: 0.375rem;
+  --ui-focus-width: 3px;
+  --ui-target-min: 2.5rem;
+  --ui-font-sans: system-ui, sans-serif;
+  --ui-font-size: 1rem;
+}

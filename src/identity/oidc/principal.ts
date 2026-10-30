@@ -1,5 +1,3 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 import type { SessionContext } from "./sessions.ts";
 
 export interface Principal {
@@ -12,6 +10,14 @@ export interface Principal {
   actorChain: string[];
 }
 
-export function principalOf(_session: SessionContext): Principal {
-  throw new Error("not implemented");
+export function principalOf(session: SessionContext): Principal {
+  return {
+    tenantId: session.tenant.tenantId,
+    userId: session.userId,
+    kind: "human",
+    sessionId: session.sessionRef,
+    roles: [],
+    teams: [],
+    actorChain: [],
+  };
 }
