@@ -46,7 +46,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-033 | answered | none | verdict | Hold H-034ad64a: UI criterion C-74fd23b0 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-034 | answered | none | verdict | Hold H-da5c95d0: UI criterion C-ab5cf141 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-035 | answered | none | verdict | Hold H-b3bec5d6: UI criterion C-852bb719 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-036 | open | none | verdict | Hold H-d3c23a86: UI criterion C-247ad9d2 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-036 | answered | none | verdict | Hold H-d3c23a86: UI criterion C-247ad9d2 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-037 | open | none | verdict | Hold H-e860473b: UI criterion C-a0904f4d has no end-to-end test (not_testable); see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -834,7 +834,7 @@ accept The hold may be waived. Criterion C-852bb719 is the fix unit's regression
 
 ## Q-036: Hold H-d3c23a86: UI criterion C-247ad9d2 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.77 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -851,6 +851,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-247ad9d2 is the regression scenario "task 1.1: no-op calls and loads do not settle with the request in flight": when the promises of load, loadMore and retry settle, an API timing no page shows. start now returns a promise that resolves once its request's outcome is committed or reset() drops it (cursor-list.ts finishPending), calls that start nothing still resolve at once, and its Node tests (C-247ad9d2 load loadMore and retry settle with their request; C-efc9d8f0 C-247ad9d2 no-op calls settle at once while a request is in flight) passed with a red assertion. design.md "Browser coverage, stated plainly" says no page uses these components and add-web-ui-kit rules out a kit demo route, so this unit has no journey; the first consumers (add-web-admin for DataTable, add-web-task-inbox for SchemaForm) prove the markup with assert_accessible(page).
 ---
 
 ## Q-037: Hold H-e860473b: UI criterion C-a0904f4d has no end-to-end test (not_testable); see the generated UI tests table
