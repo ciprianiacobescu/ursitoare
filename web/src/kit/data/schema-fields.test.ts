@@ -257,6 +257,29 @@ test("C-9d1fffc7 schemaToFields reports root problems without dropping fields", 
   assert.deepEqual(crowded.problems, ["more than 100 properties"]);
 });
 
+test("C-a0904f4d schemaToFields treats an enum without type as a text enum", () => {
+  const untyped = parsed(
+    { type: "object", properties: { kind: { enum: ["bug", "task"] } } },
+    "an enum property without a type",
+  );
+  const typed = parsed(
+    { type: "object", properties: { kind: { type: "string", enum: ["bug", "task"] } } },
+    "an enum property with the string type",
+  );
+  assert.deepEqual(untyped.problems, []);
+  assert.equal(untyped.fields.length, 1);
+  assert.equal(typed.fields.length, 1);
+  assert.deepEqual(known(untyped.fields[0], "the untyped enum field"), known(typed.fields[0], "the typed enum field"));
+  assert.deepEqual(known(untyped.fields[0], "the untyped enum field"), {
+    name: "kind",
+    label: "Kind",
+    hint: null,
+    required: false,
+    kind: "enum",
+    options: ["bug", "task"],
+  });
+});
+
 test("C-9d1fffc7 schemaToFields accepts an empty object schema and holds 100 properties", () => {
   const empty = parsed({ type: "object" }, "an object schema without properties");
   assert.deepEqual(empty.fields, []);
