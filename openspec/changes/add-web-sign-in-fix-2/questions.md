@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.2 | technical | Unfreeze e2e/test_m1_sign_in.py to repair its broken URL assertion |
+| Q-001 | answered | 1.2 | technical | Unfreeze e2e/test_m1_sign_in.py to repair its broken URL assertion |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Unfreeze e2e/test_m1_sign_in.py to repair its broken URL assertion
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The question comes from a fix task and its only remedy is a change to the frozen browser test e2e/test_m1_sign_in.py (line 137 does read `expect(page).to_have_url(lambda ...)` as described). A fix task cannot unfreeze or edit a test file, there is no clarifier suggestion to accept, and an answer nam
 - **Blocking tasks:** 1.2
 - **Kind:** technical
@@ -35,3 +35,4 @@ Harness note: this is a fix task. It cannot unfreeze a test or test-support file
 
 ### Answer
 <!-- write below this line -->
+A person committed 3c23ff5a55 on the unit branch. It repairs both defects of the M1 journey test: the URL check now uses page.wait_for_url with the same predicate (to_have_url takes only a string or a pattern in Playwright Python 1.63), and the "Sign in" heading locator takes exact=True as design decision 13 requires (without it it also matched the panel heading "Sign in required"). It also puts web/src/auth/SignInPage.tsx back on ApiRequestError status 401, as design decision 10 says; keep 401, do not change it. Checked on Node 24: lint, typecheck, 940 unit tests and all 45 e2e tests pass. Nothing is weakened and nothing else needs changing: run the gates again.
