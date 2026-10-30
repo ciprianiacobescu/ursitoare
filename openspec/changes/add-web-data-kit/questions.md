@@ -834,6 +834,7 @@ accept The hold may be waived. Criterion C-852bb719 is the fix unit's regression
 ## Q-036: Hold H-d3c23a86: UI criterion C-247ad9d2 has no end-to-end test (not_testable); see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.77 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
