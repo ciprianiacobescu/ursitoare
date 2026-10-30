@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | open | none | verdict | Criterion C-98c49746 (web-data-kit › A cursor list loads one page at a time and appends the next › Page size and subscribers): accept as satisfied? |
-| Q-002 | open | none | verdict | Finding F-27dc58cb: Load more after an empty page unmounts the focused button |
+| Q-002 | answered | none | verdict | Finding F-27dc58cb: Load more after an empty page unmounts the focused button |
 | Q-003 | open | none | verdict | Finding F-78d50e72: An unsupported property `c` comes back with an empty name |
 | Q-004 | open | none | verdict | Finding F-4c79e0be: task 1.1: no-op calls and loads do not settle with the request in flight |
 | Q-005 | open | none | verdict | Finding F-d49cb373: task 4.1: an enum property without type is not rendered as an enum |
@@ -81,7 +81,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-002: Finding F-27dc58cb: Load more after an empty page unmounts the focused button
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -103,6 +104,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is right. In cursor-list.ts a loadMore keeps the items and the nextCursor of the page before it, so after state (5) the list is loading with no items and nextCursor "c1". In data-table.ts tableView makes body loading for any loading state with no items and loadMore busy only when there are items, so this state gets loadMore hidden; DataTable.tsx renders the Load more button only when loadMore is not hidden, so the button that was just pressed unmounts. focusAfterChange has no branch for loaded to loading, so it returns none and keyboard focus falls to the document body. Design Decision 4 says focusAfterChange names a target for every change that unmounts the focused button, so keyboard focus is never lost, and that Load more keeps focus while busy; Decision 9 of the decisions made while writing says the same. The frozen scenario (2) and its test only pin loading with no items and a null cursor, which is the first page, so the fix can tell a Load more after an empty page apart by its non-null nextCursor without touching any test. WHEN tableView gets a loading state with no items and a non-null nextCursor, the state a loadMore from a loaded page with no items and a cursor produces THEN loadMore is busy so the Load more button stays mounted with aria-disabled and keyboard focus stays on it, while loading with no items and a null cursor keeps body loading and loadMore hidden.
 ---
 
 ## Q-003: Finding F-78d50e72: An unsupported property `c` comes back with an empty name
