@@ -12,6 +12,38 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.2 | technical | stack.db.test.ts asserts one tenant; the frozen tests at lines 205 and 274/318 now contradict the shipped tenant-b part (stop at line 205) |
+| Q-002 | open | none | verdict | Criterion C-d115a25a (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Alice signs in and the header shows user and tenant): accept as satisfied? |
+| Q-003 | open | none | verdict | Criterion C-a699ddc9 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Two tenants stay apart): accept as satisfied? |
+| Q-004 | open | none | verdict | Criterion C-c3f18eb0 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A request without a session is unauthenticated): accept as satisfied? |
+| Q-005 | open | none | verdict | Criterion C-67c1baa1 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session): accept as satisfied? |
+| Q-006 | open | none | verdict | Criterion C-6e84f9b2 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A post without the CSRF header is refused): accept as satisfied? |
+| Q-007 | open | none | verdict | Criterion C-4faae006 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The return path is kept): accept as satisfied? |
+| Q-008 | open | none | verdict | Criterion C-a76b8eac (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable): accept as satisfied? |
+| Q-009 | open | none | verdict | Hold H-545ec45b: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table |
+| Q-010 | open | none | verdict | Hold H-e3f87d2a: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table |
+| Q-011 | open | none | verdict | Hold H-2023e80e: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table |
+| Q-012 | open | none | verdict | Hold H-d7fe3aa5: UI criterion C-22c98964 has no end-to-end test; see the generated UI tests table |
+| Q-013 | open | none | verdict | Hold H-2135a2da: UI criterion C-023c2efe has no end-to-end test; see the generated UI tests table |
+| Q-014 | open | none | verdict | Hold H-8928b203: UI criterion C-5368eb23 has no end-to-end test; see the generated UI tests table |
+| Q-015 | open | none | verdict | Hold H-f279e66d: UI criterion C-3809dcd7 has no end-to-end test; see the generated UI tests table |
+| Q-016 | open | none | verdict | Hold H-aa40376f: UI criterion C-b4adf358 has no end-to-end test; see the generated UI tests table |
+| Q-017 | open | none | verdict | Hold H-bede43a4: UI criterion C-eb130cb7 has no end-to-end test; see the generated UI tests table |
+| Q-018 | open | none | verdict | Hold H-499b792b: UI criterion C-4b09fc8c has no end-to-end test; see the generated UI tests table |
+| Q-019 | open | none | verdict | Hold H-9f7f3848: UI criterion C-77971a2d has no end-to-end test; see the generated UI tests table |
+| Q-020 | open | none | verdict | Hold H-ad0fc545: UI criterion C-53df20c1 has no end-to-end test; see the generated UI tests table |
+| Q-021 | open | none | verdict | Hold H-74d8aa3c: UI criterion C-c79d9365 has no end-to-end test; see the generated UI tests table |
+| Q-022 | open | none | verdict | Hold H-a83fac20: UI criterion C-812ae263 has no end-to-end test; see the generated UI tests table |
+| Q-023 | open | none | verdict | Hold H-39317e01: UI criterion C-c1ed19d8 has no end-to-end test; see the generated UI tests table |
+| Q-024 | open | none | verdict | Hold H-b94b73e6: UI criterion C-39471a6a has no end-to-end test; see the generated UI tests table |
+| Q-025 | open | none | verdict | Hold H-10718ca8: UI criterion C-bf32f3ba has no end-to-end test; see the generated UI tests table |
+| Q-026 | open | none | verdict | Hold H-82663866: UI criterion C-79192192 has no end-to-end test; see the generated UI tests table |
+| Q-027 | open | none | verdict | Hold H-836c11cc: UI criterion C-d115a25a has no end-to-end test; see the generated UI tests table |
+| Q-028 | open | none | verdict | Hold H-8f91a4e8: UI criterion C-a699ddc9 has no end-to-end test; see the generated UI tests table |
+| Q-029 | open | none | verdict | Hold H-f0134794: UI criterion C-c3f18eb0 has no end-to-end test; see the generated UI tests table |
+| Q-030 | open | none | verdict | Hold H-6e0d90dd: UI criterion C-67c1baa1 has no end-to-end test; see the generated UI tests table |
+| Q-031 | open | none | verdict | Hold H-37f34a81: UI criterion C-6e84f9b2 has no end-to-end test; see the generated UI tests table |
+| Q-032 | open | none | verdict | Hold H-7cb33059: UI criterion C-4faae006 has no end-to-end test; see the generated UI tests table |
+| Q-033 | open | none | verdict | Hold H-7c2702b1: UI criterion C-a76b8eac has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -34,6 +66,799 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `test/support/e2e-stack/stack.db.test.ts`: change the one-tenant assertions at lines 205, 274 and 318 so they accept the default tenant plus tenant B (both with their own review_profile 'solo' check), keep the reset idempotence assertions, and unfreeze exactly these two tests (C-d194233f and C-f55456d0) for this task.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: Criterion C-d115a25a (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Alice signs in and the header shows user and tenant): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-d115a25a (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Alice signs in and the header shows user and tenant)
+
+### Context
+Criterion C-d115a25a (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Alice signs in and the header shows user and tenant) is needs human after round 3.
+
+Scenario:
+\- **WHEN** `login(page, users["alice"])` runs inside `page.expect_response` for the 200 answer of `/api/v1/me`
+\- **THEN** that answer's `capabilities` contain `read_self`; the banner contains "Signed in as Alice Example" and "Tenant: E2E tenant" and a button "Sign out"; `assert_accessible(page)` passes on the landing page
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m1_sign_in::test_c_d115a25a_alice_signs_in_and_the_header_shows_user_and_tenant[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-003: Criterion C-a699ddc9 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Two tenants stay apart): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-a699ddc9 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Two tenants stay apart)
+
+### Context
+Criterion C-a699ddc9 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Two tenants stay apart) is needs human after round 3.
+
+Scenario:
+\- **WHEN** alice signs in on one page and mallory signs in on a page of a second `browser.new_context`
+\- **THEN** mallory's banner contains `users["mallory"]["displayName"]` and "Tenant B" and neither "E2E tenant" nor "Alice Example"; alice's page still shows "Alice Example" and "E2E tenant"
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m1_sign_in::test_c_a699ddc9_two_tenants_stay_apart[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Criterion C-c3f18eb0 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A request without a session is unauthenticated): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-c3f18eb0 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A request without a session is unauthenticated)
+
+### Context
+Criterion C-c3f18eb0 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A request without a session is unauthenticated) is needs human after round 3.
+
+Scenario:
+\- **WHEN** `playwright.request.new_context` sends `GET /api/v1/me` with no cookie
+\- **THEN** the answer is 401 with `error.code` `UNAUTHENTICATED`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m1_sign_in::test_c_c3f18eb0_a_request_without_a_session_is_unauthenticated (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Criterion C-67c1baa1 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-67c1baa1 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session)
+
+### Context
+Criterion C-67c1baa1 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session) is needs human after round 3.
+
+Scenario:
+\- **WHEN** alice clicks "Sign out"
+\- **THEN** the page ends on the path `/sign-in` with the button "Sign in" visible, and `page.request.get("/api/v1/me")` is 401
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m1_sign_in::test_c_67c1baa1_sign_out_ends_the_session[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-006: Criterion C-6e84f9b2 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A post without the CSRF header is refused): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-6e84f9b2 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A post without the CSRF header is refused)
+
+### Context
+Criterion C-6e84f9b2 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A post without the CSRF header is refused) is needs human after round 3.
+
+Scenario:
+\- **WHEN** alice is signed in and `page.request.post("/auth/oidc/logout")` is sent without the header, then the page is reloaded
+\- **THEN** the answer is 403 with `error.code` `OIDC_CSRF_INVALID` and the banner still shows "Alice Example"
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m1_sign_in::test_c_6e84f9b2_a_post_without_the_csrf_header_is_refused[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-007: Criterion C-4faae006 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The return path is kept): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-4faae006 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The return path is kept)
+
+### Context
+Criterion C-4faae006 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The return path is kept) is needs human after round 3.
+
+Scenario:
+\- **WHEN** `login(page, users["alice"], "/sign-in?error=SESSION_ENDED&return_to=%2Fflows")` runs
+\- **THEN** the page ends on the path `/flows` and the banner shows "Alice Example"
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m1_sign_in::test_c_4faae006_the_return_path_is_kept[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-008: Criterion C-a76b8eac (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-a76b8eac (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable)
+
+### Context
+Criterion C-a76b8eac (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable) is needs human after round 3.
+
+Scenario:
+\- **WHEN** on `/sign-in` signed out, once the button "Sign in" is visible, Tab is pressed up to 15 times until it is focused; then alice signs in and the same is done for "Sign out"
+\- **THEN** each button becomes focused, its computed `outlineStyle` is not `none` and its `outlineWidth` is at least 2px
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m1_sign_in::test_c_a76b8eac_the_sign_in_and_sign_out_buttons_are_keyboard_reachable[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-009: Hold H-545ec45b: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-01e427f8: not_testable after 1 attempt(s); The criterion checks internal module functions (registerSignInMessages, messageFor, catalogue order and lengths) that are not exposed to the browser UI; only partial message text is user-visible on the sign-in page, so the full criterion cannot be asserted through the web interface..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-010: Hold H-e3f87d2a: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-e78811f4: not_testable after 1 attempt(s); The criterion asserts the exact contents of the internal SIGN_IN_MESSAGES export; via the browser only 10 of the 12 texts can surface (OIDC_CSRF_INVALID and OIDC_NOT_CONFIGURED are not accepted by the sign-in page and fall back), so the full twelve-entry catalogue is not observable through the UI..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-011: Hold H-2023e80e: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-cef4634b: not_testable after 1 attempt(s); The criterion asserts exact outputs of pure helper functions (loginUrl/signInUrl) for arbitrary hostile inputs; these values are not observable through the browser UI, which only exposes a single sign-in link/href..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-012: Hold H-d7fe3aa5: UI criterion C-22c98964 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-22c98964 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-22c98964: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_22c98964::test_external_return_to_is_refused[chromium], test_l4_c_22c98964::test_failed_session_offers_sign_in_to_root[chromium], test_l4_c_22c98964::test_html_error_code_shows_unknown_error[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-013: Hold H-2135a2da: UI criterion C-023c2efe has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-023c2efe has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-023c2efe: not_testable after 1 attempt(s); This criterion tests internal JavaScript function behavior (withCsrfHeader wrapping a recording fetch, isStateChanging) at the unit level; it is not observable through the browser UI that an e2e Playwright test can assert..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-014: Hold H-8928b203: UI criterion C-5368eb23 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-5368eb23 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-5368eb23: not_testable after 1 attempt(s); The scenario checks injected fakes (fake fetch records, recording location.assign counts, csrfTokenFrom returns) of internal session-client functions, none of which are observable through the app UI at L4_E2E_BASE_URL..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-015: Hold H-f279e66d: UI criterion C-3809dcd7 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-3809dcd7 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-3809dcd7: not_testable after 1 attempt(s); The criterion covers internal withSessionEnd wrapper semantics against fakes (onEnded counting, response codes), which is not observable through the browser UI that a Playwright e2e test can drive..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-016: Hold H-aa40376f: UI criterion C-b4adf358 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-b4adf358 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-b4adf358: not_testable after 1 attempt(s); The criterion checks an internal pure function (redirectToSignIn) with a mocked recording location.assign across four synthetic location objects; this behavior is not exposed on window nor observable through the browser UI in an e2e test..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-017: Hold H-bede43a4: UI criterion C-eb130cb7 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-eb130cb7 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-eb130cb7: not_testable after 1 attempt(s); The criterion asserts pure-function results for a fixed safeRedirect input list and an exact loader.reset() call count behind a mocked loader; these are internal unit behaviors with no browser-observable surface for a playwright e2e test to drive..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-018: Hold H-499b792b: UI criterion C-4b09fc8c has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-4b09fc8c has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-4b09fc8c: not_testable after 1 attempt(s); The criterion asserts internal call counts and ordering (post twice, reset before load) and the exact return value of signOut, which are unit-level behaviors not observable through the browser UI or network alone..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-019: Hold H-9f7f3848: UI criterion C-77971a2d has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-77971a2d has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-77971a2d: not_testable after 1 attempt(s); The criterion checks the internal return-value shapes of browserSession.signOut() and loader reset call counts, which are not observable through the browser UI; a Playwright e2e test can only see toasts or navigation, not those result objects..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-020: Hold H-ad0fc545: UI criterion C-53df20c1 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-53df20c1 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-53df20c1: not_testable after 1 attempt(s); The criterion is a static source-scan check (raw colours, kit tokens, inline styles in auth.css and .tsx files) with no user-observable browser outcome to assert via the public interface..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-021: Hold H-74d8aa3c: UI criterion C-c79d9365 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-c79d9365 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-c79d9365: not_testable after 1 attempt(s); The criterion covers Node-side collectSeedData merging/error behavior, which is not observable through the browser page the e2e test must drive..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-022: Hold H-a83fac20: UI criterion C-812ae263 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-812ae263 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-812ae263: not_testable after 1 attempt(s); The criterion describes server-side seeding and tenant-resolution functions (oidcPart.seed, tenantBPart.seed, ensureDefaultTenant, resolveTenantForToken) run against withTestDatabase, which are not observable through a browser UI via playwright; it cannot be checked as a browser e2e test..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-023: Hold H-39317e01: UI criterion C-c1ed19d8 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-c1ed19d8 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-c1ed19d8: not_testable after 1 attempt(s); The criterion asserts server-side seed data (stored passwords equal to fake.passwordOf, handle.env == {}, no password in any env) that is not observable through the browser UI; display name and tenant could only surface after a sign-in whose fake-IdP flow is not specified here..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-024: Hold H-b94b73e6: UI criterion C-39471a6a has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-39471a6a has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-39471a6a: not_testable after 1 attempt(s); The criterion concerns discoverParts() ordering and a parts/27-tenant-b.ts file export, which are build/harness file-system details not observable through the browser UI..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-025: Hold H-10718ca8: UI criterion C-bf32f3ba has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-bf32f3ba has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-bf32f3ba: not_testable after 2 attempt(s); The control listener binds its own ephemeral port outside the L4_E2E_BASE_URL origin, and a browser page/request cannot forge the Host header or Origin, so these cases cannot be reached through the public e2e interface..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-026: Hold H-82663866: UI criterion C-79192192 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-79192192 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-79192192: writer_failed after 1 attempt(s); the stream ended without a final stop (last reason: length).
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-027: Hold H-836c11cc: UI criterion C-d115a25a has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-d115a25a has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-d115a25a: writer_failed after 1 attempt(s); no answer within 600s.
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-028: Hold H-8f91a4e8: UI criterion C-a699ddc9 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-a699ddc9 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-a699ddc9: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_a699ddc9::test_two_tenants_stay_apart[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-029: Hold H-f0134794: UI criterion C-c3f18eb0 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-c3f18eb0 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-c3f18eb0: uncollectable after 2 attempt(s); the app does not start without the unit's test and support files (reverted: e2e/conftest.py).
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-030: Hold H-6e0d90dd: UI criterion C-67c1baa1 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-67c1baa1 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-67c1baa1: writer_failed after 2 attempt(s); opencode's permission rules rejected a tool call (bash).
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-031: Hold H-37f34a81: UI criterion C-6e84f9b2 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-6e84f9b2 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-6e84f9b2: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_6e84f9b2::test_logout_without_csrf_header_is_refused[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-032: Hold H-7cb33059: UI criterion C-4faae006 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-4faae006 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-4faae006: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_4faae006::test_return_path_is_kept[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-033: Hold H-7c2702b1: UI criterion C-a76b8eac has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-a76b8eac has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-a76b8eac: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_a76b8eac::test_sign_in_and_sign_out_buttons_are_keyboard_reachable[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
 
 ### Answer
 <!-- write below this line -->
