@@ -1,0 +1,409 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/api/pagination.ts",
+      "web/src/kit/data",
+      "body/<name>",
+      "web/src/kit",
+      "src/api",
+      "web/src/api/client.ts",
+      "web/src/kit/data/data.css",
+      "docs/decisions/0002",
+      "web/src/kit/data/cursor-list.test.ts",
+      "web/src/kit/errors.ts",
+      "web/src/kit/data/cursor-list.ts",
+      "web/src/kit/data/page-fetcher.test.ts",
+      "web/src/kit/data/page-fetcher.ts",
+      "web/src/kit/data/data-css.test.ts",
+      "web/src/kit/data/data-table.test.ts",
+      "web/src/kit/data/data-table.ts",
+      "web/src/kit/data/DataTable.tsx",
+      "web/src/kit/data/form-errors.test.ts",
+      "web/src/kit/messages.ts",
+      "web/src/kit/data/form-errors.ts",
+      "web/src/kit/data/field.test.ts",
+      "web/src/kit/data/field.ts",
+      "web/src/kit/data/Field.tsx",
+      "web/src/kit/data/form.test.ts",
+      "web/src/kit/data/form.ts",
+      "web/src/kit/data/Form.tsx",
+      "web/src/kit/data/schema-fields.test.ts",
+      "web/src/kit/data/schema-fields.ts",
+      "web/src/kit/data/schema-values.test.ts",
+      "web/src/kit/data/schema-values.ts",
+      "web/src/kit/data/SchemaForm.tsx",
+      "web/src/kit/data/data-keyboard.test.ts",
+      "web/src/kit/data/data-keyboard.ts",
+      "web/src/kit/keyboard.ts",
+      "**/details.fields[].field",
+      "**/data.css",
+      "**/field.ts",
+      "**/form.ts",
+      "**/DataTable.tsx",
+      "**/Field.tsx",
+      "**/Form.tsx",
+      "**/SchemaForm.tsx",
+      "**/*Props",
+      "**/*.test.ts",
+      "**/[",
+      "**/tokens.css",
+      "**/theme.css",
+      "**/--ui-*",
+      "**/[aria-invalid=\"true\"]",
+      "**/--ui-space-*",
+      "**/^[A-Za-z][A-Za-z0-9_]{0,63}$",
+      "**/^[A-Za-z0-9:_-]{1,64}$",
+      "**/errors[FORM_ERROR_KEY]",
+      "**/^-?",
+      "module api",
+      "module body",
+      "module docs",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-web-data-kit-fix-1/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit-fix-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit-fix-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit-fix-1/specs/web-data-kit/spec.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit-fix-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/.l4/evidence/round-2/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/.l4/evidence/round-2/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/.l4/evidence/round-2/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/.l4/ledger/r-20261029T2151Z-07ed.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/.l4/ledger/r-20261030T0021Z-b45b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/.l4/ledger/r-20261030T0116Z-3bb9.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/.l4/ledger/r-20261030T0121Z-07ef.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/.l4/ledger/r-20261030T0126Z-8768.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-data-kit/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/kit/data/DataTable.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/Field.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/Form.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/SchemaForm.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/cursor-list.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/data/cursor-list.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/data-css.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/data/data-keyboard.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/data/data-keyboard.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/data-table.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/data/data-table.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/data.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/field.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/data/field.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/form-errors.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/data/form-errors.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/form.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/data/form.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/page-fetcher.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/data/page-fetcher.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/schema-fields.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/data/schema-fields.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/schema-values.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/data/schema-values.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/kit/data/DataTable.tsx, web/src/kit/data/Field.tsx, web/src/kit/data/Form.tsx, web/src/kit/data/SchemaForm.tsx, web/src/kit/data/cursor-list.ts and 8 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/kit/data/DataTable.tsx",
+      "web/src/kit/data/Field.tsx",
+      "web/src/kit/data/Form.tsx",
+      "web/src/kit/data/SchemaForm.tsx",
+      "web/src/kit/data/cursor-list.ts",
+      "web/src/kit/data/data-keyboard.ts",
+      "web/src/kit/data/data-table.ts",
+      "web/src/kit/data/field.ts",
+      "web/src/kit/data/form-errors.ts",
+      "web/src/kit/data/form.ts",
+      "web/src/kit/data/page-fetcher.ts",
+      "web/src/kit/data/schema-fields.ts",
+      "web/src/kit/data/schema-values.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 952,
+      "passed": 952,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 54,
+      "new_passed": 54,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

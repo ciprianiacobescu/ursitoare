@@ -1,0 +1,118 @@
+.ui-table-region {
+  max-width: 100%;
+}
+
+.ui-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--ui-radius);
+}
+
+.ui-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--ui-font-size);
+}
+
+.ui-table thead th {
+  color: var(--ui-color-text);
+  background: var(--ui-color-surface);
+  text-align: left;
+  padding: var(--ui-space-2) var(--ui-space-3);
+  border-bottom: 1px solid var(--ui-color-border);
+}
+
+.ui-table tbody th,
+.ui-table tbody td {
+  padding: var(--ui-space-2) var(--ui-space-3);
+  border-bottom: 1px solid var(--ui-color-border);
+  text-align: left;
+}
+
+.ui-table-actions {
+  display: flex;
+  justify-content: center;
+  padding: var(--ui-space-3);
+}
+
+.ui-form {
+  display: block;
+}
+
+.ui-form-error {
+  color: var(--ui-color-danger-text);
+  background: var(--ui-color-danger-surface);
+  padding: var(--ui-space-2) var(--ui-space-3);
+  border-radius: var(--ui-radius);
+}
+
+.ui-form-problems {
+  color: var(--ui-color-danger-text);
+  background: var(--ui-color-danger-surface);
+  padding: var(--ui-space-2) var(--ui-space-3);
+  border-radius: var(--ui-radius);
+}
+
+.ui-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--ui-space-3) 0;
+}
+
+.ui-field {
+  display: block;
+  padding: var(--ui-space-2) 0;
+}
+
+.ui-field-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+}
+
+.ui-field-label {
+  font-size: var(--ui-font-size);
+  color: var(--ui-color-text);
+  display: block;
+  padding-bottom: var(--ui-space-1);
+}
+
+.ui-field-required {
+  color: var(--ui-color-text-muted);
+}
+
+.ui-field-hint {
+  color: var(--ui-color-text-muted);
+  display: block;
+  padding-top: var(--ui-space-1);
+}
+
+.ui-field-error {
+  color: var(--ui-color-danger);
+  display: block;
+  padding-top: var(--ui-space-1);
+}
+
+.ui-input {
+  color: var(--ui-color-text);
+  background: var(--ui-color-bg);
+  border: var(--ui-color-border);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: var(--ui-radius);
+  font-size: var(--ui-font-size);
+  width: 100%;
+  min-height: var(--ui-target-min);
+  padding: var(--ui-space-2) var(--ui-space-3);
+}
+
+.ui-input[aria-invalid="true"] {
+  border: var(--ui-color-danger);
+  border-style: solid;
+  border-width: 1px;
+}
+
+.ui-checkbox {
+  width: 1.5rem;
+  height: 1.5rem;
+  accent-color: var(--ui-color-accent);
+}
