@@ -37,7 +37,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-024 | answered | none | verdict | Hold H-b94b73e6: UI criterion C-39471a6a has no end-to-end test; see the generated UI tests table |
 | Q-025 | answered | none | verdict | Hold H-10718ca8: UI criterion C-bf32f3ba has no end-to-end test; see the generated UI tests table |
 | Q-026 | answered | none | verdict | Hold H-82663866: UI criterion C-79192192 has no end-to-end test; see the generated UI tests table |
-| Q-027 | open | none | verdict | Hold H-836c11cc: UI criterion C-d115a25a has no end-to-end test; see the generated UI tests table |
+| Q-027 | answered | none | verdict | Hold H-836c11cc: UI criterion C-d115a25a has no end-to-end test; see the generated UI tests table |
 | Q-028 | open | none | verdict | Hold H-8f91a4e8: UI criterion C-a699ddc9 has no end-to-end test; see the generated UI tests table |
 | Q-029 | open | none | verdict | Hold H-f0134794: UI criterion C-c3f18eb0 has no end-to-end test; see the generated UI tests table |
 | Q-030 | open | none | verdict | Hold H-6e0d90dd: UI criterion C-67c1baa1 has no end-to-end test; see the generated UI tests table |
@@ -754,7 +754,7 @@ accept C-79192192's scenario checks the real stack's sign-in route, completeFake
 
 ## Q-027: Hold H-836c11cc: UI criterion C-d115a25a has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.51 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -774,6 +774,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-d115a25a has an end-to-end test that passes at head: e2e/test_m1_sign_in.py traces it by its l4 marker and does what the scenario says (see the verdict question of C-d115a25a). Step 5's writer gave no answer within 600s, so no generated test exists. The e2e and unit gates passed at head 601ca1f (985 of 985 tests, verification round 3).
 ---
 
 ## Q-028: Hold H-8f91a4e8: UI criterion C-a699ddc9 has no end-to-end test; see the generated UI tests table
