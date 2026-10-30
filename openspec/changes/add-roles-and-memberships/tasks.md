@@ -12,7 +12,7 @@
 
 ## 4. Memberships from token groups
 
-- [ ] 4.1 Write `src/identity/rbac/sync.test.ts` and `src/identity/rbac/memberships.test.ts` first (a helper builds `header.payload.signature` strings with base64url JSON; users from `upsertUserFromClaims`; mappings from `setGroupMapping` with an operator actor; a mutable clock; scenarios "The claim", "Add, keep, replace, remove", "Other sources are untouched", "Bad input and tenants" and "Load"), then implement `groupsFromIdToken` and `syncMemberships` in `src/identity/rbac/sync.ts` (decisions 4 and 9) and `loadMemberships` in `src/identity/rbac/memberships.ts` (decision 8; membership ids from `opts.ids.next("mem")`), exporting them from `src/identity/index.ts`, implementing requirements "Token groups become memberships at sign-in" and "The principal carries the roles and teams of its memberships"
+- [x] 4.1 Write `src/identity/rbac/sync.test.ts` and `src/identity/rbac/memberships.test.ts` first (a helper builds `header.payload.signature` strings with base64url JSON; users from `upsertUserFromClaims`; mappings from `setGroupMapping` with an operator actor; a mutable clock; scenarios "The claim", "Add, keep, replace, remove", "Other sources are untouched", "Bad input and tenants" and "Load"), then implement `groupsFromIdToken` and `syncMemberships` in `src/identity/rbac/sync.ts` (decisions 4 and 9) and `loadMemberships` in `src/identity/rbac/memberships.ts` (decision 8; membership ids from `opts.ids.next("mem")`), exporting them from `src/identity/index.ts`, implementing requirements "Token groups become memberships at sign-in" and "The principal carries the roles and teams of its memberships"
 
 ## 5. Direct grants
 

@@ -40,3 +40,7 @@ export {
   setGroupMapping,
   removeGroupMapping,
 } from "./rbac/group-map.ts";
+export type { SyncResult } from "./rbac/sync.ts";
+export { groupsFromIdToken, syncMemberships } from "./rbac/sync.ts";
+export type { MembershipSet } from "./rbac/memberships.ts";
+export { loadMemberships } from "./rbac/memberships.ts";
