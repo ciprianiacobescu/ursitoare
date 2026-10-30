@@ -110,6 +110,7 @@ reject The finding is right. In cursor-list.ts a loadMore keeps the items and th
 ## Q-003: Finding F-78d50e72: An unsupported property `c` comes back with an empty name
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The finding is confirmed in the code: parseProperty in web/src/kit/data/schema-fields.ts (line 283-288) deliberately overrides a valid name with "" when the property has no type, so property c is returned with name "" and label "Field 3", and nothing identifies it as c; this is at odds with design D
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
