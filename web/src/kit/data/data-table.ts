@@ -137,7 +137,7 @@ export function tableView(state: CursorListState<unknown>): TableView {
   let body: TableView["body"];
   if (status === "idle" || (status === "error" && rowCount === 0)) {
     body = "none";
-  } else if (status === "loading" && rowCount === 0) {
+  } else if (status === "loading" && rowCount === 0 && state.nextCursor === null) {
     body = "loading";
   } else if (status === "loaded" && rowCount === 0 && state.nextCursor === null) {
     body = "empty";
@@ -145,7 +145,7 @@ export function tableView(state: CursorListState<unknown>): TableView {
     body = "rows";
   }
   let loadMore: TableView["loadMore"] = "hidden";
-  if (status === "loading" && rowCount > 0) {
+  if (status === "loading" && (rowCount > 0 || state.nextCursor !== null)) {
     loadMore = "busy";
   } else if (status === "loaded" && state.nextCursor !== null) {
     loadMore = "enabled";
@@ -161,7 +161,7 @@ export function tableView(state: CursorListState<unknown>): TableView {
     }
   }
   let announcement = "";
-  if (status === "loading" && rowCount > 0) {
+  if (status === "loading" && (rowCount > 0 || state.nextCursor !== null)) {
     announcement = "Loading more rows";
   } else if (status === "loaded" && rowCount > 0) {
     announcement = rowCount === 1 ? "1 row shown" : `${rowCount} rows shown`;
@@ -193,7 +193,7 @@ export function focusAfterChange(
   }
   if (
     prev.status === "loading" &&
-    prev.items.length > 0 &&
+    (prev.items.length > 0 || prev.nextCursor !== null) &&
     next.status === "loaded" &&
     next.nextCursor === null
   ) {
