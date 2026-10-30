@@ -43,7 +43,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-030 | answered | none | verdict | Hold H-74697ad6: UI criterion C-dc43ef5f has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-031 | answered | none | verdict | Hold H-ca2dd6a8: UI criterion C-08c4c2e4 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-032 | answered | none | verdict | Hold H-979139da: UI criterion C-61a6e3a3 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-033 | open | none | verdict | Hold H-034ad64a: UI criterion C-74fd23b0 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-033 | answered | none | verdict | Hold H-034ad64a: UI criterion C-74fd23b0 has no end-to-end test (not_testable); see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -765,7 +765,7 @@ accept The hold may be waived. Criterion C-61a6e3a3 is the scenario "The server 
 
 ## Q-033: Hold H-034ad64a: UI criterion C-74fd23b0 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -781,3 +781,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-74fd23b0 is the scenario "Styles, documentation and sources": a check of source files (data.css, the .tsx files and the exported constants), which no page shows. design.md "Browser coverage, stated plainly" says no page uses these components and add-web-ui-kit rules out a kit demo route, so this unit has no journey; what decides the DOM is in .ts and proved in Node, and the first consumers (add-web-task-inbox for SchemaForm, add-web-admin for DataTable) prove the markup with assert_accessible(page). Its Node test is traced as covered and passed with a red assertion.
