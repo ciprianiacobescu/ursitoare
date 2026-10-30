@@ -239,3 +239,4 @@
 {"at":"2026-10-30T21:37:32Z","attempt":1,"cost_usd":14.88484,"runs":5,"type":"plan.charged","unit":"openspec:add-web-sign-in"}
 {"at":"2026-10-30T21:39:26Z","branch":"l4/archive/openspec/add-web-sign-in","head":"bda30d2e63003ce84aa04fbe30a0830fe28f7133","type":"unit.branch_deleted","unit":"openspec:add-web-sign-in"}
 {"at":"2026-10-30T21:39:28Z","batch":"m1-identity-and-policy","profile":"none","revision":"bda30d2e63003ce84aa04fbe30a0830fe28f7133","type":"batch.accepted"}
+{"at":"2026-10-30T21:40:51Z","revision":"bda30d2e63003ce84aa04fbe30a0830fe28f7133","type":"plan.completed"}

@@ -1,12 +1,12 @@
 # Delivery plan m1
 
-- Status: stopped
+- Status: completed
 - Repository: https://github.com/ciprianiacobescu/ursitoare
-- Target: main at f3e4dbb20ca4c6bdede8562c7fbb0b38ef9d963d
+- Target: main at bda30d2e63003ce84aa04fbe30a0830fe28f7133
 - Merge: auto
 - No promotion target is set. Promotion was not performed.
-- Written: 2026-10-28T00:18:19Z
-- Stopped: unit_halted (openspec:add-pdp-cedar): task 1.1: max_task_attempts (3) reached in single; last failure: none of the tests you added looks at the answer: they pass when the project's functions answer their zero value and on the unit's base code (src.pdp.malformed-design.test.ts::C-50748953 M8 names an undeclared action in the action scope
+- Written: 2026-10-30T21:40:51Z
+- Completed at: bda30d2e63003ce84aa04fbe30a0830fe28f7133
 
 ## Units
 
@@ -32,72 +32,67 @@
 - Usage: $6.08, 2 run(s), 1 attempt(s)
 
 ### openspec:add-pdp-cedar
-- Result: not integrated
-- Pull request: <forge>/ciprianiacobescu/ursitoare/pull/22
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $8.19, 4 run(s), 1 attempt(s)
-- Delegate decisions:
-  - Q-003 (verdict): accept by the delegate (claude-fable-5-1 via claude-code), $1.05
-  - Q-004 (verdict): reject by the delegate (claude-fable-5-1 via claude-code), $0.87
-  - Q-002 (verdict): reject by the delegate (claude-fable-5-1 via claude-code), $0.89
-  - Q-001 (technical): accept by the delegate (claude-fable-5-1 via claude-code), $1.08
+- Result: integrated at ce5e6f64f88b21410cebed69fcc647b2613f7277
+- Pull request: 22
+- Merge commit: ce5e6f64f88b21410cebed69fcc647b2613f7277
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $11.90, 6 run(s), 1 attempt(s)
 
 ### openspec:add-policy-catalogue
-- Result: not integrated
-- Pull request: none
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Result: integrated at 6b3a8967359d1bba7429bbe3b4aa9f217ca21c92
+- Pull request: 24
+- Merge commit: 6b3a8967359d1bba7429bbe3b4aa9f217ca21c92
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $3.68, 3 run(s), 1 attempt(s)
 
 ### openspec:add-oidc-login
-- Result: not integrated
-- Pull request: none
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Result: integrated at a10fb0e3811383d9a703a593d269a3ffa254a8c5
+- Pull request: 26
+- Merge commit: a10fb0e3811383d9a703a593d269a3ffa254a8c5
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $10.89, 6 run(s), 1 attempt(s)
 
 ### openspec:add-api-pep
-- Result: not integrated
-- Pull request: none
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Result: integrated at 6f85bb3bd180fee942b4638495e12495299359e9
+- Pull request: 28
+- Merge commit: 6f85bb3bd180fee942b4638495e12495299359e9
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $1.90, 3 run(s), 1 attempt(s)
 
 ### openspec:add-api-conventions
-- Result: not integrated
-- Pull request: none
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Result: integrated at b8674a9428d7fb74619f0b1ae6202353ddaa6607
+- Pull request: 30
+- Merge commit: b8674a9428d7fb74619f0b1ae6202353ddaa6607
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $5.44, 3 run(s), 1 attempt(s)
 
 ### openspec:add-web-ui-kit
-- Result: not integrated
-- Pull request: none
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Result: integrated at fe66136ce61d2326270b445e3e2878a645e6f702
+- Pull request: 32
+- Merge commit: fe66136ce61d2326270b445e3e2878a645e6f702
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $25.62, 9 run(s), 1 attempt(s)
 
 ### openspec:add-web-data-kit
-- Result: not integrated
-- Pull request: none
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Result: integrated at 10727a2ed0e7e363c45e4122d62ba221f2866f22
+- Pull request: 34
+- Merge commit: 10727a2ed0e7e363c45e4122d62ba221f2866f22
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $27.66, 6 run(s), 1 attempt(s)
 
 ### openspec:add-web-sign-in
-- Result: not integrated
-- Pull request: none
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Result: integrated at 4a909bd26a52ff6327d479f5f6b87b43f4e98f62
+- Pull request: 36
+- Merge commit: 4a909bd26a52ff6327d479f5f6b87b43f4e98f62
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $14.88, 5 run(s), 1 attempt(s)
 
 ## Batches
 
-- m1-identity-and-policy (profile none): not checked
+- m1-identity-and-policy (profile none): accepted at bda30d2e63003ce84aa04fbe30a0830fe28f7133
 
 ## Usage
 
-- Cost: $88.51
+- Cost: $182.30
 - Of which the readiness review: $48.38
-- Runs that dispatched a unit: 16
+- Runs that dispatched a unit: 53
