@@ -205,3 +205,4 @@
 {"at":"2026-10-30T01:22:00Z","run":"r-20261030T0121Z-07ef","type":"unit.dispatched","unit":"openspec:add-web-data-kit"}
 {"at":"2026-10-30T01:26:59Z","attempt":1,"cost_usd":15.444316,"runs":5,"type":"plan.charged","unit":"openspec:add-web-data-kit"}
 {"at":"2026-10-30T01:26:59Z","run":"r-20261030T0126Z-8768","type":"unit.dispatched","unit":"openspec:add-web-data-kit"}
+{"at":"2026-10-30T02:20:22Z","detail":"awaiting_human: no new answers (verdicts open: Q-034, Q-036, Q-037) (escalated to a person: Q-036, Q-037)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-data-kit"}
