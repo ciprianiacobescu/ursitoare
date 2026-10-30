@@ -1,7 +1,36 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
+import { useEffect, useState } from "react";
 
+import { capabilityLoader } from "../kit/capabilities.ts";
 import type { CapabilityState } from "../kit/capabilities.ts";
 
+function isAbortError(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    (error as { name?: unknown }).name === "AbortError"
+  );
+}
+
 export function useSession(): CapabilityState | null {
-  throw new Error("not implemented");
+  const [state, setState] = useState<CapabilityState | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let active = true;
+    capabilityLoader.load(controller.signal).then(
+      (next) => {
+        if (active) setState(next);
+      },
+      (error: unknown) => {
+        if (!active || isAbortError(error)) return;
+        setState({ status: "failed", code: "UNKNOWN_ERROR" });
+      },
+    );
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, []);
+
+  return state;
 }

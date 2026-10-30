@@ -1,5 +1,6 @@
 import { Link, NavLink, Outlet } from "react-router";
 
+import { AccountMenu } from "../auth/AccountMenu.tsx";
 import { ToastRegion } from "../kit/ToastRegion.tsx";
 import { useVisibleNav } from "../kit/use-visible-nav.ts";
 
@@ -23,6 +24,7 @@ export function Shell() {
             ))}
           </ul>
         </nav>
+        <AccountMenu />
       </header>
       <main id="main" tabIndex={-1}>
         <Outlet />
