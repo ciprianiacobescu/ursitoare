@@ -1,0 +1,53 @@
+{
+  "schema": "l4/delivery-plan@1",
+  "plan_id": "m2",
+  "target": "main",
+  "merge": "auto",
+  "limits": {
+    "max_cost_usd": 200,
+    "max_unit_attempts": 3,
+    "max_runs": 40
+  },
+  "external_dependencies": [],
+  "exclude": [],
+  "batches": [
+    {
+      "id": "m2-administration",
+      "acceptance_profile": "none",
+      "depends_on": [],
+      "units": [
+        {
+          "id": "openspec:add-roles-and-memberships",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-admin-api",
+          "depends_on": [
+            "openspec:add-roles-and-memberships"
+          ]
+        },
+        {
+          "id": "openspec:add-admin-cli",
+          "depends_on": [
+            "openspec:add-roles-and-memberships"
+          ]
+        },
+        {
+          "id": "openspec:add-audit-api",
+          "depends_on": [
+            "openspec:add-admin-api"
+          ]
+        },
+        {
+          "id": "openspec:add-web-admin",
+          "depends_on": [
+            "openspec:add-admin-api",
+            "openspec:add-admin-cli",
+            "openspec:add-audit-api",
+            "openspec:add-roles-and-memberships"
+          ]
+        }
+      ]
+    }
+  ]
+}

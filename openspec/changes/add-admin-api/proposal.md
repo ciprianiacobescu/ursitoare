@@ -7,7 +7,7 @@ Observable result: a signed-in tenant administrator (`tenant_admin` alone holds 
 ## What Changes
 
 - `src/identity/admin/`: account, IdP link and review-profile functions. `src/api`: `adminApiError`, `pageRows` and `registerAdminRoutes` with 19 routes.
-- Migration `0180_admin_api.sql` (one column grant); six new entries in `ERROR_CODES`; `src/main.ts` registers the routes; `docs/api/openapi.json` is regenerated.
+- Migration `0180_admin_api.sql` (one column grant); six new entries in `ERROR_CODES` (the `api-conventions` requirement "Every error code is registered" is modified: its registry scenario lists 22 codes); `src/main.ts` registers the routes; `docs/api/openapi.json` is regenerated.
 
 ## Impact
 
