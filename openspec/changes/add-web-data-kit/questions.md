@@ -142,7 +142,6 @@ reject Confirmed: for a property without a type parseProperty (schema-fields.ts:
 ## Q-004: Finding F-4c79e0be: task 1.1: no-op calls and loads do not settle with the request in flight
 
 - **Status:** answered
-- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -163,7 +162,10 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
-accept The finding is waived. The only basis for it is the task 1.1 sentence that a no-op call settles with the request in flight, and the task's own frozen test for the Nothing to do scenario reads that sentence the other way: it awaits loadMore and load while the first request is still unanswered and answers the request only afterwards, so a no-op call that returned the pending request's promise would never settle and the test would time out. The specification scenario asks only that fetchPage is called once and the state ends loaded with a, design Decision 2 says only that any other call is a no-op, and no document requires load, loadMore or retry to wait for the page. The code satisfies the criterion as written and the suggested fix cannot be made without changing a frozen test.
+reject This replaces the delegate's accept, which did not know the M2 caller and read the test conflict as covering every call; it covers only calls that start nothing. Confirmed: load, loadMore and retry return Promise.resolve() at once even when they start a request (cursor-list.ts:178-204), so awaiting them does not wait for the page. Task 1.1 asks for calls that settle with the request in flight, and add-web-admin (M2) builds loadAllItems on that: it awaits load() and then loadMore() while the state is loaded with a nextCursor, so with this code it reads loading and stops with no items. Keep a call that starts nothing resolving at once: this unit's test C-efc9d8f0 (cursor-list.test.ts:181-182) awaits such calls while the first request is still unanswered. WHEN load() from idle, loadMore() from loaded with a nextCursor and retry() from error each start a request THEN the promise each returns resolves only once that request's page or error is committed, or once reset() drops it, never rejects, and the state read right after it is that outcome, while a call that starts nothing still resolves at once.
+<!-- l4 questions --replace by CiprianSpot on 2026-10-30; previous answer:
+> accept The finding is waived. The only basis for it is the task 1.1 sentence that a no-op call settles with the request in flight, and the task's own frozen test for the Nothing to do scenario reads that sentence the other way: it awaits loadMore and load while the first request is still unanswered and answers the request only afterwards, so a no-op call that returned the pending request's promise would never settle and the test would time out. The specification scenario asks only that fetchPage is called once and the state ends loaded with a, design Decision 2 says only that any other call is a no-op, and no document requires load, loadMore or retry to wait for the page. The code satisfies the criterion as written and the suggested fix cannot be made without changing a frozen test.
+-->
 ---
 
 ## Q-005: Finding F-d49cb373: task 4.1: an enum property without type is not rendered as an enum
