@@ -290,6 +290,43 @@ test("C-686289b8 tableView gives every state its view", () => {
   assert.equal(list.length, 8, "every state of the scenario got a view");
 });
 
+test("C-686289b8 C-ab5cf141 tableView keeps a load more after an empty page busy", () => {
+  const loadingAfterEmptyPage = state("loading", [], "c1");
+  let view: TableView | undefined;
+  assert.doesNotThrow(() => {
+    view = tableView(loadingAfterEmptyPage);
+  }, "a load more after an empty page gets a view");
+  assert.deepEqual(
+    known(view, "the view of a load more after an empty page"),
+    {
+      body: "rows",
+      rowCount: 0,
+      loadMore: "busy",
+      loadMoreLabel: "Load more",
+      retry: "hidden",
+      retryLabel: null,
+      showError: false,
+      announcement: "Loading more rows",
+      load: false,
+    },
+    "the Load more button stays mounted and busy instead of unmounting",
+  );
+});
+
+test("C-ab5cf141 focusAfterChange moves to the table when an empty page ends the list", () => {
+  const before = state("loading", [], "c1");
+  const after = state("loaded", [], null);
+  let target: TableFocus | undefined;
+  assert.doesNotThrow(() => {
+    target = focusAfterChange(before, after);
+  }, "the change after an empty page gets a focus target");
+  assert.equal(
+    known(target, "the focus target after an empty page ends the list"),
+    "table",
+    "focus moves to the table region when the load more button unmounts",
+  );
+});
+
 test("C-3bc08473 focusAfterChange names where focus moves after a change", () => {
   const pairs: readonly {
     readonly name: string;
