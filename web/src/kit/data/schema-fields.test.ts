@@ -123,6 +123,39 @@ test("C-78331251 schemaToFields marks each unsupported property with its reason"
   assert.ok(views.every((view) => view.error === `Unsupported: ${view.reason}`), "each error is Unsupported plus the reason");
 });
 
+test("C-78331251 C-852bb719 schemaToFields labels an untyped property by its name", () => {
+  const result = parsed(
+    {
+      type: "object",
+      properties: {
+        a: { type: "string", format: "email" },
+        b: { type: "object" },
+        c: {},
+        d: { type: "string", pattern: "(" },
+        e: true,
+        f: { type: "array", items: { type: "number" } },
+        g: { type: "string", enum: [1, 2] },
+      },
+    },
+    "the unsupported properties schema",
+  );
+  assert.deepEqual(result.problems, []);
+  assert.equal(result.fields.length, 7);
+  const views = result.fields.map((field) => unsupported(field));
+  assert.deepEqual(views.map((view) => view.name), ["a", "b", "", "d", "e", "f", "g"]);
+  assert.deepEqual(views.map((view) => view.label), ["A", "B", "C", "D", "E", "F", "G"]);
+  assert.deepEqual(views.map((view) => view.reason), [
+    'keyword "format" is not supported',
+    'type "object" is not supported',
+    "the property has no type",
+    "pattern is not a valid expression",
+    "the property schema must be an object",
+    "array items must be strings",
+    "enum must hold 1 to 100 distinct text values of 1 to 200 characters",
+  ]);
+  assert.ok(views.every((view) => view.error === `Unsupported: ${view.reason}`), "each error is Unsupported plus the reason");
+});
+
 test("C-69d9392a schemaToFields names a required property that has no schema", () => {
   const result = parsed({ type: "object", required: ["ghost"] }, "a required name with no property schema");
   assert.deepEqual(result.problems, []);
