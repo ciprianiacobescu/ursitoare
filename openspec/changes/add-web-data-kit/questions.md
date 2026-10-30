@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | open | none | verdict | Criterion C-98c49746 (web-data-kit › A cursor list loads one page at a time and appends the next › Page size and subscribers): accept as satisfied? |
 | Q-002 | answered | none | verdict | Finding F-27dc58cb: Load more after an empty page unmounts the focused button |
 | Q-003 | open | none | verdict | Finding F-78d50e72: An unsupported property `c` comes back with an empty name |
-| Q-004 | open | none | verdict | Finding F-4c79e0be: task 1.1: no-op calls and loads do not settle with the request in flight |
+| Q-004 | answered | none | verdict | Finding F-4c79e0be: task 1.1: no-op calls and loads do not settle with the request in flight |
 | Q-005 | open | none | verdict | Finding F-d49cb373: task 4.1: an enum property without type is not rendered as an enum |
 | Q-006 | open | none | verdict | Hold H-fe461ce5: UI criterion C-4ad6d2b9 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-ee891db8: UI criterion C-efc9d8f0 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -136,7 +136,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-004: Finding F-4c79e0be: task 1.1: no-op calls and loads do not settle with the request in flight
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -157,6 +158,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived. The only basis for it is the task 1.1 sentence that a no-op call settles with the request in flight, and the task's own frozen test for the Nothing to do scenario reads that sentence the other way: it awaits loadMore and load while the first request is still unanswered and answers the request only afterwards, so a no-op call that returned the pending request's promise would never settle and the test would time out. The specification scenario asks only that fetchPage is called once and the state ends loaded with a, design Decision 2 says only that any other call is a no-op, and no document requires load, loadMore or retry to wait for the page. The code satisfies the criterion as written and the suggested fix cannot be made without changing a frozen test.
 ---
 
 ## Q-005: Finding F-d49cb373: task 4.1: an enum property without type is not rendered as an enum
