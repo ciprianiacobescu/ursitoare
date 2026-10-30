@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: Unfreeze e2e/test_m1_sign_in.py to repair its broken URL assertion
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The question comes from a fix task and its only remedy is a change to the frozen browser test e2e/test_m1_sign_in.py (line 137 does read `expect(page).to_have_url(lambda ...)` as described). A fix task cannot unfreeze or edit a test file, there is no clarifier suggestion to accept, and an answer nam
 - **Blocking tasks:** 1.2
 - **Kind:** technical
 - **Asked:** 2026-10-30T06:35Z by glm, run r-20261030T0434Z-57e9, task 1.2
