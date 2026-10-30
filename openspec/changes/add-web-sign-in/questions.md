@@ -27,7 +27,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-014 | answered | none | verdict | Hold H-8928b203: UI criterion C-5368eb23 has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-f279e66d: UI criterion C-3809dcd7 has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-aa40376f: UI criterion C-b4adf358 has no end-to-end test; see the generated UI tests table |
-| Q-017 | open | none | verdict | Hold H-bede43a4: UI criterion C-eb130cb7 has no end-to-end test; see the generated UI tests table |
+| Q-017 | answered | none | verdict | Hold H-bede43a4: UI criterion C-eb130cb7 has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-499b792b: UI criterion C-4b09fc8c has no end-to-end test; see the generated UI tests table |
 | Q-019 | open | none | verdict | Hold H-9f7f3848: UI criterion C-77971a2d has no end-to-end test; see the generated UI tests table |
 | Q-020 | open | none | verdict | Hold H-ad0fc545: UI criterion C-53df20c1 has no end-to-end test; see the generated UI tests table |
@@ -504,7 +504,7 @@ accept C-b4adf358's scenario checks redirectToSignIn over four synthetic locatio
 
 ## Q-017: Hold H-bede43a4: UI criterion C-eb130cb7 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.51 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -524,6 +524,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-eb130cb7's scenario checks safeRedirect over a fixed input list and the loader.reset count of signOut; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/sign-out.test.ts C-eb130cb7 traces it with a red-assertion proof and passes at head. The e2e and unit gates passed at head 601ca1f (985 of 985 tests, verification round 3).
 ---
 
 ## Q-018: Hold H-499b792b: UI criterion C-4b09fc8c has no end-to-end test; see the generated UI tests table
