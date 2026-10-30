@@ -545,6 +545,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ## Q-019: Hold H-9f7f3848: UI criterion C-77971a2d has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.51 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
