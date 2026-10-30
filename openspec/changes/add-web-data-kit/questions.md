@@ -44,7 +44,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-031 | answered | none | verdict | Hold H-ca2dd6a8: UI criterion C-08c4c2e4 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-032 | answered | none | verdict | Hold H-979139da: UI criterion C-61a6e3a3 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-033 | answered | none | verdict | Hold H-034ad64a: UI criterion C-74fd23b0 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-034 | open | none | verdict | Hold H-da5c95d0: UI criterion C-ab5cf141 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-034 | answered | none | verdict | Hold H-da5c95d0: UI criterion C-ab5cf141 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-035 | answered | none | verdict | Hold H-b3bec5d6: UI criterion C-852bb719 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-036 | open | none | verdict | Hold H-d3c23a86: UI criterion C-247ad9d2 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-037 | open | none | verdict | Hold H-e860473b: UI criterion C-a0904f4d has no end-to-end test (not_testable); see the generated UI tests table |
@@ -791,7 +791,7 @@ accept The hold may be waived. Criterion C-74fd23b0 is the scenario "Styles, doc
 
 ## Q-034: Hold H-da5c95d0: UI criterion C-ab5cf141 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -807,6 +807,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-ab5cf141 is the fix's regression scenario "Load more after an empty page unmounts the focused button": the return values of tableView and focusAfterChange, pure functions in data-table.ts, which no page shows. The fix keys the busy Load more and the end-of-list focus on a non-null nextCursor, and its Node tests (C-686289b8 C-ab5cf141 tableView keeps a load more after an empty page busy; C-ab5cf141 focusAfterChange moves to the table) passed with a red assertion. design.md "Browser coverage, stated plainly" says no page uses these components and add-web-ui-kit rules out a kit demo route, so this unit has no journey; the first consumers (add-web-admin for DataTable, add-web-task-inbox for SchemaForm) prove the markup with assert_accessible(page).
 ---
 
 ## Q-035: Hold H-b3bec5d6: UI criterion C-852bb719 has no end-to-end test (not_testable); see the generated UI tests table
