@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | open | none | verdict | Finding F-78d50e72: An unsupported property `c` comes back with an empty name |
 | Q-004 | answered | none | verdict | Finding F-4c79e0be: task 1.1: no-op calls and loads do not settle with the request in flight |
 | Q-005 | open | none | verdict | Finding F-d49cb373: task 4.1: an enum property without type is not rendered as an enum |
-| Q-006 | open | none | verdict | Hold H-fe461ce5: UI criterion C-4ad6d2b9 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-fe461ce5: UI criterion C-4ad6d2b9 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-ee891db8: UI criterion C-efc9d8f0 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-949d5558: UI criterion C-98c49746 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-c97509ef: UI criterion C-3d1d3680 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -190,7 +190,8 @@ This finding cites no criterion: end the reason with one sentence WHEN <the situ
 
 ## Q-006: Hold H-fe461ce5: UI criterion C-4ad6d2b9 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -206,6 +207,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold is waived. Criterion C-4ad6d2b9 is the scenario First page, then load more of the cursor list, which describes the states, items, cursors and requests of createCursorList, a plain state machine in cursor-list.ts with no markup of its own. The Node test for it creates a list with page size 2, asserts the idle, loading and loaded states, the two requests with cursor null then c1 and limit 2, a distinct AbortSignal on each, and the final items a, b and c, which is the whole scenario. No route of the web app mounts DataTable or any other data component, and the design's test plan and the proposal both state that this change has no kit demo route and no browser journey, leaving the markup to the first consumers add-web-task-inbox and add-web-admin. A browser test therefore cannot observe this criterion, and the unit can go on as it stands.
 ---
 
 ## Q-007: Hold H-ee891db8: UI criterion C-efc9d8f0 has no end-to-end test (not_testable); see the generated UI tests table
