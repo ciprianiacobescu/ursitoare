@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | open | none | verdict | Finding F-d49cb373: task 4.1: an enum property without type is not rendered as an enum |
 | Q-006 | answered | none | verdict | Hold H-fe461ce5: UI criterion C-4ad6d2b9 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-ee891db8: UI criterion C-efc9d8f0 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-949d5558: UI criterion C-98c49746 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-949d5558: UI criterion C-98c49746 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-c97509ef: UI criterion C-3d1d3680 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-e034653d: UI criterion C-79a9fd48 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-1632d223: UI criterion C-629f74f4 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -232,7 +232,8 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ## Q-008: Hold H-949d5558: UI criterion C-98c49746 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -248,6 +249,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold is waived. Criterion C-98c49746 is the scenario Page size and subscribers of the cursor list, which describes the module API of createCursorList: a pageSize outside 1 to 200 or not an integer throws a KitError of code KIT_PROP_INVALID, a list without pageSize asks for limit 50, a second subscriber is called for every change even when the first throws, and two getState reads without a change are one object. None of that is page behaviour a browser could observe. The implementation in cursor-list.ts validates the page size, falls back to DEFAULT_PAGE_SIZE of 50, and calls every listener from a copy of the set inside a try block, and the Node test for the criterion asserts the three rejected sizes, the accepted 200, the default limit and the second subscriber's calls past a throwing first subscriber. No file outside web/src/kit/data imports the data components or createCursorList, so no route of the web app mounts them, and the design's test plan and the proposal both state that this change has no kit demo route and no browser journey, leaving the markup to the first consumers. An end-to-end test for this criterion is therefore impossible as well as unnecessary, and the unit can go on as it stands.
 ---
 
 ## Q-009: Hold H-c97509ef: UI criterion C-3d1d3680 has no end-to-end test (not_testable); see the generated UI tests table
