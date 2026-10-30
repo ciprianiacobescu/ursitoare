@@ -65,6 +65,15 @@ export function createCursorList<T>(
   let generation = 0;
   let controller: AbortController | null = null;
   let failedCursor: string | null = null;
+  let resolvePending: (() => void) | null = null;
+
+  function finishPending(): void {
+    const resolve = resolvePending;
+    resolvePending = null;
+    if (resolve !== null) {
+      resolve();
+    }
+  }
 
   function commit(next: CursorListState<T>): void {
     snapshot = next;
@@ -105,7 +114,7 @@ export function createCursorList<T>(
     return null;
   }
 
-  function start(cursor: string | null, restart: boolean): void {
+  function start(cursor: string | null, restart: boolean): Promise<void> {
     const atStart = ++generation;
     // A restart (a load or a CURSOR_INVALID retry) begins from an empty list, every other
     // request keeps the rows and the cursor of the page before it.
@@ -117,11 +126,15 @@ export function createCursorList<T>(
       error: null,
     });
     failedCursor = cursor;
+    finishPending();
     if (controller !== null) {
       controller.abort();
     }
     const own = new AbortController();
     controller = own;
+    const done = new Promise<void>((resolve) => {
+      resolvePending = resolve;
+    });
     const request: PageRequest = { cursor, limit: pageSize, signal: own.signal };
     const onSettled = (
       page: CursorPage<T>,
@@ -132,11 +145,13 @@ export function createCursorList<T>(
       }
       if (fault !== null) {
         commit({ status: "error", items: snapshot.items, nextCursor: snapshot.nextCursor, error: fault });
+        finishPending();
         return;
       }
       const checked = pageFault(page, cursor);
       if (checked !== null) {
         commit({ status: "error", items: snapshot.items, nextCursor: snapshot.nextCursor, error: checked });
+        finishPending();
         return;
       }
       commit({
@@ -145,6 +160,7 @@ export function createCursorList<T>(
         nextCursor: page.next_cursor,
         error: null,
       });
+      finishPending();
     };
     let pending: Promise<CursorPage<T>>;
     try {
@@ -156,6 +172,7 @@ export function createCursorList<T>(
       (page) => onSettled(page, null),
       (error: unknown) => onSettled({ items: [], next_cursor: null }, error),
     );
+    return done;
   }
 
   return {
@@ -179,8 +196,7 @@ export function createCursorList<T>(
       if (snapshot.status !== "idle") {
         return Promise.resolve();
       }
-      start(null, true);
-      return Promise.resolve();
+      return start(null, true);
     },
 
     loadMore(): Promise<void> {
@@ -188,8 +204,7 @@ export function createCursorList<T>(
       if (snapshot.status !== "loaded" || cursor === null) {
         return Promise.resolve();
       }
-      start(cursor, false);
-      return Promise.resolve();
+      return start(cursor, false);
     },
 
     retry(): Promise<void> {
@@ -200,8 +215,7 @@ export function createCursorList<T>(
       const rejectedCursor = error instanceof ApiRequestError && error.code === "CURSOR_INVALID";
       // A rejected cursor cannot come back, so the retry begins from the first page;
       // every other error repeats the failed request with the cursor it asked for.
-      start(rejectedCursor ? null : failedCursor, rejectedCursor);
-      return Promise.resolve();
+      return start(rejectedCursor ? null : failedCursor, rejectedCursor);
     },
 
     reset(): void {
@@ -211,6 +225,7 @@ export function createCursorList<T>(
         controller = null;
       }
       failedCursor = null;
+      finishPending();
       const changed =
         snapshot.status !== "idle" ||
         snapshot.items.length > 0 ||
