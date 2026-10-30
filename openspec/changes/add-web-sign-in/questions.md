@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-c3f18eb0 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A request without a session is unauthenticated): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-67c1baa1 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-6e84f9b2 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A post without the CSRF header is refused): accept as satisfied? |
-| Q-007 | open | none | verdict | Criterion C-4faae006 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The return path is kept): accept as satisfied? |
+| Q-007 | answered | none | verdict | Criterion C-4faae006 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The return path is kept): accept as satisfied? |
 | Q-008 | open | none | verdict | Criterion C-a76b8eac (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable): accept as satisfied? |
 | Q-009 | open | none | verdict | Hold H-545ec45b: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-e3f87d2a: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table |
@@ -239,7 +239,8 @@ accept The criterion is satisfied as it stands. The browser test for C-6e84f9b2 
 
 ## Q-007: Criterion C-4faae006 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The return path is kept): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -266,6 +267,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The browser test for C-4faae006 calls login(page, users["alice"], "/sign-in?error=SESSION_ENDED&return_to=%2Fflows"), waits until the page URL's path is /flows, and asserts that the banner contains "Alice Example": every clause of the scenario, word for word. The production code backs each step of the round trip. On the sign-in page, signInView parses return_to through safeReturnTo, which keeps /flows, and builds the login href /auth/oidc/login?return_to=%2Fflows, which the Sign in button assigns. The server login route sanitizes return_to with sanitizeReturnTo, which keeps a same-origin path not under /auth/, stores it in the sealed login cookie, and the callback route answers 302 to state.returnTo after creating the session. The static handler serves /flows as the SPA because the path matches no file and has no asset extension, so index.html is returned; the router renders the not-found route inside the Shell, whose header holds AccountMenu, and accountView maps the ready session to "Signed in as Alice Example". The Node tests sign-in-page.test.ts and return-to.test.ts cover the client-side mapping of exactly this search string. The verifier ignored the browser test only because it has no red record, and the generated test it cites is not in the tree; the judge attributed that failure to the generated tests rather than the implementation, and the e2e gate with the M1 journey passes. The pending lint failure concerns an unused assignment in stack.seed.test.ts and does not touch this criterion.
 ---
 
 ## Q-008: Criterion C-a76b8eac (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable): accept as satisfied?
