@@ -220,3 +220,5 @@
 {"at":"2026-10-30T02:47:49Z","run":"r-20261030T0247Z-7d77","type":"unit.dispatched","unit":"openspec:add-web-sign-in"}
 {"at":"2026-10-30T04:28:43Z","detail":"awaiting_human: no new answers (open: Q-001) (escalated to a person: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-sign-in"}
 {"at":"2026-10-30T04:34:42Z","by":"harness","reason":"the cause is gone: openspec:add-web-sign-in is awaiting_human","type":"plan.resumed"}
+{"at":"2026-10-30T04:34:43Z","attempt":1,"cost_usd":1.867452,"runs":2,"type":"plan.charged","unit":"openspec:add-web-sign-in"}
+{"at":"2026-10-30T04:34:43Z","run":"r-20261030T0434Z-57e9","type":"unit.dispatched","unit":"openspec:add-web-sign-in"}
