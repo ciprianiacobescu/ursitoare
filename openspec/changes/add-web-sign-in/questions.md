@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.2 | technical | stack.db.test.ts asserts one tenant; the frozen tests at lines 205 and 274/318 now contradict the shipped tenant-b part (stop at line 205) |
 | Q-002 | answered | none | verdict | Criterion C-d115a25a (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Alice signs in and the header shows user and tenant): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-a699ddc9 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Two tenants stay apart): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-a699ddc9 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Two tenants stay apart): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-c3f18eb0 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A request without a session is unauthenticated): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-67c1baa1 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-6e84f9b2 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A post without the CSRF header is refused): accept as satisfied? |
@@ -107,7 +107,8 @@ accept The criterion is satisfied as it stands. The browser test for C-d115a25a 
 
 ## Q-003: Criterion C-a699ddc9 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Two tenants stay apart): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -134,6 +135,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The browser test for C-a699ddc9 signs alice in on the fixture page, opens a second browser.new_context with the same base URL, signs mallory in on a page of that context, and asserts that mallory's banner contains users["mallory"]["displayName"] and "Tenant B" and contains neither "E2E tenant" nor "Alice Example"; after closing the second context it asserts that alice's banner still contains "Alice Example" and "E2E tenant". That is every clause of the scenario, word for word. The production code backs it: Shell.tsx renders AccountMenu inside the header element, which is the banner landmark; accountView maps a ready session to me.user.displayName and me.tenant.name from /me; AccountMenu renders "Signed in as" and "Tenant:" with those two values. The tenant-b stack part seeds "Tenant B" with organisation org-b and serves mallory's display name from the fake's minted name claim, and the Node test stack.seed.test.ts proves through the real stack that alice's /me body names "Alice Example" and "E2E tenant" without "Tenant B" while mallory's names "Tenant B" without "E2E tenant". The only reason the verifier ignored the browser test is the missing red record, which is not a defect of the code or of the test's assertions. The pending lint failure is unrelated to this criterion.
 ---
 
 ## Q-004: Criterion C-c3f18eb0 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A request without a session is unauthenticated): accept as satisfied?
