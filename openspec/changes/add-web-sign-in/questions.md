@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.2 | technical | stack.db.test.ts asserts one tenant; the frozen tests at lines 205 and 274/318 now contradict the shipped tenant-b part (stop at line 205) |
-| Q-002 | open | none | verdict | Criterion C-d115a25a (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Alice signs in and the header shows user and tenant): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-d115a25a (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Alice signs in and the header shows user and tenant): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-a699ddc9 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Two tenants stay apart): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-c3f18eb0 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A request without a session is unauthenticated): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-67c1baa1 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session): accept as satisfied? |
@@ -74,7 +74,8 @@ Edit `test/support/e2e-stack/stack.db.test.ts`: change the one-tenant assertions
 
 ## Q-002: Criterion C-d115a25a (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Alice signs in and the header shows user and tenant): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -101,6 +102,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The browser test for C-d115a25a runs login(page, users["alice"]) inside page.expect_response for the 200 answer of /api/v1/me, asserts that the answer's capabilities contain read_self, that the banner contains "Signed in as Alice Example" and "Tenant: E2E tenant", that a "Sign out" button is visible in the banner, and then calls assert_accessible(page) on the landing page: every clause of the scenario, word for word. The production code backs it: Shell.tsx renders AccountMenu inside the header element, which is the banner landmark; accountView maps a ready session to the display name and tenant name from /me; AccountMenu renders "Signed in as", "Tenant:" and a type="button" labelled "Sign out". The Node test stack.seed.test.ts proves through the real stack that alice's /me body names "Alice Example", "E2E tenant" and read_self. The only reason the verifier ignored the browser test is the missing red record, and the generated-test writer timed out; neither is a defect of the code or of the test's assertions. The pending lint failure in stack.seed.test.ts is unrelated to this criterion.
 ---
 
 ## Q-003: Criterion C-a699ddc9 (web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Two tenants stay apart): accept as satisfied?
