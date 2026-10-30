@@ -45,7 +45,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-032 | answered | none | verdict | Hold H-979139da: UI criterion C-61a6e3a3 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-033 | answered | none | verdict | Hold H-034ad64a: UI criterion C-74fd23b0 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-034 | open | none | verdict | Hold H-da5c95d0: UI criterion C-ab5cf141 has no end-to-end test (not_testable); see the generated UI tests table |
-| Q-035 | open | none | verdict | Hold H-b3bec5d6: UI criterion C-852bb719 has no end-to-end test (not_testable); see the generated UI tests table |
+| Q-035 | answered | none | verdict | Hold H-b3bec5d6: UI criterion C-852bb719 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-036 | open | none | verdict | Hold H-d3c23a86: UI criterion C-247ad9d2 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-037 | open | none | verdict | Hold H-e860473b: UI criterion C-a0904f4d has no end-to-end test (not_testable); see the generated UI tests table |
 <!-- l4:index:end -->
@@ -811,7 +811,8 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ## Q-035: Hold H-b3bec5d6: UI criterion C-852bb719 has no end-to-end test (not_testable); see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -827,6 +828,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-852bb719 is the fix unit's regression scenario "An unsupported property c comes back with an empty name": schemaToFields, given the schema of "Unsupported properties", labels the untyped property c as "C" with the reason "the property has no type" and leaves the other six fields unchanged. That is the return value of a pure function in schema-fields.ts, which no page shows: parseProperty keeps the label derived from the name and blanks only the name, and the Node test for the criterion asserts the seven names, the seven labels A to G, the seven reasons and the Unsupported prefix, and passed with a red assertion. No file of the web app outside web/src/kit/data imports SchemaForm or schemaToFields, so no route mounts the component, and the design's test plan and the proposal both state that this change has no kit demo route and no browser journey, leaving the markup to the first consumers add-web-task-inbox and add-web-admin. A browser test therefore cannot observe this criterion, and the unit can go on as it stands.
 ---
 
 ## Q-036: Hold H-d3c23a86: UI criterion C-247ad9d2 has no end-to-end test (not_testable); see the generated UI tests table
