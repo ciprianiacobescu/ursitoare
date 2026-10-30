@@ -85,6 +85,25 @@ async function run(): Promise<void> {
   }
 }
 
+interface Tracker {
+  settled: boolean;
+  rejected: boolean;
+}
+
+function track(promise: Promise<void>): Tracker {
+  const tracker: Tracker = { settled: false, rejected: false };
+  promise.then(
+    () => {
+      tracker.settled = true;
+    },
+    () => {
+      tracker.settled = true;
+      tracker.rejected = true;
+    },
+  );
+  return tracker;
+}
+
 function callAt(calls: readonly Call[], index: number): Call {
   const recorded = calls.at(index);
   assert.ok(recorded !== undefined, `request ${index} was made`);
@@ -493,4 +512,120 @@ test("C-629f74f4 malformed page", async () => {
   assert.deepEqual([...repeatedState.items], ["a", "b"], "nothing was appended");
   await assert.doesNotReject(() => loadRepeated, "the load settled");
   await assert.doesNotReject(() => loadMore, "the loadMore settled");
+});
+
+test("C-247ad9d2 load loadMore and retry settle with their request", async () => {
+  const { fetchPage, calls } = fakeFetchPage();
+  let holder: CursorList<string> | undefined;
+  assert.doesNotThrow(() => {
+    holder = createCursorList(fetchPage);
+  }, "the list is created");
+  const list = settledFrom(holder, "the list");
+
+  const loading = track(list.load());
+  await run();
+  assert.equal(calls.length, 1, "load started a request");
+  assert.equal(loading.settled, false, "load waits while its page is unanswered");
+  callAt(calls, 0).slot.settle({ ok: true, page: { items: ["a"], next_cursor: "c1" } });
+  await run();
+  assert.equal(loading.settled, true, "load settles once its page is committed");
+  assert.equal(loading.rejected, false, "load never rejects");
+
+  const more = track(list.loadMore());
+  await run();
+  assert.equal(calls.length, 2, "loadMore started a request");
+  assert.equal(more.settled, false, "loadMore waits while its page is unanswered");
+  callAt(calls, 1).slot.settle({ ok: true, page: { items: ["b"], next_cursor: null } });
+  await run();
+  assert.equal(more.settled, true, "loadMore settles once its page is committed");
+  assert.equal(more.rejected, false, "loadMore never rejects");
+
+  const failing = fakeFetchPage();
+  let failingHolder: CursorList<string> | undefined;
+  assert.doesNotThrow(() => {
+    failingHolder = createCursorList(failing.fetchPage);
+  }, "the failing list is created");
+  const failingList = settledFrom(failingHolder, "the failing list");
+  const firstPage = track(failingList.load());
+  await run();
+  assert.equal(firstPage.settled, false, "load waits while its page is unanswered");
+  callAt(failing.calls, 0).slot.settle({
+    ok: false,
+    error: new ApiRequestError(503, "AUTHZ_UNAVAILABLE", "x"),
+  });
+  await run();
+  assert.equal(firstPage.settled, true, "load settles once its error is committed");
+  assert.equal(firstPage.rejected, false, "load never rejects on a failed page");
+  assert.equal(failingList.getState().status, "error", "the failure was committed");
+
+  const retrying = track(failingList.retry());
+  await run();
+  assert.equal(failing.calls.length, 2, "retry started a request");
+  assert.equal(retrying.settled, false, "retry waits while its page is unanswered");
+  callAt(failing.calls, 1).slot.settle({ ok: true, page: { items: ["a"], next_cursor: null } });
+  await run();
+  assert.equal(retrying.settled, true, "retry settles once its page is committed");
+  assert.equal(retrying.rejected, false, "retry never rejects");
+
+  const droppedFake = fakeFetchPage();
+  let droppedHolder: CursorList<string> | undefined;
+  assert.doesNotThrow(() => {
+    droppedHolder = createCursorList(droppedFake.fetchPage);
+  }, "the dropped list is created");
+  const droppedList = settledFrom(droppedHolder, "the dropped list");
+  const dropped = track(droppedList.load());
+  await run();
+  assert.equal(dropped.settled, false, "the load waits while its page is unanswered");
+  assert.doesNotThrow(() => {
+    droppedList.reset();
+  }, "reset drops the request");
+  await run();
+  assert.equal(dropped.settled, true, "reset settles the promise it dropped");
+  assert.equal(dropped.rejected, false, "reset never rejects the dropped load");
+  assert.deepEqual(droppedList.getState(), { status: "idle", items: [], nextCursor: null, error: null });
+});
+
+test("C-efc9d8f0 C-247ad9d2 no-op calls settle at once while a request is in flight", async () => {
+  const { fetchPage, calls } = fakeFetchPage();
+  let holder: CursorList<string> | undefined;
+  assert.doesNotThrow(() => {
+    holder = createCursorList(fetchPage);
+  }, "the list is created");
+  const list = settledFrom(holder, "the list");
+
+  const idleMore = track(list.loadMore());
+  await run();
+  assert.equal(idleMore.settled, true, "loadMore on an idle list settles at once");
+  assert.equal(idleMore.rejected, false, "the idle no-op never rejects");
+
+  const loading = track(list.load());
+  await run();
+  assert.equal(calls.length, 1, "load started the first request");
+  assert.equal(loading.settled, false, "the load with a request in flight waits");
+
+  const whileLoadingMore = track(list.loadMore());
+  const whileLoadingLoad = track(list.load());
+  await run();
+  assert.equal(whileLoadingMore.settled, true, "loadMore while loading is a no-op that settles at once");
+  assert.equal(whileLoadingLoad.settled, true, "a second load while loading is a no-op that settles at once");
+  assert.equal(whileLoadingMore.rejected, false, "the loadMore no-op never rejects");
+  assert.equal(whileLoadingLoad.rejected, false, "the second load no-op never rejects");
+  assert.equal(calls.length, 1, "no-op calls start no request");
+
+  callAt(calls, 0).slot.settle({ ok: true, page: { items: ["a"], next_cursor: null } });
+  await run();
+  assert.equal(loading.settled, true, "the started load settles once its page is committed");
+
+  await assert.doesNotReject(() => list.loadMore(), "loadMore without a cursor is a no-op");
+  await assert.doesNotReject(() => list.load(), "load again while loaded is a no-op");
+  await assert.doesNotReject(() => list.retry(), "retry without an error is a no-op");
+  await run();
+
+  assert.equal(calls.length, 1, "fetchPage was called once in total");
+  assert.deepEqual(list.getState(), {
+    status: "loaded",
+    items: ["a"],
+    nextCursor: null,
+    error: null,
+  });
 });
