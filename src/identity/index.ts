@@ -25,3 +25,12 @@ export type { Principal } from "./oidc/principal.ts";
 export { principalOf } from "./oidc/principal.ts";
 export type { OidcRoutesDeps } from "./oidc/routes.ts";
 export { registerOidcRoutes } from "./oidc/routes.ts";
+export type { RbacErrorCode } from "./rbac/errors.ts";
+export { RbacError } from "./rbac/errors.ts";
+export type { RbacActor } from "./rbac/names.ts";
+export {
+  DEFAULT_ROLES,
+  DEFAULT_BOOTSTRAP_ADMIN_GROUP,
+  BOOTSTRAP_ADMIN_GROUP_ENV,
+} from "./rbac/names.ts";
+export { listRoles, listTeams, createTeam, deleteTeam } from "./rbac/teams.ts";

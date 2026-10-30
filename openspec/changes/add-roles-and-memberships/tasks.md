@@ -4,7 +4,7 @@
 
 ## 2. Roles and teams
 
-- [ ] 2.1 Write `src/identity/rbac/teams.test.ts` first (used teams made by owner SQL inserts into `ursitoare.idp_group_map` and `ursitoare.membership`), then implement `RbacError` (one fixed message per code, no input echoed) in `src/identity/rbac/errors.ts`, the module-internal validators of design.md decision 11 and the tenant check (`current_setting('app.tenant_id', true)` against `ctx.tenantId`, else `RBAC_TENANT_MISMATCH`) in `src/identity/rbac/names.ts`, and `listRoles`, `listTeams`, `createTeam`, `deleteTeam` in `src/identity/rbac/teams.ts` (audit events of decision 10; `deleteTeam` pre-checks mappings and memberships, and maps the foreign-key error `23503` to `RBAC_IN_USE`), exporting every new public symbol from `src/identity/index.ts`, implementing requirement "Roles are listed and teams are managed inside one tenant"
+- [x] 2.1 Write `src/identity/rbac/teams.test.ts` first (used teams made by owner SQL inserts into `ursitoare.idp_group_map` and `ursitoare.membership`), then implement `RbacError` (one fixed message per code, no input echoed) in `src/identity/rbac/errors.ts`, the module-internal validators of design.md decision 11 and the tenant check (`current_setting('app.tenant_id', true)` against `ctx.tenantId`, else `RBAC_TENANT_MISMATCH`) in `src/identity/rbac/names.ts`, and `listRoles`, `listTeams`, `createTeam`, `deleteTeam` in `src/identity/rbac/teams.ts` (audit events of decision 10; `deleteTeam` pre-checks mappings and memberships, and maps the foreign-key error `23503` to `RBAC_IN_USE`), exporting every new public symbol from `src/identity/index.ts`, implementing requirement "Roles are listed and teams are managed inside one tenant"
 
 ## 3. Group mappings
 
