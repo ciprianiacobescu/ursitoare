@@ -54,6 +54,7 @@ export function startControlServer(deps: {
   port: number;
   faults: FaultTable;
   reset(): Promise<void>;
+  seedData?(): Readonly<Record<string, unknown>>;
 }): Promise<ControlServer> {
   const server = http.createServer((request, response) => {
     void handle(request, response);
@@ -77,6 +78,30 @@ export function startControlServer(deps: {
 
     const path = pathOf(request.url);
     const method = request.method ?? "";
+
+    if (path === "/seed") {
+      if (method !== "GET") {
+        request.resume();
+        send(response, 405, envelope("CONTROL_METHOD_NOT_ALLOWED", "Method not allowed"), {
+          allow: "GET",
+        });
+        return;
+      }
+      request.resume();
+      if (deps.seedData === undefined) {
+        send(response, 404, envelope("CONTROL_NOT_FOUND", "Not found"));
+        return;
+      }
+      let data: Readonly<Record<string, unknown>>;
+      try {
+        data = deps.seedData();
+      } catch {
+        send(response, 500, envelope("CONTROL_SEED_FAILED", "Seed data failed"));
+        return;
+      }
+      send(response, 200, JSON.stringify(data));
+      return;
+    }
 
     if (path === "/reset") {
       if (method !== "POST") {
