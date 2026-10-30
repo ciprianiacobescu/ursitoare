@@ -22,9 +22,9 @@ Observable result: a signed-in tenant administrator (`tenant_admin` alone holds 
 // src/identity/admin/{errors,accounts,idp-links,review-profile}.ts (exported by src/identity/index.ts)
 type AdminErrorCode = "ADMIN_INVALID" | "ADMIN_NOT_FOUND" | "ADMIN_EXISTS" | "ADMIN_UNKNOWN_ISSUER" | "ADMIN_SELF_DISABLE" | "ADMIN_WRONG_KIND" | "ADMIN_TENANT_MISMATCH"
 class AdminError extends Error { readonly code: AdminErrorCode; constructor(code: AdminErrorCode, message: string) }
-interface AccountView extends User { roles: string[]; teams: string[]; localRoles: string[] }
-function getAccount(tx: TenantTx, ctx: TenantContext, userId: string, kind: UserKind): Promise<AccountView | null>
-function listAccounts(tx: TenantTx, ctx: TenantContext, q: { kind: UserKind; state?: UserState | undefined; limit: number; after?: string | undefined }): Promise<{ users: AccountView[]; next: string | null }>
+interface AdminAccount extends User { roles: string[]; teams: string[]; localRoles: string[] }
+function getAccount(tx: TenantTx, ctx: TenantContext, userId: string, kind: UserKind): Promise<AdminAccount | null>
+function listAccounts(tx: TenantTx, ctx: TenantContext, q: { kind: UserKind; state?: UserState | undefined; limit: number; after?: string | undefined }): Promise<{ users: AdminAccount[]; next: string | null }>
 function provisionServiceAccount(tx: TenantTx, ctx: TenantContext, input: { displayName: string; ownerUserId: string }, actor: Extract<RbacActor, { userId: string }>, opts?: IdentityOptions): Promise<User>
 function setAccountState(tx: TenantTx, ctx: TenantContext, input: { userId: string; kind: UserKind; state: UserState }, actor: Extract<RbacActor, { userId: string }>, opts?: IdentityOptions): Promise<{ user: User; changed: boolean }>
 interface IdpLinkRecord { issuer: string; subject: string; linkedAt: string }
@@ -42,7 +42,7 @@ function registerAdminRoutes(server: FastifyInstance, deps: AdminApiDeps): void
 // ERROR_CODES gains ALREADY_EXISTS 409, IN_USE 409, ELEVATION_REFUSED 403, UNKNOWN_ISSUER 422, OPERATION_REFUSED 422, ENGINE_KEY_REQUIRED 503 "Paging needs the engine key (URSITOARE_ENGINE_KEY_FILE)"
 ```
 
-Routes, bodies and answers (JSON `Account` is `AccountView`, `IdpLink` is `IdpLinkRecord`, `GroupMapping` is that of `add-roles-and-memberships`): `specs/admin-api/spec.md`; the 19 routes with their declared codes: `design.md` § Interfaces. All lists answer `{ items, next_cursor }`; every API timestamp is UTC with six fraction digits (`2026-10-25T09:00:05.000000Z`).
+Routes, bodies and answers (JSON `Account` is `AdminAccount`, `IdpLink` is `IdpLinkRecord`, `GroupMapping` is that of `add-roles-and-memberships`): `specs/admin-api/spec.md`; the 19 routes with their declared codes: `design.md` § Interfaces. All lists answer `{ items, next_cursor }`; every API timestamp is UTC with six fraction digits (`2026-10-25T09:00:05.000000Z`).
 
 **Interfaces taken:**
 

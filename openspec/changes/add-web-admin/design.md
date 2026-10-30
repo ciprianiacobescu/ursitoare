@@ -57,7 +57,7 @@ Stubs: `ADMIN_PAGES` is `[]`, `ADMIN_TABLES` five specs `{ caption: "", columns:
 
 | Situation | Behaviour |
 |---|---|
-| No session, or it ended | 401 `UNAUTHENTICATED`; `browserSession.api` goes to `/sign-in?error=SESSION_ENDED` |
+| No session, or it ended | 401 `UNAUTHENTICATED`; the first such answer to a `browserSession.api` call goes to `/sign-in?error=SESSION_ENDED&return_to=<encoded path>` (`/me` never redirects) |
 | Signed in without the capability | 403 `FORBIDDEN`; the table or options show `ErrorPanel` with the decision id and "Copy decision id" |
 | Engine down or slow, or an answer of the wrong shape | the table keeps its rows and offers "Try again"; an action shows an error toast; a parser gives `null`: `INVALID_RESPONSE`, catalogue text |
 | Bad form input | nothing is sent; the message is beside the field, focus on the first invalid one |
