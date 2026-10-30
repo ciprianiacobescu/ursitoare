@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-sign-in: NEEDS_HUMAN (round 3)
+# Verification: openspec:add-web-sign-in: PASS (round 4)
 
 traceability: 22/29 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 22/29 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 1.2 | base main@9dbc21eb8d contained |
-| 1 | integrity | ok | 70.3 | 10 sub-checks; scope: 55 changed file(s) |
-| 2 | build | ok | 24.0 |  |
-| 3 | tests | ok | 91.8 |  |
-| 4 | traceability | ok | 0.1 | 20/29 criteria covered |
-| 4a | audit sampling | ok | 329.2 | 2 rejected, 4 skipped; support files at the base: 15 |
-| 5 | ui test generation | ok | 5084.8 | 4 accepted, 5 fails_at_head, 16 not_testable, 1 uncollectable, 3 writer_failed |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: test/support/e2e-stack/control.ts, test/support/e2e-stack/parts/27-tenant-b.ts, test/support/e2e-stack/seed-data.ts, test/support/e2e-stack/stack.ts, test/support/e2e-stack/tenant-b-part.ts and 13 more |
-| 8 | s1 judge | ok | 5.5 | 29/29 criteria judged by jev |
-| 9 | judge | ok | 512.3 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 3) |
+| 1 | integrity | reused | 0.0 | reused (round 3) |
+| 2 | build | reused | 0.0 | reused (round 3) |
+| 3 | tests | reused | 0.0 | reused (round 3) |
+| 4 | traceability | reused | 0.0 | reused (round 3) |
+| 4a | audit sampling | reused | 0.0 | reused (round 3) |
+| 5 | ui test generation | reused | 0.0 | reused (round 3) |
+| 6 | quality | reused | 0.0 | reused (round 3) |
+| 8 | s1 judge | reused | 0.0 | reused (round 3) |
+| 9 | judge | reused | 0.0 | reused (round 3) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -300,6 +300,41 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - C-23a4ce1e: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_23a4ce1e_r3.py
 - C-e78811f4: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_e78811f4_r3.py
 
+## Answers to verdict questions
+
+- Q-002 accept C-d115a25a by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser test for C-d115a25a runs login(page, users["alice"]) inside page.expect_response for the 200 answer of /api/v1/me, asserts that the answer's capabilities contain read_self, that the banner contains "Signed in as Alice Example" and "Tenant: E2E ten...
+- Q-003 accept C-a699ddc9 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser test for C-a699ddc9 signs alice in on the fixture page, opens a second browser.new_context with the same base URL, signs mallory in on a page of that context, and asserts that mallory's banner contains users["mallory"]["displayName"] and "Tenant B...
+- Q-004 accept C-c3f18eb0 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser test for C-c3f18eb0 opens a playwright.request.new_context on the base URL, sends GET /api/v1/me with no cookie, and asserts that the status is 401 and that the body's error.code is UNAUTHENTICATED: every clause of the scenario, word for word. The...
+- Q-005 accept C-67c1baa1 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser test for C-67c1baa1 signs alice in, clicks the "Sign out" button inside the banner, then asserts that the button "Sign in" (exact name) is visible, that the path of the page URL is /sign-in, and that page.request.get("/api/v1/me") answers 401: eve...
+- Q-006 accept C-6e84f9b2 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser test for C-6e84f9b2 signs alice in, sends page.request.post("/auth/oidc/logout") with no header, asserts that the status is 403 and that the body's error.code is OIDC_CSRF_INVALID, then reloads the page and asserts that the banner still contains "...
+- Q-007 accept C-4faae006 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser test for C-4faae006 calls login(page, users["alice"], "/sign-in?error=SESSION_ENDED&return_to=%2Fflows"), waits until the page URL's path is /flows, and asserts that the banner contains "Alice Example": every clause of the scenario, word for word....
+- Q-008 accept C-a76b8eac by agent (CLAUDECODE): Checked against the scenario step by step: e2e/test_m1_sign_in.py::test_c_a76b8eac_the_sign_in_and_sign_out_buttons_are_keyboard_reachable (marked @pytest.mark.l4("C-a76b8eac")) on /sign-in signed out, presses Tab up to 15 times until "Sign in" (exact) is focused and asserts outlineStyle not none an...
+- Q-009 accept H-545ec45b by the delegate (claude-fable-5-1 via claude-code): The hold may be waived: criterion C-01e427f8 is not a browser criterion. Its scenario calls registerSignInMessages twice and messageFor for each code of SIGN_IN_ERROR_CODES, checks the order of the ten codes, the pairwise distinct texts of 1 to 200 characters, that each answer equals its SIGN_IN_MES...
+- Q-010 accept H-e3f87d2a by agent (CLAUDECODE): C-e78811f4's scenario checks the exact twelve entries of SIGN_IN_MESSAGES, two of which the sign-in page never shows; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/messages.test.ts C-e78811f4 traces it with a red-assertion proof and passes at h...
+- Q-011 accept H-2023e80e by agent (CLAUDECODE): C-cef4634b's scenario checks the return values of loginUrl and signInUrl for hostile inputs; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/return-to.test.ts C-cef4634b traces it with a red-assertion proof and passes at head. The e2e and unit ga...
+- Q-012 accept H-d7fe3aa5 by agent (CLAUDECODE): C-22c98964's scenario checks the six return values of the pure function signInView; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/sign-in-page.test.ts C-22c98964 traces it with a red-assertion proof and passes at head. The e2e and unit gates pa...
+- Q-013 accept H-2135a2da by agent (CLAUDECODE): C-023c2efe's scenario checks withCsrfHeader around a recording fetch and isStateChanging; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/session-fetch.test.ts C-023c2efe traces it with a red-assertion proof and passes at head. The e2e and unit g...
+- Q-014 accept H-8928b203 by agent (CLAUDECODE): C-5368eb23's scenario checks createBrowserSession against a fake fetch, a fake loader and a recording location; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/session-client.test.ts C-5368eb23 traces it with a red-assertion proof and passes at h...
+- Q-015 accept H-f279e66d by agent (CLAUDECODE): C-3809dcd7's scenario checks withSessionEnd around a fake fetch and the number of onEnded calls; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/session-fetch.test.ts C-3809dcd7 traces it with a red-assertion proof and passes at head. The e2e and...
+- Q-016 accept H-aa40376f by agent (CLAUDECODE): C-b4adf358's scenario checks redirectToSignIn over four synthetic locations with a recording assign; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/return-to.test.ts C-b4adf358 traces it with a red-assertion proof and passes at head. The e2e and...
+- Q-017 accept H-bede43a4 by agent (CLAUDECODE): C-eb130cb7's scenario checks safeRedirect over a fixed input list and the loader.reset count of signOut; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/sign-out.test.ts C-eb130cb7 traces it with a red-assertion proof and passes at head. The e2e ...
+- Q-018 accept H-499b792b by agent (CLAUDECODE): C-4b09fc8c's scenario checks the post count, the reset-before-load order and the result of signOut against a fake post; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/sign-out.test.ts C-4b09fc8c traces it with a red-assertion proof and passes at...
+- Q-019 accept H-9f7f3848 by agent (CLAUDECODE): C-77971a2d's scenario checks the result objects of signOut for four rejections and the reset count; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/sign-out.test.ts C-77971a2d traces it with a red-assertion proof and passes at head. The e2e and u...
+- Q-020 accept H-ad0fc545 by agent (CLAUDECODE): C-53df20c1's scenario checks a static scan of auth.css and the .tsx files for raw colours, kit tokens and inline styles; that is a unit-level check with no browser-observable form as written, and its unit test web/src/auth/auth-css.test.ts C-53df20c1 traces it with a red-assertion proof and passes a...
+- Q-021 accept H-74d8aa3c by agent (CLAUDECODE): C-c79d9365's scenario checks collectSeedData over fake part handles in Node; that is a unit-level check with no browser-observable form as written, and its unit test test/support/e2e-stack/seed-data.test.ts C-c79d9365 (two tests) traces it with a red-assertion proof and passes at head. The e2e and u...
+- Q-022 accept H-a83fac20 by agent (CLAUDECODE): C-812ae263's scenario checks the seeds of the oidc and tenant-b parts, ensureDefaultTenant and resolveTenantForToken on withTestDatabase; that is a unit-level check with no browser-observable form as written, and its unit test test/support/e2e-stack/tenant-b-part.test.ts C-812ae263 traces it with a ...
+- Q-023 accept H-39317e01 by agent (CLAUDECODE): C-c1ed19d8's scenario checks seedUsersOf against the fake, handle.env and the absence of passwords in env; that is a unit-level check with no browser-observable form as written, and its unit test test/support/e2e-stack/tenant-b-part.test.ts C-c1ed19d8 traces it with a red-assertion proof and passes ...
+- Q-024 accept H-b94b73e6 by agent (CLAUDECODE): C-39471a6a's scenario checks the order of discoverParts() and the text of parts/27-tenant-b.ts; that is a unit-level check with no browser-observable form as written, and its unit test test/support/e2e-stack/tenant-b-part.test.ts C-39471a6a traces it with a red-assertion proof and passes at head. Th...
+- Q-025 accept H-10718ca8 by agent (CLAUDECODE): C-bf32f3ba's scenario checks the control listener's answers to a forged Host, an Origin header and wrong methods, which a page on the app's origin cannot send; that is a unit-level check with no browser-observable form as written, and its unit test test/support/e2e-stack/control.seed.test.ts C-bf32f...
+- Q-026 accept H-82663866 by agent (CLAUDECODE): C-79192192's scenario checks the real stack's sign-in route, completeFakeLogin and API answers driven from Node; that is a unit-level check with no browser-observable form as written, and its unit test test/support/e2e-stack/stack.seed.test.ts C-79192192 traces it with a red-assertion proof and pass...
+- Q-027 accept H-836c11cc by agent (CLAUDECODE): C-d115a25a has an end-to-end test that passes at head: e2e/test_m1_sign_in.py traces it by its l4 marker and does what the scenario says (see the verdict question of C-d115a25a). Step 5's writer gave no answer within 600s, so no generated test exists. The e2e and unit gates passed at head 601ca1f (9...
+- Q-028 accept H-8f91a4e8 by agent (CLAUDECODE): C-a699ddc9 has an end-to-end test that passes at head: e2e/test_m1_sign_in.py traces it by its l4 marker and does what the scenario says (see the verdict question of C-a699ddc9). The generated test of step 5 fails for its own reason: after clicking "Sign in" it never fills the fake provider's "Usern...
+- Q-029 accept H-f0134794 by agent (CLAUDECODE): C-c3f18eb0 has an end-to-end test that passes at head: e2e/test_m1_sign_in.py traces it by its l4 marker and does what the scenario says (see the verdict question of C-c3f18eb0). Step 5's test was uncollectable without this unit's e2e/conftest.py. The e2e and unit gates passed at head 601ca1f (985 o...
+- Q-030 accept H-6e0d90dd by agent (CLAUDECODE): C-67c1baa1 has an end-to-end test that passes at head: e2e/test_m1_sign_in.py traces it by its l4 marker and does what the scenario says (see the verdict question of C-67c1baa1). Step 5's writer was stopped by opencode's permission rules, so no generated test exists. The e2e and unit gates passed at...
+- Q-031 accept H-37f34a81 by agent (CLAUDECODE): C-6e84f9b2 has an end-to-end test that passes at head: e2e/test_m1_sign_in.py traces it by its l4 marker and does what the scenario says (see the verdict question of C-6e84f9b2). The generated test of step 5 fails for its own reason: after clicking "Sign in" it never fills the fake provider's "Usern...
+- Q-032 accept H-7cb33059 by agent (CLAUDECODE): C-4faae006 has an end-to-end test that passes at head: e2e/test_m1_sign_in.py traces it by its l4 marker and does what the scenario says (see the verdict question of C-4faae006). The generated test of step 5 fails for its own reason: after clicking "Sign in" it never fills the fake provider's "Usern...
+- Q-033 accept H-7c2702b1 by agent (CLAUDECODE): C-a76b8eac has an end-to-end test that passes at head: e2e/test_m1_sign_in.py traces it by its l4 marker and does what the scenario says (see the verdict question of C-a76b8eac). The generated test of step 5 fails for its own reason: after clicking "Sign in" it never fills the fake provider's "Usern...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -326,13 +361,13 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-bf32f3ba | web-auth › The e2e stack seeds tenant B and the browser users › The control listener serves seed data to the test process only | pass | pass | the judge passed it and a discriminating test passes |
 | C-79192192 | web-auth › The e2e stack seeds tenant B and the browser users › Alice and mallory see their own tenant through the real engine | pass | pass | the judge passed it and a discriminating test passes |
 | C-ee431615 | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in page shows the error and is accessible | pass | pass | the judge passed it and a discriminating test passes |
-| C-d115a25a | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Alice signs in and the header shows user and tenant | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-a699ddc9 | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Two tenants stay apart | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-c3f18eb0 | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A request without a session is unauthenticated | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-67c1baa1 | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-6e84f9b2 | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A post without the CSRF header is refused | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-4faae006 | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The return path is kept | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-a76b8eac | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-d115a25a | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Alice signs in and the header shows user and tenant | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser test for C-d115a25a runs login(page, users["alice"]) inside page.expect_response for the 200 answer of /api/v1/me, asserts that the answer's capabilities contain read_self, that the bann... |
+| C-a699ddc9 | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Two tenants stay apart | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser test for C-a699ddc9 signs alice in on the fixture page, opens a second browser.new_context with the same base URL, signs mallory in on a page of that context, and asserts that mallory's ... |
+| C-c3f18eb0 | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A request without a session is unauthenticated | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser test for C-c3f18eb0 opens a playwright.request.new_context on the base URL, sends GET /api/v1/me with no cookie, and asserts that the status is 401 and that the body's error.code is UNAU... |
+| C-67c1baa1 | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › Sign out ends the session | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser test for C-67c1baa1 signs alice in, clicks the "Sign out" button inside the banner, then asserts that the button "Sign in" (exact name) is visible, that the path of the page URL is /sign... |
+| C-6e84f9b2 | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › A post without the CSRF header is refused | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser test for C-6e84f9b2 signs alice in, sends page.request.post("/auth/oidc/logout") with no header, asserts that the status is 403 and that the body's error.code is OIDC_CSRF_INVALID, then ... |
+| C-4faae006 | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The return path is kept | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser test for C-4faae006 calls login(page, users["alice"], "/sign-in?error=SESSION_ENDED&return_to=%2Fflows"), waits until the page URL's path is /flows, and asserts that the banner contains ... |
+| C-a76b8eac | web-auth › The M1 journey proves sign-in, tenant isolation and sign-out › The sign-in and sign-out buttons are keyboard reachable | pass | pass | accepted by agent (CLAUDECODE): Checked against the scenario step by step: e2e/test_m1_sign_in.py::test_c_a76b8eac_the_sign_in_and_sign_out_buttons_are_keyboard_reachable (marked @pytest.mark.l4("C-a76b8eac")) on /sign-in signed out, presses Tab up to 15 times until "Sign in" (exact) is focused and ... |
 
 ## Findings
 
@@ -378,34 +413,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] Harness UI tests still fail at head (criterion C-22c98964): The gate report lists the generated UI tests for C-22c98964, C-a699ddc9, C-6e84f9b2, C-4faae006 and C-a76b8eac as fails_at_head while the e2e gate and the M1 journey tests pass. The committed code and the M1 tests satisfy the criteria; the discrepancy is in the generated tests, not the implementation.
 - [minor, judge] accountView lacks the accountView contract test for the signed_in continue path in the UI: The accountView node test covers the pure view but the generated browser test for C-e3de8f9e is the only UI proof; the AccountMenu markup is only covered through the M1 journey. This is an observation, not a defect.
 - [minor, judge] seedUsersOf also rejects an empty-string name claim (spec gap) (criterion C-c1ed19d8): The task and criterion specify STACK_PART_INVALID only when the minted id token's name claim is missing or not a string. displayNameOf additionally throws when the claim is the empty string (name.length === 0), which two reasonable implementations could treat either as a valid (if odd) display name or as invalid; the scenario does not pin this input down.
-
-## Needs a human
-
-- UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table
-- UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table
-- UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table
-- UI criterion C-22c98964 has no end-to-end test; see the generated UI tests table
-- UI criterion C-023c2efe has no end-to-end test; see the generated UI tests table
-- UI criterion C-5368eb23 has no end-to-end test; see the generated UI tests table
-- UI criterion C-3809dcd7 has no end-to-end test; see the generated UI tests table
-- UI criterion C-b4adf358 has no end-to-end test; see the generated UI tests table
-- UI criterion C-eb130cb7 has no end-to-end test; see the generated UI tests table
-- UI criterion C-4b09fc8c has no end-to-end test; see the generated UI tests table
-- UI criterion C-77971a2d has no end-to-end test; see the generated UI tests table
-- UI criterion C-53df20c1 has no end-to-end test; see the generated UI tests table
-- UI criterion C-c79d9365 has no end-to-end test; see the generated UI tests table
-- UI criterion C-812ae263 has no end-to-end test; see the generated UI tests table
-- UI criterion C-c1ed19d8 has no end-to-end test; see the generated UI tests table
-- UI criterion C-39471a6a has no end-to-end test; see the generated UI tests table
-- UI criterion C-bf32f3ba has no end-to-end test; see the generated UI tests table
-- UI criterion C-79192192 has no end-to-end test; see the generated UI tests table
-- UI criterion C-d115a25a has no end-to-end test; see the generated UI tests table
-- UI criterion C-a699ddc9 has no end-to-end test; see the generated UI tests table
-- UI criterion C-c3f18eb0 has no end-to-end test; see the generated UI tests table
-- UI criterion C-67c1baa1 has no end-to-end test; see the generated UI tests table
-- UI criterion C-6e84f9b2 has no end-to-end test; see the generated UI tests table
-- UI criterion C-4faae006 has no end-to-end test; see the generated UI tests table
-- UI criterion C-a76b8eac has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
