@@ -282,7 +282,7 @@ function parseProperty(
 
   if (!hasType) {
     return unsupportedField(
-      { ...base, name: "", label: labelFromName("", index) },
+      { ...base, name: "" },
       "the property has no type",
     );
   }
