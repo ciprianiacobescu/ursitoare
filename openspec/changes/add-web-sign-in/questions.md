@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: stack.db.test.ts asserts one tenant; the frozen tests at lines 205 and 274/318 now contradict the shipped tenant-b part (stop at line 205)
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The conflict is real: database-part.ts seed drops and recreates the database then ensures only the default tenant, reset.ts re-runs every part's seed, stack.ts discovers the shipped parts, and task 4.2 makes the tenant-b seed insert Tenant B, so the real stack holds two tenants after start and after
 - **Blocking tasks:** 4.2
 - **Kind:** technical
 - **Asked:** 2026-10-30T04:25Z by glm, run r-20261030T0247Z-7d77, task 4.2
