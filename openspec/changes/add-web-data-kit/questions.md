@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Finding F-27dc58cb: Load more after an empty page unmounts the focused button |
 | Q-003 | answered | none | verdict | Finding F-78d50e72: An unsupported property `c` comes back with an empty name |
 | Q-004 | answered | none | verdict | Finding F-4c79e0be: task 1.1: no-op calls and loads do not settle with the request in flight |
-| Q-005 | open | none | verdict | Finding F-d49cb373: task 4.1: an enum property without type is not rendered as an enum |
+| Q-005 | answered | none | verdict | Finding F-d49cb373: task 4.1: an enum property without type is not rendered as an enum |
 | Q-006 | answered | none | verdict | Hold H-fe461ce5: UI criterion C-4ad6d2b9 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-ee891db8: UI criterion C-efc9d8f0 has no end-to-end test (not_testable); see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-949d5558: UI criterion C-98c49746 has no end-to-end test (not_testable); see the generated UI tests table |
@@ -170,7 +170,7 @@ reject This replaces the delegate's accept, which did not know the M2 caller and
 
 ## Q-005: Finding F-d49cb373: task 4.1: an enum property without type is not rendered as an enum
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -191,6 +191,7 @@ This finding cites no criterion: end the reason with one sentence WHEN <the situ
 
 ### Answer
 <!-- write below this line -->
+reject Confirmed: parseProperty returns "the property has no type" (schema-fields.ts:283-287) before it looks at enum, so { enum: ["bug", "task"] } becomes an unsupported field and blocks the form. Task 4.1 defines the enum kind as enum of texts with type absent or "string", and only an enum with another type is refused (line 279). A property with neither type nor enum keeps the reason "the property has no type". WHEN schemaToFields gets an object schema whose only property kind is { enum: ["bug", "task"] } with no type THEN problems is empty and the one field is the same enum field Kind with options bug and task that { type: "string", enum: ["bug", "task"] } gives.
 ---
 
 ## Q-006: Hold H-fe461ce5: UI criterion C-4ad6d2b9 has no end-to-end test (not_testable); see the generated UI tests table
