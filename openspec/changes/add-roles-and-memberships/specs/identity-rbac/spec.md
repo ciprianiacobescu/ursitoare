@@ -133,7 +133,7 @@ The file `src/identity/policy/roles.cedar` SHALL hold exactly four platform-laye
 
 #### Scenario: Who may do what
 - **WHEN** an engine from `createPolicyEngine` over a temporary `srcDir` holding a copy of `roles.cedar` checks, for principals of `tenant_a` with roles `tenant_admin`, `auditor`, `author`, `approver` and none, the actions `manage_users_roles`, `manage_tenant`, `read_audit` and `read_self` on `Tenant::"tenant_a"`, and `tenant_admin` of `tenant_a` on `Tenant::"tenant_b"`
-- **THEN** `tenant_admin` is allowed all four; `auditor` is allowed `read_audit` and `read_self` only; every other principal is allowed `read_self` only; the cross-tenant request is denied
+- **THEN** `tenant_admin` is allowed all four; `auditor` is allowed `read_audit` and `read_self` only; every other principal is allowed `read_self` only; the cross-tenant request is denied (`read_self` and the cross-tenant forbid come from the platform layer that `createPolicyEngine` always adds)
 
 #### Scenario: Loaded with every module's fragments
 - **WHEN** `createPolicyEngine({ srcDir: defaultSrcDir(), ... })` is built and checks `tenant_admin` for `manage_users_roles`

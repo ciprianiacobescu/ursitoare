@@ -1,6 +1,6 @@
 ## Context
 
-Adds roles, teams, IdP group mappings and memberships (ADR-12) to `src/identity`, with the permits and the e2e seed. Merged dependencies are in `delivered-shapes.md`; the others as their folders define them:
+Adds roles, teams, IdP group mappings and memberships (ADR-12) to `src/identity`, with the permits and the e2e seed. Every dependency is merged; its shapes, and the facts below with their file and line, are in `delivered-shapes.md` (main@bda30d2):
 
 - `add-oidc-login`: the callback runs one `withTenantTx` with `upsertUserFromClaims`, the session-hint seal and `createSession` (its decision 6); a failure there is a 302 to `/sign-in?error=OIDC_INTERNAL`, audited as `auth.login_refused`; `principalOf(session)` returns empty `roles` and `teams`.
 - `add-api-pep`: the `session` verifier in `src/api/session-auth.ts` returns `{ principal: principalOf(session), tenant: session.tenant, session }` using `PepDeps.pool`; a verifier that throws is 503 `AUTHZ_UNAVAILABLE`.
