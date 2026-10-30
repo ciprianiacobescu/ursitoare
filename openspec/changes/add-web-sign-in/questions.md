@@ -36,7 +36,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-023 | answered | none | verdict | Hold H-39317e01: UI criterion C-c1ed19d8 has no end-to-end test; see the generated UI tests table |
 | Q-024 | answered | none | verdict | Hold H-b94b73e6: UI criterion C-39471a6a has no end-to-end test; see the generated UI tests table |
 | Q-025 | answered | none | verdict | Hold H-10718ca8: UI criterion C-bf32f3ba has no end-to-end test; see the generated UI tests table |
-| Q-026 | open | none | verdict | Hold H-82663866: UI criterion C-79192192 has no end-to-end test; see the generated UI tests table |
+| Q-026 | answered | none | verdict | Hold H-82663866: UI criterion C-79192192 has no end-to-end test; see the generated UI tests table |
 | Q-027 | open | none | verdict | Hold H-836c11cc: UI criterion C-d115a25a has no end-to-end test; see the generated UI tests table |
 | Q-028 | open | none | verdict | Hold H-8f91a4e8: UI criterion C-a699ddc9 has no end-to-end test; see the generated UI tests table |
 | Q-029 | open | none | verdict | Hold H-f0134794: UI criterion C-c3f18eb0 has no end-to-end test; see the generated UI tests table |
@@ -729,7 +729,7 @@ accept C-bf32f3ba's scenario checks the control listener's answers to a forged H
 
 ## Q-026: Hold H-82663866: UI criterion C-79192192 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.51 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -749,6 +749,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-79192192's scenario checks the real stack's sign-in route, completeFakeLogin and API answers driven from Node; that is a unit-level check with no browser-observable form as written, and its unit test test/support/e2e-stack/stack.seed.test.ts C-79192192 traces it with a red-assertion proof and passes at head. The e2e and unit gates passed at head 601ca1f (985 of 985 tests, verification round 3). Its browser form is also proved by passing e2e/test_m1_sign_in.py tests: C-a699ddc9 signs alice and mallory in through the real engine and keeps their tenants apart, C-c3f18eb0 gets the cookie-less 401 and C-6e84f9b2 the 403 without the CSRF header. Step 5's writer stopped on its length limit.
 ---
 
 ## Q-027: Hold H-836c11cc: UI criterion C-d115a25a has no end-to-end test; see the generated UI tests table
