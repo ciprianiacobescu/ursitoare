@@ -197,3 +197,5 @@
 {"at":"2026-10-29T21:51:52Z","branch":"l4/archive/openspec/add-web-ui-kit","head":"c1d58271e34eb6c276748890f50fa778e5527b92","type":"unit.branch_deleted","unit":"openspec:add-web-ui-kit"}
 {"at":"2026-10-29T21:51:54Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-web-data-kit"}
 {"at":"2026-10-29T21:51:54Z","run":"r-20261029T2151Z-07ed","type":"unit.dispatched","unit":"openspec:add-web-data-kit"}
+{"at":"2026-10-30T00:21:52Z","attempt":1,"cost_usd":0.713047,"runs":2,"type":"plan.charged","unit":"openspec:add-web-data-kit"}
+{"at":"2026-10-30T00:21:52Z","run":"r-20261030T0021Z-b45b","type":"unit.dispatched","unit":"openspec:add-web-data-kit"}
