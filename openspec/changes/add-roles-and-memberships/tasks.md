@@ -8,7 +8,7 @@
 
 ## 3. Group mappings
 
-- [ ] 3.1 Write `src/identity/rbac/group-map.test.ts` first (`provisionTenantIdp(db.ownerPool, ...)` for both tenants; removal memberships by owner SQL), then implement `listGroupMappings`, `setGroupMapping` and `removeGroupMapping` in `src/identity/rbac/group-map.ts` (decisions 3 and 5, the elevation check on the current, new and removed target before the no-op test; the issuer must be in `ursitoare.tenant_idp`; a replaced or removed target loses its `idp_claim` memberships of that issuer; events `identity.group_mapped` and `identity.group_unmapped`), exporting them from `src/identity/index.ts`, implementing requirement "A group mapping links one IdP group to one role or team"
+- [x] 3.1 Write `src/identity/rbac/group-map.test.ts` first (`provisionTenantIdp(db.ownerPool, ...)` for both tenants; removal memberships by owner SQL), then implement `listGroupMappings`, `setGroupMapping` and `removeGroupMapping` in `src/identity/rbac/group-map.ts` (decisions 3 and 5, the elevation check on the current, new and removed target before the no-op test; the issuer must be in `ursitoare.tenant_idp`; a replaced or removed target loses its `idp_claim` memberships of that issuer; events `identity.group_mapped` and `identity.group_unmapped`), exporting them from `src/identity/index.ts`, implementing requirement "A group mapping links one IdP group to one role or team"
 
 ## 4. Memberships from token groups
 

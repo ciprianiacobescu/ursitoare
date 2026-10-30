@@ -34,3 +34,9 @@ export {
   BOOTSTRAP_ADMIN_GROUP_ENV,
 } from "./rbac/names.ts";
 export { listRoles, listTeams, createTeam, deleteTeam } from "./rbac/teams.ts";
+export type { GroupMapping } from "./rbac/group-map.ts";
+export {
+  listGroupMappings,
+  setGroupMapping,
+  removeGroupMapping,
+} from "./rbac/group-map.ts";
