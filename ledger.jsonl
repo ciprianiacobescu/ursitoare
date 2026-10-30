@@ -229,3 +229,5 @@
 {"at":"2026-10-30T21:16:24Z","run":"r-20261030T2116Z-1bb1","type":"unit.dispatched","unit":"openspec:add-web-sign-in"}
 {"at":"2026-10-30T21:21:54Z","detail":"awaiting_human: no new answers (verdicts open: Q-008, Q-010, Q-011, Q-012, Q-013, Q-014, Q-015, Q-016, Q-017, Q-018, Q-019, Q-020, Q-021, Q-022, Q-023, Q-024, Q-025, Q-026, Q-027, Q-028, Q-029, Q-030, Q-031, Q-032, Q-033) (escalated to a person: Q-010, Q-011, Q-012, Q-013, Q-014, Q-015, Q-016, Q-017, Q-018, Q-019, Q-020, Q-021, Q-022, Q-023, Q-024, Q-025, Q-026, Q-027, Q-028, Q-029, Q-030, Q-031, Q-032, Q-033)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-sign-in"}
 {"at":"2026-10-30T21:25:26Z","by":"harness","reason":"the cause is gone: openspec:add-web-sign-in is awaiting_human","type":"plan.resumed"}
+{"at":"2026-10-30T21:25:29Z","attempt":1,"cost_usd":14.88484,"runs":5,"type":"plan.charged","unit":"openspec:add-web-sign-in"}
+{"at":"2026-10-30T21:25:29Z","run":"r-20261030T2125Z-47bc","type":"unit.dispatched","unit":"openspec:add-web-sign-in"}
