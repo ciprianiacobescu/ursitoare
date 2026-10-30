@@ -42,7 +42,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-029 | answered | none | verdict | Hold H-f0134794: UI criterion C-c3f18eb0 has no end-to-end test; see the generated UI tests table |
 | Q-030 | answered | none | verdict | Hold H-6e0d90dd: UI criterion C-67c1baa1 has no end-to-end test; see the generated UI tests table |
 | Q-031 | answered | none | verdict | Hold H-37f34a81: UI criterion C-6e84f9b2 has no end-to-end test; see the generated UI tests table |
-| Q-032 | open | none | verdict | Hold H-7cb33059: UI criterion C-4faae006 has no end-to-end test; see the generated UI tests table |
+| Q-032 | answered | none | verdict | Hold H-7cb33059: UI criterion C-4faae006 has no end-to-end test; see the generated UI tests table |
 | Q-033 | open | none | verdict | Hold H-7c2702b1: UI criterion C-a76b8eac has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -879,7 +879,7 @@ accept C-6e84f9b2 has an end-to-end test that passes at head: e2e/test_m1_sign_i
 
 ## Q-032: Hold H-7cb33059: UI criterion C-4faae006 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($12.51 of $15.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -899,6 +899,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-4faae006 has an end-to-end test that passes at head: e2e/test_m1_sign_in.py traces it by its l4 marker and does what the scenario says (see the verdict question of C-4faae006). The generated test of step 5 fails for its own reason: after clicking "Sign in" it never fills the fake provider's "Username or email" and "Password" form with the per-start password of the users fixture (e2e/conftest.py login does), so it can never sign in. The e2e and unit gates passed at head 601ca1f (985 of 985 tests, verification round 3).
 ---
 
 ## Q-033: Hold H-7c2702b1: UI criterion C-a76b8eac has no end-to-end test; see the generated UI tests table
