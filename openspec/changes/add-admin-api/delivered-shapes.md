@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-admin-api
 
-The merged names this change takes (proposal.md, "Interfaces taken"), as declared on main (cd81ff3): `tsc --emitDeclarationOnly` output without `export` and `declare`. 
+The merged names this change takes (proposal.md, "Interfaces taken"), as declared on main (bda30d2): `tsc --emitDeclarationOnly` output without `export` and `declare`. 
 
 ```ts
 // add-engine-skeleton (src/core, src/observability, src/api, src/config, src/main.ts)

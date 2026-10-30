@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-audit-api
 
-The merged names this change takes, as declared on main@cd81ff3 with `export` dropped.
+The merged names this change takes, as declared on main@bda30d2 with `export` dropped.
 
 ```ts
 // add-engine-skeleton (src/api/errors.ts)
@@ -70,7 +70,7 @@ class PdpError extends Error { readonly code: PdpErrorCode; readonly details: Re
 
 ## Facts from the merged code
 
-Read at main@cd81ff3; each bullet quotes the code.
+Read at main@bda30d2; each bullet quotes the code.
 
 - The server's Ajv does not strip unknown properties; `src/api/server.ts:43`: `ajv: { customOptions: { removeAdditional: false, allErrors: false } },`
 - A schema fault is 400 `VALIDATION_FAILED` with `details.fields`, one `{ field, message }` per issue; an `additionalProperties` fault names the property. `src/api/errors.ts:65-67`: `} else if (keyword === "additionalProperties") {` / `const additional = stringField(params, "additionalProperty");` / `if (additional !== undefined) suffix = `/${additional}`;`, and `:70`: ``return `${context}${instancePath}${suffix}`;`` (`context` is `querystring` for a query).

@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-admin-cli
 
-The merged names this change takes, as declared on main (cd81ff3), `export` and `declare` dropped. The code is the truth; this file shows its shapes to the readiness judge. Names from `add-roles-and-memberships` are in that folder's "Interfaces given".
+The merged names this change takes, as declared on main (bda30d2), `export` and `declare` dropped. The code is the truth; this file shows its shapes to the readiness judge. Names from `add-roles-and-memberships` are in that folder's "Interfaces given".
 
 ```ts
 // add-engine-skeleton (src/core, src/config)

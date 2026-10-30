@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-roles-and-memberships
 
-The merged names this change takes, as main@cd81ff3 declares them (`tsc --emitDeclarationOnly`, without `export` and `declare`). The code is the truth.
+The merged names this change takes, as main@bda30d2 declares them (`tsc --emitDeclarationOnly`, without `export` and `declare`). The code is the truth.
 
 ```ts
 // add-engine-skeleton (src/core)

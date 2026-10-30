@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-web-admin
 
-The names this change takes from merged code ("Interfaces taken"), as declared on main@9dbc21e with `export` dropped; the code is the truth.
+The names this change takes from merged code ("Interfaces taken"), as declared on main@bda30d2 with `export` dropped; the code is the truth.
 
 ```ts
 // add-web-shell (web/src/api/client.ts)
@@ -56,7 +56,7 @@ interface FieldProps { idPrefix: string; name: string; label: string; hint?: str
 
 ## Facts from the merged code
 
-At main@9dbc21e.
+At main@bda30d2.
 
 - `web/src/features/index.ts:4` is `const mods = import.meta.glob<{ feature: FeatureSpec }>("./*.tsx", { eager: true });` and line 6 sorts the modules by file name before `registerFeature(mod.feature)`: a new `web/src/features/NN-<name>.tsx` that exports `feature` is registered with no edit to a shared file.
 - `web/src/app/features.ts:4-11` lists the reserved roots `["api"]`, `["health"]`, `["auth", "oidc"]`, `[".well-known"]`, `["hooks"]`, `["callbacks"]`, `["mcp"]`; `/admin` is not among them.

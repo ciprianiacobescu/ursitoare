@@ -70,7 +70,7 @@ function checkOwnerEndpoint(s: Snapshot): Violation[]
 - From `add-tenancy-foundation`: `TenantContext`, `TenantTx`, `withTenantTx`, `TENANT_ID_PATTERN`, `seedTwoTenants`; table `ursitoare.tenant`.
 - From `add-architecture-fitness`: `Snapshot`, `Violation`, `snapshotOf`, `readSnapshot`, `sortViolations`, `isTestFile`.
 
-Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@e226f8c, checked line by line).
+Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@bda30d2, checked line by line).
 
 ## Out of scope
 

@@ -63,7 +63,7 @@ const rbacPart: E2eStackPart; const RBAC_SEED_TEAM: string; const RBAC_SEED_MAPP
 - From `add-e2e-stack`: `E2eStackPart`, `PartContext`, `PartHandle`, `E2eStackError`, `databaseApi`, `databasePart`, `discoverParts`.
 - From `add-fake-oidc`: `startFakeOidc`, `FakeOidc`.
 
-Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@e226f8c, checked line by line).
+Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@bda30d2, checked line by line).
 
 ## Out of scope
 

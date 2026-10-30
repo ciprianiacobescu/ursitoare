@@ -55,7 +55,7 @@ All three routes are `session` routes under `read_audit`; query names are in des
 - From `add-api-conventions`: `PAGE_QUERY_SCHEMA`, `readPage`, `startAfter`, `paginate`, `Page`, `CursorBinding`, `deriveCursorKey`, `encodeCursor`, `unregisteredRouteErrors`, `servedOpenApiText`, `ERROR_CODES`; the rule that a unit adding a route regenerates `docs/api/openapi.json`.
 - From `add-admin-api`: `registerAdminRoutes`, after whose call in `src/main.ts` the audit routes are registered; the registered code `ENGINE_KEY_REQUIRED` (503, `Paging needs the engine key (URSITOARE_ENGINE_KEY_FILE)`); the admin paths in `docs/api/openapi.json`.
 
-Shapes of the delivered names above: `delivered-shapes.md` in this folder (merged code, main@e226f8c, checked line by line).
+Shapes of the delivered names above: `delivered-shapes.md` in this folder (merged code, main@bda30d2, checked line by line).
 
 ## Out of scope
 

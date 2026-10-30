@@ -56,7 +56,7 @@ Routes, bodies and answers (JSON `Account` is `AdminAccount`, `IdpLink` is `IdpL
 - From `add-api-conventions` (U14): `ERROR_CODES`, `isRegisteredCode`, `unregisteredRouteErrors`, `PAGE_QUERY_SCHEMA`, `readPage`, `startAfter`, `paginate`, `Page`, `CursorBinding`, `CursorKey`, `CursorPosition`, `deriveCursorKey`, `encodeCursor`, `respondIdempotent`, `IDEMPOTENCY_HEADER_SCHEMA`, `servedOpenApiText`; the headers `Idempotency-Key` and `Idempotent-Replayed`; the rule that a unit adding a route or a code regenerates `docs/api/openapi.json` and edits `ERROR_CODES`.
 - From `add-roles-and-memberships` (U17): `RbacError`, `RbacErrorCode`, `RbacActor`, `DEFAULT_ROLES`, `listRoles`, `listTeams`, `createTeam`, `deleteTeam`, `GroupMapping`, `listGroupMappings`, `setGroupMapping`, `removeGroupMapping`, `grantRole`, `revokeRole`, `syncMemberships`; the policy file `src/identity/policy/roles.cedar`; the principal's `roles` filled by the session verifier.
 
-Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@e226f8c, checked line by line).
+Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@bda30d2, checked line by line).
 
 ## Out of scope
 
