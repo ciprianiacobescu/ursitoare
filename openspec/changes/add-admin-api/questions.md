@@ -46,7 +46,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-033 | answered | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
 | Q-034 | answered | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
 | Q-035 | answered | none | verdict | Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied? |
-| Q-036 | open | none | verdict | Hold H-0b1cd52c: the judge's reply was discarded (part 3 of 4, timeout: no answer within 600s) |
+| Q-036 | answered | none | verdict | Hold H-0b1cd52c: the judge's reply was discarded (part 3 of 4, timeout: no answer within 600s) |
 <!-- l4:index:end -->
 
 ---
@@ -1172,7 +1172,7 @@ accept: Round 1 (head 02e99e4) the judge mimo-judge passed it and a discriminati
 
 ## Q-036: Hold H-0b1cd52c: the judge's reply was discarded (part 3 of 4, timeout: no answer within 600s)
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($47.08 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -1189,3 +1189,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept: the judge timed out on part 3 of 4 this round. Round 1 (head 02e99e4) the same judge passed all 29 criteria on the same production code; the only change since is the new test src/api/admin-isolation.test.ts, and every criterion question of this round is answered on that record.
