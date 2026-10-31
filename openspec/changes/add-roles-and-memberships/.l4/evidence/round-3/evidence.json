@@ -1,0 +1,433 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/identity",
+      "src/api/session-auth.ts",
+      "<tenant>/<team>",
+      "test/arch/modules.ts",
+      "src/db/migrations/0170_rbac.sql",
+      "docs/decisions/0002",
+      "src/identity/index.ts",
+      "src/identity/oidc/callback.ts",
+      "src/identity/rbac/{errors,names,teams,group-map,sync,memberships,grants,bootstrap,principal}.ts",
+      "src/identity/rbac/schema.test.ts",
+      "src/identity/rbac/names.ts",
+      "src/identity/rbac/teams.test.ts",
+      "src/identity/rbac/errors.ts",
+      "src/identity/rbac/teams.ts",
+      "src/identity/rbac/group-map.test.ts",
+      "src/identity/rbac/group-map.ts",
+      "src/identity/rbac/sync.test.ts",
+      "src/identity/rbac/memberships.test.ts",
+      "src/identity/rbac/sync.ts",
+      "src/identity/rbac/memberships.ts",
+      "src/identity/rbac/grants.test.ts",
+      "src/identity/rbac/grants.ts",
+      "src/identity/rbac/bootstrap.test.ts",
+      "src/identity/rbac/bootstrap.ts",
+      "src/identity/roles-policy.test.ts",
+      "src/identity/policy/roles.cedar",
+      "src/identity/rbac/principal.test.ts",
+      "src/identity/rbac/principal.ts",
+      "src/api/session-auth.rbac.test.ts",
+      "src/identity/oidc/memberships.test.ts",
+      "test/support/e2e-stack/rbac-part.test.ts",
+      "test/support/e2e-stack/rbac-part.ts",
+      "test/support/e2e-stack/parts/30-rbac.ts",
+      "<srcDir>/<module>/policy/*.cedar",
+      "**/names.ts",
+      "**/identity.*",
+      "**/^[A-Za-z0-9_-]{1,64}$",
+      "**/^[A-Za-z0-9._@-]{1,64}$",
+      "**/*.test.ts",
+      "module <srcDir>",
+      "module <tenant>",
+      "module api",
+      "module db",
+      "module docs",
+      "module identity",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-roles-and-memberships-fix-1/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships-fix-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships-fix-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships-fix-1/specs/identity-rbac/spec.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships-fix-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/.l4/evidence/round-2/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/.l4/evidence/round-2/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/.l4/evidence/round-2/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/.l4/ledger/r-20261030T2244Z-b219.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/.l4/ledger/r-20261031T0004Z-f337.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/.l4/ledger/r-20261031T0117Z-a389.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/.l4/ledger/r-20261031T0210Z-2e8f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/.l4/ledger/r-20261031T0212Z-d0bf.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-roles-and-memberships/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/session-auth.rbac.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/session-auth.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0170_rbac.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/index.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/callback.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/memberships.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/policy/roles.cedar",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/rbac/bootstrap.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/rbac/bootstrap.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/rbac/default-roles.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/rbac/errors.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/rbac/grants.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/rbac/grants.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/rbac/group-map.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/rbac/group-map.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/rbac/memberships.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/rbac/memberships.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/rbac/names.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/rbac/principal.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/rbac/principal.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/rbac/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/rbac/sync.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/rbac/sync.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/rbac/teams.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/rbac/teams.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/roles-policy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/parts/30-rbac.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/rbac-part.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/rbac-part.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/session-auth.ts, src/identity/index.ts, src/identity/oidc/callback.ts, src/identity/rbac/bootstrap.ts, src/identity/rbac/errors.ts and 9 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/session-auth.ts",
+      "src/identity/index.ts",
+      "src/identity/oidc/callback.ts",
+      "src/identity/rbac/bootstrap.ts",
+      "src/identity/rbac/errors.ts",
+      "src/identity/rbac/grants.ts",
+      "src/identity/rbac/group-map.ts",
+      "src/identity/rbac/memberships.ts",
+      "src/identity/rbac/names.ts",
+      "src/identity/rbac/principal.ts",
+      "src/identity/rbac/sync.ts",
+      "src/identity/rbac/teams.ts",
+      "test/support/e2e-stack/parts/30-rbac.ts",
+      "test/support/e2e-stack/rbac-part.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1021,
+      "passed": 1021,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 32,
+      "new_passed": 32,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
