@@ -265,6 +265,7 @@ accept The criterion is satisfied as it stands. parseAccount in web/src/admin/us
 ## Q-007: Criterion C-87e93809 (web-admin › The Users page lists people and disables or enables them › Cells and actions): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
