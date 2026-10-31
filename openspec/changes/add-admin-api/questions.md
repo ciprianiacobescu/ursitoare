@@ -31,7 +31,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-018 | answered | none | verdict | Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account): accept as satisfied? |
 | Q-019 | answered | none | verdict | Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation): accept as satisfied? |
 | Q-020 | answered | none | verdict | Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse): accept as satisfied? |
-| Q-021 | open | none | verdict | Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove): accept as satisfied? |
+| Q-021 | answered | none | verdict | Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove): accept as satisfied? |
 | Q-022 | open | none | verdict | Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals): accept as satisfied? |
 | Q-023 | open | none | verdict | Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add): accept as satisfied? |
 | Q-024 | open | none | verdict | Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals): accept as satisfied? |
@@ -677,7 +677,8 @@ accept The criterion is satisfied. The server test in src/api/admin-teams.test.t
 
 ## Q-021: Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -704,6 +705,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-group-map.test.ts runs the scenario as written: the routed issuer is provisioned for tenant A, a team finance exists, and carol puts group ursitoare-authors with roleId author; the test asserts 200 and deep-equals the body to { issuer, group: "ursitoare-authors", roleId: "author", teamId: null, reviewedBy: carol }. The replacing put with teamId finance is asserted 200 with roleId null, teamId "finance" and the same reviewedBy. Carol's GET /api/v1/idp-group-map is asserted 200 with items deep-equal to that one mapping and next_cursor null. The DELETE with the url-encoded issuer and group query is asserted 204, the repeat 404 with code NOT_FOUND, and tenant B's admin zed's GET is deep-equal to { items: [], next_cursor: null }. The harness records it as passed and failing red by assertion. The production code matches: the three idp-group-map routes are session routes under manage_users_roles whose handlers take the tenant and principal only from the session through requireAdminContext and run inside withTenantTx of that tenant; the PUT body schema requires issuer and group and exactly one of roleId or teamId and calls setGroupMapping, which checks the routed issuer and the target, upserts the row with ON CONFLICT DO UPDATE replacing role_id, team_id and reviewed_by, and returns { issuer, group, roleId, teamId, reviewedBy: actor id }; the GET lists the tenant's mappings through listGroupMappings and cuts them with pageRows under the idp_group_map scope; the DELETE validates issuer and group from the query, calls removeGroupMapping, which returns false when no row exists, and answers 404 NOT_FOUND in that case or 204 otherwise. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-022: Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals): accept as satisfied?
