@@ -40,7 +40,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-027 | answered | none | verdict | Hold H-2b38782f: UI criterion C-7c7c77c3 has no end-to-end test; see the generated UI tests table |
 | Q-028 | open | none | verdict | Hold H-7b12a03b: UI criterion C-bf07943b has no end-to-end test; see the generated UI tests table |
 | Q-029 | answered | none | verdict | Hold H-7ce02cbb: UI criterion C-195c3385 has no end-to-end test; see the generated UI tests table |
-| Q-030 | open | none | verdict | Hold H-ffedae36: UI criterion C-0c949ead has no end-to-end test; see the generated UI tests table |
+| Q-030 | answered | none | verdict | Hold H-ffedae36: UI criterion C-0c949ead has no end-to-end test; see the generated UI tests table |
 | Q-031 | open | none | verdict | Hold H-30bc4c2c: UI criterion C-97244065 has no end-to-end test; see the generated UI tests table |
 | Q-032 | open | none | verdict | Hold H-7c7ec97d: UI criterion C-87e93809 has no end-to-end test; see the generated UI tests table |
 | Q-033 | open | none | verdict | Hold H-9a555cbd: UI criterion C-0c16ec24 has no end-to-end test; see the generated UI tests table |
@@ -983,7 +983,8 @@ accept The hold may be waived and the unit can go on as it stands. Criterion C-1
 
 ## Q-030: Hold H-ffedae36: UI criterion C-0c949ead has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -1002,6 +1003,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived and the unit can go on as it stands. Criterion C-0c949ead is the scenario "Error text for an action": it calls adminErrorMessage with hand-built ApiRequestError values for 409 IN_USE, 422 OPERATION_REFUSED with the reasons self_disable and other, and 403 FORBIDDEN with a decision id, a unit-level call to a pure function whose inputs a browser cannot construct, which is why the generated browser test was judged not testable. The implementation in web/src/admin/messages.ts takes errorPanelModel's catalogue message, replaces it with the reason text for a 422 OPERATION_REFUSED whose details.reason it knows, and appends " Decision id: <id>" when the model carries one, so the server's message never reaches the text. Its tracing Node test in web/src/admin/messages.test.ts asserts exactly the scenario's four answers, including that "raw SQL" is absent and that the forbidden text equals messageFor("FORBIDDEN") followed by " Decision id: d-1", and it passed as a red assertion. The same function is also asserted against the real engine in the Node journey test/journeys/m2-admin.test.ts, where carol's own disable yields "You cannot disable your own account.". The user-visible side is covered by the repository's own browser journey e2e/test_m2_admin.py: TeamsPage shows adminErrorMessage of a failed delete in an error toast, and when carol deletes the seeded team finance the journey expects the IN_USE catalogue text "This team is still the target of a group mapping. Remove that mapping first." while the row stays; alice's 403 page shows "Decision id:" with the id carol then finds in her log. A missing harness-generated browser test for a pure function therefore says nothing about the change.
 ---
 
 ## Q-031: Hold H-30bc4c2c: UI criterion C-97244065 has no end-to-end test; see the generated UI tests table
