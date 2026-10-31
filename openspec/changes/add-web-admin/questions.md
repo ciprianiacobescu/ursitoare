@@ -28,7 +28,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-015 | answered | none | verdict | Criterion C-71033976 (web-admin › The Audit log page lists events newest first and filters by event type › Parsing an event and its cells): accept as satisfied? |
 | Q-016 | answered | none | verdict | Criterion C-1e5047ed (web-admin › The Audit log page lists events newest first and filters by event type › The event type filter): accept as satisfied? |
 | Q-017 | answered | none | verdict | Criterion C-1d816fd1 (web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification): accept as satisfied? |
-| Q-018 | open | none | verdict | Criterion C-d2fc8f38 (web-admin › The Audit log page shows whether the chain verifies › Status text): accept as satisfied? |
+| Q-018 | answered | none | verdict | Criterion C-d2fc8f38 (web-admin › The Audit log page shows whether the chain verifies › Status text): accept as satisfied? |
 | Q-019 | open | none | verdict | Criterion C-52c26a32 (web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources): accept as satisfied? |
 | Q-020 | open | none | verdict | Criterion C-dd02e61e (web-admin › The admin logic works against the real engine › Carol manages mappings and teams and reads the log): accept as satisfied? |
 | Q-021 | open | none | verdict | Criterion C-06a71640 (web-admin › The admin logic works against the real engine › Alice is refused, carol finds the id and disables her): accept as satisfied? |
@@ -624,7 +624,8 @@ accept The criterion is satisfied as it stands. parseVerification in web/src/adm
 
 ## Q-018: Criterion C-d2fc8f38 (web-admin › The Audit log page shows whether the chain verifies › Status text): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -651,6 +652,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. verificationView in web/src/admin/audit.ts answers the checking state with tone checking, headline "Checking the audit chain" and the fixed detail; a failed state with tone unavailable, headline "Verification unavailable" and adminErrorMessage of the error, which appends " Decision id: d-9" for the refusal; a done result with ok false with tone broken, headline "Audit chain broken" and a detail naming event 17 and the reason text for hash; and a done result with ok true with tone ok and headline "Audit chain verified", the detail being "No events to check yet. Checked at <time>." for 0 events, "<n> events checked, <k> signed head anchors matched. Checked at <time>." when anchorsVerified is above 0, and "<n> events checked. No signed head anchor exists yet, so only the hash chain was checked. Checked at <time>." otherwise, exactly the two forms of task 6.2, with the time formatted by the same timeOf helper as auditCells, so 2026-10-25T09:00:00.000000Z gives "2026-10-25 09:00:00 UTC". The two tracing tests in web/src/admin/verification.test.ts build every one of the scenario's six states inside assert.doesNotThrow and assert the exact tones, headlines and detail texts, including the 42-event and 2-anchor forms, the empty form, the broken detail for event 17 with its hash reason, and the unavailable detail equal to adminErrorMessage of the 403 with decision id d-9; they also cover the singular forms and the gap and anchor reasons. Both passed as red assertions, and AuditPage.tsx renders the view in the role status paragraph with the tone class. The judge gave no verdict only because its evidence was cut to fit the budget, and the failing generated browser test is a harness artifact that is not in the repository: the scenario is a unit-level call to a pure function that a browser journey cannot observe.
 ---
 
 ## Q-019: Criterion C-52c26a32 (web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources): accept as satisfied?
