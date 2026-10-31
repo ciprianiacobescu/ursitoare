@@ -12,6 +12,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 7.4 | technical | src/cli/admin/list-users.test.ts:160 |
+| Q-002 | open | none | verdict | Criterion C-a13f7327 (ops-cli › admin grant-role and revoke-role change a direct grant › Refusals and isolation): accept as satisfied? |
+| Q-003 | open | none | verdict | Finding F-f42f8c30: task 7.2: revoke-role refusals and isolation are not exercised |
 <!-- l4:index:end -->
 
 ---
@@ -35,6 +37,63 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/cli/admin/list-users.test.ts`: change line 160 to `const bobLine = (bob: User): string => `${bob.userId}\thuman\tactive\t\t\tBob B`;`
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: Criterion C-a13f7327 (ops-cli › admin grant-role and revoke-role change a direct grant › Refusals and isolation): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-a13f7327 (ops-cli › admin grant-role and revoke-role change a direct grant › Refusals and isolation)
+
+### Context
+Criterion C-a13f7327 (ops-cli › admin grant-role and revoke-role change a direct grant › Refusals and isolation) is needs human after round 1.
+
+Scenario:
+\- **WHEN** each command runs with user `usr_ghost` (role `author`); role `Bad Role` (user alice); no `--user`; no `--role`; and bob of `tenant_b`, who holds `author`, with `--tenant tenant_a --role author`; and `grant-role` with role `ghost`
+\- **THEN** exit and stderr: 1 `RBAC_NOT_FOUND: `, 1 `RBAC_INVALID: `, 2 `CLI_USAGE: missing required option --user`, 2 `CLI_USAGE: missing required option --role`, 1 `RBAC_NOT_FOUND: ` (and `ghost`); the `RBAC_*` runs leave an event `outcome: "refused"` with that code; bob still holds `author`
+
+Why: uncovered: the tests that trace it are inadequate or did not pass
+Judge: insufficient_evidence
+Tracing tests: src.cli.admin.grant-role.test.ts::C-a13f7327 admin grant-role and revoke-role refuse invalid input and stay isolated (passed, red_assertion, inadequate)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-003: Finding F-f42f8c30: task 7.2: revoke-role refusals and isolation are not exercised
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it (criterion C-a13f7327).
+
+Title: task 7.2: revoke-role refusals and isolation are not exercised
+Detail: Task 7.2 says the 'Refusals and isolation' scenario is 'run for both commands'. src/cli/admin/grant-role.test.ts runs usr_ghost, Bad Role, bob of tenant_b and ghost only through admin grant-role. admin revoke-role is run only for the missing --user and --role. If revokeRole returns false for an unknown or foreign user, revoke-role would print 'not held' and exit 0, against the scenario, and no test would catch it.
+Suggested fix: Add revoke-role runs for usr_ghost, Bad Role and bob of tenant_b with --tenant tenant_a, and assert exit 1, RBAC_* stderr, refused events, and that bob still holds author.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-a13f7327 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
 
 ### Answer
 <!-- write below this line -->
