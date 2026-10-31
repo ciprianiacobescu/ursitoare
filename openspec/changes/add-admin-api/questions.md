@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Criterion C-8a23d872 (admin-api › Every admin route is a session route under the right action › The route table): accept as satisfied? |
 | Q-009 | answered | none | verdict | Criterion C-a4888ef3 (admin-api › Every admin route is a session route under the right action › Who may call): accept as satisfied? |
 | Q-010 | answered | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
-| Q-011 | open | none | verdict | Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping): accept as satisfied? |
+| Q-011 | answered | none | verdict | Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping): accept as satisfied? |
 | Q-012 | open | none | verdict | Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through): accept as satisfied? |
 | Q-013 | open | none | verdict | Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges): accept as satisfied? |
 | Q-014 | open | none | verdict | Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read): accept as satisfied? |
@@ -347,7 +347,8 @@ accept The criterion is satisfied. The tracing test in src/api/admin-isolation.t
 
 ## Q-011: Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -374,6 +375,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The mapping table in src/api/admin-errors.ts holds exactly the fourteen domain codes of the scenario: the three invalid codes map to VALIDATION_FAILED, the two not-found codes to NOT_FOUND, the two exists codes to ALREADY_EXISTS, RBAC_IN_USE to IN_USE, RBAC_ELEVATION to ELEVATION_REFUSED, the two unknown-issuer codes to UNKNOWN_ISSUER, and ADMIN_SELF_DISABLE, ADMIN_WRONG_KIND and IDENTITY_OWNER_INVALID to OPERATION_REFUSED with details reason self_disable, wrong_kind and owner_invalid. The function recognises RbacError, AdminError and IdentityError instances, builds the ApiError from the registry's status and default message, so the input message never reaches the output, and returns anything unmapped unchanged. The registry gives 400, 404, 409, 409, 403, 422 and 422 for those codes, matching the scenario. The tracing test constructs all fourteen errors with the message secret-input, asserts each result is an ApiError with the expected status and code, that the message does not contain secret-input, and that details deep-equals the expected reason for the three refused operations. It passed and failed red by assertion.
 ---
 
 ## Q-012: Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through): accept as satisfied?
