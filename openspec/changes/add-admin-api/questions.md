@@ -45,7 +45,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-032 | answered | none | verdict | Criterion C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine): accept as satisfied? |
 | Q-033 | answered | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
 | Q-034 | answered | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
-| Q-035 | open | none | verdict | Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied? |
+| Q-035 | answered | none | verdict | Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied? |
 | Q-036 | open | none | verdict | Hold H-0b1cd52c: the judge's reply was discarded (part 3 of 4, timeout: no answer within 600s) |
 <!-- l4:index:end -->
 
@@ -1139,7 +1139,7 @@ accept The criterion is satisfied. The tracing test in test/arch/error-codes.tes
 
 ## Q-035: Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($47.08 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -1167,6 +1167,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept: Round 1 (head 02e99e4) the judge mimo-judge passed it and a discriminating test passed. Since then the only change outside openspec is the new test src/api/admin-isolation.test.ts (git diff 02e99e4 621c054), and the round 3 tests step passed, so the code and tests the judge passed are unchanged. This round the judge timed out (part 3 of 4), which says nothing about the criterion.
 ---
 
 ## Q-036: Hold H-0b1cd52c: the judge's reply was discarded (part 3 of 4, timeout: no answer within 600s)
