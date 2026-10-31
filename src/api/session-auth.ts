@@ -1,4 +1,9 @@
-import { SESSION_COOKIE, parseCookies, principalOf, resolveSession } from "../identity/index.ts";
+import {
+  SESSION_COOKIE,
+  parseCookies,
+  resolvePrincipal,
+  resolveSession,
+} from "../identity/index.ts";
 import type { AuthKind, AuthVerifier } from "./route.ts";
 
 export const sessionVerifier: AuthVerifier = async (req, auth: AuthKind, deps) => {
@@ -12,5 +17,9 @@ export const sessionVerifier: AuthVerifier = async (req, auth: AuthKind, deps) =
   if (session === null) {
     return null;
   }
-  return { principal: principalOf(session), tenant: session.tenant, session };
+  return {
+    principal: await resolvePrincipal(deps.pool, session),
+    tenant: session.tenant,
+    session,
+  };
 };
