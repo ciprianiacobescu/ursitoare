@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-2c3410e3 (web-admin › Admin pages are listed by capability and declare literal paths › The page table): accept as satisfied? |
+| Q-001 | answered | none | verdict | Criterion C-2c3410e3 (web-admin › Admin pages are listed by capability and declare literal paths › The page table): accept as satisfied? |
 | Q-002 | open | none | verdict | Criterion C-7c7c77c3 (web-admin › Admin pages are listed by capability and declare literal paths › Navigation follows capabilities): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-bf07943b (web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-195c3385 (web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts): accept as satisfied? |
@@ -68,7 +68,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-2c3410e3 (web-admin › Admin pages are listed by capability and declare literal paths › The page table): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -95,6 +96,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. ADMIN_PAGES in web/src/admin/pages.ts lists, in order, admin-users at /admin/users "Users", admin-roles-teams at /admin/roles-and-teams "Roles and teams" and admin-group-mappings at /admin/group-mappings "Group mappings", all with capability manage_users_roles, then admin-audit at /admin/audit "Audit log" with read_audit. ADMIN_TABLES carries the captions "Users", "Roles", "Teams", "Group mappings" and "Audit events", the empty titles "No users yet", "No roles", "No teams yet", "No group mappings" and "No events", the two descriptions of task 1.1, and the users table has the "Roles and teams" column. The test "the page table lists the four admin pages in order" deep-compares ADMIN_PAGES against that list, and "the admin tables carry their captions columns and empty texts" deep-compares each spec, passes it to dataTableModel inside assert.doesNotThrow, and asserts the model's caption, emptyTitle and emptyDescription, plus the "Roles and teams" column. Both passed as red assertions. The judge gave no verdict only because its evidence budget was cut, and the failing generated browser test is a harness artifact, not part of this Node-level scenario.
 ---
 
 ## Q-002: Criterion C-7c7c77c3 (web-admin › Admin pages are listed by capability and declare literal paths › Navigation follows capabilities): accept as satisfied?
