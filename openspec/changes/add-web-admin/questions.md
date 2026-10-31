@@ -44,7 +44,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-031 | answered | none | verdict | Hold H-30bc4c2c: UI criterion C-97244065 has no end-to-end test; see the generated UI tests table |
 | Q-032 | answered | none | verdict | Hold H-7c7ec97d: UI criterion C-87e93809 has no end-to-end test; see the generated UI tests table |
 | Q-033 | answered | none | verdict | Hold H-9a555cbd: UI criterion C-0c16ec24 has no end-to-end test; see the generated UI tests table |
-| Q-034 | open | none | verdict | Hold H-c36e205c: UI criterion C-4bc159f4 has no end-to-end test; see the generated UI tests table |
+| Q-034 | answered | none | verdict | Hold H-c36e205c: UI criterion C-4bc159f4 has no end-to-end test; see the generated UI tests table |
 | Q-035 | open | none | verdict | Hold H-d0d2c1b0: UI criterion C-c174064a has no end-to-end test; see the generated UI tests table |
 | Q-036 | open | none | verdict | Hold H-cc90d893: UI criterion C-b8ae0992 has no end-to-end test; see the generated UI tests table |
 | Q-037 | open | none | verdict | Hold H-ce62dad6: UI criterion C-5e078fd3 has no end-to-end test; see the generated UI tests table |
@@ -1083,7 +1083,8 @@ accept The hold may be waived and the unit can go on as it stands. Criterion C-0
 
 ## Q-034: Hold H-c36e205c: UI criterion C-4bc159f4 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -1102,6 +1103,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived and the unit can go on as it stands. Criterion C-4bc159f4 is the scenario "Names": it calls parseNamed with { roleId: "tenant_admin" }, { roleId: "Tenant" } and { teamId: "finance" } and checkTeamId with " ops ", "" and "Ops", then compares the returned values and messages, a unit-level call to two pure functions whose inputs a browser cannot construct, so a generated browser test for it is a harness artifact and the one that failed at the head is not in the repository. The implementation in web/src/admin/teams.ts gives exactly the scenario's values: parseNamed needs a plain object with an own property of the asked key whose string value matches the role pattern or the team pattern, so "tenant_admin" and "finance" are returned and the upper-case "Tenant" gives null; checkTeamId trims the text, answers "Enter a team name." for the empty text, the task 4.1 message "Use a lower-case letter first, then lower-case letters, digits, hyphens or underscores (up to 64 characters)." for a text outside the team pattern such as "Ops", and { ok: true, value: "ops" } for the padded name. The two tracing Node tests in web/src/admin/teams.test.ts call each function inside assert.doesNotThrow and assert exactly those inputs and outputs, and both passed as red assertions; Q-009 already accepted the criterion on them. The user-visible side is covered by the repository's own browser journey e2e/test_m2_admin.py: TeamsPage builds its roles and teams lists with parseNamed as parseItem and runs checkTeamId on the "Team name" field before postTeam, and the journey has carol open "Roles and teams", sees the table "Roles" list approver, auditor, author and tenant_admin, fills "Team name" with "ops", presses "Create team" and sees the row "ops" appear in the table "Teams", which only a successful parse and check can produce, with assert_accessible on the page.
 ---
 
 ## Q-035: Hold H-d0d2c1b0: UI criterion C-c174064a has no end-to-end test; see the generated UI tests table
