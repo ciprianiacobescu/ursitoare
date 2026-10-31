@@ -39,7 +39,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-026 | answered | none | verdict | Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals): accept as satisfied? |
 | Q-027 | answered | none | verdict | Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event): accept as satisfied? |
 | Q-028 | answered | none | verdict | Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing): accept as satisfied? |
-| Q-029 | open | none | verdict | Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows): accept as satisfied? |
+| Q-029 | answered | none | verdict | Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows): accept as satisfied? |
 | Q-030 | open | none | verdict | Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key): accept as satisfied? |
 | Q-031 | open | none | verdict | Criterion C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server): accept as satisfied? |
 | Q-032 | open | none | verdict | Criterion C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine): accept as satisfied? |
@@ -941,7 +941,8 @@ accept The criterion is satisfied. The tracing test in src/api/admin-refusals.te
 
 ## Q-029: Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -968,6 +969,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The tracing test in src/api/admin-page.test.ts runs the scenario as written: it derives the key from deriveCursorKey over a 64-character engine text, binds tenant_a and scope teams, and calls pageRows over the rows b, d, a, c, e with limit 2 and a null cursor, then with each next_cursor. It asserts the pages deep-equal a and b, c and d, and e, that the first two next_cursor values are not null and the third is null, that no rows give a page deep-equal to { items: [], next_cursor: null }, and that a cursor encoded for tenant_b with scope teams and one encoded for tenant_a with scope roles each throw an ApiError whose status is 400 and code CURSOR_INVALID; a second test adds that a cursor whose position has another length is refused the same way. The harness records both as passed and failing red by assertion. The production code matches: pageRows decodes the cursor through startAfter, which calls decodeCursor with the binding's tenant and scope and throws 400 CURSOR_INVALID when the claims' tenant or scope differs from the expected ones; it sorts the rows by their key positions by code unit, keeps the rows whose position is greater than the cursor's, and hands them to paginate, which takes limit items and encodes next_cursor from the last item only when more rows remain, otherwise null.
 ---
 
 ## Q-030: Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key): accept as satisfied?
