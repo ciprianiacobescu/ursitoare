@@ -1138,6 +1138,7 @@ accept The criterion is satisfied. The tracing test in test/arch/error-codes.tes
 ## Q-035: Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($47.08 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
