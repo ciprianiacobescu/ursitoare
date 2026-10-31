@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | none | verdict | Criterion C-2c3410e3 (web-admin › Admin pages are listed by capability and declare literal paths › The page table): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-7c7c77c3 (web-admin › Admin pages are listed by capability and declare literal paths › Navigation follows capabilities): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-bf07943b (web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-195c3385 (web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-195c3385 (web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-0c949ead (web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-97244065 (web-admin › The Users page lists people and disables or enables them › Parsing an account): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-87e93809 (web-admin › The Users page lists people and disables or enables them › Cells and actions): accept as satisfied? |
@@ -166,7 +166,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-004: Criterion C-195c3385 (web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -193,6 +194,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. ADMIN_MESSAGES in web/src/admin/messages.ts holds exactly the six codes ALREADY_EXISTS, IN_USE, ELEVATION_REFUSED, UNKNOWN_ISSUER, OPERATION_REFUSED and ENGINE_KEY_REQUIRED, each with the text task 2.1 prescribes, and registerAdminMessages calls the kit's registerMessages on it. The kit's registerMessages only throws for a code that is already registered with a different text, so a second call with the same catalogue is idempotent, and messageFor answers the registered text rather than FALLBACK_MESSAGE. The tracing test registers twice inside assert.doesNotThrow, deep-compares the sorted keys against the six expected codes, and for each code asserts the entry text, that messageFor resolves to it, and that it differs from FALLBACK_MESSAGE. It passed as a red assertion. The judge gave no verdict only because its evidence was cut to fit the budget, and the missing browser test was itself judged not testable since the scenario exercises internal registry functions.
 ---
 
 ## Q-005: Criterion C-0c949ead (web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action): accept as satisfied?
