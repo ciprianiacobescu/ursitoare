@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Finding F-cde045de: No discriminating test for cross-tenant admin isolation |
 | Q-006 | answered | none | verdict | Finding F-28a40cf9: Uncovered criterion C-598727de (Another tenant and a forged tenant) |
 | Q-007 | answered | none | verdict | Finding F-c28b995d: Uncovered criterion C-96e47324 (The registry) at gate level |
-| Q-008 | open | none | verdict | Criterion C-8a23d872 (admin-api › Every admin route is a session route under the right action › The route table): accept as satisfied? |
+| Q-008 | answered | none | verdict | Criterion C-8a23d872 (admin-api › Every admin route is a session route under the right action › The route table): accept as satisfied? |
 | Q-009 | open | none | verdict | Criterion C-a4888ef3 (admin-api › Every admin route is a session route under the right action › Who may call): accept as satisfied? |
 | Q-010 | open | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
 | Q-011 | open | none | verdict | Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping): accept as satisfied? |
@@ -248,7 +248,8 @@ accept The finding is waived: the criterion is satisfied and the named test asse
 
 ## Q-008: Criterion C-8a23d872 (admin-api › Every admin route is a session route under the right action › The route table): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -275,6 +276,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The four registrars called by registerAdminRoutes define exactly the 19 routes of the design table through defineRoute, every one with auth { kind: "session" }, action manage_users_roles except PUT /api/v1/tenant/review-profile with manage_tenant, and declared errors equal to the table's codes row by row (P expands to CURSOR_INVALID, ENGINE_KEY_REQUIRED and VALIDATION_FAILED, I to the two idempotency codes). Every declared and implied code is in the 22-entry registry, so unregisteredRouteErrors is empty. The tracing test builds two servers with installPep, one with the app pool and one with pool null, registers the routes inside assert.doesNotThrow, asserts 19 admin routes, and for each of its 19 rows asserts the route exists, its auth deep-equals { kind: "session" }, its action matches and its errors include each code, then asserts unregisteredRouteErrors of all defined routes is [] on both servers. It passed and failed red by assertion. Handlers read tenant and principal only from request.tenant and request.principal set by the PEP's session verifier, and body and query schemas refuse additional properties, so no route takes a tenant or principal from a request.
 ---
 
 ## Q-009: Criterion C-a4888ef3 (admin-api › Every admin route is a session route under the right action › Who may call): accept as satisfied?
