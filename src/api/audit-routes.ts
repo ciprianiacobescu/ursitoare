@@ -33,8 +33,92 @@ export interface WalkQueue {
   run<T>(tenantId: string, fromSeq: bigint, start: () => Promise<T>): Promise<T>;
 }
 
-export function createWalkQueue(_maxConcurrent: number): WalkQueue {
-  throw new Error("not implemented");
+interface WalkEntry {
+  tenantId: string;
+  fromSeq: bigint;
+  promise: Promise<unknown>;
+}
+
+interface WaitingWalk {
+  tenantId: string;
+  fromSeq: bigint;
+  start: () => Promise<unknown>;
+  promise: Promise<unknown>;
+  deliver: (walk: Promise<unknown>) => void;
+}
+
+function promiseOf(start: () => Promise<unknown>): Promise<unknown> {
+  try {
+    return start();
+  } catch (error: unknown) {
+    return Promise.reject(error);
+  }
+}
+
+export function createWalkQueue(maxConcurrent: number): WalkQueue {
+  if (!Number.isInteger(maxConcurrent) || maxConcurrent < 1) {
+    throw new RangeError("maxConcurrent must be an integer of at least 1");
+  }
+  const running: WalkEntry[] = [];
+  const waiting: WaitingWalk[] = [];
+
+  const onSettled = (entry: WalkEntry): void => {
+    const index = running.indexOf(entry);
+    if (index >= 0) running.splice(index, 1);
+    promote();
+  };
+
+  const trackWalk = (
+    tenantId: string,
+    fromSeq: bigint,
+    walk: Promise<unknown>,
+    heldPromise: Promise<unknown> = walk,
+  ): WalkEntry => {
+    const entry: WalkEntry = { tenantId, fromSeq, promise: heldPromise };
+    running.push(entry);
+    heldPromise.then(
+      () => onSettled(entry),
+      () => onSettled(entry),
+    );
+    return entry;
+  };
+
+  const promote = (): void => {
+    for (let index = 0; index < waiting.length && running.length < maxConcurrent; ) {
+      const next = waiting[index] as WaitingWalk;
+      if (running.some((entry) => entry.tenantId === next.tenantId)) {
+        index += 1;
+        continue;
+      }
+      waiting.splice(index, 1);
+      const walk = promiseOf(next.start);
+      trackWalk(next.tenantId, next.fromSeq, walk, next.promise);
+      next.deliver(walk);
+    }
+  };
+
+  return {
+    run<T>(tenantId: string, fromSeq: bigint, start: () => Promise<T>): Promise<T> {
+      const held = running.find(
+        (entry) => entry.tenantId === tenantId && entry.fromSeq === fromSeq,
+      );
+      if (held !== undefined) return held.promise as Promise<T>;
+      const queued = waiting.find(
+        (entry) => entry.tenantId === tenantId && entry.fromSeq === fromSeq,
+      );
+      if (queued !== undefined) return queued.promise as Promise<T>;
+      if (running.length < maxConcurrent && !running.some((entry) => entry.tenantId === tenantId)) {
+        return trackWalk(tenantId, fromSeq, promiseOf(start as () => Promise<unknown>))
+          .promise as Promise<T>;
+      }
+      let deliver!: (walk: Promise<unknown>) => void;
+      const promise = new Promise<unknown>((resolve) => {
+        deliver = resolve;
+      });
+      waiting.push({ tenantId, fromSeq, start: start as () => Promise<unknown>, promise, deliver });
+      return promise as Promise<T>;
+    },
+  };
 }
 
 export interface AuditApiDeps {
@@ -220,6 +304,7 @@ interface AuditRouteDeps {
   readonly key: CursorKey | null;
   readonly engineKey: KeyMaterial | null;
   readonly clock: Clock;
+  readonly walks: WalkQueue;
   verify?: typeof verifyChain;
 }
 
@@ -374,27 +459,30 @@ async function verifyHandler(
     throw new ApiError(503, "AUTHZ_UNAVAILABLE", "Authorization is unavailable");
   }
   const { fromSeq } = parseVerifyQuery(request.query as Record<string, unknown>);
+  const pool = deps.pool;
 
-  const anchorsVerified =
-    deps.engineKey === null ? 0 : await countAnchors(deps.pool, tenant, fromSeq);
+  return deps.walks.run(tenant.tenantId, fromSeq, async () => {
+    const anchorsVerified =
+      deps.engineKey === null ? 0 : await countAnchors(pool, tenant, fromSeq);
 
-  const opts =
-    deps.engineKey === null
-      ? { fromSeq }
-      : { fromSeq, engineKey: deps.engineKey };
-  const run = deps.verify ?? verifyChain;
-  const report = await run(deps.pool, tenant, opts);
+    const opts =
+      deps.engineKey === null
+        ? { fromSeq }
+        : { fromSeq, engineKey: deps.engineKey };
+    const run = deps.verify ?? verifyChain;
+    const report = await run(pool, tenant, opts);
 
-  return {
-    ok: report.ok,
-    checked: report.checked,
-    firstBadSeq: report.firstBadSeq === undefined ? null : report.firstBadSeq.toString(),
-    reason: report.reason === undefined ? null : report.reason,
-    fromSeq: fromSeq.toString(),
-    anchorsChecked: deps.engineKey !== null && anchorsVerified > 0,
-    anchorsVerified,
-    checkedAt: formatAt(deps.clock.now()),
-  };
+    return {
+      ok: report.ok,
+      checked: report.checked,
+      firstBadSeq: report.firstBadSeq === undefined ? null : report.firstBadSeq.toString(),
+      reason: report.reason === undefined ? null : report.reason,
+      fromSeq: fromSeq.toString(),
+      anchorsChecked: deps.engineKey !== null && anchorsVerified > 0,
+      anchorsVerified,
+      checkedAt: formatAt(deps.clock.now()),
+    };
+  });
 }
 
 export function registerAuditRoutes(server: FastifyInstance, deps: AuditApiDeps): void {
@@ -404,6 +492,7 @@ export function registerAuditRoutes(server: FastifyInstance, deps: AuditApiDeps)
     key,
     engineKey: deps.engineKey,
     clock: deps.clock,
+    walks: deps.walks ?? createWalkQueue(2),
   };
   if (deps.verify !== undefined) {
     routeDeps.verify = deps.verify;

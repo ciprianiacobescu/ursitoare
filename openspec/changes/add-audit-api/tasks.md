@@ -31,7 +31,7 @@ Fixtures: `scenario-data.md`; specs: `specs/audit-api/spec.md` and `specs/audit-
 
 ## 8. Verification walks
 
-- [ ] 8.1 Write `src/api/audit-walks.test.ts` (scenarios "Equal requests share a walk", "Another start of a tenant waits, other tenants do not", "A failed walk is not kept", "A start that throws, and the size") and `src/api/audit-verify-queue.test.ts` (scenario "The verify route goes through the queue") first, then add `WalkQueue`, `createWalkQueue` and the `walks` member of `AuditApiDeps` to `src/api/audit-routes.ts` as Decision 8 says, run the walk of Decision 7 through `deps.walks ?? createWalkQueue(2)`, and export `createWalkQueue` and `WalkQueue` from `src/api/index.ts`, implementing requirement "Verification walks run one per tenant and two at a time"
+- [x] 8.1 Write `src/api/audit-walks.test.ts` (scenarios "Equal requests share a walk", "Another start of a tenant waits, other tenants do not", "A failed walk is not kept", "A start that throws, and the size") and `src/api/audit-verify-queue.test.ts` (scenario "The verify route goes through the queue") first, then add `WalkQueue`, `createWalkQueue` and the `walks` member of `AuditApiDeps` to `src/api/audit-routes.ts` as Decision 8 says, run the walk of Decision 7 through `deps.walks ?? createWalkQueue(2)`, and export `createWalkQueue` and `WalkQueue` from `src/api/index.ts`, implementing requirement "Verification walks run one per tenant and two at a time"
 
 ## 9. Engine wiring and API document
 
