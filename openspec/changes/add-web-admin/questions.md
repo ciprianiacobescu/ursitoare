@@ -135,6 +135,7 @@ accept The criterion is satisfied as it stands. The test "the navigation follows
 ## Q-003: Criterion C-bf07943b (web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: the reply has 24 checked entries: the limit is 20
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
