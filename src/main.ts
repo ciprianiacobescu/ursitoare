@@ -15,6 +15,7 @@ import {
   installPep,
   isWebBuilt,
   listDefinedRoutes,
+  registerAdminRoutes,
   registerMeRoute,
   registerOpenApiRoute,
   registerWebApp,
@@ -204,6 +205,12 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     };
     installPep(server, pep);
     registerMeRoute(server, pep);
+    registerAdminRoutes(server, {
+      pool: pep.pool,
+      clock: pep.clock,
+      ids: systemIds,
+      engineKey: config.engineKey,
+    });
     registerOpenApiRoute(server, { version: VERSION });
     await definePublicRoutes(server, "oidc", (scoped) =>
       registerOidcRoutes(scoped, {
