@@ -46,7 +46,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-033 | answered | none | verdict | Hold H-9a555cbd: UI criterion C-0c16ec24 has no end-to-end test; see the generated UI tests table |
 | Q-034 | answered | none | verdict | Hold H-c36e205c: UI criterion C-4bc159f4 has no end-to-end test; see the generated UI tests table |
 | Q-035 | answered | none | verdict | Hold H-d0d2c1b0: UI criterion C-c174064a has no end-to-end test; see the generated UI tests table |
-| Q-036 | open | none | verdict | Hold H-cc90d893: UI criterion C-b8ae0992 has no end-to-end test; see the generated UI tests table |
+| Q-036 | answered | none | verdict | Hold H-cc90d893: UI criterion C-b8ae0992 has no end-to-end test; see the generated UI tests table |
 | Q-037 | open | none | verdict | Hold H-ce62dad6: UI criterion C-5e078fd3 has no end-to-end test; see the generated UI tests table |
 | Q-038 | open | none | verdict | Hold H-6399c22b: UI criterion C-741e5139 has no end-to-end test; see the generated UI tests table |
 | Q-039 | open | none | verdict | Hold H-e3b15649: UI criterion C-8a1094e4 has no end-to-end test; see the generated UI tests table |
@@ -1133,7 +1133,8 @@ accept The hold may be waived and the unit can go on as it stands. Criterion C-c
 
 ## Q-036: Hold H-cc90d893: UI criterion C-b8ae0992 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -1152,6 +1153,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived and the unit can go on as it stands. Criterion C-b8ae0992 is the scenario "Parsing, showing and offering mappings": it calls parseGroupMapping with hand-built mapping bodies, mappingCells, grantOptions, defaultIssuer and reads ISSUER_HINT, then compares the returned values, a unit-level call to pure functions whose inputs a browser cannot construct, so a generated browser test for it would be a harness artifact and the writer's failure to produce one says nothing about the change. The implementation in web/src/admin/mappings.ts gives exactly the scenario's values: parseGroupMapping needs a plain object with issuer, group and reviewedBy as bounded texts, roleId and teamId null or matching their patterns, and exactly one target set, so the role and team mappings parse to themselves while both targets set or an empty group give null; mappingCells gives the group, issuer and reviewer with grants "Role: author" or "Team: finance"; grantOptions lists every role as role:<id> "Role: <id>" then every team as team:<id> "Team: <id>"; defaultIssuer answers "" for no rows and the first row's issuer otherwise; ISSUER_HINT is the task 5.1 text. The four tracing Node tests in web/src/admin/mappings.test.ts call each function inside assert.doesNotThrow and deep-compare the scenario's inputs against its outputs, all passed as red assertions, and Q-011 already accepted the criterion on them. The same functions run against the real engine in test/journeys/m2-admin.test.ts, where carol's loadAllItems over /idp-group-map with parseGroupMapping yields the four seeded mappings and defaultIssuer of them feeds setMapping. The user-visible side is covered by the repository's own browser journey e2e/test_m2_admin.py: MappingsPage builds its list with parseGroupMapping as parseItem, renders each row through mappingCells, fills the Grant select from grantOptions, pre-fills Issuer from defaultIssuer and shows ISSUER_HINT as the field's hint, and the journey has carol open "Group mappings", see a row for "ursitoare-authors" in the table "Group mappings", choose "Role: auditor" in Grant, press "Map group" and see the new row with "Role: auditor", with assert_accessible on the page.
 ---
 
 ## Q-037: Hold H-ce62dad6: UI criterion C-5e078fd3 has no end-to-end test; see the generated UI tests table
