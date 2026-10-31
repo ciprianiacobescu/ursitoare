@@ -30,7 +30,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-017 | answered | none | verdict | Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state): accept as satisfied? |
 | Q-018 | answered | none | verdict | Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account): accept as satisfied? |
 | Q-019 | answered | none | verdict | Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation): accept as satisfied? |
-| Q-020 | open | none | verdict | Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse): accept as satisfied? |
+| Q-020 | answered | none | verdict | Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse): accept as satisfied? |
 | Q-021 | open | none | verdict | Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove): accept as satisfied? |
 | Q-022 | open | none | verdict | Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals): accept as satisfied? |
 | Q-023 | open | none | verdict | Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add): accept as satisfied? |
@@ -644,7 +644,8 @@ accept The criterion is satisfied. The server test in src/api/admin-service-acco
 
 ## Q-020: Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -671,6 +672,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-teams.test.ts runs the scenario as written: carol posts finance with Idempotency-Key k1 and the test asserts 201 with body { teamId: "finance" }; the post of finance with k2 is asserted 409 ALREADY_EXISTS; the post of Finance is asserted 400 VALIDATION_FAILED; carol's GET /api/v1/teams is asserted 200 with items [{ teamId: "finance" }] and next_cursor null, and tenant B's admin zed's GET is asserted 200 with items [] and next_cursor null; the post of ops with k3 is asserted 201 { teamId: "ops" } and its repeat 201 with the same body and header idempotent-replayed true; a group of the routed issuer is then mapped to finance through setGroupMapping; DELETE /api/v1/teams/finance is asserted 409 IN_USE, DELETE of ops 204, and the second DELETE of ops 404 NOT_FOUND; finally the audit chain of tenant A is asserted to hold exactly two identity.team_created events whose targets are finance and ops and exactly one identity.team_deleted event with target { kind: "team", id: "ops" }. The harness records it as passed and failing red by assertion. The production code matches: the POST route validates teamId against the lowercase team pattern so Finance is 400, takes the idempotency header schema and answers through respondIdempotent, and createTeam inserts with ON CONFLICT DO NOTHING, throws RBAC_EXISTS when no row was inserted and otherwise appends one identity.team_created event; deleteTeam throws RBAC_NOT_FOUND for an absent team, RBAC_IN_USE when a group mapping or membership references it, and otherwise deletes and appends one identity.team_deleted event; adminApiError maps RBAC_EXISTS to 409 ALREADY_EXISTS, RBAC_IN_USE to 409 IN_USE and RBAC_NOT_FOUND to 404 NOT_FOUND; the GET route lists the session tenant's teams under withTenantTx of that tenant and cuts them with pageRows. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-021: Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove): accept as satisfied?
