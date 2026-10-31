@@ -231,7 +231,6 @@ export function MappingsPage(): ReactNode {
               label="Issuer"
               hint={ISSUER_HINT}
               error={errors["issuer"] ?? null}
-              required
             >
               {(control) => (
                 <input
@@ -251,7 +250,6 @@ export function MappingsPage(): ReactNode {
               name="group"
               label="Group"
               error={errors["group"] ?? null}
-              required
             >
               {(control) => (
                 <input
@@ -268,7 +266,6 @@ export function MappingsPage(): ReactNode {
               name="grant"
               label="Grant"
               error={errors["grant"] ?? null}
-              required
             >
               {(control) => (
                 <select

@@ -159,7 +159,6 @@ export function TeamsPage(): ReactNode {
             name="teamId"
             label="Team name"
             error={teamError}
-            required
           >
             {(control) => (
               <input
