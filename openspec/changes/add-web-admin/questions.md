@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Criterion C-5e078fd3 (web-admin › The Group mappings page maps a group to one role or team › Building the request): accept as satisfied? |
 | Q-013 | answered | none | verdict | Criterion C-741e5139 (web-admin › The Group mappings page maps a group to one role or team › Saving a mapping, reading every page): accept as satisfied? |
 | Q-014 | answered | none | verdict | Criterion C-8a1094e4 (web-admin › The Group mappings page maps a group to one role or team › A removal states the consequence): accept as satisfied? |
-| Q-015 | open | none | verdict | Criterion C-71033976 (web-admin › The Audit log page lists events newest first and filters by event type › Parsing an event and its cells): accept as satisfied? |
+| Q-015 | answered | none | verdict | Criterion C-71033976 (web-admin › The Audit log page lists events newest first and filters by event type › Parsing an event and its cells): accept as satisfied? |
 | Q-016 | open | none | verdict | Criterion C-1e5047ed (web-admin › The Audit log page lists events newest first and filters by event type › The event type filter): accept as satisfied? |
 | Q-017 | open | none | verdict | Criterion C-1d816fd1 (web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification): accept as satisfied? |
 | Q-018 | open | none | verdict | Criterion C-d2fc8f38 (web-admin › The Audit log page shows whether the chain verifies › Status text): accept as satisfied? |
@@ -525,7 +525,8 @@ accept The criterion is satisfied as it stands. removeMappingConfirm in web/src/
 
 ## Q-015: Criterion C-71033976 (web-admin › The Audit log page lists events newest first and filters by event type › Parsing an event and its cells): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -552,6 +553,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. parseAuditEvent in web/src/admin/audit.ts needs a plain object whose seq matches ^(0|[1-9][0-9]{0,18})$, whose at matches the UTC timestamp pattern of design decision 4, whose eventType matches the lower-case dotted pattern, whose actor is a kind and id with kind among user, service and system, whose target is null or a kind and id, and whose payload is a plain object, then returns only the six AuditEvent fields, so the carol event parses to itself without origin, seq "017" fails the seq pattern and payload [] fails the record check, each giving null. auditCells formats a matching at as its first 19 characters with T replaced by a space plus " UTC" and keeps any other text unchanged, shows the actor and target as "kind: id" with a dash for a null target, and shows the payload as JSON.stringify cut to 240 characters with a dash for an empty object, so the three cell sets are exactly those of the scenario. The tracing test "parseAuditEvent keeps a valid event and refuses malformed bodies" parses the body inside assert.doesNotThrow and deep-compares it to the six-field event, then asserts null for seq "017" and payload []; "auditCells shows seq time type actor target and details" deep-compares the first cells to the scenario's object and asserts details "—" with target "action: manage_users_roles" for the second event and time "not a time" for the third; a companion test checks the 240-character cut. All three passed as red assertions. The judge gave no verdict only because its evidence was cut to fit the budget, and the failing generated browser test is a harness artifact that is not in the repository: the scenario is a unit-level call to two pure functions that a browser journey cannot observe.
 ---
 
 ## Q-016: Criterion C-1e5047ed (web-admin › The Audit log page lists events newest first and filters by event type › The event type filter): accept as satisfied?
