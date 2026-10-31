@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-013 | answered | none | verdict | Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges): accept as satisfied? |
 | Q-014 | answered | none | verdict | Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read): accept as satisfied? |
 | Q-015 | answered | none | verdict | Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts): accept as satisfied? |
-| Q-016 | open | none | verdict | Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable): accept as satisfied? |
+| Q-016 | answered | none | verdict | Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable): accept as satisfied? |
 | Q-017 | open | none | verdict | Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state): accept as satisfied? |
 | Q-018 | open | none | verdict | Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account): accept as satisfied? |
 | Q-019 | open | none | verdict | Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation): accept as satisfied? |
@@ -512,7 +512,8 @@ accept The criterion is satisfied. The server test in src/api/admin-users.test.t
 
 ## Q-016: Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -539,6 +540,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-users.test.ts builds the scenario exactly: carol and bob hold live sessions, a service account exists, and carol patches bob to disabled twice (both 200 with state disabled), patches herself to disabled (422 OPERATION_REFUSED with details { reason: "self_disable" }, and a GET of carol then reads state active), sends { state: "deleted" } (400 VALIDATION_FAILED), bob's session calls GET /api/v1/users (401 UNAUTHENTICATED), carol patches bob to active (200 with state active), bob's same session calls GET /api/v1/users again (200), and the service account's id is patched through /users (404 NOT_FOUND). It then reads the audit chain and asserts exactly two identity.user_state_changed events, each with target { kind: "user", id: bob } and actor { kind: "user", id: carol }, with payloads { from: "active", to: "disabled", kind: "human" } then { from: "disabled", to: "active", kind: "human" }. The function-level test in src/identity/admin/accounts.test.ts also asserts changed false for a same-state call, the self-disable and not-found rejections, and the two audit events. Both tests passed and failed red by assertion. The production code matches: setAccountState locks the row FOR UPDATE, throws ADMIN_NOT_FOUND for an absent row or the other kind, throws ADMIN_SELF_DISABLE after the existence check, returns changed false without an audit event when the state is unchanged, and otherwise writes state and updated_at and appends one identity.user_state_changed event with that target, actor and payload; the PATCH route runs it with kind human under the session's tenant and answers getAccount read after the change in the same transaction. Sessions are suspended rather than revoked: resolveSession joins the user row and returns null while the user's state is not active, without touching the session row, so an enable restores every session that has not expired meanwhile.
 ---
 
 ## Q-017: Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state): accept as satisfied?
