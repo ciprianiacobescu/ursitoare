@@ -9,6 +9,7 @@ import { AdminError } from "../identity/index.ts";
 import { ApiError } from "./errors.ts";
 import { deriveCursorKey } from "./cursor.ts";
 import type { CursorKey } from "./cursor.ts";
+import { registerAdminServiceAccountRoutes } from "./admin-service-accounts.ts";
 import { registerAdminUsersRoutes } from "./admin-users.ts";
 
 export interface AdminApiDeps {
@@ -70,8 +71,36 @@ export function adminNotFound(): AdminError {
   return new AdminError("ADMIN_NOT_FOUND", "admin target not found");
 }
 
+function emptyBodyJsonParser(
+  request: FastifyRequest,
+  body: string,
+  done: (error: Error | null, value?: unknown) => void,
+): void {
+  if (body === "") {
+    done(null, undefined);
+    return;
+  }
+  try {
+    done(null, JSON.parse(body));
+  } catch (error) {
+    done(error as Error);
+  }
+}
+
 export function registerAdminRoutes(server: FastifyInstance, deps: AdminApiDeps): void {
+  try {
+    server.addContentTypeParser("application/json", { parseAs: "string" }, emptyBodyJsonParser);
+  } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      (error as { code?: unknown }).code !== "FST_ERR_CTP_ALREADY_PRESENT"
+    ) {
+      throw error;
+    }
+  }
   const key = deps.engineKey === null ? null : deriveCursorKey(deps.engineKey);
   const routeDeps: AdminRouteDeps = { ...deps, key };
   registerAdminUsersRoutes(server, routeDeps);
+  registerAdminServiceAccountRoutes(server, routeDeps);
 }
