@@ -34,7 +34,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-021 | answered | none | verdict | Criterion C-06a71640 (web-admin › The admin logic works against the real engine › Alice is refused, carol finds the id and disables her): accept as satisfied? |
 | Q-022 | open | none | verdict | Criterion C-f7bbb238 (web-admin › The M2 journey proves the admin screens in a browser › Carol maps a group and the log shows it verified): accept as satisfied? |
 | Q-023 | answered | none | verdict | Criterion C-652f54b7 (web-admin › The M2 journey proves the admin screens in a browser › Alice sees a 403 page with the decision id): accept as satisfied? |
-| Q-024 | open | none | verdict | Criterion C-d118ea9b (web-admin › The M2 journey proves the admin screens in a browser › Carol disables and enables alice): accept as satisfied? |
+| Q-024 | answered | none | verdict | Criterion C-d118ea9b (web-admin › The M2 journey proves the admin screens in a browser › Carol disables and enables alice): accept as satisfied? |
 | Q-025 | open | none | verdict | Criterion C-19381fcc (web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team): accept as satisfied? |
 | Q-026 | open | none | verdict | Hold H-7687af8e: UI criterion C-2c3410e3 has no end-to-end test; see the generated UI tests table |
 | Q-027 | open | none | verdict | Hold H-2b38782f: UI criterion C-7c7c77c3 has no end-to-end test; see the generated UI tests table |
@@ -819,7 +819,8 @@ accept The criterion is satisfied as it stands. The browser test for it in e2e/t
 
 ## Q-024: Criterion C-d118ea9b (web-admin › The M2 journey proves the admin screens in a browser › Carol disables and enables alice): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -846,6 +847,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The browser test for it in e2e/test_m2_admin.py signs alice in in a second browser context, signs carol in, opens "Users", asserts that carol's own row contains "This is your account" and has no button, that alice's row contains "author · finance", presses the button named exactly "Disable Alice Example", expects the dialog to contain the full disable description for Alice Example, presses exactly "Disable user", expects alice's row to show "Disabled" and the heading "Users" to be focused, has alice open /admin/users and expects her URL to end in /sign-in?error=SESSION_ENDED&return_to=%2Fadmin%2Fusers, then presses exactly "Enable Alice Example" and expects "Active", "author · finance" and the heading focused again, with assert_accessible on the page. The code gives exactly that: accountAction in web/src/admin/users.ts answers the own row with the note "This is your account", an active account with the button label "Disable <name>", the confirm action "Disable user" and the description text task 3.1 prescribes, and a disabled account with "Enable <name>" and no confirm; accountCells gives "Active" or "Disabled" and joins roles and teams with " · "; UsersPage renders the note as text or the named button, opens ConfirmDialog with the description in a paragraph when confirm is set, and after a successful patchAccountState resets the list and focuses the h1 with tabIndex -1. The session client wraps fetch with withSessionEnd, which on the first 401 UNAUTHENTICATED calls redirectToSignIn, assigning /sign-in?error=SESSION_ENDED&return_to= with the encoded current path, so alice's visit to /admin/users while suspended lands on the expected URL. The Node journey against the real engine already proved the server side: disabling alice returns state "disabled", her next call gives 401 UNAUTHENTICATED, and re-enabling returns "active". The test is ignored only because no red or audit record proves it discriminates, which the harness itself attributes to the browser-only pairing the design describes; the test's assertions check the scenario in full.
 ---
 
 ## Q-025: Criterion C-19381fcc (web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team): accept as satisfied?
