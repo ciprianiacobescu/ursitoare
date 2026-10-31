@@ -755,6 +755,7 @@ accept The criterion is satisfied as it stands. The tracing test in test/journey
 ## Q-022: Criterion C-f7bbb238 (web-admin › The M2 journey proves the admin screens in a browser › Carol maps a group and the log shows it verified): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: the reason has 1028 characters: the limit is 1000
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
