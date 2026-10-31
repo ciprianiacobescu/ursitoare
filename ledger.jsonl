@@ -57,3 +57,5 @@
 {"at":"2026-10-31T11:37:03Z","revision":"cc322332e209fd700427cfd3be5c6ab238502714","type":"unit.integrated","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T11:37:03Z","attempt":1,"cost_usd":48.8074,"runs":10,"type":"plan.charged","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T11:38:27Z","branch":"l4/archive/openspec/add-admin-api","head":"0d84c0c60c0a186a7dbd1a1879f4742906d68cc9","type":"unit.branch_deleted","unit":"openspec:add-admin-api"}
+{"at":"2026-10-31T11:38:28Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-admin-cli"}
+{"at":"2026-10-31T11:38:28Z","run":"r-20261031T1138Z-f3f5","type":"unit.dispatched","unit":"openspec:add-admin-cli"}
