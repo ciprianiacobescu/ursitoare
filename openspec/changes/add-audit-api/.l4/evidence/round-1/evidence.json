@@ -1,0 +1,263 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "docs/api/openapi.json",
+      "src/audit/query.ts",
+      "src/pdp/decisions-query.ts",
+      "src/api/audit-query.ts",
+      "src/api/audit-routes.ts",
+      "src/api/index.ts",
+      "test/arch/modules.ts",
+      "querystring/<name>",
+      "src/db/pool.ts",
+      "src/main.ts",
+      "src/db/migrations/0190_audit_read_indexes.sql",
+      "tenant_a/u_1",
+      "src/audit/verify.test.ts",
+      "src/main.audit.test.ts",
+      "src/main.api.test.ts",
+      "docs/decisions/0002",
+      "src/audit/index.ts",
+      "src/pdp/index.ts",
+      "src/api/{audit-query,audit-routes}.ts",
+      "specs/audit-api/spec.md",
+      "specs/audit-verification/spec.md",
+      "src/audit/read-indexes.test.ts",
+      "src/audit/query.test.ts",
+      "src/audit/anchor-count.test.ts",
+      "src/pdp/decisions-query.test.ts",
+      "src/api/audit-query.test.ts",
+      "src/api/audit-list.test.ts",
+      "src/api/decisions-route.test.ts",
+      "src/api/audit-verify.test.ts",
+      "src/api/audit-walks.test.ts",
+      "src/api/audit-verify-queue.test.ts",
+      "**/index.ts",
+      "**/[\"VALIDATION_FAILED\"]",
+      "**/^[a-z][a-z0-9_.]{0,63}$",
+      "**/^[1-9][0-9]{0,18}$",
+      "**/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",
+      "**/[seq]",
+      "**/*.test.ts",
+      "module api",
+      "module audit",
+      "module db",
+      "module docs",
+      "module main",
+      "module main.api.test",
+      "module main.audit.test",
+      "module pdp",
+      "module querystring",
+      "module specs",
+      "module tenant_a",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-api/.l4/ledger/r-20261031T1457Z-00fe.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-api/.l4/ledger/r-20261031T1729Z-1ad5.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-api/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/audit-list.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/audit-query.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/audit-query.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/audit-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/audit-verify-queue.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/audit-verify.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/audit-walks.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/decisions-route.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/audit/anchor-count.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/index.ts",
+        "module": "audit",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/audit/query.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/audit/query.ts",
+        "module": "audit",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/audit/read-indexes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/db/migrations/0190_audit_read_indexes.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.audit.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/decisions-query.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/decisions-query.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/index.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/audit-query.ts, src/api/audit-routes.ts, src/api/index.ts, src/audit/index.ts, src/audit/query.ts and 3 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/audit-query.ts",
+      "src/api/audit-routes.ts",
+      "src/api/index.ts",
+      "src/audit/index.ts",
+      "src/audit/query.ts",
+      "src/main.ts",
+      "src/pdp/decisions-query.ts",
+      "src/pdp/index.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1141,
+      "passed": 1141,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 49,
+      "new_passed": 49,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
