@@ -27,7 +27,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-014 | answered | none | verdict | Criterion C-8a1094e4 (web-admin › The Group mappings page maps a group to one role or team › A removal states the consequence): accept as satisfied? |
 | Q-015 | answered | none | verdict | Criterion C-71033976 (web-admin › The Audit log page lists events newest first and filters by event type › Parsing an event and its cells): accept as satisfied? |
 | Q-016 | answered | none | verdict | Criterion C-1e5047ed (web-admin › The Audit log page lists events newest first and filters by event type › The event type filter): accept as satisfied? |
-| Q-017 | open | none | verdict | Criterion C-1d816fd1 (web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification): accept as satisfied? |
+| Q-017 | answered | none | verdict | Criterion C-1d816fd1 (web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification): accept as satisfied? |
 | Q-018 | open | none | verdict | Criterion C-d2fc8f38 (web-admin › The Audit log page shows whether the chain verifies › Status text): accept as satisfied? |
 | Q-019 | open | none | verdict | Criterion C-52c26a32 (web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources): accept as satisfied? |
 | Q-020 | open | none | verdict | Criterion C-dd02e61e (web-admin › The admin logic works against the real engine › Carol manages mappings and teams and reads the log): accept as satisfied? |
@@ -591,7 +591,8 @@ accept The criterion is satisfied as it stands. parseEventTypeFilter in web/src/
 
 ## Q-017: Criterion C-1d816fd1 (web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -618,6 +619,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. parseVerification in web/src/admin/audit.ts needs a plain object whose checkedAt is a UTC timestamp text, whose firstBadSeq is null or a decimal seq, whose ok is a boolean equal to firstBadSeq being null, whose checked and anchorsVerified are non-negative safe integers, whose anchorsChecked is a boolean equal to anchorsVerified being above 0, and whose reason is null, hash, gap or anchor, then returns only the seven Verification fields, so the scenario's body parses to itself without fromSeq, while ok true with firstBadSeq "17", anchorsVerified -1, anchorsChecked true with anchorsVerified 0 and a body without checkedAt each give null. loadVerification calls the client's get with the path /audit/verify and { signal } when a signal is given or {} otherwise, parses the answer with parseVerification and throws ApiRequestError(200, "INVALID_RESPONSE", "Invalid verification") when the parse gives null, so { ok: "yes" } rejects with code INVALID_RESPONSE. The tracing test "parseVerification keeps a valid verification and refuses malformed bodies" deep-compares the parsed body to the seven-field verification and asserts null for each of the four malformed bodies named by the scenario plus a negative checked count; "loadVerification asks the verify path and refuses an unreadable answer" uses recording fake clients and asserts one call with path /audit/verify and options deep-equal to { signal }, a second call with options {}, the parsed result, and a rejection with an ApiRequestError whose code is INVALID_RESPONSE for a client answering { ok: "yes" }. Both passed as red assertions, and AuditPage.tsx calls loadVerification with the session client and an abort signal. The judge gave no verdict only because its evidence was cut to fit the budget, and the missing browser test was itself judged not testable since the scenario is a unit-level call to a parser and a client function with a fake client.
 ---
 
 ## Q-018: Criterion C-d2fc8f38 (web-admin › The Audit log page shows whether the chain verifies › Status text): accept as satisfied?
