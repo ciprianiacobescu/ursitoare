@@ -200,6 +200,7 @@ accept The criterion is satisfied as it stands. ADMIN_MESSAGES in web/src/admin/
 ## Q-005: Criterion C-0c949ead (web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
