@@ -176,7 +176,7 @@ export function registerAdminRbacRoutes(
         { key: deps.key, tenantId: tenant.tenantId, scope: ROLES_SCOPE },
         (row) => [row.roleId],
       );
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -196,7 +196,7 @@ export function registerAdminRbacRoutes(
         { key: deps.key, tenantId: tenant.tenantId, scope: TEAMS_SCOPE },
         (row) => [row.teamId],
       );
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -227,7 +227,7 @@ export function registerAdminRbacRoutes(
         });
         return { status: 201, body: created };
       });
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -249,7 +249,7 @@ export function registerAdminRbacRoutes(
       );
       reply.code(204).send(undefined);
       return reply;
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -269,7 +269,7 @@ export function registerAdminRbacRoutes(
         { key: deps.key, tenantId: tenant.tenantId, scope: GROUP_MAP_SCOPE },
         mappingPosition,
       );
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -292,7 +292,7 @@ export function registerAdminRbacRoutes(
       return withTenantTx(pool, tenant, (tx) =>
         setGroupMapping(tx, tenant, body, actor, { clock: deps.clock, ids: deps.ids }),
       );
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -318,7 +318,7 @@ export function registerAdminRbacRoutes(
       }
       reply.code(204).send(undefined);
       return reply;
-    }),
+    }, deps),
   });
 }
 

@@ -226,7 +226,7 @@ export function registerAdminUsersRoutes(
             })
           : null;
       return { items: result.users, next_cursor };
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -248,7 +248,7 @@ export function registerAdminUsersRoutes(
       );
       if (account === null) throw adminNotFound();
       return account;
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -279,7 +279,7 @@ export function registerAdminUsersRoutes(
       });
       if (account === null) throw adminNotFound();
       return account;
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -306,7 +306,7 @@ export function registerAdminUsersRoutes(
         { key: deps.key, tenantId: tenant.tenantId, scope: IDP_LINKS_SCOPE },
         idpLinkPosition,
       );
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -349,6 +349,6 @@ export function registerAdminUsersRoutes(
           return { status: 201, body: link };
         },
       );
-    }),
+    }, deps),
   });
 }

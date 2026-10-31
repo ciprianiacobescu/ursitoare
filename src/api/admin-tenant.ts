@@ -76,6 +76,6 @@ export function registerAdminTenantRoutes(
           clock: deps.clock,
         }),
       );
-    }),
+    }, deps),
   });
 }

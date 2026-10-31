@@ -237,7 +237,7 @@ export function registerAdminServiceAccountRoutes(
             })
           : null;
       return { items: result.users, next_cursor };
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -274,7 +274,7 @@ export function registerAdminServiceAccountRoutes(
         if (account === null) throw adminNotFound();
         return { status: 201, body: account };
       });
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -305,7 +305,7 @@ export function registerAdminServiceAccountRoutes(
       });
       if (account === null) throw adminNotFound();
       return account;
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -333,7 +333,7 @@ export function registerAdminServiceAccountRoutes(
         { key: deps.key, tenantId: tenant.tenantId, scope: SERVICE_ACCOUNT_ROLES_SCOPE },
         (row) => [row.roleId],
       );
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -361,7 +361,7 @@ export function registerAdminServiceAccountRoutes(
         });
       });
       return { roleId, result };
-    }),
+    }, deps),
   });
 
   defineRoute(server, {
@@ -390,6 +390,6 @@ export function registerAdminServiceAccountRoutes(
       if (!revoked) throw adminNotFound();
       reply.code(204).send(undefined);
       return reply;
-    }),
+    }, deps),
   });
 }
