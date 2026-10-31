@@ -46,3 +46,4 @@ export type { MembershipSet } from "./rbac/memberships.ts";
 export { loadMemberships } from "./rbac/memberships.ts";
 export { grantRole, revokeRole } from "./rbac/grants.ts";
 export { mapBootstrapAdminGroup, bootstrapAdminGroup } from "./rbac/bootstrap.ts";
+export { resolvePrincipal } from "./rbac/principal.ts";
