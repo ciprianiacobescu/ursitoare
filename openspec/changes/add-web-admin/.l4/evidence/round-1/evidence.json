@@ -1,0 +1,332 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "web/src/admin",
+      "<i>ursitoare-auditors</i>",
+      "test/journeys/session.ts",
+      "e2e/test_m2_admin.py",
+      "e2e",
+      "test/journeys/m2-admin.test.ts",
+      "docs/decisions/0002",
+      "e2e/conftest.py",
+      "web/src/admin/admin.css",
+      "parts/30-rbac.ts",
+      "web/src/features/60-admin-users.tsx",
+      "web/src/admin/pages.test.ts",
+      "web/src/admin/shared.ts",
+      "web/src/admin/pages.ts",
+      "web/src/admin/messages.test.ts",
+      "web/src/admin/messages.ts",
+      "web/src/admin/users.test.ts",
+      "web/src/admin/users.ts",
+      "web/src/admin/UsersPage.tsx",
+      "web/src/admin/teams.test.ts",
+      "web/src/features/61-admin-roles-teams.tsx",
+      "web/src/admin/teams.ts",
+      "web/src/admin/mappings.test.ts",
+      "web/src/features/62-admin-group-mappings.tsx",
+      "web/src/admin/mappings.ts",
+      "web/src/admin/MappingsPage.tsx",
+      "web/src/admin/removal.test.ts",
+      "web/src/admin/audit.test.ts",
+      "web/src/features/63-admin-audit.tsx",
+      "web/src/admin/audit.ts",
+      "web/src/admin/AuditPage.tsx",
+      "web/src/admin/verification.test.ts",
+      "web/src/admin/admin-css.test.ts",
+      "**/^[A-Za-z0-9_-]{1,64}$",
+      "**/^[a-z][a-z0-9_]{0,31}$",
+      "**/^[a-z][a-z0-9_-]{0,63}$",
+      "**/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",
+      "**/admin.css",
+      "**/[]",
+      "**/[\"teamId\"]",
+      "**/index.html",
+      "**/*.test.ts",
+      "web/src/admin/*.ts",
+      "**/shared.ts",
+      "**/pages.ts",
+      "**/messages.ts",
+      "**/users.ts",
+      "**/teams.ts",
+      "**/mappings.ts",
+      "**/UsersPage.tsx",
+      "**/TeamsPage.tsx",
+      "**/MappingsPage.tsx",
+      "**/AuditPage.tsx",
+      "**/\\bkey:\\s*\"",
+      "**/^[\\x21-\\x7e]{1,128}$",
+      "**/^[a-z][a-z0-9_.]{0,63}$",
+      "module <i>ursitoare-auditors<",
+      "module audit",
+      "module docs",
+      "module e2e",
+      "module parts",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m2_admin.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-admin/.l4/ledger/r-20261031T1806Z-2dcf.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-admin/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/journeys/m2-admin.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/journeys/session.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/AuditPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/MappingsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/TeamsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/UsersPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/admin-css.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/admin/admin.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/audit.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/admin/audit.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/mappings.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/admin/mappings.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/messages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/admin/messages.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/pages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/admin/pages.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/removal.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/admin/shared.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/teams.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/admin/teams.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/users.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/admin/users.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/verification.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/features/60-admin-users.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/features/61-admin-roles-teams.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/features/62-admin-group-mappings.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/features/63-admin-audit.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: test/journeys/session.ts, web/src/admin/AuditPage.tsx, web/src/admin/MappingsPage.tsx, web/src/admin/TeamsPage.tsx, web/src/admin/UsersPage.tsx and 11 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "test/journeys/session.ts",
+      "web/src/admin/AuditPage.tsx",
+      "web/src/admin/MappingsPage.tsx",
+      "web/src/admin/TeamsPage.tsx",
+      "web/src/admin/UsersPage.tsx",
+      "web/src/admin/audit.ts",
+      "web/src/admin/mappings.ts",
+      "web/src/admin/messages.ts",
+      "web/src/admin/pages.ts",
+      "web/src/admin/shared.ts",
+      "web/src/admin/teams.ts",
+      "web/src/admin/users.ts",
+      "web/src/features/60-admin-users.tsx",
+      "web/src/features/61-admin-roles-teams.tsx",
+      "web/src/features/62-admin-group-mappings.tsx",
+      "web/src/features/63-admin-audit.tsx"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 1200,
+      "passed": 1198,
+      "failed": 2,
+      "errored": 0,
+      "skipped": 0,
+      "new": 59,
+      "new_passed": 57,
+      "skipped_unchanged": []
+    },
+    "findings": [
+      {
+        "severity": "blocker",
+        "title": "new tests failed",
+        "detail": "test_m2_admin::test_c_19381fcc_carol_creates_and_deletes_a_team[chromium], test_m2_admin::test_c_f7bbb238_carol_maps_a_group_and_the_log_shows_it_verified[chromium]"
+      }
+    ]
+  }
+}
