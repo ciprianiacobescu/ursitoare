@@ -59,7 +59,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-046 | answered | none | verdict | Hold H-6ea9ed12: UI criterion C-06a71640 has no end-to-end test; see the generated UI tests table |
 | Q-047 | answered | none | verdict | Hold H-11d4a924: UI criterion C-f7bbb238 has no end-to-end test; see the generated UI tests table |
 | Q-048 | answered | none | verdict | Hold H-4662f538: UI criterion C-652f54b7 has no end-to-end test; see the generated UI tests table |
-| Q-049 | open | none | verdict | Hold H-17337413: UI criterion C-d118ea9b has no end-to-end test; see the generated UI tests table |
+| Q-049 | answered | none | verdict | Hold H-17337413: UI criterion C-d118ea9b has no end-to-end test; see the generated UI tests table |
 | Q-050 | open | none | verdict | Hold H-e41ee87b: UI criterion C-19381fcc has no end-to-end test; see the generated UI tests table |
 | Q-051 | open | none | verdict | Hold H-346cd016: the judge's reply was discarded (part 1 of 2, schema_invalid: structured output invalid: riskiest_assumptions: more t... |
 <!-- l4:index:end -->
@@ -1468,7 +1468,7 @@ accept C-652f54b7 has an end-to-end test: e2e/test_m2_admin.py::test_c_652f54b7_
 
 ## Q-049: Hold H-17337413: UI criterion C-d118ea9b has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -1488,6 +1488,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-d118ea9b has an end-to-end test: e2e/test_m2_admin.py::test_c_d118ea9b_carol_disables_and_enables_alice, written by task 7.1 as the requirement says. It signs in with `login` and the seed users and passed in the e2e gate at the head 4cfa770. The harness ignored it only because task 7.1's e2e file has no red record. At the base 5faa0e7, web/src/features holds only 10-home and 15-sign-in, so there is no admin link or page and the test fails there (inferred from the base tree, not run). Q-024 accepts the criterion on that evidence. The generated UI test is no evidence against it: the generator reported it not testable because it found no way to sign in.
 ---
 
 ## Q-050: Hold H-e41ee87b: UI criterion C-19381fcc has no end-to-end test; see the generated UI tests table
