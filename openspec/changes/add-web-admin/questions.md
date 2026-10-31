@@ -30,7 +30,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-017 | answered | none | verdict | Criterion C-1d816fd1 (web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification): accept as satisfied? |
 | Q-018 | answered | none | verdict | Criterion C-d2fc8f38 (web-admin › The Audit log page shows whether the chain verifies › Status text): accept as satisfied? |
 | Q-019 | open | none | verdict | Criterion C-52c26a32 (web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources): accept as satisfied? |
-| Q-020 | open | none | verdict | Criterion C-dd02e61e (web-admin › The admin logic works against the real engine › Carol manages mappings and teams and reads the log): accept as satisfied? |
+| Q-020 | answered | none | verdict | Criterion C-dd02e61e (web-admin › The admin logic works against the real engine › Carol manages mappings and teams and reads the log): accept as satisfied? |
 | Q-021 | open | none | verdict | Criterion C-06a71640 (web-admin › The admin logic works against the real engine › Alice is refused, carol finds the id and disables her): accept as satisfied? |
 | Q-022 | open | none | verdict | Criterion C-f7bbb238 (web-admin › The M2 journey proves the admin screens in a browser › Carol maps a group and the log shows it verified): accept as satisfied? |
 | Q-023 | open | none | verdict | Criterion C-652f54b7 (web-admin › The M2 journey proves the admin screens in a browser › Alice sees a 403 page with the decision id): accept as satisfied? |
@@ -688,7 +688,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-020: Criterion C-dd02e61e (web-admin › The admin logic works against the real engine › Carol manages mappings and teams and reads the log): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -715,6 +716,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The tracing test in test/journeys/m2-admin.test.ts signs carol in through signInAs and sessionClient against a fresh e2e stack, then runs exactly the scenario: loadAllItems over cursorPageFetcher for /roles, /teams and /idp-group-map, asserting the roles deep-equal ["approver", "auditor", "author", "tenant_admin"], the teams deep-equal ["finance"] and the mappings number four, which on a fresh stack are the three RBAC_SEED_MAPPINGS plus the bootstrap ursitoare-admins mapping the rbac part seeds; setMapping with defaultIssuer of those mappings maps ursitoare-auditors to role auditor and the result's roleId is asserted "auditor"; postTeam for ops with key k-1 twice is asserted to return "ops" both times and with k-2 to reject with code ALREADY_EXISTS; removeTeamById for ops resolves to undefined and for finance rejects with code IN_USE; auditFetcher(client, "identity.group_mapped") yields an item whose payload.group is ursitoare-auditors; loadVerification gives ok true, anchorsChecked false, anchorsVerified 0 and checked at least 1, and verificationView of it has headline "Audit chain verified" and a detail containing "only the hash chain was checked"; finally removeMapping of the new mapping resolves to undefined. Every rejection is caught by a helper that asserts an ApiRequestError, so no driver error escapes. The logic functions in web/src/admin/mappings.ts and web/src/admin/audit.ts behave as the test expects, and the test passed as a red assertion against the real engine. The judge gave no verdict only because its evidence was cut to fit the budget, and the missing browser test is a harness artifact: this is the Node journey the design pairs with the browser requirement.
 ---
 
 ## Q-021: Criterion C-06a71640 (web-admin › The admin logic works against the real engine › Alice is refused, carol finds the id and disables her): accept as satisfied?
