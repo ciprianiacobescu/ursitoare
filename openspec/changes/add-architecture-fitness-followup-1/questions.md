@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | superseded | none | verdict | Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied? |
 | Q-002 | superseded | none | verdict | Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied? |
 | Q-003 | superseded | none | verdict | Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-ba84c521 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A false positive is fixed in the rule): accept as satisfied? |
 <!-- l4:index:end -->
@@ -120,7 +120,7 @@ accept: a conduct criterion, as on the parent unit. On this unit checkAll(readSn
 
 ## Q-004: Criterion C-eea53b80 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A violation in merged code stops the task): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -147,6 +147,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept: a conduct criterion, as on the parent unit (its Q-004) and as answered in Q-001 of the attempt the restart replaced. On this unit checkAll(readSnapshot()) is empty: test/arch/repo.test.ts:63 asserts it deep-equals the empty list, and the round 3 tests step passed (head 880042a, base main@93f072a; no code change since). The diff from that base changes only test/arch/rules.ts, test/arch/secrets.ts and test/arch/secrets.test.ts besides its openspec folder: nothing under src/ or test/support/, no owner file, and test/arch/modules.ts is unchanged. So no blocker was due. rules.ts drops its duplicated copy of MODULES and imports the graph from modules.ts (FB-001), and secrets.ts now skips only openspec/changes/**/.l4 instead of every .l4 path, which widens the scan (FB-002); neither adds a skip, todo or narrower pattern to a rule.
 ---
 
 ## Q-005: Criterion C-8c4b4392 (architecture-tree-blockers › A violation in a file this change may not change is a blocker › A directory outside the graph stops the task): accept as satisfied?
