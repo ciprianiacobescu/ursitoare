@@ -10,6 +10,7 @@ import { ApiError } from "./errors.ts";
 import { deriveCursorKey } from "./cursor.ts";
 import type { CursorKey } from "./cursor.ts";
 import { registerAdminServiceAccountRoutes } from "./admin-service-accounts.ts";
+import { registerAdminRbacRoutes } from "./admin-rbac.ts";
 import { registerAdminUsersRoutes } from "./admin-users.ts";
 
 export interface AdminApiDeps {
@@ -103,4 +104,5 @@ export function registerAdminRoutes(server: FastifyInstance, deps: AdminApiDeps)
   const routeDeps: AdminRouteDeps = { ...deps, key };
   registerAdminUsersRoutes(server, routeDeps);
   registerAdminServiceAccountRoutes(server, routeDeps);
+  registerAdminRbacRoutes(server, routeDeps);
 }
