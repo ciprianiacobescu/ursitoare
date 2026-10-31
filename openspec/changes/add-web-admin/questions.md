@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | open | none | verdict | Criterion C-0c949ead (web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-97244065 (web-admin › The Users page lists people and disables or enables them › Parsing an account): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-87e93809 (web-admin › The Users page lists people and disables or enables them › Cells and actions): accept as satisfied? |
-| Q-008 | open | none | verdict | Criterion C-0c16ec24 (web-admin › The Users page lists people and disables or enables them › Setting a state): accept as satisfied? |
+| Q-008 | answered | none | verdict | Criterion C-0c16ec24 (web-admin › The Users page lists people and disables or enables them › Setting a state): accept as satisfied? |
 | Q-009 | open | none | verdict | Criterion C-4bc159f4 (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Names): accept as satisfied? |
 | Q-010 | open | none | verdict | Criterion C-c174064a (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Creating and deleting): accept as satisfied? |
 | Q-011 | open | none | verdict | Criterion C-b8ae0992 (web-admin › The Group mappings page maps a group to one role or team › Parsing, showing and offering mappings): accept as satisfied? |
@@ -294,7 +294,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-008: Criterion C-0c16ec24 (web-admin › The Users page lists people and disables or enables them › Setting a state): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -321,6 +322,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. patchAccountState in web/src/admin/users.ts checks the user id against the pattern of design decision 3, calls the client's patch with the path /users/ followed by the encoded id and the body { state }, parses the answer with parseAccount, and throws ApiRequestError(200, "INVALID_RESPONSE", "Invalid account") when the parse gives null, so for ("u_bob", "disabled") with a recording client the client gets patch("/users/u_bob", { state: "disabled" }) and the parsed account carries state "disabled", while an answer of {} fails parseAccount and rejects with code INVALID_RESPONSE. The tracing test "patchAccountState sends the state and rejects an unreadable account" uses a recording fake client that records path and body, asserts exactly one call with path "/users/u_bob" and body { state: "disabled" }, asserts the result's state is "disabled", and then asserts that a client answering {} rejects with an ApiRequestError whose code is INVALID_RESPONSE. The companion test asserts a path-like id "../x" is refused with a RangeError and nothing is sent. Both passed as red assertions. The judge gave no verdict only because its evidence was cut to fit the budget, and the missing browser test is a harness artifact: the scenario is a unit-level client call that a browser journey cannot observe.
 ---
 
 ## Q-009: Criterion C-4bc159f4 (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Names): accept as satisfied?
