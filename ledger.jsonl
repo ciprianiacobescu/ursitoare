@@ -77,3 +77,4 @@
 {"at":"2026-10-31T17:29:29Z","run":"r-20261031T1729Z-1ad5","type":"unit.dispatched","unit":"openspec:add-audit-api"}
 {"at":"2026-10-31T18:01:46Z","head":"727211b2a6c573fc581dd185ca9dde25af0a4ea4","pr":45,"target_before":"e95e05a39668464cd3da60e87920a4c5b959b109","type":"unit.merge_requested","unit":"openspec:add-audit-api"}
 {"at":"2026-10-31T18:01:50Z","ci":"not_run","head":"727211b2a6c573fc581dd185ca9dde25af0a4ea4","merge_commit":"2fb9fb603b1d314f100c99500ec138674c41d2a2","method":"squash","pr":45,"raced":false,"type":"unit.merged","unit":"openspec:add-audit-api"}
+{"at":"2026-10-31T18:01:55Z","branch":"l4/openspec/add-audit-api","head":"727211b2a6c573fc581dd185ca9dde25af0a4ea4","type":"unit.branch_deleted","unit":"openspec:add-audit-api"}
