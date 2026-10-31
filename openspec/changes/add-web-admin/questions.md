@@ -39,7 +39,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-026 | answered | none | verdict | Hold H-7687af8e: UI criterion C-2c3410e3 has no end-to-end test; see the generated UI tests table |
 | Q-027 | answered | none | verdict | Hold H-2b38782f: UI criterion C-7c7c77c3 has no end-to-end test; see the generated UI tests table |
 | Q-028 | open | none | verdict | Hold H-7b12a03b: UI criterion C-bf07943b has no end-to-end test; see the generated UI tests table |
-| Q-029 | open | none | verdict | Hold H-7ce02cbb: UI criterion C-195c3385 has no end-to-end test; see the generated UI tests table |
+| Q-029 | answered | none | verdict | Hold H-7ce02cbb: UI criterion C-195c3385 has no end-to-end test; see the generated UI tests table |
 | Q-030 | open | none | verdict | Hold H-ffedae36: UI criterion C-0c949ead has no end-to-end test; see the generated UI tests table |
 | Q-031 | open | none | verdict | Hold H-30bc4c2c: UI criterion C-97244065 has no end-to-end test; see the generated UI tests table |
 | Q-032 | open | none | verdict | Hold H-7c7ec97d: UI criterion C-87e93809 has no end-to-end test; see the generated UI tests table |
@@ -958,7 +958,8 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ## Q-029: Hold H-7ce02cbb: UI criterion C-195c3385 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -977,6 +978,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived and the unit can go on as it stands. Criterion C-195c3385 is the scenario "The codes and their texts": it runs registerAdminMessages twice and calls messageFor for each code of ADMIN_MESSAGES, comparing keys and texts against the catalogue and FALLBACK_MESSAGE, a unit-level call to registry functions that no browser can invoke or observe directly, which is why the generated browser test was judged not testable. Its tracing Node test in web/src/admin/messages.test.ts registers twice inside assert.doesNotThrow, deep-compares the sorted keys against the six codes ALREADY_EXISTS, IN_USE, ELEVATION_REFUSED, UNKNOWN_ISSUER, OPERATION_REFUSED and ENGINE_KEY_REQUIRED, and for each asserts the entry text, that messageFor resolves to it and that it differs from FALLBACK_MESSAGE; the kit's registerMessages only throws for a code already registered with other text, so the second call is idempotent. Q-004 already accepted the criterion on that test. The user-visible side of the same behaviour is covered by the repository's own browser journey e2e/test_m2_admin.py: each feature file calls registerAdminMessages at module level, and when carol tries to delete the seeded team finance the page shows the IN_USE catalogue text "This team is still the target of a group mapping. Remove that mapping first." while the row stays. A missing harness-generated browser test for a registry call therefore says nothing about the change.
 ---
 
 ## Q-030: Hold H-ffedae36: UI criterion C-0c949ead has no end-to-end test; see the generated UI tests table
