@@ -18,6 +18,35 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Finding F-cde045de: No discriminating test for cross-tenant admin isolation |
 | Q-006 | answered | none | verdict | Finding F-28a40cf9: Uncovered criterion C-598727de (Another tenant and a forged tenant) |
 | Q-007 | answered | none | verdict | Finding F-c28b995d: Uncovered criterion C-96e47324 (The registry) at gate level |
+| Q-008 | open | none | verdict | Criterion C-8a23d872 (admin-api › Every admin route is a session route under the right action › The route table): accept as satisfied? |
+| Q-009 | open | none | verdict | Criterion C-a4888ef3 (admin-api › Every admin route is a session route under the right action › Who may call): accept as satisfied? |
+| Q-010 | open | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
+| Q-011 | open | none | verdict | Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping): accept as satisfied? |
+| Q-012 | open | none | verdict | Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through): accept as satisfied? |
+| Q-013 | open | none | verdict | Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges): accept as satisfied? |
+| Q-014 | open | none | verdict | Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read): accept as satisfied? |
+| Q-015 | open | none | verdict | Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts): accept as satisfied? |
+| Q-016 | open | none | verdict | Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable): accept as satisfied? |
+| Q-017 | open | none | verdict | Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state): accept as satisfied? |
+| Q-018 | open | none | verdict | Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account): accept as satisfied? |
+| Q-019 | open | none | verdict | Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation): accept as satisfied? |
+| Q-020 | open | none | verdict | Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse): accept as satisfied? |
+| Q-021 | open | none | verdict | Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove): accept as satisfied? |
+| Q-022 | open | none | verdict | Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals): accept as satisfied? |
+| Q-023 | open | none | verdict | Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add): accept as satisfied? |
+| Q-024 | open | none | verdict | Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals): accept as satisfied? |
+| Q-025 | open | none | verdict | Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning): accept as satisfied? |
+| Q-026 | open | none | verdict | Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals): accept as satisfied? |
+| Q-027 | open | none | verdict | Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event): accept as satisfied? |
+| Q-028 | open | none | verdict | Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing): accept as satisfied? |
+| Q-029 | open | none | verdict | Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows): accept as satisfied? |
+| Q-030 | open | none | verdict | Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key): accept as satisfied? |
+| Q-031 | open | none | verdict | Criterion C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server): accept as satisfied? |
+| Q-032 | open | none | verdict | Criterion C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine): accept as satisfied? |
+| Q-033 | open | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
+| Q-034 | open | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
+| Q-035 | open | none | verdict | Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied? |
+| Q-036 | open | none | verdict | Hold H-0b1cd52c: the judge's reply was discarded (part 3 of 4, timeout: no answer within 600s) |
 <!-- l4:index:end -->
 
 ---
@@ -214,3 +243,892 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ### Answer
 <!-- write below this line -->
 accept The finding is waived: the criterion is satisfied and the named test asserts its whole scenario. The registry in src/api/error-codes.ts holds exactly the 22 entries the scenario lists, each with the status and message given. The test compares the sorted key set of ERROR_CODES with its 22 expected keys, deep-compares status and message of every entry, checks isRegisteredCode true for each of the 22 and false for cursor_invalid, the empty string and NOT_A_CODE. The key-set comparison would fail against the base's 16-entry registry, so the test discriminates. The gate reports no discriminating test only because the task changed this frozen test in place rather than adding a new one, which the design records as the chosen approach; the stale title naming 16 codes is required by that in-place change and does not affect the assertions.
+
+---
+
+## Q-008: Criterion C-8a23d872 (admin-api › Every admin route is a session route under the right action › The route table): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-8a23d872 (admin-api › Every admin route is a session route under the right action › The route table)
+
+### Context
+Criterion C-8a23d872 (admin-api › Every admin route is a session route under the right action › The route table) is needs human after round 3.
+
+Scenario:
+\- **WHEN** `registerAdminRoutes` runs on a server with `installPep` (once with a pool, once with `pool: null`) and `listDefinedRoutes(server)` is read
+\- **THEN** both servers list the 19 rows (method, url, action) of the table with `auth` `{ kind: "session" }` and an `errors` list containing the row's codes, and `unregisteredRouteErrors(listDefinedRoutes(server))` is `[]`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-policy.test.ts::C-8a23d872 the admin route table holds 19 session routes with their actions and codes (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-009: Criterion C-a4888ef3 (admin-api › Every admin route is a session route under the right action › Who may call): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-a4888ef3 (admin-api › Every admin route is a session route under the right action › Who may call)
+
+### Context
+Criterion C-a4888ef3 (admin-api › Every admin route is a session route under the right action › Who may call) is needs human after round 3.
+
+Scenario:
+\- **WHEN** under `roles.cedar` carol (operator grant `tenant_admin`), alice (operator grant `author`) and a caller with no cookie send `GET /api/v1/roles`, and carol and alice send `PUT /api/v1/tenant/review-profile` with `{ "reviewProfile": "team" }`
+\- **THEN** carol gets 200 with `items` `[{ roleId: "approver" }, { roleId: "auditor" }, { roleId: "author" }, { roleId: "tenant_admin" }]` and `next_cursor` `null`, alice gets 403 `FORBIDDEN` with `details.decisionId` (profile unchanged) and the caller with no cookie 401 `UNAUTHENTICATED`; carol's switch is 200
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-policy.test.ts::C-a4888ef3 roles cedar permits only the tenant admin on the admin routes (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-010: Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant)
+
+### Context
+Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant) is needs human after round 3.
+
+Scenario:
+\- **WHEN** tenant A holds humans ann and bob and a service account, tenant B holds human zed, and B's admin sends `GET /api/v1/users`, `GET` and `PATCH /api/v1/users/<ann>`, `PUT /api/v1/service-accounts/<svc>/roles/author`, `GET /api/v1/users/<ann>/idp-links` and `POST /api/v1/teams` with `{ "teamId": "x", "tenantId": "tenant_a" }`
+\- **THEN** the list holds only zed, the next four answer 404 `NOT_FOUND`, the last 400 `VALIDATION_FAILED`, and tenant A's rows are unchanged
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-isolation.test.ts::C-598727de tenant B admin cannot reach tenant A rows and a forged tenant is refused (passed, pre_satisfied)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-011: Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping)
+
+### Context
+Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping) is needs human after round 3.
+
+Scenario:
+\- **WHEN** `adminApiError` gets `RbacError` and `AdminError` and `IdentityError` instances of `RBAC_INVALID`, `IDENTITY_INVALID`, `ADMIN_INVALID`, `RBAC_NOT_FOUND`, `ADMIN_NOT_FOUND`, `RBAC_EXISTS`, `ADMIN_EXISTS`, `RBAC_IN_USE`, `RBAC_ELEVATION`, `RBAC_UNKNOWN_ISSUER`, `ADMIN_UNKNOWN_ISSUER`, `ADMIN_SELF_DISABLE`, `ADMIN_WRONG_KIND`, `IDENTITY_OWNER_INVALID`
+\- **THEN** each result is an `ApiError` with status and code `400 VALIDATION_FAILED` (x3), `404 NOT_FOUND` (x2), `409 ALREADY_EXISTS` (x2), `409 IN_USE`, `403 ELEVATION_REFUSED`, `422 UNKNOWN_ISSUER` (x2), and `422 OPERATION_REFUSED` with `details.reason` `self_disable`, `wrong_kind`, `owner_invalid`; no output message contains `secret-input`, the message given to every input error
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-errors.test.ts::C-cc3ddc89 admin errors map to registered API codes (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-012: Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through)
+
+### Context
+Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through) is needs human after round 3.
+
+Scenario:
+\- **WHEN** `adminApiError` gets `RbacError("RBAC_TENANT_MISMATCH", ...)`, `RbacError("RBAC_DIRECT_GRANT_REFUSED", ...)`, `AdminError("ADMIN_TENANT_MISMATCH", ...)`, `new Error("boom")` and the string `"x"`
+\- **THEN** each result is strictly equal (`===`) to its input
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-errors.test.ts::C-e8ea1428 other errors pass through unchanged (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-013: Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges)
+
+### Context
+Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges) is needs human after round 3.
+
+Scenario:
+\- **WHEN** the ledger row `version = 180`, `name = 'admin_api'` is asserted, then as the app role in `tenant_a` a test runs `UPDATE ursitoare.tenant SET review_profile = 'team' WHERE tenant_id = 'tenant_a'`, the same `WHERE tenant_id = 'tenant_b'`, `SET name = 'x'`, `SET review_profile = 'bogus'`, an `INSERT` and a `DELETE`, and `checkTenancyCatalog(db.ownerPool)` runs
+\- **THEN** the first changes 1 row, the second 0 rows (tenant B stays `solo`), `name`, `INSERT` and `DELETE` fail with SQLSTATE `42501`, `'bogus'` with `23514`, and the violations are `[]`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.identity.admin.schema.test.ts::C-7a958882 Objects and privileges (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-014: Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read)
+
+### Context
+Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read) is needs human after round 3.
+
+Scenario:
+\- **WHEN** tenant A holds humans ann, bob, cat and a service account, and carol (a fourth human) calls `GET /api/v1/users?limit=2` and the `next_cursor`, `?state=disabled`, `?limit=0`, `GET` of ann, of the service account, of an unknown valid id and of `bad%20id`
+\- **THEN** the pages hold 2 then 2 users ordered by `userId`, with `next_cursor` set then `null`, none a service account; each item has exactly `userId`, `kind` `human`, `ownerUserId` `null`, `displayName`, `email`, `state`, `roles`, `teams`, `localRoles` (arrays); the filter gives `{ items: [], next_cursor: null }`; the rest answer 400, 200 with ann's item, 404, 404, 400
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-users.test.ts::C-32b7b36c users are listed paged filtered and read by id (passed, red_assertion); src.identity.admin.accounts.test.ts::C-32b7b36c Accounts list and read (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-015: Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts)
+
+### Context
+Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts) is needs human after round 3.
+
+Scenario:
+\- **WHEN** ann holds `author` by an operator grant and, through `syncMemberships` of groups mapped to `approver` and to team `finance`, those two; bob holds nothing; ann is then patched to `disabled`; and carol sends `GET /api/v1/users` and `GET /api/v1/users/<ann>`
+\- **THEN** ann's item (in both) has `state` `disabled`, `roles` `["approver", "author"]`, `teams` `["finance"]` and `localRoles` `["author"]`; bob's arrays are `[]`; tenant B sees none
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-users.test.ts::C-c6c6a2a5 accounts carry roles teams and local roles across states (passed, red_assertion); src.identity.admin.accounts.test.ts::C-c6c6a2a5 Accounts hold roles teams and local roles (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-016: Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable)
+
+### Context
+Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable) is needs human after round 3.
+
+Scenario:
+\- **WHEN** bob (with a live session) is patched to `disabled` twice, carol patches herself to `disabled`, `{ "state": "deleted" }` is sent, bob's session calls `GET /api/v1/users`, bob is patched to `active`, bob's same session calls `GET /api/v1/users` again, and the service account's id is patched through `/users`
+\- **THEN** the answers are 200 with the item, `state: "disabled"` (x2), 422 `OPERATION_REFUSED` with `details.reason` `self_disable` (carol stays `active`), 400, 401 `UNAUTHENTICATED`, 200 with the item, `state: "active"`, 200 (session works again), 404; the chain holds one `identity.user_state_changed` per real change (two) with target `{ kind: "user", id: <bob> }`, actor `{ kind: "user", id: <carol> }` and payloads `{ from: "active", to: "disabled", kind: "human" }` then `{ from: "disabled", to: "active", kind: "human" }`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-users.test.ts::C-9733f98e users are disabled and enabled with suspended then restored sessions (passed, red_assertion); src.identity.admin.accounts.test.ts::C-9733f98e Account state changes (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-017: Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state)
+
+### Context
+Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state) is needs human after round 3.
+
+Scenario:
+\- **WHEN** carol posts `{ "displayName": "Nightly bot" }` with `Idempotency-Key` `k1` twice, then with `ownerUserId` bob, a service account's id, an unknown id, `displayName` `""`, lists `GET /api/v1/service-accounts`, and patches the first account to `disabled`
+\- **THEN** the first is 201 `{ userId, kind: "service", ownerUserId: <carol>, displayName: "Nightly bot", email: null, state: "active", roles: [], teams: [], localRoles: [] }` and the repeat the same body with header `idempotent-replayed: true` (one account, one `identity.service_account_created` event, target the account, payload `{ ownerUserId: <carol>, displayName: "Nightly bot" }`); the others 201 with owner bob, 422 `OPERATION_REFUSED` `owner_invalid` (x2), 400; the list holds the 2 service accounts only; the patch is 200 `disabled`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-service-accounts.test.ts::C-8087d00f service accounts are created listed owned and disabled (passed, red_assertion); src.identity.admin.accounts.test.ts::C-8087d00f Service account provisioning and owners (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-018: Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account)
+
+### Context
+Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account) is needs human after round 3.
+
+Scenario:
+\- **WHEN** carol sends `PUT /api/v1/service-accounts/<svc>/roles/author` twice, `GET .../roles`, `PUT .../roles/ghost`, `PUT .../roles/Bad`, `PUT`, `GET` and `DELETE` of `.../roles/author` for human bob's id, patches the service account to `disabled`, repeats `GET .../roles`, patches it back to `active`, and sends `DELETE .../roles/author` twice
+\- **THEN** the answers are 200 `{ roleId: "author", result: "granted" }`, 200 `result: "exists"`, 200 `items` `[{ roleId: "author" }]`, 404 `NOT_FOUND`, 400, 404 (x3), 200 `disabled`, 200 `items` `[{ roleId: "author" }]`, 200 `active`, 204, 404; the chain holds one `identity.role_granted` and one `identity.role_revoked`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-service-accounts.test.ts::C-c102e454 service account roles are granted listed and revoked (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-019: Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation)
+
+### Context
+Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation) is needs human after round 3.
+
+Scenario:
+\- **WHEN** a caller who holds only `author` (policy `PERMIT_ALL`) sends `PUT .../roles/tenant_admin` and `PUT .../roles/author` for the service account
+\- **THEN** the first is 403 `ELEVATION_REFUSED` and stores nothing, the second 200 `granted`; one `identity.role_granted` (`author`) is in the chain
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-service-accounts.test.ts::C-50b6b834 service account role grants cannot exceed the caller (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-020: Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse)
+
+### Context
+Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse) is needs human after round 3.
+
+Scenario:
+\- **WHEN** carol posts `finance` with key `k1`, `finance` with key `k2`, `Finance`, and `ops` with key `k3` twice; lists teams as A and as B; maps a group to `finance`; deletes `finance`; deletes the unused `ops`; deletes `ops` again
+\- **THEN** the posts answer 201 `{ teamId: "finance" }`, 409 `ALREADY_EXISTS`, 400, 201, and a replayed 201; A lists `[{ teamId: "finance" }]` and B `[]`; the delete of the mapped team is 409 `IN_USE` and of `ops` 204, then 404; the chain holds `identity.team_created` for `finance` and for `ops` once each and one `identity.team_deleted`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-teams.test.ts::C-8b40a61c teams are created listed isolated mapped and deleted (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-021: Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove)
+
+### Context
+Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove) is needs human after round 3.
+
+Scenario:
+\- **WHEN** the issuer `https://idp.example/realms/ursitoare` is routed to tenant A, and carol puts group `ursitoare-authors` with `roleId` `author`, then `teamId` `finance`, lists, deletes it by `?issuer=<urlencoded>&group=ursitoare-authors` twice, and B lists
+\- **THEN** the puts answer 200 `{ issuer, group: "ursitoare-authors", roleId: "author", teamId: null, reviewedBy: <carol> }` then the same with `roleId: null`, `teamId: "finance"`; the list holds that one mapping; the deletes are 204 then 404; B's list is `{ items: [], next_cursor: null }`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-group-map.test.ts::C-09ace5ca group mapping is set replaced listed removed and tenant scoped (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-022: Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals)
+
+### Context
+Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals) is needs human after round 3.
+
+Scenario:
+\- **WHEN** carol puts a mapping with both `roleId` and `teamId`, neither, `roleId` `ghost`, issuer `https://other.example`, a 256-character group, and a caller who holds only `author` (policy `PERMIT_ALL`) maps to `tenant_admin`
+\- **THEN** the answers are 400, 400, 404 `NOT_FOUND`, 422 `UNKNOWN_ISSUER`, 400, 403 `ELEVATION_REFUSED`, and no mapping was stored by them
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-group-map.test.ts::C-11a09b04 group mapping refusals keep the map empty (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-023: Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-802ffb44 (admin-api › IdP links are listed and added › List and add)
+
+### Context
+Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add) is needs human after round 3.
+
+Scenario:
+\- **WHEN** ann signed in once (issuer `https://idp.example/realms/ursitoare`, subject `sub-ann`, clock `2026-10-25T09:00:00Z`) and carol lists her links, posts `{ issuer, subject: "sub-ann-2" }` with `Idempotency-Key` `k1` twice, and lists again
+\- **THEN** the first list is `[{ issuer, subject: "sub-ann", linkedAt: "2026-10-25T09:00:00.000000Z" }]`, the post 201 with that shape for `sub-ann-2` and the repeat the same with `idempotent-replayed: true`, the last list holds both in order, and one `identity.idp_linked` event has target `{ kind: "user", id: <ann> }` and payload `{ issuer, subject: "sub-ann-2" }`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-users.test.ts::C-802ffb44 idp links are listed and added idempotently (passed, red_assertion); src.identity.admin.idp-links.test.ts::C-802ffb44 IdP links are listed and added (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-024: Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-a63083c0 (admin-api › IdP links are listed and added › Refusals)
+
+### Context
+Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals) is needs human after round 3.
+
+Scenario:
+\- **WHEN** carol posts `sub-ann` again (new key), bob's own pair for ann, an issuer with no `tenant_idp` row, a subject `" x"`, any pair for the service account and for an unknown id, and lists the service account's links
+\- **THEN** the answers are 409 `ALREADY_EXISTS` (x2), 422 `UNKNOWN_ISSUER`, 400, 422 `OPERATION_REFUSED` `wrong_kind`, 404, 404, and nothing was linked
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-users.test.ts::C-a63083c0 idp link refusals link nothing (passed, red_assertion); src.identity.admin.idp-links.test.ts::C-a63083c0 Concurrent identical IdP links resolve once (passed, red_assertion); src.identity.admin.idp-links.test.ts::C-a63083c0 IdP links refuse held pairs and bad targets (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-025: Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning)
+
+### Context
+Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning) is needs human after round 3.
+
+Scenario:
+\- **WHEN** tenant A (`solo`) holds active humans ann, bob and carol, and carol puts `team`, `solo` twice, then ann and bob are disabled and she puts `solo`
+\- **THEN** the answers are 200 `{ tenantId: "tenant_a", reviewProfile: "team", previous: "solo", changed: true, humanMembers: 3, warning: null }`; `solo` with `previous: "team"`, `changed: true` and `warning` `{ code: "SOLO_TENANT_HAS_MANY_HUMANS", message: "This solo tenant has 3 active human members; each may review their own flows.", humanMembers: 3 }`; the same with `previous: "solo"`, `changed: false`; and, with `humanMembers: 1`, `previous: "solo"`, `changed: false`, `warning: null`; the chain holds `identity.review_profile_changed` twice (payloads `{ from: "solo", to: "team", humanMembers: 3 }`, `{ from: "team", to: "solo", humanMembers: 3 }`), the owner reads `solo` for A and B
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-tenant.test.ts::C-10655032 the review profile switches warns and stays audited through the server (passed, red_assertion); src.identity.admin.review-profile.test.ts::C-10655032 The review profile switches, warns and stays audited (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-026: Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals)
+
+### Context
+Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals) is needs human after round 3.
+
+Scenario:
+\- **WHEN** carol puts `{ "reviewProfile": "duo" }`, `{}` and `{ "reviewProfile": "team", "x": 1 }`
+\- **THEN** each answer is 400 `VALIDATION_FAILED`, profile unchanged
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-tenant.test.ts::C-1801fd2c the review profile route refuses a bad body and keeps the profile (passed, red_assertion); src.identity.admin.review-profile.test.ts::C-1801fd2c The review profile refuses an unknown profile (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-027: Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event)
+
+### Context
+Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event) is needs human after round 3.
+
+Scenario:
+\- **WHEN** alice (only `author`, `PERMIT_ALL`) maps a group of the routed issuer to `tenant_admin` and puts that role on a service account; carol patches herself to `disabled`, posts a service account owned by a service account, links an IdP identity to a service account; carol sends a bad body, deletes an unknown team and posts one team twice (no key)
+\- **THEN** the first five answers are 403 `ELEVATION_REFUSED` (x2), 422 `OPERATION_REFUSED` (x3); the chain holds five `identity.change_refused` events, payload `code` `RBAC_ELEVATION` (x2), `ADMIN_SELF_DISABLE`, `IDENTITY_OWNER_INVALID`, `ADMIN_WRONG_KIND`, each with actor `{ kind: "user", id: <caller> }`, target `{ kind: "action", id: "manage_users_roles" }` and `payload.route` the route pattern (`/api/v1/users/:userId` for self-disable); the 400, 404, 409 add none
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-refusals.test.ts::C-777b5224 each refused admin change appends one change refused event (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-028: Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing)
+
+### Context
+Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing) is needs human after round 3.
+
+Scenario:
+\- **WHEN** the first scenario's elevation request is repeated with a pool whose client rejects statements that mention `audit_`
+\- **THEN** the answer is the same 403 `ELEVATION_REFUSED`, no role is stored, and the log has a warning `AUDIT_FAILED`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-refusals.test.ts::C-e4402b02 a failing refusal audit keeps the answer and logs the failure (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-029: Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-5995b318 (admin-api › Lists page with the cursor contract › pageRows)
+
+### Context
+Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows) is needs human after round 3.
+
+Scenario:
+\- **WHEN** `pageRows(["b", "d", "a", "c", "e"], { limit: 2, cursor: null }, binding, (r) => [r])` runs with a key from `deriveCursorKey({ reveal: () => "k".repeat(64) })`, tenant `tenant_a`, scope `teams`, then with each `next_cursor`, with no rows, with a cursor made for `tenant_b` and one made for scope `roles`
+\- **THEN** the pages hold `a, b`, `c, d`, `e` with `next_cursor` set, set, `null`; the empty list gives `{ items: [], next_cursor: null }`; the last two throw `ApiError` 400 `CURSOR_INVALID`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-page.test.ts::C-5995b318 pageRows cuts a whole list into ordered pages under cursors (passed, red_assertion); src.api.admin-page.test.ts::C-5995b318 pageRows refuses a cursor position of another length (passed, red_assertion); src.api.admin-teams.test.ts::C-eec17a85 C-5995b318 C-4c8964eb teams paging walks cursors and a keyless server refuses paging (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-030: Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key)
+
+### Context
+Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key) is needs human after round 3.
+
+Scenario:
+\- **WHEN** `pageRows` has `key: null` and gets 2 rows with limit 5, the same with a cursor, and 3 rows with limit 2
+\- **THEN** the first gives both rows and `next_cursor: null`; the second and the third throw `ApiError` 503 `ENGINE_KEY_REQUIRED`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-page.test.ts::C-4c8964eb pageRows without an engine key serves one page and refuses a cursor (passed, red_assertion); src.api.admin-teams.test.ts::C-eec17a85 C-5995b318 C-4c8964eb teams paging walks cursors and a keyless server refuses paging (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-031: Criterion C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server)
+
+### Context
+Criterion C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server) is needs human after round 3.
+
+Scenario:
+\- **WHEN** tenant A has teams `a1` to `a5` and humans ann and bob, and carol walks `GET /api/v1/teams?limit=2`, edits a cursor, sends the cursor of `GET /api/v1/roles?limit=1` to `/teams`; and a server with `engineKey: null` answers `GET /api/v1/teams?limit=50`, `?limit=2`, `?cursor=x` and `GET /api/v1/users?limit=1`
+\- **THEN** the walk gives 2, 2, 1 teams once each; the edited and foreign cursors are 400 `CURSOR_INVALID`; the keyless server answers 200, then 503 `ENGINE_KEY_REQUIRED` three times
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.admin-teams.test.ts::C-eec17a85 C-5995b318 C-4c8964eb teams paging walks cursors and a keyless server refuses paging (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-032: Criterion C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine)
+
+### Context
+Criterion C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine) is needs human after round 3.
+
+Scenario:
+\- **WHEN** `main` runs (port 0, no database) with `inspectServers`, and `docs/api/openapi.json` is read after an `assert.ok` that it exists
+\- **THEN** the public server defines the 19 routes with their actions, `unregisteredRouteErrors` of all defined routes is `[]`, the document holds every one of the 19 paths and equals `servedOpenApiText()`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.main.admin.test.ts::C-ddb4acf0 the real engine serves the admin routes and the OpenAPI document (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-033: Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan)
+
+### Context
+Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan) is needs human after round 3.
+
+Scenario:
+\- **WHEN** `checkApiErrorCodes` runs on a snapshot whose `src/x/a.ts` has `throw new ApiError(409, "FLOW_EXISTS", "x")` on line 3, with the registered list `["NOT_FOUND"]`
+\- **THEN** it returns one violation with code `ARCH_API_ERROR_CODE`, file `src/x/a.ts`, line 3, and a message that names `FLOW_EXISTS` and `src/api/error-codes.ts`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: test.arch.error-codes.test.ts::C-601275f9 An unregistered literal ApiError code fails the scan (passed, pass_to_pass)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-034: Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass)
+
+### Context
+Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass) is needs human after round 3.
+
+Scenario:
+\- **WHEN** a snapshot holds `new ApiError(404, "NOT_FOUND", "m")`, `new ApiError(500, code, "m")` and a `src/x/a.test.ts` with the literal `"FLOW_EXISTS"`
+\- **THEN** `checkApiErrorCodes` returns `[]`, and also `[]` over `readSnapshot()` with the default registry
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: test.arch.error-codes.test.ts::C-05ca73a7 Registered, dynamic and test code use passes the scan (passed, pass_to_pass)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-035: Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+- **Criteria:** C-541ef4f9 (api-conventions › Every error code is registered › Route errors)
+
+### Context
+Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors) is needs human after round 3.
+
+Scenario:
+\- **WHEN** `unregisteredRouteErrors` gets `GET /a` with errors `["NOT_FOUND", "NOPE"]` and `POST /b` with `[]`
+\- **THEN** it returns `["GET /a: NOPE"]`, and `[]` for no routes (the real engine's routes are checked in "The real engine" of the OpenAPI requirement)
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.api.error-codes.test.ts::C-541ef4f9 Route errors lists only routes whose declared codes are unregistered (passed, pass_to_pass)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-036: Hold H-0b1cd52c: the judge's reply was discarded (part 3 of 4, timeout: no answer within 600s)
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: the judge's reply was discarded (part 3 of 4, timeout: no answer within 600s)
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->

@@ -1,0 +1,497 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "docs/api/openapi.json",
+      "src/identity/admin/{errors,accounts,idp-links,review-profile}.ts",
+      "src/api/{admin-errors,admin-page,admin-routes}.ts",
+      "src/db/migrations/0180_admin_api.sql",
+      "src/api/error-codes.ts",
+      "src/main.ts",
+      "src/api/admin-routes.ts",
+      "https://idp.example/realms/ursitoare",
+      "src/identity/policy/roles.cedar",
+      "<temp>/identity/policy",
+      "src/main.admin.test.ts",
+      "src/main.api.test.ts",
+      "src/api/error-codes.test.ts",
+      "specs/criteria.py",
+      "src/identity/users.ts",
+      "src/identity/schema.test.ts",
+      "docs/decisions/0002",
+      "src/identity/index.ts",
+      "src/api/index.ts",
+      "test/arch/modules.ts",
+      "src/api/{admin-users,admin-service-accounts,admin-rbac,admin-tenant}.ts",
+      "src/api/{index,error-codes}.ts",
+      "specs/admin-api/spec.md",
+      "src/identity/admin/schema.test.ts",
+      "src/identity/admin/accounts.test.ts",
+      "src/identity/admin/errors.ts",
+      "src/identity/admin/accounts.ts",
+      "src/identity/admin/idp-links.test.ts",
+      "src/identity/admin/idp-links.ts",
+      "src/identity/admin/review-profile.test.ts",
+      "src/identity/admin/review-profile.ts",
+      "src/api/admin-errors.test.ts",
+      "src/api/admin-errors.ts",
+      "src/api/admin-page.test.ts",
+      "src/api/admin-page.ts",
+      "src/api/admin-users.test.ts",
+      "src/api/admin-users.ts",
+      "src/api/admin-service-accounts.test.ts",
+      "src/api/admin-service-accounts.ts",
+      "src/api/admin-teams.test.ts",
+      "src/api/admin-rbac.ts",
+      "src/api/admin-group-map.test.ts",
+      "src/api/admin-tenant.test.ts",
+      "src/api/admin-policy.test.ts",
+      "src/api/admin-tenant.ts",
+      "src/api/admin-refusals.test.ts",
+      "src/audit/index.ts",
+      "**/identity.*",
+      "**/^[A-Za-z0-9_-]{1,64}$",
+      "**/*_TENANT_MISMATCH",
+      "**/[roleId]",
+      "**/[teamId]",
+      "**/[sha256hex",
+      "**/[userId]",
+      "**/*.test.ts",
+      "module <temp>",
+      "module api",
+      "module audit",
+      "module db",
+      "module docs",
+      "module https:",
+      "module identity",
+      "module main",
+      "module main.admin.test",
+      "module main.api.test",
+      "module specs",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api-fix-1/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api-fix-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api-fix-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api-fix-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/evidence/round-2/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/evidence/round-2/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/evidence/round-2/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/ledger/r-20261031T0256Z-f813.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/ledger/r-20261031T0339Z-c380.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/ledger/r-20261031T0406Z-70cf.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/ledger/r-20261031T0525Z-46b0.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/ledger/r-20261031T0527Z-4c9b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/ledger/r-20261031T0740Z-aae9.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/ledger/r-20261031T0855Z-e7d0.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/.l4/ledger/r-20261031T0942Z-0b72.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-admin-api/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/admin-errors.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/admin-errors.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/admin-group-map.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/admin-isolation.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/admin-page.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/admin-page.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/admin-policy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/admin-rbac.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/admin-refusals.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/admin-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/admin-service-accounts.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/admin-service-accounts.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/admin-teams.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/admin-tenant.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/admin-tenant.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/admin-users.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/admin-users.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/error-codes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/error-codes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0180_admin_api.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/admin/accounts.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/admin/accounts.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/admin/errors.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/admin/idp-links.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/admin/idp-links.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/admin/review-profile.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/admin/review-profile.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/admin/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/index.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.admin.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/admin-errors.ts, src/api/admin-page.ts, src/api/admin-rbac.ts, src/api/admin-routes.ts, src/api/admin-service-accounts.ts and 10 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/admin-errors.ts",
+      "src/api/admin-page.ts",
+      "src/api/admin-rbac.ts",
+      "src/api/admin-routes.ts",
+      "src/api/admin-service-accounts.ts",
+      "src/api/admin-tenant.ts",
+      "src/api/admin-users.ts",
+      "src/api/error-codes.ts",
+      "src/api/index.ts",
+      "src/identity/admin/accounts.ts",
+      "src/identity/admin/errors.ts",
+      "src/identity/admin/idp-links.ts",
+      "src/identity/admin/review-profile.ts",
+      "src/identity/index.ts",
+      "src/main.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1057,
+      "passed": 1057,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 36,
+      "new_passed": 36,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
