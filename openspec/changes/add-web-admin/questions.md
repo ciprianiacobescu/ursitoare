@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-013 | answered | none | verdict | Criterion C-741e5139 (web-admin › The Group mappings page maps a group to one role or team › Saving a mapping, reading every page): accept as satisfied? |
 | Q-014 | answered | none | verdict | Criterion C-8a1094e4 (web-admin › The Group mappings page maps a group to one role or team › A removal states the consequence): accept as satisfied? |
 | Q-015 | answered | none | verdict | Criterion C-71033976 (web-admin › The Audit log page lists events newest first and filters by event type › Parsing an event and its cells): accept as satisfied? |
-| Q-016 | open | none | verdict | Criterion C-1e5047ed (web-admin › The Audit log page lists events newest first and filters by event type › The event type filter): accept as satisfied? |
+| Q-016 | answered | none | verdict | Criterion C-1e5047ed (web-admin › The Audit log page lists events newest first and filters by event type › The event type filter): accept as satisfied? |
 | Q-017 | open | none | verdict | Criterion C-1d816fd1 (web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification): accept as satisfied? |
 | Q-018 | open | none | verdict | Criterion C-d2fc8f38 (web-admin › The Audit log page shows whether the chain verifies › Status text): accept as satisfied? |
 | Q-019 | open | none | verdict | Criterion C-52c26a32 (web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources): accept as satisfied? |
@@ -558,7 +558,8 @@ accept The criterion is satisfied as it stands. parseAuditEvent in web/src/admin
 
 ## Q-016: Criterion C-1e5047ed (web-admin › The Audit log page lists events newest first and filters by event type › The event type filter): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -585,6 +586,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. parseEventTypeFilter in web/src/admin/audit.ts trims the text, answers { ok: true, value: null } for an empty trimmed text, { ok: false, message } with the exact task 6.1 text "Event types are lower-case words separated by dots, for example identity.group_mapped." for a text outside ^[a-z][a-z0-9_.]{0,63}$ such as "Authz", and { ok: true, value: "authz.denied" } for " authz.denied ". auditFetcher is cursorPageFetcher(client, "/audit", { parseItem: parseAuditEvent, query }) with the query { event_type } when a type is given and no query otherwise; the kit's cursorPageFetcher sends get(path, { query: { ...query, limit }, signal }) and adds cursor only when it is not null, and throws ApiRequestError(200, "INVALID_RESPONSE") when parseItem gives null, which parseAuditEvent does for { seq: "x" } since it lacks the other fields. The three tracing tests assert exactly the scenario: the filter results for "  ", " authz.denied " and "Authz" including the task 6.1 message; a recording get client receiving path /audit with { query: { event_type: "authz.denied", limit: 25 }, signal } and then the same query with cursor "c1"; the unfiltered fetcher receiving { query: { limit: 25 }, signal } and rejecting with an ApiRequestError of code INVALID_RESPONSE for an item { seq: "x" }. All three passed as red assertions. The judge gave no verdict only because its evidence was cut to fit the budget, and the missing browser test was itself judged not testable since the scenario is a unit-level call to logic functions with a fake client.
 ---
 
 ## Q-017: Criterion C-1d816fd1 (web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification): accept as satisfied?
