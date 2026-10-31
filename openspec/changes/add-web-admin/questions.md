@@ -29,7 +29,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-016 | answered | none | verdict | Criterion C-1e5047ed (web-admin › The Audit log page lists events newest first and filters by event type › The event type filter): accept as satisfied? |
 | Q-017 | answered | none | verdict | Criterion C-1d816fd1 (web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification): accept as satisfied? |
 | Q-018 | answered | none | verdict | Criterion C-d2fc8f38 (web-admin › The Audit log page shows whether the chain verifies › Status text): accept as satisfied? |
-| Q-019 | open | none | verdict | Criterion C-52c26a32 (web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources): accept as satisfied? |
+| Q-019 | answered | none | verdict | Criterion C-52c26a32 (web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources): accept as satisfied? |
 | Q-020 | answered | none | verdict | Criterion C-dd02e61e (web-admin › The admin logic works against the real engine › Carol manages mappings and teams and reads the log): accept as satisfied? |
 | Q-021 | answered | none | verdict | Criterion C-06a71640 (web-admin › The admin logic works against the real engine › Alice is refused, carol finds the id and disables her): accept as satisfied? |
 | Q-022 | open | none | verdict | Criterion C-f7bbb238 (web-admin › The M2 journey proves the admin screens in a browser › Carol maps a group and the log shows it verified): accept as satisfied? |
@@ -662,7 +662,7 @@ accept The criterion is satisfied as it stands. verificationView in web/src/admi
 
 ## Q-019: Criterion C-52c26a32 (web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -690,6 +690,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Reviewed by the owner's delegate (the judge's reply was discarded, see Q-051) at the head 4cfa770 against the scenario and tasks.md; paths under web/src/admin/ unless named. The stylesheet and the sources: admin.css and web/src/kit/tokens.css are asserted to exist (admin-css.test.ts:57-58); findRawColours and findInlineStyleUse report nothing for the stylesheet (:63-64); every var(--ui-…) names a property parseTokens finds (:65-67); the four page files and web/src/features/60-63 are each asserted to exist, then checked for inline style (:69-80); the four .admin-status--* rules use the token pairs of task 6.2 (:25-30, :82-95). Checked by hand as well: admin.css has no hex, rgb, hsl or named colour, none of the eight sources holds "style", and all 16 var(--ui-…) names exist in tokens.css.
 ---
 
 ## Q-020: Criterion C-dd02e61e (web-admin › The admin logic works against the real engine › Carol manages mappings and teams and reads the log): accept as satisfied?
