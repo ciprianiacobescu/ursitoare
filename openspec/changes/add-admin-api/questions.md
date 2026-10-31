@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Finding F-28a40cf9: Uncovered criterion C-598727de (Another tenant and a forged tenant) |
 | Q-007 | answered | none | verdict | Finding F-c28b995d: Uncovered criterion C-96e47324 (The registry) at gate level |
 | Q-008 | answered | none | verdict | Criterion C-8a23d872 (admin-api › Every admin route is a session route under the right action › The route table): accept as satisfied? |
-| Q-009 | open | none | verdict | Criterion C-a4888ef3 (admin-api › Every admin route is a session route under the right action › Who may call): accept as satisfied? |
+| Q-009 | answered | none | verdict | Criterion C-a4888ef3 (admin-api › Every admin route is a session route under the right action › Who may call): accept as satisfied? |
 | Q-010 | open | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
 | Q-011 | open | none | verdict | Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping): accept as satisfied? |
 | Q-012 | open | none | verdict | Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through): accept as satisfied? |
@@ -281,7 +281,8 @@ accept The criterion is satisfied. The four registrars called by registerAdminRo
 
 ## Q-009: Criterion C-a4888ef3 (admin-api › Every admin route is a session route under the right action › Who may call): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -308,6 +309,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The tracing test builds a server with installPep and a policy engine loaded from a copy of roles.cedar, creates sessions for carol and alice in tenant A, grants carol tenant_admin and alice author by operator grants, and then asserts every element of the scenario: carol's GET /api/v1/roles is 200 with items approver, auditor, author, tenant_admin and next_cursor null; alice's GET is 403 FORBIDDEN with a string details.decisionId; the request with no cookie is 401 UNAUTHENTICATED; alice's PUT /api/v1/tenant/review-profile with reviewProfile team is 403 FORBIDDEN with details.decisionId and the owner pool still reads solo for tenant A; carol's PUT is 200 with reviewProfile team, previous solo and changed true. The test passed and failed red by assertion. The production code matches: GET /api/v1/roles and PUT /api/v1/tenant/review-profile are defineRoute session routes under manage_users_roles and manage_tenant, the tenant and principal come only from the session through requireAdminContext, and roles.cedar permits those two actions only to principals in Role tenant_admin, so an author is refused by the PEP and no handler runs.
 ---
 
 ## Q-010: Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied?
