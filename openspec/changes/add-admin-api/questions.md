@@ -34,7 +34,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-021 | answered | none | verdict | Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove): accept as satisfied? |
 | Q-022 | answered | none | verdict | Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals): accept as satisfied? |
 | Q-023 | answered | none | verdict | Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add): accept as satisfied? |
-| Q-024 | open | none | verdict | Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals): accept as satisfied? |
+| Q-024 | answered | none | verdict | Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals): accept as satisfied? |
 | Q-025 | open | none | verdict | Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning): accept as satisfied? |
 | Q-026 | open | none | verdict | Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals): accept as satisfied? |
 | Q-027 | open | none | verdict | Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event): accept as satisfied? |
@@ -776,7 +776,8 @@ accept The criterion is satisfied. The server test in src/api/admin-users.test.t
 
 ## Q-024: Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -803,6 +804,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-users.test.ts runs the scenario as written: the routed issuer is provisioned for tenant A, ann and bob each sign in once, carol is a tenant admin and a service account exists; carol posts sub-ann again for ann with a new key and the test asserts 409 ALREADY_EXISTS, posts bob's own pair for ann and asserts 409 ALREADY_EXISTS, posts an issuer with no tenant_idp row and asserts 422 UNKNOWN_ISSUER, posts the subject " x" and asserts 400 VALIDATION_FAILED, posts a pair for the service account and asserts 422 OPERATION_REFUSED with details { reason: "wrong_kind" }, posts a pair for the unknown id ghost and asserts 404 NOT_FOUND, lists the service account's links and asserts 404 NOT_FOUND, and finally lists ann's links and asserts they are still exactly the one sub-ann link, so nothing was linked. The function-level test in src/identity/admin/idp-links.test.ts asserts the same refusals as AdminError codes ADMIN_EXISTS (x2), ADMIN_UNKNOWN_ISSUER, ADMIN_INVALID, ADMIN_WRONG_KIND and ADMIN_NOT_FOUND, that listIdpLinks rejects with ADMIN_NOT_FOUND for the service account and for an unknown id, that the idp_link table still holds only the three sign-in subjects, and that no identity.idp_linked event was appended; a third test shows that two concurrent identical links resolve to one row and one ADMIN_EXISTS. The harness records all three as passed and failing red by assertion. The production code matches: addIdpLink validates the text so a padded subject is ADMIN_INVALID, requires an existing user (ADMIN_NOT_FOUND) and a human (ADMIN_WRONG_KIND) before checking the issuer in tenant_idp (ADMIN_UNKNOWN_ISSUER), takes the advisory lock, inserts with ON CONFLICT DO NOTHING and throws ADMIN_EXISTS when no row was inserted, so a pair held by any user is refused and the transaction rolls back before the audit append; listIdpLinks throws ADMIN_NOT_FOUND for a non-human; the mapping table in src/api/admin-errors.ts turns those codes into 400 VALIDATION_FAILED, 404 NOT_FOUND, 409 ALREADY_EXISTS, 422 UNKNOWN_ISSUER and 422 OPERATION_REFUSED with reason wrong_kind. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-025: Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning): accept as satisfied?
