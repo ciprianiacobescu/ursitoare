@@ -660,6 +660,7 @@ accept The criterion is satisfied as it stands. verificationView in web/src/admi
 ## Q-019: Criterion C-52c26a32 (web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
