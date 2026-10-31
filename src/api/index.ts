@@ -8,6 +8,8 @@ export { deriveCursorKey, encodeCursor, decodeCursor } from "./cursor.ts";
 export type { Page, CursorBinding } from "./pagination.ts";
 export { PAGE_QUERY_SCHEMA, readPage, startAfter, paginate } from "./pagination.ts";
 export type { ListQuery } from "./audit-query.ts";
+export type { AuditApiDeps, AuditVerification, WalkQueue } from "./audit-routes.ts";
+export { registerAuditRoutes, createWalkQueue } from "./audit-routes.ts";
 export { parseAuditQuery, parseDecisionQuery, parseVerifyQuery } from "./audit-query.ts";
 export type { PageBinding } from "./admin-page.ts";
 export { pageRows } from "./admin-page.ts";
