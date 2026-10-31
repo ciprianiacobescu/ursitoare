@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: src/identity/rbac/grants.test.ts:348-350 — count query has no placeholder but binds one parameter
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The diagnosis is confirmed: src/identity/rbac/grants.test.ts:348-350 sends a SQL text with no $1 and binds [a.tenantId] through membershipCount, which passes both straight to tx.query (a pg client), so Postgres rejects the bind (08P01) and the error escapes the test. But the clarifier suggestion (op
 - **Blocking tasks:** 5.1
 - **Kind:** technical
 - **Asked:** 2026-10-30T23:59Z by glm, run r-20261030T2244Z-b219, task 5.1
