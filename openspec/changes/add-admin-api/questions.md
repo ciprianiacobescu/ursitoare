@@ -27,7 +27,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-014 | answered | none | verdict | Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read): accept as satisfied? |
 | Q-015 | answered | none | verdict | Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts): accept as satisfied? |
 | Q-016 | answered | none | verdict | Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable): accept as satisfied? |
-| Q-017 | open | none | verdict | Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state): accept as satisfied? |
+| Q-017 | answered | none | verdict | Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state): accept as satisfied? |
 | Q-018 | open | none | verdict | Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account): accept as satisfied? |
 | Q-019 | open | none | verdict | Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation): accept as satisfied? |
 | Q-020 | open | none | verdict | Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse): accept as satisfied? |
@@ -545,7 +545,8 @@ accept The criterion is satisfied. The server test in src/api/admin-users.test.t
 
 ## Q-017: Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -572,6 +573,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-service-accounts.test.ts runs the scenario exactly: carol posts { displayName: "Nightly bot" } with Idempotency-Key k1 and the test asserts 201 with exactly the nine account keys, kind service, ownerUserId carol, displayName Nightly bot, email null, state active and empty roles, teams and localRoles; the repeat with k1 is asserted 201 with a body deep-equal to the first and header idempotent-replayed true; the post with ownerUserId bob is 201 with owner bob; the posts with a service account's id and an unknown id as owner are each 422 OPERATION_REFUSED with details { reason: "owner_invalid" }; displayName "" is 400 VALIDATION_FAILED; GET /api/v1/service-accounts lists exactly the two created accounts, every item of kind service, with next_cursor null; the PATCH of the first account to disabled is 200 with state disabled; and the audit chain holds one identity.service_account_created event targeting the first account, with target { kind: "user", id } and payload { ownerUserId: carol, displayName: "Nightly bot" }, so the replay appended none. The function-level test in src/identity/admin/accounts.test.ts also asserts the created shape, owner bob, IDENTITY_OWNER_INVALID for an inactive and for a service owner, that nothing is stored by them, and the events with their targets and payloads. Both tests passed and failed red by assertion. The production code matches: the POST route takes the idempotency header schema and answers through respondIdempotent, which replays the stored body with the Idempotent-Replayed header without running the handler again; the owner defaults to the caller's userId; createServiceAccount refuses an owner that is absent, not human or not active with IDENTITY_OWNER_INVALID, which adminApiError maps to 422 OPERATION_REFUSED with reason owner_invalid; the body schema requires displayName with minLength 1 so an empty name is 400; provisionServiceAccount appends one identity.service_account_created event with that target and payload; the list route reads listAccounts with kind service; and the PATCH route runs setAccountState with kind service and answers getAccount read after the change.
 ---
 
 ## Q-018: Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account): accept as satisfied?
