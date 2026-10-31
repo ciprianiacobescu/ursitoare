@@ -16,6 +16,7 @@ import {
   isWebBuilt,
   listDefinedRoutes,
   registerAdminRoutes,
+  registerAuditRoutes,
   registerMeRoute,
   registerOpenApiRoute,
   registerWebApp,
@@ -209,6 +210,11 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
       pool: pep.pool,
       clock: pep.clock,
       ids: systemIds,
+      engineKey: config.engineKey,
+    });
+    registerAuditRoutes(server, {
+      pool: pep.pool,
+      clock: pep.clock,
       engineKey: config.engineKey,
     });
     registerOpenApiRoute(server, { version: VERSION });
