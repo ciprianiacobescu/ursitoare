@@ -43,7 +43,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-030 | answered | none | verdict | Hold H-ffedae36: UI criterion C-0c949ead has no end-to-end test; see the generated UI tests table |
 | Q-031 | answered | none | verdict | Hold H-30bc4c2c: UI criterion C-97244065 has no end-to-end test; see the generated UI tests table |
 | Q-032 | answered | none | verdict | Hold H-7c7ec97d: UI criterion C-87e93809 has no end-to-end test; see the generated UI tests table |
-| Q-033 | open | none | verdict | Hold H-9a555cbd: UI criterion C-0c16ec24 has no end-to-end test; see the generated UI tests table |
+| Q-033 | answered | none | verdict | Hold H-9a555cbd: UI criterion C-0c16ec24 has no end-to-end test; see the generated UI tests table |
 | Q-034 | open | none | verdict | Hold H-c36e205c: UI criterion C-4bc159f4 has no end-to-end test; see the generated UI tests table |
 | Q-035 | open | none | verdict | Hold H-d0d2c1b0: UI criterion C-c174064a has no end-to-end test; see the generated UI tests table |
 | Q-036 | open | none | verdict | Hold H-cc90d893: UI criterion C-b8ae0992 has no end-to-end test; see the generated UI tests table |
@@ -1058,7 +1058,8 @@ accept The hold may be waived and the unit can go on as it stands. Criterion C-8
 
 ## Q-033: Hold H-9a555cbd: UI criterion C-0c16ec24 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -1077,6 +1078,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived and the unit can go on as it stands. Criterion C-0c16ec24 is the scenario "Setting a state": it runs patchAccountState with a recording client for ("u_bob", "disabled") and with a client answering {}, then compares the recorded call, the returned state and the INVALID_RESPONSE rejection, a unit-level call to a logic function with a fake client that a browser cannot drive or observe directly, so the generated browser test the harness failed to write would be an artifact and its absence says nothing about the change. The implementation in web/src/admin/users.ts checks the user id against the id pattern, calls the client's patch with the path /users/ followed by the encoded id and the body { state }, parses the answer with parseAccount and throws ApiRequestError(200, "INVALID_RESPONSE", "Invalid account") when the parse gives null. Its two tracing Node tests in web/src/admin/users.test.ts assert exactly one patch call with path /users/u_bob and body { state: "disabled" }, a result whose state is "disabled", a rejection with an ApiRequestError of code INVALID_RESPONSE for an answer of {}, and a RangeError with nothing sent for the path-like id ../x; both passed as red assertions and Q-008 already accepted the criterion on them. The same function is run against the real engine in test/journeys/m2-admin.test.ts, where carol's disable of alice returns state "disabled", her own disable rejects with OPERATION_REFUSED, and the re-enable returns state "active". The user-visible side is covered by the repository's own browser journey e2e/test_m2_admin.py: UsersPage calls patchAccountState with the session client when carol presses the row button, and the journey presses exactly "Disable Alice Example" and "Disable user", expects the row to show "Disabled" and the heading to be focused, has alice land on the session-ended sign-in page, then presses exactly "Enable Alice Example" and expects "Active", with assert_accessible on the page.
 ---
 
 ## Q-034: Hold H-c36e205c: UI criterion C-4bc159f4 has no end-to-end test; see the generated UI tests table
