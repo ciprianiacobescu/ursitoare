@@ -53,3 +53,6 @@
 {"at":"2026-10-31T11:35:21Z","head":"ea679b41a8409f5d77422907955c4790e3851511","pr":41,"target_before":"fe00a46b4583a28db7cf546e0888a1b890a0bf4b","type":"unit.merge_requested","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T11:35:26Z","ci":"not_run","head":"ea679b41a8409f5d77422907955c4790e3851511","merge_commit":"cc322332e209fd700427cfd3be5c6ab238502714","method":"squash","pr":41,"raced":false,"type":"unit.merged","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T11:35:31Z","branch":"l4/openspec/add-admin-api","head":"ea679b41a8409f5d77422907955c4790e3851511","type":"unit.branch_deleted","unit":"openspec:add-admin-api"}
+{"at":"2026-10-31T11:37:03Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"cc322332e209fd700427cfd3be5c6ab238502714","status":"pass","type":"unit.postcheck","unit":"openspec:add-admin-api"}
+{"at":"2026-10-31T11:37:03Z","revision":"cc322332e209fd700427cfd3be5c6ab238502714","type":"unit.integrated","unit":"openspec:add-admin-api"}
+{"at":"2026-10-31T11:37:03Z","attempt":1,"cost_usd":48.8074,"runs":10,"type":"plan.charged","unit":"openspec:add-admin-api"}
