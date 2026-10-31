@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 5.1 | technical | src/identity/rbac/grants.test.ts:348-350 — count query has no placeholder but binds one parameter |
 | Q-002 | answered | none | verdict | Criterion C-bb91aeca (identity-rbac › Every tenant has the four default roles › Created with the tenant): accept as satisfied? |
-| Q-003 | open | none | verdict | Finding F-780eb40d: Schema test does not check the exported DEFAULT_ROLES |
+| Q-003 | answered | none | verdict | Finding F-780eb40d: Schema test does not check the exported DEFAULT_ROLES |
 <!-- l4:index:end -->
 
 ---
@@ -83,7 +83,8 @@ reject The scenario's THEN clause requires that the exported DEFAULT_ROLES const
 
 ## Q-003: Finding F-780eb40d: Schema test does not check the exported DEFAULT_ROLES
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -104,3 +105,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The scenario Created with the tenant requires that the sorted copy of the exported DEFAULT_ROLES constant equals the four role ids read from ursitoare.role for every tenant. The test that traces it declares its own literal list of the four ids and, where the constant should be compared, asserts that the sorted copy of that literal equals the literal, which is a tautology, and it never imports DEFAULT_ROLES. No other test file in the repository imports DEFAULT_ROLES. The production constant in src/identity/rbac/names.ts does hold exactly tenant_admin, author, approver and auditor and is re-exported from src/identity/index.ts, so the code is right, but the clause tying the exported constant to the seeded roles is untested and the criterion is not satisfied as written. Because existing tests are frozen, the fix adds a new Node test rather than editing the existing one. WHEN after seedTwoTenants(db) the owner inserts tenant_c and DEFAULT_ROLES is imported from src/identity/index.ts THEN a test asserts that [...DEFAULT_ROLES].sort() deep-equals the sorted role ids that SELECT role_id FROM ursitoare.role returns for each of tenant_a, tenant_b and tenant_c inside withTenantTx(db.ownerPool, ...), that list being approver, auditor, author, tenant_admin.
