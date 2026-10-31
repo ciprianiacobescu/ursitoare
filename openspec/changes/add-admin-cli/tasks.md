@@ -4,7 +4,7 @@
 
 ## 2. The command registry
 
-- [ ] 2.1 Write `src/cli/registry.test.ts` first (scenarios "Register, find, list" and "Refusals"; commands are plain objects `{ summary, options: {}, database: false, run }`; refusals compared by `code`), then implement `CliError` and `CliErrorCode` in `src/cli/errors.ts` and `createCommandRegistry` in `src/cli/registry.ts` (decision 1), exporting every public symbol of `src/cli/*.ts` from `src/cli/index.ts`, implementing requirement "The command registry holds named commands"
+- [x] 2.1 Write `src/cli/registry.test.ts` first (scenarios "Register, find, list" and "Refusals"; commands are plain objects `{ summary, options: {}, database: false, run }`; refusals compared by `code`), then implement `CliError` and `CliErrorCode` in `src/cli/errors.ts` and `createCommandRegistry` in `src/cli/registry.ts` (decision 1), exporting every public symbol of `src/cli/*.ts` from `src/cli/index.ts`, implementing requirement "The command registry holds named commands"
 
 ## 3. The dispatcher
 
