@@ -44,7 +44,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-031 | answered | none | verdict | Criterion C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server): accept as satisfied? |
 | Q-032 | answered | none | verdict | Criterion C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine): accept as satisfied? |
 | Q-033 | answered | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
-| Q-034 | open | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
+| Q-034 | answered | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
 | Q-035 | open | none | verdict | Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied? |
 | Q-036 | open | none | verdict | Hold H-0b1cd52c: the judge's reply was discarded (part 3 of 4, timeout: no answer within 600s) |
 <!-- l4:index:end -->
@@ -1104,7 +1104,8 @@ accept The criterion is satisfied. The scan in test/arch/error-codes.ts walks ev
 
 ## Q-034: Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -1131,6 +1132,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The tracing test in test/arch/error-codes.test.ts builds a snapshot holding a non-test file with new ApiError(404, "NOT_FOUND", "m"), a non-test file with new ApiError(500, dynamic, "m") where the code is a variable, and src/x/a.test.ts holding the literal "FLOW_EXISTS"; it runs checkApiErrorCodes inside assert.doesNotThrow with the default registry and asserts the result deep-equals [], repeats it with the registered list ["NOT_FOUND"] and asserts [], and then runs checkApiErrorCodes over readSnapshot() and asserts [] for the real tree. The harness records it as passed. The scan in test/arch/error-codes.ts skips files outside src, non-.ts files and test files, parses each remaining file with the TypeScript parser, and reports a violation only for a new ApiError expression whose second argument is a string or no-substitution template literal not in the registered set, so a registered literal and a dynamic code pass and a test file is never scanned. The real tree is clean: every literal code constructed in a non-test src file (NOT_FOUND, WEB_NOT_BUILT, AUTHZ_UNAVAILABLE, FORBIDDEN, UNAUTHENTICATED, CSRF_INVALID, VALIDATION_FAILED, CURSOR_INVALID, ENGINE_KEY_REQUIRED, IDEMPOTENCY_KEY_REUSED, IDEMPOTENCY_IN_PROGRESS) is one of the 22 entries of ERROR_CODES in src/api/error-codes.ts, including the six this unit added. The criterion is unchanged from add-api-conventions and the judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-035: Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied?
