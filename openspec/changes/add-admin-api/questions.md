@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | accepted | 3.1 | technical | src/identity/admin/idp-links.test.ts:270 |
 | Q-003 | answered | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
-| Q-005 | open | none | verdict | Finding F-cde045de: No discriminating test for cross-tenant admin isolation |
+| Q-005 | answered | none | verdict | Finding F-cde045de: No discriminating test for cross-tenant admin isolation |
 | Q-006 | answered | none | verdict | Finding F-28a40cf9: Uncovered criterion C-598727de (Another tenant and a forged tenant) |
 | Q-007 | answered | none | verdict | Finding F-c28b995d: Uncovered criterion C-96e47324 (The registry) at gate level |
 <!-- l4:index:end -->
@@ -141,7 +141,7 @@ accept The criterion is satisfied. The registry in src/api/error-codes.ts holds 
 
 ## Q-005: Finding F-cde045de: No discriminating test for cross-tenant admin isolation
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -161,6 +161,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject: the same gap as Q-003 and Q-006: no test covers C-598727de, so the admin routes have no test of tenant isolation (tenant B requests at tenant A ids, a forged tenantId in a team body, tenant A rows unchanged). The fix is one new test over the server that traces C-598727de.
 ---
 
 ## Q-006: Finding F-28a40cf9: Uncovered criterion C-598727de (Another tenant and a forged tenant)
