@@ -7,3 +7,4 @@
 {"at":"2026-10-30T22:44:22Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-roles-and-memberships"}
 {"at":"2026-10-30T22:44:22Z","run":"r-20261030T2244Z-b219","type":"unit.dispatched","unit":"openspec:add-roles-and-memberships"}
 {"at":"2026-10-31T00:02:08Z","detail":"awaiting_human: no new answers (open: Q-001) (escalated to a person: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-roles-and-memberships"}
+{"at":"2026-10-31T00:04:20Z","by":"harness","reason":"the cause is gone: openspec:add-roles-and-memberships is awaiting_human","type":"plan.resumed"}
