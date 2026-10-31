@@ -61,7 +61,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-048 | answered | none | verdict | Hold H-4662f538: UI criterion C-652f54b7 has no end-to-end test; see the generated UI tests table |
 | Q-049 | answered | none | verdict | Hold H-17337413: UI criterion C-d118ea9b has no end-to-end test; see the generated UI tests table |
 | Q-050 | answered | none | verdict | Hold H-e41ee87b: UI criterion C-19381fcc has no end-to-end test; see the generated UI tests table |
-| Q-051 | open | none | verdict | Hold H-346cd016: the judge's reply was discarded (part 1 of 2, schema_invalid: structured output invalid: riskiest_assumptions: more t... |
+| Q-051 | answered | none | verdict | Hold H-346cd016: the judge's reply was discarded (part 1 of 2, schema_invalid: structured output invalid: riskiest_assumptions: more t... |
 <!-- l4:index:end -->
 
 ---
@@ -1518,7 +1518,7 @@ accept C-19381fcc has an end-to-end test: e2e/test_m2_admin.py::test_c_19381fcc_
 
 ## Q-051: Hold H-346cd016: the judge's reply was discarded (part 1 of 2, schema_invalid: structured output invalid: riskiest_assumptions: more t...
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -1535,3 +1535,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The judge nemotron-judge (opencode/nemotron-3.5-super-vl-free) passed its hello, but its reply to part 1 of 2 listed more than three riskiest assumptions, so the harness discarded it and no criterion got a judge verdict. The owner's delegate reviewed all 25 criteria at the head 4cfa770 instead: Q-001..Q-025 map every THEN clause to an assertion, and the gates passed (1200 of 1200 tests, lint, typecheck, build and e2e). Independence, stated plainly: the delegate is Claude (Anthropic). Tasks 1.1-5.1 were implemented by deepseek-free and 5.2-6.2 by glm, so their criteria were reviewed by another vendor. Task 7.1 (criteria C-dd02e61e, C-06a71640, C-f7bbb238, C-652f54b7, C-d118ea9b, C-19381fcc) and fix-1 were written by claude-sonnet, the delegate's vendor; for those the evidence rests on the tests passing against the real e2e stack, not on the review. The S1 judge (jev) scored the 21 node-tested criteria 0.85 to 0.94; its 0.04 to 0.06 for the four browser journeys matches the harness ignoring their e2e tests as evidence (no red record), not a defect. Accepted with these follow-ups, none a clause of a scenario: messages.ts:40 looks a refusal reason up on a plain object without an own-key check; the recording clients of users.test.ts and mappings.test.ts drop the options argument; test/journeys/m2-admin.test.ts:83 counts the four seeded mappings without naming them.
