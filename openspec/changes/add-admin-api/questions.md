@@ -41,7 +41,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-028 | answered | none | verdict | Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing): accept as satisfied? |
 | Q-029 | answered | none | verdict | Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows): accept as satisfied? |
 | Q-030 | open | none | verdict | Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key): accept as satisfied? |
-| Q-031 | open | none | verdict | Criterion C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server): accept as satisfied? |
+| Q-031 | answered | none | verdict | Criterion C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server): accept as satisfied? |
 | Q-032 | open | none | verdict | Criterion C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine): accept as satisfied? |
 | Q-033 | open | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
 | Q-034 | open | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
@@ -1005,7 +1005,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-031: Criterion C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -1032,6 +1033,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The tracing test in src/api/admin-teams.test.ts builds the scenario as written: the harness creates sessions, and so human rows, for carol, ann and bob in tenant A, creates teams a1 to a5 through createTeam, and runs a second server registered with engineKey null beside the keyed one. Carol walks GET /api/v1/teams?limit=2 and the test deep-equals the pages to a1 and a2, then a3 and a4, then a5, with a string next_cursor on the first two and null on the last, so each team appears once. It edits the first cursor's leading character and asserts 400 with code CURSOR_INVALID, takes the next_cursor of GET /api/v1/roles?limit=1 and sends it to /teams, asserting 400 CURSOR_INVALID. On the keyless server it asserts GET /api/v1/teams?limit=50 is 200 with all five teams and next_cursor null, and that ?limit=2, ?cursor=x and GET /api/v1/users?limit=1 each answer 503 with code ENGINE_KEY_REQUIRED. The harness records the test as passed and failing red by assertion. The production code matches: registerAdminRoutes derives the cursor key once from the engine key or passes null; the teams and roles routes read the tenant's whole list and cut it with pageRows under the teams and roles scopes, and pageRows with a key decodes the cursor through startAfter, which refuses a cursor whose signature, tenant or scope does not match with 400 CURSOR_INVALID; with a null key pageRows throws 503 ENGINE_KEY_REQUIRED for any cursor or when the rows exceed the limit, and otherwise serves the sorted list with next_cursor null; the users route applies the same rule, refusing a cursor with no key and a page whose SQL read reports a next position. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-032: Criterion C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine): accept as satisfied?
