@@ -36,7 +36,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-023 | answered | none | verdict | Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add): accept as satisfied? |
 | Q-024 | answered | none | verdict | Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals): accept as satisfied? |
 | Q-025 | answered | none | verdict | Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning): accept as satisfied? |
-| Q-026 | open | none | verdict | Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals): accept as satisfied? |
+| Q-026 | answered | none | verdict | Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals): accept as satisfied? |
 | Q-027 | open | none | verdict | Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event): accept as satisfied? |
 | Q-028 | open | none | verdict | Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing): accept as satisfied? |
 | Q-029 | open | none | verdict | Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows): accept as satisfied? |
@@ -842,7 +842,8 @@ accept The criterion is satisfied. The server test in src/api/admin-tenant.test.
 
 ## Q-026: Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -869,6 +870,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-tenant.test.ts runs the scenario as written: tenant A starts solo, carol holds tenant_admin by an operator grant under a permit-all tenant policy, and she puts { reviewProfile: "duo" }, {} and { reviewProfile: "team", x: 1 } through server.inject on PUT /api/v1/tenant/review-profile with her session cookie and CSRF token. For each the test asserts status 400 and error code VALIDATION_FAILED, then asserts through the owner pool that tenant A still reads solo and tenant B still reads solo, so the profile is unchanged. The function-level test in src/identity/admin/review-profile.test.ts asserts that setReviewProfile rejects duo with an AdminError of code ADMIN_INVALID and that both tenants keep solo. The harness records both as passed and failing red by assertion. The production code matches: the route's body schema has additionalProperties false, requires reviewProfile and restricts it to the enum solo or team, so all three bodies fail Fastify's schema validation before the handler runs; the error handler turns a validation failure into a 400 envelope with code VALIDATION_FAILED; the route declares only VALIDATION_FAILED as the design table requires; and setReviewProfile re-validates the value with ADMIN_INVALID, which adminApiError maps to VALIDATION_FAILED, before locking or updating the tenant row. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-027: Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event): accept as satisfied?
