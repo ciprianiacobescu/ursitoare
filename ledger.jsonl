@@ -40,3 +40,4 @@
 {"at":"2026-10-31T08:55:08Z","attempt":1,"cost_usd":4.283377,"runs":6,"type":"plan.charged","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T08:55:08Z","run":"r-20261031T0855Z-e7d0","type":"unit.dispatched","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T09:39:02Z","detail":"awaiting_human: no new answers (verdicts open: Q-005)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-admin-api"}
+{"at":"2026-10-31T09:42:15Z","by":"harness","reason":"the cause is gone: openspec:add-admin-api is awaiting_human","type":"plan.resumed"}
