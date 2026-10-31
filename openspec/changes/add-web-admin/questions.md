@@ -42,7 +42,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-029 | answered | none | verdict | Hold H-7ce02cbb: UI criterion C-195c3385 has no end-to-end test; see the generated UI tests table |
 | Q-030 | answered | none | verdict | Hold H-ffedae36: UI criterion C-0c949ead has no end-to-end test; see the generated UI tests table |
 | Q-031 | answered | none | verdict | Hold H-30bc4c2c: UI criterion C-97244065 has no end-to-end test; see the generated UI tests table |
-| Q-032 | open | none | verdict | Hold H-7c7ec97d: UI criterion C-87e93809 has no end-to-end test; see the generated UI tests table |
+| Q-032 | answered | none | verdict | Hold H-7c7ec97d: UI criterion C-87e93809 has no end-to-end test; see the generated UI tests table |
 | Q-033 | open | none | verdict | Hold H-9a555cbd: UI criterion C-0c16ec24 has no end-to-end test; see the generated UI tests table |
 | Q-034 | open | none | verdict | Hold H-c36e205c: UI criterion C-4bc159f4 has no end-to-end test; see the generated UI tests table |
 | Q-035 | open | none | verdict | Hold H-d0d2c1b0: UI criterion C-c174064a has no end-to-end test; see the generated UI tests table |
@@ -1033,7 +1033,8 @@ accept The hold may be waived and the unit can go on as it stands. Criterion C-9
 
 ## Q-032: Hold H-7c7ec97d: UI criterion C-87e93809 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -1052,6 +1053,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived and the unit can go on as it stands. Criterion C-87e93809 is the scenario "Cells and actions": it calls accountCells and accountAction with hand-built Bob accounts and a selfId and compares the returned objects, a unit-level call to two pure functions whose inputs a browser cannot construct, so a generated browser test for it is a harness artifact and its failure says nothing about the change. The implementation in web/src/admin/users.ts gives exactly the scenario's values: the state cell is "Active" or "Disabled"; rolesTeams joins the roles with " (direct)" for a local grant, then " · " and the teams, one part alone standing without a separator and "—" when both are empty; the own row answers { kind: "none", note: "This is your account" }; an active account gets kind disable, the label "Disable <name>", the confirm title "Disable <name>?", the task 3.1 description, the action "Disable user" and the done text "Disabled <name>."; a disabled account gets kind enable, "Enable <name>", confirm null and "Enabled <name>.". The tracing Node test in web/src/admin/users.test.ts builds the four scenario accounts inside assert.doesNotThrow and asserts every one of those cells and actions, including the full disable description, and passed as a red assertion; two companion tests cover the clip cut and the blank-name fallback. UsersPage renders the note as text or the named button, opens ConfirmDialog from the action's confirm, and otherwise runs the state change at once. The user-visible side is covered by the repository's own browser journey e2e/test_m2_admin.py: carol's own row shows "This is your account" with no button, alice's row shows "author · finance", the button named exactly "Disable Alice Example" opens a dialog with the task 3.1 description for Alice Example and the button "Disable user", the row then shows "Disabled", and "Enable Alice Example" brings it back to "Active". A missing harness-generated browser test for two pure functions therefore says nothing about the change.
 ---
 
 ## Q-033: Hold H-9a555cbd: UI criterion C-0c16ec24 has no end-to-end test; see the generated UI tests table
