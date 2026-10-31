@@ -37,7 +37,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-024 | answered | none | verdict | Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals): accept as satisfied? |
 | Q-025 | answered | none | verdict | Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning): accept as satisfied? |
 | Q-026 | answered | none | verdict | Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals): accept as satisfied? |
-| Q-027 | open | none | verdict | Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event): accept as satisfied? |
+| Q-027 | answered | none | verdict | Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event): accept as satisfied? |
 | Q-028 | open | none | verdict | Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing): accept as satisfied? |
 | Q-029 | open | none | verdict | Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows): accept as satisfied? |
 | Q-030 | open | none | verdict | Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key): accept as satisfied? |
@@ -875,7 +875,8 @@ accept The criterion is satisfied. The server test in src/api/admin-tenant.test.
 
 ## Q-027: Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -902,6 +903,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-refusals.test.ts runs the scenario as written: alice holds only author by an operator grant under a permit-all tenant policy and carol tenant_admin, the routed issuer is provisioned and a service account exists; alice puts the group ursitoare-authors to tenant_admin on /api/v1/idp-group-map and puts tenant_admin on the service account's roles, and the test asserts 403 ELEVATION_REFUSED for both; carol patches herself to disabled, posts a service account owned by the service account and posts an IdP link for the service account, and the test asserts 422 OPERATION_REFUSED for each. It then reads the tenant's audit chain filtered to identity.change_refused and asserts exactly five events, payload codes RBAC_ELEVATION, RBAC_ELEVATION, ADMIN_SELF_DISABLE, IDENTITY_OWNER_INVALID, ADMIN_WRONG_KIND in order, each actor deep-equal to { kind: "user", id } of alice twice then carol three times, each target deep-equal to { kind: "action", id: "manage_users_roles" }, and the payload routes equal to the five route patterns including /api/v1/users/:userId for the self-disable. Carol then posts an empty body to /api/v1/teams (400), deletes the unknown team ghost (404) and posts team ops twice without a key (201 then 409), and the test asserts the refusal event count is still five. The harness records it as passed and failing red by assertion. The production code matches: every admin handler is wrapped by adminHandler in src/api/admin-routes.ts, which runs the handler inside withTenantTx so the domain error rolls the change back, recognises RBAC_ELEVATION, ADMIN_SELF_DISABLE, ADMIN_WRONG_KIND and IDENTITY_OWNER_INVALID from RbacError, AdminError and IdentityError instances, and for those calls appendAuditCommitted, which opens its own transaction, with eventType identity.change_refused, actor { kind, id: principal.userId }, target { kind: "action", id: the defined route's action } and payload { code, route: request.routeOptions.url }, then rethrows the error mapped by adminApiError; a failed append is only logged as AUDIT_FAILED and the answer is unchanged. Validation failures, not-found and exists errors are not in the refusal set, so 400, 404 and 409 append nothing. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-028: Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing): accept as satisfied?
