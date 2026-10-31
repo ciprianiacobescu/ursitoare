@@ -139,6 +139,14 @@ profiles:
     auth: api_key
     model: opencode-go/mimo-v2.6-flash
     vendor: xiaomi
+  # The owner's next choice (2026-10-27), added 2026-10-31: on add-admin-api both MiMo judges ended at their 32k output
+  # limit on part 1 of 4 and nemotron's hello failed, so the unit had no judge. Last of the opencode judges, so the free
+  # ones still judge first; $2/$6 per million tokens on Go, 131k output.
+  qwen-judge:
+    adapter: opencode
+    auth: api_key
+    model: opencode-go/qwen3.8-max
+    vendor: alibaba
   # System One (owner decision 2026-10-25, every L4 project): Jev first, Laya when Jev does not open. Secret
   # TYPESAFE_API_KEY in the GitHub environment `l4`.
   jev:
@@ -163,6 +171,7 @@ roles:
   - nemotron-judge
   - mimo-judge
   - mimo-go-judge
+  - qwen-judge
   - codex-judge
   s1_judge:
   - jev
