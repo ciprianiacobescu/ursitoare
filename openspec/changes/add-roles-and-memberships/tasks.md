@@ -20,7 +20,7 @@
 
 ## 6. The bootstrap admin group
 
-- [ ] 6.1 Write `src/identity/rbac/bootstrap.test.ts` first (a fresh tenant for the parallel calls), then implement `mapBootstrapAdminGroup` and `bootstrapAdminGroup` in `src/identity/rbac/bootstrap.ts` (decision 7; the env record is a parameter, never `process.env`), exporting them and the three constants of task 1.1 from `src/identity/index.ts`, implementing requirement "The bootstrap admin group is mapped once and audited"
+- [x] 6.1 Write `src/identity/rbac/bootstrap.test.ts` first (a fresh tenant for the parallel calls), then implement `mapBootstrapAdminGroup` and `bootstrapAdminGroup` in `src/identity/rbac/bootstrap.ts` (decision 7; the env record is a parameter, never `process.env`), exporting them and the three constants of task 1.1 from `src/identity/index.ts`, implementing requirement "The bootstrap admin group is mapped once and audited"
 
 ## 7. The permits
 
