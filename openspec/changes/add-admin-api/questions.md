@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping): accept as satisfied? |
 | Q-012 | answered | none | verdict | Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through): accept as satisfied? |
 | Q-013 | answered | none | verdict | Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges): accept as satisfied? |
-| Q-014 | open | none | verdict | Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read): accept as satisfied? |
+| Q-014 | answered | none | verdict | Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read): accept as satisfied? |
 | Q-015 | open | none | verdict | Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts): accept as satisfied? |
 | Q-016 | open | none | verdict | Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable): accept as satisfied? |
 | Q-017 | open | none | verdict | Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state): accept as satisfied? |
@@ -446,7 +446,8 @@ accept The criterion is satisfied. The migration 0180_admin_api.sql holds the si
 
 ## Q-014: Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -473,6 +474,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The route GET /api/v1/users calls listAccounts with kind human, so service accounts are never listed, and the optional state filter and the page limit and cursor come from the validated query; listAccounts orders by user_id under the C collation, reads limit plus one rows and reports a next position only when more rows remain, and the handler encodes it as next_cursor bound to the tenant and the users scope or returns null. The 200 response schema lists exactly the nine account properties with additionalProperties false, and getAccount builds every item with roles, teams and localRoles as sorted arrays. GET /api/v1/users/{userId} validates the id against the identity pattern, so bad id is 400 VALIDATION_FAILED, reads getAccount with kind human and answers the account or 404 NOT_FOUND, so a service account's id and an unknown id are both 404; a limit of 0 fails the page validation with 400. The server test seeds ann, bob, cat, carol and a service account, and asserts two items with a string cursor, then two items with next_cursor null, the concatenated userIds equal to the sorted four human ids, every item of kind human with exactly the nine keys, ownerUserId null and empty arrays, the disabled filter deep-equal to { items: [], next_cursor: null }, 400 VALIDATION_FAILED for limit 0, 200 with ann's userId for her read, 404 NOT_FOUND for the service account and for an unknown id, and 400 VALIDATION_FAILED for bad%20id. The function-level test deep-equals the first page to ann and bob with next bob, the second to cat and carol with next null, the whole item shape, and getAccount equal to the listed item. Both tests passed and failed red by assertion.
 ---
 
 ## Q-015: Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts): accept as satisfied?
