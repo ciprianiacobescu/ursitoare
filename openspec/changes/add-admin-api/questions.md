@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.1 | technical | src/identity/admin/accounts.test.ts:224 asserts ADMIN_TENANT_MISMATCH without a foreign transaction, and its signIn helper cannot produce the asserted display names |
-| Q-002 | open | 3.1 | technical | src/identity/admin/idp-links.test.ts:270 |
+| Q-002 | accepted | 3.1 | technical | src/identity/admin/idp-links.test.ts:270 |
 <!-- l4:index:end -->
 
 ---
@@ -45,7 +45,8 @@ Edit `src/identity/admin/accounts.test.ts`: move the ADMIN_TENANT_MISMATCH asser
 
 ## Q-002: src/identity/admin/idp-links.test.ts:270
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.1
 - **Kind:** technical
 - **Asked:** 2026-10-31T04:04Z by deepseek-free, run r-20261031T0339Z-c380, task 3.1
