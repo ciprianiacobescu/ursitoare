@@ -49,6 +49,8 @@ export {
 export type { PepDeps } from "./pep.ts";
 export { installPep } from "./pep.ts";
 export { registerMeRoute } from "./me.ts";
+export type { AdminApiDeps } from "./admin-routes.ts";
+export { registerAdminRoutes } from "./admin-routes.ts";
 export { definePublicRoutes } from "./public-group.ts";
 export { checkRouteCoverage } from "./coverage.ts";
 export { listPredicate } from "./list-filter.ts";
