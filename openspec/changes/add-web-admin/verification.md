@@ -1,39 +1,42 @@
-# Verification: openspec:add-web-admin: FAIL (round 1)
+# Verification: openspec:add-web-admin: NEEDS_HUMAN (round 2)
 
-traceability: not checked (an earlier step failed)
+traceability: 21/25 criteria covered by a discriminating test
 
-- Base: `026464a257d46e6d273d9fc0df19587592fb7069`
-- Head: `912abb9836c57576e9de46924b56fbff793f44a9`
+- Base: `5faa0e73adee6ed703f322d1ad372d3446ac8dab`
+- Head: `4cfa77044c8809f414bfd756f95cf8fcad47a4db`
 - Implementer profiles: deepseek-free, glm, claude-sonnet
-- Judge: mimo-judge, 0 call(s), prompt sha256 `-`
+- Judge: nemotron-judge, 2 call(s), prompt sha256 `aeaace6dfcd8ab505dbdb9d92d9625e624edea488b86612d308a0eaa8f8dcaa9`
+- Judge replies of nemotron-judge (this unit, all rounds): valid 0, repaired 0, retried 0, discarded 1; this round: discarded
+- independence: declared (unverified): nemotron-judge nvidia (declared), deepseek-free deepseek (declared), glm zhipu (declared), claude-sonnet anthropic (tool)
+- Cost: $0.0000
 
 ## Ladder
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base merged: main@026464a257 as 912abb9836 (2 commits) |
-| 1 | integrity | ok | 99.3 | 11 sub-checks; scope: 30 changed file(s) |
-| 2 | build | ok | 27.1 |  |
-| 3 | tests | failed | 189.7 | `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` failed: exit code 1; failing: test_m2_admin::test_c_19381fcc_carol_creates_and_deletes_a_team[chromium], test_m2_admin::test_c_f7bbb238_carol_maps_a_group_and_the_log_shows_... |
-| 4 | traceability | not_run | 0.0 | an earlier step failed |
-| 4a | audit sampling | not_run | 0.0 | an earlier step failed |
-| 5 | ui test generation | not_run | 0.0 | an earlier step failed |
-| 6 | quality | not_run | 0.0 | an earlier step failed |
-| 8 | s1 judge | not_run | 0.0 | an earlier step failed |
-| 9 | judge | not_run | 0.0 | an earlier step failed |
-| 10 | aggregation | ok | 0.0 | FAIL |
+| 0 | preconditions | ok | 0.8 | base merged: main@5faa0e73ad as 4cfa77044c (1 commit) |
+| 1 | integrity | ok | 101.6 | 11 sub-checks; scope: 40 changed file(s) |
+| 2 | build | ok | 27.5 |  |
+| 3 | tests | ok | 131.7 |  |
+| 4 | traceability | ok | 0.2 | 21/25 criteria covered |
+| 4a | audit sampling | ok | 48.4 | 2 not_testable, 5 skipped; support files at the base: 11 |
+| 5 | ui test generation | ok | 3766.8 | 12 fails_at_head, 10 not_testable, 3 writer_failed |
+| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: test/journeys/session.ts, web/src/admin/AuditPage.tsx, web/src/admin/MappingsPage.tsx, web/src/admin/TeamsPage.tsx, web/src/admin/UsersPage.tsx and 11 more |
+| 8 | s1 judge | ok | 1.6 | 25/25 criteria judged by jev |
+| 9 | judge | failed | 456.7 | schema_invalid: structured output invalid: riskiest_assumptions: more than 3 items |
+| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
 
 ## Gates
 
 | Gate | Status | Command | Log |
 |---|---|---|---|
-| setup | pass | `pnpm install --frozen-lockfile` | .l4-out/gates/r-20261031T2026Z-44e1/004-setup.log |
-| setup | pass | `uv sync --project e2e --frozen` | .l4-out/gates/r-20261031T2026Z-44e1/005-setup.log |
-| build | pass | `pnpm run build` | .l4-out/gates/r-20261031T2026Z-44e1/006-build.log |
-| lint | pass | `pnpm run lint` | .l4-out/gates/r-20261031T2026Z-44e1/007-lint.log |
-| typecheck | pass | `pnpm run typecheck` | .l4-out/gates/r-20261031T2026Z-44e1/008-typecheck.log |
-| test | pass | `pnpm run test` | .l4-out/gates/r-20261031T2026Z-44e1/009-test.log |
-| e2e | fail | `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` | .l4-out/gates/r-20261031T2026Z-44e1/010-e2e.log |
+| setup | pass | `pnpm install --frozen-lockfile` | .l4-out/gates/r-20261031T2122Z-2c12/004-setup.log |
+| setup | pass | `uv sync --project e2e --frozen` | .l4-out/gates/r-20261031T2122Z-2c12/005-setup.log |
+| build | pass | `pnpm run build` | .l4-out/gates/r-20261031T2122Z-2c12/006-build.log |
+| lint | pass | `pnpm run lint` | .l4-out/gates/r-20261031T2122Z-2c12/007-lint.log |
+| typecheck | pass | `pnpm run typecheck` | .l4-out/gates/r-20261031T2122Z-2c12/008-typecheck.log |
+| test | pass | `pnpm run test` | .l4-out/gates/r-20261031T2122Z-2c12/009-test.log |
+| e2e | pass | `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` | .l4-out/gates/r-20261031T2122Z-2c12/010-e2e.log |
 
 ## Integrity
 
@@ -42,7 +45,7 @@ traceability: not checked (an earlier step failed)
 | protected paths | ok | no protected path differs from the base |
 | pre-existing tests | ok | 1 test file(s) compared with the base |
 | red-green freeze | ok | 9 task(s): red and green compared |
-| test path freeze | ok | 9 harness step commit(s) checked |
+| test path freeze | ok | 10 harness step commit(s) checked |
 | content scan | ok | no result-manipulating construct in the changed support and runner files |
 | gate configuration | skipped | no gate or runner configuration file changed |
 | test awareness | ok | no production line reacts to the test run |
@@ -51,19 +54,59 @@ traceability: not checked (an earlier step failed)
 | python encoding | ok | 1 Python file(s) added or changed, each read, none declares another encoding |
 | pre-existing tests still pass | ok | 1092 of 1092 base tests pass on the unit's code with its 11 test and support files at the base (base: not needed) |
 
+## Traceability
+
+| Id | Criterion | State | Tests (status, proof) | Not evidence | S1 p | Evidence links |
+|---|---|---|---|---|---|---|
+| C-2c3410e3 | web-admin › Admin pages are listed by capability and declare literal paths › The page table | covered | web.src.admin.pages.test.ts::C-2c3410e3 the admin tables carry their captions columns and empty texts (passed, red_assertion); web.src.admin.pages.test.ts::C-2c3410e3 the page table lists the four admin pages in order (passed, red_assertion) | - | 0.90 | `e2e/test_l4_c_2c3410e3.py`, `test-results/test-l4-c-2c3410e3-py-test-admin-pages-declare-literal-paths-chromium-admin-audit-audit-log-captions3/test-failed-1.png`, `test-results/test-l4-c-2c3410e3-py-test-admin-pages-declare-literal-paths-chromium-admin-audit-audit-log-captions3/trace.zip`, `test-r... |
+| C-7c7c77c3 | web-admin › Admin pages are listed by capability and declare literal paths › Navigation follows capabilities | covered | web.src.admin.pages.test.ts::C-7c7c77c3 the navigation follows capabilities (passed, red_assertion) | - | 0.92 | - |
+| C-bf07943b | web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals | covered | web.src.admin.audit.test.ts::C-bf07943b the admin audit feature file declares its literal page entry (passed, red_assertion); web.src.admin.mappings.test.ts::C-bf07943b the group mappings feature file declares its literal page entry (passed, red_assertion); web.src.admin.pages.test.ts::C-bf07943b fe... | - | 0.85 | - |
+| C-195c3385 | web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts | covered | web.src.admin.messages.test.ts::C-195c3385 the admin messages register their catalogue texts (passed, red_assertion) | - | 0.90 | - |
+| C-0c949ead | web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action | covered | web.src.admin.messages.test.ts::C-0c949ead an action error shows catalogue text and the decision id (passed, red_assertion) | - | 0.90 | `e2e/test_l4_c_0c949ead.py`, `.l4-out/e2e/page.html` |
+| C-97244065 | web-admin › The Users page lists people and disables or enables them › Parsing an account | covered | web.src.admin.users.test.ts::C-97244065 parseAccount keeps a valid account and refuses malformed bodies (passed, red_assertion) | - | 0.90 | - |
+| C-87e93809 | web-admin › The Users page lists people and disables or enables them › Cells and actions | covered | web.src.admin.users.test.ts::C-87e93809 a blank display name falls back to the user id and a missing email shows a dash (passed, red_assertion); web.src.admin.users.test.ts::C-87e93809 a long display name and many roles are cut by clip (passed, red_assertion); web.src.admin.users.test.ts::C-87e93809... | - | 0.93 | `e2e/test_l4_c_87e93809.py`, `test-results/test-l4-c-87e93809-py-test-users-cells-and-actions-chromium/test-failed-1.png`, `test-results/test-l4-c-87e93809-py-test-users-cells-and-actions-chromium/trace.zip`, `.l4-out/e2e/page.html` |
+| C-0c16ec24 | web-admin › The Users page lists people and disables or enables them › Setting a state | covered | web.src.admin.users.test.ts::C-0c16ec24 patchAccountState refuses a path-like user id before sending (passed, red_assertion); web.src.admin.users.test.ts::C-0c16ec24 patchAccountState sends the state and rejects an unreadable account (passed, red_assertion) | - | 0.90 | `e2e/test_l4_c_0c16ec24.py`, `.l4-out/e2e/page.html` |
+| C-4bc159f4 | web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Names | covered | web.src.admin.teams.test.ts::C-4bc159f4 checkTeamId trims a name and explains what a team id may be (passed, red_assertion); web.src.admin.teams.test.ts::C-4bc159f4 parseNamed reads a role or team id and refuses a malformed one (passed, red_assertion) | - | 0.92 | `e2e/test_l4_c_4bc159f4.py`, `test-results/test-l4-c-4bc159f4-py-test-roles-and-teams-names-chromium/test-failed-1.png`, `test-results/test-l4-c-4bc159f4-py-test-roles-and-teams-names-chromium/trace.zip`, `.l4-out/e2e/page.html` |
+| C-c174064a | web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Creating and deleting | covered | web.src.admin.teams.test.ts::C-c174064a deleteTeamConfirm names the team and its consequence (passed, red_assertion); web.src.admin.teams.test.ts::C-c174064a postTeam refuses a bad team or key before sending (passed, red_assertion); web.src.admin.teams.test.ts::C-c174064a postTeam sends a keyed crea... | - | 0.89 | `e2e/test_l4_c_c174064a.py`, `test-results/test-l4-c-c174064a-py-test-creating-and-deleting-a-team-chromium/test-failed-1.png`, `test-results/test-l4-c-c174064a-py-test-creating-and-deleting-a-team-chromium/trace.zip`, `.l4-out/e2e/page.html` |
+| C-b8ae0992 | web-admin › The Group mappings page maps a group to one role or team › Parsing, showing and offering mappings | covered | web.src.admin.mappings.test.ts::C-b8ae0992 defaultIssuer picks the first issuer and the hint explains the field (passed, red_assertion); web.src.admin.mappings.test.ts::C-b8ae0992 grantOptions lists every role then every team (passed, red_assertion); web.src.admin.mappings.test.ts::C-b8ae0992 mappin... | - | 0.93 | - |
+| C-5e078fd3 | web-admin › The Group mappings page maps a group to one role or team › Building the request | covered | web.src.admin.mappings.test.ts::C-5e078fd3 mappingRequest bounds the issuer and group texts (passed, red_assertion); web.src.admin.mappings.test.ts::C-5e078fd3 mappingRequest refuses a grant that is not offered (passed, red_assertion); web.src.admin.mappings.test.ts::C-5e078fd3 mappingRequest report... | - | 0.88 | `e2e/test_l4_c_5e078fd3.py`, `test-results/test-l4-c-5e078fd3-py-test-group-mapping-request-chromium/test-failed-1.png`, `test-results/test-l4-c-5e078fd3-py-test-group-mapping-request-chromium/trace.zip`, `.l4-out/e2e/page.html` |
+| C-741e5139 | web-admin › The Group mappings page maps a group to one role or team › Saving a mapping, reading every page | covered | web.src.admin.mappings.test.ts::C-741e5139 loadAllItems reads every page with a size of two hundred (passed, red_assertion); web.src.admin.mappings.test.ts::C-741e5139 loadAllItems stops after five pages (passed, red_assertion); web.src.admin.mappings.test.ts::C-741e5139 loadAllItems throws the erro... | - | 0.92 | - |
+| C-8a1094e4 | web-admin › The Group mappings page maps a group to one role or team › A removal states the consequence | covered | web.src.admin.removal.test.ts::C-8a1094e4 removeMapping deletes by issuer and group on the group map path (passed, red_assertion); web.src.admin.removal.test.ts::C-8a1094e4 removeMappingConfirm cuts a long group name in the title (passed, red_assertion); web.src.admin.removal.test.ts::C-8a1094e4 rem... | - | 0.91 | `e2e/test_l4_c_8a1094e4.py`, `test-results/test-l4-c-8a1094e4-py-test-remove-mapping-confirm-states-consequence-chromium/test-failed-1.png`, `test-results/test-l4-c-8a1094e4-py-test-remove-mapping-confirm-states-consequence-chromium/trace.zip`, `.l4-out/e2e/page.html` |
+| C-71033976 | web-admin › The Audit log page lists events newest first and filters by event type › Parsing an event and its cells | covered | web.src.admin.audit.test.ts::C-71033976 a 300 character payload leaves 240 details characters ending in an ellipsis (passed, red_assertion); web.src.admin.audit.test.ts::C-71033976 auditCells shows seq time type actor target and details (passed, red_assertion); web.src.admin.audit.test.ts::C-7103397... | - | 0.86 | `e2e/test_l4_c_71033976.py`, `test-results/test-l4-c-71033976-py-test-audit-log-lists-events-newest-first-and-filters-by-event-type-chromium/test-failed-1.png`, `test-results/test-l4-c-71033976-py-test-audit-log-lists-events-newest-first-and-filters-by-event-type-chromium/trace.zip`, `.l4-out/e2e/pa... |
+| C-1e5047ed | web-admin › The Audit log page lists events newest first and filters by event type › The event type filter | covered | web.src.admin.audit.test.ts::C-1e5047ed auditFetcher asks the audit path with the event type and the page limit (passed, red_assertion); web.src.admin.audit.test.ts::C-1e5047ed auditFetcher without a type asks only the page limit and refuses an unreadable event (passed, red_assertion); web.src.admin... | - | 0.92 | - |
+| C-1d816fd1 | web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification | covered | web.src.admin.verification.test.ts::C-1d816fd1 loadVerification asks the verify path and refuses an unreadable answer (passed, red_assertion); web.src.admin.verification.test.ts::C-1d816fd1 parseVerification keeps a valid verification and refuses malformed bodies (passed, red_assertion) | - | 0.93 | - |
+| C-d2fc8f38 | web-admin › The Audit log page shows whether the chain verifies › Status text | covered | web.src.admin.verification.test.ts::C-d2fc8f38 verificationView names the broken chain and the unavailable check (passed, red_assertion); web.src.admin.verification.test.ts::C-d2fc8f38 verificationView names the checking and verified statuses (passed, red_assertion) | - | 0.94 | `e2e/test_l4_c_d2fc8f38.py`, `test-results/test-l4-c-d2fc8f38-py-test-audit-chain-verification-status-chromium/test-failed-1.png`, `test-results/test-l4-c-d2fc8f38-py-test-audit-chain-verification-status-chromium/trace.zip`, `.l4-out/e2e/page.html` |
+| C-52c26a32 | web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources | covered | web.src.admin.admin-css.test.ts::C-52c26a32 the admin stylesheet and sources follow the kit rules (passed, red_assertion) | - | 0.90 | - |
+| C-dd02e61e | web-admin › The admin logic works against the real engine › Carol manages mappings and teams and reads the log | covered | test.journeys.m2-admin.test.ts::C-dd02e61e carol manages mappings and teams and reads the log (passed, red_assertion) | - | 0.93 | `e2e/test_l4_c_dd02e61e.py`, `.l4-out/e2e/page.html` |
+| C-06a71640 | web-admin › The admin logic works against the real engine › Alice is refused, carol finds the id and disables her | covered | test.journeys.m2-admin.test.ts::C-06a71640 alice is refused and carol finds the id and disables her (passed, red_assertion) | - | 0.92 | `e2e/test_l4_c_06a71640.py`, `test-results/test-l4-c-06a71640-py-test-alice-refused-carol-disables-her-chromium/test-failed-1.png`, `test-results/test-l4-c-06a71640-py-test-alice-refused-carol-disables-her-chromium/trace.zip`, `.l4-out/e2e/page.html` |
+| C-f7bbb238 | web-admin › The M2 journey proves the admin screens in a browser › Carol maps a group and the log shows it verified | uncovered | - | test_m2_admin::test_c_f7bbb238_carol_maps_a_group_and_the_log_shows_it_verified[chromium] (no proof that it discriminates (no red, audit or generated record)) | 0.06 | `e2e/test_l4_c_f7bbb238.py`, `test-results/test-l4-c-f7bbb238-py-test-carol-maps-group-and-log-shows-verified-chromium/test-failed-1.png`, `test-results/test-l4-c-f7bbb238-py-test-carol-maps-group-and-log-shows-verified-chromium/trace.zip`, `.l4-out/e2e/page.html` |
+| C-652f54b7 | web-admin › The M2 journey proves the admin screens in a browser › Alice sees a 403 page with the decision id | uncovered | - | test_m2_admin::test_c_652f54b7_alice_sees_a_403_page_with_the_decision_id[chromium] (no proof that it discriminates (no red, audit or generated record)) | 0.04 | `e2e/test_l4_c_652f54b7.py`, `test-results/test-l4-c-652f54b7-py-test-alice-sees-403-with-decision-id-chromium/test-failed-1.png`, `test-results/test-l4-c-652f54b7-py-test-alice-sees-403-with-decision-id-chromium/trace.zip`, `.l4-out/e2e/page.html` |
+| C-d118ea9b | web-admin › The M2 journey proves the admin screens in a browser › Carol disables and enables alice | uncovered | - | test_m2_admin::test_c_d118ea9b_carol_disables_and_enables_alice[chromium] (no proof that it discriminates (no red, audit or generated record)) | 0.04 | - |
+| C-19381fcc | web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team | uncovered | - | test_m2_admin::test_c_19381fcc_carol_creates_and_deletes_a_team[chromium] (no proof that it discriminates (no red, audit or generated record)) | 0.05 | `e2e/test_l4_c_19381fcc.py`, `test-results/test-l4-c-19381fcc-py-test-carol-creates-and-deletes-a-team-chromium/test-failed-1.png`, `test-results/test-l4-c-19381fcc-py-test-carol-creates-and-deletes-a-team-chromium/trace.zip`, `.l4-out/e2e/page.html` |
+
 ## Evidence
 
 ### Needs attention
 
-- blocker: new tests failed: test_m2_admin::test_c_19381fcc_carol_creates_and_deletes_a_team[chromium], test_m2_admin::test_c_f7bbb238_carol_maps_a_group_and_the_log_shows_it_verified[chromium]
+Nothing needs attention.
 
 ### Files
 
 | Path | Module | Label | Why |
 |---|---|---|---|
 | `e2e/test_m2_admin.py` |  | relevant | new test file |
+| `openspec/changes/add-web-admin-fix-1/.l4/fix.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-admin-fix-1/.openspec.yaml` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-admin-fix-1/proposal.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-admin-fix-1/tasks.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-admin/.l4/evidence/round-1/evidence.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-admin/.l4/evidence/round-1/verdict.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-admin/.l4/evidence/round-1/verification.md` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-web-admin/.l4/ledger/r-20261031T1806Z-2dcf.jsonl` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-admin/.l4/ledger/r-20261031T2026Z-44e1.jsonl` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-admin/.l4/ledger/r-20261031T2121Z-1d08.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-web-admin/tasks.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-web-admin/verification.md` |  | none | exempt: harness, spec or documentation path |
 | `test/journeys/m2-admin.test.ts` |  | relevant | new test file |
 | `test/journeys/session.ts` | test | relevant | named in the spec |
 | `web/src/admin/AuditPage.tsx` | web | relevant | named in the spec |
@@ -98,22 +141,171 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ### Tests
 
-1198 of 1200 passed, 2 failed, 0 errored, 0 skipped.
-57 of 59 new tests passed.
+1200 of 1200 passed, 0 failed, 0 errored, 0 skipped.
+59 of 59 new tests passed.
+
+## Generated UI tests
+
+| Criterion | Status | Test | Base | Head | Attempts | Reason | Artefacts |
+|---|---|---|---|---|---|---|---|
+| C-2c3410e3 | fails_at_head | e2e/test_l4_c_2c3410e3.py | fail | fail | 2 | the test fails at the head: test_l4_c_2c3410e3::test_admin_pages_declare_literal_paths[chromium-/admin/audit-Audit log-captions3], test_l4_c_2c3410e3::test_admin_pages_declare_literal_paths[chromium-/admin/group-mappings-Group mappings-captions2], test_l4_c_2c3410e3::test_admin_pages_declare_literal... | test-results/test-l4-c-2c3410e3-py-test-admin-pages-declare-literal-paths-chromium-admin-audit-audit-log-captions3/test-failed-1.png, test-results/test-l4-c-2c3410e3-py-test-admin-pages-declare-literal-paths-chromium-admin-audit-audit-log-captions3/trace.zip, test-results/test-l4-c-2c3410e3-py-test-... |
+| C-7c7c77c3 | not_testable | - | - | - | 1 | This criterion tests a TypeScript feature-registry `nav` function returning labels for capability sets — a unit-level outcome with no browser-observable UI behavior, URL, or user action to drive through pytest-playwright. | - |
+| C-bf07943b | not_testable | - | - | - | 1 | featureLiterals is a TypeScript source-parsing function (returns null for non-literal path) not exposed through the web UI; it has no observable user outcome, so it cannot be verified via pytest-playwright against L4_E2E_BASE_URL — it is a unit-test concern. | - |
+| C-195c3385 | not_testable | - | - | - | 1 | The criterion exercises internal message-registry functions (registerAdminMessages, messageFor, ADMIN_MESSAGES, FALLBACK_MESSAGE) that are not exposed through the web UI, so an e2e test using the page fixture cannot invoke them or observe their keys/texts. | - |
+| C-0c949ead | not_testable | e2e/test_l4_c_0c949ead.py | - | - | 2 | The criterion asserts the output of the internal adminErrorMessage function for specific ApiRequestError inputs; those errors can only be produced by the backend and cannot be triggered deterministically through the browser's public interface while restricting requests to the base origin. | - |
+| C-97244065 | not_testable | - | - | - | 1 | parseAccount is an internal TypeScript parsing function with no HTTP endpoint or user-observable UI outcome; it cannot be invoked or observed through the Users page or page fixture. | - |
+| C-87e93809 | fails_at_head | e2e/test_l4_c_87e93809.py | fail | fail | 2 | the test fails at the head: test_l4_c_87e93809::test_users_cells_and_actions[chromium] | test-results/test-l4-c-87e93809-py-test-users-cells-and-actions-chromium/test-failed-1.png, test-results/test-l4-c-87e93809-py-test-users-cells-and-actions-chromium/trace.zip |
+| C-0c16ec24 | writer_failed | e2e/test_l4_c_0c16ec24.py | - | - | 2 | structured output missing: the reply holds no JSON object | - |
+| C-4bc159f4 | fails_at_head | e2e/test_l4_c_4bc159f4.py | fail | fail | 2 | the test fails at the head: test_l4_c_4bc159f4::test_roles_and_teams_names[chromium] | test-results/test-l4-c-4bc159f4-py-test-roles-and-teams-names-chromium/test-failed-1.png, test-results/test-l4-c-4bc159f4-py-test-roles-and-teams-names-chromium/trace.zip |
+| C-c174064a | fails_at_head | e2e/test_l4_c_c174064a.py | fail | fail | 2 | the test fails at the head: test_l4_c_c174064a::test_creating_and_deleting_a_team[chromium] | test-results/test-l4-c-c174064a-py-test-creating-and-deleting-a-team-chromium/test-failed-1.png, test-results/test-l4-c-c174064a-py-test-creating-and-deleting-a-team-chromium/trace.zip |
+| C-b8ae0992 | writer_failed | - | - | - | 1 | opencode's permission rules rejected a tool call (bash) | - |
+| C-5e078fd3 | fails_at_head | e2e/test_l4_c_5e078fd3.py | fail | fail | 2 | the test fails at the head: test_l4_c_5e078fd3::test_group_mapping_request[chromium] | test-results/test-l4-c-5e078fd3-py-test-group-mapping-request-chromium/test-failed-1.png, test-results/test-l4-c-5e078fd3-py-test-group-mapping-request-chromium/trace.zip |
+| C-741e5139 | not_testable | - | - | - | 1 | The criterion asserts internal JavaScript module behavior of setMapping/loadAllItems (PUT call arguments, fetcher cursor/limit requests, call counts), which is not observable through the browser's public interface from a pytest-playwright test against the base URL. | - |
+| C-8a1094e4 | fails_at_head | e2e/test_l4_c_8a1094e4.py | fail | fail | 2 | the test fails at the head: test_l4_c_8a1094e4::test_remove_mapping_confirm_states_consequence[chromium] | test-results/test-l4-c-8a1094e4-py-test-remove-mapping-confirm-states-consequence-chromium/test-failed-1.png, test-results/test-l4-c-8a1094e4-py-test-remove-mapping-confirm-states-consequence-chromium/trace.zip |
+| C-71033976 | fails_at_head | e2e/test_l4_c_71033976.py | fail | fail | 2 | the test fails at the head: test_l4_c_71033976::test_audit_log_lists_events_newest_first_and_filters_by_event_type[chromium] | test-results/test-l4-c-71033976-py-test-audit-log-lists-events-newest-first-and-filters-by-event-type-chromium/test-failed-1.png, test-results/test-l4-c-71033976-py-test-audit-log-lists-events-newest-first-and-filters-by-event-type-chromium/trace.zip |
+| C-1e5047ed | not_testable | - | - | - | 1 | The criterion asserts internal parseEventTypeFilter return objects and exact API call sequences (cursor pagination, INVALID_RESPONSE rejection) rather than user-observable outcomes; the admin route and authentication needed to reach the AuditPage are not provided. | - |
+| C-1d816fd1 | not_testable | - | - | - | 1 | The criterion asserts internal unit behavior of `parseVerification` and `loadVerification` (parsed output shape, HTTP call sequence, mock rejection) which is not observable through the Audit page's public UI; only the final verification status is shown to the user. | - |
+| C-d2fc8f38 | fails_at_head | e2e/test_l4_c_d2fc8f38.py | fail | fail | 2 | the test fails at the head: test_l4_c_d2fc8f38::test_audit_chain_verification_status[chromium] | test-results/test-l4-c-d2fc8f38-py-test-audit-chain-verification-status-chromium/test-failed-1.png, test-results/test-l4-c-d2fc8f38-py-test-audit-chain-verification-status-chromium/trace.zip |
+| C-52c26a32 | not_testable | - | - | - | 1 | This criterion statically analyzes server-side source files (admin.css, tokens.css, .tsx) using internal functions (findRawColours, findInlineStyleUse, parseTokens); nothing about it is observable through the browser's public HTTP interface via the page fixture. | - |
+| C-dd02e61e | writer_failed | e2e/test_l4_c_dd02e61e.py | - | - | 2 | opencode's permission rules rejected a tool call (bash) | - |
+| C-06a71640 | fails_at_head | e2e/test_l4_c_06a71640.py | fail | fail | 2 | the test fails at the head: test_l4_c_06a71640::test_alice_refused_carol_disables_her[chromium] | test-results/test-l4-c-06a71640-py-test-alice-refused-carol-disables-her-chromium/test-failed-1.png, test-results/test-l4-c-06a71640-py-test-alice-refused-carol-disables-her-chromium/trace.zip |
+| C-f7bbb238 | fails_at_head | e2e/test_l4_c_f7bbb238.py | fail | fail | 2 | the test fails at the head: test_l4_c_f7bbb238::test_carol_maps_group_and_log_shows_verified[chromium] | test-results/test-l4-c-f7bbb238-py-test-carol-maps-group-and-log-shows-verified-chromium/test-failed-1.png, test-results/test-l4-c-f7bbb238-py-test-carol-maps-group-and-log-shows-verified-chromium/trace.zip |
+| C-652f54b7 | fails_at_head | e2e/test_l4_c_652f54b7.py | fail | fail | 2 | the test fails at the head: test_l4_c_652f54b7::test_alice_sees_403_with_decision_id[chromium] | test-results/test-l4-c-652f54b7-py-test-alice-sees-403-with-decision-id-chromium/test-failed-1.png, test-results/test-l4-c-652f54b7-py-test-alice-sees-403-with-decision-id-chromium/trace.zip |
+| C-d118ea9b | not_testable | - | - | - | 1 | The criterion requires signing in as two distinct users (carol and alice) in separate browser contexts, but no sign-in mechanism, credentials, or authentication helper is provided in the criterion, UI diff, or page snapshot, so a self-contained e2e test cannot establish those sessions without implem... | - |
+| C-19381fcc | fails_at_head | e2e/test_l4_c_19381fcc.py | fail | fail | 2 | the test fails at the head: test_l4_c_19381fcc::test_carol_creates_and_deletes_a_team[chromium] | test-results/test-l4-c-19381fcc-py-test-carol-creates-and-deletes-a-team-chromium/test-failed-1.png, test-results/test-l4-c-19381fcc-py-test-carol-creates-and-deletes-a-team-chromium/trace.zip |
+
+## S1 (recorded for calibration, never decides)
+
+| Criterion | Status | p | Model | Engine | Note |
+|---|---|---|---|---|---|
+| C-2c3410e3 | ok | 0.900 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-7c7c77c3 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-bf07943b | ok | 0.850 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-195c3385 | ok | 0.900 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-0c949ead | ok | 0.900 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-97244065 | ok | 0.900 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-87e93809 | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-0c16ec24 | ok | 0.900 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-4bc159f4 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-c174064a | ok | 0.890 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-b8ae0992 | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-5e078fd3 | ok | 0.880 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-741e5139 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-8a1094e4 | ok | 0.910 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-71033976 | ok | 0.860 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-1e5047ed | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-1d816fd1 | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-d2fc8f38 | ok | 0.940 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-52c26a32 | ok | 0.900 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-dd02e61e | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-06a71640 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-f7bbb238 | ok | 0.060 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-652f54b7 | ok | 0.040 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-d118ea9b | ok | 0.040 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-19381fcc | ok | 0.050 | jev-1.13.0 | jev | evidence cut to fit the budget |
+
+## Audit
+
+| Criterion | Status | Test | Support | Reason |
+|---|---|---|---|---|
+| C-741e5139 | skipped | - | - | cap |
+| C-97244065 | skipped | - | - | cap |
+| C-2c3410e3 | skipped | - | - | cap |
+| C-0c949ead | skipped | - | - | cap |
+| C-dd02e61e | skipped | - | - | cap |
+| C-1d816fd1 | not_testable | - | - | criterion exercises TypeScript parseVerification/loadVerification under node --test; no Python module under test is shown to import for pytest |
+| C-52c26a32 | not_testable | - | - | The criterion requires calling findRawColours, findInlineStyleUse and parseTokens, but these functions, the module under test that exports them, and their signatures are not defined in the shown sources, so importing them would require guessing names, which is forbidden. |
 
 ## Criteria
 
-None judged.
+| Id | Criterion | Judge | Result | Reason |
+|---|---|---|---|---|
+| C-2c3410e3 | web-admin › Admin pages are listed by capability and declare literal paths › The page table | - | needs_human | the judge gave no verdict for this criterion |
+| C-7c7c77c3 | web-admin › Admin pages are listed by capability and declare literal paths › Navigation follows capabilities | - | needs_human | the judge gave no verdict for this criterion |
+| C-bf07943b | web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals | - | needs_human | the judge gave no verdict for this criterion |
+| C-195c3385 | web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts | - | needs_human | the judge gave no verdict for this criterion |
+| C-0c949ead | web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action | - | needs_human | the judge gave no verdict for this criterion |
+| C-97244065 | web-admin › The Users page lists people and disables or enables them › Parsing an account | - | needs_human | the judge gave no verdict for this criterion |
+| C-87e93809 | web-admin › The Users page lists people and disables or enables them › Cells and actions | - | needs_human | the judge gave no verdict for this criterion |
+| C-0c16ec24 | web-admin › The Users page lists people and disables or enables them › Setting a state | - | needs_human | the judge gave no verdict for this criterion |
+| C-4bc159f4 | web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Names | - | needs_human | the judge gave no verdict for this criterion |
+| C-c174064a | web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Creating and deleting | - | needs_human | the judge gave no verdict for this criterion |
+| C-b8ae0992 | web-admin › The Group mappings page maps a group to one role or team › Parsing, showing and offering mappings | - | needs_human | the judge gave no verdict for this criterion |
+| C-5e078fd3 | web-admin › The Group mappings page maps a group to one role or team › Building the request | - | needs_human | the judge gave no verdict for this criterion |
+| C-741e5139 | web-admin › The Group mappings page maps a group to one role or team › Saving a mapping, reading every page | - | needs_human | the judge gave no verdict for this criterion |
+| C-8a1094e4 | web-admin › The Group mappings page maps a group to one role or team › A removal states the consequence | - | needs_human | the judge gave no verdict for this criterion |
+| C-71033976 | web-admin › The Audit log page lists events newest first and filters by event type › Parsing an event and its cells | - | needs_human | the judge gave no verdict for this criterion |
+| C-1e5047ed | web-admin › The Audit log page lists events newest first and filters by event type › The event type filter | - | needs_human | the judge gave no verdict for this criterion |
+| C-1d816fd1 | web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification | - | needs_human | the judge gave no verdict for this criterion |
+| C-d2fc8f38 | web-admin › The Audit log page shows whether the chain verifies › Status text | - | needs_human | the judge gave no verdict for this criterion |
+| C-52c26a32 | web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources | - | needs_human | the judge gave no verdict for this criterion |
+| C-dd02e61e | web-admin › The admin logic works against the real engine › Carol manages mappings and teams and reads the log | - | needs_human | the judge gave no verdict for this criterion |
+| C-06a71640 | web-admin › The admin logic works against the real engine › Alice is refused, carol finds the id and disables her | - | needs_human | the judge gave no verdict for this criterion |
+| C-f7bbb238 | web-admin › The M2 journey proves the admin screens in a browser › Carol maps a group and the log shows it verified | - | needs_human | uncovered: no adequate discriminating test traces it |
+| C-652f54b7 | web-admin › The M2 journey proves the admin screens in a browser › Alice sees a 403 page with the decision id | - | needs_human | uncovered: no adequate discriminating test traces it |
+| C-d118ea9b | web-admin › The M2 journey proves the admin screens in a browser › Carol disables and enables alice | - | needs_human | uncovered: no adequate discriminating test traces it |
+| C-19381fcc | web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team | - | needs_human | uncovered: no adequate discriminating test traces it |
 
 ## Findings
 
-- [blocker, deterministic] e2e gate failed: `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` failed: exit code 1; failing: test_m2_admin::test_c_19381fcc_carol_creates_and_deletes_a_team[chromium], test_m2_admin::test_c_f7bbb238_carol_maps_a_group_and_the_log_shows_it_verified[chromium] Log: `.l4-out/gates/r-20261031T2026Z-44e1/010-e2e.log`.
-- [blocker, deterministic] new tests failed: test_m2_admin::test_c_19381fcc_carol_creates_and_deletes_a_team[chromium], test_m2_admin::test_c_f7bbb238_carol_maps_a_group_and_the_log_shows_it_verified[chromium]
+- [minor, deterministic] a test is ignored as evidence (criterion C-f7bbb238): test_m2_admin::test_c_f7bbb238_carol_maps_a_group_and_the_log_shows_it_verified[chromium]: no proof that it discriminates (no red, audit or generated record)
+- [minor, deterministic] a test is ignored as evidence (criterion C-652f54b7): test_m2_admin::test_c_652f54b7_alice_sees_a_403_page_with_the_decision_id[chromium]: no proof that it discriminates (no red, audit or generated record)
+- [minor, deterministic] a test is ignored as evidence (criterion C-d118ea9b): test_m2_admin::test_c_d118ea9b_carol_disables_and_enables_alice[chromium]: no proof that it discriminates (no red, audit or generated record)
+- [minor, deterministic] a test is ignored as evidence (criterion C-19381fcc): test_m2_admin::test_c_19381fcc_carol_creates_and_deletes_a_team[chromium]: no proof that it discriminates (no red, audit or generated record)
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-2c3410e3): No end-to-end test traces criterion C-2c3410e3 (web-admin › Admin pages are listed by capability and declare literal paths › The page table); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-7c7c77c3): No end-to-end test traces criterion C-7c7c77c3 (web-admin › Admin pages are listed by capability and declare literal paths › Navigation follows capabilities); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-bf07943b): No end-to-end test traces criterion C-bf07943b (web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-195c3385): No end-to-end test traces criterion C-195c3385 (web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-0c949ead): No end-to-end test traces criterion C-0c949ead (web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-97244065): No end-to-end test traces criterion C-97244065 (web-admin › The Users page lists people and disables or enables them › Parsing an account); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-87e93809): No end-to-end test traces criterion C-87e93809 (web-admin › The Users page lists people and disables or enables them › Cells and actions); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-0c16ec24): No end-to-end test traces criterion C-0c16ec24 (web-admin › The Users page lists people and disables or enables them › Setting a state); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-4bc159f4): No end-to-end test traces criterion C-4bc159f4 (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Names); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-c174064a): No end-to-end test traces criterion C-c174064a (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Creating and deleting); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-b8ae0992): No end-to-end test traces criterion C-b8ae0992 (web-admin › The Group mappings page maps a group to one role or team › Parsing, showing and offering mappings); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-5e078fd3): No end-to-end test traces criterion C-5e078fd3 (web-admin › The Group mappings page maps a group to one role or team › Building the request); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-741e5139): No end-to-end test traces criterion C-741e5139 (web-admin › The Group mappings page maps a group to one role or team › Saving a mapping, reading every page); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-8a1094e4): No end-to-end test traces criterion C-8a1094e4 (web-admin › The Group mappings page maps a group to one role or team › A removal states the consequence); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-71033976): No end-to-end test traces criterion C-71033976 (web-admin › The Audit log page lists events newest first and filters by event type › Parsing an event and its cells); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-1e5047ed): No end-to-end test traces criterion C-1e5047ed (web-admin › The Audit log page lists events newest first and filters by event type › The event type filter); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-1d816fd1): No end-to-end test traces criterion C-1d816fd1 (web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-d2fc8f38): No end-to-end test traces criterion C-d2fc8f38 (web-admin › The Audit log page shows whether the chain verifies › Status text); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-52c26a32): No end-to-end test traces criterion C-52c26a32 (web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-dd02e61e): No end-to-end test traces criterion C-dd02e61e (web-admin › The admin logic works against the real engine › Carol manages mappings and teams and reads the log); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-06a71640): No end-to-end test traces criterion C-06a71640 (web-admin › The admin logic works against the real engine › Alice is refused, carol finds the id and disables her); step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-f7bbb238): The end-to-end test test_m2_admin::test_c_f7bbb238_carol_maps_a_group_and_the_log_shows_it_verified[chromium] traces criterion C-f7bbb238 (web-admin › The M2 journey proves the admin screens in a browser › Carol maps a group and the log shows it verified), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-652f54b7): The end-to-end test test_m2_admin::test_c_652f54b7_alice_sees_a_403_page_with_the_decision_id[chromium] traces criterion C-652f54b7 (web-admin › The M2 journey proves the admin screens in a browser › Alice sees a 403 page with the decision id), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-d118ea9b): The end-to-end test test_m2_admin::test_c_d118ea9b_carol_disables_and_enables_alice[chromium] traces criterion C-d118ea9b (web-admin › The M2 journey proves the admin screens in a browser › Carol disables and enables alice), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
+- [minor, deterministic] UI criterion without an end-to-end test (criterion C-19381fcc): The end-to-end test test_m2_admin::test_c_19381fcc_carol_creates_and_deletes_a_team[chromium] traces criterion C-19381fcc (web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 
-## Fix unit
+## Needs a human
 
-Fix unit 1 is created for these tasks:
-- F-22a9abae, F-7e9a81fb e2e gate failed (+1 more)
+- UI criterion C-2c3410e3 has no end-to-end test; see the generated UI tests table
+- UI criterion C-7c7c77c3 has no end-to-end test; see the generated UI tests table
+- UI criterion C-bf07943b has no end-to-end test; see the generated UI tests table
+- UI criterion C-195c3385 has no end-to-end test; see the generated UI tests table
+- UI criterion C-0c949ead has no end-to-end test; see the generated UI tests table
+- UI criterion C-97244065 has no end-to-end test; see the generated UI tests table
+- UI criterion C-87e93809 has no end-to-end test; see the generated UI tests table
+- UI criterion C-0c16ec24 has no end-to-end test; see the generated UI tests table
+- UI criterion C-4bc159f4 has no end-to-end test; see the generated UI tests table
+- UI criterion C-c174064a has no end-to-end test; see the generated UI tests table
+- UI criterion C-b8ae0992 has no end-to-end test; see the generated UI tests table
+- UI criterion C-5e078fd3 has no end-to-end test; see the generated UI tests table
+- UI criterion C-741e5139 has no end-to-end test; see the generated UI tests table
+- UI criterion C-8a1094e4 has no end-to-end test; see the generated UI tests table
+- UI criterion C-71033976 has no end-to-end test; see the generated UI tests table
+- UI criterion C-1e5047ed has no end-to-end test; see the generated UI tests table
+- UI criterion C-1d816fd1 has no end-to-end test; see the generated UI tests table
+- UI criterion C-d2fc8f38 has no end-to-end test; see the generated UI tests table
+- UI criterion C-52c26a32 has no end-to-end test; see the generated UI tests table
+- UI criterion C-dd02e61e has no end-to-end test; see the generated UI tests table
+- UI criterion C-06a71640 has no end-to-end test; see the generated UI tests table
+- UI criterion C-f7bbb238 has no end-to-end test; see the generated UI tests table
+- UI criterion C-652f54b7 has no end-to-end test; see the generated UI tests table
+- UI criterion C-d118ea9b has no end-to-end test; see the generated UI tests table
+- UI criterion C-19381fcc has no end-to-end test; see the generated UI tests table
+- the judge's reply was discarded (part 1 of 2, schema_invalid: structured output invalid: riskiest_assumptions: more than 3 items)
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
