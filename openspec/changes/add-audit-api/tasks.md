@@ -11,7 +11,7 @@ Fixtures: `scenario-data.md`; specs: `specs/audit-api/spec.md` and `specs/audit-
 
 ## 3. Policy decision reader
 
-- [ ] 3.1 Write `src/pdp/decisions-query.test.ts` first (the reader part of "The reader and the parser refuse bad input" with `PdpError` `code` and `details.reason`, the reader results of "Each filter" and "Ties, both directions and the call's own row" (no own row), the shape of `d_4`, and tenant B's call returning `b_1` only), then implement `listPolicyDecisions` in `src/pdp/decisions-query.ts` as Decisions 3, 5 and 6 say (a private copy of the time rule) and export it and the types `PolicyDecisionFilter` and `PolicyDecisionRecord` from `src/pdp/index.ts`, implementing requirement "Policy decisions are listed with their filters"
+- [x] 3.1 Write `src/pdp/decisions-query.test.ts` first (the reader part of "The reader and the parser refuse bad input" with `PdpError` `code` and `details.reason`, the reader results of "Each filter" and "Ties, both directions and the call's own row" (no own row), the shape of `d_4`, and tenant B's call returning `b_1` only), then implement `listPolicyDecisions` in `src/pdp/decisions-query.ts` as Decisions 3, 5 and 6 say (a private copy of the time rule) and export it and the types `PolicyDecisionFilter` and `PolicyDecisionRecord` from `src/pdp/index.ts`, implementing requirement "Policy decisions are listed with their filters"
 
 ## 4. Query parsing
 
