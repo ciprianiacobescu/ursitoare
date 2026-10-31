@@ -45,7 +45,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-032 | answered | none | verdict | Hold H-7c7ec97d: UI criterion C-87e93809 has no end-to-end test; see the generated UI tests table |
 | Q-033 | answered | none | verdict | Hold H-9a555cbd: UI criterion C-0c16ec24 has no end-to-end test; see the generated UI tests table |
 | Q-034 | answered | none | verdict | Hold H-c36e205c: UI criterion C-4bc159f4 has no end-to-end test; see the generated UI tests table |
-| Q-035 | open | none | verdict | Hold H-d0d2c1b0: UI criterion C-c174064a has no end-to-end test; see the generated UI tests table |
+| Q-035 | answered | none | verdict | Hold H-d0d2c1b0: UI criterion C-c174064a has no end-to-end test; see the generated UI tests table |
 | Q-036 | open | none | verdict | Hold H-cc90d893: UI criterion C-b8ae0992 has no end-to-end test; see the generated UI tests table |
 | Q-037 | open | none | verdict | Hold H-ce62dad6: UI criterion C-5e078fd3 has no end-to-end test; see the generated UI tests table |
 | Q-038 | open | none | verdict | Hold H-6399c22b: UI criterion C-741e5139 has no end-to-end test; see the generated UI tests table |
@@ -1108,7 +1108,8 @@ accept The hold may be waived and the unit can go on as it stands. Criterion C-4
 
 ## Q-035: Hold H-d0d2c1b0: UI criterion C-c174064a has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -1127,6 +1128,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived and the unit can go on as it stands. Criterion C-c174064a is the scenario "Creating and deleting": it runs postTeam with a recording client for ("ops", "key-1") and with one answering {}, removeTeamById for "ops" and reads deleteTeamConfirm("ops"), then compares the recorded calls, the returned id, the INVALID_RESPONSE rejection and the confirmation's title and action, a unit-level call to logic functions with fake clients that a browser cannot drive or observe directly, so a generated browser test for it is a harness artifact; the one that failed at the head is not in the repository and failed at the base too. The implementation in web/src/admin/teams.ts checks the team id and the key against their patterns, posts to /teams with the body { teamId } and the header Idempotency-Key, parses the answer with parseNamed and throws ApiRequestError(200, "INVALID_RESPONSE", "Invalid team") when it gives null; removeTeamById deletes /teams/ followed by the encoded id and returns nothing; deleteTeamConfirm answers the title "Delete team ops?" and the action "Delete team". The five tracing Node tests in web/src/admin/teams.test.ts assert exactly one post call with path /teams, body { teamId: "ops" } and options { headers: { "Idempotency-Key": "key-1" } }, a result of "ops", a rejection with code INVALID_RESPONSE for an answer of {}, one delete call with path /teams/ops resolving to undefined, the confirmation's title and action, and RangeErrors with nothing sent for a bad team, key or path-like id; all passed as red assertions and Q-010 already accepted the criterion on them. The same functions run against the real engine in test/journeys/m2-admin.test.ts, where creating ops twice with k-1 returns "ops", k-2 rejects ALREADY_EXISTS, deleting ops resolves and deleting finance rejects IN_USE. The user-visible side is covered by the repository's own browser journey e2e/test_m2_admin.py: TeamsPage calls postTeam with the session client and a fresh crypto.randomUUID() key on "Create team" and removeTeamById after the ConfirmDialog built from deleteTeamConfirm, and the journey has carol fill "Team name" with "ops", press "Create team", see the row "ops" in the table "Teams", press exactly "Delete team ops" and "Delete team" in the dialog, see the row go, then try "Delete team finance" and see the IN_USE catalogue text while the row stays, with assert_accessible on the page.
 ---
 
 ## Q-036: Hold H-cc90d893: UI criterion C-b8ae0992 has no end-to-end test; see the generated UI tests table
