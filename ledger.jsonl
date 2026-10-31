@@ -71,3 +71,5 @@
 {"at":"2026-10-31T14:56:28Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"e95e05a39668464cd3da60e87920a4c5b959b109","status":"pass","type":"unit.postcheck","unit":"openspec:add-admin-cli"}
 {"at":"2026-10-31T14:56:28Z","revision":"e95e05a39668464cd3da60e87920a4c5b959b109","type":"unit.integrated","unit":"openspec:add-admin-cli"}
 {"at":"2026-10-31T14:56:28Z","attempt":1,"cost_usd":7.407357,"runs":4,"type":"plan.charged","unit":"openspec:add-admin-cli"}
+{"at":"2026-10-31T14:57:47Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-audit-api"}
+{"at":"2026-10-31T14:57:47Z","run":"r-20261031T1457Z-00fe","type":"unit.dispatched","unit":"openspec:add-audit-api"}
