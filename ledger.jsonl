@@ -73,3 +73,5 @@
 {"at":"2026-10-31T14:56:28Z","attempt":1,"cost_usd":7.407357,"runs":4,"type":"plan.charged","unit":"openspec:add-admin-cli"}
 {"at":"2026-10-31T14:57:47Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-audit-api"}
 {"at":"2026-10-31T14:57:47Z","run":"r-20261031T1457Z-00fe","type":"unit.dispatched","unit":"openspec:add-audit-api"}
+{"at":"2026-10-31T17:29:29Z","attempt":1,"cost_usd":0.56913,"runs":2,"type":"plan.charged","unit":"openspec:add-audit-api"}
+{"at":"2026-10-31T17:29:29Z","run":"r-20261031T1729Z-1ad5","type":"unit.dispatched","unit":"openspec:add-audit-api"}
