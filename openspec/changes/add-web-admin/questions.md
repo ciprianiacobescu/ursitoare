@@ -58,7 +58,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-045 | answered | none | verdict | Hold H-d04992fb: UI criterion C-dd02e61e has no end-to-end test; see the generated UI tests table |
 | Q-046 | answered | none | verdict | Hold H-6ea9ed12: UI criterion C-06a71640 has no end-to-end test; see the generated UI tests table |
 | Q-047 | answered | none | verdict | Hold H-11d4a924: UI criterion C-f7bbb238 has no end-to-end test; see the generated UI tests table |
-| Q-048 | open | none | verdict | Hold H-4662f538: UI criterion C-652f54b7 has no end-to-end test; see the generated UI tests table |
+| Q-048 | answered | none | verdict | Hold H-4662f538: UI criterion C-652f54b7 has no end-to-end test; see the generated UI tests table |
 | Q-049 | open | none | verdict | Hold H-17337413: UI criterion C-d118ea9b has no end-to-end test; see the generated UI tests table |
 | Q-050 | open | none | verdict | Hold H-e41ee87b: UI criterion C-19381fcc has no end-to-end test; see the generated UI tests table |
 | Q-051 | open | none | verdict | Hold H-346cd016: the judge's reply was discarded (part 1 of 2, schema_invalid: structured output invalid: riskiest_assumptions: more t... |
@@ -1443,7 +1443,7 @@ accept C-f7bbb238 has an end-to-end test: e2e/test_m2_admin.py::test_c_f7bbb238_
 
 ## Q-048: Hold H-4662f538: UI criterion C-652f54b7 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -1463,6 +1463,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-652f54b7 has an end-to-end test: e2e/test_m2_admin.py::test_c_652f54b7_alice_sees_a_403_page_with_the_decision_id, written by task 7.1 as the requirement says. It signs in with `login` and the seed users and passed in the e2e gate at the head 4cfa770. The harness ignored it only because task 7.1's e2e file has no red record. At the base 5faa0e7, web/src/features holds only 10-home and 15-sign-in, so there is no admin link or page and the test fails there (inferred from the base tree, not run). Q-023 accepts the criterion on that evidence. The generated UI test is no evidence against it: it fails at the base and the head because it signs in with guessed credentials on a form the app does not have. Every admin page needs a session, and the only sign-in that works on the fake stack is `login` of e2e/conftest.py with the `users` fixture (the engine's "Sign in" button, then the provider's "Username or email" form, with passwords the stack makes at each start and serves at /seed).
 ---
 
 ## Q-049: Hold H-17337413: UI criterion C-d118ea9b has no end-to-end test; see the generated UI tests table
