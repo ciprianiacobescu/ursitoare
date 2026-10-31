@@ -19,8 +19,10 @@ export type CliErrorCode =
 
 export class CliError extends Error {
   readonly code: CliErrorCode;
-  constructor(_code: CliErrorCode, message: string) {
+
+  constructor(code: CliErrorCode, message: string) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "CliError";
+    this.code = code;
   }
 }
