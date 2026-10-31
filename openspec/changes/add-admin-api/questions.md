@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.1 | technical | src/identity/admin/accounts.test.ts:224 asserts ADMIN_TENANT_MISMATCH without a foreign transaction, and its signIn helper cannot produce the asserted display names |
+| Q-002 | open | 3.1 | technical | src/identity/admin/idp-links.test.ts:270 |
 <!-- l4:index:end -->
 
 ---
@@ -36,6 +37,30 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/identity/admin/accounts.test.ts`: move the ADMIN_TENANT_MISMATCH assertion out of the tenant_a block (lines 224-228) and give it its own foreign transaction: `await withTenantTx(db.appPool, b, async (tx) => { await assert.rejects(listAccounts(tx, a, { kind: "human", limit: 50 }), MISMATCH, "a tenant_b transaction with the tenant_a context"); });`
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: src/identity/admin/idp-links.test.ts:270
+
+- **Status:** open
+- **Blocking tasks:** 3.1
+- **Kind:** technical
+- **Asked:** 2026-10-31T04:04Z by deepseek-free, run r-20261031T0339Z-c380, task 3.1
+
+### Context
+The test signs carol in at line 180 with signIn, which calls upsertUserFromClaims and inserts an idp_link row for subject "sub-carol" (the helper asserts the call resolves). Line 270 then asserts that the whole tenant's idp_link subjects are exactly ["sub-ann", "sub-bob"], so no correct addIdpLink implementation can pass without deleting carol's legitimate sign-in link. The spec/design says addIdpLink only inserts a new link and audits it; it never removes existing sign-in links.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/identity/admin/idp-links.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-admin-api`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/identity/admin/idp-links.test.ts`: change line 270 to `assert.deepEqual(stored, ["sub-ann", "sub-bob", "sub-carol"], "nothing was linked");`
+2. Edit `src/identity/admin/idp-links.test.ts`: change the query at lines 263-269 to filter by `user_id = ANY($2::text[])` for ann and bob so carol's sign-in link is excluded.
+
+### Clarifier suggestion
+Edit `src/identity/admin/idp-links.test.ts`: change line 270 to `assert.deepEqual(stored, ["sub-ann", "sub-bob", "sub-carol"], "nothing was linked");`
 
 ### Answer
 <!-- write below this line -->
