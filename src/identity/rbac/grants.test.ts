@@ -347,7 +347,7 @@ test("C-f3ce9a1e Missing, invalid, concurrent, disabled", async () => {
         a,
         `SELECT count(*)::int AS n FROM ursitoare.membership
          WHERE user_id = 'u2' AND role_id = 'author' AND source = 'idp_claim'`,
-        [a.tenantId],
+        [],
       ),
       1,
     );

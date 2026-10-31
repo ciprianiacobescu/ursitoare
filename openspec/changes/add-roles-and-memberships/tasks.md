@@ -16,7 +16,7 @@
 
 ## 5. Direct grants
 
-- [ ] 5.1 Write `src/identity/rbac/grants.test.ts` first (a human owner and a service account from `createServiceAccount`; two parallel transactions on separate connections of `db.appPool` for the concurrent grant), then implement `grantRole` and `revokeRole` in `src/identity/rbac/grants.ts` (decision 5 and its check order; `INSERT ... ON CONFLICT DO NOTHING` decides `granted` or `exists`; events `identity.role_granted` and `identity.role_revoked` only when a row changed; `revokeRole` deletes `local` rows only), exporting them from `src/identity/index.ts`, implementing requirement "A role is granted directly only to a service account, or by an operator"
+- [x] 5.1 Write `src/identity/rbac/grants.test.ts` first (a human owner and a service account from `createServiceAccount`; two parallel transactions on separate connections of `db.appPool` for the concurrent grant), then implement `grantRole` and `revokeRole` in `src/identity/rbac/grants.ts` (decision 5 and its check order; `INSERT ... ON CONFLICT DO NOTHING` decides `granted` or `exists`; events `identity.role_granted` and `identity.role_revoked` only when a row changed; `revokeRole` deletes `local` rows only), exporting them from `src/identity/index.ts`, implementing requirement "A role is granted directly only to a service account, or by an operator"
 
 ## 6. The bootstrap admin group
 
