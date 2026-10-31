@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-31T02:54:44Z",
+  "integrated_revision": "f41b553e95033ee46af3496ac9ef0d57f5dfa869",
+  "merge_commit": "f41b553e95033ee46af3496ac9ef0d57f5dfa869",
+  "plan_digest": "60d144e669271138",
+  "plan_id": "m2",
+  "postcheck": "pass",
+  "pr": 39,
+  "receipt_id": "m2/openspec:add-roles-and-memberships/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "6f8d1058afc8fbf9ac682f8af8e0f9176ad3137d",
+  "spec_digest": "0b40b0949b357ad1",
+  "target": "main",
+  "unit_id": "openspec:add-roles-and-memberships"
+}
