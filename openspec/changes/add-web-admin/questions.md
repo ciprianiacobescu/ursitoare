@@ -41,7 +41,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-028 | open | none | verdict | Hold H-7b12a03b: UI criterion C-bf07943b has no end-to-end test; see the generated UI tests table |
 | Q-029 | answered | none | verdict | Hold H-7ce02cbb: UI criterion C-195c3385 has no end-to-end test; see the generated UI tests table |
 | Q-030 | answered | none | verdict | Hold H-ffedae36: UI criterion C-0c949ead has no end-to-end test; see the generated UI tests table |
-| Q-031 | open | none | verdict | Hold H-30bc4c2c: UI criterion C-97244065 has no end-to-end test; see the generated UI tests table |
+| Q-031 | answered | none | verdict | Hold H-30bc4c2c: UI criterion C-97244065 has no end-to-end test; see the generated UI tests table |
 | Q-032 | open | none | verdict | Hold H-7c7ec97d: UI criterion C-87e93809 has no end-to-end test; see the generated UI tests table |
 | Q-033 | open | none | verdict | Hold H-9a555cbd: UI criterion C-0c16ec24 has no end-to-end test; see the generated UI tests table |
 | Q-034 | open | none | verdict | Hold H-c36e205c: UI criterion C-4bc159f4 has no end-to-end test; see the generated UI tests table |
@@ -1008,7 +1008,8 @@ accept The hold may be waived and the unit can go on as it stands. Criterion C-0
 
 ## Q-031: Hold H-30bc4c2c: UI criterion C-97244065 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -1027,6 +1028,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived and the unit can go on as it stands. Criterion C-97244065 is the scenario "Parsing an account": it calls parseAccount with a hand-built Bob body and six malformed bodies and compares the results, a unit-level call to a pure parser whose inputs a browser cannot construct, which is why the generated browser test was judged not testable. The implementation in web/src/admin/users.ts refuses a non-record, checks userId against the id pattern, kind, displayName and email lengths, state against active or disabled, and roles, teams and localRoles as arrays of strings matching the role or team pattern, then returns only the eight AccountRow fields, so ownerUserId is dropped and each malformed body gives null. Its tracing Node test in web/src/admin/users.test.ts parses the Bob body inside assert.doesNotThrow, deep-compares it to the eight-field account without the owner, and asserts null for the deleted state, the path-like id, the text roles field, the upper-case team, the numeric local role and the null body; Q-006 already accepted the criterion on that test. The same parser is run against the real engine in test/journeys/m2-admin.test.ts, where carol's loadAllItems over /users with parseAccount yields alice with roles author, team finance and no local roles and carol with tenant_admin. The user-visible side is covered by the repository's own browser journey e2e/test_m2_admin.py: UsersPage builds its list from cursorPageFetcher with parseAccount as parseItem, and carol's Users table shows alice's row with "author · finance" and her own row with "This is your account", which only a successful parse of the engine's accounts can produce. A missing harness-generated browser test for a pure parser therefore says nothing about the change.
 ---
 
 ## Q-032: Hold H-7c7ec97d: UI criterion C-87e93809 has no end-to-end test; see the generated UI tests table
