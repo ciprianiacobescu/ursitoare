@@ -33,3 +33,5 @@
 {"at":"2026-10-31T05:15:51Z","attempt":1,"cost_usd":3.756178,"runs":3,"type":"plan.charged","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T05:15:51Z","detail":"task 5.1: max_task_attempts (3) reached in red on glm (2), claude-sonnet (3); last failure: red broke existing tests: src.api.error-codes.test.ts::C-96e47324 The registry holds exactly the 16 codes of the API with status and message","reason":"unit_halted","type":"plan.stopped","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T05:25:50Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"admin-api task 5.1 halted on the L4 named-test window limit (L4-IMP-089, fix due in 0.4.47); retried with an implementer note to change the test's own lines","type":"plan.resumed"}
+{"at":"2026-10-31T05:27:12Z","attempt":1,"cost_usd":3.756178,"runs":4,"type":"plan.charged","unit":"openspec:add-admin-api"}
+{"at":"2026-10-31T05:27:12Z","run":"r-20261031T0527Z-4c9b","type":"unit.dispatched","unit":"openspec:add-admin-api"}
