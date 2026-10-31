@@ -33,7 +33,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-020 | answered | none | verdict | Criterion C-dd02e61e (web-admin › The admin logic works against the real engine › Carol manages mappings and teams and reads the log): accept as satisfied? |
 | Q-021 | answered | none | verdict | Criterion C-06a71640 (web-admin › The admin logic works against the real engine › Alice is refused, carol finds the id and disables her): accept as satisfied? |
 | Q-022 | open | none | verdict | Criterion C-f7bbb238 (web-admin › The M2 journey proves the admin screens in a browser › Carol maps a group and the log shows it verified): accept as satisfied? |
-| Q-023 | open | none | verdict | Criterion C-652f54b7 (web-admin › The M2 journey proves the admin screens in a browser › Alice sees a 403 page with the decision id): accept as satisfied? |
+| Q-023 | answered | none | verdict | Criterion C-652f54b7 (web-admin › The M2 journey proves the admin screens in a browser › Alice sees a 403 page with the decision id): accept as satisfied? |
 | Q-024 | open | none | verdict | Criterion C-d118ea9b (web-admin › The M2 journey proves the admin screens in a browser › Carol disables and enables alice): accept as satisfied? |
 | Q-025 | open | none | verdict | Criterion C-19381fcc (web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team): accept as satisfied? |
 | Q-026 | open | none | verdict | Hold H-7687af8e: UI criterion C-2c3410e3 has no end-to-end test; see the generated UI tests table |
@@ -786,7 +786,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-023: Criterion C-652f54b7 (web-admin › The M2 journey proves the admin screens in a browser › Alice sees a 403 page with the decision id): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -813,6 +814,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The browser test for it in e2e/test_m2_admin.py signs alice in, opens /admin/users by address, expects an alert containing "Not allowed" with the text "Decision id:" and a button named exactly "Copy decision id", asserts there is no "Users" link, reads the decision id from the code element of that paragraph, then in a second browser context signs carol in, filters her Audit log by "authz.denied" and expects a row of the table "Audit events" containing that same id, with assert_accessible on both pages. The code gives exactly that: the app routes every registered feature regardless of capability while the navigation drops a feature whose capability the session lacks, so alice reaches the Users page without a "Users" link; the page's DataTable shows an ErrorPanel when its cursor list ends in error; ErrorPanel is a section with role alert whose title for a 403 is "Not allowed" and which renders a paragraph "Decision id:" with the id in a code element and a "Copy decision id" button whenever the 403 envelope carries a decisionId; the server's refusal throws 403 FORBIDDEN with details.decisionId and writes an authz.denied event whose payload begins with that decisionId, which auditCells renders as the JSON text of the payload, so carol's filtered table row contains the id. The Node journey test against the real engine already proved the server side of this scenario, asserting the 403 FORBIDDEN with a non-empty decisionId and an authz.denied item whose payload.decisionId equals it. The harness's generated browser test that failed at the head is not in the repository and failed in both of its columns, so its failure says nothing about the change; the repository's own test traces the scenario assertion by assertion.
 ---
 
 ## Q-024: Criterion C-d118ea9b (web-admin › The M2 journey proves the admin screens in a browser › Carol disables and enables alice): accept as satisfied?
