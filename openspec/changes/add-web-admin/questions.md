@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Criterion C-c174064a (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Creating and deleting): accept as satisfied? |
 | Q-011 | answered | none | verdict | Criterion C-b8ae0992 (web-admin › The Group mappings page maps a group to one role or team › Parsing, showing and offering mappings): accept as satisfied? |
 | Q-012 | answered | none | verdict | Criterion C-5e078fd3 (web-admin › The Group mappings page maps a group to one role or team › Building the request): accept as satisfied? |
-| Q-013 | open | none | verdict | Criterion C-741e5139 (web-admin › The Group mappings page maps a group to one role or team › Saving a mapping, reading every page): accept as satisfied? |
+| Q-013 | answered | none | verdict | Criterion C-741e5139 (web-admin › The Group mappings page maps a group to one role or team › Saving a mapping, reading every page): accept as satisfied? |
 | Q-014 | open | none | verdict | Criterion C-8a1094e4 (web-admin › The Group mappings page maps a group to one role or team › A removal states the consequence): accept as satisfied? |
 | Q-015 | open | none | verdict | Criterion C-71033976 (web-admin › The Audit log page lists events newest first and filters by event type › Parsing an event and its cells): accept as satisfied? |
 | Q-016 | open | none | verdict | Criterion C-1e5047ed (web-admin › The Audit log page lists events newest first and filters by event type › The event type filter): accept as satisfied? |
@@ -459,7 +459,8 @@ accept The criterion is satisfied as it stands. mappingRequest in web/src/admin/
 
 ## Q-013: Criterion C-741e5139 (web-admin › The Group mappings page maps a group to one role or team › Saving a mapping, reading every page): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -486,6 +487,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. setMapping in web/src/admin/mappings.ts calls the client's put with the path /idp-group-map and the body, parses the answer with parseGroupMapping and returns the mapping, so a recording client gets put("/idp-group-map", body) and the result is the mapping. loadAllItems builds a cursor list with a page size of 200, calls load, then loadMore while the state is loaded with a non-null cursor and fewer than five pages have been read, and throws the state's error when the list ended in error; the kit's createCursorList sends each fetcher request as { cursor, limit: pageSize, signal } and keeps the rejection of a fetcher as the error of its state. So the two-page fetcher is asked { cursor: null, limit: 200 } then { cursor: "c1", limit: 200 } and yields [1, 2, 3], the endless fetcher is asked exactly five times, and a fetcher that rejects ApiRequestError(503, "AUTHZ_UNAVAILABLE", "x") makes loadAllItems reject with that same error object. The tracing tests use a recording put client and fake page fetchers and assert exactly those outcomes: one call with path /idp-group-map and the role body deep-equal to the request, the result deep-equal to the mapping, the requests compared on cursor and limit, the five-call count, and a rejection whose error is identical to the thrown failure. All six passed as red assertions. The judge gave no verdict only because its evidence was cut to fit the budget, and the missing browser test was itself judged not testable since the scenario is a unit-level call to logic functions with fake clients.
 ---
 
 ## Q-014: Criterion C-8a1094e4 (web-admin › The Group mappings page maps a group to one role or team › A removal states the consequence): accept as satisfied?
