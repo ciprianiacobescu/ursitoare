@@ -40,7 +40,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-027 | answered | none | verdict | Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event): accept as satisfied? |
 | Q-028 | answered | none | verdict | Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing): accept as satisfied? |
 | Q-029 | answered | none | verdict | Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows): accept as satisfied? |
-| Q-030 | open | none | verdict | Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key): accept as satisfied? |
+| Q-030 | answered | none | verdict | Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key): accept as satisfied? |
 | Q-031 | answered | none | verdict | Criterion C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server): accept as satisfied? |
 | Q-032 | answered | none | verdict | Criterion C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine): accept as satisfied? |
 | Q-033 | answered | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
@@ -974,7 +974,7 @@ accept The criterion is satisfied. The tracing test in src/api/admin-page.test.t
 
 ## Q-030: Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($47.08 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -1002,6 +1002,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept: Round 1 (head 02e99e4) the judge mimo-judge passed it and a discriminating test passed. Since then the only change outside openspec is the new test src/api/admin-isolation.test.ts (git diff 02e99e4 621c054), and the round 3 tests step passed, so the code and tests the judge passed are unchanged. This round the judge timed out (part 3 of 4), which says nothing about the criterion.
 ---
 
 ## Q-031: Criterion C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server): accept as satisfied?
