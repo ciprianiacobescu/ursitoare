@@ -975,6 +975,7 @@ accept The criterion is satisfied. The tracing test in src/api/admin-page.test.t
 ## Q-030: Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($47.08 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
