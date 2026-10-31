@@ -50,3 +50,4 @@
 {"at":"2026-10-31T11:22:25Z","attempt":1,"run":"r-20261031T1122Z-8567","type":"plan.run_idle","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T11:24:31Z","attempt":1,"cost_usd":48.8074,"runs":10,"type":"plan.charged","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T11:24:31Z","run":"r-20261031T1124Z-3c3c","type":"unit.dispatched","unit":"openspec:add-admin-api"}
+{"at":"2026-10-31T11:35:21Z","head":"ea679b41a8409f5d77422907955c4790e3851511","pr":41,"target_before":"fe00a46b4583a28db7cf546e0888a1b890a0bf4b","type":"unit.merge_requested","unit":"openspec:add-admin-api"}
