@@ -47,3 +47,43 @@
 .admin-status strong {
   color: var(--ui-color-text);
 }
+
+.admin-status--ok {
+  color: var(--ui-color-success-text);
+  background: var(--ui-color-success-surface);
+  border-left-color: var(--ui-color-success-text);
+}
+
+.admin-status--ok strong {
+  color: inherit;
+}
+
+.admin-status--broken {
+  color: var(--ui-color-danger-text);
+  background: var(--ui-color-danger-surface);
+  border-left-color: var(--ui-color-danger-text);
+}
+
+.admin-status--broken strong {
+  color: inherit;
+}
+
+.admin-status--unavailable {
+  color: var(--ui-color-danger-text);
+  background: var(--ui-color-danger-surface);
+  border-left-color: var(--ui-color-danger-text);
+}
+
+.admin-status--unavailable strong {
+  color: inherit;
+}
+
+.admin-status--checking {
+  color: var(--ui-color-info-text);
+  background: var(--ui-color-info-surface);
+  border-left-color: var(--ui-color-info-text);
+}
+
+.admin-status--checking strong {
+  color: inherit;
+}

@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
 import { browserSession } from "../auth/browser-session.ts";
@@ -9,8 +9,14 @@ import { createCursorList } from "../kit/data/cursor-list.ts";
 import type { FormErrors } from "../kit/data/form-errors.ts";
 import "./admin.css";
 import { ADMIN_TABLES } from "./pages.ts";
-import { auditCells, auditFetcher, parseEventTypeFilter } from "./audit.ts";
-import type { AuditEvent } from "./audit.ts";
+import {
+  auditCells,
+  auditFetcher,
+  loadVerification,
+  parseEventTypeFilter,
+  verificationView,
+} from "./audit.ts";
+import type { AuditEvent, VerificationState } from "./audit.ts";
 
 const PAGE_TITLE = "Audit log · Ursitoare";
 const AUDIT_FIELDS = ["eventType"] as const;
@@ -45,6 +51,37 @@ export function AuditPage(): ReactNode {
     setEventType((current) => (current === checked.value ? current : checked.value));
   };
 
+  const runningVerification = useRef<AbortController | null>(null);
+  const [verificationState, setVerificationState] = useState<VerificationState>({
+    status: "checking",
+  });
+
+  const startVerification = useCallback((): void => {
+    runningVerification.current?.abort();
+    const controller = new AbortController();
+    runningVerification.current = controller;
+    setVerificationState({ status: "checking" });
+    void loadVerification(browserSession.api, controller.signal).then(
+      (result) => {
+        if (!controller.signal.aborted) {
+          setVerificationState({ status: "done", result });
+        }
+      },
+      (error: unknown) => {
+        if (!controller.signal.aborted) {
+          setVerificationState({ status: "failed", error });
+        }
+      },
+    );
+  }, []);
+
+  useEffect(() => {
+    startVerification();
+    return () => {
+      runningVerification.current?.abort();
+    };
+  }, [startVerification]);
+
   const columns = ADMIN_TABLES.audit.columns.map((column) => ({
     ...column,
     cell: (event: AuditEvent): ReactNode => {
@@ -68,11 +105,33 @@ export function AuditPage(): ReactNode {
     },
   }));
 
+  const view = verificationView(verificationState);
+
   return (
     <div className="admin-page">
       <h1 ref={headingRef} tabIndex={-1}>
         Audit log
       </h1>
+      <section className="admin-section" aria-labelledby={`${idPrefix}-verification-title`}>
+        <h2 id={`${idPrefix}-verification-title`}>Chain verification</h2>
+        <p role="status" className={`admin-status admin-status--${view.tone}`}>
+          <strong>{view.headline}</strong> {view.detail}
+        </p>
+        <div className="admin-actions">
+          <button
+            type="button"
+            className="ui-button"
+            onClick={() => {
+              if (verificationState.status !== "checking") {
+                startVerification();
+              }
+            }}
+            aria-disabled={verificationState.status === "checking"}
+          >
+            Verify again
+          </button>
+        </div>
+      </section>
       <section className="admin-section" aria-labelledby={`${idPrefix}-filter-title`}>
         <h2 id={`${idPrefix}-filter-title`}>Filter the audit log</h2>
         <Form
