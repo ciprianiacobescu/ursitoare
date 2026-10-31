@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-2c3410e3 (web-admin › Admin pages are listed by capability and declare literal paths › The page table): accept as satisfied? |
-| Q-002 | open | none | verdict | Criterion C-7c7c77c3 (web-admin › Admin pages are listed by capability and declare literal paths › Navigation follows capabilities): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-7c7c77c3 (web-admin › Admin pages are listed by capability and declare literal paths › Navigation follows capabilities): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-bf07943b (web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-195c3385 (web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-0c949ead (web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action): accept as satisfied? |
@@ -101,7 +101,8 @@ accept The criterion is satisfied as it stands. ADMIN_PAGES in web/src/admin/pag
 
 ## Q-002: Criterion C-7c7c77c3 (web-admin › Admin pages are listed by capability and declare literal paths › Navigation follows capabilities): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -128,6 +129,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The test "the navigation follows capabilities" in web/src/admin/pages.test.ts registers the four ADMIN_PAGES entries with element null in a fresh createFeatureRegistry() and deep-compares the nav labels for new Set(), new Set(["read_self", "read_audit"]) and new Set(["manage_users_roles", "read_audit"]) against [], ["Audit log"] and ["Users", "Roles and teams", "Group mappings", "Audit log"], exactly the scenario. ADMIN_PAGES in web/src/admin/pages.ts lists the three manage_users_roles pages in order and then admin-audit with read_audit, and the registry's nav in web/src/app/features.ts keeps registration order and skips a feature whose capability is not in the set, so the labels come out as the scenario demands. The test passed as a red assertion; the judge gave no verdict only because its evidence was cut to fit the budget, and the missing browser test was itself judged not testable in a browser since the scenario is a unit-level registry call.
 ---
 
 ## Q-003: Criterion C-bf07943b (web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals): accept as satisfied?
