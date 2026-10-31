@@ -99,3 +99,6 @@
 {"at":"2026-10-31T23:34:12Z","head":"8f4a54dab40cb6171f19e0dae59b87424fa45772","pr":46,"target_before":"5faa0e73adee6ed703f322d1ad372d3446ac8dab","type":"unit.merge_requested","unit":"openspec:add-web-admin"}
 {"at":"2026-10-31T23:34:18Z","ci":"not_run","head":"8f4a54dab40cb6171f19e0dae59b87424fa45772","merge_commit":"a765385161ad5cc7ab918c5dcdfced4df893a66e","method":"squash","pr":46,"raced":false,"type":"unit.merged","unit":"openspec:add-web-admin"}
 {"at":"2026-10-31T23:34:23Z","branch":"l4/openspec/add-web-admin","head":"8f4a54dab40cb6171f19e0dae59b87424fa45772","type":"unit.branch_deleted","unit":"openspec:add-web-admin"}
+{"at":"2026-10-31T23:36:13Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"a765385161ad5cc7ab918c5dcdfced4df893a66e","status":"pass","type":"unit.postcheck","unit":"openspec:add-web-admin"}
+{"at":"2026-10-31T23:36:13Z","revision":"a765385161ad5cc7ab918c5dcdfced4df893a66e","type":"unit.integrated","unit":"openspec:add-web-admin"}
+{"at":"2026-10-31T23:36:13Z","attempt":1,"cost_usd":45.256662,"runs":6,"type":"plan.charged","unit":"openspec:add-web-admin"}
