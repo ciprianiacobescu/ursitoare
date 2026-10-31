@@ -10,3 +10,5 @@
 {"at":"2026-10-31T00:04:20Z","by":"harness","reason":"the cause is gone: openspec:add-roles-and-memberships is awaiting_human","type":"plan.resumed"}
 {"at":"2026-10-31T00:04:22Z","attempt":1,"cost_usd":1.137096,"runs":2,"type":"plan.charged","unit":"openspec:add-roles-and-memberships"}
 {"at":"2026-10-31T00:04:22Z","run":"r-20261031T0004Z-f337","type":"unit.dispatched","unit":"openspec:add-roles-and-memberships"}
+{"at":"2026-10-31T01:17:37Z","attempt":1,"cost_usd":5.517789,"runs":3,"type":"plan.charged","unit":"openspec:add-roles-and-memberships"}
+{"at":"2026-10-31T01:17:37Z","run":"r-20261031T0117Z-a389","type":"unit.dispatched","unit":"openspec:add-roles-and-memberships"}
