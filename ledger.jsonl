@@ -43,3 +43,5 @@
 {"at":"2026-10-31T09:42:15Z","by":"harness","reason":"the cause is gone: openspec:add-admin-api is awaiting_human","type":"plan.resumed"}
 {"at":"2026-10-31T09:42:17Z","attempt":1,"cost_usd":10.086423,"runs":7,"type":"plan.charged","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T09:42:17Z","run":"r-20261031T0942Z-0b72","type":"unit.dispatched","unit":"openspec:add-admin-api"}
+{"at":"2026-10-31T10:59:15Z","attempt":1,"cost_usd":16.519151,"runs":8,"type":"plan.charged","unit":"openspec:add-admin-api"}
+{"at":"2026-10-31T10:59:15Z","run":"r-20261031T1059Z-c6fa","type":"unit.dispatched","unit":"openspec:add-admin-api"}
