@@ -1,4 +1,4 @@
-# Verification: openspec:add-admin-api: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-admin-api: FAIL (round 2)
 
 traceability: 27/29 criteria covered by a discriminating test
 
@@ -18,17 +18,17 @@ traceability: 27/29 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base main@fe00a46b45 contained |
-| 1 | integrity | ok | 309.8 | 11 sub-checks (+2 unfrozen by human answers); scope: 40 changed file(s) |
-| 2 | build | ok | 25.5 |  |
-| 3 | tests | ok | 186.0 |  |
-| 4 | traceability | ok | 0.2 | 27/29 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/api/admin-errors.ts, src/api/admin-page.ts, src/api/admin-rbac.ts, src/api/admin-routes.ts, src/api/admin-service-accounts.ts and 10 more |
-| 8 | s1 judge | ok | 3.7 | 28/29 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 1683.5 | 5 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -233,13 +233,21 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-05ca73a7 | ok | 0.870 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-541ef4f9 | ok | 0.880 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-003 reject C-598727de by the delegate (claude-fable-5-1 via claude-code): The criterion is not satisfied as it stands because no test exercises its scenario. The only two-tenant check in the admin route tests is the list half of it: in the test of accounts carrying roles and teams, tenant B's admin zed lists users and sees only zed. No test has B's admin read or patch one...
+- Q-004 accept C-96e47324 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. The registry in src/api/error-codes.ts holds exactly the 22 entries of the scenario with the statuses and messages given, and the named test asserts the scenario in full: it compares the sorted key set of ERROR_CODES with its 22 expected keys, deep-compares status and mes...
+- Q-005 reject F-cde045de by agent (CLAUDECODE): the same gap as Q-003 and Q-006: no test covers C-598727de, so the admin routes have no test of tenant isolation (tenant B requests at tenant A ids, a forged tenantId in a team body, tenant A rows unchanged). The fix is one new test over the server that traces C-598727de.
+- Q-006 reject F-28a40cf9 by the delegate (claude-fable-5-1 via claude-code): The finding stands: the criterion is not covered by any test. The only two-tenant checks in the admin route tests are list calls by tenant B's admin zed, who lists users, teams, roles and group mappings and sees only tenant B's rows. No test has B's admin read or patch one of tenant A's users, grant...
+- Q-007 accept F-c28b995d by the delegate (claude-fable-5-1 via claude-code): The finding is waived: the criterion is satisfied and the named test asserts its whole scenario. The registry in src/api/error-codes.ts holds exactly the 22 entries the scenario lists, each with the status and message given. The test compares the sorted key set of ERROR_CODES with its 22 expected ke...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
 | C-8a23d872 | admin-api › Every admin route is a session route under the right action › The route table | pass | pass | the judge passed it and a discriminating test passes |
 | C-a4888ef3 | admin-api › Every admin route is a session route under the right action › Who may call | pass | pass | the judge passed it and a discriminating test passes |
-| C-598727de | admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-598727de | admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant | pass | fail | rejected by the delegate (claude-fable-5-1 via claude-code): The criterion is not satisfied as it stands because no test exercises its scenario. The only two-tenant check in the admin route tests is the list half of it: in the test of accounts carrying roles and teams, tenant B's admin zed lists use... |
 | C-cc3ddc89 | admin-api › Admin errors are registered codes › The mapping | pass | pass | the judge passed it and a discriminating test passes |
 | C-e8ea1428 | admin-api › Admin errors are registered codes › Other errors pass through | pass | pass | the judge passed it and a discriminating test passes |
 | C-7a958882 | admin-api › The app role may switch only its own tenant's review profile › Objects and privileges | pass | pass | the judge passed it and a discriminating test passes |
@@ -262,7 +270,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-4c8964eb | admin-api › Lists page with the cursor contract › Without an engine key | pass | pass | the judge passed it and a discriminating test passes |
 | C-eec17a85 | admin-api › Lists page with the cursor contract › Through the server | pass | pass | the judge passed it and a discriminating test passes |
 | C-ddb4acf0 | admin-api › The engine serves the admin routes and documents them › The real engine | pass | pass | the judge passed it and a discriminating test passes |
-| C-96e47324 | api-conventions › Every error code is registered › The registry | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-96e47324 | api-conventions › Every error code is registered › The registry | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. The registry in src/api/error-codes.ts holds exactly the 22 entries of the scenario with the statuses and messages given, and the named test asserts the scenario in full: it compares the sorted key set of ERROR_... |
 | C-601275f9 | api-conventions › Every error code is registered › An unregistered literal code fails the scan | pass | pass | the judge passed it and a discriminating test passes |
 | C-05ca73a7 | api-conventions › Every error code is registered › Registered, dynamic and test uses pass | pass | pass | the judge passed it and a discriminating test passes |
 | C-541ef4f9 | api-conventions › Every error code is registered › Route errors | pass | pass | the judge passed it and a discriminating test passes |
@@ -271,12 +279,17 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 - [minor, deterministic] a test is ignored as evidence (criterion C-96e47324): src.api.error-codes.test.ts::C-96e47324 The registry holds exactly the 16 codes of the API with status and message: no proof that it discriminates (no red, audit or generated record)
 - [minor, judge] Two-tenant isolation has no discriminating test (spec gap) (criterion C-598727de): The gate report marks C-598727de uncovered ("no discriminating test"). The criterion requires B's admin to get 404 on A's user ids across GET/PATCH, role routes and idp-links, and 400 on a forged tenantId body; no test in this part exercises that combination.
-- [major, judge] No discriminating test for cross-tenant admin isolation (criterion C-598727de): The gate report's traceability matrix marks C-598727de as uncovered with no discriminating test, so the two-tenant/forged-tenant admin scenario has no test evidence on this head.
+- [major, human] No discriminating test for cross-tenant admin isolation (criterion C-598727de): The gate report's traceability matrix marks C-598727de as uncovered with no discriminating test, so the two-tenant/forged-tenant admin scenario has no test evidence on this head. [rejected by agent (CLAUDECODE) (the same gap as Q-003 and Q-006: no test covers C-598727de, so the admin routes have no test of tenant isolation (tenant B requests at tenant A ids, a forged tenantId in a team body, tenant A rows unchanged). The fix is one new test over the server that traces C-598727de.)]
 - [minor, judge] openapi.json documents 200 for DELETE routes the spec requires to answer 204 (criterion C-ddb4acf0): The regenerated docs/api/openapi.json in this part records responses.200 for DELETE /api/v1/teams/{teamId}, DELETE /api/v1/service-accounts/{userId}/roles/{roleId} and DELETE /api/v1/idp-group-map, while the admin-api scenarios require 204 on a successful delete (gate tests expecting 204 passed).
-- [major, judge] Uncovered criterion C-598727de (Another tenant and a forged tenant) (criterion C-598727de): The gate report marks C-598727de as 'uncovered — no discriminating test'. The criterion requires a test that a tenant B admin's attempts to list/read/patch tenant A's users, grant roles to A's service account, list A's idp-links, and POST a team with a forged tenantId all fail (404/400) and leave A's rows unchanged. No test in the gate report asserts this full scenario end-to-end through the HTTP routes.
-- [major, judge] Uncovered criterion C-96e47324 (The registry) at gate level (criterion C-96e47324): The gate report marks C-96e47324 as 'uncovered — no discriminating test', even though the named test src.api.error-codes.test.ts::C-96e47324 was changed in place and passed. The traceability matrix did not count it as covering the criterion, suggesting the test may not assert the observable outcome (the exact 22-entry registry with statuses and messages) in a way the harness recognises as discriminating. This needs human review of whether the in-place change still asserts everything required.
+- [major, human] Uncovered criterion C-598727de (Another tenant and a forged tenant) (criterion C-598727de): The gate report marks C-598727de as 'uncovered — no discriminating test'. The criterion requires a test that a tenant B admin's attempts to list/read/patch tenant A's users, grant roles to A's service account, list A's idp-links, and POST a team with a forged tenantId all fail (404/400) and leave A's rows unchanged. No test in the gate report asserts this full scenario end-to-end through the HTTP routes. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding stands: the criterion is not covered by any test. The only two-tenant checks in the admin route tests are list calls b...
+- [minor, judge] Uncovered criterion C-96e47324 (The registry) at gate level (criterion C-96e47324): The gate report marks C-96e47324 as 'uncovered — no discriminating test', even though the named test src.api.error-codes.test.ts::C-96e47324 was changed in place and passed. The traceability matrix did not count it as covering the criterion, suggesting the test may not assert the observable outcome (the exact 22-entry registry with statuses and messages) in a way the harness recognises as discriminating. This needs human review of whether the in-place change still asserts everything required. (waived by the delegate (claude-fable-5-1 via claude-code): The finding is waived: the criterion is sa...
 - [minor, judge] Test title says '16 codes' but the test body checks 22 (criterion C-96e47324): The named test src.api.error-codes.test.ts::C-96e47324 keeps the title 'The registry holds exactly the 16 codes of the API with status and message' while its EXPECTED_CODES now contains 22 entries. The title is now factually wrong. The task (5.1) explicitly requires keeping the title ('its title stays as it is — a renamed test fails the attempt'), so this is a consequence of the task, not a defect the implementer introduced on its own. However, the mismatch is a documentation trap for future readers.
 - [minor, judge] the judge called a test inadequate (criterion C-1801fd2c): src.identity.admin.review-profile.test.ts::C-1801fd2c The review profile refuses an unknown profile
+
+## Fix unit
+
+Fix unit 1 is created for these tasks:
+- F-cde045de, F-28a40cf9 No discriminating test for cross-tenant admin isolation (+1 more)
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
