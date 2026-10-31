@@ -1,0 +1,49 @@
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-4);
+  max-width: 64rem;
+  color: var(--ui-color-text);
+}
+
+.admin-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-3);
+  padding: var(--ui-space-3);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-color-bg);
+}
+
+.admin-section h2 {
+  margin: 0;
+  font-size: var(--ui-font-size);
+  color: var(--ui-color-text);
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-space-2);
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+  max-width: 32rem;
+}
+
+.admin-status {
+  padding: var(--ui-space-2) var(--ui-space-3);
+  border-left: var(--ui-focus-width) solid var(--ui-color-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text);
+}
+
+.admin-status strong {
+  color: var(--ui-color-text);
+}
