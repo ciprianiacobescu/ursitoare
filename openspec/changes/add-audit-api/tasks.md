@@ -15,7 +15,7 @@ Fixtures: `scenario-data.md`; specs: `specs/audit-api/spec.md` and `specs/audit-
 
 ## 4. Query parsing
 
-- [ ] 4.1 Write `src/api/audit-query.test.ts` first (scenario "Parsing is a pure function", the parser part of "The reader and the parser refuse bad input", and the `parseVerifyQuery` results of "Options reach verifyChain, bad input and failures"; refusals asserted as `ApiError` with `status`, `code` and `details.fields`), then implement `parseAuditQuery`, `parseDecisionQuery` and `parseVerifyQuery` in `src/api/audit-query.ts` as Decision 3 says (no property set to `undefined`), and export them and `ListQuery` from `src/api/index.ts`, implementing requirements "Audit events can be filtered" and "Policy decisions are listed with their filters"
+- [x] 4.1 Write `src/api/audit-query.test.ts` first (scenario "Parsing is a pure function", the parser part of "The reader and the parser refuse bad input", and the `parseVerifyQuery` results of "Options reach verifyChain, bad input and failures"; refusals asserted as `ApiError` with `status`, `code` and `details.fields`), then implement `parseAuditQuery`, `parseDecisionQuery` and `parseVerifyQuery` in `src/api/audit-query.ts` as Decision 3 says (no property set to `undefined`), and export them and `ListQuery` from `src/api/index.ts`, implementing requirements "Audit events can be filtered" and "Policy decisions are listed with their filters"
 
 ## 5. The audit list route
 
