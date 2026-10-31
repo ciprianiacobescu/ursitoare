@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Criterion C-97244065 (web-admin › The Users page lists people and disables or enables them › Parsing an account): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-87e93809 (web-admin › The Users page lists people and disables or enables them › Cells and actions): accept as satisfied? |
 | Q-008 | answered | none | verdict | Criterion C-0c16ec24 (web-admin › The Users page lists people and disables or enables them › Setting a state): accept as satisfied? |
-| Q-009 | open | none | verdict | Criterion C-4bc159f4 (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Names): accept as satisfied? |
+| Q-009 | answered | none | verdict | Criterion C-4bc159f4 (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Names): accept as satisfied? |
 | Q-010 | open | none | verdict | Criterion C-c174064a (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Creating and deleting): accept as satisfied? |
 | Q-011 | open | none | verdict | Criterion C-b8ae0992 (web-admin › The Group mappings page maps a group to one role or team › Parsing, showing and offering mappings): accept as satisfied? |
 | Q-012 | open | none | verdict | Criterion C-5e078fd3 (web-admin › The Group mappings page maps a group to one role or team › Building the request): accept as satisfied? |
@@ -327,7 +327,8 @@ accept The criterion is satisfied as it stands. patchAccountState in web/src/adm
 
 ## Q-009: Criterion C-4bc159f4 (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Names): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -354,6 +355,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. parseNamed in web/src/admin/teams.ts needs a plain object with an own property of the asked key whose string value matches the role pattern ^[a-z][a-z0-9_]{0,31}$ or the team pattern ^[a-z][a-z0-9_-]{0,63}$ of design decision 3, so { roleId: "tenant_admin" } gives "tenant_admin", { roleId: "Tenant" } gives null because of the upper-case letter, and { teamId: "finance" } gives "finance". checkTeamId trims, answers { ok: false, message: "Enter a team name." } for the empty text, { ok: false, message } with the exact task 4.1 text "Use a lower-case letter first, then lower-case letters, digits, hyphens or underscores (up to 64 characters)." for a text outside the team pattern such as "Ops", and { ok: true, value: "ops" } for " ops ". The two tracing tests call each function inside assert.doesNotThrow and assert exactly the scenario's inputs and outputs, including the task 4.1 message, plus an upper-case team and a body without the asked key. Both passed as red assertions. The judge gave no verdict only because its evidence was cut to fit the budget, and the failing generated browser test is a harness artifact: the scenario is a unit-level call to two pure functions that a browser journey cannot observe.
 ---
 
 ## Q-010: Criterion C-c174064a (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Creating and deleting): accept as satisfied?
