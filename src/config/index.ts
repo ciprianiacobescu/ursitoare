@@ -10,3 +10,4 @@ export { Secret } from "./secret.ts";
 export type { ConfigErrorCode } from "./errors.ts";
 export { ConfigError } from "./errors.ts";
 export { loadConfigFromProcess } from "./process.ts";
+export { readProcessEnv } from "./environment.ts";

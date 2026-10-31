@@ -1,6 +1,6 @@
 ## 1. The process environment
 
-- [ ] 1.1 Write `src/config/environment.test.ts` first (scenario "The process environment"; the test sets and deletes `process.env.URSITOARE_CLI_PROBE` itself), then implement `readProcessEnv` in `src/config/environment.ts` (`{ ...process.env }`, a copy) and re-export it from `src/config/index.ts`, implementing requirement "The entry point runs the default registry"
+- [x] 1.1 Write `src/config/environment.test.ts` first (scenario "The process environment"; the test sets and deletes `process.env.URSITOARE_CLI_PROBE` itself), then implement `readProcessEnv` in `src/config/environment.ts` (`{ ...process.env }`, a copy) and re-export it from `src/config/index.ts`, implementing requirement "The entry point runs the default registry"
 
 ## 2. The command registry
 
