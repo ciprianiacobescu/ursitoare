@@ -36,7 +36,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-023 | answered | none | verdict | Criterion C-652f54b7 (web-admin › The M2 journey proves the admin screens in a browser › Alice sees a 403 page with the decision id): accept as satisfied? |
 | Q-024 | answered | none | verdict | Criterion C-d118ea9b (web-admin › The M2 journey proves the admin screens in a browser › Carol disables and enables alice): accept as satisfied? |
 | Q-025 | answered | none | verdict | Criterion C-19381fcc (web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team): accept as satisfied? |
-| Q-026 | open | none | verdict | Hold H-7687af8e: UI criterion C-2c3410e3 has no end-to-end test; see the generated UI tests table |
+| Q-026 | answered | none | verdict | Hold H-7687af8e: UI criterion C-2c3410e3 has no end-to-end test; see the generated UI tests table |
 | Q-027 | open | none | verdict | Hold H-2b38782f: UI criterion C-7c7c77c3 has no end-to-end test; see the generated UI tests table |
 | Q-028 | open | none | verdict | Hold H-7b12a03b: UI criterion C-bf07943b has no end-to-end test; see the generated UI tests table |
 | Q-029 | open | none | verdict | Hold H-7ce02cbb: UI criterion C-195c3385 has no end-to-end test; see the generated UI tests table |
@@ -885,7 +885,8 @@ accept The criterion is satisfied as it stands. The browser test for it in e2e/t
 
 ## Q-026: Hold H-7687af8e: UI criterion C-2c3410e3 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -904,6 +905,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived and the unit can go on as it stands. Criterion C-2c3410e3 is the scenario "The page table": it reads ADMIN_PAGES and passes each ADMIN_TABLES spec to dataTableModel, a unit-level check of two constants that no browser can observe directly, and its two tracing Node tests in web/src/admin/pages.test.ts deep-compare both constants against the scenario's values and passed as red assertions, which Q-001 already accepted. The user-visible side the hold worries about is covered by the repository's own browser journey e2e/test_m2_admin.py: carol's navigation shows the four labels in order, each page is reached by its link, and the tables are located by the captions "Users", "Roles", "Teams", "Group mappings" and "Audit events" that the criterion prescribes, with the feature files declaring the literal paths of ADMIN_PAGES. The harness-generated test that fails at the head is not in the repository and failed for every page parameter alike, so its failure says nothing about the change.
 ---
 
 ## Q-027: Hold H-2b38782f: UI criterion C-7c7c77c3 has no end-to-end test; see the generated UI tests table
