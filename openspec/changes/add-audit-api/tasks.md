@@ -7,7 +7,7 @@ Fixtures: `scenario-data.md`; specs: `specs/audit-api/spec.md` and `specs/audit-
 ## 2. Audit readers
 
 - [x] 2.1 Write `src/audit/query.test.ts` first (scenario "The reader returns records and refuses bad options", the reader results of "Each filter and a combination", "A full walk, ascending order and after_seq" (ascending, `afterSeq`) and "Free-form payload and a Mintkey event survive", and tenant B's call returning seq `"2"` and `"1"` only; refusals asserted as `AuditError` with `code` and `details.reason`), then implement `isUtcTime` and `listAuditEvents` in `src/audit/query.ts` as design.md Decisions 3, 5 and 6 say, and export them and the types `AuditEventFilter` and `AuditEventRecord` from `src/audit/index.ts`, implementing requirements "Audit events are listed newest first, a page at a time" and "Audit events can be filtered"
-- [ ] 2.2 Write `src/audit/anchor-count.test.ts` first (scenario "The anchor count"; `anchorHead` writes the anchor; `0n` asserted as `AuditError` with `details.reason` `bad_from_seq`), then implement `countAnchors` in `src/audit/query.ts` as Decision 7 says and export it from `src/audit/index.ts`, implementing requirement "The chain can be verified on request"
+- [x] 2.2 Write `src/audit/anchor-count.test.ts` first (scenario "The anchor count"; `anchorHead` writes the anchor; `0n` asserted as `AuditError` with `details.reason` `bad_from_seq`), then implement `countAnchors` in `src/audit/query.ts` as Decision 7 says and export it from `src/audit/index.ts`, implementing requirement "The chain can be verified on request"
 
 ## 3. Policy decision reader
 

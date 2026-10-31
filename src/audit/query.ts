@@ -196,9 +196,20 @@ export async function listAuditEvents(
 }
 
 export async function countAnchors(
-  _pool: TenantPool,
-  _ctx: TenantContext,
-  _fromSeq: bigint,
+  pool: TenantPool,
+  ctx: TenantContext,
+  fromSeq: bigint,
 ): Promise<number> {
-  throw new Error("not implemented");
+  if (typeof fromSeq !== "bigint" || fromSeq < 1n) {
+    throw new AuditError("AUDIT_OPTIONS_INVALID", "audit options are invalid", {
+      reason: "bad_from_seq",
+    });
+  }
+  return withTenantTx(pool, ctx, async (tx) => {
+    const res = await tx.query<{ count: number }>(
+      "SELECT count(*)::int AS count FROM ursitoare.audit_anchor WHERE tenant_id = $1 AND seq >= $2::bigint",
+      [ctx.tenantId, fromSeq],
+    );
+    return res.rows[0]?.count ?? 0;
+  });
 }
