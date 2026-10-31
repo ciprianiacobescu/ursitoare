@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Criterion C-a4888ef3 (admin-api › Every admin route is a session route under the right action › Who may call): accept as satisfied? |
 | Q-010 | answered | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
 | Q-011 | answered | none | verdict | Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping): accept as satisfied? |
-| Q-012 | open | none | verdict | Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through): accept as satisfied? |
+| Q-012 | answered | none | verdict | Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through): accept as satisfied? |
 | Q-013 | open | none | verdict | Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges): accept as satisfied? |
 | Q-014 | open | none | verdict | Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read): accept as satisfied? |
 | Q-015 | open | none | verdict | Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts): accept as satisfied? |
@@ -380,7 +380,8 @@ accept The criterion is satisfied. The mapping table in src/api/admin-errors.ts 
 
 ## Q-012: Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -407,6 +408,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. In src/api/admin-errors.ts the function adminApiError reads a domain code only from RbacError, AdminError and IdentityError instances and returns any other value unchanged, so new Error("boom") and the string "x" come back as themselves. For a domain error it looks the code up in a mapping table that holds exactly the fourteen codes of the mapping scenario; RBAC_TENANT_MISMATCH, RBAC_DIRECT_GRANT_REFUSED and ADMIN_TENANT_MISMATCH are not in it, so the function returns the input error itself. The tracing test constructs those three domain errors, a plain Error and the string "x", calls adminApiError on each inside assert.doesNotThrow and asserts with assert.strictEqual that the result is the same value as the input. It passed and failed red by assertion.
 ---
 
 ## Q-013: Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges): accept as satisfied?
