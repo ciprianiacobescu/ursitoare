@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-195c3385 (web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-0c949ead (web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-97244065 (web-admin › The Users page lists people and disables or enables them › Parsing an account): accept as satisfied? |
-| Q-007 | open | none | verdict | Criterion C-87e93809 (web-admin › The Users page lists people and disables or enables them › Cells and actions): accept as satisfied? |
+| Q-007 | answered | none | verdict | Criterion C-87e93809 (web-admin › The Users page lists people and disables or enables them › Cells and actions): accept as satisfied? |
 | Q-008 | answered | none | verdict | Criterion C-0c16ec24 (web-admin › The Users page lists people and disables or enables them › Setting a state): accept as satisfied? |
 | Q-009 | answered | none | verdict | Criterion C-4bc159f4 (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Names): accept as satisfied? |
 | Q-010 | answered | none | verdict | Criterion C-c174064a (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Creating and deleting): accept as satisfied? |
@@ -266,7 +266,7 @@ accept The criterion is satisfied as it stands. parseAccount in web/src/admin/us
 
 ## Q-007: Criterion C-87e93809 (web-admin › The Users page lists people and disables or enables them › Cells and actions): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -294,6 +294,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Reviewed by the owner's delegate (the judge's reply was discarded, see Q-051) at the head 4cfa770 against the scenario and tasks.md; paths under web/src/admin/. Cells and actions: Bob's cells are one exact compare (users.test.ts:129-134); the disabled Bob's rolesTeams is "finance" (:154) and the empty one's "—" (:168-172); the active action has kind disable (:137), buttonLabel "Disable Bob Example" (:139), done "Disabled Bob Example." (:140) and the confirm title, task 3.1 description and action "Disable user" (:141-145); the disabled Bob has state "Disabled" (:153), kind enable (:157), buttonLabel "Enable Bob Example" (:159), confirm null (:160) and done "Enabled Bob Example." (:161); the own row is the exact { kind: "none", note: "This is your account" } (:175). users.ts:96-135 implements it.
 ---
 
 ## Q-008: Criterion C-0c16ec24 (web-admin › The Users page lists people and disables or enables them › Setting a state): accept as satisfied?
