@@ -124,10 +124,13 @@ profiles:
   # MiMo model on Go, for when the free one is past its limit: $0.14/$0.28 per million tokens against a $60 monthly
   # cap, so a judge round counts little of the allowance. The owner's next choice if their verdicts are poor:
   # opencode-go/qwen3.8-max ($15 cap, counts heavily).
+  # 2026-10-31: Zen dropped nemotron-3-ultra-free (no longer in https://opencode.ai/zen/v1/models; every hello since
+  # failed with "opencode reported an error"), so its free successor judges: Nemotron 3.5 Super VL (120B-A12B,
+  # reasoning, 1M context, 131k output, so no 32k length stop like MiMo's).
   nemotron-judge:
     adapter: opencode
     auth: api_key
-    model: opencode/nemotron-3-ultra-free
+    model: opencode/nemotron-3.5-super-vl-free
     vendor: nvidia
   mimo-judge:
     adapter: opencode
