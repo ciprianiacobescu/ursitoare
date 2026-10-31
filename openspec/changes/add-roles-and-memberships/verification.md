@@ -1,4 +1,4 @@
-# Verification: openspec:add-roles-and-memberships: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-roles-and-memberships: FAIL (round 2)
 
 traceability: 29/29 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 29/29 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.4 | base main@93f072a435 contained |
-| 1 | integrity | ok | 76.2 | 11 sub-checks (+1 unfrozen by human answers); scope: 32 changed file(s) |
-| 2 | build | ok | 25.0 |  |
-| 3 | tests | ok | 104.5 |  |
-| 4 | traceability | ok | 0.2 | 29/29 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/api/session-auth.ts, src/identity/index.ts, src/identity/oidc/callback.ts, src/identity/rbac/bootstrap.ts, src/identity/rbac/errors.ts and 9 more |
-| 8 | s1 judge | ok | 1.7 | 29/29 criteria judged by jev |
-| 9 | judge | ok | 199.9 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -216,11 +216,16 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-84f68efb | ok | 0.940 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-d6306ed0 | ok | 0.880 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-002 reject C-bb91aeca by the delegate (claude-fable-5-1 via claude-code): The scenario's THEN clause requires that the exported DEFAULT_ROLES constant, sorted, equals the four role ids found in every tenant's ursitoare.role table. The tracing test never imports DEFAULT_ROLES: it declares its own literal list and, at the point where the constant should be compared, asserts...
+- Q-003 reject F-780eb40d by the delegate (claude-fable-5-1 via claude-code): The scenario Created with the tenant requires that the sorted copy of the exported DEFAULT_ROLES constant equals the four role ids read from ursitoare.role for every tenant. The test that traces it declares its own literal list of the four ids and, where the constant should be compared, asserts that...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
-| C-bb91aeca | identity-rbac › Every tenant has the four default roles › Created with the tenant | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-bb91aeca | identity-rbac › Every tenant has the four default roles › Created with the tenant | pass | fail | rejected by the delegate (claude-fable-5-1 via claude-code): The scenario's THEN clause requires that the exported DEFAULT_ROLES constant, sorted, equals the four role ids found in every tenant's ursitoare.role table. The tracing test never imports DEFAULT_ROLES: it declares its own literal list and... |
 | C-eb484eda | identity-rbac › Every tenant has the four default roles › Idempotent, setting restored | pass | pass | the judge passed it and a discriminating test passes |
 | C-8a5b7447 | identity-rbac › The rbac tables are tenant-leading and narrowly granted › Objects, catalog, privileges, checks | pass | pass | the judge passed it and a discriminating test passes |
 | C-f0f427e3 | identity-rbac › Roles are listed and teams are managed inside one tenant › Create, list, delete | pass | pass | the judge passed it and a discriminating test passes |
@@ -255,12 +260,17 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] Bootstrap overwrites an existing non-admin mapping of the same group without revoking its memberships (spec gap) (criterion C-5d833e0c): mapBootstrapAdminGroup upserts with ON CONFLICT DO UPDATE. If the bootstrap group already maps to another role or team, that mapping is replaced with tenant_admin, but the idp_claim memberships of the old target are not deleted. setGroupMapping does delete them when it replaces a mapping. No scenario pins this case.
 - [minor, judge] Direct grants to a disabled user are accepted (spec gap) (criterion C-f3ce9a1e): requireUser checks only the user's existence and kind, not its state. grantRole therefore writes a local row and an audit event for a disabled service account (or, with an operator actor, a disabled human). The grant takes effect once the user is re-enabled.
 - [minor, judge] A repeated mapping by another actor keeps the first reviewer (spec gap) (criterion C-3ba7ccd7): The no-op test compares only the target. A second actor setting the same target gets back the stored row with the original reviewedBy, and no event is appended.
-- [major, judge] Schema test does not check the exported DEFAULT_ROLES (criterion C-bb91aeca): C-bb91aeca requires `[...DEFAULT_ROLES].sort()` to equal the role list. src/identity/rbac/schema.test.ts never imports DEFAULT_ROLES and asserts `[...DEFAULT_ROLE_IDS].sort()` against its own literal. The THEN clause about the constant is therefore untested, and the implementer's note confirms it was left this way on purpose.
+- [major, human] Schema test does not check the exported DEFAULT_ROLES (criterion C-bb91aeca): C-bb91aeca requires `[...DEFAULT_ROLES].sort()` to equal the role list. src/identity/rbac/schema.test.ts never imports DEFAULT_ROLES and asserts `[...DEFAULT_ROLE_IDS].sort()` against its own literal. The THEN clause about the constant is therefore untested, and the implementer's note confirms it was left this way on purpose. [rejected by the delegate (claude-fable-5-1 via claude-code) (The scenario Created with the tenant requires that the sorted copy of the exported DEFAULT_ROLES constant equals the four role ids read from ursitoare.role for every tenant. The test that traces it declares its...
 - [minor, judge] Team refusals test does not check that no audit event is written (criterion C-e31534ad): The scenario says 'nothing is written'. The test checks only the team lists, not that refusals append no identity.team_* event.
 - [minor, judge] The 1000-group cap counts kept names, not claim entries (spec gap) (criterion C-658fd38c): groupsFromIdToken skips invalid and duplicate entries and stops only once 1000 names have been kept. A claim with more than 1000 entries, some invalid, can therefore yield names from beyond the 1000th entry. An implementation that slices the first 1000 raw entries would differ.
 - [minor, judge] One invalid group name rejects the whole sync (spec gap) (criterion C-50042352): syncMemberships validates each group with requireGroupName and throws RBAC_INVALID instead of dropping the bad entry. It also sets no upper bound on the number of groups.
 - [minor, judge] Sync runs for a disabled user (spec gap) (criterion C-50042352): The user check in syncMemberships matches any state. A disabled user's idp_claim memberships are still added, removed and audited, and an implementation that refuses non-active users would differ.
 - [minor, judge] the judge called a test inadequate (criterion C-bb91aeca): src.identity.rbac.schema.test.ts::C-bb91aeca Created with the tenant
+
+## Fix unit
+
+Fix unit 1 is created for these tasks:
+- F-780eb40d Schema test does not check the exported DEFAULT_ROLES
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
