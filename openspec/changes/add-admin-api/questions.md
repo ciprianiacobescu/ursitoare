@@ -35,7 +35,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-022 | answered | none | verdict | Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals): accept as satisfied? |
 | Q-023 | answered | none | verdict | Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add): accept as satisfied? |
 | Q-024 | answered | none | verdict | Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals): accept as satisfied? |
-| Q-025 | open | none | verdict | Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning): accept as satisfied? |
+| Q-025 | answered | none | verdict | Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning): accept as satisfied? |
 | Q-026 | open | none | verdict | Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals): accept as satisfied? |
 | Q-027 | open | none | verdict | Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event): accept as satisfied? |
 | Q-028 | open | none | verdict | Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing): accept as satisfied? |
@@ -809,7 +809,8 @@ accept The criterion is satisfied. The server test in src/api/admin-users.test.t
 
 ## Q-025: Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -836,6 +837,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-tenant.test.ts runs the scenario as written: tenant A starts solo with active humans ann, bob and carol, carol holds tenant_admin by an operator grant, and her PUT of team is asserted 200 with a body deep-equal to { tenantId: "tenant_a", reviewProfile: "team", previous: "solo", changed: true, humanMembers: 3, warning: null }; her PUT of solo is asserted 200 with previous team, changed true and the warning { code: "SOLO_TENANT_HAS_MANY_HUMANS", message: "This solo tenant has 3 active human members; each may review their own flows.", humanMembers: 3 }; the second PUT of solo is asserted 200 with previous solo, changed false and the same warning; ann and bob are then disabled through PATCH /api/v1/users and the next PUT of solo is asserted 200 with humanMembers 1, previous solo, changed false and warning null; the audit chain of tenant A filtered to identity.review_profile_changed is asserted to hold exactly two events with target { kind: "tenant", id: "tenant_a" }, actor { kind: "user", id: carol } and payloads { from: "solo", to: "team", humanMembers: 3 } then { from: "team", to: "solo", humanMembers: 3 }; and the owner pool is asserted to read solo for both tenant A and tenant B. The function-level test in src/identity/admin/review-profile.test.ts asserts the same four results, the two events and the owner reads against setReviewProfile directly. The harness records both as passed and failing red by assertion. The production code matches: the PUT route is a session route under manage_tenant whose body schema allows only solo or team, takes the tenant and principal from the session and runs setReviewProfile inside withTenantTx; setReviewProfile locks the tenant row FOR UPDATE, counts active humans, updates review_profile and appends one identity.review_profile_changed event with that target, actor and payload only when the profile differs, and returns the warning whenever the resulting profile is solo and two or more active humans exist, also when nothing changed. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-026: Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals): accept as satisfied?
