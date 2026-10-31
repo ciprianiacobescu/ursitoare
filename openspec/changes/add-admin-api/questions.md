@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 2.1 | technical | src/identity/admin/accounts.test.ts:224 asserts ADMIN_TENANT_MISMATCH without a foreign transaction, and its signIn helper cannot produce the asserted display names |
 | Q-002 | accepted | 3.1 | technical | src/identity/admin/idp-links.test.ts:270 |
 | Q-003 | answered | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
 | Q-005 | open | none | verdict | Finding F-cde045de: No discriminating test for cross-tenant admin isolation |
 | Q-006 | open | none | verdict | Finding F-28a40cf9: Uncovered criterion C-598727de (Another tenant and a forged tenant) |
 | Q-007 | open | none | verdict | Finding F-c28b995d: Uncovered criterion C-96e47324 (The registry) at gate level |
@@ -108,7 +108,8 @@ reject The criterion is not satisfied as it stands because no test exercises its
 
 ## Q-004: Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -135,6 +136,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The registry in src/api/error-codes.ts holds exactly the 22 entries of the scenario with the statuses and messages given, and the named test asserts the scenario in full: it compares the sorted key set of ERROR_CODES with its 22 expected keys, deep-compares status and message of every entry, checks isRegisteredCode true for each of the 22 and false for cursor_invalid, the empty string and NOT_A_CODE. The key-set comparison alone would fail against the 16-entry registry of the base, so the test discriminates; the harness has no red record only because the task changed this frozen test in place, as the design records. The stale title (16 codes) is required by the task and does not affect what the test asserts.
 ---
 
 ## Q-005: Finding F-cde045de: No discriminating test for cross-tenant admin isolation
