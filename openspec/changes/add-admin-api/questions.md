@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
 | Q-011 | answered | none | verdict | Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping): accept as satisfied? |
 | Q-012 | answered | none | verdict | Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through): accept as satisfied? |
-| Q-013 | open | none | verdict | Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges): accept as satisfied? |
+| Q-013 | answered | none | verdict | Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges): accept as satisfied? |
 | Q-014 | open | none | verdict | Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read): accept as satisfied? |
 | Q-015 | open | none | verdict | Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts): accept as satisfied? |
 | Q-016 | open | none | verdict | Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable): accept as satisfied? |
@@ -413,7 +413,8 @@ accept The criterion is satisfied. In src/api/admin-errors.ts the function admin
 
 ## Q-013: Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -440,6 +441,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The migration 0180_admin_api.sql holds the single statement of the design's data model, granting the app role UPDATE on the review_profile column of ursitoare.tenant and nothing more; the only other grant on that table is the SELECT of the tenancy migration, which also enables row-level security with the tenant_isolation policy on app.tenant_id and a check constraint limiting review_profile to solo or team. The tracing test first asserts the ledger row version 180 named admin_api, seeds two tenants, and as the app role in tenant A asserts that the own-row update changes 1 row, that the update aimed at tenant_b changes 0 rows and the owner still reads solo for B, that setting name, an INSERT and a DELETE reject with SQLSTATE 42501, that the value bogus rejects with 23514, and that checkTenancyCatalog over the owner pool returns an empty list. The test passed and failed red by assertion.
 ---
 
 ## Q-014: Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read): accept as satisfied?
