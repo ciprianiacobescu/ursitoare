@@ -1,19 +1,16 @@
 import { parseArgs } from "node:util";
 
-import type pg from "pg";
-
-import type { DatabaseEndpoint, Env, SecretReader } from "../config/index.ts";
+import { type DatabaseEndpoint, type Env, type SecretReader, ConfigError, loadConfig } from "../config/index.ts";
 import { systemClock, systemIds } from "../core/index.ts";
 import type { Clock, IdSource } from "../core/index.ts";
 import { CliError } from "./errors.ts";
+import { checkOwnerRole, connectDefaultOwner } from "./owner.ts";
+import type { OwnerConnection } from "./owner.ts";
 import { CLI_PROGRAM } from "./output.ts";
 import type { CliOutput } from "./output.ts";
 import type { CliCommand, CliOption, CommandRegistry } from "./registry.ts";
 
-export interface OwnerConnection {
-  pool: pg.Pool;
-  close(): Promise<void>;
-}
+export type { OwnerConnection };
 
 export interface CliDeps {
   env: Env;
@@ -92,6 +89,10 @@ function knownCode(error: unknown): string | null {
 }
 
 function report(error: unknown, stderr: CliOutput): number {
+  if (error instanceof ConfigError) {
+    stderr.write(`CLI_CONFIG_INVALID: ${error.message}\n`);
+    return 1;
+  }
   const code = knownCode(error);
   if (code === null) {
     stderr.write("CLI_INTERNAL: command failed\n");
@@ -140,7 +141,29 @@ async function dispatch(argv: readonly string[], deps: CliDeps): Promise<number>
   }
 
   if (command.database) {
-    throw new Error("not implemented");
+    const config = loadConfig(deps.env, deps.readSecret);
+    const endpoint = config.database.owner;
+    if (endpoint === null) {
+      throw new CliError(
+        "CLI_OWNER_REQUIRED",
+        "set URSITOARE_DATABASE_OWNER_URL and URSITOARE_DATABASE_OWNER_PASSWORD_FILE for this command",
+      );
+    }
+    const connection = deps.connectOwner?.(endpoint) ?? connectDefaultOwner(endpoint);
+    try {
+      await checkOwnerRole(connection.pool);
+      return await command.run({
+        args: values,
+        env: deps.env,
+        stdout: deps.stdout,
+        stderr: deps.stderr,
+        clock: deps.clock ?? systemClock,
+        ids: deps.ids ?? systemIds,
+        owner: { pool: connection.pool, config },
+      });
+    } finally {
+      await connection.close();
+    }
   }
 
   return command.run({

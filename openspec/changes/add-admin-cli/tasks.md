@@ -12,7 +12,7 @@
 
 ## 4. The owner connection
 
-- [ ] 4.1 Write `src/cli/owner.test.ts` first (`withTestDatabase()`, the harness of design.md § Test plan with `connectOwner` spies; scenarios "A top-level command skips the configuration", "Opened, used, closed" and "Refusals", full stderr lines; the unreachable database is a spy whose pool `query` rejects), then implement `src/cli/owner.ts` (decision 5) and the `database: true` branch of `runCli` in `src/cli/run.ts` (decision 4), implementing requirement "Only a database command connects, as the owner role"
+- [x] 4.1 Write `src/cli/owner.test.ts` first (`withTestDatabase()`, the harness of design.md § Test plan with `connectOwner` spies; scenarios "A top-level command skips the configuration", "Opened, used, closed" and "Refusals", full stderr lines; the unreachable database is a spy whose pool `query` rejects), then implement `src/cli/owner.ts` (decision 5) and the `database: true` branch of `runCli` in `src/cli/run.ts` (decision 4), implementing requirement "Only a database command connects, as the owner role"
 
 ## 5. The owner-endpoint rule
 
