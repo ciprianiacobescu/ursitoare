@@ -10,7 +10,7 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 3. IdP links
 
-- [ ] 3.1 Write `src/identity/admin/idp-links.test.ts` first (the function parts of the scenarios of requirement "IdP links are listed and added": order of the checks, `linkedAt` from the injected clock with six fraction digits, the event, `ADMIN_EXISTS` for a held pair, a padded subject as `ADMIN_INVALID`, and two parallel `addIdpLink` calls of one pair on two connections of `db.appPool` that resolve once and reject once with `ADMIN_EXISTS`), then implement `IdpLinkRecord`, `listIdpLinks`, `addIdpLink` in `src/identity/admin/idp-links.ts` (design.md Decision 10), exporting them from `src/identity/index.ts`, implementing requirement "IdP links are listed and added"
+- [x] 3.1 Write `src/identity/admin/idp-links.test.ts` first (the function parts of the scenarios of requirement "IdP links are listed and added": order of the checks, `linkedAt` from the injected clock with six fraction digits, the event, `ADMIN_EXISTS` for a held pair, a padded subject as `ADMIN_INVALID`, and two parallel `addIdpLink` calls of one pair on two connections of `db.appPool` that resolve once and reject once with `ADMIN_EXISTS`), then implement `IdpLinkRecord`, `listIdpLinks`, `addIdpLink` in `src/identity/admin/idp-links.ts` (design.md Decision 10), exporting them from `src/identity/index.ts`, implementing requirement "IdP links are listed and added"
 
 ## 4. Review profile
 

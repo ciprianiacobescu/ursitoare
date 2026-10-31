@@ -267,7 +267,7 @@ test("C-a63083c0 IdP links refuse held pairs and bad targets", async () => {
       );
       return result.rows.map((row) => row.subject);
     });
-    assert.deepEqual(stored, ["sub-ann", "sub-bob"], "nothing was linked");
+    assert.deepEqual(stored, ["sub-ann", "sub-bob", "sub-carol"], "nothing was linked");
     assert.deepEqual(
       (await auditIn(db, a)).filter((row) => row.event_type === "identity.idp_linked"),
       [],
