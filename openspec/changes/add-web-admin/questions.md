@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-7c7c77c3 (web-admin › Admin pages are listed by capability and declare literal paths › Navigation follows capabilities): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-bf07943b (web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-195c3385 (web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts): accept as satisfied? |
-| Q-005 | open | none | verdict | Criterion C-0c949ead (web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action): accept as satisfied? |
+| Q-005 | answered | none | verdict | Criterion C-0c949ead (web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-97244065 (web-admin › The Users page lists people and disables or enables them › Parsing an account): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-87e93809 (web-admin › The Users page lists people and disables or enables them › Cells and actions): accept as satisfied? |
 | Q-008 | answered | none | verdict | Criterion C-0c16ec24 (web-admin › The Users page lists people and disables or enables them › Setting a state): accept as satisfied? |
@@ -200,7 +200,7 @@ accept The criterion is satisfied as it stands. ADMIN_MESSAGES in web/src/admin/
 
 ## Q-005: Criterion C-0c949ead (web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -228,6 +228,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Reviewed by the owner's delegate (the judge's reply was discarded, see Q-051) at the head 4cfa770 against the scenario and tasks.md; paths under web/src/admin/. Error text for an action: IN_USE gives its entry without "raw SQL" (messages.test.ts:54-55); OPERATION_REFUSED with reason self_disable gives "You cannot disable your own account." (:64) and with reason other the OPERATION_REFUSED entry (:95-99); FORBIDDEN with decisionId d-1 gives messageFor("FORBIDDEN") followed by " Decision id: d-1" (:108-112). Outside the scenario, messages.ts:40 looks the reason up on a plain object without an own-key check, so a reason outside the table is not guaranteed the catalogue text; the engine sends a closed set of reasons, so this is left as a follow-up rather than a fix of this unit.
 ---
 
 ## Q-006: Criterion C-97244065 (web-admin › The Users page lists people and disables or enables them › Parsing an account): accept as satisfied?
