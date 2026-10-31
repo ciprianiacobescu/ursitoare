@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.1 | technical | src/identity/admin/accounts.test.ts:224 asserts ADMIN_TENANT_MISMATCH without a foreign transaction, and its signIn helper cannot produce the asserted display names |
 | Q-002 | accepted | 3.1 | technical | src/identity/admin/idp-links.test.ts:270 |
-| Q-003 | open | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
 | Q-005 | open | none | verdict | Finding F-cde045de: No discriminating test for cross-tenant admin isolation |
 | Q-006 | open | none | verdict | Finding F-28a40cf9: Uncovered criterion C-598727de (Another tenant and a forged tenant) |
@@ -75,7 +75,8 @@ Edit `src/identity/admin/idp-links.test.ts`: change line 270 to `assert.deepEqua
 
 ## Q-003: Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -102,6 +103,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The criterion is not satisfied as it stands because no test exercises its scenario. The only two-tenant check in the admin route tests is the list half of it: in the test of accounts carrying roles and teams, tenant B's admin zed lists users and sees only zed. No test has B's admin read or patch one of A's users, grant a role to A's service account, list A's user's IdP links, or post a team with a forged tenantId, and none asserts afterwards that tenant A's rows are unchanged. The production code looks right (the tenant comes from the session through requireAdminContext, getAccount and listIdpLinks run under the caller's tenant, and the team body schema has additionalProperties false), so the fix is a new Node test over the server that traces the scenario; the project's security checklist requires every tenant-scoped query to be covered by a two-tenant test and the design promises each route a two-tenant scenario. WHEN tenant A holds humans ann and bob and a service account, tenant B holds human zed, and B's tenant admin sends GET /api/v1/users, GET and PATCH /api/v1/users/<ann> with { "state": "disabled" }, PUT /api/v1/service-accounts/<svc>/roles/author, GET /api/v1/users/<ann>/idp-links and POST /api/v1/teams with { "teamId": "x", "tenantId": "tenant_a" } THEN the list holds only zed, the next four answer 404 NOT_FOUND, the last 400 VALIDATION_FAILED, ann stays active, the service account holds no role, and tenant A has no team x.
 ---
 
 ## Q-004: Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied?
