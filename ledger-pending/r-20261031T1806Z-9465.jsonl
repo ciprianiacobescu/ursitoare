@@ -1,2 +1,3 @@
 {"ts": "2026-10-31T18:06:13.377760Z", "run_id": "r-20261031T1806Z-9465", "unit": "openspec:add-audit-api", "seq": 1, "type": "run.started", "harness_version": "0.4.46", "harness_commit": "6959e8d96bbbe452190a479acc252ec99e6fb567", "command": "plan --sweep", "branch": "l4/openspec/add-audit-api"}
 {"ts": "2026-10-31T18:06:13.378360Z", "run_id": "r-20261031T1806Z-9465", "unit": "openspec:add-audit-api", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 45, "merge_commit": "2fb9fb603b1d314f100c99500ec138674c41d2a2"}
+{"ts": "2026-10-31T18:06:14.830288Z", "run_id": "r-20261031T1806Z-9465", "unit": "openspec:add-audit-api", "seq": 3, "type": "run.finished", "exit_code": 0}
