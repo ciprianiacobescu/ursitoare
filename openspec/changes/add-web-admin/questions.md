@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | open | none | verdict | Criterion C-87e93809 (web-admin › The Users page lists people and disables or enables them › Cells and actions): accept as satisfied? |
 | Q-008 | answered | none | verdict | Criterion C-0c16ec24 (web-admin › The Users page lists people and disables or enables them › Setting a state): accept as satisfied? |
 | Q-009 | answered | none | verdict | Criterion C-4bc159f4 (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Names): accept as satisfied? |
-| Q-010 | open | none | verdict | Criterion C-c174064a (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Creating and deleting): accept as satisfied? |
+| Q-010 | answered | none | verdict | Criterion C-c174064a (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Creating and deleting): accept as satisfied? |
 | Q-011 | open | none | verdict | Criterion C-b8ae0992 (web-admin › The Group mappings page maps a group to one role or team › Parsing, showing and offering mappings): accept as satisfied? |
 | Q-012 | open | none | verdict | Criterion C-5e078fd3 (web-admin › The Group mappings page maps a group to one role or team › Building the request): accept as satisfied? |
 | Q-013 | open | none | verdict | Criterion C-741e5139 (web-admin › The Group mappings page maps a group to one role or team › Saving a mapping, reading every page): accept as satisfied? |
@@ -360,7 +360,8 @@ accept The criterion is satisfied as it stands. parseNamed in web/src/admin/team
 
 ## Q-010: Criterion C-c174064a (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Creating and deleting): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -387,6 +388,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. postTeam in web/src/admin/teams.ts checks the team id and the key against their patterns, calls the client's post with the path /teams, the body { teamId } and the options { headers: { "Idempotency-Key": key } }, parses the answer with parseNamed for teamId and throws ApiRequestError(200, "INVALID_RESPONSE", "Invalid team") when the parse gives null, so for ("ops", "key-1") the client gets exactly the scenario's call and the result is "ops", while an answer of {} rejects with code INVALID_RESPONSE. removeTeamById checks the team id and calls the client's delete with /teams/ followed by the encoded id and returns nothing, so for "ops" the client gets delete("/teams/ops") and the promise resolves to undefined. deleteTeamConfirm("ops") returns title "Delete team ops?", action "Delete team" and the fixed description. The tracing tests use recording fake clients and assert exactly one post call with path "/teams", body { teamId: "ops" } and options { headers: { "Idempotency-Key": "key-1" } }, a result of "ops", a rejection with an ApiRequestError whose code is INVALID_RESPONSE for a client answering {}, one delete call with path "/teams/ops" resolving to undefined, and a confirmation with the scenario's title and action. All five passed as red assertions. The judge gave no verdict only because its evidence was cut to fit the budget, and the failing generated browser test is a harness artifact: the scenario is a unit-level call to logic functions with fake clients, which a browser journey cannot observe.
 ---
 
 ## Q-011: Criterion C-b8ae0992 (web-admin › The Group mappings page maps a group to one role or team › Parsing, showing and offering mappings): accept as satisfied?
