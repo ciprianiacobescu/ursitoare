@@ -23,7 +23,7 @@ Fixtures: `scenario-data.md`; specs: `specs/audit-api/spec.md` and `specs/audit-
 
 ## 6. The policy decision route
 
-- [ ] 6.1 Write `src/api/decisions-route.test.ts` first (the decisions fixture over the same server setup; the scenarios "Newest first, with the full item", "Ties, both directions and the call's own row", "Each filter", and the decisions cases of the cursor and access scenarios), then add `GET /api/v1/policy-decisions` to `registerAuditRoutes` in `src/api/audit-routes.ts` (Decision 4, `listPolicyDecisions` from `src/pdp/index.ts`), implementing requirements "Policy decisions are listed with their filters", "Cursors belong to one list, one order and one tenant" and "The routes need a session and read_audit and stay in the tenant"
+- [x] 6.1 Write `src/api/decisions-route.test.ts` first (the decisions fixture over the same server setup; the scenarios "Newest first, with the full item", "Ties, both directions and the call's own row", "Each filter", and the decisions cases of the cursor and access scenarios), then add `GET /api/v1/policy-decisions` to `registerAuditRoutes` in `src/api/audit-routes.ts` (Decision 4, `listPolicyDecisions` from `src/pdp/index.ts`), implementing requirements "Policy decisions are listed with their filters", "Cursors belong to one list, one order and one tenant" and "The routes need a session and read_audit and stay in the tenant"
 
 ## 7. The verification route
 
