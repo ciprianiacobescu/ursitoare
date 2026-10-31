@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 5.1 | technical | src/identity/rbac/grants.test.ts:348-350 — count query has no placeholder but binds one parameter |
+| Q-001 | answered | 5.1 | technical | src/identity/rbac/grants.test.ts:348-350 — count query has no placeholder but binds one parameter |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/identity/rbac/grants.test.ts:348-350 — count query has no placeholder but binds one parameter
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The diagnosis is confirmed: src/identity/rbac/grants.test.ts:348-350 sends a SQL text with no $1 and binds [a.tenantId] through membershipCount, which passes both straight to tx.query (a pg client), so Postgres rejects the bind (08P01) and the error escapes the test. But the clarifier suggestion (op
 - **Blocking tasks:** 5.1
 - **Kind:** technical
@@ -38,3 +38,8 @@ Edit `src/identity/rbac/grants.test.ts`: change the final count SQL (lines 348-3
 
 ### Answer
 <!-- write below this line -->
+Take option 2. Edit `src/identity/rbac/grants.test.ts` line 350: change the params `[a.tenantId]` to `[]`, and leave the SQL at lines 348-349 as it is.
+
+Do not take option 1 (the clarifier suggestion): it binds the tenant id to `user_id`, so the query would count the memberships of a user named after the tenant, find 0, and fail `assert.equal(..., 1)` for a reason that has nothing to do with the code under test.
+
+Checked: `tx` is a pg PoolClient (src/tenancy/tx.ts:8 and :21), and pg 8.23.1 uses the extended protocol whenever `values` is non-empty (node_modules/pg/lib/query.js:53-57), so the current call fails with 08P01 before it counts anything. With `[]` it runs as a plain query. `withTenantTx` sets `app.tenant_id` (src/tenancy/tx.ts:21), so the count is scoped to tenant a the same way as the sibling count at lines 293-295.
