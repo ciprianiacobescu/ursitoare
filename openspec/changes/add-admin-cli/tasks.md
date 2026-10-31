@@ -8,7 +8,7 @@
 
 ## 3. The dispatcher
 
-- [ ] 3.1 Write `src/cli/run.test.ts` first (capture writers and a registry with `admin demo` and `solo`, both `database: false`; scenarios "Help", "Flags and the exit code", "Unknown commands and bad arguments" and "A failing command", asserting the full stderr lines of decision 3), then implement `runCli` in `src/cli/run.ts` for database-free commands (decisions 2 and 3) and `CliOutput` and `CLI_PROGRAM` in `src/cli/output.ts`, implementing requirement "The dispatcher parses arguments and exits with a code"
+- [x] 3.1 Write `src/cli/run.test.ts` first (capture writers and a registry with `admin demo` and `solo`, both `database: false`; scenarios "Help", "Flags and the exit code", "Unknown commands and bad arguments" and "A failing command", asserting the full stderr lines of decision 3), then implement `runCli` in `src/cli/run.ts` for database-free commands (decisions 2 and 3) and `CliOutput` and `CLI_PROGRAM` in `src/cli/output.ts`, implementing requirement "The dispatcher parses arguments and exits with a code"
 
 ## 4. The owner connection
 
