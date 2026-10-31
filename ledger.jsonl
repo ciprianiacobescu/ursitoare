@@ -68,3 +68,6 @@
 {"at":"2026-10-31T14:54:37Z","head":"54507e2a40ca8b450653a83072f736e71a9f660c","pr":43,"target_before":"3041460d17154ef1ac169d501f26ff8aec5968c1","type":"unit.merge_requested","unit":"openspec:add-admin-cli"}
 {"at":"2026-10-31T14:54:43Z","ci":"not_run","head":"54507e2a40ca8b450653a83072f736e71a9f660c","merge_commit":"e95e05a39668464cd3da60e87920a4c5b959b109","method":"squash","pr":43,"raced":false,"type":"unit.merged","unit":"openspec:add-admin-cli"}
 {"at":"2026-10-31T14:54:48Z","branch":"l4/openspec/add-admin-cli","head":"54507e2a40ca8b450653a83072f736e71a9f660c","type":"unit.branch_deleted","unit":"openspec:add-admin-cli"}
+{"at":"2026-10-31T14:56:28Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"e95e05a39668464cd3da60e87920a4c5b959b109","status":"pass","type":"unit.postcheck","unit":"openspec:add-admin-cli"}
+{"at":"2026-10-31T14:56:28Z","revision":"e95e05a39668464cd3da60e87920a4c5b959b109","type":"unit.integrated","unit":"openspec:add-admin-cli"}
+{"at":"2026-10-31T14:56:28Z","attempt":1,"cost_usd":7.407357,"runs":4,"type":"plan.charged","unit":"openspec:add-admin-cli"}
