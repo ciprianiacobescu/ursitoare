@@ -33,7 +33,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-020 | answered | none | verdict | Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse): accept as satisfied? |
 | Q-021 | answered | none | verdict | Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove): accept as satisfied? |
 | Q-022 | answered | none | verdict | Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals): accept as satisfied? |
-| Q-023 | open | none | verdict | Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add): accept as satisfied? |
+| Q-023 | answered | none | verdict | Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add): accept as satisfied? |
 | Q-024 | open | none | verdict | Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals): accept as satisfied? |
 | Q-025 | open | none | verdict | Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning): accept as satisfied? |
 | Q-026 | open | none | verdict | Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals): accept as satisfied? |
@@ -743,7 +743,8 @@ accept The criterion is satisfied. The server test in src/api/admin-group-map.te
 
 ## Q-023: Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -770,6 +771,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-users.test.ts runs the scenario as written: the routed issuer is provisioned for tenant A, ann signs in once with subject sub-ann at the clock 2026-10-25T09:00:00Z, and carol's first GET /api/v1/users/<ann>/idp-links is asserted 200 and deep-equal to one item { issuer, subject: "sub-ann", linkedAt: "2026-10-25T09:00:00.000000Z" } with next_cursor null; her POST of { issuer, subject: "sub-ann-2" } with Idempotency-Key k1 is asserted 201 and deep-equal to that shape for sub-ann-2 with the same linkedAt; the repeat with k1 is asserted 201 with a body deep-equal to the first and header idempotent-replayed true; the last list is asserted deep-equal to the sub-ann link followed by the created link; and the audit chain of tenant A filtered to identity.idp_linked is asserted to hold exactly one event with target { kind: "user", id: ann } and payload { issuer, subject: "sub-ann-2" }. The function-level test in src/identity/admin/idp-links.test.ts asserts the same list shape, the added record, the ordered list of both, that a held pair is refused with ADMIN_EXISTS, and the single audit event with its target, actor and payload. The harness records both as passed and failing red by assertion. The production code matches: listIdpLinks requires an existing human and reads the user's rows from ursitoare.idp_link under the caller's tenant with linked_at formatted by to_char in UTC with six fraction digits; addIdpLink validates the text, requires an existing human and an issuer in tenant_idp, takes the advisory lock, inserts with ON CONFLICT DO NOTHING against the primary key (tenant_id, issuer, subject), throws ADMIN_EXISTS when no row was inserted and otherwise appends one identity.idp_linked event with target { kind: "user", id } and payload { issuer, subject } in the same transaction; the GET route is a session route under manage_users_roles that cuts the links with pageRows under the idp_links scope keyed by issuer hash and subject, and the POST route takes the idempotency header schema and answers 201 through respondIdempotent, which replays the stored body without running the handler again. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-024: Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals): accept as satisfied?
