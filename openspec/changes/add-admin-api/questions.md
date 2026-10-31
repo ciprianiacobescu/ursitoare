@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Finding F-c28b995d: Uncovered criterion C-96e47324 (The registry) at gate level |
 | Q-008 | answered | none | verdict | Criterion C-8a23d872 (admin-api › Every admin route is a session route under the right action › The route table): accept as satisfied? |
 | Q-009 | answered | none | verdict | Criterion C-a4888ef3 (admin-api › Every admin route is a session route under the right action › Who may call): accept as satisfied? |
-| Q-010 | open | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
+| Q-010 | answered | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
 | Q-011 | open | none | verdict | Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping): accept as satisfied? |
 | Q-012 | open | none | verdict | Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through): accept as satisfied? |
 | Q-013 | open | none | verdict | Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges): accept as satisfied? |
@@ -314,7 +314,8 @@ accept The criterion is satisfied. The tracing test builds a server with install
 
 ## Q-010: Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -341,6 +342,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The tracing test in src/api/admin-isolation.test.ts builds a server with installPep and registerAdminRoutes over two seeded tenants, creates humans ann and bob and a service account in tenant A and human zed in tenant B, grants zed tenant_admin by an operator grant, snapshots tenant A's user, team, membership and idp_link rows, and then asserts every element of the scenario: zed's GET /api/v1/users is 200 with items exactly [zed]; GET and PATCH /api/v1/users/<ann>, PUT /api/v1/service-accounts/<svc>/roles/author and GET /api/v1/users/<ann>/idp-links each answer 404 with code NOT_FOUND; POST /api/v1/teams with { teamId: "x", tenantId: "tenant_a" } answers 400 VALIDATION_FAILED; and tenant A's rows after the requests deep-equal the snapshot, with no team x. The test passed. It was pre-satisfied only because the production code was already correct: every handler takes the tenant from the session through requireAdminContext and runs under withTenantTx of that tenant, getAccount and listIdpLinks are called with the caller's tenant so another tenant's ids give 404, the role route reads getAccount before grantRole, and the team body schema has additionalProperties false so a tenantId in the body is refused by validation.
 ---
 
 ## Q-011: Criterion C-cc3ddc89 (admin-api › Admin errors are registered codes › The mapping): accept as satisfied?
