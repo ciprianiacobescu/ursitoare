@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Criterion C-e8ea1428 (admin-api › Admin errors are registered codes › Other errors pass through): accept as satisfied? |
 | Q-013 | answered | none | verdict | Criterion C-7a958882 (admin-api › The app role may switch only its own tenant's review profile › Objects and privileges): accept as satisfied? |
 | Q-014 | answered | none | verdict | Criterion C-32b7b36c (admin-api › Users are listed, read, disabled and enabled › List, page, filter, read): accept as satisfied? |
-| Q-015 | open | none | verdict | Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts): accept as satisfied? |
+| Q-015 | answered | none | verdict | Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts): accept as satisfied? |
 | Q-016 | open | none | verdict | Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable): accept as satisfied? |
 | Q-017 | open | none | verdict | Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state): accept as satisfied? |
 | Q-018 | open | none | verdict | Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account): accept as satisfied? |
@@ -479,7 +479,8 @@ accept The criterion is satisfied. The route GET /api/v1/users calls listAccount
 
 ## Q-015: Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -506,6 +507,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-users.test.ts builds the scenario exactly: it provisions the routed issuer, creates a team finance, maps one group to the role approver and one to the team finance, grants ann author by an operator grant, runs syncMemberships for ann with both groups, and has carol patch ann to disabled over PATCH /api/v1/users/<ann>. It then asserts in carol's GET /api/v1/users that ann's item has state disabled, roles ["approver", "author"], teams ["finance"] and localRoles ["author"], that bob's roles, teams and localRoles are each [], asserts the same four fields on GET /api/v1/users/<ann>, and that tenant B's admin zed listing users sees only zed and neither ann nor bob. The function-level test in src/identity/admin/accounts.test.ts deep-equals the whole AdminAccount of ann (disabled, the same three arrays) and of bob (empty arrays) and asserts that listAccounts under tenant B returns no users. Both tests passed and failed red by assertion. The production code matches: getAccount and listAccounts read every membership row of the users from ursitoare.membership under the caller's tenant, put every role_id in roles, only source local rows in localRoles and every team_id in teams, sorted, whatever the account's state, and the routes list kind human and read one account under the session's tenant. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-016: Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable): accept as satisfied?
