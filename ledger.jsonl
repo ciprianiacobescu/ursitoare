@@ -12,3 +12,5 @@
 {"at":"2026-10-31T00:04:22Z","run":"r-20261031T0004Z-f337","type":"unit.dispatched","unit":"openspec:add-roles-and-memberships"}
 {"at":"2026-10-31T01:17:37Z","attempt":1,"cost_usd":5.517789,"runs":3,"type":"plan.charged","unit":"openspec:add-roles-and-memberships"}
 {"at":"2026-10-31T01:17:37Z","run":"r-20261031T0117Z-a389","type":"unit.dispatched","unit":"openspec:add-roles-and-memberships"}
+{"at":"2026-10-31T02:00:30Z","attempt":1,"cost_usd":5.907701,"runs":3,"type":"plan.charged","unit":"openspec:add-roles-and-memberships"}
+{"at":"2026-10-31T02:00:30Z","detail":"task 1.1: max_task_attempts (3) reached in red on deepseek-free (2), glm (2), claude-sonnet (3); last failure: not discriminating: C-24fd43c4, C-bb91aeca, C-e5f925ef (no project source module is imported by those tests; none of its new tests fails by assertion against the unit base code)","reason":"unit_halted","type":"plan.stopped","unit":"openspec:add-roles-and-memberships"}
