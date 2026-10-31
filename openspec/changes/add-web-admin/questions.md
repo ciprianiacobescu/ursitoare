@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Criterion C-0c16ec24 (web-admin › The Users page lists people and disables or enables them › Setting a state): accept as satisfied? |
 | Q-009 | answered | none | verdict | Criterion C-4bc159f4 (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Names): accept as satisfied? |
 | Q-010 | answered | none | verdict | Criterion C-c174064a (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Creating and deleting): accept as satisfied? |
-| Q-011 | open | none | verdict | Criterion C-b8ae0992 (web-admin › The Group mappings page maps a group to one role or team › Parsing, showing and offering mappings): accept as satisfied? |
+| Q-011 | answered | none | verdict | Criterion C-b8ae0992 (web-admin › The Group mappings page maps a group to one role or team › Parsing, showing and offering mappings): accept as satisfied? |
 | Q-012 | open | none | verdict | Criterion C-5e078fd3 (web-admin › The Group mappings page maps a group to one role or team › Building the request): accept as satisfied? |
 | Q-013 | open | none | verdict | Criterion C-741e5139 (web-admin › The Group mappings page maps a group to one role or team › Saving a mapping, reading every page): accept as satisfied? |
 | Q-014 | open | none | verdict | Criterion C-8a1094e4 (web-admin › The Group mappings page maps a group to one role or team › A removal states the consequence): accept as satisfied? |
@@ -393,7 +393,8 @@ accept The criterion is satisfied as it stands. postTeam in web/src/admin/teams.
 
 ## Q-011: Criterion C-b8ae0992 (web-admin › The Group mappings page maps a group to one role or team › Parsing, showing and offering mappings): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -420,6 +421,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. parseGroupMapping in web/src/admin/mappings.ts needs a plain object whose issuer, group and reviewedBy are non-empty texts within their limits, whose roleId and teamId are null or match the role and team patterns, and exactly one of roleId and teamId null, then returns the five MappingRow fields, so the role mapping and the team mapping parse to themselves while a body with both targets set and a body with an empty group give null. mappingCells returns the group, issuer and reviewer unchanged for short values and grants "Role: author" or "Team: finance". grantOptions pushes every role as role:<id> "Role: <id>" and then every team as team:<id> "Team: <id>". defaultIssuer answers "" for no rows and the first row's issuer otherwise. ISSUER_HINT is exactly the task 5.1 text "The issuer URL your identity provider puts in tokens (iss).". The four tracing tests call each function inside assert.doesNotThrow and deep-compare the scenario's inputs against the scenario's outputs, including the two refused bodies, the three options in order, the issuers "" and "https://a.example/r", both cell sets and the hint text. All four passed as red assertions. The judge gave no verdict only because its evidence was cut to fit the budget, and the missing browser test is a harness artifact: the scenario is a unit-level call to pure functions that a browser journey cannot observe.
 ---
 
 ## Q-012: Criterion C-5e078fd3 (web-admin › The Group mappings page maps a group to one role or team › Building the request): accept as satisfied?
