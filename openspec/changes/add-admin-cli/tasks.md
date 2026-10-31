@@ -32,4 +32,4 @@
 
 ## 8. The entry point
 
-- [ ] 8.1 Write `src/cli/main.test.ts` first (scenario "The default registry through cliMain"), then implement `registerAdminCommands` in `src/cli/admin/index.ts`, `createDefaultRegistry` in `src/cli/builtin.ts` (calls `registerAdminCommands`; the one list later units extend) and `cliMain` with the entry guard in `src/cli/main.ts` (decision 13), implementing requirement "The entry point runs the default registry"
+- [x] 8.1 Write `src/cli/main.test.ts` first (scenario "The default registry through cliMain"), then implement `registerAdminCommands` in `src/cli/admin/index.ts`, `createDefaultRegistry` in `src/cli/builtin.ts` (calls `registerAdminCommands`; the one list later units extend) and `cliMain` with the entry guard in `src/cli/main.ts` (decision 13), implementing requirement "The entry point runs the default registry"
