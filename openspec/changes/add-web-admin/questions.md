@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Criterion C-b8ae0992 (web-admin › The Group mappings page maps a group to one role or team › Parsing, showing and offering mappings): accept as satisfied? |
 | Q-012 | answered | none | verdict | Criterion C-5e078fd3 (web-admin › The Group mappings page maps a group to one role or team › Building the request): accept as satisfied? |
 | Q-013 | answered | none | verdict | Criterion C-741e5139 (web-admin › The Group mappings page maps a group to one role or team › Saving a mapping, reading every page): accept as satisfied? |
-| Q-014 | open | none | verdict | Criterion C-8a1094e4 (web-admin › The Group mappings page maps a group to one role or team › A removal states the consequence): accept as satisfied? |
+| Q-014 | answered | none | verdict | Criterion C-8a1094e4 (web-admin › The Group mappings page maps a group to one role or team › A removal states the consequence): accept as satisfied? |
 | Q-015 | open | none | verdict | Criterion C-71033976 (web-admin › The Audit log page lists events newest first and filters by event type › Parsing an event and its cells): accept as satisfied? |
 | Q-016 | open | none | verdict | Criterion C-1e5047ed (web-admin › The Audit log page lists events newest first and filters by event type › The event type filter): accept as satisfied? |
 | Q-017 | open | none | verdict | Criterion C-1d816fd1 (web-admin › The Audit log page shows whether the chain verifies › Parsing and loading a verification): accept as satisfied? |
@@ -492,7 +492,8 @@ accept The criterion is satisfied as it stands. setMapping in web/src/admin/mapp
 
 ## Q-014: Criterion C-8a1094e4 (web-admin › The Group mappings page maps a group to one role or team › A removal states the consequence): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -519,6 +520,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. removeMappingConfirm in web/src/admin/mappings.ts builds the title "Remove the mapping for <group>?" with the group cut by clip (a 17-character group is unchanged), the action "Remove mapping", and the description "Members of this group lose the role <id> at once." for a role mapping or "Members of this group lose the team <id> at once." for a team mapping; when the mapping is to role tenant_admin it appends " This is an administrator role: if no other group maps to it, nobody can manage users until an operator maps one again from the command line.", word for word the warning task 5.2 prescribes. So the ursitoare-authors mapping gives the scenario's title, action and description, the team-finance mapping ends "lose the team finance at once.", and the ursitoare-admins mapping adds the warning that nobody can manage users. The three tracing tests in removal.test.ts call the function inside assert.doesNotThrow and assert exactly those titles, the action "Remove mapping" and the full description texts, with an extra check that the administrator description contains "nobody can manage users"; two companion tests cover the clipped long title and removeMapping's delete call with the issuer and group in the query. All five passed as red assertions, and MappingsPage.tsx wires removeMappingConfirm into its dialog. The judge gave no verdict only because its evidence was cut to fit the budget, and the failing generated browser test is a harness artifact that is not in the repository: the scenario is a unit-level call to a pure function.
 ---
 
 ## Q-015: Criterion C-71033976 (web-admin › The Audit log page lists events newest first and filters by event type › Parsing an event and its cells): accept as satisfied?
