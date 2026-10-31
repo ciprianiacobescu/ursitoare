@@ -178,15 +178,33 @@ export function mappedMessage(group: string): string {
   return `Mapped ${clip(group)}. Members get it the next time they sign in.`;
 }
 
-export function removeMappingConfirm(_m: MappingRow): ConfirmSpec {
-  throw new Error("not implemented");
+const REMOVE_ACTION = "Remove mapping";
+const TENANT_ADMIN_WARNING =
+  " This is an administrator role: if no other group maps to it, nobody can manage users " +
+  "until an operator maps one again from the command line.";
+
+export function removeMappingConfirm(m: MappingRow): ConfirmSpec {
+  let description =
+    m.teamId !== null
+      ? `Members of this group lose the team ${m.teamId} at once.`
+      : `Members of this group lose the role ${m.roleId} at once.`;
+  if (m.teamId === null && m.roleId === "tenant_admin") {
+    description += TENANT_ADMIN_WARNING;
+  }
+  return {
+    title: `Remove the mapping for ${clip(m.group)}?`,
+    description,
+    action: REMOVE_ACTION,
+  };
 }
 
 export async function removeMapping(
-  _client: Api<"delete">,
-  _m: Pick<MappingRow, "issuer" | "group">,
+  client: Api<"delete">,
+  m: Pick<MappingRow, "issuer" | "group">,
 ): Promise<void> {
-  throw new Error("not implemented");
+  await client.delete<unknown>("/idp-group-map", {
+    query: { issuer: m.issuer, group: m.group },
+  });
 }
 
 export async function loadAllItems<T>(fetchPage: FetchPage<T>): Promise<T[]> {

@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
 import { browserSession } from "../auth/browser-session.ts";
+import { ConfirmDialog } from "../kit/ConfirmDialog.tsx";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { DataTable } from "../kit/data/DataTable.tsx";
@@ -15,6 +16,7 @@ import { toast } from "../kit/toast.ts";
 import "./admin.css";
 import { adminErrorMessage } from "./messages.ts";
 import { ADMIN_TABLES } from "./pages.ts";
+import { clip } from "./shared.ts";
 import {
   ISSUER_HINT,
   defaultIssuer,
@@ -24,9 +26,13 @@ import {
   mappingCells,
   mappingRequest,
   parseGroupMapping,
+  removeMapping,
+  removeMappingConfirm,
   setMapping,
 } from "./mappings.ts";
-import type { GrantOption } from "./mappings.ts";
+import type { GrantOption, MappingRow } from "./mappings.ts";
+
+type MappingId = Pick<MappingRow, "issuer" | "group">;
 import { parseNamed } from "./teams.ts";
 
 const PAGE_TITLE = "Group mappings · Ursitoare";
@@ -50,6 +56,8 @@ export function MappingsPage(): ReactNode {
   const [errors, setErrors] = useState<FormErrors>({});
   const [saving, setSaving] = useState(false);
   const [grants, setGrants] = useState<GrantsState>({ status: "loading" });
+  const [removing, setRemoving] = useState<MappingId | null>(null);
+  const [pending, setPending] = useState<MappingRow | null>(null);
 
   const list = useMemo(
     () =>
@@ -142,6 +150,24 @@ export function MappingsPage(): ReactNode {
     })();
   };
 
+  const remove = (m: MappingRow): void => {
+    if (removing !== null) return;
+    setRemoving(m);
+    void (async () => {
+      try {
+        await removeMapping(browserSession.api, m);
+        toast({ kind: "success", message: `Removed the mapping for ${clip(m.group)}.` });
+        list.reset();
+        headingRef.current?.focus();
+      } catch (error) {
+        toast({ kind: "error", message: adminErrorMessage(error) });
+      } finally {
+        setRemoving(null);
+        setPending(null);
+      }
+    })();
+  };
+
   const columns = ADMIN_TABLES.mappings.columns.map((column) => ({
     ...column,
     cell: (mapping: Parameters<typeof mappingCells>[0]): ReactNode => {
@@ -155,11 +181,29 @@ export function MappingsPage(): ReactNode {
           return cells.issuer;
         case "reviewedBy":
           return cells.reviewedBy;
+        case "actions": {
+          const label = `Remove ${clip(mapping.group)}`;
+          return (
+            <button
+              type="button"
+              className="ui-button"
+              aria-disabled={removing !== null ? true : undefined}
+              onClick={() => {
+                if (removing !== null) return;
+                setPending(mapping);
+              }}
+            >
+              {label}
+            </button>
+          );
+        }
         default:
           return null;
       }
     },
   }));
+
+  const pendingConfirm = pending === null ? null : removeMappingConfirm(pending);
 
   return (
     <div className="admin-page">
@@ -259,6 +303,17 @@ export function MappingsPage(): ReactNode {
             : { emptyDescription: ADMIN_TABLES.mappings.emptyDescription })}
         />
       </section>
+      {pending !== null && pendingConfirm !== null ? (
+        <ConfirmDialog
+          open
+          title={pendingConfirm.title}
+          description={pendingConfirm.description}
+          action={pendingConfirm.action}
+          destructive
+          onConfirm={() => remove(pending)}
+          onCancel={() => setPending(null)}
+        />
+      ) : null}
     </div>
   );
 }
