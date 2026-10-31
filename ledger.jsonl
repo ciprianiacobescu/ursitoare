@@ -86,3 +86,4 @@
 {"at":"2026-10-31T20:26:29Z","attempt":1,"cost_usd":1.193453,"runs":2,"type":"plan.charged","unit":"openspec:add-web-admin"}
 {"at":"2026-10-31T20:26:29Z","run":"r-20261031T2026Z-44e1","type":"unit.dispatched","unit":"openspec:add-web-admin"}
 {"at":"2026-10-31T21:20:00Z","detail":"waiting_capacity until 2026-11-01T21:05:18Z","reason":"unit_waiting_capacity","type":"plan.waiting","unit":"openspec:add-web-admin"}
+{"at":"2026-10-31T21:21:15Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"web-admin re-probes the judges after the nemotron judge swap (5faa0e7)","type":"plan.resumed"}
