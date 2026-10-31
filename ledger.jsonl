@@ -47,3 +47,4 @@
 {"at":"2026-10-31T10:59:15Z","run":"r-20261031T1059Z-c6fa","type":"unit.dispatched","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T11:22:13Z","attempt":1,"cost_usd":48.8074,"runs":9,"type":"plan.charged","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T11:22:13Z","run":"r-20261031T1122Z-8567","type":"unit.dispatched","unit":"openspec:add-admin-api"}
+{"at":"2026-10-31T11:22:25Z","attempt":1,"run":"r-20261031T1122Z-8567","type":"plan.run_idle","unit":"openspec:add-admin-api"}
