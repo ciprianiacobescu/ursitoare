@@ -42,7 +42,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-029 | answered | none | verdict | Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows): accept as satisfied? |
 | Q-030 | open | none | verdict | Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key): accept as satisfied? |
 | Q-031 | answered | none | verdict | Criterion C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server): accept as satisfied? |
-| Q-032 | open | none | verdict | Criterion C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine): accept as satisfied? |
+| Q-032 | answered | none | verdict | Criterion C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine): accept as satisfied? |
 | Q-033 | open | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
 | Q-034 | open | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
 | Q-035 | open | none | verdict | Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied? |
@@ -1038,7 +1038,8 @@ accept The criterion is satisfied. The tracing test in src/api/admin-teams.test.
 
 ## Q-032: Criterion C-ddb4acf0 (admin-api › The engine serves the admin routes and documents them › The real engine): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -1065,6 +1066,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. In src/main.ts the public server installs the PEP, calls registerMeRoute and then registerAdminRoutes with the PEP's pool (null without a database), its clock, systemIds and the configured engine key, before the OpenAPI route, so the admin routes are defined and documented also when main runs with no database. The committed docs/api/openapi.json holds the 12 admin paths that the 19 routes map to, and under them exactly 19 admin operations: three on idp-group-map, one on roles, two on service-accounts, patch on service-accounts/{userId}, get on its roles, put and delete on roles/{roleId}, two on teams, delete on teams/{teamId}, put on tenant/review-profile, get on users, get and patch on users/{userId}, and get and post on users/{userId}/idp-links. The tracing test runs main with a port-0 config, no database and inspectServers, asserts main resolved and no exit happened, asserts for each of its 19 rows that the public server defines the method and url with the expected action and that exactly 19 routes carry an admin action, asserts unregisteredRouteErrors over the public and internal routes is [], asserts with assert.ok that the document exists before reading it, asserts every one of the 19 paths is present, and asserts the committed text equals servedOpenApiText, which starts main the same way, fetches /api/v1/openapi.json and renders it. The harness records the test as passed and failing red by assertion. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-033: Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied?
