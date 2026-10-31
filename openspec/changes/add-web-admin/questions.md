@@ -1159,6 +1159,7 @@ accept The hold may be waived and the unit can go on as it stands. Criterion C-b
 ## Q-037: Hold H-ce62dad6: UI criterion C-5e078fd3 has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
