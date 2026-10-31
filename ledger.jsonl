@@ -23,3 +23,4 @@
 {"at":"2026-10-31T02:54:44Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"f41b553e95033ee46af3496ac9ef0d57f5dfa869","status":"pass","type":"unit.postcheck","unit":"openspec:add-roles-and-memberships"}
 {"at":"2026-10-31T02:54:44Z","revision":"f41b553e95033ee46af3496ac9ef0d57f5dfa869","type":"unit.integrated","unit":"openspec:add-roles-and-memberships"}
 {"at":"2026-10-31T02:54:44Z","attempt":1,"cost_usd":5.907701,"runs":4,"type":"plan.charged","unit":"openspec:add-roles-and-memberships"}
+{"at":"2026-10-31T02:56:28Z","branch":"l4/archive/openspec/add-roles-and-memberships","head":"c572ca4c3d2fea21fc1b62082d8e05318110d005","type":"unit.branch_deleted","unit":"openspec:add-roles-and-memberships"}
