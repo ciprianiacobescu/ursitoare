@@ -52,7 +52,7 @@ async function signIn(
   let user: User | undefined;
   await assert.doesNotReject(async () => {
     user = await withTenantTx(db.appPool, ctx, (tx) =>
-      upsertUserFromClaims(tx, ctx, { issuer: ISS, subject, name: subject }, {
+      upsertUserFromClaims(tx, ctx, { issuer: ISS, subject, name: subject.slice(4) }, {
         ids,
         clock: fixedClock("2026-10-25T08:00:00Z"),
       }),
@@ -221,6 +221,8 @@ test("C-32b7b36c Accounts list and read", async () => {
         VALIDATION,
         "a bad after",
       );
+    });
+    await withTenantTx(db.appPool, b, async (tx) => {
       await assert.rejects(
         listAccounts(tx, a, { kind: "human", limit: 50 }),
         MISMATCH,
