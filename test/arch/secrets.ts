@@ -66,11 +66,7 @@ function isBinary(absolute: string): boolean {
 }
 
 function isHarnessPath(relativePath: string): boolean {
-  return (
-    relativePath === ".l4" ||
-    relativePath.startsWith(".l4/") ||
-    relativePath.includes("/.l4/")
-  );
+  return relativePath.startsWith("openspec/changes/") && relativePath.includes("/.l4/");
 }
 
 function isScannable(absolute: string): boolean {

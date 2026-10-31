@@ -162,6 +162,35 @@ test("C-e7ed48e1: the file list covers tracked and untracked files only", () => 
   );
 });
 
+test("C-6690b581: the scan skips harness .l4 folders only, not the owner .l4 files", () => {
+  const dir = tempDir();
+  const secretLine = "sk-" + "y".repeat(32);
+
+  git(dir, "init");
+
+  for (const name of [
+    ".l4/config.yaml",
+    ".l4/plans/p1.json",
+    "openspec/changes/x/.l4/evidence/round-1/verdict.json",
+    "openspec/changes/archive/2026-10-26-x/.l4/ledger/r.jsonl",
+  ]) {
+    writeFile(dir, name, secretLine + "\n");
+    git(dir, "add", name);
+  }
+
+  const found = answer(() => scanRepository(dir));
+  const violations = answer(() => (found === "THROWN" ? "THROWN" : sortViolations(found)));
+  assert.deepEqual(violations, [
+    secret("sk_key", ".l4/config.yaml", 1),
+    secret("sk_key", ".l4/plans/p1.json", 1),
+  ]);
+
+  assert.ok(Array.isArray(violations), `expected a list of violations, got ${String(violations)}`);
+  for (const violation of violations) {
+    assert.equal(violation.file.startsWith("openspec/"), false, "openspec/changes .l4 evidence must stay skipped");
+  }
+});
+
 test("C-bb0edd4e: an unavailable git fails the scan loudly", () => {
   const dir = tempDir();
 

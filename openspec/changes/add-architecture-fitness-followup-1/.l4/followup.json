@@ -1,0 +1,21 @@
+{
+  "schema": "l4/followup@1",
+  "parent": "openspec:add-architecture-fitness",
+  "items": [
+    {
+      "id": "FB-001",
+      "sha256": "4fc0c8f2b593b5c914587b5fc321666d7b1e4ad772167c62736ea8d64d7f5017"
+    },
+    {
+      "id": "FB-002",
+      "sha256": "f3ea541a48ea919caeb0cc885570777480de1cc566c718777ebd1cc241ef0b83"
+    }
+  ],
+  "chores": [
+    "F-2c8576cb"
+  ],
+  "test_chores": [],
+  "refactors": [
+    "F-2c8576cb"
+  ]
+}
