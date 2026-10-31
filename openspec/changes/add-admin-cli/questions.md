@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 7.4 | technical | src/cli/admin/list-users.test.ts:160 |
-| Q-002 | open | none | verdict | Criterion C-a13f7327 (ops-cli › admin grant-role and revoke-role change a direct grant › Refusals and isolation): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-a13f7327 (ops-cli › admin grant-role and revoke-role change a direct grant › Refusals and isolation): accept as satisfied? |
 | Q-003 | open | none | verdict | Finding F-f42f8c30: task 7.2: revoke-role refusals and isolation are not exercised |
 <!-- l4:index:end -->
 
@@ -45,7 +45,8 @@ Edit `src/cli/admin/list-users.test.ts`: change line 160 to `const bobLine = (bo
 
 ## Q-002: Criterion C-a13f7327 (ops-cli › admin grant-role and revoke-role change a direct grant › Refusals and isolation): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -72,6 +73,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied by the code as it stands. The judge's doubt was that revoke-role might answer an unknown or foreign user with "not held" and exit 0. It cannot: revokeRole in src/identity/rbac/grants.ts runs requireUserId, requireRoleId, requireRole and requireUser before its DELETE, exactly as grantRole does, so "Bad Role" throws RBAC_INVALID, the role "ghost" and the user "usr_ghost" throw RBAC_NOT_FOUND, and bob of tenant_b is not found by the tenant-scoped user lookup for tenant_a and throws RBAC_NOT_FOUND too; the boolean "absent" branch is reached only after those checks pass. The revoke-role command is a thin wrapper over revokeRole with the same required-option handling as grant-role, and both go through the same defineAdminCommand, whose describeError marks any RBAC_* code as a refusal, prints "CODE: message", writes the cli.command_run event with outcome "refused" and that code, and exits 1. The tracing test exercises that whole path for grant-role (RBAC_NOT_FOUND, RBAC_INVALID, cross-tenant bob, ghost role, four refused events, bob still holding author) and the missing --user and --role usage errors for revoke-role; the remaining revoke-role refusals follow from the shared identity checks read above. The missing direct test of revoke-role refusals is a coverage gap worth closing later, not a defect in behaviour.
 ---
 
 ## Q-003: Finding F-f42f8c30: task 7.2: revoke-role refusals and isolation are not exercised
