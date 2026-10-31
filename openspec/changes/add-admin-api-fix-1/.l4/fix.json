@@ -1,0 +1,13 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-admin-api",
+  "round": 1,
+  "findings": [
+    "F-cde045de",
+    "F-28a40cf9"
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": []
+}
