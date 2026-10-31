@@ -157,7 +157,7 @@ function registryOf(): CommandRegistry {
 const robotLine = (robot: User): string => `${robot.userId}\tservice\tactive\t\t\trobot`;
 const aliceLine = (alice: User): string =>
   `${alice.userId}\thuman\tactive\tauthor\tfinance\t${SAFE_NAME}`;
-const bobLine = (bob: User): string => `${bob.userId}\thuman\tactive\t\t\tBob`;
+const bobLine = (bob: User): string => `${bob.userId}\thuman\tactive\t\t\tBob B`;
 
 test("C-7eeb7890 admin list-users prints the tenant users by id", async () => {
   const db = await withTestDatabase();
