@@ -2,3 +2,6 @@
 {"ts": "2026-10-31T11:22:15.568385Z", "run_id": "r-20261031T1122Z-8567", "unit": "openspec:add-admin-api", "seq": 2, "type": "lock.acquired", "holder": "runnervm48cm3:3480", "nonce": "fd2fdbf6ba483874"}
 {"ts": "2026-10-31T11:22:20.828029Z", "run_id": "r-20261031T1122Z-8567", "unit": "openspec:add-admin-api", "seq": 3, "type": "pr.labels", "number": 41, "labels": ["l4:awaiting_human", "l4:needs-answers", "l4:needs-person"]}
 {"ts": "2026-10-31T11:22:22.665020Z", "run_id": "r-20261031T1122Z-8567", "unit": "openspec:add-admin-api", "seq": 4, "type": "delegate.result", "question": "Q-030", "id": "Q-030", "status": "escalated", "reason": "the delegate's cost cap of the unit is used ($47.08 of $50.00)", "called": false, "tasks": [], "target": "C-4c8964eb", "kind": "verdict"}
+{"ts": "2026-10-31T11:22:22.699475Z", "run_id": "r-20261031T1122Z-8567", "unit": "openspec:add-admin-api", "seq": 5, "type": "delegate.pass", "bound": "cost", "delegate_only": true}
+{"ts": "2026-10-31T11:22:22.722980Z", "run_id": "r-20261031T1122Z-8567", "unit": "openspec:add-admin-api", "seq": 6, "type": "lock.released"}
+{"ts": "2026-10-31T11:22:22.723372Z", "run_id": "r-20261031T1122Z-8567", "unit": "openspec:add-admin-api", "seq": 7, "type": "run.finished", "exit_code": 11}
