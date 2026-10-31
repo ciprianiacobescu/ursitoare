@@ -1,12 +1,18 @@
 import type { FastifyInstance, FastifyRequest } from "fastify";
 
-import { isUtcTime, listAuditEvents } from "../audit/index.ts";
-import type { KeyMaterial, verifyChain } from "../audit/index.ts";
+import {
+  countAnchors,
+  formatAt,
+  isUtcTime,
+  listAuditEvents,
+  verifyChain,
+} from "../audit/index.ts";
+import type { KeyMaterial } from "../audit/index.ts";
 import { listPolicyDecisions } from "../pdp/index.ts";
 import type { Clock } from "../core/index.ts";
 import type { TenantPool } from "../tenancy/index.ts";
 import { ApiError } from "./errors.ts";
-import { parseAuditQuery, parseDecisionQuery } from "./audit-query.ts";
+import { parseAuditQuery, parseDecisionQuery, parseVerifyQuery } from "./audit-query.ts";
 import { deriveCursorKey } from "./cursor.ts";
 import type { CursorKey, CursorPosition } from "./cursor.ts";
 import { startAfter, paginate } from "./pagination.ts";
@@ -174,9 +180,47 @@ const AUDIT_QUERY_SCHEMA = {
   },
 } as const;
 
+const FROM_SEQ_PATTERN = "^[1-9][0-9]{0,18}$";
+
+const VERIFY_QUERY_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    from_seq: { type: "string", pattern: FROM_SEQ_PATTERN, maxLength: 19 },
+  },
+} as const;
+
+const AUDIT_VERIFICATION_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: [
+    "ok",
+    "checked",
+    "firstBadSeq",
+    "reason",
+    "fromSeq",
+    "anchorsChecked",
+    "anchorsVerified",
+    "checkedAt",
+  ],
+  properties: {
+    ok: { type: "boolean" },
+    checked: { type: "integer" },
+    firstBadSeq: { type: ["string", "null"] },
+    reason: { type: ["string", "null"], enum: ["hash", "gap", "anchor", null] },
+    fromSeq: { type: "string" },
+    anchorsChecked: { type: "boolean" },
+    anchorsVerified: { type: "integer" },
+    checkedAt: { type: "string" },
+  },
+} as const;
+
 interface AuditRouteDeps {
   readonly pool: TenantPool | null;
   readonly key: CursorKey | null;
+  readonly engineKey: KeyMaterial | null;
+  readonly clock: Clock;
+  verify?: typeof verifyChain;
 }
 
 function engineKeyRequired(): ApiError {
@@ -318,9 +362,52 @@ async function decisionsListHandler(
   });
 }
 
+async function verifyHandler(
+  request: FastifyRequest,
+  deps: AuditRouteDeps,
+): Promise<unknown> {
+  const tenant = request.tenant;
+  if (tenant === undefined) {
+    throw new ApiError(503, "AUTHZ_UNAVAILABLE", "Authorization is unavailable");
+  }
+  if (deps.pool === null) {
+    throw new ApiError(503, "AUTHZ_UNAVAILABLE", "Authorization is unavailable");
+  }
+  const { fromSeq } = parseVerifyQuery(request.query as Record<string, unknown>);
+
+  const anchorsVerified =
+    deps.engineKey === null ? 0 : await countAnchors(deps.pool, tenant, fromSeq);
+
+  const opts =
+    deps.engineKey === null
+      ? { fromSeq }
+      : { fromSeq, engineKey: deps.engineKey };
+  const run = deps.verify ?? verifyChain;
+  const report = await run(deps.pool, tenant, opts);
+
+  return {
+    ok: report.ok,
+    checked: report.checked,
+    firstBadSeq: report.firstBadSeq === undefined ? null : report.firstBadSeq.toString(),
+    reason: report.reason === undefined ? null : report.reason,
+    fromSeq: fromSeq.toString(),
+    anchorsChecked: deps.engineKey !== null && anchorsVerified > 0,
+    anchorsVerified,
+    checkedAt: formatAt(deps.clock.now()),
+  };
+}
+
 export function registerAuditRoutes(server: FastifyInstance, deps: AuditApiDeps): void {
   const key = deps.engineKey === null ? null : deriveCursorKey(deps.engineKey);
-  const routeDeps: AuditRouteDeps = { pool: deps.pool, key };
+  const routeDeps: AuditRouteDeps = {
+    pool: deps.pool,
+    key,
+    engineKey: deps.engineKey,
+    clock: deps.clock,
+  };
+  if (deps.verify !== undefined) {
+    routeDeps.verify = deps.verify;
+  }
 
   defineRoute(server, {
     method: "GET",
@@ -346,5 +433,18 @@ export function registerAuditRoutes(server: FastifyInstance, deps: AuditApiDeps)
     },
     errors: ["CURSOR_INVALID", "ENGINE_KEY_REQUIRED", "VALIDATION_FAILED"],
     handler: (request) => decisionsListHandler(request, routeDeps),
+  });
+
+  defineRoute(server, {
+    method: "GET",
+    url: "/api/v1/audit/verify",
+    auth: { kind: "session" },
+    action: "read_audit",
+    schema: {
+      querystring: VERIFY_QUERY_SCHEMA,
+      response: { 200: AUDIT_VERIFICATION_SCHEMA },
+    },
+    errors: ["VALIDATION_FAILED"],
+    handler: (request) => verifyHandler(request, routeDeps),
   });
 }

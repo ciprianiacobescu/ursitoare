@@ -27,7 +27,7 @@ Fixtures: `scenario-data.md`; specs: `specs/audit-api/spec.md` and `specs/audit-
 
 ## 7. The verification route
 
-- [ ] 7.1 Write `src/api/audit-verify.test.ts` first (scenarios "Intact, empty and part-way" (the empty case on a second `withTestDatabase()`), "Anchors are counted, never assumed", "Tampered chains", "Options reach verifyChain, bad input and failures" with a recording `verify` in `AuditApiDeps`, and the verify cases of the no-key and access scenarios), then add `AuditVerification` and `GET /api/v1/audit/verify` to `src/api/audit-routes.ts` (Decision 7) and export `AuditVerification` from `src/api/index.ts`, implementing requirement "The chain can be verified on request"
+- [x] 7.1 Write `src/api/audit-verify.test.ts` first (scenarios "Intact, empty and part-way" (the empty case on a second `withTestDatabase()`), "Anchors are counted, never assumed", "Tampered chains", "Options reach verifyChain, bad input and failures" with a recording `verify` in `AuditApiDeps`, and the verify cases of the no-key and access scenarios), then add `AuditVerification` and `GET /api/v1/audit/verify` to `src/api/audit-routes.ts` (Decision 7) and export `AuditVerification` from `src/api/index.ts`, implementing requirement "The chain can be verified on request"
 
 ## 8. Verification walks
 
