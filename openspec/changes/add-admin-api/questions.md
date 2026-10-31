@@ -38,7 +38,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-025 | answered | none | verdict | Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning): accept as satisfied? |
 | Q-026 | answered | none | verdict | Criterion C-1801fd2c (admin-api › The review profile is switched, audited, with a solo warning › Refusals): accept as satisfied? |
 | Q-027 | answered | none | verdict | Criterion C-777b5224 (admin-api › A refused change is audited › Each refusal leaves one event): accept as satisfied? |
-| Q-028 | open | none | verdict | Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing): accept as satisfied? |
+| Q-028 | answered | none | verdict | Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing): accept as satisfied? |
 | Q-029 | open | none | verdict | Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows): accept as satisfied? |
 | Q-030 | open | none | verdict | Criterion C-4c8964eb (admin-api › Lists page with the cursor contract › Without an engine key): accept as satisfied? |
 | Q-031 | open | none | verdict | Criterion C-eec17a85 (admin-api › Lists page with the cursor contract › Through the server): accept as satisfied? |
@@ -908,7 +908,8 @@ accept The criterion is satisfied. The server test in src/api/admin-refusals.tes
 
 ## Q-028: Criterion C-e4402b02 (admin-api › A refused change is audited › A failing audit changes nothing): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -935,6 +936,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The tracing test in src/api/admin-refusals.test.ts builds the harness with a pool wrapper whose client rejects any statement whose text mentions audit_, registers the admin routes with that pool, and captures the server log at level warn. Alice, who holds only author under a permit-all tenant policy, repeats the elevation request of the first scenario by putting tenant_admin on the service account's roles. The test asserts 403 with code ELEVATION_REFUSED, reads the membership table for the service account and asserts it is empty, asserts that the captured log lines include a record with code AUDIT_FAILED, and asserts that the audit chain holds no identity.change_refused event. The harness records it as passed and failing red by assertion. The production code matches: the PUT route runs getAccount and grantRole inside withTenantTx of the wrapped pool, and grantRole's assertCanGrant throws RBAC_ELEVATION before the membership insert, so the transaction rolls back and no role is stored; adminHandler then recognises RBAC_ELEVATION as a refusal code and calls appendChangeRefused, which runs appendAuditCommitted in its own withTenantTx over the same pool, whose first statement reads ursitoare.audit_head and is rejected by the wrapper; the catch logs request.log.warn with code AUDIT_FAILED and the mapped ELEVATION_REFUSED error is rethrown unchanged, so the answer stays 403. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-029: Criterion C-5995b318 (admin-api › Lists page with the cursor contract › pageRows): accept as satisfied?
