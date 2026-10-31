@@ -7,6 +7,7 @@ import type { Clock } from "../../core/index.ts";
 import type { TenantContext, TenantPool } from "../../tenancy/index.ts";
 import { withTenantTx } from "../../tenancy/index.ts";
 import { IdentityError } from "../errors.ts";
+import { groupsFromIdToken, syncMemberships } from "../rbac/sync.ts";
 import { resolveTenantForToken } from "../tenant-idp.ts";
 import { upsertUserFromClaims } from "../users.ts";
 import type { OidcClient } from "./client.ts";
@@ -160,6 +161,13 @@ export function registerCallbackRoute(server: FastifyInstance, deps: CallbackDep
           const user = await upsertUserFromClaims(tx, resolvedTenant, claims, {
             clock: deps.clock,
           });
+          await syncMemberships(
+            tx,
+            resolvedTenant,
+            user.userId,
+            { issuer: claims.issuer, groups: groupsFromIdToken(idToken) },
+            { clock: deps.clock },
+          );
           const endSessionHint = hintSealer.seal(
             idToken,
             `${resolvedTenant.tenantId}\n${user.userId}`,

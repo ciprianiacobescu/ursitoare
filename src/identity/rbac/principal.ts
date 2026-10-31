@@ -1,9 +1,27 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
-import type { TenantPool } from "../../tenancy/index.ts";
-import type { Principal } from "../oidc/principal.ts";
+import { withTenantTx, type TenantPool } from "../../tenancy/index.ts";
+import { principalOf, type Principal } from "../oidc/principal.ts";
 import type { SessionContext } from "../oidc/sessions.ts";
+import { rbacError } from "./errors.ts";
+import { loadMemberships } from "./memberships.ts";
 
-export async function resolvePrincipal(_pool: TenantPool, _session: SessionContext): Promise<Principal> {
-  throw new Error("not implemented");
+const MAX_MEMBERSHIPS = 64;
+
+export async function resolvePrincipal(
+  pool: TenantPool,
+  session: SessionContext,
+): Promise<Principal> {
+  const memberships = await withTenantTx(pool, session.tenant, (tx) =>
+    loadMemberships(tx, session.tenant, session.userId),
+  );
+  if (
+    memberships.roles.length > MAX_MEMBERSHIPS ||
+    memberships.teams.length > MAX_MEMBERSHIPS
+  ) {
+    throw rbacError("RBAC_TOO_MANY_MEMBERSHIPS");
+  }
+  return {
+    ...principalOf(session),
+    roles: memberships.roles,
+    teams: memberships.teams,
+  };
 }

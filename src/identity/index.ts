@@ -25,3 +25,25 @@ export type { Principal } from "./oidc/principal.ts";
 export { principalOf } from "./oidc/principal.ts";
 export type { OidcRoutesDeps } from "./oidc/routes.ts";
 export { registerOidcRoutes } from "./oidc/routes.ts";
+export type { RbacErrorCode } from "./rbac/errors.ts";
+export { RbacError } from "./rbac/errors.ts";
+export type { RbacActor } from "./rbac/names.ts";
+export {
+  DEFAULT_ROLES,
+  DEFAULT_BOOTSTRAP_ADMIN_GROUP,
+  BOOTSTRAP_ADMIN_GROUP_ENV,
+} from "./rbac/names.ts";
+export { listRoles, listTeams, createTeam, deleteTeam } from "./rbac/teams.ts";
+export type { GroupMapping } from "./rbac/group-map.ts";
+export {
+  listGroupMappings,
+  setGroupMapping,
+  removeGroupMapping,
+} from "./rbac/group-map.ts";
+export type { SyncResult } from "./rbac/sync.ts";
+export { groupsFromIdToken, syncMemberships } from "./rbac/sync.ts";
+export type { MembershipSet } from "./rbac/memberships.ts";
+export { loadMemberships } from "./rbac/memberships.ts";
+export { grantRole, revokeRole } from "./rbac/grants.ts";
+export { mapBootstrapAdminGroup, bootstrapAdminGroup } from "./rbac/bootstrap.ts";
+export { resolvePrincipal } from "./rbac/principal.ts";
