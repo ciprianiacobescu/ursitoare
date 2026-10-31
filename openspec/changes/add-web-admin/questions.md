@@ -32,7 +32,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-019 | answered | none | verdict | Criterion C-52c26a32 (web-admin › Admin styles use the kit's tokens and no inline styles › The stylesheet and the sources): accept as satisfied? |
 | Q-020 | answered | none | verdict | Criterion C-dd02e61e (web-admin › The admin logic works against the real engine › Carol manages mappings and teams and reads the log): accept as satisfied? |
 | Q-021 | answered | none | verdict | Criterion C-06a71640 (web-admin › The admin logic works against the real engine › Alice is refused, carol finds the id and disables her): accept as satisfied? |
-| Q-022 | open | none | verdict | Criterion C-f7bbb238 (web-admin › The M2 journey proves the admin screens in a browser › Carol maps a group and the log shows it verified): accept as satisfied? |
+| Q-022 | answered | none | verdict | Criterion C-f7bbb238 (web-admin › The M2 journey proves the admin screens in a browser › Carol maps a group and the log shows it verified): accept as satisfied? |
 | Q-023 | answered | none | verdict | Criterion C-652f54b7 (web-admin › The M2 journey proves the admin screens in a browser › Alice sees a 403 page with the decision id): accept as satisfied? |
 | Q-024 | answered | none | verdict | Criterion C-d118ea9b (web-admin › The M2 journey proves the admin screens in a browser › Carol disables and enables alice): accept as satisfied? |
 | Q-025 | answered | none | verdict | Criterion C-19381fcc (web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team): accept as satisfied? |
@@ -761,7 +761,7 @@ accept The criterion is satisfied as it stands. The tracing test in test/journey
 
 ## Q-022: Criterion C-f7bbb238 (web-admin › The M2 journey proves the admin screens in a browser › Carol maps a group and the log shows it verified): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: the reason has 1028 characters: the limit is 1000
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -789,6 +789,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Reviewed by the owner's delegate (the judge's reply was discarded, see Q-051) at the head 4cfa770 against the scenario and tasks.md 7.1. The test is e2e/test_m2_admin.py (lines below); it signs in with conftest's login and the seed users and passed in the e2e gate at 4cfa770, and no code under e2e, web, src or test changed between 4cfa770 and the branch head. At the base 5faa0e7 web/src/features has only 10-home and 15-sign-in and the four admin pages are stubs that throw, so there is no admin link or route (failure there inferred, not run). Task 7.1 was written by claude-sonnet, the delegate's vendor; the evidence is the test passing in the browser against the real engine. Carol maps a group and the log shows it verified: carol signs in (L26), the navigation shows "Users", "Roles and teams", "Group mappings" and "Audit log" (L27-28), she opens "Group mappings" (L30, title "Group mappings · Ursitoare" at L31), the table "Group mappings" has the ursitoare-authors row (L32-33), she fills Group with <i>ursitoare-auditors</i>, chooses "Role: auditor" and presses "Map group" (L36-38), the new row shows the literal text and "Role: auditor" with no i element (L39-42), she opens "Audit log" (L44), the Chain verification status says "Audit chain verified" (L45-46), and after filtering by identity.group_mapped (L47-48) the table "Audit events" has a row with ursitoare-auditors (L49-50); assert_accessible runs on both admin pages (L34, L51). At the base the first failure is the missing "Users" link (L28).
 ---
 
 ## Q-023: Criterion C-652f54b7 (web-admin › The M2 journey proves the admin screens in a browser › Alice sees a 403 page with the decision id): accept as satisfied?
