@@ -38,7 +38,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-025 | answered | none | verdict | Criterion C-19381fcc (web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team): accept as satisfied? |
 | Q-026 | answered | none | verdict | Hold H-7687af8e: UI criterion C-2c3410e3 has no end-to-end test; see the generated UI tests table |
 | Q-027 | answered | none | verdict | Hold H-2b38782f: UI criterion C-7c7c77c3 has no end-to-end test; see the generated UI tests table |
-| Q-028 | open | none | verdict | Hold H-7b12a03b: UI criterion C-bf07943b has no end-to-end test; see the generated UI tests table |
+| Q-028 | answered | none | verdict | Hold H-7b12a03b: UI criterion C-bf07943b has no end-to-end test; see the generated UI tests table |
 | Q-029 | answered | none | verdict | Hold H-7ce02cbb: UI criterion C-195c3385 has no end-to-end test; see the generated UI tests table |
 | Q-030 | answered | none | verdict | Hold H-ffedae36: UI criterion C-0c949ead has no end-to-end test; see the generated UI tests table |
 | Q-031 | answered | none | verdict | Hold H-30bc4c2c: UI criterion C-97244065 has no end-to-end test; see the generated UI tests table |
@@ -943,7 +943,7 @@ accept The hold may be waived and the unit can go on as it stands. Criterion C-7
 
 ## Q-028: Hold H-7b12a03b: UI criterion C-bf07943b has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -963,6 +963,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-bf07943b is a unit-level criterion: its WHEN gives `featureLiterals` source texts, which is no browser step, so its evidence is the node tests that trace it in web/src/admin/pages.test.ts (1.1), users.test.ts (3.1), teams.test.ts (4.1), mappings.test.ts (5.1) and audit.test.ts (6.1). Each failed at the base by assertion and passes at the head, and Q-003 accepts the criterion on that evidence. The generated UI test is no evidence against it: the generator itself reported it not testable through the browser, because the scenario calls functions on literal inputs. The admin pages' browser behaviour is proven separately by e2e/test_m2_admin.py (criteria C-f7bbb238, C-652f54b7, C-d118ea9b and C-19381fcc), which signs in with `login` and the seed users and passed in the e2e gate at the head 4cfa770.
 ---
 
 ## Q-029: Hold H-7ce02cbb: UI criterion C-195c3385 has no end-to-end test; see the generated UI tests table
