@@ -12,6 +12,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 5.1 | technical | src/identity/rbac/grants.test.ts:348-350 — count query has no placeholder but binds one parameter |
+| Q-002 | open | none | verdict | Criterion C-bb91aeca (identity-rbac › Every tenant has the four default roles › Created with the tenant): accept as satisfied? |
+| Q-003 | open | none | verdict | Finding F-780eb40d: Schema test does not check the exported DEFAULT_ROLES |
 <!-- l4:index:end -->
 
 ---
@@ -43,3 +45,60 @@ Take option 2. Edit `src/identity/rbac/grants.test.ts` line 350: change the para
 Do not take option 1 (the clarifier suggestion): it binds the tenant id to `user_id`, so the query would count the memberships of a user named after the tenant, find 0, and fail `assert.equal(..., 1)` for a reason that has nothing to do with the code under test.
 
 Checked: `tx` is a pg PoolClient (src/tenancy/tx.ts:8 and :21), and pg 8.23.1 uses the extended protocol whenever `values` is non-empty (node_modules/pg/lib/query.js:53-57), so the current call fails with 08P01 before it counts anything. With `[]` it runs as a plain query. `withTenantTx` sets `app.tenant_id` (src/tenancy/tx.ts:21), so the count is scoped to tenant a the same way as the sibling count at lines 293-295.
+
+---
+
+## Q-002: Criterion C-bb91aeca (identity-rbac › Every tenant has the four default roles › Created with the tenant): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-bb91aeca (identity-rbac › Every tenant has the four default roles › Created with the tenant)
+
+### Context
+Criterion C-bb91aeca (identity-rbac › Every tenant has the four default roles › Created with the tenant) is needs human after round 1.
+
+Scenario:
+\- **WHEN** after `seedTwoTenants(db)` the owner inserts tenant `tenant_c`, and `SELECT role_id FROM ursitoare.role` is read for each tenant inside `withTenantTx(db.ownerPool, ...)`
+\- **THEN** each of `tenant_a`, `tenant_b`, `tenant_c` has exactly `approver`, `auditor`, `author`, `tenant_admin`, and `[...DEFAULT_ROLES].sort()` equals that list
+
+Why: uncovered: the tests that trace it are inadequate or did not pass
+Judge: pass
+Tracing tests: src.identity.rbac.schema.test.ts::C-bb91aeca Created with the tenant (passed, red_assertion, inadequate)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-003: Finding F-780eb40d: Schema test does not check the exported DEFAULT_ROLES
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it (criterion C-bb91aeca).
+
+Title: Schema test does not check the exported DEFAULT_ROLES
+Detail: C-bb91aeca requires `[...DEFAULT_ROLES].sort()` to equal the role list. src/identity/rbac/schema.test.ts never imports DEFAULT_ROLES and asserts `[...DEFAULT_ROLE_IDS].sort()` against its own literal. The THEN clause about the constant is therefore untested, and the implementer's note confirms it was left this way on purpose.
+Suggested fix: Import DEFAULT_ROLES from src/identity/index.ts and assert `[...DEFAULT_ROLES].sort()` deep-equals the roles read for each tenant.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-bb91aeca as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
