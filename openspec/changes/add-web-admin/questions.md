@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | open | none | verdict | Criterion C-bf07943b (web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-195c3385 (web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-0c949ead (web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action): accept as satisfied? |
-| Q-006 | open | none | verdict | Criterion C-97244065 (web-admin › The Users page lists people and disables or enables them › Parsing an account): accept as satisfied? |
+| Q-006 | answered | none | verdict | Criterion C-97244065 (web-admin › The Users page lists people and disables or enables them › Parsing an account): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-87e93809 (web-admin › The Users page lists people and disables or enables them › Cells and actions): accept as satisfied? |
 | Q-008 | open | none | verdict | Criterion C-0c16ec24 (web-admin › The Users page lists people and disables or enables them › Setting a state): accept as satisfied? |
 | Q-009 | open | none | verdict | Criterion C-4bc159f4 (web-admin › The Roles and teams page lists roles and teams and creates or deletes a team › Names): accept as satisfied? |
@@ -230,7 +230,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-006: Criterion C-97244065 (web-admin › The Users page lists people and disables or enables them › Parsing an account): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -257,6 +258,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. parseAccount in web/src/admin/users.ts refuses a non-object body, checks userId against ^[A-Za-z0-9_-]{1,64}$, kind against human or service, displayName and email lengths, state against active or disabled, and roles, teams and localRoles as arrays whose every entry is a string matching the role or team pattern, then returns only the eight AccountRow fields, so ownerUserId is dropped. For the scenario's bodies: the Bob body parses to itself without ownerUserId; state "deleted" fails the state check; userId "../x" fails the id pattern; roles "author" is not an array; teams ["Finance"] fails the lower-case team pattern; localRoles [7] has a non-string entry; and null is not a record, so each of those gives null. The tracing test parses the Bob body inside assert.doesNotThrow and deep-compares it to the eight-field account without the owner, then asserts null for each of the six malformed bodies named by the scenario plus a 201-character display name. It passed as a red assertion. The judge gave no verdict only because its evidence was cut to fit the budget, and the missing browser test was itself judged not testable since parseAccount is an internal parsing function.
 ---
 
 ## Q-007: Criterion C-87e93809 (web-admin › The Users page lists people and disables or enables them › Cells and actions): accept as satisfied?
