@@ -1170,6 +1170,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-036: Hold H-0b1cd52c: the judge's reply was discarded (part 3 of 4, timeout: no answer within 600s)
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's cost cap of the unit is used ($47.08 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
