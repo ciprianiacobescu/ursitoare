@@ -15,3 +15,5 @@ export type { ChainReport } from "./verify.ts";
 export { verifyChain } from "./verify.ts";
 export type { Anchor } from "./anchor.ts";
 export { anchorHead } from "./anchor.ts";
+export type { AuditEventFilter, AuditEventRecord } from "./query.ts";
+export { isUtcTime, listAuditEvents } from "./query.ts";
