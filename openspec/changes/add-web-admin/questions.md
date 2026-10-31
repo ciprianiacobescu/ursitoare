@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-2c3410e3 (web-admin › Admin pages are listed by capability and declare literal paths › The page table): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-7c7c77c3 (web-admin › Admin pages are listed by capability and declare literal paths › Navigation follows capabilities): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-bf07943b (web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-bf07943b (web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-195c3385 (web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-0c949ead (web-admin › Admin errors show catalogue text and the refusal's decision id › Error text for an action): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-97244065 (web-admin › The Users page lists people and disables or enables them › Parsing an account): accept as satisfied? |
@@ -134,7 +134,7 @@ accept The criterion is satisfied as it stands. The test "the navigation follows
 
 ## Q-003: Criterion C-bf07943b (web-admin › Admin pages are listed by capability and declare literal paths › A feature file declares the table's literals): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: the reply has 24 checked entries: the limit is 20
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -162,6 +162,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Reviewed by the owner's delegate (the judge's reply was discarded, see Q-051) at the head 4cfa770 against the scenario and tasks.md; paths under web/src/admin/. A feature file declares the table's literals: featureLiterals of the literal users entry gives the four-field object (pages.test.ts:168-177), and with path: adminPath gives null (:183); each of the four files in web/src/features/ (60-63) is asserted to exist and its result to equal its ADMIN_PAGES entry without file (users.test.ts:255, teams.test.ts:223, mappings.test.ts:396, audit.test.ts:264); those paths are the file values pinned at pages.test.ts:60.
 ---
 
 ## Q-004: Criterion C-195c3385 (web-admin › Admin errors show catalogue text and the refusal's decision id › The codes and their texts): accept as satisfied?
