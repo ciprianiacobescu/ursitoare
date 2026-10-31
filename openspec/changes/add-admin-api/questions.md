@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
 | Q-005 | open | none | verdict | Finding F-cde045de: No discriminating test for cross-tenant admin isolation |
 | Q-006 | answered | none | verdict | Finding F-28a40cf9: Uncovered criterion C-598727de (Another tenant and a forged tenant) |
-| Q-007 | open | none | verdict | Finding F-c28b995d: Uncovered criterion C-96e47324 (The registry) at gate level |
+| Q-007 | answered | none | verdict | Finding F-c28b995d: Uncovered criterion C-96e47324 (The registry) at gate level |
 <!-- l4:index:end -->
 
 ---
@@ -191,7 +191,8 @@ reject The finding stands: the criterion is not covered by any test. The only tw
 
 ## Q-007: Finding F-c28b995d: Uncovered criterion C-96e47324 (The registry) at gate level
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -211,3 +212,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived: the criterion is satisfied and the named test asserts its whole scenario. The registry in src/api/error-codes.ts holds exactly the 22 entries the scenario lists, each with the status and message given. The test compares the sorted key set of ERROR_CODES with its 22 expected keys, deep-compares status and message of every entry, checks isRegisteredCode true for each of the 22 and false for cursor_invalid, the empty string and NOT_A_CODE. The key-set comparison would fail against the base's 16-entry registry, so the test discriminates. The gate reports no discriminating test only because the task changed this frozen test in place rather than adding a new one, which the design records as the chosen approach; the stale title naming 16 codes is required by that in-place change and does not affect the assertions.
