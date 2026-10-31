@@ -2,7 +2,7 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 1. The tenant grant
 
-- [ ] 1.1 Write `src/identity/admin/schema.test.ts` first (it starts with `assert.ok` on the ledger row `version = 180`, `name = 'admin_api'`; each statement of "Objects and privileges" is its own `withTenantTx(db.appPool, a, ...)`, refusals by `await assert.rejects(p, { code })`, row counts from the result and the owner pool), then add `src/db/migrations/0180_admin_api.sql` holding the SQL of design.md § Data model verbatim, implementing requirement "The app role may switch only its own tenant's review profile"
+- [x] 1.1 Write `src/identity/admin/schema.test.ts` first (it starts with `assert.ok` on the ledger row `version = 180`, `name = 'admin_api'`; each statement of "Objects and privileges" is its own `withTenantTx(db.appPool, a, ...)`, refusals by `await assert.rejects(p, { code })`, row counts from the result and the owner pool), then add `src/db/migrations/0180_admin_api.sql` holding the SQL of design.md § Data model verbatim, implementing requirement "The app role may switch only its own tenant's review profile"
 
 ## 2. Accounts
 
