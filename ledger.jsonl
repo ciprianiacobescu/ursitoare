@@ -35,3 +35,5 @@
 {"at":"2026-10-31T05:25:50Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"admin-api task 5.1 halted on the L4 named-test window limit (L4-IMP-089, fix due in 0.4.47); retried with an implementer note to change the test's own lines","type":"plan.resumed"}
 {"at":"2026-10-31T05:27:12Z","attempt":1,"cost_usd":3.756178,"runs":4,"type":"plan.charged","unit":"openspec:add-admin-api"}
 {"at":"2026-10-31T05:27:12Z","run":"r-20261031T0527Z-4c9b","type":"unit.dispatched","unit":"openspec:add-admin-api"}
+{"at":"2026-10-31T07:40:23Z","attempt":1,"cost_usd":4.261565,"runs":5,"type":"plan.charged","unit":"openspec:add-admin-api"}
+{"at":"2026-10-31T07:40:23Z","run":"r-20261031T0740Z-aae9","type":"unit.dispatched","unit":"openspec:add-admin-api"}
