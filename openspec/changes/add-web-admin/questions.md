@@ -37,7 +37,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-024 | answered | none | verdict | Criterion C-d118ea9b (web-admin › The M2 journey proves the admin screens in a browser › Carol disables and enables alice): accept as satisfied? |
 | Q-025 | answered | none | verdict | Criterion C-19381fcc (web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team): accept as satisfied? |
 | Q-026 | answered | none | verdict | Hold H-7687af8e: UI criterion C-2c3410e3 has no end-to-end test; see the generated UI tests table |
-| Q-027 | open | none | verdict | Hold H-2b38782f: UI criterion C-7c7c77c3 has no end-to-end test; see the generated UI tests table |
+| Q-027 | answered | none | verdict | Hold H-2b38782f: UI criterion C-7c7c77c3 has no end-to-end test; see the generated UI tests table |
 | Q-028 | open | none | verdict | Hold H-7b12a03b: UI criterion C-bf07943b has no end-to-end test; see the generated UI tests table |
 | Q-029 | open | none | verdict | Hold H-7ce02cbb: UI criterion C-195c3385 has no end-to-end test; see the generated UI tests table |
 | Q-030 | open | none | verdict | Hold H-ffedae36: UI criterion C-0c949ead has no end-to-end test; see the generated UI tests table |
@@ -910,7 +910,8 @@ accept The hold may be waived and the unit can go on as it stands. Criterion C-2
 
 ## Q-027: Hold H-2b38782f: UI criterion C-7c7c77c3 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -929,6 +930,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived and the unit can go on as it stands. Criterion C-7c7c77c3 is the scenario "Navigation follows capabilities": it registers the four ADMIN_PAGES entries with element null in a fresh createFeatureRegistry() and asks nav with three capability sets, a unit-level call that no browser can drive or observe directly, which is why the generated browser test was judged not testable. Its tracing Node test in web/src/admin/pages.test.ts does exactly that and deep-compares the labels against [], ["Audit log"] and ["Users", "Roles and teams", "Group mappings", "Audit log"]; the registry's nav in web/src/app/features.ts keeps registration order and skips a feature whose capability the set lacks, and ADMIN_PAGES lists the three manage_users_roles pages before the read_audit page, so the labels come out as the scenario demands. Q-002 already accepted the criterion on that test. The user-visible side of the same behaviour is covered by the repository's own browser journey e2e/test_m2_admin.py: carol, signed in as tenant_admin, sees the links "Users", "Roles and teams", "Group mappings" and "Audit log", and alice, an author, has no "Users" link. A missing harness-generated browser test for a registry call therefore says nothing about the change.
 ---
 
 ## Q-028: Hold H-7b12a03b: UI criterion C-bf07943b has no end-to-end test; see the generated UI tests table
