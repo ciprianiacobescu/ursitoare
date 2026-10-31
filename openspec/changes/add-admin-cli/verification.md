@@ -1,4 +1,4 @@
-# Verification: openspec:add-admin-cli: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-admin-cli: PASS (round 2)
 
 traceability: 28/28 criteria covered by a discriminating test
 
@@ -17,17 +17,17 @@ traceability: 28/28 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base main@3041460d17 contained |
-| 1 | integrity | ok | 68.6 | 11 sub-checks (+1 unfrozen by human answers); scope: 36 changed file(s) |
-| 2 | build | ok | 18.7 |  |
-| 3 | tests | ok | 89.9 |  |
-| 4 | traceability | ok | 0.1 | 28/28 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/cli/admin/bootstrap-admin.ts, src/cli/admin/define.ts, src/cli/admin/grant-role.ts, src/cli/admin/index.ts, src/cli/admin/list-users.ts and 13 more |
-| 8 | s1 judge | ok | 2.8 | 28/28 criteria judged by jev |
-| 9 | judge | ok | 231.3 | 3 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -222,6 +222,11 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-2687097e | ok | 0.940 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-54587b81 | ok | 0.950 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-002 accept C-a13f7327 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied by the code as it stands. The judge's doubt was that revoke-role might answer an unknown or foreign user with "not held" and exit 0. It cannot: revokeRole in src/identity/rbac/grants.ts runs requireUserId, requireRoleId, requireRole and requireUser before its DELETE, exact...
+- Q-003 accept F-f42f8c30 by the delegate (claude-fable-5-1 via claude-code): The finding rests on a hypothesis the code rules out, so it may be waived; the behaviour the scenario asks of revoke-role is in place and the shared path is exercised. The judge feared that revokeRole might return false for an unknown or foreign user, which would make revoke-role print "not held" an...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -246,7 +251,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-b47916b5 | ops-cli › admin bootstrap-admin maps the first admin group › Issuer and input refusals | pass | pass | the judge passed it and a discriminating test passes |
 | C-e9948ac3 | ops-cli › admin grant-role and revoke-role change a direct grant › Grant to a human, twice, as JSON | pass | pass | the judge passed it and a discriminating test passes |
 | C-e5dc7461 | ops-cli › admin grant-role and revoke-role change a direct grant › Revoke twice, and an identity-provider role | pass | pass | the judge passed it and a discriminating test passes |
-| C-a13f7327 | ops-cli › admin grant-role and revoke-role change a direct grant › Refusals and isolation | insufficient_evidence | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-a13f7327 | ops-cli › admin grant-role and revoke-role change a direct grant › Refusals and isolation | insufficient_evidence | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied by the code as it stands. The judge's doubt was that revoke-role might answer an unknown or foreign user with "not held" and exit 0. It cannot: revokeRole in src/identity/rbac/grants.ts runs requireUserId, requir... |
 | C-30dfd9af | ops-cli › admin verify-audit checks the chain and counts anchors › An intact chain, with and without anchors | pass | pass | the judge passed it and a discriminating test passes |
 | C-049c428b | ops-cli › admin verify-audit checks the chain and counts anchors › A broken chain | pass | pass | the judge passed it and a discriminating test passes |
 | C-7683a50f | ops-cli › admin verify-audit checks the chain and counts anchors › Without the engine key | pass | pass | the judge passed it and a discriminating test passes |
@@ -257,7 +262,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Findings
 
-- [major, judge] task 7.2: revoke-role refusals and isolation are not exercised (criterion C-a13f7327): Task 7.2 says the 'Refusals and isolation' scenario is 'run for both commands'. src/cli/admin/grant-role.test.ts runs usr_ghost, Bad Role, bob of tenant_b and ghost only through admin grant-role. admin revoke-role is run only for the missing --user and --role. If revokeRole returns false for an unknown or foreign user, revoke-role would print 'not held' and exit 0, against the scenario, and no test would catch it.
+- [minor, judge] task 7.2: revoke-role refusals and isolation are not exercised (criterion C-a13f7327): Task 7.2 says the 'Refusals and isolation' scenario is 'run for both commands'. src/cli/admin/grant-role.test.ts runs usr_ghost, Bad Role, bob of tenant_b and ghost only through admin grant-role. admin revoke-role is run only for the missing --user and --role. If revokeRole returns false for an unknown or foreign user, revoke-role would print 'not held' and exit 0, against the scenario, and no test would catch it. (waived by the delegate (claude-fable-5-1 via claude-code): The finding rests on a hypothesis the code rules out, so it may be waived; the behaviour the scenario asks of revoke-role ...
 - [minor, judge] task 2.1: owner.ts exports may not be re-exported from src/cli/index.ts: Task 2.1 asks for every public symbol of src/cli/*.ts to be exported from src/cli/index.ts. src/cli/owner.ts is new and exports connectDefaultOwner and checkOwnerRole, but src/cli/index.ts is not in the diff. The implementer says OwnerConnection is re-exported through run.ts; nothing shown re-exports the two functions.
 - [minor, judge] An audit-write failure after a CLI_USAGE refusal exits 1, not 2 (spec gap) (criterion C-0222fcc1): In define.ts the CLI_AUDIT_FAILED branch always returns 1, even when the original refusal was CLI_USAGE (bad --limit, --after or --group), which otherwise exits 2.
 - [minor, judge] Owner-endpoint rule misses element-access database and assigned variables (spec gap) (criterion C-c40b4ca3): endsWithDatabase accepts only property access (x.database), so config["database"].owner is not reported. collectDatabaseVariables records only declaration initialisers, so `let d; d = config.database; d.owner` is not reported either.
