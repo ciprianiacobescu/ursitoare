@@ -48,7 +48,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-035 | answered | none | verdict | Hold H-d0d2c1b0: UI criterion C-c174064a has no end-to-end test; see the generated UI tests table |
 | Q-036 | answered | none | verdict | Hold H-cc90d893: UI criterion C-b8ae0992 has no end-to-end test; see the generated UI tests table |
 | Q-037 | answered | none | verdict | Hold H-ce62dad6: UI criterion C-5e078fd3 has no end-to-end test; see the generated UI tests table |
-| Q-038 | open | none | verdict | Hold H-6399c22b: UI criterion C-741e5139 has no end-to-end test; see the generated UI tests table |
+| Q-038 | answered | none | verdict | Hold H-6399c22b: UI criterion C-741e5139 has no end-to-end test; see the generated UI tests table |
 | Q-039 | open | none | verdict | Hold H-e3b15649: UI criterion C-8a1094e4 has no end-to-end test; see the generated UI tests table |
 | Q-040 | open | none | verdict | Hold H-7c19852a: UI criterion C-71033976 has no end-to-end test; see the generated UI tests table |
 | Q-041 | open | none | verdict | Hold H-f48309f9: UI criterion C-1e5047ed has no end-to-end test; see the generated UI tests table |
@@ -1193,7 +1193,7 @@ accept C-5e078fd3 is a unit-level criterion: its WHEN gives `mappingRequest` lit
 
 ## Q-038: Hold H-6399c22b: UI criterion C-741e5139 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -1213,6 +1213,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-741e5139 is a unit-level criterion: its WHEN runs `setMapping` with a recording client and `loadAllItems` over fake fetchers, which is no browser step, so its evidence is the node tests that trace it in web/src/admin/mappings.test.ts (task 5.1). Each failed at the base by assertion and passes at the head, and Q-013 accepts the criterion on that evidence. The generated UI test is no evidence against it: the generator itself reported it not testable through the browser, because the scenario calls functions on literal inputs. The admin pages' browser behaviour is proven separately by e2e/test_m2_admin.py (criteria C-f7bbb238, C-652f54b7, C-d118ea9b and C-19381fcc), which signs in with `login` and the seed users and passed in the e2e gate at the head 4cfa770.
 ---
 
 ## Q-039: Hold H-e3b15649: UI criterion C-8a1094e4 has no end-to-end test; see the generated UI tests table
