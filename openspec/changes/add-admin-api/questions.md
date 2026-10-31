@@ -29,7 +29,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-016 | answered | none | verdict | Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable): accept as satisfied? |
 | Q-017 | answered | none | verdict | Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state): accept as satisfied? |
 | Q-018 | answered | none | verdict | Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account): accept as satisfied? |
-| Q-019 | open | none | verdict | Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation): accept as satisfied? |
+| Q-019 | answered | none | verdict | Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation): accept as satisfied? |
 | Q-020 | open | none | verdict | Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse): accept as satisfied? |
 | Q-021 | open | none | verdict | Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove): accept as satisfied? |
 | Q-022 | open | none | verdict | Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals): accept as satisfied? |
@@ -611,7 +611,8 @@ accept The criterion is satisfied. The server test in src/api/admin-service-acco
 
 ## Q-019: Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -638,6 +639,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-service-accounts.test.ts runs the scenario as written: the harness grants alice only author by an operator grant under a permit-all tenant policy, alice puts tenant_admin on the service account and the test asserts 403 with code ELEVATION_REFUSED, then carol's GET of the account's roles is asserted 200 with { items: [], next_cursor: null }, so nothing was stored; alice then puts author and the test asserts 200 with { roleId: "author", result: "granted" }; finally the audit chain filtered to identity.role_granted events targeting the account is asserted to hold exactly one event, with payload { roleId: "author", via: "admin" }. The test passed and failed red by assertion. The production code matches: the PUT route builds the actor from the session principal's kind, userId and roles, reads getAccount and calls grantRole inside one withTenantTx; grantRole's assertCanGrant throws RBAC_ELEVATION when the actor holds neither tenant_admin nor the requested role, before the membership INSERT, so the transaction rolls back and no row or audit event is stored; adminApiError maps RBAC_ELEVATION to the registered ELEVATION_REFUSED 403; a grant of a role the actor holds inserts the membership and appends one identity.role_granted event. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-020: Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse): accept as satisfied?
