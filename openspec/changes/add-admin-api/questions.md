@@ -28,7 +28,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-015 | answered | none | verdict | Criterion C-c6c6a2a5 (admin-api › Users are listed, read, disabled and enabled › Roles and teams of accounts): accept as satisfied? |
 | Q-016 | answered | none | verdict | Criterion C-9733f98e (admin-api › Users are listed, read, disabled and enabled › Disable and enable): accept as satisfied? |
 | Q-017 | answered | none | verdict | Criterion C-8087d00f (admin-api › Service accounts are created, listed, disabled and given roles › Create, list, owner, state): accept as satisfied? |
-| Q-018 | open | none | verdict | Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account): accept as satisfied? |
+| Q-018 | answered | none | verdict | Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account): accept as satisfied? |
 | Q-019 | open | none | verdict | Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation): accept as satisfied? |
 | Q-020 | open | none | verdict | Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse): accept as satisfied? |
 | Q-021 | open | none | verdict | Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove): accept as satisfied? |
@@ -578,7 +578,8 @@ accept The criterion is satisfied. The server test in src/api/admin-service-acco
 
 ## Q-018: Criterion C-c102e454 (admin-api › Service accounts are created, listed, disabled and given roles › Roles of a service account): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -605,6 +606,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-service-accounts.test.ts runs the scenario exactly as written: carol puts author on the service account twice and the test asserts 200 with { roleId: "author", result: "granted" } then 200 with result exists; GET of the roles is 200 with items [{ roleId: "author" }] and next_cursor null; PUT of ghost is 404 NOT_FOUND; PUT of Bad is 400 VALIDATION_FAILED; PUT, GET and DELETE of roles/author for human bob's id are each 404 NOT_FOUND; the PATCH to disabled is 200 with state disabled; the repeated GET of the roles while disabled is again 200 with items [{ roleId: "author" }]; the PATCH back to active is 200 with state active; DELETE of roles/author is 204 and the second DELETE is 404 NOT_FOUND; and the audit chain for that account holds exactly one identity.role_granted and one identity.role_revoked event. The test passed and failed red by assertion. The production code matches: all three roles routes first read getAccount with kind service under the session's tenant and answer 404 when it is null, so a human's id is 404 on every one; the roleId param pattern rejects Bad at validation; grantRole requires the role (RBAC_NOT_FOUND, mapped to 404 NOT_FOUND), inserts with ON CONFLICT DO NOTHING and returns exists without an audit event when the row already exists, and appends one identity.role_granted on a real grant; the GET lists the account's localRoles whatever its state, since getAccount reads the user row by id and kind without a state filter; revokeRole deletes the local membership row, appends one identity.role_revoked on a real revoke and returns false when nothing was deleted, which the DELETE route answers as 404. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-019: Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation): accept as satisfied?
