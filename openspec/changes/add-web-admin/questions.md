@@ -35,7 +35,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-022 | open | none | verdict | Criterion C-f7bbb238 (web-admin › The M2 journey proves the admin screens in a browser › Carol maps a group and the log shows it verified): accept as satisfied? |
 | Q-023 | answered | none | verdict | Criterion C-652f54b7 (web-admin › The M2 journey proves the admin screens in a browser › Alice sees a 403 page with the decision id): accept as satisfied? |
 | Q-024 | answered | none | verdict | Criterion C-d118ea9b (web-admin › The M2 journey proves the admin screens in a browser › Carol disables and enables alice): accept as satisfied? |
-| Q-025 | open | none | verdict | Criterion C-19381fcc (web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team): accept as satisfied? |
+| Q-025 | answered | none | verdict | Criterion C-19381fcc (web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team): accept as satisfied? |
 | Q-026 | open | none | verdict | Hold H-7687af8e: UI criterion C-2c3410e3 has no end-to-end test; see the generated UI tests table |
 | Q-027 | open | none | verdict | Hold H-2b38782f: UI criterion C-7c7c77c3 has no end-to-end test; see the generated UI tests table |
 | Q-028 | open | none | verdict | Hold H-7b12a03b: UI criterion C-bf07943b has no end-to-end test; see the generated UI tests table |
@@ -852,7 +852,8 @@ accept The criterion is satisfied as it stands. The browser test for it in e2e/t
 
 ## Q-025: Criterion C-19381fcc (web-admin › The M2 journey proves the admin screens in a browser › Carol creates and deletes a team): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -879,6 +880,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The browser test for it in e2e/test_m2_admin.py signs carol in, opens "Roles and teams", expects a row of the table "Roles" for each of approver, auditor, author and tenant_admin, fills "Team name" with "ops", presses "Create team", expects the row "ops" in the table "Teams", presses exactly "Delete team ops" and "Delete team" in the dialog, expects the "ops" row to be gone, then presses exactly "Delete team finance" and "Delete team", expects the text "This team is still the target of a group mapping. Remove that mapping first." to be visible and the "finance" row to stay, with assert_accessible on the page. The code gives exactly that: TeamsPage renders the two DataTables with the captions of ADMIN_TABLES, a Form "Create team" with a Field labelled "Team name", a button "Delete team <id>" on every team row, a ConfirmDialog built from deleteTeamConfirm whose action is "Delete team", resets the teams list after a successful removeTeamById, and on failure shows a toast with adminErrorMessage of the error. adminErrorMessage goes through errorPanelModel, which answers messageFor of the code, and the feature file registers ADMIN_MESSAGES at module level, so a 409 IN_USE gives the registered text "This team is still the target of a group mapping. Remove that mapping first.", which ToastRegion renders as a paragraph. The Node journey against the real engine already proved the server side: removing ops resolves and removing the seeded finance team rejects with IN_USE because the seeded team-finance mapping still targets it. The harness-generated test is not in the repository and failed on both base and head, so its failure says nothing about the change; the repository's own test traces the scenario assertion by assertion and is ignored only for want of a red record, which the design explains by the browser-only pairing of this requirement.
 ---
 
 ## Q-026: Hold H-7687af8e: UI criterion C-2c3410e3 has no end-to-end test; see the generated UI tests table
