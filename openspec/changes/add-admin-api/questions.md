@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-598727de (admin-api › Every admin route is a session route under the right action › Another tenant and a forged tenant): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
 | Q-005 | open | none | verdict | Finding F-cde045de: No discriminating test for cross-tenant admin isolation |
-| Q-006 | open | none | verdict | Finding F-28a40cf9: Uncovered criterion C-598727de (Another tenant and a forged tenant) |
+| Q-006 | answered | none | verdict | Finding F-28a40cf9: Uncovered criterion C-598727de (Another tenant and a forged tenant) |
 | Q-007 | open | none | verdict | Finding F-c28b995d: Uncovered criterion C-96e47324 (The registry) at gate level |
 <!-- l4:index:end -->
 
@@ -165,7 +165,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-006: Finding F-28a40cf9: Uncovered criterion C-598727de (Another tenant and a forged tenant)
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -185,6 +186,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding stands: the criterion is not covered by any test. The only two-tenant checks in the admin route tests are list calls by tenant B's admin zed, who lists users, teams, roles and group mappings and sees only tenant B's rows. No test has B's admin read or patch one of tenant A's users, grant a role to A's service account, list an A user's IdP links, or post a team whose body carries a forged tenantId, and no test asserts afterwards that tenant A's rows are unchanged. The production code appears correct, since every handler takes the tenant from the session through requireAdminContext and the body schemas refuse additional properties, so the fix is a new Node test over the server that traces the scenario; the project's security checklist requires every tenant-scoped query to be covered by a two-tenant test and the design promises each route a two-tenant scenario. WHEN tenant A holds humans ann and bob and a service account, tenant B holds human zed, and B's tenant admin sends GET /api/v1/users, GET and PATCH /api/v1/users/<ann> with { "state": "disabled" }, PUT /api/v1/service-accounts/<svc>/roles/author, GET /api/v1/users/<ann>/idp-links and POST /api/v1/teams with { "teamId": "x", "tenantId": "tenant_a" } THEN the list holds only zed, the next four answer 404 NOT_FOUND, the last 400 VALIDATION_FAILED, ann stays active, the service account holds no role, and tenant A has no team x.
 ---
 
 ## Q-007: Finding F-c28b995d: Uncovered criterion C-96e47324 (The registry) at gate level
