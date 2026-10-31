@@ -18,3 +18,4 @@
 {"at":"2026-10-31T02:12:32Z","attempt":1,"cost_usd":5.907701,"runs":4,"type":"plan.charged","unit":"openspec:add-roles-and-memberships"}
 {"at":"2026-10-31T02:12:32Z","run":"r-20261031T0212Z-d0bf","type":"unit.dispatched","unit":"openspec:add-roles-and-memberships"}
 {"at":"2026-10-31T02:53:01Z","head":"6f8d1058afc8fbf9ac682f8af8e0f9176ad3137d","pr":39,"target_before":"93f072a4351c30ae7665a3faf2d03524f8a429f6","type":"unit.merge_requested","unit":"openspec:add-roles-and-memberships"}
+{"at":"2026-10-31T02:53:06Z","ci":"not_run","head":"6f8d1058afc8fbf9ac682f8af8e0f9176ad3137d","merge_commit":"f41b553e95033ee46af3496ac9ef0d57f5dfa869","method":"squash","pr":39,"raced":false,"type":"unit.merged","unit":"openspec:add-roles-and-memberships"}
