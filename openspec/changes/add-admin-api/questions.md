@@ -32,7 +32,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-019 | answered | none | verdict | Criterion C-50b6b834 (admin-api › Service accounts are created, listed, disabled and given roles › No elevation): accept as satisfied? |
 | Q-020 | answered | none | verdict | Criterion C-8b40a61c (admin-api › Roles and teams are listed and teams managed › Create, list, delete, refuse): accept as satisfied? |
 | Q-021 | answered | none | verdict | Criterion C-09ace5ca (admin-api › Group mappings are set, replaced, listed and removed › Set, replace, list, remove): accept as satisfied? |
-| Q-022 | open | none | verdict | Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals): accept as satisfied? |
+| Q-022 | answered | none | verdict | Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals): accept as satisfied? |
 | Q-023 | open | none | verdict | Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add): accept as satisfied? |
 | Q-024 | open | none | verdict | Criterion C-a63083c0 (admin-api › IdP links are listed and added › Refusals): accept as satisfied? |
 | Q-025 | open | none | verdict | Criterion C-10655032 (admin-api › The review profile is switched, audited, with a solo warning › Switch and warning): accept as satisfied? |
@@ -710,7 +710,8 @@ accept The criterion is satisfied. The server test in src/api/admin-group-map.te
 
 ## Q-022: Criterion C-11a09b04 (admin-api › Group mappings are set, replaced, listed and removed › Refusals): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -737,6 +738,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The server test in src/api/admin-group-map.test.ts runs the scenario as written: the routed issuer is provisioned for tenant A, alice holds only author by an operator grant under a permit-all tenant policy, and carol puts a mapping with both roleId and teamId (asserted 400 VALIDATION_FAILED), with neither (400 VALIDATION_FAILED), with roleId ghost (404 NOT_FOUND), with issuer https://other.example (422 UNKNOWN_ISSUER) and with a 256-character group (400 VALIDATION_FAILED); alice then maps the group to tenant_admin and the test asserts 403 ELEVATION_REFUSED; finally carol's GET /api/v1/idp-group-map is asserted deep-equal to { items: [], next_cursor: null }, so none of the refused puts stored a mapping. The harness records the test as passed and failing red by assertion. The production code matches: the PUT body schema bounds group to 255 characters and requires exactly one of roleId or teamId through oneOf, so both, neither and the overlong group fail validation with 400 before the handler runs; setGroupMapping checks the routed issuer in tenant_idp and throws RBAC_UNKNOWN_ISSUER, checks the role exists and throws RBAC_NOT_FOUND, and assertCanMap throws RBAC_ELEVATION when the actor holds neither tenant_admin nor the requested role, each before the INSERT, so the transaction rolls back; adminApiError maps those codes to 422 UNKNOWN_ISSUER, 404 NOT_FOUND and 403 ELEVATION_REFUSED from the registry, and adminHandler rethrows the mapped error. The judge gave no verdict only because its evidence was cut to fit its budget.
 ---
 
 ## Q-023: Criterion C-802ffb44 (admin-api › IdP links are listed and added › List and add): accept as satisfied?
