@@ -53,7 +53,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-040 | answered | none | verdict | Hold H-7c19852a: UI criterion C-71033976 has no end-to-end test; see the generated UI tests table |
 | Q-041 | answered | none | verdict | Hold H-f48309f9: UI criterion C-1e5047ed has no end-to-end test; see the generated UI tests table |
 | Q-042 | answered | none | verdict | Hold H-78728d9d: UI criterion C-1d816fd1 has no end-to-end test; see the generated UI tests table |
-| Q-043 | open | none | verdict | Hold H-1d919b7f: UI criterion C-d2fc8f38 has no end-to-end test; see the generated UI tests table |
+| Q-043 | answered | none | verdict | Hold H-1d919b7f: UI criterion C-d2fc8f38 has no end-to-end test; see the generated UI tests table |
 | Q-044 | open | none | verdict | Hold H-eea2f155: UI criterion C-52c26a32 has no end-to-end test; see the generated UI tests table |
 | Q-045 | open | none | verdict | Hold H-d04992fb: UI criterion C-dd02e61e has no end-to-end test; see the generated UI tests table |
 | Q-046 | open | none | verdict | Hold H-6ea9ed12: UI criterion C-06a71640 has no end-to-end test; see the generated UI tests table |
@@ -1318,7 +1318,7 @@ accept C-1d816fd1 is a unit-level criterion: its WHEN gives `parseVerification` 
 
 ## Q-043: Hold H-1d919b7f: UI criterion C-d2fc8f38 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -1338,6 +1338,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-d2fc8f38 is a unit-level criterion: its WHEN gives `verificationView` literal states, which is no browser step, so its evidence is the node tests that trace it in web/src/admin/verification.test.ts (task 6.2). Each failed at the base by assertion and passes at the head, and Q-018 accepts the criterion on that evidence. The generated UI test is no evidence against it: it fails at the base and the head because it stubs the API and it opens the page with no session. Every admin page needs a session, and the only sign-in that works on the fake stack is `login` of e2e/conftest.py with the `users` fixture (the engine's "Sign in" button, then the provider's "Username or email" form, with passwords the stack makes at each start and serves at /seed). The admin pages' browser behaviour is proven separately by e2e/test_m2_admin.py (criteria C-f7bbb238, C-652f54b7, C-d118ea9b and C-19381fcc), which signs in with `login` and the seed users and passed in the e2e gate at the head 4cfa770.
 ---
 
 ## Q-044: Hold H-eea2f155: UI criterion C-52c26a32 has no end-to-end test; see the generated UI tests table
