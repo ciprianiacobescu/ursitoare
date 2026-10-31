@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-10-31T18:05:06Z",
+  "integrated_revision": "2fb9fb603b1d314f100c99500ec138674c41d2a2",
+  "merge_commit": "2fb9fb603b1d314f100c99500ec138674c41d2a2",
+  "plan_digest": "60d144e669271138",
+  "plan_id": "m2",
+  "postcheck": "pass",
+  "pr": 45,
+  "receipt_id": "m2/openspec:add-audit-api/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "727211b2a6c573fc581dd185ca9dde25af0a4ea4",
+  "spec_digest": "b467e632226da9e8",
+  "target": "main",
+  "unit_id": "openspec:add-audit-api"
+}
