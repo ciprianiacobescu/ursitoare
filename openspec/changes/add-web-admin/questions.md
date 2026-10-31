@@ -1447,6 +1447,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ## Q-049: Hold H-17337413: UI criterion C-d118ea9b has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate: the delegate's share of the plan's cost is used ($47.52 of $50.00)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
