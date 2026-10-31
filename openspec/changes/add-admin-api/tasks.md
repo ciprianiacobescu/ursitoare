@@ -14,7 +14,7 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 4. Review profile
 
-- [ ] 4.1 Write `src/identity/admin/review-profile.test.ts` first (the function parts of "Switch and warning" (the four results, the two events, tenant B untouched, the owner's read of the profile) and "Refusals" (`duo` as `ADMIN_INVALID`)), then implement `ReviewProfileWarning`, `ReviewProfileChange`, `setReviewProfile` in `src/identity/admin/review-profile.ts` (design.md Decision 11), exporting them from `src/identity/index.ts`, implementing requirement "The review profile is switched, audited, with a solo warning"
+- [x] 4.1 Write `src/identity/admin/review-profile.test.ts` first (the function parts of "Switch and warning" (the four results, the two events, tenant B untouched, the owner's read of the profile) and "Refusals" (`duo` as `ADMIN_INVALID`)), then implement `ReviewProfileWarning`, `ReviewProfileChange`, `setReviewProfile` in `src/identity/admin/review-profile.ts` (design.md Decision 11), exporting them from `src/identity/index.ts`, implementing requirement "The review profile is switched, audited, with a solo warning"
 
 ## 5. Error codes and paging
 
