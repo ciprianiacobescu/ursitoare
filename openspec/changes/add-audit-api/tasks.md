@@ -2,7 +2,7 @@ Fixtures: `scenario-data.md`; specs: `specs/audit-api/spec.md` and `specs/audit-
 
 ## 1. Read indexes
 
-- [ ] 1.1 Write `src/audit/read-indexes.test.ts` first (it starts with `assert.ok` that `to_regclass` of both tables is not null; scenarios "Objects and catalog" and "Later partitions" through `db.ownerPool`), then add `src/db/migrations/0190_audit_read_indexes.sql` holding the SQL of design.md § Data model verbatim, implementing requirement "Read indexes support the filtered lists"
+- [x] 1.1 Write `src/audit/read-indexes.test.ts` first (it starts with `assert.ok` that `to_regclass` of both tables is not null; scenarios "Objects and catalog" and "Later partitions" through `db.ownerPool`), then add `src/db/migrations/0190_audit_read_indexes.sql` holding the SQL of design.md § Data model verbatim, implementing requirement "Read indexes support the filtered lists"
 
 ## 2. Audit readers
 
