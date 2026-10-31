@@ -22,6 +22,15 @@ export const ERROR_CODES: Readonly<Record<string, { readonly status: number; rea
       status: 409,
       message: "A request with this idempotency key is in progress",
     },
+    ALREADY_EXISTS: { status: 409, message: "Resource already exists" },
+    IN_USE: { status: 409, message: "Resource is in use" },
+    ELEVATION_REFUSED: { status: 403, message: "Role cannot be granted by this principal" },
+    UNKNOWN_ISSUER: { status: 422, message: "Issuer is not routed to this tenant" },
+    OPERATION_REFUSED: { status: 422, message: "Operation is refused" },
+    ENGINE_KEY_REQUIRED: {
+      status: 503,
+      message: "Paging needs the engine key (URSITOARE_ENGINE_KEY_FILE)",
+    },
   } as const;
 
 export function isRegisteredCode(code: string): boolean {

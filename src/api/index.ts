@@ -1,11 +1,14 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this module implements it.
 
 export { ApiError } from "./errors.ts";
+export { adminApiError } from "./admin-errors.ts";
 export { ERROR_CODES, isRegisteredCode, unregisteredRouteErrors } from "./error-codes.ts";
 export type { CursorPosition, KeyMaterial, CursorKey, CursorScope } from "./cursor.ts";
 export { deriveCursorKey, encodeCursor, decodeCursor } from "./cursor.ts";
 export type { Page, CursorBinding } from "./pagination.ts";
 export { PAGE_QUERY_SCHEMA, readPage, startAfter, paginate } from "./pagination.ts";
+export type { PageBinding } from "./admin-page.ts";
+export { pageRows } from "./admin-page.ts";
 export {
   IDEMPOTENCY_HEADER_SCHEMA,
   idempotencyKeyOf,
@@ -46,6 +49,8 @@ export {
 export type { PepDeps } from "./pep.ts";
 export { installPep } from "./pep.ts";
 export { registerMeRoute } from "./me.ts";
+export type { AdminApiDeps } from "./admin-routes.ts";
+export { registerAdminRoutes } from "./admin-routes.ts";
 export { definePublicRoutes } from "./public-group.ts";
 export { checkRouteCoverage } from "./coverage.ts";
 export { listPredicate } from "./list-filter.ts";

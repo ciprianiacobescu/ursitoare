@@ -4,6 +4,19 @@ export type { IdentityErrorCode } from "./errors.ts";
 export { IdentityError } from "./errors.ts";
 export type { UserKind, UserState, User, IdentityOptions, TokenClaims, UserPage } from "./users.ts";
 export { upsertUserFromClaims, getUser, listUsers, createServiceAccount } from "./users.ts";
+export type { AdminErrorCode } from "./admin/errors.ts";
+export { AdminError } from "./admin/errors.ts";
+export type { AdminAccount } from "./admin/accounts.ts";
+export {
+  getAccount,
+  listAccounts,
+  provisionServiceAccount,
+  setAccountState,
+} from "./admin/accounts.ts";
+export type { IdpLinkRecord } from "./admin/idp-links.ts";
+export { addIdpLink, listIdpLinks } from "./admin/idp-links.ts";
+export type { ReviewProfileChange, ReviewProfileWarning } from "./admin/review-profile.ts";
+export { setReviewProfile } from "./admin/review-profile.ts";
 export { IDP_ROUTE_KIND, idpRouteKey, organizationFromClaim } from "./route.ts";
 export type { IdpPair } from "./tenant-idp.ts";
 export { provisionTenantIdp, resolveTenantForToken } from "./tenant-idp.ts";
