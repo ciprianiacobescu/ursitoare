@@ -2,7 +2,7 @@ Tests in `src/authoring/validate/` import from `./index.ts` and `test/support/fl
 
 ## 1. Codes and schema helpers
 
-- [ ] 1.1 Implement `src/authoring/validate/types.ts` and `src/authoring/validate/codes.ts` (`Layer`, `Issue`, `ValidationResult`, `FLOW_ERROR_CODES`, `FLOW_WARNING_CODES`, `FLOW_RESERVED_CODES`, in the order of `codes.md`), tested first by `src/authoring/validate/codes.test.ts`, implementing requirement "The code lists"
+- [x] 1.1 Implement `src/authoring/validate/types.ts` and `src/authoring/validate/codes.ts` (`Layer`, `Issue`, `ValidationResult`, `FLOW_ERROR_CODES`, `FLOW_WARNING_CODES`, `FLOW_RESERVED_CODES`, in the order of `codes.md`), tested first by `src/authoring/validate/codes.test.ts`, implementing requirement "The code lists"
 - [ ] 1.2 Implement `src/authoring/validate/jsonschema.ts` (`jsonSchemaProblem` on the shared `Ajv2020` settings, plus the seed's `deref`, `typeSet`, `enumValues`, `admits`, `resolvePath`, `compat` with the depth cap of design D5), tested first by `src/authoring/validate/jsonschema.test.ts`, implementing requirement "jsonSchemaProblem checks embedded schemas"
 
 ## 2. The three layers
