@@ -22,7 +22,7 @@ Spec: `specs/flow-format/spec.md`; signatures and decisions: `design.md`. Each t
 
 ## 6. Content hash
 
-- [ ] 6.1 Write `src/authoring/format/hash.test.ts` first (scenario "The hash is sha256 of the canonical JSON", importing `contentHash` and `isContentHash` from `src/authoring/index.ts`; the three golden hashes asserted as literals), then implement `contentHash` and `isContentHash` in `src/authoring/format/hash.ts` with `node:crypto` and confirm that `src/authoring/format/index.ts` and `src/authoring/index.ts` export every name of design.md § Interfaces, implementing requirement "The content hash identifies a canonical flow"
+- [x] 6.1 Write `src/authoring/format/hash.test.ts` first (scenario "The hash is sha256 of the canonical JSON", importing `contentHash` and `isContentHash` from `src/authoring/index.ts`; the three golden hashes asserted as literals), then implement `contentHash` and `isContentHash` in `src/authoring/format/hash.ts` with `node:crypto` and confirm that `src/authoring/format/index.ts` and `src/authoring/index.ts` export every name of design.md § Interfaces, implementing requirement "The content hash identifies a canonical flow"
 
 ## 7. Documentation
 
