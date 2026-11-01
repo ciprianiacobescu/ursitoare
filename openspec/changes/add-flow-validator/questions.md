@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 4.1 | technical | Allow Write/Edit for task 4.1 |
+| Q-002 | open | 5.2 | technical | src/cli/flow/validate.test.ts:162 writes a raw control byte instead of the JSON escape sequence |
 <!-- l4:index:end -->
 
 ---
@@ -47,3 +48,27 @@ No command can run renderDiagnosticsDoc() for you, so write the document text yo
   - one final newline.
 - Then write docs/authoring/diagnostics.md by applying exactly that layout to the same 53 entries.
 - Run `pnpm run test`: the C-73b013e5 test "the committed document equals renderDiagnosticsDoc and ends with one newline" prints the first difference if the two texts differ. Fix the file until it passes.
+
+---
+
+## Q-002: src/cli/flow/validate.test.ts:162 writes a raw control byte instead of the JSON escape sequence
+
+- **Status:** open
+- **Blocking tasks:** 5.2
+- **Kind:** technical
+- **Asked:** 2026-11-01T12:49Z by deepseek-free, run r-20261101T1219Z-efa1, task 5.2
+
+### Context
+The test calls writeFile(badCatalogue, '{"blocks":{"a\u001b@1":{"effect":"x"}}}'), so JavaScript turns \u001b into a raw U+001B byte inside a JSON string. JSON.parse rejects raw control characters, so catalogueFromJson throws CatalogueFileError("invalid JSON"), while the test expects the diagnostic pointer /blocks/a?@1/effect. The spec scenario says the file holds the escape sequence \u001b, which JSON parses to the control character in the key before the validator builds its pointer; no strict JSON reader can reach that pointer from a raw control byte. This is the only failing assertion; the implementation already produces the expected pointer when the file contains the two-character escape sequence.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/cli/flow/validate.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-flow-validator`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/cli/flow/validate.test.ts`: change line 162's string literal from `'{"blocks":{"a\u001b@1":{"effect":"x"}}}'` to `'{"blocks":{"a\\u001b@1":{"effect":"x"}}}'` so the file holds the JSON escape sequence `\u001b` and parses to the key containing the control character.
+2. Keep the test as written and let the CLI escape raw control characters inside catalogue string literals before calling catalogueFromJson, accepting catalogue files that strict JSON would reject.
+
+### Clarifier suggestion
+Edit `src/cli/flow/validate.test.ts`: change line 162's string literal from `'{"blocks":{"a\u001b@1":{"effect":"x"}}}'` to `'{"blocks":{"a\\u001b@1":{"effect":"x"}}}'` so the file holds the JSON escape sequence `\u001b` and parses to the key containing the control character.
+
+### Answer
+<!-- write below this line -->
