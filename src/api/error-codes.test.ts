@@ -41,6 +41,7 @@ test("C-96e47324 The registry holds exactly the 16 codes of the API with status 
       status: 503,
       message: "Paging needs the engine key (URSITOARE_ENGINE_KEY_FILE)",
     },
+    FLOW_TEXT_INVALID: { status: 422, message: "Flow text is not a readable flow document" },
   };
 
   assert.deepEqual(Object.keys(ERROR_CODES).sort(), Object.keys(EXPECTED_CODES).sort());
