@@ -1,5 +1,3 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 import type { FormatErrorCode } from "../../authoring/index.ts";
 
 export type FlowErrorCode =
@@ -22,8 +20,10 @@ export class FlowError extends Error {
   readonly code: FlowErrorCode;
   readonly details: FlowTextDetails | null;
 
-  constructor(_code: FlowErrorCode, message: string, _details?: FlowTextDetails) {
+  constructor(code: FlowErrorCode, message: string, details?: FlowTextDetails) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "FlowError";
+    this.code = code;
+    this.details = details ?? null;
   }
 }
