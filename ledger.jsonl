@@ -81,3 +81,4 @@
 {"at":"2026-11-01T19:24:45Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"8fcdedb392fcbce7c3602311029b6a82a9fa0eaf","status":"pass","type":"unit.postcheck","unit":"openspec:add-flow-registry"}
 {"at":"2026-11-01T19:24:45Z","revision":"8fcdedb392fcbce7c3602311029b6a82a9fa0eaf","type":"unit.integrated","unit":"openspec:add-flow-registry"}
 {"at":"2026-11-01T19:24:45Z","attempt":1,"cost_usd":7.518218,"runs":3,"type":"plan.charged","unit":"openspec:add-flow-registry"}
+{"at":"2026-11-01T19:26:09Z","branch":"l4/archive/openspec/add-flow-registry","head":"4a082ec3c6ae59bd593d7117bc8151f4c787f86b","type":"unit.branch_deleted","unit":"openspec:add-flow-registry"}
