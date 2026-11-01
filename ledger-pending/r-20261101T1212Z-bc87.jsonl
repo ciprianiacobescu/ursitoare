@@ -1,2 +1,3 @@
 {"ts": "2026-11-01T12:13:10.659622Z", "run_id": "r-20261101T1212Z-bc87", "unit": "openspec:add-web-admin", "seq": 1, "type": "run.started", "harness_version": "0.4.51", "harness_commit": "0a45c31871c14bbd997abf3eaa6d7577e2559924", "command": "plan --sweep", "branch": "l4/openspec/add-web-admin"}
 {"ts": "2026-11-01T12:13:10.660257Z", "run_id": "r-20261101T1212Z-bc87", "unit": "openspec:add-web-admin", "seq": 2, "type": "archive.opened", "number": 56, "url": "<forge>/ciprianiacobescu/ursitoare/pull/56", "branch": "l4/archive/openspec/add-web-admin", "head": "79de291e8d28f5cbd5edca50e3906b4647c1a4af"}
+{"ts": "2026-11-01T12:13:12.215594Z", "run_id": "r-20261101T1212Z-bc87", "unit": "openspec:add-web-admin", "seq": 3, "type": "run.finished", "exit_code": 0}
