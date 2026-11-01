@@ -1,7 +1,15 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
-import type { Catalogue } from "../authoring/index.ts";
+import type {
+  BlockDef,
+  Catalogue,
+  DelegateTargetDef,
+  FlowSignature,
+  ModelProfileDef,
+  RoleDef,
+} from "../authoring/index.ts";
+import { listRoles } from "../identity/index.ts";
+import { withTenantTx } from "../tenancy/index.ts";
 import type { TenantContext, TenantPool } from "../tenancy/index.ts";
+import { listAllBlockVersions } from "./block-store.ts";
 import type { BlockVersion } from "./block-store.ts";
 
 export interface RegistryCatalogue extends Catalogue {
@@ -10,15 +18,47 @@ export interface RegistryCatalogue extends Catalogue {
 }
 
 export function registryCatalogue(
-  _blocks: readonly BlockVersion[],
-  _roles: readonly string[],
+  blocks: readonly BlockVersion[],
+  roles: readonly string[],
 ): RegistryCatalogue {
-  throw new Error("not implemented");
+  const defs = new Map<string, BlockDef>(
+    blocks.map((version) => [version.ref, structuredClone(version.def)]),
+  );
+  const roleSet = new Set<string>(roles);
+  return {
+    block(ref: string): BlockDef | undefined {
+      if (typeof ref !== "string") return undefined;
+      const def = defs.get(ref);
+      return def === undefined ? undefined : structuredClone(def);
+    },
+    role(name: string): RoleDef | undefined {
+      return typeof name === "string" && roleSet.has(name) ? { name } : undefined;
+    },
+    modelProfile(): ModelProfileDef | undefined {
+      return undefined;
+    },
+    delegateTarget(): DelegateTargetDef | undefined {
+      return undefined;
+    },
+    flow(): FlowSignature | undefined {
+      return undefined;
+    },
+    blockRefs(): string[] {
+      return [...defs.keys()];
+    },
+    roleNames(): string[] {
+      return [...roleSet];
+    },
+  };
 }
 
 export async function loadRegistryCatalogue(
-  _pool: TenantPool,
-  _ctx: TenantContext,
+  pool: TenantPool,
+  ctx: TenantContext,
 ): Promise<Catalogue> {
-  throw new Error("not implemented");
+  const { blocks, roles } = await withTenantTx(pool, ctx, async (tx) => ({
+    blocks: await listAllBlockVersions(tx, ctx),
+    roles: await listRoles(tx, ctx),
+  }));
+  return registryCatalogue(blocks, roles);
 }
