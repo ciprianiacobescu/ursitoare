@@ -30,4 +30,4 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 8. Engine wiring and API document
 
-- [ ] 8.1 Write `src/main.blocks.test.ts` first (scenario "The real engine serves and documents the list", `main` run as `src/main.admin.test.ts` does), then in `src/main.ts` call `registerBlockRoutes(server, { pool: pep.pool, engineKey: config.engineKey })` right after `registerAuditRoutes(...)` and regenerate `docs/api/openapi.json` with `node test/support/openapi-docs.ts`, implementing requirement "The engine serves the route and documents it"
+- [x] 8.1 Write `src/main.blocks.test.ts` first (scenario "The real engine serves and documents the list", `main` run as `src/main.admin.test.ts` does), then in `src/main.ts` call `registerBlockRoutes(server, { pool: pep.pool, engineKey: config.engineKey })` right after `registerAuditRoutes(...)` and regenerate `docs/api/openapi.json` with `node test/support/openapi-docs.ts`, implementing requirement "The engine serves the route and documents it"
