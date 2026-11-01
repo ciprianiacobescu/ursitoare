@@ -1,9 +1,17 @@
 import type { FastifyInstance } from "fastify";
 
+import type { Catalogue } from "../authoring/index.ts";
 import type { Clock } from "../core/index.ts";
-import { getVersion, listVersions, saveFlowVersion } from "../registry/index.ts";
+import {
+  getVersion,
+  listVersions,
+  loadRegistryCatalogue,
+  saveFlowVersion,
+  validateVersion,
+} from "../registry/index.ts";
 import type { VersionSummary } from "../registry/index.ts";
 import { withTenantTx } from "../tenancy/index.ts";
+import type { TenantContext } from "../tenancy/index.ts";
 import { encodeCursor } from "./cursor.ts";
 import type { CursorKey } from "./cursor.ts";
 import {
@@ -58,9 +66,19 @@ const DETAIL_SCHEMA = {
   properties: { ...SUMMARY_SCHEMA.properties, text: { type: "string" }, canonical: {}, result: {} },
 };
 
+const VALIDATE_RESPONSE = {
+  type: "object",
+  additionalProperties: false,
+  required: ["version", "result"],
+  properties: { version: SUMMARY_SCHEMA, result: {} },
+};
+
 export function registerVersionRoutes(
   server: FastifyInstance,
-  deps: { clock: Clock },
+  deps: {
+    clock: Clock;
+    catalogueFor?: ((ctx: TenantContext) => Promise<Catalogue>) | undefined;
+  },
   key: CursorKey | null,
   shared: FlowRouteShared,
 ): void {
@@ -171,6 +189,28 @@ export function registerVersionRoutes(
       );
       if (version === null) throw notFound();
       return version;
+    },
+  });
+
+  defineRoute(server, {
+    method: "POST",
+    url: "/api/v1/flows/:flowId/versions/:hash/validate",
+    auth: { kind: "session" },
+    action: "edit_flow",
+    resource: loadFlowResource,
+    schema: { params: VERSION_PARAMS, response: { 200: VALIDATE_RESPONSE } },
+    errors: ["NOT_FOUND", "VALIDATION_FAILED"],
+    handler: async (request) => {
+      const { pool, tenant, actor } = context(request);
+      const { flowId, hash } = request.params as { flowId: string; hash: string };
+      return mapped(async () => {
+        const catalogue = await (deps.catalogueFor
+          ? deps.catalogueFor(tenant)
+          : loadRegistryCatalogue(pool, tenant));
+        return withTenantTx(pool, tenant, (tx) =>
+          validateVersion(tx, tenant, { flowId, hash, catalogue }, actor, { clock: deps.clock }),
+        );
+      });
     },
   });
 }
