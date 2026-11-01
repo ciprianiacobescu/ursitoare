@@ -84,3 +84,5 @@
 {"at":"2026-11-01T19:26:09Z","branch":"l4/archive/openspec/add-flow-registry","head":"4a082ec3c6ae59bd593d7117bc8151f4c787f86b","type":"unit.branch_deleted","unit":"openspec:add-flow-registry"}
 {"at":"2026-11-01T19:26:10Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-web-flow-editor"}
 {"at":"2026-11-01T19:26:10Z","run":"r-20261101T1926Z-72e4","type":"unit.dispatched","unit":"openspec:add-web-flow-editor"}
+{"at":"2026-11-01T21:57:52Z","attempt":1,"cost_usd":5.015689,"runs":2,"type":"plan.charged","unit":"openspec:add-web-flow-editor"}
+{"at":"2026-11-01T21:57:52Z","run":"r-20261101T2157Z-7044","type":"unit.dispatched","unit":"openspec:add-web-flow-editor"}
