@@ -20,7 +20,7 @@
 
 ## 5. The pages
 
-- [ ] 5.1 Write `web/src/flows/flows-page.test.ts` first (after `existsSync`, `flowFeatureLiterals` of `web/src/features/70-flows.tsx` equals the first entry of `FLOW_PAGES`; `FlowsPage.tsx` has no `dangerouslySetInnerHTML`), then implement `FlowsPage` in `web/src/flows/FlowsPage.tsx` and create `web/src/flows/flows.css` and `web/src/features/70-flows.tsx` as `design.md` § Component wiring says, implementing requirement "Flow pages are registered by file and listed by capability"
+- [x] 5.1 Write `web/src/flows/flows-page.test.ts` first (after `existsSync`, `flowFeatureLiterals` of `web/src/features/70-flows.tsx` equals the first entry of `FLOW_PAGES`; `FlowsPage.tsx` has no `dangerouslySetInnerHTML`), then implement `FlowsPage` in `web/src/flows/FlowsPage.tsx` and create `web/src/flows/flows.css` and `web/src/features/70-flows.tsx` as `design.md` § Component wiring says, implementing requirement "Flow pages are registered by file and listed by capability"
 - [ ] 5.2 Write `web/src/flows/editor-sources.test.ts` first (`71-flow-editor.tsx` against the second entry of `FLOW_PAGES`; the file part of "Editor configuration": `flows.css` against `findRawColours` and the tokens; `findInlineStyleUse`, `cspNonce`, `unsafe-inline`, `eval(` and `dangerouslySetInnerHTML` over `editor-mount.ts`, the `.tsx` files and both feature files; `existsSync` first; the `FlowEditorPage.tsx` part of "The panel registry"), then implement `CodeEditor` and `FlowEditorPage` in `web/src/flows/CodeEditor.tsx` and `FlowEditorPage.tsx` and create `web/src/features/71-flow-editor.tsx`, implementing requirements "The editor runs under the engine's Content-Security-Policy" and "Other units can add panels to the editor page"
 
 ## 6. Test blocks and journeys

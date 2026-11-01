@@ -1,0 +1,43 @@
+.flow-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-4);
+  max-width: 64rem;
+  color: var(--ui-color-text);
+}
+
+.flow-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-3);
+  padding: var(--ui-space-3);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-color-bg);
+}
+
+.flow-section h2 {
+  margin: 0;
+  font-size: var(--ui-font-size);
+  color: var(--ui-color-text);
+}
+
+.flow-editor-host {
+  min-height: 20rem;
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius);
+}
+
+.flow-hint {
+  margin: 0;
+  color: var(--ui-color-text);
+}
+
+.flow-issues {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
