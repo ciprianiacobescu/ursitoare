@@ -20,3 +20,4 @@
 {"at":"2026-11-01T05:52:02Z","run":"r-20261101T0551Z-0bc2","type":"unit.dispatched","unit":"openspec:add-taint-static"}
 {"at":"2026-11-01T06:52:46Z","attempt":1,"cost_usd":1.236546,"runs":2,"type":"plan.charged","unit":"openspec:add-taint-static"}
 {"at":"2026-11-01T06:52:46Z","run":"r-20261101T0652Z-fcf6","type":"unit.dispatched","unit":"openspec:add-taint-static"}
+{"at":"2026-11-01T07:45:15Z","head":"84a3f1edb8177307354fc7d627c9f5370d3744ad","pr":48,"target_before":"eec9a3b95ec91d8acef4fb84569020e319388a61","type":"unit.merge_requested","unit":"openspec:add-taint-static"}
