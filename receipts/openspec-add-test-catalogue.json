@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-01T09:51:20Z",
+  "integrated_revision": "b630a6dd0bce789936492931fb6741f4721a97b7",
+  "merge_commit": "b630a6dd0bce789936492931fb6741f4721a97b7",
+  "plan_digest": "17f19b151151b0e3",
+  "plan_id": "m3",
+  "postcheck": "pass",
+  "pr": 49,
+  "receipt_id": "m3/openspec:add-test-catalogue/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "f6b6ea70cf6a1c2fc73244d9e766071e8d596ef3",
+  "spec_digest": "a2410be4cb5343c8",
+  "target": "main",
+  "unit_id": "openspec:add-test-catalogue"
+}
