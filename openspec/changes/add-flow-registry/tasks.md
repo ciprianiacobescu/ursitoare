@@ -1,4 +1,4 @@
-Spec: `specs/flow-registry/spec.md`; signatures, routes, decisions: `design.md`; SQL: `data-model.md`; merged shapes and facts: `delivered-shapes.md`. Fixtures: design.md § Test plan. Every test file starts with `assert.equal(typeof <the function it tests>, "function")`; a call that reaches a scaffold stub (a function, `seedFlowActors`, a route) is wrapped in `await assert.doesNotReject(...)` or `p.then((v) => v, (e: unknown) => e)` and asserted; errors are asserted by `code`; route tests also check tenant B. Test names have no `.`, `[` or `::`.
+Spec: `specs/flow-registry/spec.md`; signatures, routes, decisions: `design.md`; SQL: `data-model.md`; merged shapes and facts: `delivered-shapes.md`. Fixtures: design.md § Test plan. Tests import each symbol from its defining file. Every test file starts with `assert.equal(typeof <the function it tests>, "function")`; a call that reaches a scaffold stub (a function, `seedFlowActors`, a route) is wrapped in `await assert.doesNotReject(...)` or `p.then((v) => v, (e: unknown) => e)` and asserted; errors are asserted by `code`; route tests also check tenant B. Test names have no `.`, `[` or `::`.
 
 ## 1. The tables
 

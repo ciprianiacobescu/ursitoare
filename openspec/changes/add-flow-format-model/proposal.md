@@ -60,6 +60,8 @@ function requiredSuccessorFields(kind: string): string[]
 
 Also given, with their fields in the second block of design.md § Interfaces: `Values`, `NodeKind`, `FLOW_TOP_LEVEL_FIELDS`, `FORMAT_ERROR_CODES`, `FlowNode` and its 14 node types (`BlockNode` to `EndNode`, one per kind), `NodeBase`, `LlmTuning`, `ContextSource`, `HookSelector`, `HookWhen`, `CodeHook`, `BlockHook`, `HookDef`, `HookRule`, `HookScope`, `BlockDef`, `ModelProfileDef`, `RoleDef`, `DelegateTargetDef`, `FlowSignature`, `ValueField`, `SuccessorField`, `documentedTerms`, `missingDocTerms`. `DEFAULT_PARSE_LIMITS` is `{ maxBytes: 1048576, maxDepth: 64, maxAliasCount: 20 }`; the content hash is `sha256:` plus 64 lowercase hex digits over the canonical JSON of the whole document.
 
+A later unit may add optional members to `Catalogue` only, in a task that names `src/authoring/format/catalogue.ts`; `add-flow-validator` adds `delegateWorkflows?(target: string): readonly string[] | undefined` (the workflows a delegate target offers, `undefined` for an unknown target).
+
 **Interfaces taken:** none from another change.
 
 ## Out of scope

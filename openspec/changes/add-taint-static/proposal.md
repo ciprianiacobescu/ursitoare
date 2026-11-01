@@ -49,6 +49,10 @@ function flowCapabilities(flow: Flow, catalogue: Catalogue): FlowCapabilities
 
 - From `add-flow-format-model`: `Flow`, `FlowNode`, `NodeKind`, `NODE_KINDS`, `Effect`, `Catalogue`, `emptyCatalogue` (tests only), `BlockDef`, `DelegateTargetDef`, `HookRule`, `HookDef`, `HookSelector`, `ContextSource`, `Ref`, `Seg`, `ValueField`, `scanTemplate`, `refToString`, `walkStrings`, `escapePointer`, `valueFields`, `hookValueFields`. Their exact declarations are in `reference.md`.
 
+Test samples use this unit's own catalogue C, not `add-test-catalogue`'s; names they share (`docs.fetch@1`, `http.get@1`, `kb.search@1`) carry other markers here.
+
+**Catalogue C** (blocks, then delegate targets `target/workflow`): `invoices.get@1` read, `untrusted_fields` `["raw_text", "vendor_name"]`; `erp.lookup_vendor@1` read, `data_class: "private"`; `erp.create_payment@1` pay; `mail.send@1` send; `http.get@1` read, `untrusted_result: true`, `data_class: "public"`; `docs.fetch@1` read, `data_class: "public"`; `kb.search@1` read; `crm.update@1` write, `untrusted_fields` `["notes.body"]`; `n8n/archive-invoice` effect send, `untrusted_result: true`; `n8n/calc` effect read, `untrusted_result: false`. Every other ref is unknown.
+
 ## Out of scope
 
 Validation and its diagnostics (the L3 sink checks, `W_LETHAL_TRIFECTA`, `L3_TAINT_*`, mapping a `TaintError`): `add-flow-validator`, which calls `analyzeTaint` and `flowCapabilities`. Runtime labels on step records and the property test that static includes runtime: `add-taint-runtime`. The Cedar forbid and the activation gate: `add-trifecta-gate`. The test catalogue with its `data_class` markers: `add-test-catalogue`; `data_class` in the registry: `add-block-registry`. The hooks checker (`H_*` codes): `add-hook-checker`. Capabilities of a subflow's own blocks, memory reads and tainted trigger inputs.
