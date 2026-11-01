@@ -1,6 +1,6 @@
 ## 1. Pages and tables
 
-- [ ] 1.1 Write `web/src/flows/pages.test.ts` first (typeof check of `flowFeatureLiterals`; scenario "The page table, the navigation and the tables" except the two feature-file reads), then implement `FlowPage`, `FLOW_PAGES`, `FLOW_TABLES` and `flowFeatureLiterals` in `web/src/flows/pages.ts` (tables: `reference.md`), implementing requirement "Flow pages are registered by file and listed by capability"
+- [x] 1.1 Write `web/src/flows/pages.test.ts` first (typeof check of `flowFeatureLiterals`; scenario "The page table, the navigation and the tables" except the two feature-file reads), then implement `FlowPage`, `FLOW_PAGES`, `FLOW_TABLES` and `flowFeatureLiterals` in `web/src/flows/pages.ts` (tables: `reference.md`), implementing requirement "Flow pages are registered by file and listed by capability"
 
 ## 2. Rows, requests and diagnostics
 
