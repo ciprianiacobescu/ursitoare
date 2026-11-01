@@ -1,0 +1,558 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/authoring/index.ts",
+      "src/identity/index.ts",
+      "seed",
+      "seed/node-hooks/flows",
+      "static",
+      "flows",
+      "flows/static",
+      "delegate:<target>/<workflow>",
+      "src",
+      "test",
+      "node:assert/strict",
+      "test/support/catalogue",
+      "test/support/hook-flows",
+      "seed/policy-cedar/config/private-blocks.json",
+      "docs/decisions/0002",
+      "src/identity/rbac/names.ts",
+      "test/arch/modules.ts",
+      "test/support/README.md",
+      "catalogue",
+      "hook-flows",
+      "test/support/catalogue/blocks.v0.json",
+      "test/support/catalogue/flows/rf-1-invoice-intake.yaml",
+      ".../flows/rf-1-core.yaml",
+      ".../flows/rf-1-core-approval.yaml",
+      "test/support/hook-flows/flows/<name>.yaml",
+      "test/support/hook-flows/flows/static/<name>.yaml",
+      "parts/35-catalogue.ts",
+      "specs/test-catalogue/spec.md",
+      "test/support/catalogue/document.test.ts",
+      "seed/shared/catalogue/blocks.v0.json",
+      "test/support/catalogue/errors.ts",
+      "test/support/catalogue/document.ts",
+      "test/support/catalogue/loader.test.ts",
+      "test/support/catalogue/loader.ts",
+      "test/support/catalogue/references.test.ts",
+      "test/support/catalogue/references.ts",
+      "test/support/catalogue/flows.test.ts",
+      "test/support/catalogue/flows/rf-1-core.yaml",
+      "test/support/catalogue/flows/rf-1-core-approval.yaml",
+      "test/support/catalogue/flows.ts",
+      "test/support/hook-flows/hook-flows.test.ts",
+      "test/support/hook-flows/flows",
+      "seed/node-hooks/flows/static",
+      "test/support/hook-flows/flows/static",
+      "test/support/hook-flows/index.ts",
+      "**/*.test.ts",
+      "**/[]",
+      "**/*.yaml",
+      "**/blocks.v0.json",
+      "**/map[key]",
+      "flows/*.yaml",
+      "flows/static/*.yaml",
+      "**/H_*",
+      "**/W_*",
+      "**/flow.hooks[*].pre",
+      "**/tsconfig.build.json",
+      "**/[",
+      "**/document.test.ts",
+      "**/loader.test.ts",
+      "**/references.test.ts",
+      "**/flows.test.ts",
+      "**/document.ts",
+      "**/loader.ts",
+      "module ...",
+      "module authoring",
+      "module delegate:<target>",
+      "module docs",
+      "module flows",
+      "module identity",
+      "module node:assert",
+      "module parts",
+      "module seed",
+      "module specs",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-test-catalogue/.l4/ledger/r-20261101T0748Z-de30.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-test-catalogue/.l4/ledger/r-20261101T0925Z-c893.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-test-catalogue/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/catalogue/blocks.v0.json",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/catalogue/document.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/catalogue/document.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/catalogue/errors.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/catalogue/flows.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/catalogue/flows.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/catalogue/flows/rf-1-core-approval.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/catalogue/flows/rf-1-core.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/catalogue/flows/rf-1-invoice-intake.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/catalogue/loader.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/catalogue/loader.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/catalogue/references.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/catalogue/references.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/c2-effect-post-hook.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/f-eff.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/f-ret-exhausted.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/f-ret.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/m-h0.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/m-h1.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/m-h2.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s02-pre-mutate.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s03-post-mutate.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s04-pre-skip.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s06-next-redirect.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s07-next-block-hook.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s08-from-logic.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s09-onion.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s10-park-hooks.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s10b-timeout-post.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s11-end-pre.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s12a-fail.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s12b-block-onerror.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s13-undeclared-route.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s14-unsafe-redirect.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s14c-cycle.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s15-guard-redirect.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s15-guard.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s16a-raise.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s16b-lower.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s17-taint.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s18a-skip-human.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s18b-rewrite-decision.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s18c-skip-effect.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s18d-routes-on-human.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/s19-block-hook-pep.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/static/n-block.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/static/n-dominance-hook.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/static/n-no-match.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/static/n-retry-scope-human.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/static/n-retry-scope.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/static/n-route-self.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/static/n-route-target.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/static/n-schema-routes-pre.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/static/n-schema.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/x1a-retry-pay.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/x1b-retry-raise.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/x2-skip-taint.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/flows/x3-gate-bypass.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-flows/hook-flows.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/hook-flows/index.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: test/support/catalogue/document.ts, test/support/catalogue/errors.ts, test/support/catalogue/flows.ts, test/support/catalogue/loader.ts, test/support/catalogue/references.ts and 1 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "test/support/catalogue/document.ts",
+      "test/support/catalogue/errors.ts",
+      "test/support/catalogue/flows.ts",
+      "test/support/catalogue/loader.ts",
+      "test/support/catalogue/references.ts",
+      "test/support/hook-flows/index.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1253,
+      "passed": 1253,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 13,
+      "new_passed": 13,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

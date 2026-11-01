@@ -9,8 +9,9 @@ export type CatalogueDataErrorCode =
 export class CatalogueDataError extends Error {
   readonly code: CatalogueDataErrorCode;
 
-  constructor(_code: CatalogueDataErrorCode, message: string) {
+  constructor(code: CatalogueDataErrorCode, message: string) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "CatalogueDataError";
+    this.code = code;
   }
 }
