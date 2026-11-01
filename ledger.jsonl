@@ -51,3 +51,4 @@
 {"at":"2026-11-01T12:52:46Z","run":"r-20261101T1252Z-3bf3","type":"unit.dispatched","unit":"openspec:add-flow-validator"}
 {"at":"2026-11-01T13:31:52Z","head":"a192b5ee7bb2f30add10b07fa6f445bbda487fb3","pr":52,"target_before":"0b89cc652e46ed23dc2f0b531b8e81ce39cb570d","type":"unit.merge_requested","unit":"openspec:add-flow-validator"}
 {"at":"2026-11-01T13:31:57Z","ci":"not_run","head":"a192b5ee7bb2f30add10b07fa6f445bbda487fb3","merge_commit":"256225f1385974a4054b42d529408ca372057863","method":"squash","pr":52,"raced":false,"type":"unit.merged","unit":"openspec:add-flow-validator"}
+{"at":"2026-11-01T13:32:02Z","branch":"l4/openspec/add-flow-validator","head":"a192b5ee7bb2f30add10b07fa6f445bbda487fb3","type":"unit.branch_deleted","unit":"openspec:add-flow-validator"}
