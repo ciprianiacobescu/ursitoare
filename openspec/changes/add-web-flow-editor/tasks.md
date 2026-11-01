@@ -10,7 +10,7 @@
 
 ## 3. The editor text
 
-- [ ] 3.1 Write `web/src/flows/positions.test.ts` first (typeof check of `pointerRange`; the `lineColumnOffset` and `pointerRange` part of "Offsets, pointers and marks"), then implement both in `web/src/flows/positions.ts`, implementing requirement "Diagnostics are marked in the editor text"
+- [x] 3.1 Write `web/src/flows/positions.test.ts` first (typeof check of `pointerRange`; the `lineColumnOffset` and `pointerRange` part of "Offsets, pointers and marks"), then implement both in `web/src/flows/positions.ts`, implementing requirement "Diagnostics are marked in the editor text"
 - [ ] 3.2 Write `web/src/flows/editor-config.test.ts` first (typeof check of `lintItems`; the `lintItems` part of "Offsets, pointers and marks" and the state and theme parts of "Editor configuration", the theme serialised one declaration per line as `  <property>: <value>;`), then implement `EDITOR_LABEL`, `EDITOR_THEME`, `createEditorState` and `lintItems` in `web/src/flows/editor-config.ts` and `mountEditor` in `web/src/flows/editor-mount.ts` (DOM code, no Node test: `attachShadow({ mode: "open" })`, the shadow root passed as `root`), implementing requirements "Diagnostics are marked in the editor text" and "The editor runs under the engine's Content-Security-Policy"
 
 ## 4. The editor page logic
