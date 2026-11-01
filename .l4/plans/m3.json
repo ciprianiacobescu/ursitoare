@@ -1,0 +1,84 @@
+{
+  "schema": "l4/delivery-plan@1",
+  "plan_id": "m3",
+  "target": "main",
+  "merge": "auto",
+  "limits": {
+    "max_cost_usd": 300,
+    "max_unit_attempts": 3,
+    "max_runs": 64
+  },
+  "external_dependencies": [],
+  "exclude": [],
+  "batches": [
+    {
+      "id": "m3-flow-authoring",
+      "acceptance_profile": "none",
+      "depends_on": [],
+      "units": [
+        {
+          "id": "openspec:add-flow-format-model",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-taint-static",
+          "depends_on": [
+            "openspec:add-flow-format-model"
+          ]
+        },
+        {
+          "id": "openspec:add-test-catalogue",
+          "depends_on": [
+            "openspec:add-flow-format-model"
+          ]
+        },
+        {
+          "id": "openspec:add-flow-validator",
+          "depends_on": [
+            "openspec:add-flow-format-model",
+            "openspec:add-taint-static",
+            "openspec:add-test-catalogue"
+          ]
+        },
+        {
+          "id": "openspec:add-block-registry",
+          "depends_on": [
+            "openspec:add-flow-format-model",
+            "openspec:add-flow-validator"
+          ]
+        },
+        {
+          "id": "openspec:add-flow-registry",
+          "depends_on": [
+            "openspec:add-block-registry",
+            "openspec:add-flow-format-model",
+            "openspec:add-flow-validator",
+            "openspec:add-test-catalogue"
+          ]
+        },
+        {
+          "id": "openspec:add-web-flow-editor",
+          "depends_on": [
+            "openspec:add-block-registry",
+            "openspec:add-flow-format-model",
+            "openspec:add-flow-registry",
+            "openspec:add-flow-validator",
+            "openspec:add-test-catalogue"
+          ]
+        },
+        {
+          "id": "openspec:add-web-flow-graph",
+          "depends_on": [
+            "openspec:add-block-registry",
+            "openspec:add-flow-format-model",
+            "openspec:add-flow-registry",
+            "openspec:add-flow-validator",
+            "openspec:add-taint-static",
+            "openspec:add-test-catalogue",
+            "openspec:add-web-flow-editor"
+          ]
+        }
+      ]
+    }
+  ]
+}
