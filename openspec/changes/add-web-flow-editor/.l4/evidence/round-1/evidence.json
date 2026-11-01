@@ -1,0 +1,386 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "@codemirror/state",
+      "web",
+      "src/authoring",
+      "test",
+      "web/src/admin/shared.ts",
+      "web/src/flows",
+      "@codemirror/lint",
+      "node:assert/strict",
+      "e2e/test_m3_flow_editor.py",
+      "e2e/test_m2_admin.py",
+      "docs/decisions/0002",
+      "web/package.json",
+      "@codemirror/commands",
+      "@codemirror/lang-yaml",
+      "@codemirror/view",
+      "test/arch/licence-policy.ts",
+      "parts/35-catalogue.ts",
+      "web/src/features/70-flows.tsx",
+      "test/support/e2e-stack/catalogue-part.ts",
+      "src/authoring/index.ts",
+      "src/registry/index.ts",
+      "web/src/flows/pages.test.ts",
+      "web/src/flows/pages.ts",
+      "web/src/flows/diagnostics.test.ts",
+      "test/web-flow-editor/link-parity.test.ts",
+      "web/src/flows/diagnostics.ts",
+      "web/src/flows/versions.test.ts",
+      "test/web-flow-editor/starter-parity.test.ts",
+      "web/src/flows/versions.ts",
+      "web/src/flows/flows.test.ts",
+      "web/src/flows/flows.ts",
+      "web/src/flows/positions.test.ts",
+      "web/src/flows/positions.ts",
+      "web/src/flows/editor-config.test.ts",
+      "web/src/flows/editor-config.ts",
+      "web/src/flows/editor-mount.ts",
+      "web/src/flows/editor-model.test.ts",
+      "web/src/flows/messages.test.ts",
+      "web/src/flows/editor-model.ts",
+      "web/src/flows/messages.ts",
+      "web/src/flows/editor-panels.test.ts",
+      "web/src/flows/editor-panels.ts",
+      "web/src/flows/flows-page.test.ts",
+      "web/src/flows/FlowsPage.tsx",
+      "web/src/flows/flows.css",
+      "web/src/flows/editor-sources.test.ts",
+      "web/src/flows/CodeEditor.tsx",
+      "web/src/features/71-flow-editor.tsx",
+      "test/support/e2e-stack/catalogue-part.test.ts",
+      "test/journeys/m3-flow-editor.test.ts",
+      "e2e",
+      "test/support/e2e-stack/parts/35-catalogue.ts",
+      "**/index.html",
+      "**/positions.ts",
+      "@codemirror/*",
+      "**/flows.css",
+      "**/pages.ts",
+      "**/diagnostics.ts",
+      "**/versions.ts",
+      "**/flows.ts",
+      "**/messages.ts",
+      "**/FlowsPage.tsx",
+      "**/FlowEditorPage.tsx",
+      "**/CodeEditor.tsx",
+      "module @codemirror",
+      "module authoring",
+      "module docs",
+      "module e2e",
+      "module node:assert",
+      "module parts",
+      "module registry",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m3_flow_editor.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-flow-editor/.l4/ledger/r-20261101T1926Z-72e4.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-flow-editor/.l4/ledger/r-20261101T2157Z-7044.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-flow-editor/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/journeys/m3-flow-editor.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/catalogue-part.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/catalogue-part.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/parts/35-catalogue.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/web-flow-editor/link-parity.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/web-flow-editor/starter-parity.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/features/70-flows.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/features/71-flow-editor.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/CodeEditor.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/FlowEditorPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/FlowsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/diagnostics.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/diagnostics.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/editor-config.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/editor-config.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/editor-model.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/editor-model.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/editor-mount.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/editor-panels.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/editor-panels.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/editor-sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/flows-page.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/flows.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/flows.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/flows.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/messages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/messages.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/pages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/pages.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/positions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/positions.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/versions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/versions.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: test/support/e2e-stack/catalogue-part.ts, test/support/e2e-stack/parts/35-catalogue.ts, web/src/features/70-flows.tsx, web/src/features/71-flow-editor.tsx, web/src/flows/CodeEditor.tsx and 12 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "test/support/e2e-stack/catalogue-part.ts",
+      "test/support/e2e-stack/parts/35-catalogue.ts",
+      "web/src/features/70-flows.tsx",
+      "web/src/features/71-flow-editor.tsx",
+      "web/src/flows/CodeEditor.tsx",
+      "web/src/flows/FlowEditorPage.tsx",
+      "web/src/flows/FlowsPage.tsx",
+      "web/src/flows/diagnostics.ts",
+      "web/src/flows/editor-config.ts",
+      "web/src/flows/editor-model.ts",
+      "web/src/flows/editor-mount.ts",
+      "web/src/flows/editor-panels.ts",
+      "web/src/flows/flows.ts",
+      "web/src/flows/messages.ts",
+      "web/src/flows/pages.ts",
+      "web/src/flows/positions.ts",
+      "web/src/flows/versions.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 1428,
+      "passed": 1426,
+      "failed": 2,
+      "errored": 0,
+      "skipped": 0,
+      "new": 60,
+      "new_passed": 60,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

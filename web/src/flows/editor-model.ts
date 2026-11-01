@@ -1,5 +1,3 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 import type { SaveResult, VersionRow } from "./versions.ts";
 
 export interface Baseline {
@@ -7,14 +5,20 @@ export interface Baseline {
   version: VersionRow;
 }
 
-export function editorStatus(_baseline: Baseline | null, _text: string): string {
-  throw new Error("not implemented");
+export function editorStatus(baseline: Baseline | null, text: string): string {
+  if (baseline === null) return "Not saved yet.";
+  const n = baseline.version.number;
+  if (baseline.text !== text) return `Unsaved changes since version ${n}.`;
+  const ok = baseline.version.validationOk;
+  if (ok === null) return `Version ${n} saved. Not validated yet.`;
+  return ok ? `Version ${n} saved and validated.` : `Version ${n} saved. Validation found errors.`;
 }
 
-export function planValidate(_baseline: Baseline | null, _text: string): "validate" | "save-first" {
-  throw new Error("not implemented");
+export function planValidate(baseline: Baseline | null, text: string): "validate" | "save-first" {
+  return baseline !== null && baseline.text === text ? "validate" : "save-first";
 }
 
-export function saveMessage(_saved: SaveResult): string {
-  throw new Error("not implemented");
+export function saveMessage(saved: SaveResult): string {
+  const n = saved.version.number;
+  return saved.created ? `Saved version ${n}.` : `Nothing to save: this text is already version ${n}.`;
 }
