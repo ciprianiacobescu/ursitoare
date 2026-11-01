@@ -28,3 +28,4 @@
 {"at":"2026-11-01T07:47:03Z","attempt":1,"cost_usd":2.505262,"runs":2,"type":"plan.charged","unit":"openspec:add-taint-static"}
 {"at":"2026-11-01T07:48:34Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-test-catalogue"}
 {"at":"2026-11-01T07:48:34Z","run":"r-20261101T0748Z-de30","type":"unit.dispatched","unit":"openspec:add-test-catalogue"}
+{"at":"2026-11-01T09:19:57Z","detail":"waiting_capacity until 2026-11-02T09:18:06Z","reason":"unit_waiting_capacity","type":"plan.waiting","unit":"openspec:add-test-catalogue"}
