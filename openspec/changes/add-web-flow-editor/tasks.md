@@ -15,7 +15,7 @@
 
 ## 4. The editor page logic
 
-- [ ] 4.1 Write `web/src/flows/editor-model.test.ts` and `web/src/flows/messages.test.ts` first (typeof checks; scenario "Status, plan and error text", `saveMessage` included), then implement `editorStatus`, `planValidate`, `saveMessage` in `web/src/flows/editor-model.ts` and `flowErrorMessage` in `web/src/flows/messages.ts`, implementing requirement "The editor page explains its state and its errors"
+- [x] 4.1 Write `web/src/flows/editor-model.test.ts` and `web/src/flows/messages.test.ts` first (typeof checks; scenario "Status, plan and error text", `saveMessage` included), then implement `editorStatus`, `planValidate`, `saveMessage` in `web/src/flows/editor-model.ts` and `flowErrorMessage` in `web/src/flows/messages.ts`, implementing requirement "The editor page explains its state and its errors"
 - [ ] 4.2 Write `web/src/flows/editor-panels.test.ts` first (typeof check of `createEditorPanelRegistry`; scenario "The panel registry"), then implement the registry, `registerEditorPanel` and `listEditorPanels` (one shared default registry) in `web/src/flows/editor-panels.ts`, implementing requirement "Other units can add panels to the editor page"
 
 ## 5. The pages
