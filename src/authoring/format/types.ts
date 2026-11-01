@@ -30,7 +30,22 @@ export type NodeKind =
   | "wait"
   | "end";
 
-export const NODE_KINDS: readonly NodeKind[] = [];
+export const NODE_KINDS: readonly NodeKind[] = [
+  "block",
+  "code",
+  "llm.extract",
+  "llm.generate",
+  "llm.decide",
+  "agent",
+  "switch",
+  "human.approval",
+  "human.form",
+  "foreach",
+  "subflow",
+  "delegate",
+  "wait",
+  "end",
+];
 
 export type HookScope = "input" | "output" | "node" | "next" | "from";
 
@@ -228,4 +243,14 @@ export interface Flow {
   expose?: "mcp";
 }
 
-export const FLOW_TOP_LEVEL_FIELDS: readonly (keyof Flow)[] = [];
+export const FLOW_TOP_LEVEL_FIELDS: readonly (keyof Flow)[] = [
+  "ursitoare",
+  "flow",
+  "version",
+  "description",
+  "inputs",
+  "start",
+  "nodes",
+  "hooks",
+  "expose",
+];
