@@ -6,7 +6,7 @@ Spec: `specs/test-catalogue/spec.md`; signatures and decisions: `design.md`; how
 
 ## 2. The loader
 
-- [ ] 2.1 Write `test/support/catalogue/loader.test.ts` first (scenarios "Block lookups answer exactly" and "Roles, profiles, delegate targets and flows answer from the document"; `DEFAULT_ROLES` imported from `src/identity/index.ts`; the empty-document catalogue is built with `catalogueFromDocument` from a literal document with empty collections), then implement `catalogueFromDocument` and `loadTestCatalogue` in `test/support/catalogue/loader.ts` (design.md Decisions 4 and 5: `Object.hasOwn`, `structuredClone` per answer, the `flow` key `ref + "@" + major`, the delegate answer `{ effect: "send", untrusted_result: true }`), implementing requirement "The loader answers the Catalogue interface from the document"
+- [x] 2.1 Write `test/support/catalogue/loader.test.ts` first (scenarios "Block lookups answer exactly" and "Roles, profiles, delegate targets and flows answer from the document"; `DEFAULT_ROLES` imported from `src/identity/index.ts`; the empty-document catalogue is built with `catalogueFromDocument` from a literal document with empty collections), then implement `catalogueFromDocument` and `loadTestCatalogue` in `test/support/catalogue/loader.ts` (design.md Decisions 4 and 5: `Object.hasOwn`, `structuredClone` per answer, the `flow` key `ref + "@" + major`, the delegate answer `{ effect: "send", untrusted_result: true }`), implementing requirement "The loader answers the Catalogue interface from the document"
 
 ## 3. References and reachability
 
