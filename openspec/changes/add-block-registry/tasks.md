@@ -2,7 +2,7 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 1. The table
 
-- [ ] 1.1 Write `src/registry/schema.test.ts` first (it starts with `assert.ok` on the ledger row `version = 260`, `name = 'block_registry'` and on `to_regclass('ursitoare.block_version')`; each statement of "Objects, checks, privileges and two tenants" is its own `withTenantTx`, refusals by `await assert.rejects(p, { code })`), then add `src/db/migrations/0260_block_registry.sql` holding the SQL of design.md § Data model verbatim, implementing requirement "Block versions are stored per tenant and can only be added"
+- [x] 1.1 Write `src/registry/schema.test.ts` first (it starts with `assert.ok` on the ledger row `version = 260`, `name = 'block_registry'` and on `to_regclass('ursitoare.block_version')`; each statement of "Objects, checks, privileges and two tenants" is its own `withTenantTx`, refusals by `await assert.rejects(p, { code })`), then add `src/db/migrations/0260_block_registry.sql` holding the SQL of design.md § Data model verbatim, implementing requirement "Block versions are stored per tenant and can only be added"
 
 ## 2. Normalising a block
 
