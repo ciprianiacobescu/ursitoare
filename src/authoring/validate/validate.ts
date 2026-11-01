@@ -5,6 +5,7 @@
 
 import { parseFlowText } from "../format/index.ts";
 import type { Catalogue, FlowFormat } from "../format/index.ts";
+import { TaintError } from "../taint/index.ts";
 import { checkL1 } from "./l1.ts";
 import { checkL2 } from "./l2.ts";
 import { checkL3 } from "./l3.ts";
@@ -37,17 +38,27 @@ function dedupe(issues: Issue[]): Issue[] {
   return out;
 }
 
+function guarded(layer: Layer, sink: Sink, run: () => void): void {
+  try {
+    run();
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    const text = e instanceof TaintError ? message : `validator crashed: ${message}`;
+    sink.err(layer, "INTERNAL_ERROR", null, "", text.split("\n")[0] ?? "");
+  }
+}
+
 export function validateFlow(doc: unknown, catalogue: Catalogue): ValidationResult {
   const sink = new Sink();
   const layers: Layer[] = ["L1"];
-  checkL1(doc, sink);
+  guarded("L1", sink, () => checkL1(doc, sink));
   if (sink.errors.length === 0) {
     layers.push("L2");
-    checkL2(doc, catalogue, sink);
+    guarded("L2", sink, () => checkL2(doc, catalogue, sink));
   }
   if (sink.errors.length === 0) {
     layers.push("L3");
-    checkL3(doc, catalogue, sink);
+    guarded("L3", sink, () => checkL3(doc, catalogue, sink));
   }
   const errors = sortIssues(sink.errors);
   return {
