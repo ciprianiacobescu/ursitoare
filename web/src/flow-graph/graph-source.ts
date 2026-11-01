@@ -28,3 +28,14 @@ export async function loadLatestGraph(
 export function graphLoadError(_error: unknown): unknown {
   throw new Error("not implemented");
 }
+
+export type GraphLoad =
+  | { phase: "loading"; label: string }
+  | { phase: "ready"; value: unknown }
+  | { phase: "error"; error: unknown; retryLabel: string };
+
+export const GRAPH_LOADING: GraphLoad = { phase: "loading", label: "" };
+
+export async function settleGraphLoad(_load: Promise<unknown>): Promise<GraphLoad> {
+  throw new Error("not implemented");
+}
