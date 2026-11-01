@@ -1,0 +1,95 @@
+# expect: L1_UNIQUE_ITEMS
+# note: outcomes must be unique
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: extract
+  extract:
+    kind: llm.extract
+    input:
+      text: ${{ nodes.fetch.output.content }}
+    instructions: Extract the summary, amount, count, urgency and tags.
+    output_schema:
+      type: object
+      properties:
+        summary:
+          type: string
+        amount:
+          type: number
+        count:
+          type: integer
+        urgent:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+        note:
+          type: string
+      required:
+        - summary
+        - amount
+        - count
+        - urgent
+        - tags
+    next: classify
+  done:
+    kind: end
+    status: completed
+  classify:
+    kind: llm.decide
+    input:
+      summary: ${{ nodes.extract.output.summary }}
+    instructions: Is this urgent?
+    outcomes:
+      - urgent
+      - urgent
+    cases:
+      urgent: alert
+      routine: log
+  alert:
+    kind: block
+    uses: slack.post_message@1
+    with:
+      channel: "#ops"
+      text: "Urgent: ${{ nodes.extract.output.summary }}"
+    next: done
+  log:
+    kind: block
+    uses: sheets.append_row@1
+    with:
+      sheet_id: S1
+      values:
+        - ${{ nodes.extract.output.summary }}
+    next: done

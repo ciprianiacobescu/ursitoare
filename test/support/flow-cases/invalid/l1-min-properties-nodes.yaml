@@ -1,0 +1,31 @@
+# expect: L1_MIN_PROPERTIES
+# note: nodes must not be empty
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes: {}

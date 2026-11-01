@@ -1,0 +1,51 @@
+# expect: L1_INVALID_JSON_SCHEMA
+# note: inputs.required must be an array
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+  required: url
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: extract
+  extract:
+    kind: llm.extract
+    input:
+      text: ${{ nodes.fetch.output.content }}
+    instructions: Extract the summary, amount, count, urgency and tags.
+    output_schema:
+      type: object
+      properties:
+        summary:
+          type: string
+        amount:
+          type: number
+        count:
+          type: integer
+        urgent:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+        note:
+          type: string
+      required:
+        - summary
+        - amount
+        - count
+        - urgent
+        - tags
+    next: done
+  done:
+    kind: end
+    status: completed
