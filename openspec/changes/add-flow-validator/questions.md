@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 4.1 | technical | Allow Write/Edit for task 4.1 |
-| Q-002 | open | 5.2 | technical | src/cli/flow/validate.test.ts:162 writes a raw control byte instead of the JSON escape sequence |
+| Q-002 | accepted | 5.2 | technical | src/cli/flow/validate.test.ts:162 writes a raw control byte instead of the JSON escape sequence |
 <!-- l4:index:end -->
 
 ---
@@ -53,7 +53,8 @@ No command can run renderDiagnosticsDoc() for you, so write the document text yo
 
 ## Q-002: src/cli/flow/validate.test.ts:162 writes a raw control byte instead of the JSON escape sequence
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.2
 - **Kind:** technical
 - **Asked:** 2026-11-01T12:49Z by deepseek-free, run r-20261101T1219Z-efa1, task 5.2
