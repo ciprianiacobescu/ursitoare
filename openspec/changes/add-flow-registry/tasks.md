@@ -2,7 +2,7 @@ Spec: `specs/flow-registry/spec.md`; signatures, routes, decisions: `design.md`;
 
 ## 1. The tables
 
-- [ ] 1.1 Write `src/registry/flows/schema.test.ts` first (scenario "Objects, isolation and privileges"; it starts with `assert.ok` on the ledger row `version = 270`; rows seeded through `withTenantTx(db.ownerPool, a, ...)`, each statement its own `withTenantTx(db.appPool, ...)`, refusals by `await assert.rejects(p, { code })`), then add `src/db/migrations/0270_flow_registry.sql` holding the SQL of `data-model.md` verbatim, implementing requirement "Flow tables are tenant tables with narrow privileges"
+- [x] 1.1 Write `src/registry/flows/schema.test.ts` first (scenario "Objects, isolation and privileges"; it starts with `assert.ok` on the ledger row `version = 270`; rows seeded through `withTenantTx(db.ownerPool, a, ...)`, each statement its own `withTenantTx(db.appPool, ...)`, refusals by `await assert.rejects(p, { code })`), then add `src/db/migrations/0270_flow_registry.sql` holding the SQL of `data-model.md` verbatim, implementing requirement "Flow tables are tenant tables with narrow privileges"
 
 ## 2. Flows
 
