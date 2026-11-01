@@ -10,7 +10,7 @@ Spec: `specs/flow-format/spec.md`; signatures and decisions: `design.md`. Each t
 
 ## 3. Node helpers
 
-- [ ] 3.1 Write `src/authoring/format/nodes.test.ts` first (scenario "Value fields and successors per node kind"), then implement `valueFields`, `hookValueFields`, `successorFields` and `requiredSuccessorFields` in `src/authoring/format/nodes.ts` (design.md Decision 8; ported from `seed/format/src/refs.ts` and `graph.ts`, without `any`), implementing requirement "Node structure is read through shared helpers"
+- [x] 3.1 Write `src/authoring/format/nodes.test.ts` first (scenario "Value fields and successors per node kind"), then implement `valueFields`, `hookValueFields`, `successorFields` and `requiredSuccessorFields` in `src/authoring/format/nodes.ts` (design.md Decision 8; ported from `seed/format/src/refs.ts` and `graph.ts`, without `any`), implementing requirement "Node structure is read through shared helpers"
 
 ## 4. Safe parsing
 
