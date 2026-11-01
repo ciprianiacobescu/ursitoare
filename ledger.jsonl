@@ -55,3 +55,4 @@
 {"at":"2026-11-01T13:33:28Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"256225f1385974a4054b42d529408ca372057863","status":"pass","type":"unit.postcheck","unit":"openspec:add-flow-validator"}
 {"at":"2026-11-01T13:33:28Z","revision":"256225f1385974a4054b42d529408ca372057863","type":"unit.integrated","unit":"openspec:add-flow-validator"}
 {"at":"2026-11-01T13:33:28Z","attempt":1,"cost_usd":6.978139,"runs":3,"type":"plan.charged","unit":"openspec:add-flow-validator"}
+{"at":"2026-11-01T13:34:59Z","branch":"l4/archive/openspec/add-flow-validator","head":"5585bf46ff836717c051d25977443105c8daae7d","type":"unit.branch_deleted","unit":"openspec:add-flow-validator"}
