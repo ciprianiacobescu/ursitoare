@@ -45,13 +45,15 @@ function flowCapabilities(flow: Flow, catalogue: Catalogue): FlowCapabilities
 
 `TAINT_LABELS`, `NO_TAINT` and `TAINT_LIMITS` are frozen; `TAINT_LIMITS` is `{ maxNodes: 5000, maxHookPairs: 200000, maxEdges: 100000 }`. A `Taint` is a sorted array (`[]` trusted, `["extracted"]`, `["untrusted"]`, `["extracted", "untrusted"]`). Result shapes and the rules behind them are in design.md; sites in `CapabilitySite` are `at` (a JSON Pointer into the flow) and `tool` (a block ref, `<target>:<workflow>`, a flow ref or a context source).
 
+Reading the results. `NodeTaint.input` is the taint of everything the node reads (what a policy request for it carries); `output` that of its output; `fields` overrides `output` for named top-level output fields. One `TaintEdge` exists per reference occurrence: `to` is the node whose context holds it (for a flow rule, the wrapped node), `path` the JSON Pointer of its string in the flow document, `ref` the printed reference (`refToString`, or the raw `${{ ... }}` text when it does not parse), `from` the producing node (for `nodes.*` of an existing node and `hook.output.*`), else `null` (also for a missing node), `taint` the labels it carries, `resolved` false when it could not be resolved (`taint` is then `["untrusted"]`), `hook` the id of the hook holding it else `null`. U25 reports L3 diagnostics from `edges` and `nodes`, and skips `resolved: false` edges that its own reference checks report.
+
 **Interfaces taken**
 
 - From `add-flow-format-model`: `Flow`, `FlowNode`, `NodeKind`, `NODE_KINDS`, `Effect`, `Catalogue`, `emptyCatalogue` (tests only), `BlockDef`, `DelegateTargetDef`, `HookRule`, `HookDef`, `HookSelector`, `ContextSource`, `Ref`, `Seg`, `ValueField`, `scanTemplate`, `refToString`, `walkStrings`, `escapePointer`, `valueFields`, `hookValueFields`. Their exact declarations are in `reference.md`.
 
 Test samples use this unit's own catalogue C, not `add-test-catalogue`'s; names they share (`docs.fetch@1`, `http.get@1`, `kb.search@1`) carry other markers here.
 
-**Catalogue C** (blocks, then delegate targets `target/workflow`): `invoices.get@1` read, `untrusted_fields` `["raw_text", "vendor_name"]`; `erp.lookup_vendor@1` read, `data_class: "private"`; `erp.create_payment@1` pay; `mail.send@1` send; `http.get@1` read, `untrusted_result: true`, `data_class: "public"`; `docs.fetch@1` read, `data_class: "public"`; `kb.search@1` read; `crm.update@1` write, `untrusted_fields` `["notes.body"]`; `n8n/archive-invoice` effect send, `untrusted_result: true`; `n8n/calc` effect read, `untrusted_result: false`. Every other ref is unknown.
+**Catalogue C** (blocks, then delegate targets `target/workflow`): `invoices.get@1` read, `untrusted_fields` `["raw_text", "vendor_name"]`; `erp.lookup_vendor@1` read, `data_class: "private"`; `erp.create_payment@1` pay; `mail.send@1` send; `http.get@1` read, `untrusted_result: true`, `data_class: "public"`; `docs.fetch@1` read, `data_class: "public"`; `kb.search@1` read; `crm.update@1` write, `untrusted_fields` `["notes"]`; `n8n/archive-invoice` effect send, `untrusted_result: true`; `n8n/calc` effect read, `untrusted_result: false`. Every other ref is unknown.
 
 ## Out of scope
 
