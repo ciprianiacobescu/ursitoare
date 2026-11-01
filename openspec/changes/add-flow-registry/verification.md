@@ -1,4 +1,4 @@
-# Verification: openspec:add-flow-registry: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-flow-registry: PASS (round 2)
 
 traceability: 17/17 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 17/17 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base main@e2fb71225f contained |
-| 1 | integrity | ok | 256.5 | 11 sub-checks; scope: 31 changed file(s) |
-| 2 | build | ok | 21.8 |  |
-| 3 | tests | ok | 117.8 |  |
-| 4 | traceability | ok | 0.1 | 17/17 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/api/error-codes.ts, src/api/flow-common.ts, src/api/flow-errors.ts, src/api/flow-routes.ts, src/api/flow-versions.ts and 8 more |
-| 8 | s1 judge | ok | 1.7 | 14/17 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 273.6 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -187,11 +187,15 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-f696603a | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-226d18fa | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-001 accept C-96e47324 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. ERROR_CODES in src/api/error-codes.ts holds exactly the 23 entries the scenario lists, each with the exact status and message, FLOW_TEXT_INVALID 422 "Flow text is not a readable flow document" included, and isRegisteredCode is an own-property check, so it is ...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
-| C-96e47324 | api-conventions › Every error code is registered › The registry | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-96e47324 | api-conventions › Every error code is registered › The registry | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. ERROR_CODES in src/api/error-codes.ts holds exactly the 23 entries the scenario lists, each with the exact status and message, FLOW_TEXT_INVALID 422 "Flow text is not a readable flow document" inclu... |
 | C-601275f9 | api-conventions › Every error code is registered › An unregistered literal code fails the scan | pass | pass | the judge passed it and a discriminating test passes |
 | C-05ca73a7 | api-conventions › Every error code is registered › Registered, dynamic and test uses pass | pass | pass | the judge passed it and a discriminating test passes |
 | C-541ef4f9 | api-conventions › Every error code is registered › Route errors | pass | pass | the judge passed it and a discriminating test passes |
