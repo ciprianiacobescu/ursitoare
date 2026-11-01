@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: Unfreeze the two stale deep-link e2e tests so task 1.1 can point them at an unowned path
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The conflict is real: e2e/test_m0_skeleton.py (line 227) and e2e/test_l4_c_0daf92cd.py (line 10) open /flows and expect the "Page not found" heading, while web/src/features/70-flows.tsx registers /flows as the spec requires (Flow pages requirement). No production change can satisfy both. But the onl
 - **Blocking tasks:** 1.1
 - **Kind:** technical
 - **Asked:** 2026-11-01T22:18Z by deepseek-free, run r-20261101T2157Z-7044, task 1.1
