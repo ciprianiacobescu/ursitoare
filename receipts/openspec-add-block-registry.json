@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-01T16:07:46Z",
+  "integrated_revision": "6571bae4501bf09ec731f22b9b432fe7319e0c0a",
+  "merge_commit": "6571bae4501bf09ec731f22b9b432fe7319e0c0a",
+  "plan_digest": "17f19b151151b0e3",
+  "plan_id": "m3",
+  "postcheck": "pass",
+  "pr": 58,
+  "receipt_id": "m3/openspec:add-block-registry/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "62462bec67ba5fd8a4229a7c760f6238f7aa27b9",
+  "spec_digest": "e2ea1719b04a132a",
+  "target": "main",
+  "unit_id": "openspec:add-block-registry"
+}
