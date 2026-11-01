@@ -18,7 +18,7 @@ Spec: `specs/flow-format/spec.md`; signatures and decisions: `design.md`. Each t
 
 ## 5. Canonical form
 
-- [ ] 5.1 Write `src/authoring/format/canonical.test.ts` first (scenarios "Canonical JSON ignores order, surface and reference spacing", "Canonical JSON keeps real differences and unusual keys" and "Canonical form refuses what is not JSON"; errors asserted by `instanceof FormatError`, `code` and `path`), then implement `FormatError` in `src/authoring/format/errors.ts` and `canonicalizeFlow`, `stableStringify`, `canonicalJson` and `canonicalEqual` in `src/authoring/format/canonical.ts` as design.md Decision 5 says (objects built with `Object.fromEntries`), implementing requirement "Canonical JSON is one string per meaning"
+- [x] 5.1 Write `src/authoring/format/canonical.test.ts` first (scenarios "Canonical JSON ignores order, surface and reference spacing", "Canonical JSON keeps real differences and unusual keys" and "Canonical form refuses what is not JSON"; errors asserted by `instanceof FormatError`, `code` and `path`), then implement `FormatError` in `src/authoring/format/errors.ts` and `canonicalizeFlow`, `stableStringify`, `canonicalJson` and `canonicalEqual` in `src/authoring/format/canonical.ts` as design.md Decision 5 says (objects built with `Object.fromEntries`), implementing requirement "Canonical JSON is one string per meaning"
 
 ## 6. Content hash
 

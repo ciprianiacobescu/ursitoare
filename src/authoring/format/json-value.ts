@@ -73,6 +73,7 @@ export function findJsonProblem(value: unknown, maxDepth: number): JsonProblem |
         return null;
       }
       for (const [key, child] of Object.entries(current)) {
+        if (child === undefined) continue;
         const childPath = `${path}/${escapePointer(key)}`;
         const keyProblem = stringProblem(key);
         if (keyProblem !== null) return notJson(childPath, `key ${keyProblem}`);
