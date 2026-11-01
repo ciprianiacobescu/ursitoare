@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-01T19:24:45Z",
+  "integrated_revision": "8fcdedb392fcbce7c3602311029b6a82a9fa0eaf",
+  "merge_commit": "8fcdedb392fcbce7c3602311029b6a82a9fa0eaf",
+  "plan_digest": "17f19b151151b0e3",
+  "plan_id": "m3",
+  "postcheck": "pass",
+  "pr": 60,
+  "receipt_id": "m3/openspec:add-flow-registry/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "01b5c5fbe74790a593803fceca9dcf87bc01e7fb",
+  "spec_digest": "2bb26588704634f8",
+  "target": "main",
+  "unit_id": "openspec:add-flow-registry"
+}

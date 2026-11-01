@@ -78,3 +78,6 @@
 {"at":"2026-11-01T19:22:09Z","head":"01b5c5fbe74790a593803fceca9dcf87bc01e7fb","pr":60,"target_before":"e2fb71225fad8ff8ccda219381783940b2cc58b2","type":"unit.merge_requested","unit":"openspec:add-flow-registry"}
 {"at":"2026-11-01T19:22:14Z","ci":"not_run","head":"01b5c5fbe74790a593803fceca9dcf87bc01e7fb","merge_commit":"8fcdedb392fcbce7c3602311029b6a82a9fa0eaf","method":"squash","pr":60,"raced":false,"type":"unit.merged","unit":"openspec:add-flow-registry"}
 {"at":"2026-11-01T19:22:20Z","branch":"l4/openspec/add-flow-registry","head":"01b5c5fbe74790a593803fceca9dcf87bc01e7fb","type":"unit.branch_deleted","unit":"openspec:add-flow-registry"}
+{"at":"2026-11-01T19:24:45Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"8fcdedb392fcbce7c3602311029b6a82a9fa0eaf","status":"pass","type":"unit.postcheck","unit":"openspec:add-flow-registry"}
+{"at":"2026-11-01T19:24:45Z","revision":"8fcdedb392fcbce7c3602311029b6a82a9fa0eaf","type":"unit.integrated","unit":"openspec:add-flow-registry"}
+{"at":"2026-11-01T19:24:45Z","attempt":1,"cost_usd":7.518218,"runs":3,"type":"plan.charged","unit":"openspec:add-flow-registry"}
