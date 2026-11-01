@@ -1,14 +1,13 @@
 # Delivered shapes taken by add-web-flow-graph
 
-Names taken from merged code, as declared on main@3142c5f with `export` dropped; the code is the truth. Names this unit takes from unmerged siblings (U22 to U28) are in proposal.md § Interfaces taken, as those changes give them.
+Names taken from merged code, as declared on main@3142c5f with `export` dropped; the code is the truth. Names from unmerged siblings are in proposal.md § Interfaces taken.
 
 ```ts
 // web/src/admin/shared.ts (add-web-admin)
-type Api<K extends keyof ApiClient> = Pick<ApiClient, K>
+type Api<K extends keyof ApiClient> = Pick<ApiClient, K>   // ApiClient has get(path, opts?) and post(path, body?, opts?) among others
 function clip(text: string, max = 80): string   // text.length > max ? `${text.slice(0, max - 1)}…` : text
 // web/src/api/client.ts (add-web-shell)
 class ApiRequestError extends Error { readonly status: number; readonly code: string; readonly details: unknown; readonly requestId: string | null; constructor(status: number, code: string, message: string, opts?: { details?: unknown; requestId?: string | null; cause?: unknown }) }
-interface ApiClient { get<T>(path: string, opts?: Omit<RequestOptions, "body">): Promise<T>; post<T>(path: string, body?: unknown, opts?: Omit<RequestOptions, "body">): Promise<T>; /* request, put, patch, delete as well */ }
 // web/src/app/features.ts (add-web-shell)
 interface FeatureSpec { id: string; path: string; navLabel?: string; capability?: string; element: ReactNode }
 function createFeatureRegistry(): FeatureRegistry   // register(spec): void; list(): readonly Feature[]; nav(capabilities?: ReadonlySet<string>): NavItem[] with NavItem { id; path; label }
@@ -21,6 +20,9 @@ interface SourceHit { line: number; text: string }             // contrast.ts
 function parseTokens(css: string): StringMap                   // StringMap = Readonly<Record<string, string>>
 function findRawColours(css: string): SourceHit[]
 function findInlineStyleUse(source: string): SourceHit[]
+// web/src/kit/error-panel.ts (add-web-ui-kit)
+interface ErrorPanelModel { code: string; status: number | null; title: string; message: string; decisionId: string | null }
+function errorPanelModel(error: unknown): ErrorPanelModel
 // test/ (add-e2e-stack, add-fake-oidc, add-roles-and-memberships)
 type E2eStack = Readonly<{ url: string; controlUrl: string; handles: ReadonlyMap<string, PartHandle>; close(): Promise<void> }>   // test/support/e2e-stack/stack.ts
 function startE2eStack(opts?: StackOptions): Promise<E2eStack>
@@ -34,9 +36,10 @@ function sessionClient(stack: Pick<E2eStack, "url">, session: TestSession): ApiC
 
 At main@3142c5f.
 
-- `src/api/security-headers.ts:3-4`: `CONTENT_SECURITY_POLICY` is the constant `"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'"`.
-- `web/src/features/index.ts:4-8`: `const mods = import.meta.glob<{ feature: FeatureSpec }>("./*.tsx", { eager: true });` then `registerFeature(mod.feature)` for every module sorted by file name, so a `.tsx` file there that does not export `feature` is a start-up error.
+- `src/api/security-headers.ts:3-4`: `CONTENT_SECURITY_POLICY` is the constant `"default-src 'self'; script-src 'self'; style-src 'self'; ..."` (the rest does not matter here).
+- `web/src/features/index.ts:4-8`: `const mods = import.meta.glob<{ feature: FeatureSpec }>("./*.tsx", { eager: true });` then `registerFeature(mod.feature)` for every module sorted by file name: a `.tsx` file there without `feature` is a start-up error.
 - `web/src/app/features.ts:140`: a `navLabel` on a path with a `:param` segment makes `validateFeature` throw `FEATURE_INVALID`; `:168` the duplicate-path check compares the normalised paths (every `:param` becomes `:`), so `/flows/:flowId` and `/flows/:flowId/graph` are different paths.
-- `web/src/kit/ErrorPanel.tsx`: `<section role="alert">` with an `h2`, "Error code: <code>" and, for a 403, the decision id; `LoadingState.tsx`: `<div role="status" aria-busy="true">`.
+- `web/src/kit/error-panel.ts:16-33,45-67`: `errorPanelModel` of an `ApiRequestError` gives `title` "Not allowed" for status 403, "Not found" for 404, "Something went wrong" for other statuses, `message` from `messageFor(code)` (`messages.ts:9-17`; `FORBIDDEN` and `INTERNAL` as in reference.md), `decisionId` only for status 403 with a string `details.decisionId`; a non-`ApiRequestError` gives code `UNKNOWN_ERROR`, status null.
+- `web/src/kit/ErrorPanel.tsx`: `<section role="alert">` with an `h2` and "Error code: <code>"; `LoadingState.tsx`: `<div role="status" aria-busy="true">`.
 - `web/tsconfig.json`: `lib` `["es2023", "dom", "dom.iterable"]`, `types` `["vite/client"]`; root `tsconfig.json`: `lib` `["es2024"]`, `types` `["node"]`, `exclude` holds `web`.
-- `src/api/web.ts:194-212`: a path that is not a file under `web/dist` and whose last segment has no asset extension (`js`, `css`, `json`, `svg`, ...) is answered with `index.html`, so `/flows/demo-graph/graph` reaches the single-page app; `src/api/web-paths.ts` reserves only the roots `api`, `health`, `auth/oidc`, `.well-known`, `hooks`, `callbacks` and `mcp`.
+- `src/api/web.ts:194-212`: a path that is not a file under `web/dist` and whose last segment has no asset extension (`js`, `css`, `json`, `svg`, ...) is answered with `index.html`, so `/flows/demo-graph/graph` reaches the single-page app; `src/api/web-paths.ts` reserves only the roots `api`, `health`, `auth/oidc`, `.well-known`, `hooks`, `callbacks`, `mcp`.
