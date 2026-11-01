@@ -14,7 +14,7 @@ Spec: `specs/flow-format/spec.md`; signatures and decisions: `design.md`. Each t
 
 ## 4. Safe parsing
 
-- [ ] 4.1 Write `src/authoring/format/parse.test.ts` first (scenarios "YAML and JSON parse to the same document", "Malformed text is refused with a code and a position", "Values that are not JSON are refused", "Size is measured in bytes before parsing", "Deep and self-referencing documents are refused" and "Alias expansion is bounded"), then implement `formatOf` and `parseFlowText` in `src/authoring/format/parse.ts` (YAML options, BOM, byte check, lower-only `limits`, error mapping with `line` and `column`) and the walk `findJsonProblem(value, maxDepth)` in `src/authoring/format/json-value.ts`, as design.md Decisions 1 to 3 say, implementing requirements "Flow text is parsed into a plain document or refused with a code" and "Parsing is bounded in size, depth and aliases"
+- [x] 4.1 Write `src/authoring/format/parse.test.ts` first (scenarios "YAML and JSON parse to the same document", "Malformed text is refused with a code and a position", "Values that are not JSON are refused", "Size is measured in bytes before parsing", "Deep and self-referencing documents are refused" and "Alias expansion is bounded"), then implement `formatOf` and `parseFlowText` in `src/authoring/format/parse.ts` (YAML options, BOM, byte check, lower-only `limits`, error mapping with `line` and `column`) and the walk `findJsonProblem(value, maxDepth)` in `src/authoring/format/json-value.ts`, as design.md Decisions 1 to 3 say, implementing requirements "Flow text is parsed into a plain document or refused with a code" and "Parsing is bounded in size, depth and aliases"
 
 ## 5. Canonical form
 
