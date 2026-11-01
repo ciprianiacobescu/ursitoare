@@ -2,6 +2,7 @@
 
 export { ApiError } from "./errors.ts";
 export { adminApiError } from "./admin-errors.ts";
+export { flowApiError } from "./flow-errors.ts";
 export { ERROR_CODES, isRegisteredCode, unregisteredRouteErrors } from "./error-codes.ts";
 export type { CursorPosition, KeyMaterial, CursorKey, CursorScope } from "./cursor.ts";
 export { deriveCursorKey, encodeCursor, decodeCursor } from "./cursor.ts";
