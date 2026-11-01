@@ -10,7 +10,7 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 3. Reading stored versions
 
-- [ ] 3.1 Write `src/registry/block-read.test.ts` first (scenario "Get, list and the tenant guard"; rows are inserted with SQL through the owner pool), then implement `BlockVersion`, `getBlockVersion` and `listBlockVersions` in `src/registry/block-store.ts` (design.md Decision 7, with the internal row query without a limit), exporting them from `src/registry/index.ts`, implementing requirement "Stored versions are read by ref or by page"
+- [x] 3.1 Write `src/registry/block-read.test.ts` first (scenario "Get, list and the tenant guard"; rows are inserted with SQL through the owner pool), then implement `BlockVersion`, `getBlockVersion` and `listBlockVersions` in `src/registry/block-store.ts` (design.md Decision 7, with the internal row query without a limit), exporting them from `src/registry/index.ts`, implementing requirement "Stored versions are read by ref or by page"
 
 ## 4. The audited import
 
