@@ -22,7 +22,7 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 6. The policy
 
-- [ ] 6.1 Write `src/registry/policy.test.ts` first (scenario "Who may read"; the copy of `blocks.cedar` is read with `readFile(...).catch(() => "")` so red fails by assertion, as `src/identity/roles-policy.test.ts` does), then add `src/registry/policy/blocks.cedar` with the permits `registry-blocks-tenant-admin-read-registry`, `registry-blocks-author-read-registry` and `registry-blocks-approver-read-registry`, each `permit (principal in Role::"<role>", action == Action::"read_registry", resource);` (design.md Decision 12), implementing requirement "Reading the registry needs the read_registry action"
+- [x] 6.1 Write `src/registry/policy.test.ts` first (scenario "Who may read"; the copy of `blocks.cedar` is read with `readFile(...).catch(() => "")` so red fails by assertion, as `src/identity/roles-policy.test.ts` does), then add `src/registry/policy/blocks.cedar` with the permits `registry-blocks-tenant-admin-read-registry`, `registry-blocks-author-read-registry` and `registry-blocks-approver-read-registry`, each `permit (principal in Role::"<role>", action == Action::"read_registry", resource);` (design.md Decision 12), implementing requirement "Reading the registry needs the read_registry action"
 
 ## 7. The route
 
