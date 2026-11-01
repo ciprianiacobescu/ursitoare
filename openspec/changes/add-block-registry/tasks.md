@@ -14,7 +14,7 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 4. The audited import
 
-- [ ] 4.1 Write `src/registry/import.test.ts` first (scenarios "An import adds versions and one event each", "A repeat changes nothing and a changed definition is refused", "Parallel imports and a failing audit" with two connections of `db.appPool` and the `XX000` wrapper pool, and the `importCatalogue` parts of "Bad blocks are refused"), then implement `ImportReport` and `importCatalogue` in `src/registry/block-store.ts` (design.md Decisions 5 and 6), exporting them from `src/registry/index.ts`, implementing requirement "importCatalogue adds immutable block versions and audits each"
+- [x] 4.1 Write `src/registry/import.test.ts` first (scenarios "An import adds versions and one event each", "A repeat changes nothing and a changed definition is refused", "Parallel imports and a failing audit" with two connections of `db.appPool` and the `XX000` wrapper pool, and the `importCatalogue` parts of "Bad blocks are refused"), then implement `ImportReport` and `importCatalogue` in `src/registry/block-store.ts` (design.md Decisions 5 and 6), exporting them from `src/registry/index.ts`, implementing requirement "importCatalogue adds immutable block versions and audits each"
 
 ## 5. The catalogue
 

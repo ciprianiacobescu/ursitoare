@@ -1,9 +1,12 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
-import { formatAt } from "../audit/index.ts";
+import { appendAudit, appendAuditCommitted, formatAt } from "../audit/index.ts";
 import type { BlockDef, Effect, JsonSchema } from "../authoring/index.ts";
+import { systemClock } from "../core/index.ts";
 import type { Clock } from "../core/index.ts";
+import { withTenantTx } from "../tenancy/index.ts";
 import type { TenantContext, TenantPool, TenantTx } from "../tenancy/index.ts";
+import { normalizeBlockImport } from "./block-input.ts";
 import type { BlockBinding, BlockImport } from "./block-input.ts";
 import { RegistryError } from "./errors.ts";
 
@@ -70,14 +73,122 @@ async function assertTenantMatches(tx: TenantTx, ctx: TenantContext): Promise<vo
   }
 }
 
+const MAX_IMPORT_BLOCKS = 200;
+
+function byCodeUnit(a: string, b: string): number {
+  return a < b ? -1 : a > b ? 1 : 0;
+}
+
 export async function importCatalogue(
-  _pool: TenantPool,
-  _ctx: TenantContext,
-  _blocks: { [ref: string]: BlockImport },
-  _actor: { kind: "user" | "service" | "system"; id: string },
-  _opts?: { clock?: Clock },
+  pool: TenantPool,
+  ctx: TenantContext,
+  blocks: { [ref: string]: BlockImport },
+  actor: { kind: "user" | "service" | "system"; id: string },
+  opts?: { clock?: Clock },
 ): Promise<ImportReport> {
-  throw new Error("not implemented");
+  const proto: unknown =
+    typeof blocks === "object" && blocks !== null ? Object.getPrototypeOf(blocks) : undefined;
+  if (typeof blocks !== "object" || blocks === null || (proto !== Object.prototype && proto !== null)) {
+    throw new RegistryError("REGISTRY_INVALID", "blocks must be an object", {
+      field: "blocks",
+      reason: "not_object",
+    });
+  }
+  const refs = Object.keys(blocks).sort(byCodeUnit);
+  if (refs.length > MAX_IMPORT_BLOCKS) {
+    throw new RegistryError("REGISTRY_INVALID", "too many blocks in one import", {
+      field: "blocks",
+      reason: "too_many",
+    });
+  }
+  const normalized = refs.map((ref) => normalizeBlockImport(ref, blocks[ref]));
+  if (normalized.length === 0) return { imported: [], unchanged: [] };
+
+  const clock = opts?.clock ?? systemClock;
+  try {
+    return await withTenantTx(pool, ctx, async (tx) => {
+      await tx.query(
+        "SELECT pg_advisory_xact_lock(hashtextextended('ursitoare:block_import:' || $1::text, 0))",
+        [ctx.tenantId],
+      );
+      const held = await tx.query<{ ref: string; content_hash: string }>(
+        `SELECT ref, content_hash FROM ursitoare.block_version
+         WHERE tenant_id = $1 AND ref = ANY($2::text[])`,
+        [ctx.tenantId, refs],
+      );
+      const heldHashes = new Map(held.rows.map((row) => [row.ref, row.content_hash]));
+      for (const block of normalized) {
+        const hash = heldHashes.get(block.ref);
+        if (hash !== undefined && hash !== block.contentHash) {
+          throw new RegistryError("REGISTRY_CONFLICT", "block version already exists", {
+            ref: block.ref,
+          });
+        }
+      }
+      const report: ImportReport = { imported: [], unchanged: [] };
+      for (const block of normalized) {
+        if (heldHashes.has(block.ref)) {
+          report.unchanged.push(block.ref);
+          continue;
+        }
+        await appendAudit(
+          tx,
+          ctx,
+          {
+            eventType: "registry.block_imported",
+            actor,
+            target: { kind: "block", id: block.ref },
+            payload: { contentHash: block.contentHash, effect: block.def.effect },
+          },
+          { clock },
+        );
+        const d = block.def;
+        await tx.query(
+          `INSERT INTO ursitoare.block_version
+             (tenant_id, ref, effect, description, input, output, untrusted_fields, data_class,
+              untrusted_result, unsafe_to_retry, binding, content_hash, imported_by, imported_at)
+           VALUES ($1, $2, $3, $4, $5::jsonb, $6::jsonb, $7::text[], $8, $9, $10, $11::jsonb, $12, $13, $14)`,
+          [
+            ctx.tenantId,
+            block.ref,
+            d.effect,
+            d.description ?? null,
+            JSON.stringify(d.input),
+            JSON.stringify(d.output),
+            d.untrusted_fields ?? [],
+            d.data_class ?? null,
+            d.untrusted_result ?? false,
+            d.unsafe_to_retry ?? false,
+            block.binding === null ? null : JSON.stringify(block.binding),
+            block.contentHash,
+            actor.id,
+            clock.now(),
+          ],
+        );
+        report.imported.push(block.ref);
+      }
+      return report;
+    });
+  } catch (error) {
+    if (error instanceof RegistryError && error.code === "REGISTRY_CONFLICT") {
+      try {
+        await appendAuditCommitted(
+          pool,
+          ctx,
+          {
+            eventType: "registry.import_refused",
+            actor,
+            target: { kind: "block", id: String(error.details["ref"]) },
+            payload: { code: "REGISTRY_CONFLICT" },
+          },
+          { clock },
+        );
+      } catch {
+        // the original conflict is what the caller needs
+      }
+    }
+    throw error;
+  }
 }
 
 export async function getBlockVersion(
