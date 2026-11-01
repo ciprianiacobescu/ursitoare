@@ -18,6 +18,7 @@ import {
   registerAdminRoutes,
   registerAuditRoutes,
   registerBlockRoutes,
+  registerFlowRoutes,
   registerMeRoute,
   registerOpenApiRoute,
   registerWebApp,
@@ -219,6 +220,7 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
       engineKey: config.engineKey,
     });
     registerBlockRoutes(server, { pool: pep.pool, engineKey: config.engineKey });
+    registerFlowRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
     registerOpenApiRoute(server, { version: VERSION });
     await definePublicRoutes(server, "oidc", (scoped) =>
       registerOidcRoutes(scoped, {
