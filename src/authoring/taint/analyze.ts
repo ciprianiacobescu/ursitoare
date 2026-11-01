@@ -1,11 +1,13 @@
 import type { BlockDef, Catalogue, Flow, Ref } from "../format/index.ts";
 import {
   escapePointer,
+  hookValueFields,
   refToString,
   scanTemplate,
   valueFields,
   walkStrings,
 } from "../format/index.ts";
+import { TAINT_LIMITS, TaintError } from "./errors.ts";
 import type { AppliedHooks } from "./hooks.ts";
 import { collectHooks } from "./hooks.ts";
 import type { Taint } from "./labels.ts";
@@ -98,48 +100,58 @@ function occurrences(id: string, node: unknown): Occurrence[] {
   return out;
 }
 
-function referenceTaint(
+interface ResolvedReference {
+  taint: Taint;
+  resolved: boolean;
+}
+
+const UNRESOLVED: ResolvedReference = { taint: UNTRUSTED, resolved: false };
+
+function resolveReference(
   occurrence: Occurrence,
   states: Map<string, State>,
   nodes: Map<string, unknown>,
   itemTaint: Taint | undefined,
   wrapped: string,
-): Taint {
+): ResolvedReference {
   const ref = occurrence.ref;
-  if (ref === undefined) return NO_TAINT;
+  if (ref === undefined) return UNRESOLVED;
+  if (ref.root === "inputs") return { taint: NO_TAINT, resolved: true };
   if (ref.root === "item") {
     if (occurrence.fromValue && occurrence.field === "with" && itemTaint !== undefined) {
-      return itemTaint;
+      return { taint: itemTaint, resolved: true };
     }
-    return NO_TAINT;
+    return UNRESOLVED;
   }
   if (ref.root === "hook") {
     const state = states.get(wrapped);
-    if (state === undefined) return NO_TAINT;
-    if (ref.scope === "input") return state.input;
+    if (state === undefined) return UNRESOLVED;
+    if (ref.scope === "input") return { taint: state.input, resolved: true };
     if (ref.scope === "output") {
       const first = ref.path[0];
       if (first !== undefined) {
         const field = state.fields.get(first);
-        if (field !== undefined) return field;
+        if (field !== undefined) return { taint: field, resolved: true };
       }
-      return state.output;
+      return { taint: state.output, resolved: true };
     }
-    return NO_TAINT;
+    return { taint: NO_TAINT, resolved: true };
   }
-  if (ref.root !== "node") return NO_TAINT;
   const state = states.get(ref.id);
-  if (state === undefined) return NO_TAINT;
+  if (state === undefined) return UNRESOLVED;
   if (ref.field === "outcome") {
     const kind = kindOf(nodes.get(ref.id));
-    return kind === "llm.decide" || kind === "human.approval" ? NO_TAINT : state.output;
+    return {
+      taint: kind === "llm.decide" || kind === "human.approval" ? NO_TAINT : state.output,
+      resolved: true,
+    };
   }
   const first = ref.path[0];
   if (first !== undefined) {
     const field = state.fields.get(first);
-    if (field !== undefined) return field;
+    if (field !== undefined) return { taint: field, resolved: true };
   }
-  return state.output;
+  return { taint: state.output, resolved: true };
 }
 
 function isUntrustedTool(def: BlockDef | undefined): boolean {
@@ -175,7 +187,7 @@ function itemTaintOf(
   let taint: Taint = NO_TAINT;
   for (const occurrence of found) {
     if (occurrence.field !== "items") continue;
-    taint = joinTaint(taint, referenceTaint(occurrence, states, nodes, undefined, ""));
+    taint = joinTaint(taint, resolveReference(occurrence, states, nodes, undefined, "").taint);
   }
   return taint;
 }
@@ -252,7 +264,7 @@ function outputFor(
     case "end":
       return { output: input, fields: new Map() };
     default:
-      return { output: NO_TAINT, fields: new Map() };
+      return { output: UNTRUSTED, fields: new Map() };
   }
 }
 
@@ -277,11 +289,11 @@ function evaluate(
   const itemTaint = kind === "foreach" ? itemTaintOf(found, states, nodes) : undefined;
   let input: Taint = contextTainted(node, kind) ? UNTRUSTED : NO_TAINT;
   for (const occurrence of found) {
-    input = joinTaint(input, referenceTaint(occurrence, states, nodes, itemTaint, id));
+    input = joinTaint(input, resolveReference(occurrence, states, nodes, itemTaint, id).taint);
   }
   for (const occurrence of hooks.code) {
     if (occurrence.ref !== undefined && occurrence.ref.root === "hook") continue;
-    input = joinTaint(input, referenceTaint(occurrence, states, nodes, itemTaint, id));
+    input = joinTaint(input, resolveReference(occurrence, states, nodes, itemTaint, id).taint);
   }
   if (hooks.malformed) input = joinTaint(input, UNTRUSTED);
   const result = outputFor(kind, node, input, catalogue);
@@ -320,17 +332,93 @@ function sameState(a: State, b: State): boolean {
   return true;
 }
 
+function countValueRefs(value: unknown): number {
+  let count = 0;
+  walkStrings(value, "", (text) => {
+    for (const seg of scanTemplate(text)) {
+      if (seg.type === "ref") count += 1;
+    }
+  });
+  return count;
+}
+
+function countHookRefs(hook: unknown): number {
+  if (!isRecord(hook)) return 0;
+  if (hook.kind !== "code" && hook.kind !== "block") return 0;
+  let count = 0;
+  for (const field of hookValueFields(hook)) count += countValueRefs(field.value);
+  return count;
+}
+
+function countNodeHookRefs(node: unknown): number {
+  if (!isRecord(node)) return 0;
+  let count = 0;
+  for (const listName of ["pre", "post"] as const) {
+    const list = node[listName];
+    if (!Array.isArray(list)) continue;
+    for (const hook of list) count += countHookRefs(hook);
+  }
+  return count;
+}
+
+function countRuleRefs(rule: unknown): number {
+  if (!isRecord(rule)) return 0;
+  return countHookRefs(rule.pre) + countHookRefs(rule.post);
+}
+
+function checkLimits(nodeCount: number, ruleCount: number, refCount: number): void {
+  if (nodeCount > TAINT_LIMITS.maxNodes) {
+    throw new TaintError(
+      "TAINT_TOO_LARGE",
+      `taint analysis limit exceeded: nodes ${nodeCount} > ${TAINT_LIMITS.maxNodes}`,
+    );
+  }
+  const pairs = ruleCount * nodeCount;
+  if (pairs > TAINT_LIMITS.maxHookPairs) {
+    throw new TaintError(
+      "TAINT_TOO_LARGE",
+      `taint analysis limit exceeded: hook pairs ${pairs} > ${TAINT_LIMITS.maxHookPairs}`,
+    );
+  }
+  if (refCount > TAINT_LIMITS.maxEdges) {
+    throw new TaintError(
+      "TAINT_TOO_LARGE",
+      `taint analysis limit exceeded: edges ${refCount} > ${TAINT_LIMITS.maxEdges}`,
+    );
+  }
+}
+
 export function analyzeTaint(flow: Flow, catalogue: Catalogue): TaintAnalysis {
   const nodes = nodeMap(flow);
   const ids = [...nodes.keys()].sort();
   const parsed = new Map<string, Occurrence[]>();
   const hooksByNode = new Map<string, AppliedHooks>();
   const allOccurrences = new Map<string, Occurrence[]>();
+
+  let nodeRefCount = 0;
   for (const id of ids) {
     const node = nodes.get(id);
     const found = occurrences(id, node);
-    const hooks = collectHooks(id, node, flow, catalogue);
     parsed.set(id, found);
+    nodeRefCount += found.length + countNodeHookRefs(node);
+  }
+
+  const rawRules: unknown = flow.hooks;
+  let ruleCount = 0;
+  let ruleRefCount = 0;
+  if (Array.isArray(rawRules)) {
+    ruleCount = rawRules.length;
+    for (const rule of rawRules) ruleRefCount += countRuleRefs(rule);
+  } else if (rawRules !== undefined) {
+    ruleCount = 1;
+  }
+
+  checkLimits(ids.length, ruleCount, nodeRefCount + ruleRefCount * ids.length);
+
+  for (const id of ids) {
+    const node = nodes.get(id);
+    const found = parsed.get(id) ?? [];
+    const hooks = collectHooks(id, node, flow, catalogue);
     hooksByNode.set(id, hooks);
     allOccurrences.set(id, [...found, ...hooks.all]);
   }
@@ -406,13 +494,14 @@ export function analyzeTaint(flow: Flow, catalogue: Catalogue): TaintAnalysis {
       } else if (ref !== undefined && ref.root === "hook" && ref.scope === "output") {
         from = id;
       }
+      const resolved = resolveReference(occurrence, states, nodes, itemTaint, id);
       edges.push({
         to: id,
         path: occurrence.path,
         ref: ref !== undefined ? refToString(ref) : occurrence.raw,
         from,
-        taint: referenceTaint(occurrence, states, nodes, itemTaint, id),
-        resolved: true,
+        taint: resolved.taint,
+        resolved: resolved.resolved,
         hook: occurrence.hook,
       });
     }
