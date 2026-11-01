@@ -6,7 +6,7 @@ Spec: `specs/flow-format/spec.md`; signatures and decisions: `design.md`. Each t
 
 ## 2. Reference grammar
 
-- [ ] 2.1 Write `src/authoring/format/refs.test.ts` first (scenarios "A reference is parsed or explained" and "Templates are scanned into segments"), then implement `parseRef`, `scanTemplate`, `isSingleRef`, `refToString`, `suspiciousInterpolation`, `walkStrings` and `escapePointer` in `src/authoring/format/refs.ts` as a port of `seed/format/src/refs.ts` (read-only) with the `hook` root and the renames of design.md Decision 7, implementing requirement "References are parsed by one grammar"
+- [x] 2.1 Write `src/authoring/format/refs.test.ts` first (scenarios "A reference is parsed or explained" and "Templates are scanned into segments"), then implement `parseRef`, `scanTemplate`, `isSingleRef`, `refToString`, `suspiciousInterpolation`, `walkStrings` and `escapePointer` in `src/authoring/format/refs.ts` as a port of `seed/format/src/refs.ts` (read-only) with the `hook` root and the renames of design.md Decision 7, implementing requirement "References are parsed by one grammar"
 
 ## 3. Node helpers
 
