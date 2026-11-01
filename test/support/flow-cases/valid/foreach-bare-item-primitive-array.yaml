@@ -1,0 +1,41 @@
+# note: bare ${{ item }} over an array of strings
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: each
+nodes:
+  done:
+    kind: end
+    status: completed
+  each:
+    kind: foreach
+    items: ${{ inputs.ids }}
+    uses: orders.get@1
+    with:
+      order_id: ${{ item }}
+    max_parallel: 4
+    next: done

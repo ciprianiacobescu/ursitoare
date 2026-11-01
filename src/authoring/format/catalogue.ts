@@ -37,6 +37,8 @@ export interface Catalogue {
   role(name: string): RoleDef | undefined;
   delegateTarget(target: string, workflow: string): DelegateTargetDef | undefined;
   flow(ref: string, major: number): FlowSignature | undefined;
+  /** The workflows a delegate target offers, `undefined` when the target does not exist. */
+  delegateWorkflows?(target: string): readonly string[] | undefined;
 }
 
 export const emptyCatalogue: Catalogue = Object.freeze({

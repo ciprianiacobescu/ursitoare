@@ -1,0 +1,48 @@
+# expect: L3_TAINT_TO_CONSEQUENTIAL
+# note: untrusted content nested in an object parameter
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: post
+  done:
+    kind: end
+    status: completed
+  post:
+    kind: block
+    uses: http.post@1
+    with:
+      url: https://example.com/hook
+      json:
+        text: ${{ nodes.fetch.output.content }}
+    next: done

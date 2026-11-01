@@ -2,4 +2,4 @@
 
 export * from "./format/index.ts";
 export * from "./taint/index.ts";
-export type { Layer, Issue, ValidationResult } from "./validate/index.ts";
+export * from "./validate/index.ts";

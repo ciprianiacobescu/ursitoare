@@ -1,0 +1,47 @@
+# expect: L2_WITH_MISSING_REQUIRED
+# note: foreach block with missing required
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: inbox
+nodes:
+  inbox:
+    kind: block
+    uses: mail.read_inbox@1
+    with:
+      mailbox: support@example.com
+      max: 10
+    next: each
+  each:
+    kind: foreach
+    items: ${{ nodes.inbox.output.messages }}
+    uses: crm.find_customer@1
+    with: {}
+    next: done
+  done:
+    kind: end
+    status: completed

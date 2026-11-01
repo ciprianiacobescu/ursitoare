@@ -1,0 +1,48 @@
+# expect: L3_TYPE_MISMATCH
+# note: number is not accepted where integer is declared
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: inbox
+nodes:
+  inbox:
+    kind: block
+    uses: mail.read_inbox@1
+    with:
+      mailbox: support@example.com
+      max: ${{ inputs.amount }}
+    next: each
+  each:
+    kind: foreach
+    items: ${{ nodes.inbox.output.messages }}
+    uses: crm.find_customer@1
+    with:
+      email: ${{ item.from }}
+    next: done
+  done:
+    kind: end
+    status: completed

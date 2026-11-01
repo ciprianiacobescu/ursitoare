@@ -1,0 +1,65 @@
+# note: outcome is one of fixed labels; usable in a send
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: classify
+  done:
+    kind: end
+    status: completed
+  classify:
+    kind: llm.decide
+    input:
+      doc: ${{ nodes.fetch.output.content }}
+    instructions: Is this urgent?
+    outcomes:
+      - urgent
+      - routine
+    cases:
+      urgent: alert
+      routine: log
+  alert:
+    kind: block
+    uses: slack.post_message@1
+    with:
+      channel: "#ops"
+      text: Classified as ${{ nodes.classify.outcome }}
+    next: done
+  log:
+    kind: block
+    uses: sheets.append_row@1
+    with:
+      sheet_id: S1
+      values:
+        - x
+    next: done

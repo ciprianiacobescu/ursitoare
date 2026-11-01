@@ -1,0 +1,5 @@
+# expect: L1_PARSE
+# note: duplicate mapping key
+ursitoare: "0.1"
+flow: a
+flow: b

@@ -1,0 +1,49 @@
+# expect: L3_TAINT_TO_CONSEQUENTIAL
+# note: item.* from untrusted messages into an effectful block
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: inbox
+nodes:
+  inbox:
+    kind: block
+    uses: mail.read_inbox@1
+    with:
+      mailbox: support@example.com
+      max: 10
+    next: each
+  each:
+    kind: foreach
+    items: ${{ nodes.inbox.output.messages }}
+    uses: slack.post_message@1
+    with:
+      channel: "#ops"
+      text: ${{ item.body }}
+    next: done
+  done:
+    kind: end
+    status: completed

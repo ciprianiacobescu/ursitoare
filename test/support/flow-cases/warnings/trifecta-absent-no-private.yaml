@@ -1,0 +1,46 @@
+# note: public web fetch only is not private data
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: msg
+  done:
+    kind: end
+    status: completed
+  msg:
+    kind: block
+    uses: slack.post_message@1
+    with:
+      channel: "#ops"
+      text: hello
+    next: done

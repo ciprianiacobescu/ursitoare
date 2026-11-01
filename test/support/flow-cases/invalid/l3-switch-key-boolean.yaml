@@ -1,0 +1,78 @@
+# expect: L3_SWITCH_KEY_INCOMPATIBLE
+# note: boolean cases are 'true' / 'false'
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: extract
+  extract:
+    kind: llm.extract
+    input:
+      text: ${{ nodes.fetch.output.content }}
+    instructions: Extract the summary, amount, count, urgency and tags.
+    output_schema:
+      type: object
+      properties:
+        summary:
+          type: string
+        amount:
+          type: number
+        count:
+          type: integer
+        urgent:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+        note:
+          type: string
+      required:
+        - summary
+        - amount
+        - count
+        - urgent
+        - tags
+    next: sw
+  done:
+    kind: end
+    status: completed
+  sw:
+    kind: switch
+    on: ${{ nodes.extract.output.urgent }}
+    cases:
+      yes: other
+    default: done
+  other:
+    kind: end
+    status: failed

@@ -1,0 +1,47 @@
+# expect-warnings: W_TAINT_TO_OPAQUE_CALL
+# note: untrusted into a subflow input
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: sub
+  done:
+    kind: end
+    status: completed
+  sub:
+    kind: subflow
+    flow: notify-customer@1
+    with:
+      customer_id: c1
+      message: ${{ nodes.fetch.output.content }}
+    next: done

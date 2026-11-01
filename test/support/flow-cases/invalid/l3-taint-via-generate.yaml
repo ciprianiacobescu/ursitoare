@@ -1,0 +1,61 @@
+# expect: L3_TAINT_TO_CONSEQUENTIAL
+# note: llm.generate does not clean untrusted input
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: gen
+  done:
+    kind: end
+    status: completed
+  send:
+    kind: block
+    uses: mail.send@1
+    with:
+      to: ops@example.com
+      subject: Digest
+      body: ${{ nodes.gen.output.text }}
+    next: done
+  gen:
+    kind: llm.generate
+    input:
+      doc: ${{ nodes.fetch.output.content }}
+    instructions: Summarise.
+    output_schema:
+      type: object
+      properties:
+        text:
+          type: string
+      required:
+        - text
+    next: send
