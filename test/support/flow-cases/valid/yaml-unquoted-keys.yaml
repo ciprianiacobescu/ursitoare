@@ -1,0 +1,33 @@
+# note: unquoted true/false/integer case keys and an `on:` key are plain strings (YAML 1.2)
+ursitoare: "0.1"
+flow: yaml-keys
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    flag: { type: boolean }
+    count: { type: integer }
+  required: [flag, count]
+start: pick
+nodes:
+  pick:
+    kind: switch
+    on: "${{ inputs.flag }}"
+    cases:
+      true: by_count
+      false: stop
+    default: stop
+  by_count:
+    kind: switch
+    on: "${{ inputs.count }}"
+    cases:
+      0: stop
+      -1: stop
+      42: done
+    default: stop
+  done:
+    kind: end
+    status: completed
+  stop:
+    kind: end
+    status: failed

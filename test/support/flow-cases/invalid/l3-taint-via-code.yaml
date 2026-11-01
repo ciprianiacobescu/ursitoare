@@ -1,0 +1,62 @@
+# expect: L3_TAINT_TO_CONSEQUENTIAL
+# note: code does not launder taint
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: calc
+  done:
+    kind: end
+    status: completed
+  send:
+    kind: block
+    uses: mail.send@1
+    with:
+      to: ops@example.com
+      subject: Digest
+      body: ${{ nodes.calc.output.v }}
+    next: done
+  calc:
+    kind: code
+    language: js
+    input:
+      text: ${{ nodes.fetch.output.content }}
+    source: "return { v: input.text.slice(0, 10) };"
+    output_schema:
+      type: object
+      properties:
+        v:
+          type: string
+      required:
+        - v
+    next: send

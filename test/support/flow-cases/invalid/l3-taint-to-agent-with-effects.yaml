@@ -1,0 +1,55 @@
+# expect: L3_TAINT_TO_AGENT_WITH_EFFECTS
+# note: untrusted input to an agent that can send mail
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: agent
+  done:
+    kind: end
+    status: completed
+  agent:
+    kind: agent
+    input:
+      doc: ${{ nodes.fetch.output.content }}
+    goal: Handle the document.
+    tools:
+      - kb.search@1
+      - mail.send@1
+    max_steps: 5
+    output_schema:
+      type: object
+      properties:
+        done:
+          type: boolean
+    next: done

@@ -1,0 +1,45 @@
+# note: read blocks may take untrusted arguments
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: kb
+  done:
+    kind: end
+    status: completed
+  kb:
+    kind: block
+    uses: kb.search@1
+    with:
+      query: ${{ nodes.fetch.output.content }}
+    next: done

@@ -1,0 +1,53 @@
+# expect-warnings: W_LETHAL_TRIFECTA
+# note: untrusted read + private read + send
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: cust
+  done:
+    kind: end
+    status: completed
+  cust:
+    kind: block
+    uses: crm.find_customer@1
+    with:
+      email: a@example.com
+    next: msg
+  msg:
+    kind: block
+    uses: slack.post_message@1
+    with:
+      channel: "#ops"
+      text: hello
+    next: done

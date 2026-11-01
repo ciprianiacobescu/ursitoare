@@ -1,0 +1,88 @@
+# note: literals of the right type; enum literal; array literal with refs
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: docs.fetch@1
+    with:
+      url: ${{ inputs.url }}
+    next: extract
+  extract:
+    kind: llm.extract
+    input:
+      text: ${{ nodes.fetch.output.content }}
+    instructions: Extract the summary, amount, count, urgency and tags.
+    output_schema:
+      type: object
+      properties:
+        summary:
+          type: string
+        amount:
+          type: number
+        count:
+          type: integer
+        urgent:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+        note:
+          type: string
+      required:
+        - summary
+        - amount
+        - count
+        - urgent
+        - tags
+    next: tk
+  done:
+    kind: end
+    status: completed
+  tk:
+    kind: block
+    uses: crm.create_ticket@1
+    with:
+      customer_id: c1
+      subject: Hello ${{ nodes.extract.output.summary }}
+      priority: urgent
+      body: b
+    next: cal
+  cal:
+    kind: block
+    uses: calendar.create_event@1
+    with:
+      title: t
+      start: 2026-01-01T10:00:00Z
+      end: 2026-01-01T11:00:00Z
+      attendees:
+        - a@example.com
+        - ${{ inputs.email }}
+    next: done

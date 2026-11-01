@@ -1,0 +1,49 @@
+# note: foreach calling a registry subflow
+ursitoare: "0.1"
+flow: fixture
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    url:
+      type: string
+    email:
+      type: string
+    amount:
+      type: number
+    count:
+      type: integer
+    flag:
+      type: boolean
+    ids:
+      type: array
+      items:
+        type: string
+  required:
+    - url
+    - email
+    - amount
+    - count
+    - flag
+    - ids
+start: inbox
+nodes:
+  inbox:
+    kind: block
+    uses: calendar.find_slots@1
+    with:
+      attendees:
+        - a@example.com
+      duration_minutes: 30
+    next: each
+  each:
+    kind: foreach
+    items: ${{ nodes.inbox.output.slots }}
+    subflow: notify-customer@1
+    with:
+      customer_id: c1
+      message: Slot ${{ item.start }}
+    next: done
+  done:
+    kind: end
+    status: completed

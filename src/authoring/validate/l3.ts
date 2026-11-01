@@ -4,7 +4,8 @@
  */
 
 import { escapePointer, isSingleRef, parseVersionedRef, refToString, scanTemplate } from "../format/index.ts";
-import type { BlockDef, Catalogue, FlowSignature, Ref } from "../format/index.ts";
+import type { BlockDef, Catalogue, Flow, FlowSignature, Ref } from "../format/index.ts";
+import { checkTaint } from "./taint-checks.ts";
 import { availability, buildEdges, topoOrder } from "./graph.ts";
 import type { Edge } from "./graph.ts";
 import { admits, compat, deref, enumValues, fmtTypes, isObj, jsType, own, resolvePath, typeSet } from "./jsonschema.ts";
@@ -596,4 +597,11 @@ export function checkL3(doc: unknown, catalogue: Catalogue, s: Sink): void {
         break; // wait
     }
   }
+
+  const refErrorPaths = new Set(
+    s.errors
+      .filter((issue) => issue.code.startsWith("L3_REF_") || issue.code === "L3_ITEM_OUTSIDE_FOREACH")
+      .map((issue) => issue.path),
+  );
+  checkTaint(doc as unknown as Flow, catalogue, refErrorPaths, s);
 }
