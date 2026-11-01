@@ -1,0 +1,235 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/authoring/taint",
+      "seed/policy-cedar/src/extractor.ts",
+      "seed/format/src/validate.ts",
+      "src/authoring/taint/index.ts",
+      "src/authoring/index.ts",
+      ".../post",
+      "node:assert/strict",
+      "metric:",
+      "docs/authoring",
+      "docs/decisions/0002",
+      "src/core",
+      "test/arch/modules.ts",
+      "target/workflow",
+      "n8n/archive-invoice",
+      "n8n/calc",
+      "specs/taint/spec.md",
+      "src/authoring/taint/labels.test.ts",
+      "src/authoring/taint/surface.test.ts",
+      "src/authoring/taint/labels.ts",
+      "src/authoring/taint/analyze.test.ts",
+      "src/authoring/taint/analyze.ts",
+      "src/authoring/taint/tools.ts",
+      "src/authoring/taint/sources.test.ts",
+      "src/authoring/taint/hooks.test.ts",
+      "src/authoring/taint/hooks.ts",
+      "src/authoring/taint/closed.test.ts",
+      "src/authoring/taint/errors.ts",
+      "src/authoring/taint/capabilities.test.ts",
+      "src/authoring/taint/capabilities.ts",
+      "**/labels.ts",
+      "**/analyze.ts",
+      "**/hooks.ts",
+      "**/capabilities.ts",
+      "**/errors.ts",
+      "**/index.ts",
+      "**/surface.test.ts",
+      "**/[]",
+      "**/[\"extracted\"]",
+      "**/[\"untrusted\"]",
+      "**/inputs.*",
+      "**/fields[p]",
+      "**/item.*",
+      "**/hook.input.*",
+      "**/hook.output.*",
+      "**/hook.node.*",
+      "**/hook.next.*",
+      "**/hook.from.*",
+      "**/llm.*",
+      "**/human.*",
+      "**/[",
+      "**/*.test.ts",
+      "**/nodes.*",
+      "**/[\"notes\"]",
+      "**/hook.*",
+      "module ...",
+      "module authoring",
+      "module core",
+      "module docs",
+      "module n8n",
+      "module node:assert",
+      "module seed",
+      "module specs",
+      "module target",
+      "module test",
+      "module tools"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-taint-static/.l4/ledger/r-20261101T0551Z-0bc2.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-taint-static/.l4/ledger/r-20261101T0652Z-fcf6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-taint-static/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-taint-static/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/authoring/index.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/taint/analyze.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/taint/analyze.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/taint/capabilities.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/taint/capabilities.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/taint/closed.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/taint/errors.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/taint/hooks.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/taint/hooks.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/taint/labels.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/taint/labels.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/taint/sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/taint/surface.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/taint/tools.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/authoring/index.ts, src/authoring/taint/analyze.ts, src/authoring/taint/capabilities.ts, src/authoring/taint/errors.ts, src/authoring/taint/hooks.ts and 2 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/authoring/index.ts",
+      "src/authoring/taint/analyze.ts",
+      "src/authoring/taint/capabilities.ts",
+      "src/authoring/taint/errors.ts",
+      "src/authoring/taint/hooks.ts",
+      "src/authoring/taint/labels.ts",
+      "src/authoring/taint/tools.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1240,
+      "passed": 1240,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 16,
+      "new_passed": 16,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
