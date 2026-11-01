@@ -44,3 +44,4 @@
 {"at":"2026-11-01T12:13:26Z","branch":"l4/archive/openspec/add-taint-static","head":"1ab435f5a8aa024cf6db7fa866c408593f5e7d38","type":"unit.branch_deleted","unit":"openspec:add-taint-static"}
 {"at":"2026-11-01T12:13:26Z","branch":"l4/archive/openspec/add-test-catalogue","head":"7ccab5a421167879eb5a4cb2636fa8afa9309147","type":"unit.branch_deleted","unit":"openspec:add-test-catalogue"}
 {"at":"2026-11-01T12:13:27Z","detail":"awaiting_human: no new answers (open: Q-001) (escalated to a person: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-flow-validator"}
+{"at":"2026-11-01T12:19:26Z","by":"harness","reason":"the cause is gone: openspec:add-flow-validator is awaiting_human","type":"plan.resumed"}
