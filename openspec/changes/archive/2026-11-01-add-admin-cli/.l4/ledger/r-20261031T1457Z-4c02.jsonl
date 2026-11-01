@@ -1,0 +1,3 @@
+{"ts": "2026-10-31T14:57:41.393967Z", "run_id": "r-20261031T1457Z-4c02", "unit": "openspec:add-admin-cli", "seq": 1, "type": "run.started", "harness_version": "0.4.46", "harness_commit": "6959e8d96bbbe452190a479acc252ec99e6fb567", "command": "plan --sweep", "branch": "l4/openspec/add-admin-cli"}
+{"ts": "2026-10-31T14:57:41.394809Z", "run_id": "r-20261031T1457Z-4c02", "unit": "openspec:add-admin-cli", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 43, "merge_commit": "e95e05a39668464cd3da60e87920a4c5b959b109"}
+{"ts": "2026-10-31T14:57:42.818487Z", "run_id": "r-20261031T1457Z-4c02", "unit": "openspec:add-admin-cli", "seq": 3, "type": "run.finished", "exit_code": 0}

@@ -56,3 +56,10 @@ The architecture tests SHALL leave alone a call that only looks like a loader fo
 #### Scenario: Require look-alikes and test files pass
 - **WHEN** `checkAll` gets `src/api/a.ts` with `x.require("node:https");`, `require.resolve("node:https");`, `requireX("node:https");`, `const t = "require(name)";` and `const c = require("../core/index.ts");`, `src/api/b.ts` with `const a = require("node:process").argv;`, `src/config/c.ts` with `const e = require("node:process").env;`, `src/gateway/g.ts` with `const h = require("node:https");`, and `src/api/a.test.ts` with `require("node:https");`, `require(name);`, `createRequire(import.meta.url);` and `process.getBuiltinModule("node:https");`
 - **THEN** it returns `[]`
+
+### Requirement: The secret scan skips harness folders only, not the owner's .l4 files — feedback FB-002
+The behaviour pinned by the scenarios below SHALL hold.
+
+#### Scenario: The secret scan skips harness folders only, not the owner's .l4 files
+- **WHEN** scanRepository runs on a temp git repository whose tracked files .l4/config.yaml, .l4/plans/p1.json, openspec/changes/x/.l4/evidence/round-1/verdict.json and openspec/changes/archive/2026-10-26-x/.l4/ledger/r.jsonl each hold one secret-looking line built at run time
+- **THEN** it returns exactly one ARCH_SECRET for .l4/config.yaml and one for .l4/plans/p1.json, and none for the two files under openspec/changes
