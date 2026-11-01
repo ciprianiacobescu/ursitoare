@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
+| Q-001 | answered | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -45,3 +46,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. ERROR_CODES in src/api/error-codes.ts holds exactly the 23 entries the scenario lists, each with the exact status and message, FLOW_TEXT_INVALID 422 "Flow text is not a readable flow document" included, and isRegisteredCode is an own-property check, so it is true for each of the 23 and false for cursor_invalid, the empty string and NOT_A_CODE. The frozen test in src/api/error-codes.test.ts asserts the whole scenario: the sorted key set equals the 23 expected keys, each entry deep-equals its expected status and message, isRegisteredCode is true for every expected code and false for the three unregistered strings. It was ignored only because, as a frozen test modified by this unit, it has no red record, not because it fails or is weak. The flow-errors test was called inadequate only because it checks the FLOW_TEXT_INVALID entry alone, which is correct but partial. The judge passed the criterion, and the gate failure shown is a type error in src/registry/flows/versions.test.ts, unrelated to the registry.
