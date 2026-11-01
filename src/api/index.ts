@@ -2,6 +2,7 @@
 
 export { ApiError } from "./errors.ts";
 export { adminApiError } from "./admin-errors.ts";
+export { flowApiError } from "./flow-errors.ts";
 export { ERROR_CODES, isRegisteredCode, unregisteredRouteErrors } from "./error-codes.ts";
 export type { CursorPosition, KeyMaterial, CursorKey, CursorScope } from "./cursor.ts";
 export { deriveCursorKey, encodeCursor, decodeCursor } from "./cursor.ts";
@@ -12,6 +13,8 @@ export type { AuditApiDeps, AuditVerification, WalkQueue } from "./audit-routes.
 export { registerAuditRoutes, createWalkQueue } from "./audit-routes.ts";
 export type { BlockApiDeps } from "./block-routes.ts";
 export { registerBlockRoutes } from "./block-routes.ts";
+export type { FlowApiDeps } from "./flow-routes.ts";
+export { registerFlowRoutes } from "./flow-routes.ts";
 export { parseAuditQuery, parseDecisionQuery, parseVerifyQuery } from "./audit-query.ts";
 export type { PageBinding } from "./admin-page.ts";
 export { pageRows } from "./admin-page.ts";

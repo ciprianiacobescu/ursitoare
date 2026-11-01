@@ -594,6 +594,1421 @@
         ]
       }
     },
+    "/api/v1/flows": {
+      "get": {
+        "operationId": "get_api_v1_flows",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "maxLength": 1024,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "createdBy": {
+                            "type": "string"
+                          },
+                          "flowId": {
+                            "type": "string"
+                          },
+                          "latest": {
+                            "anyOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "author": {
+                                    "type": "string"
+                                  },
+                                  "createdAt": {
+                                    "type": "string"
+                                  },
+                                  "flowId": {
+                                    "type": "string"
+                                  },
+                                  "hash": {
+                                    "type": "string"
+                                  },
+                                  "number": {
+                                    "type": "integer"
+                                  },
+                                  "requestedBy": {
+                                    "type": [
+                                      "null",
+                                      "string"
+                                    ]
+                                  },
+                                  "state": {
+                                    "type": "string"
+                                  },
+                                  "surface": {
+                                    "type": "string"
+                                  },
+                                  "validatedAt": {
+                                    "type": [
+                                      "null",
+                                      "string"
+                                    ]
+                                  },
+                                  "validationOk": {
+                                    "type": [
+                                      "null",
+                                      "boolean"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "flowId",
+                                  "number",
+                                  "hash",
+                                  "state",
+                                  "surface",
+                                  "author",
+                                  "requestedBy",
+                                  "createdAt",
+                                  "validatedAt",
+                                  "validationOk"
+                                ],
+                                "type": "object"
+                              }
+                            ]
+                          },
+                          "ownerTeam": {
+                            "type": "string"
+                          },
+                          "versionCount": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "flowId",
+                          "ownerTeam",
+                          "createdBy",
+                          "createdAt",
+                          "versionCount",
+                          "latest"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "next_cursor": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "next_cursor"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CURSOR_INVALID, VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, ENGINE_KEY_REQUIRED"
+          }
+        },
+        "x-ursitoare-action": "read_flow",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CURSOR_INVALID",
+          "ENGINE_KEY_REQUIRED",
+          "FORBIDDEN",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      },
+      "post": {
+        "operationId": "post_api_v1_flows",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "idempotency-key",
+            "required": false,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[!-~]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "maxLength": 64,
+                    "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+                    "type": "string"
+                  },
+                  "ownerTeam": {
+                    "pattern": "^[a-z][a-z0-9_-]{0,63}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "ownerTeam"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "string"
+                    },
+                    "flowId": {
+                      "type": "string"
+                    },
+                    "latest": {
+                      "anyOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "author": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "flowId": {
+                              "type": "string"
+                            },
+                            "hash": {
+                              "type": "string"
+                            },
+                            "number": {
+                              "type": "integer"
+                            },
+                            "requestedBy": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            },
+                            "state": {
+                              "type": "string"
+                            },
+                            "surface": {
+                              "type": "string"
+                            },
+                            "validatedAt": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            },
+                            "validationOk": {
+                              "type": [
+                                "null",
+                                "boolean"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "flowId",
+                            "number",
+                            "hash",
+                            "state",
+                            "surface",
+                            "author",
+                            "requestedBy",
+                            "createdAt",
+                            "validatedAt",
+                            "validationOk"
+                          ],
+                          "type": "object"
+                        }
+                      ]
+                    },
+                    "ownerTeam": {
+                      "type": "string"
+                    },
+                    "versionCount": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "flowId",
+                    "ownerTeam",
+                    "createdBy",
+                    "createdAt",
+                    "versionCount",
+                    "latest"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CSRF_INVALID, FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: ALREADY_EXISTS, IDEMPOTENCY_IN_PROGRESS"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: IDEMPOTENCY_KEY_REUSED, OPERATION_REFUSED"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "edit_flow",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "ALREADY_EXISTS",
+          "AUTHZ_UNAVAILABLE",
+          "CSRF_INVALID",
+          "FORBIDDEN",
+          "IDEMPOTENCY_IN_PROGRESS",
+          "IDEMPOTENCY_KEY_REUSED",
+          "NOT_FOUND",
+          "OPERATION_REFUSED",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/flows/{flowId}": {
+      "get": {
+        "operationId": "get_api_v1_flows_flowId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "flowId",
+            "required": true,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "string"
+                    },
+                    "flowId": {
+                      "type": "string"
+                    },
+                    "latest": {
+                      "anyOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "author": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "flowId": {
+                              "type": "string"
+                            },
+                            "hash": {
+                              "type": "string"
+                            },
+                            "number": {
+                              "type": "integer"
+                            },
+                            "requestedBy": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            },
+                            "state": {
+                              "type": "string"
+                            },
+                            "surface": {
+                              "type": "string"
+                            },
+                            "validatedAt": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            },
+                            "validationOk": {
+                              "type": [
+                                "null",
+                                "boolean"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "flowId",
+                            "number",
+                            "hash",
+                            "state",
+                            "surface",
+                            "author",
+                            "requestedBy",
+                            "createdAt",
+                            "validatedAt",
+                            "validationOk"
+                          ],
+                          "type": "object"
+                        }
+                      ]
+                    },
+                    "ownerTeam": {
+                      "type": "string"
+                    },
+                    "versionCount": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "flowId",
+                    "ownerTeam",
+                    "createdBy",
+                    "createdAt",
+                    "versionCount",
+                    "latest"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "read_flow",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "FORBIDDEN",
+          "NOT_FOUND",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/flows/{flowId}/versions": {
+      "get": {
+        "operationId": "get_api_v1_flows_flowId_versions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "flowId",
+            "required": true,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "maxLength": 1024,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "author": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "flowId": {
+                            "type": "string"
+                          },
+                          "hash": {
+                            "type": "string"
+                          },
+                          "number": {
+                            "type": "integer"
+                          },
+                          "requestedBy": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "state": {
+                            "type": "string"
+                          },
+                          "surface": {
+                            "type": "string"
+                          },
+                          "validatedAt": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "validationOk": {
+                            "type": [
+                              "null",
+                              "boolean"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "flowId",
+                          "number",
+                          "hash",
+                          "state",
+                          "surface",
+                          "author",
+                          "requestedBy",
+                          "createdAt",
+                          "validatedAt",
+                          "validationOk"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "next_cursor": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "next_cursor"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CURSOR_INVALID, VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, ENGINE_KEY_REQUIRED"
+          }
+        },
+        "x-ursitoare-action": "read_flow",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CURSOR_INVALID",
+          "ENGINE_KEY_REQUIRED",
+          "FORBIDDEN",
+          "NOT_FOUND",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      },
+      "post": {
+        "operationId": "post_api_v1_flows_flowId_versions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "flowId",
+            "required": true,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "idempotency-key",
+            "required": false,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[!-~]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "format": {
+                    "enum": [
+                      "yaml",
+                      "json"
+                    ],
+                    "type": "string"
+                  },
+                  "text": {
+                    "maxLength": 1048576,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "format",
+                  "text"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "created": {
+                      "type": "boolean"
+                    },
+                    "version": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "author": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "flowId": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "number": {
+                          "type": "integer"
+                        },
+                        "requestedBy": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "state": {
+                          "type": "string"
+                        },
+                        "surface": {
+                          "type": "string"
+                        },
+                        "validatedAt": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "validationOk": {
+                          "type": [
+                            "null",
+                            "boolean"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "flowId",
+                        "number",
+                        "hash",
+                        "state",
+                        "surface",
+                        "author",
+                        "requestedBy",
+                        "createdAt",
+                        "validatedAt",
+                        "validationOk"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "version",
+                    "created"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "created": {
+                      "type": "boolean"
+                    },
+                    "version": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "author": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "flowId": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "number": {
+                          "type": "integer"
+                        },
+                        "requestedBy": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "state": {
+                          "type": "string"
+                        },
+                        "surface": {
+                          "type": "string"
+                        },
+                        "validatedAt": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "validationOk": {
+                          "type": [
+                            "null",
+                            "boolean"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "flowId",
+                        "number",
+                        "hash",
+                        "state",
+                        "surface",
+                        "author",
+                        "requestedBy",
+                        "createdAt",
+                        "validatedAt",
+                        "validationOk"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "version",
+                    "created"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CSRF_INVALID, FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: IDEMPOTENCY_IN_PROGRESS"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: PAYLOAD_TOO_LARGE"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FLOW_TEXT_INVALID, IDEMPOTENCY_KEY_REUSED"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "edit_flow",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CSRF_INVALID",
+          "FLOW_TEXT_INVALID",
+          "FORBIDDEN",
+          "IDEMPOTENCY_IN_PROGRESS",
+          "IDEMPOTENCY_KEY_REUSED",
+          "NOT_FOUND",
+          "PAYLOAD_TOO_LARGE",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/flows/{flowId}/versions/{hash}": {
+      "get": {
+        "operationId": "get_api_v1_flows_flowId_versions_hash",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "flowId",
+            "required": true,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "hash",
+            "required": true,
+            "schema": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "author": {
+                      "type": "string"
+                    },
+                    "canonical": {},
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "flowId": {
+                      "type": "string"
+                    },
+                    "hash": {
+                      "type": "string"
+                    },
+                    "number": {
+                      "type": "integer"
+                    },
+                    "requestedBy": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "result": {},
+                    "state": {
+                      "type": "string"
+                    },
+                    "surface": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "validatedAt": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "validationOk": {
+                      "type": [
+                        "null",
+                        "boolean"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "flowId",
+                    "number",
+                    "hash",
+                    "state",
+                    "surface",
+                    "author",
+                    "requestedBy",
+                    "createdAt",
+                    "validatedAt",
+                    "validationOk",
+                    "text",
+                    "canonical",
+                    "result"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "read_flow",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "FORBIDDEN",
+          "NOT_FOUND",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/flows/{flowId}/versions/{hash}/validate": {
+      "post": {
+        "operationId": "post_api_v1_flows_flowId_versions_hash_validate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "flowId",
+            "required": true,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "hash",
+            "required": true,
+            "schema": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "result": {},
+                    "version": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "author": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "flowId": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "number": {
+                          "type": "integer"
+                        },
+                        "requestedBy": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "state": {
+                          "type": "string"
+                        },
+                        "surface": {
+                          "type": "string"
+                        },
+                        "validatedAt": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "validationOk": {
+                          "type": [
+                            "null",
+                            "boolean"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "flowId",
+                        "number",
+                        "hash",
+                        "state",
+                        "surface",
+                        "author",
+                        "requestedBy",
+                        "createdAt",
+                        "validatedAt",
+                        "validationOk"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "version",
+                    "result"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CSRF_INVALID, FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "edit_flow",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CSRF_INVALID",
+          "FORBIDDEN",
+          "NOT_FOUND",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
     "/api/v1/idp-group-map": {
       "delete": {
         "operationId": "delete_api_v1_idp_group_map",

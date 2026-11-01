@@ -1,0 +1,320 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/registry/flows",
+      "src/registry/index.ts",
+      "test/arch/modules.ts",
+      "src/registry/policy/flows.cedar",
+      "src/main.ts",
+      "src/db/migrations/0270_flow_registry.sql",
+      "docs/decisions/0002",
+      "src/api/index.ts",
+      "docs/api/openapi.json",
+      "src/api/{index,error-codes}.ts",
+      "src/api/error-codes.test.ts",
+      "specs/api-conventions/spec.md",
+      "src/authoring/index.ts",
+      "src/api",
+      "specs/flow-registry/spec.md",
+      "src/registry/flows/schema.test.ts",
+      "src/registry/flows/flows.test.ts",
+      "src/registry/flows/errors.ts",
+      "src/registry/flows/flows.ts",
+      "test/support/flow-actors.ts",
+      "src/registry/flows/versions.test.ts",
+      "src/registry/flows/versions.ts",
+      "src/registry/flows/validate.test.ts",
+      "src/registry/flows/validate.ts",
+      "src/api/flow-errors.test.ts",
+      "src/api/flow-errors.ts",
+      "src/api/error-codes.ts",
+      "src/api/flow-routes.test.ts",
+      "src/api/flow-routes.ts",
+      "src/api/flow-versions.test.ts",
+      "src/api/flow-versions.ts",
+      "src/api/flow-validate.test.ts",
+      "src/api/flow-audit.test.ts",
+      "src/api/flow-policy.test.ts",
+      "src/main.flows.test.ts",
+      "src/main.admin.test.ts",
+      "src/api/flow-*.ts",
+      "**/^[a-z][a-z0-9]*",
+      "**/^[a-z][a-z0-9_-]{0,63}$",
+      "**/^sha256:[0-9a-f]{64}$",
+      "**/[principal.teams]",
+      "**/[flowId]",
+      "**/[",
+      "module api",
+      "module authoring",
+      "module db",
+      "module docs",
+      "module main",
+      "module main.admin.test",
+      "module main.flows.test",
+      "module registry",
+      "module specs",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-flow-registry/.l4/ledger/r-20261101T1609Z-fccb.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-flow-registry/.l4/ledger/r-20261101T1844Z-fba4.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-flow-registry/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/error-codes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/error-codes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/flow-audit.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/flow-common.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/flow-errors.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/flow-errors.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/flow-policy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/flow-routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/flow-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/flow-validate.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/flow-versions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/flow-versions.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0270_flow_registry.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.flows.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/flows/errors.ts",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/flows/flows.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/registry/flows/flows.ts",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/flows/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/registry/flows/validate.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/registry/flows/validate.ts",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/flows/versions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/registry/flows/versions.ts",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/index.ts",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/policy/flows.cedar",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/flow-actors.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/error-codes.ts, src/api/flow-common.ts, src/api/flow-errors.ts, src/api/flow-routes.ts, src/api/flow-versions.ts and 8 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/error-codes.ts",
+      "src/api/flow-common.ts",
+      "src/api/flow-errors.ts",
+      "src/api/flow-routes.ts",
+      "src/api/flow-versions.ts",
+      "src/api/index.ts",
+      "src/main.ts",
+      "src/registry/flows/errors.ts",
+      "src/registry/flows/flows.ts",
+      "src/registry/flows/validate.ts",
+      "src/registry/flows/versions.ts",
+      "src/registry/index.ts",
+      "test/support/flow-actors.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1368,
+      "passed": 1368,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 40,
+      "new_passed": 40,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

@@ -8,3 +8,16 @@ export type { BlockVersion, ImportReport } from "./block-store.ts";
 export { importCatalogue, getBlockVersion, listBlockVersions } from "./block-store.ts";
 export type { RegistryCatalogue } from "./catalogue.ts";
 export { registryCatalogue, loadRegistryCatalogue } from "./catalogue.ts";
+export type { FlowErrorCode, FlowTextDetails } from "./flows/errors.ts";
+export { FlowError } from "./flows/errors.ts";
+export type {
+  FlowActor,
+  FlowOptions,
+  FlowRecord,
+  VersionDetail,
+  VersionState,
+  VersionSummary,
+} from "./flows/flows.ts";
+export { createFlow, flowOwnerTeam, getFlow, listFlows } from "./flows/flows.ts";
+export { getVersion, listVersions, saveFlowVersion } from "./flows/versions.ts";
+export { validateVersion } from "./flows/validate.ts";
