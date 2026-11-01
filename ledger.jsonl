@@ -69,3 +69,5 @@
 {"at":"2026-11-01T16:07:46Z","revision":"6571bae4501bf09ec731f22b9b432fe7319e0c0a","type":"unit.integrated","unit":"openspec:add-block-registry"}
 {"at":"2026-11-01T16:07:46Z","attempt":1,"cost_usd":3.128973,"runs":2,"type":"plan.charged","unit":"openspec:add-block-registry"}
 {"at":"2026-11-01T16:09:38Z","branch":"l4/archive/openspec/add-block-registry","head":"e2fb71225fad8ff8ccda219381783940b2cc58b2","type":"unit.branch_deleted","unit":"openspec:add-block-registry"}
+{"at":"2026-11-01T16:09:39Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-flow-registry"}
+{"at":"2026-11-01T16:09:39Z","run":"r-20261101T1609Z-fccb","type":"unit.dispatched","unit":"openspec:add-flow-registry"}
