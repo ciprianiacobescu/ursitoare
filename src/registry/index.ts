@@ -20,3 +20,4 @@ export type {
 } from "./flows/flows.ts";
 export { createFlow, flowOwnerTeam, getFlow, listFlows } from "./flows/flows.ts";
 export { getVersion, listVersions, saveFlowVersion } from "./flows/versions.ts";
+export { validateVersion } from "./flows/validate.ts";

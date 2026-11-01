@@ -8,9 +8,9 @@ import type { FlowActor, FlowOptions, VersionDetail, VersionState, VersionSummar
 
 const FLOW_ID_PATTERN = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
 const FLOW_ID_MAX = 64;
-const HASH_PATTERN = /^sha256:[0-9a-f]{64}$/;
+export const HASH_PATTERN = /^sha256:[0-9a-f]{64}$/;
 
-interface VersionRow {
+export interface VersionRow {
   flow_id: string;
   version_no: number;
   content_hash: string;
@@ -25,10 +25,10 @@ interface VersionRow {
   canonical?: unknown;
 }
 
-const SUMMARY_COLUMNS = `flow_id, version_no, content_hash, state, source_surface, author,
+export const SUMMARY_COLUMNS = `flow_id, version_no, content_hash, state, source_surface, author,
   requested_by, created_at, validated_at, validation`;
 
-function toSummary(row: VersionRow): VersionSummary {
+export function toSummary(row: VersionRow): VersionSummary {
   return {
     flowId: row.flow_id,
     number: row.version_no,
@@ -43,7 +43,7 @@ function toSummary(row: VersionRow): VersionSummary {
   };
 }
 
-async function assertTenantMatches(tx: TenantTx, ctx: TenantContext): Promise<void> {
+export async function assertTenantMatches(tx: TenantTx, ctx: TenantContext): Promise<void> {
   const result = await tx.query<{ t: string | null }>(
     "SELECT current_setting('app.tenant_id', true) AS t",
   );
@@ -52,7 +52,7 @@ async function assertTenantMatches(tx: TenantTx, ctx: TenantContext): Promise<vo
   }
 }
 
-function requireFlowId(value: unknown): string {
+export function requireFlowId(value: unknown): string {
   if (typeof value !== "string" || value.length > FLOW_ID_MAX || !FLOW_ID_PATTERN.test(value)) {
     throw new FlowError("FLOW_INVALID", "flow id is invalid");
   }
