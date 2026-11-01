@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 2.3 | technical | src/authoring/taint/hooks.test.ts:176 asserts fetch fields {} but the same scenario requires fetch to be an invoices.get block with untrusted fields |
+| Q-001 | accepted | 2.3 | technical | src/authoring/taint/hooks.test.ts:176 asserts fetch fields {} but the same scenario requires fetch to be an invoices.get block with untrusted fields |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/authoring/taint/hooks.test.ts:176 asserts fetch fields {} but the same scenario requires fetch to be an invoices.get block with untrusted fields
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 2.3
 - **Kind:** technical
 - **Asked:** 2026-11-01T06:50Z by deepseek-free, run r-20261101T0551Z-0bc2, task 2.3
