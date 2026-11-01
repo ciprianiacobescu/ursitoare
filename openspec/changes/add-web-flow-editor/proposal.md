@@ -1,8 +1,8 @@
 ## Why
 
-The registry (U27) stores and validates flows, but an author reaches it only with raw HTTP. This change adds the flow list, a text editor and the diagnostics, and settles how a code editor runs under the engine's strict Content-Security-Policy.
+The registry (U27) stores and validates flows, but an author reaches it only with raw HTTP. This change adds the flow list, a text editor and the diagnostics, and settles how the editor runs under the engine's CSP.
 
-Observable result: an author of team `finance` opens "Flows", creates `demo-intake` for `finance`, lands in its editor with a valid starter text, edits it in a CodeMirror 6 editor named "Flow text", presses "Save version" (a repeated text answers "Nothing to save") and "Validate", and reads the diagnostics: code, place, message and a link "Guide for L2_UNKNOWN_BLOCK (opens in a new tab)" to the code's section of `docs/authoring/diagnostics.md`, with the offending text underlined. A text the registry cannot read is shown with its line and column. A reader who is not an author gets the 403 text with the decision id; another tenant sees nothing. The editor is styled, raises no policy violation, and Tab leaves it.
+Observable result: an author of team `finance` opens "Flows", creates `demo-intake` for `finance`, lands in its editor with a valid starter text, edits it in a CodeMirror 6 editor named "Flow text", presses "Save version" (a repeated text answers "Nothing to save") and "Validate", and reads the diagnostics: code, place, message and a link "Guide for L2_UNKNOWN_BLOCK (opens in a new tab)" to the code's section of `docs/authoring/diagnostics.md`, with the offending text underlined. A text the registry cannot read is shown with its line and column; a reader who is not an author gets the 403 text with the decision id. The editor is styled, raises no policy violation, and Tab leaves it.
 
 ## What Changes
 
@@ -12,10 +12,9 @@ Observable result: an author of team `finance` opens "Flows", creates `demo-inta
 
 ## Impact
 
-- **Scaffold:** Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them. The scaffold installs, exact, in `web/package.json`: `@codemirror/commands` 6.11.1, `@codemirror/lang-yaml` 6.1.3, `@codemirror/lint` 6.9.7, `@codemirror/state` 6.7.6 and `@codemirror/view` 6.43.15 (all MIT, allowed by `test/arch/licence-policy.ts`; no install script; older than three days). Not scaffolded: the two feature files (a stub feature would break the registry), `flows.css`, `parts/35-catalogue.ts`, the tests and the journey. No existing file changes.
-- **Depends on:** `add-web-ui-kit` (U15), `add-web-data-kit` (U15b), `add-web-sign-in` (U16) and `add-flow-registry` (U27) as the roadmap row says; beyond it `add-flow-validator` (U25), `add-flow-format-model` (U22, tests), `add-test-catalogue` (U24), `add-block-registry` (U26), `add-web-admin` (U21: `Api`, `Check`, `clip`), `add-api-pep` (the 403 envelope), `add-api-conventions` (lists, `Idempotency-Key`), `add-roles-and-memberships` (the seeds), `add-fake-oidc` and the merged `add-web-shell` and `add-e2e-stack`.
-- **Files implemented** (stubs): those of Interfaces given. **Created:** `flows.css`, the two feature files, `parts/35-catalogue.ts`, the tests and `e2e/test_m3_flow_editor.py`. **Changed:** none.
-- **Migrations, tables, endpoints, env vars, error codes:** none. The stack part adds `registry.block_imported` events to the test database only.
+- **Scaffold:** Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them. The scaffold installs, exact, in `web/package.json`: `@codemirror/commands` 6.11.1, `@codemirror/lang-yaml` 6.1.3, `@codemirror/lint` 6.9.7, `@codemirror/state` 6.7.6 and `@codemirror/view` 6.43.15 (all MIT, allowed by `test/arch/licence-policy.ts`). Not scaffolded: the two feature files (a stub would break the registry), `flows.css`, `parts/35-catalogue.ts` and the tests. No existing file changes.
+- **Depends on:** `add-web-ui-kit` (U15), `add-web-data-kit` (U15b), `add-web-sign-in` (U16) and `add-flow-registry` (U27) as the roadmap row says; beyond it `add-flow-validator` (U25), `add-flow-format-model` (U22, tests), `add-test-catalogue` (U24), `add-block-registry` (U26), `add-web-admin` (U21), `add-api-pep`, `add-api-conventions`, `add-roles-and-memberships`, `add-fake-oidc`, `add-web-shell` and `add-e2e-stack`.
+- **Migrations, tables, endpoints, env vars, error codes:** none.
 
 **Interfaces given** (paths under `web/src/flows/` unless in full; members of the types: design.md § Interfaces)
 
