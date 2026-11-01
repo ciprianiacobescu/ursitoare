@@ -1,4 +1,4 @@
-import type { Catalogue, Flow, Ref } from "../format/index.ts";
+import type { BlockDef, Catalogue, Flow, Ref } from "../format/index.ts";
 import {
   escapePointer,
   refToString,
@@ -35,6 +35,7 @@ const UNTRUSTED: Taint = Object.freeze(["untrusted"] as const);
 
 interface Occurrence {
   path: string;
+  field: string;
   ref: Ref | undefined;
   raw: string;
   target: string | null;
@@ -79,6 +80,7 @@ function occurrences(id: string, node: unknown): Occurrence[] {
           const ref = seg.ref;
           out.push({
             path,
+            field: field.field,
             ref,
             raw: seg.raw,
             target: ref !== undefined && ref.root === "node" ? ref.id : null,
@@ -94,9 +96,15 @@ function referenceTaint(
   occurrence: Occurrence,
   states: Map<string, State>,
   nodes: Map<string, unknown>,
+  itemTaint: Taint | undefined,
 ): Taint {
   const ref = occurrence.ref;
-  if (ref === undefined || ref.root !== "node") return NO_TAINT;
+  if (ref === undefined) return NO_TAINT;
+  if (ref.root === "item") {
+    if (occurrence.field === "with" && itemTaint !== undefined) return itemTaint;
+    return NO_TAINT;
+  }
+  if (ref.root !== "node") return NO_TAINT;
   const state = states.get(ref.id);
   if (state === undefined) return NO_TAINT;
   if (ref.field === "outcome") {
@@ -109,6 +117,44 @@ function referenceTaint(
     if (field !== undefined) return field;
   }
   return state.output;
+}
+
+function isUntrustedTool(def: BlockDef | undefined): boolean {
+  return (
+    def === undefined ||
+    def.untrusted_result === true ||
+    (def.untrusted_fields !== undefined && def.untrusted_fields.length > 0)
+  );
+}
+
+function contextTainted(node: unknown, kind: string | undefined): boolean {
+  if (
+    kind !== "llm.extract" &&
+    kind !== "llm.generate" &&
+    kind !== "llm.decide" &&
+    kind !== "agent"
+  ) {
+    return false;
+  }
+  if (!isRecord(node) || !Array.isArray(node.context)) return false;
+  for (const entry of node.context) {
+    const tier = isRecord(entry) ? entry.tier : undefined;
+    if (tier !== "approved") return true;
+  }
+  return false;
+}
+
+function itemTaintOf(
+  found: Occurrence[],
+  states: Map<string, State>,
+  nodes: Map<string, unknown>,
+): Taint {
+  let taint: Taint = NO_TAINT;
+  for (const occurrence of found) {
+    if (occurrence.field !== "items") continue;
+    taint = joinTaint(taint, referenceTaint(occurrence, states, nodes, undefined));
+  }
+  return taint;
 }
 
 function outputFor(
@@ -147,6 +193,33 @@ function outputFor(
       return { output: relabelExtract(input), fields: new Map() };
     case "llm.decide":
       return { output: input, fields: new Map([["outcome", NO_TAINT]]) };
+    case "agent": {
+      const tools = isRecord(node) ? node.tools : undefined;
+      let untrusted = !Array.isArray(tools);
+      if (Array.isArray(tools)) {
+        for (const tool of tools) {
+          if (isUntrustedTool(describeTool(catalogue, tool))) {
+            untrusted = true;
+            break;
+          }
+        }
+      }
+      return {
+        output: untrusted ? joinTaint(input, UNTRUSTED) : input,
+        fields: new Map(),
+      };
+    }
+    case "foreach": {
+      const uses = isRecord(node) ? node.uses : undefined;
+      const def = describeTool(catalogue, uses);
+      const trusted = typeof uses === "string" && !isUntrustedTool(def);
+      return {
+        output: trusted ? input : joinTaint(input, UNTRUSTED),
+        fields: new Map(),
+      };
+    }
+    case "subflow":
+      return { output: joinTaint(input, UNTRUSTED), fields: new Map() };
     case "code":
     case "llm.generate":
     case "human.approval":
@@ -154,9 +227,6 @@ function outputFor(
     case "switch":
     case "wait":
     case "end":
-    case "agent":
-    case "foreach":
-    case "subflow":
       return { output: input, fields: new Map() };
     default:
       return { output: NO_TAINT, fields: new Map() };
@@ -170,11 +240,13 @@ function evaluate(
   nodes: Map<string, unknown>,
   catalogue: Catalogue,
 ): State {
-  let input: Taint = NO_TAINT;
+  const kind = kindOf(node);
+  const itemTaint = kind === "foreach" ? itemTaintOf(found, states, nodes) : undefined;
+  let input: Taint = contextTainted(node, kind) ? UNTRUSTED : NO_TAINT;
   for (const occurrence of found) {
-    input = joinTaint(input, referenceTaint(occurrence, states, nodes));
+    input = joinTaint(input, referenceTaint(occurrence, states, nodes, itemTaint));
   }
-  const result = outputFor(kindOf(node), node, input, catalogue);
+  const result = outputFor(kind, node, input, catalogue);
   return { input, output: result.output, fields: result.fields };
 }
 
@@ -262,7 +334,10 @@ export function analyzeTaint(flow: Flow, catalogue: Catalogue): TaintAnalysis {
 
   const edges: TaintEdge[] = [];
   for (const id of ids) {
-    for (const occurrence of parsed.get(id) ?? []) {
+    const found = parsed.get(id) ?? [];
+    const itemTaint =
+      kindOf(nodes.get(id)) === "foreach" ? itemTaintOf(found, states, nodes) : undefined;
+    for (const occurrence of found) {
       const ref = occurrence.ref;
       const from =
         ref !== undefined && ref.root === "node" && nodes.has(ref.id) ? ref.id : null;
@@ -271,7 +346,7 @@ export function analyzeTaint(flow: Flow, catalogue: Catalogue): TaintAnalysis {
         path: occurrence.path,
         ref: ref !== undefined ? refToString(ref) : occurrence.raw,
         from,
-        taint: referenceTaint(occurrence, states, nodes),
+        taint: referenceTaint(occurrence, states, nodes, itemTaint),
         resolved: true,
         hook: null,
       });
