@@ -52,3 +52,6 @@
 {"at":"2026-11-01T13:31:52Z","head":"a192b5ee7bb2f30add10b07fa6f445bbda487fb3","pr":52,"target_before":"0b89cc652e46ed23dc2f0b531b8e81ce39cb570d","type":"unit.merge_requested","unit":"openspec:add-flow-validator"}
 {"at":"2026-11-01T13:31:57Z","ci":"not_run","head":"a192b5ee7bb2f30add10b07fa6f445bbda487fb3","merge_commit":"256225f1385974a4054b42d529408ca372057863","method":"squash","pr":52,"raced":false,"type":"unit.merged","unit":"openspec:add-flow-validator"}
 {"at":"2026-11-01T13:32:02Z","branch":"l4/openspec/add-flow-validator","head":"a192b5ee7bb2f30add10b07fa6f445bbda487fb3","type":"unit.branch_deleted","unit":"openspec:add-flow-validator"}
+{"at":"2026-11-01T13:33:28Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"256225f1385974a4054b42d529408ca372057863","status":"pass","type":"unit.postcheck","unit":"openspec:add-flow-validator"}
+{"at":"2026-11-01T13:33:28Z","revision":"256225f1385974a4054b42d529408ca372057863","type":"unit.integrated","unit":"openspec:add-flow-validator"}
+{"at":"2026-11-01T13:33:28Z","attempt":1,"cost_usd":6.978139,"runs":3,"type":"plan.charged","unit":"openspec:add-flow-validator"}

@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-01T13:33:28Z",
+  "integrated_revision": "256225f1385974a4054b42d529408ca372057863",
+  "merge_commit": "256225f1385974a4054b42d529408ca372057863",
+  "plan_digest": "17f19b151151b0e3",
+  "plan_id": "m3",
+  "postcheck": "pass",
+  "pr": 52,
+  "receipt_id": "m3/openspec:add-flow-validator/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "a192b5ee7bb2f30add10b07fa6f445bbda487fb3",
+  "spec_digest": "5803cc3afe1d8b1a",
+  "target": "main",
+  "unit_id": "openspec:add-flow-validator"
+}
