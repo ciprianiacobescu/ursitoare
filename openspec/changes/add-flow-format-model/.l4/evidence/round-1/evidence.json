@@ -1,0 +1,244 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/authoring/format",
+      "seed/format",
+      "seed",
+      "src/authoring/format/index.ts",
+      "src/authoring/index.ts",
+      "src/audit/canonical.ts",
+      "docs/authoring/format.md",
+      "node:assert/strict",
+      "test/arch/licence-policy.ts",
+      "docs/decisions/0002",
+      "src/core",
+      "test/arch/modules.ts",
+      "src/authoring/format/catalogue.ts",
+      "specs/flow-format/spec.md",
+      "src/authoring/format/catalogue.test.ts",
+      "src/authoring/format/refs.test.ts",
+      "src/authoring/format/refs.ts",
+      "seed/format/src/refs.ts",
+      "src/authoring/format/nodes.test.ts",
+      "src/authoring/format/nodes.ts",
+      "src/authoring/format/parse.test.ts",
+      "src/authoring/format/parse.ts",
+      "src/authoring/format/json-value.ts",
+      "src/authoring/format/canonical.test.ts",
+      "src/authoring/format/errors.ts",
+      "src/authoring/format/canonical.ts",
+      "src/authoring/format/hash.test.ts",
+      "src/authoring/format/hash.ts",
+      "src/authoring/format/doc-terms.test.ts",
+      "src/authoring/format/doc-terms.ts",
+      "**/types.ts",
+      "**/io.ts",
+      "**/canonical.ts",
+      "**/refs.ts",
+      "**/out[key]",
+      "**/linePos[0]",
+      "**/FORMAT_*",
+      "**/hooks[*].pre",
+      "**/^sha256:[0-9a-f]{64}$",
+      "**/[A-Za-z0-9_]+",
+      "**/[a-z][a-z0-9_]*",
+      "**/llm.*",
+      "**/[]",
+      "**/graph.ts",
+      "**/catalogue.ts",
+      "**/hash.test.ts",
+      "**/[",
+      "**/*.test.ts",
+      "**/delegateWorkflows?",
+      "module audit",
+      "module authoring",
+      "module core",
+      "module docs",
+      "module node:assert",
+      "module seed",
+      "module specs",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/authoring/format.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-flow-format-model/.l4/ledger/r-20261101T0413Z-757a.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-flow-format-model/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/authoring/format/canonical.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/format/canonical.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/format/catalogue.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/format/catalogue.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/format/doc-terms.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/format/doc-terms.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/format/errors.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/format/hash.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/format/hash.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/format/json-value.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/format/nodes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/format/nodes.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/format/parse.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/format/parse.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/format/refs.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/format/refs.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/format/types.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/authoring/format/canonical.ts, src/authoring/format/catalogue.ts, src/authoring/format/doc-terms.ts, src/authoring/format/errors.ts, src/authoring/format/hash.ts and 5 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/authoring/format/canonical.ts",
+      "src/authoring/format/catalogue.ts",
+      "src/authoring/format/doc-terms.ts",
+      "src/authoring/format/errors.ts",
+      "src/authoring/format/hash.ts",
+      "src/authoring/format/json-value.ts",
+      "src/authoring/format/nodes.ts",
+      "src/authoring/format/parse.ts",
+      "src/authoring/format/refs.ts",
+      "src/authoring/format/types.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1224,
+      "passed": 1224,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 24,
+      "new_passed": 24,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
