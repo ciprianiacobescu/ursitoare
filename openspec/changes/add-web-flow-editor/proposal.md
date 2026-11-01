@@ -33,7 +33,7 @@ Observable result: an author of team `finance` opens "Flows", creates `demo-inta
 - `web/src/features/70-flows.tsx` (`/flows`) and `71-flow-editor.tsx` (`/flows/:flowId`): `feature: FeatureSpec` each, never stubs
 - `test/support/e2e-stack/catalogue-part.ts`: cataloguePart: E2eStackPart; `parts/35-catalogue.ts` (one line, created in green)
 
-For U29: routes `/flows` and `/flows/:flowId`, the accessible names and the panel slot are in `design.md` § For U29.
+For U29: routes `/flows` and `/flows/:flowId`; link "Flows"; table "Flows" (a link per flow id); form "Create flow" ("Flow name", "Owner team", button "Create flow"), then the new flow's editor; heading `Flow <id>`; text box "Flow text"; buttons "Save version", "Validate", "Open version <n>"; region "Diagnostics" (a status, links "Guide for <code> (opens in a new tab)"); a refused save or validate is an error toast of `flowErrorMessage`. Each panel is a region named by its title, from `listEditorPanels()` read at render time; in its context `version` is the baseline's, `canonical` that version's document when the page loaded it (on open, "Open version <n>") and `null` after a save, `result` its stored or fresh result, all three `null` while the text differs.
 
 **Interfaces taken:**
 

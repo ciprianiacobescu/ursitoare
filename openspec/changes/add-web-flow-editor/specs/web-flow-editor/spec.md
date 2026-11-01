@@ -1,6 +1,6 @@
 ## Purpose
 
-The flow editor gives an author a flow list, a CodeMirror 6 text editor that runs under the engine's Content-Security-Policy, saved versions, and validation diagnostics that link to the diagnostics guide.
+The flow editor offers a flow list, a CodeMirror 6 editor under the engine's Content-Security-Policy, saved versions and diagnostics linked to the guide.
 
 ## ADDED Requirements
 
@@ -37,18 +37,18 @@ The create form SHALL check the flow name and the owner team before sending, and
 - **THEN** the first row is `{ key: "text:0", severity: "error", code: "FORMAT_YAML_SYNTAX", message: "Unexpected end", where: "Line 3, column 2", href: null, linkText: null, path: null, position: { line: 3, column: 2 } }`; the JSON one has code "FORMAT_JSON_SYNTAX", `where` "Whole text" and `position: null`; the next three have code "FLOW_TEXT_INVALID" and the three messages of reference.md § Texts for `not_object`, `name_mismatch` (naming "rf-1-core") and an unknown reason; the long message is cut to 300 characters ending with "…"; the last two inputs give `null`
 
 #### Scenario: The starter text is valid for the engine
-- **WHEN** a test under `test/web-flow-editor/` calls `starterText("demo-flow")` and `starterText("Bad_Name")`, and `detectFormat` with `'  {"flow": "x"}'`, `"flow: x"` and `""`, and parses the starter text with `parseFlowText` and validates it with `validateFlow(doc, emptyCatalogue)` from `src/authoring/index.ts`
+- **WHEN** the test calls `starterText("demo-flow")` and `starterText("Bad_Name")`, and `detectFormat` with `'  {"flow": "x"}'`, `"flow: x"` and `""`, and parses the starter text with `parseFlowText` and validates it with `validateFlow(doc, emptyCatalogue)` from `src/authoring/index.ts`
 - **THEN** the first equals the text of reference.md § Starter text exactly and the second throws `RangeError`; the formats are "json", "yaml" and "yaml"; the parse is ok with `flow` "demo-flow" and `ok` is true
 
 ### Requirement: Validation shows diagnostics that link to the guide
-`validateVersion` SHALL send `POST /api/v1/flows/{flowId}/versions/{hash}/validate` without a body, and each diagnostic SHALL show its code, place and message and a link to `docs/authoring/diagnostics.md#<code in lower case>` in the repository.
+`validateVersion` SHALL send `POST /api/v1/flows/{flowId}/versions/{hash}/validate` without a body, and each diagnostic SHALL show its code, place and message and a link to `docs/authoring/diagnostics.md#<code in lower case>`.
 
 #### Scenario: Validate, rows, links and summary
 - **WHEN** `validateVersion(client, "rf-1-core", H)` runs against `{ version: V, result: R }` and then with `layers_run: ["L9"]`; `parseValidation` gets `ok: "yes"`, an issue with code "bad code", `node: 5` and no `path`; `diagnosticRows(R)`; `diagnosticHref` gets "L1_PARSE", "W_LETHAL_TRIFECTA", "INTERNAL_ERROR", "FORMAT_YAML_SYNTAX", "l2_lower" and "L2_X\nY"; `diagnosticsSummary(R, "2026-10-25T09:00:00.000000Z")` and, for a result with no issues and layers L1 to L3, with `null`
 - **THEN** the call is `{ path: "/flows/rf-1-core/versions/" + encodeURIComponent(H) + "/validate", body: undefined, opts: undefined }`; the first answer resolves to `{ version: <parsed V>, result: R }`, the second rejects with `INVALID_RESPONSE`; the three bad shapes parse to `null`; the rows are `{ key: "error:0", severity: "error", code: "L2_UNKNOWN_BLOCK", message: R's error message, where: "Node fetch · /nodes/fetch/uses", href: REPO_DOCS_BASE + "docs/authoring/diagnostics.md#l2_unknown_block", linkText: "Guide for L2_UNKNOWN_BLOCK (opens in a new tab)", path: "/nodes/fetch/uses", position: null }`, then `warning:0` with `where` "/nodes" and `warning:1` with `where` "Whole flow"; the hrefs are the base plus `docs/authoring/diagnostics.md#l1_parse`, `#w_lethal_trifecta`, `#internal_error`, then three times `null`; the summaries are "Not valid. 1 error, 2 warnings. Layers run: L1, L2, L3. Checked 2026-10-25 09:00:00 UTC." and "Valid. 0 errors, 0 warnings. Layers run: L1, L2, L3."
 
 #### Scenario: The web rules agree with the engine's
-- **WHEN** a test under `test/web-flow-editor/` imports the web rules and `src/authoring/index.ts` and checks every code of `FLOW_ERROR_CODES`, `FLOW_WARNING_CODES` and `FLOW_RESERVED_CODES`, and `REPO_DOCS_BASE`
+- **WHEN** the test imports the web rules and `src/authoring/index.ts` and checks every code of `FLOW_ERROR_CODES`, `FLOW_WARNING_CODES` and `FLOW_RESERVED_CODES`, and `REPO_DOCS_BASE`
 - **THEN** for each code `diagnosticHref(code)` equals `REPO_DOCS_BASE + diagnosticLink(code)`; `REPO_DOCS_BASE` is "https://github.com/ciprianiacobescu/ursitoare/blob/main/"
 
 ### Requirement: Diagnostics are marked in the editor text
@@ -63,7 +63,7 @@ The editor SHALL mount CodeMirror in an open shadow root, so that its styles are
 
 #### Scenario: Editor configuration
 - **WHEN** `createEditorState("a: 1\n", onChange)` is built; `web/src/flows/editor-mount.ts`, `flows.css`, the `.tsx` files of `web/src/flows/` and the two feature files are read
-- **THEN** the document is "a: 1\n"; `EDITOR_LABEL` is "Flow text" and the content attributes include `{ "aria-label": "Flow text" }` and `{ "aria-multiline": "true" }`; no key binding has a `key`, `mac`, `win` or `linux` containing "Tab"; `findRawColours` of the theme and of `flows.css` is `[]` and each `var(--…)` it uses is a token of `web/src/kit/tokens.css`; the mount source contains `attachShadow({ mode: "open" })` and passes `root` to `new EditorView`; `findInlineStyleUse` is `[]` for every file read and none contains `cspNonce`, `unsafe-inline` or `eval(`
+- **THEN** the document is "a: 1\n"; `EDITOR_LABEL` is "Flow text" and the content attributes include `{ "aria-label": "Flow text" }` and `{ "aria-multiline": "true" }`; no key binding has a `key`, `mac`, `win` or `linux` containing "Tab"; `findRawColours` of the theme and of `flows.css` is `[]` and each `var(--…)` it uses is a token of `web/src/kit/tokens.css`; the mount source contains `attachShadow({ mode: "open" })` and passes `root` to `new EditorView`; `findInlineStyleUse` is `[]` for every file read and none contains `cspNonce`, `unsafe-inline`, `eval(` or `dangerouslySetInnerHTML`; `FlowEditorPage.tsx` contains `rel="noopener noreferrer"`
 
 ### Requirement: The editor page explains its state and its errors
 The page SHALL say what is saved, plan a validation and turn errors into actionable text.
@@ -77,14 +77,14 @@ The editor page SHALL render every panel registered through `registerEditorPanel
 
 #### Scenario: The panel registry
 - **WHEN** a registry from `createEditorPanelRegistry()` gets `{ id: "graph", title: "Graph", render }`, then the same id, ids "Bad Id" and "", titles "" and of 61 characters, and a `render` that is no function; `list()` is read, mutated and read again
-- **THEN** the first registration succeeds and `list()` equals `[panel]`; the duplicate throws an `EditorPanelError` with `code` "EDITOR_PANEL_DUPLICATE" and each other input one with `code` "EDITOR_PANEL_INVALID"; mutating the returned array does not change the next `list()`
+- **THEN** the first registration succeeds and `list()` equals `[panel]`; the duplicate throws an `EditorPanelError` with `code` "EDITOR_PANEL_DUPLICATE" and each other input one with `code` "EDITOR_PANEL_INVALID"; mutating the returned array does not change the next `list()`; in `FlowEditorPage.tsx` each `listEditorPanels(` follows `function FlowEditorPage(`
 
 ### Requirement: The e2e stack seeds the test blocks
 The stack part `catalogue` SHALL import `readCatalogueDocument().blocks` with `importCatalogue` into every tenant the fake identity provider serves, and a repeat SHALL change nothing.
 
 #### Scenario: Seed, re-seed, skip
 - **WHEN** the database, oidc and rbac parts are seeded, tenant B is provisioned for the fake issuer and tenant C is not, `cataloguePart.start` and `seed` run, `seed` runs again, and `discoverParts()` is read
-- **THEN** for the default tenant and tenant B the sorted refs of `listBlockVersions` equal the sorted keys of `readCatalogueDocument().blocks` and the `def` of `docs.fetch@1` deep-equals the document's; each has one `registry.block_imported` event per ref after the first seed and as many after the second; tenant C has none; the handle's `env` is `{}`; `discoverParts()` lists `catalogue` right after `rbac`, last
+- **THEN** for the default tenant and tenant B the sorted refs of `listBlockVersions` equal the sorted keys of `readCatalogueDocument().blocks` and the `def` of `docs.fetch@1` deep-equals the document's with `untrusted_result` and `unsafe_to_retry` `false` added; each has one `registry.block_imported` event per ref after the first seed and as many after the second; tenant C has none; the handle's `env` is `{}`; `discoverParts()` lists `catalogue` after `rbac`
 
 ### Requirement: The editor works against the real engine, in logic and in a browser
 The logic functions SHALL create, save, validate and read flows through the e2e stack's engine as the seed users, a refusal SHALL reach the person as text with its decision id, and the pages SHALL work in a browser with every control named, the editor styled and no policy or accessibility violation.

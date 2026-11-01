@@ -13,7 +13,7 @@ Two pages over U27's routes (shapes: U27's proposal). Merged names: `delivered-s
 7. **Diagnostics.** Rows come from the stored or fresh result (errors, then warnings, in the server's order) or from a text refusal (one row); message and node text are untrusted, rendered as text and cut to 300 characters.
 8. **Docs link.** The engine serves no docs and `web/` must not import `src/authoring` (it would bundle ajv and acorn). `diagnosticHref(code)` is `REPO_DOCS_BASE + "docs/authoring/diagnostics.md#" + code.toLowerCase()` for `^(L[123]_|W_)[A-Z0-9_]+$` and `INTERNAL_ERROR`, else `null` (parser codes such as `FORMAT_YAML_SYNTAX` have no section). A test under `test/` requires equality with U25's `diagnosticLink` for every code.
 9. **Positions.** `lineColumnOffset` places a parse error; `pointerRange` walks the tree of `yamlLanguage.parser.parse(text)`: in a mapping (`BlockMapping`, `FlowMapping`) it takes the `Pair` whose `Key` text, unquoted, equals the segment; in a sequence (`BlockSequence`, `FlowSequence`) the n-th `Item`; segments decode `~1` then `~0`. The range is the scalar value of the last resolved pair or item, or the pair's key when its value is a mapping, a sequence or absent, cut at the end of its first line. An unresolved segment leaves the last resolved key or item; with none (or a pointer without a leading `/`) it is the first line; the empty text gives 0 to 0.
-10. **Panels for U29.** `registerEditorPanel` (the default registry) lets U29's feature file add a section without editing this unit's files. The page renders each panel as a `<section aria-labelledby>` with an `h2` of its title and `render(context)`; `context.version`, `canonical` and `result` are the baseline's while the text equals it, else `null`. The registry catalogue answers `modelProfile`, `delegateTarget` and `flow` as `undefined` (U26), so a journey flow uses blocks and roles only.
+10. **Panels for U29.** `registerEditorPanel` (the default registry) lets U29's feature file add a section without editing this unit's files. The page renders each panel as a `<section aria-labelledby>` with an `h2` of its title and `render(context)`; it reads `listEditorPanels()` when it renders; context and names: proposal.md "For U29". The registry catalogue answers `modelProfile`, `delegateTarget` and `flow` as `undefined` (U26), so a journey flow uses blocks and roles only.
 11. **Owner team is a text field:** no route an author may call lists teams (`GET /teams` needs `manage_users_roles`); a team the author is not in is a 403.
 12. **Reuse and imports.** `Api`, `Check`, `clip` come from `web/src/admin/shared.ts`. The files that `test/` files import (the root typecheck has no DOM types) are `flows`, `versions`, `diagnostics`, `editor-model`, `messages`, `positions` and `pages`: they import no `.tsx`, DOM global or `editor-config.ts`, and `positions.ts` imports only `yamlLanguage`.
 
@@ -54,10 +54,6 @@ class EditorPanelError extends Error { readonly code: "EDITOR_PANEL_INVALID" | "
 - Diagnostic links use `target="_blank"` and `rel="noopener noreferrer"`. `CodeEditor` makes a host `div`, calls `mountEditor(host, createEditorState(initialText, onChange))` in an effect, passes the handle to `onReady` and destroys it on cleanup. `mountEditor` calls `host.attachShadow({ mode: "open" })`, appends a child `div` and passes the shadow root as `root` to `new EditorView`.
 - `flows.css`: `flow-page`, `flow-section`, `flow-editor-host` (bordered, `min-height` 20rem), `flow-hint` and the issues list; token colours only, no `style` attribute.
 
-## For U29 (closing journey and graph)
-
-Routes `/flows` and `/flows/:flowId`. Accessible names: table "Flows"; form "Create flow" with labels "Flow name" and "Owner team" and button "Create flow"; heading `Flow <id>`; text box "Flow text" (role `textbox`; `locator.fill` works on it); buttons "Save version" and "Validate"; region "Diagnostics" with its status and list "Issues"; links "Guide for <code> (opens in a new tab)"; table "Versions"; buttons "Open version <n>" and "Show <code> in the editor". Reusable: `starterText`, `diagnosticRows`, `pointerRange`. The graph calls `registerEditorPanel({ id, title, render })` at module level in its feature file and reads `context.canonical` (the saved version's document, so no YAML parser in the browser).
-
 ## Failure cases
 
 | Situation | Behaviour |
@@ -79,7 +75,6 @@ Node tests beside each file, `node:assert/strict`, each beginning with `assert.e
 
 ## Decisions made while writing
 
-- **Shadow root, not a nonce:** measured, no policy change (decision 3). **No syntax colours** until a token-based highlight style exists.
-- **Pointers are mapped in the editor** (U25's issues carry JSON Pointers, no line); a pointer to a missing key marks its nearest ancestor.
+- **No syntax colours** until a token-based highlight style exists.
 - **Validate may save first,** so a stored result always has a hash behind it. **Panels, not a route, for the graph:** U29 reads the canonical document.
-- **Repository URL for the guide;** serving the docs is a later choice. **A browser journey in this unit** (the milestone one is U29's), so the policy claim is proved in a browser.
+- **A browser journey in this unit** (the milestone one is U29's), so the policy claim is proved in a browser.

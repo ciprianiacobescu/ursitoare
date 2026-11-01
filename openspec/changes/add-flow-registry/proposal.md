@@ -71,4 +71,4 @@ Shapes of the delivered names above: `delivered-shapes.md` in this folder (decla
 
 ## Out of scope
 
-The states after `validated` and `run_as`; diff, `parent_hash`, forking; test runs; the LLM author; a stateless `POST /flows/validate`; renaming, moving or deleting a flow; blocks (U26); the screens (U28, U29); `ursitoare flow validate` (U25); re-validation after a block import.
+The states after `validated` and `run_as`; diff, `parent_hash`, forking; test runs; the LLM author; a stateless `POST /flows/validate`; renaming, moving or deleting a flow; blocks (U26); the screens (U28, U29); re-validation after a block import.
