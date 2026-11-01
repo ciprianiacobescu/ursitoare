@@ -30,3 +30,5 @@
 {"at":"2026-11-01T07:48:34Z","run":"r-20261101T0748Z-de30","type":"unit.dispatched","unit":"openspec:add-test-catalogue"}
 {"at":"2026-11-01T09:19:57Z","detail":"waiting_capacity until 2026-11-02T09:18:06Z","reason":"unit_waiting_capacity","type":"plan.waiting","unit":"openspec:add-test-catalogue"}
 {"at":"2026-11-01T09:25:51Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"U24 waited for capacity only because the opencode judges were unreachable for ~25 min; they answer again (checked 09:25Z) and U24 is retried into verification.","type":"plan.resumed"}
+{"at":"2026-11-01T09:26:59Z","attempt":1,"cost_usd":2.067734,"runs":2,"type":"plan.charged","unit":"openspec:add-test-catalogue"}
+{"at":"2026-11-01T09:26:59Z","run":"r-20261101T0926Z-5f11","type":"unit.dispatched","unit":"openspec:add-test-catalogue"}
