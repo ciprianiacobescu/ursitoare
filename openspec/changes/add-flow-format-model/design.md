@@ -48,7 +48,7 @@ function requiredSuccessorFields(kind: string): string[]
 ```ts
 // the types and constants the first block names
 type HookScope = "input" | "output" | "node" | "next" | "from"
-interface BlockDef { effect: Effect; description?: string; input: JsonSchema; output: JsonSchema; untrusted_fields?: string[]; private?: boolean; untrusted_result?: boolean; unsafe_to_retry?: boolean }
+interface BlockDef { effect: Effect; description?: string; input: JsonSchema; output: JsonSchema; untrusted_fields?: string[]; data_class?: "public" | "private"; untrusted_result?: boolean; unsafe_to_retry?: boolean }
 interface ModelProfileDef { ref: string }
 interface RoleDef { name: string }
 interface DelegateTargetDef { effect: Effect; untrusted_result: boolean }
@@ -123,6 +123,7 @@ Node tests beside the code, `node:assert/strict`, no database, network or clock;
 
 ## Decisions made while writing
 
+- **Privacy marker.** `BlockDef` carries `data_class?: "public" | "private"`, the name architecture §7 gives it, not a `private` boolean. Consumers read an absent `data_class` as `"private"` (fail-closed); a per-output-field class is left for later.
 - `FORMAT_*` codes, not `L1_PARSE`: U25's 47-code test is untouched and U25 maps them.
 - `yaml` 2.9.1 exact (the seed's version, licence ISC, allowed by `test/arch/licence-policy.ts`).
 - Limits 1 MiB, depth 64, aliases 20, lower-only; a leading BOM is ignored.
