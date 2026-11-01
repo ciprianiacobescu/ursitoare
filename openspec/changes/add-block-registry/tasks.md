@@ -18,7 +18,7 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 5. The catalogue
 
-- [ ] 5.1 Write `src/registry/catalogue.test.ts` first (scenarios "Lookups answer exactly", with versions built in the test and no database, and "A load reads one tenant and stays fixed"; `block(ref)` is asserted not to be a `Promise`), then implement `RegistryCatalogue`, `registryCatalogue` and `loadRegistryCatalogue` in `src/registry/catalogue.ts` (design.md Decision 8; `listRoles` from `src/identity/index.ts`), exporting them from `src/registry/index.ts`, implementing requirement "RegistryCatalogue answers the Catalogue interface from a snapshot"
+- [x] 5.1 Write `src/registry/catalogue.test.ts` first (scenarios "Lookups answer exactly", with versions built in the test and no database, and "A load reads one tenant and stays fixed"; `block(ref)` is asserted not to be a `Promise`), then implement `RegistryCatalogue`, `registryCatalogue` and `loadRegistryCatalogue` in `src/registry/catalogue.ts` (design.md Decision 8; `listRoles` from `src/identity/index.ts`), exporting them from `src/registry/index.ts`, implementing requirement "RegistryCatalogue answers the Catalogue interface from a snapshot"
 
 ## 6. The policy
 
