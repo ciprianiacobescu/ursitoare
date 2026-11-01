@@ -59,3 +59,4 @@
 {"at":"2026-11-01T13:35:00Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-block-registry"}
 {"at":"2026-11-01T13:35:00Z","run":"r-20261101T1334Z-29ab","type":"unit.dispatched","unit":"openspec:add-block-registry"}
 {"at":"2026-11-01T15:41:23Z","detail":"waiting_capacity until 2026-11-02T15:39:24Z","reason":"unit_waiting_capacity","type":"plan.waiting","unit":"openspec:add-block-registry"}
+{"at":"2026-11-01T15:44:12Z","by":"harness","reason":"the cause is gone: openspec:add-block-registry is verifying","type":"plan.resumed"}
