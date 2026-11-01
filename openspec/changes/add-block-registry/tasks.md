@@ -26,7 +26,7 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 7. The route
 
-- [ ] 7.1 Write `src/api/block-routes.test.ts` first (scenarios "A page of blocks and the walk" and "Refusals of the list" through `server.inject`, with the fixture of design.md § Test plan, a keyless server and an engine with no tenant policy), then implement `BlockApiDeps` and `registerBlockRoutes` in `src/api/block-routes.ts` (design.md Decision 11), exporting both from `src/api/index.ts`, implementing requirement "GET /api/v1/blocks lists the tenant's blocks a page at a time"
+- [x] 7.1 Write `src/api/block-routes.test.ts` first (scenarios "A page of blocks and the walk" and "Refusals of the list" through `server.inject`, with the fixture of design.md § Test plan, a keyless server and an engine with no tenant policy), then implement `BlockApiDeps` and `registerBlockRoutes` in `src/api/block-routes.ts` (design.md Decision 11), exporting both from `src/api/index.ts`, implementing requirement "GET /api/v1/blocks lists the tenant's blocks a page at a time"
 
 ## 8. Engine wiring and API document
 
