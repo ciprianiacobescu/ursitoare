@@ -2,7 +2,7 @@ Spec: `specs/flow-format/spec.md`; signatures and decisions: `design.md`. Each t
 
 ## 1. Catalogue interface
 
-- [ ] 1.1 Write `src/authoring/format/catalogue.test.ts` first (scenario "Empty catalogue and versioned references": the five `emptyCatalogue` lookups and the twelve `parseVersionedRef` inputs), then implement `emptyCatalogue` and `parseVersionedRef` in `src/authoring/format/catalogue.ts` as design.md Decision 9 says, implementing requirement "The catalogue is an interface with a versioned-reference helper"
+- [x] 1.1 Write `src/authoring/format/catalogue.test.ts` first (scenario "Empty catalogue and versioned references": the five `emptyCatalogue` lookups and the twelve `parseVersionedRef` inputs), then implement `emptyCatalogue` and `parseVersionedRef` in `src/authoring/format/catalogue.ts` as design.md Decision 9 says, implementing requirement "The catalogue is an interface with a versioned-reference helper"
 
 ## 2. Reference grammar
 
