@@ -77,7 +77,7 @@ odd:
 
 profiles:
   # Cheap first, Claude last (owner decision 2026-10-25). Secrets: OPENCODE_API_KEY, CLAUDE_CODE_OAUTH_TOKEN,
-  # CODEX_API_KEY, sealed in the GitHub environment `l4` with `l4 setup github --secret NAME=ENVVAR`.
+  # CODEX_API_KEY, KIRO_API_KEY, sealed in the GitHub environment `l4` with `l4 setup github --secret NAME=ENVVAR`.
   # Owner decision 2026-10-27: the free DeepSeek model of OpenCode Zen implements first (same key). Zen free models
   # have their own usage limit; past it the hello fails and the walk goes on to glm. `deepseek` (the same model on the
   # Go allowance) is out of the chain: after deepseek-free a failing task would only try that model again.
@@ -91,10 +91,12 @@ profiles:
     auth: api_key
     model: opencode-go/deepseek-v4.1-flash
     vendor: deepseek
+  # Owner decision 2026-11-01 ("use free models"): the Go balance is empty (glm-5.3-flash answered "Insufficient account
+  # funds" after 75 s; every 60 s hello timed out), so glm runs the same model free on Zen.
   glm:
     adapter: opencode
     auth: api_key
-    model: opencode-go/glm-5.3-flash
+    model: opencode/glm-5.3-flash-free
     vendor: zhipu
   claude-sonnet:
     adapter: claude-code
@@ -137,6 +139,29 @@ profiles:
     auth: api_key
     model: opencode/mimo-v2.6-flash-free
     vendor: xiaomi
+  # Owner decision 2026-11-01 ("use free models in open go + kiro-cli for judges"): Beam, Reflection AI's open-weight
+  # model (Apache 2.0, 1M context), free on the Go key with an empty balance (L4 hello 2.3 s, 2026-11-01).
+  # Reflection AI is its maker per opencode's and Vercel's listings; no implementer shares it.
+  beam-judge:
+    adapter: opencode
+    auth: api_key
+    model: opencode-go/beam-free
+    vendor: reflection
+  # The same model as glm, free on Zen: judges every unit glm did not touch (glm is vetoed for its own).
+  glm-judge:
+    adapter: opencode
+    auth: api_key
+    model: opencode/glm-5.3-flash-free
+    vendor: zhipu
+  # Kiro (owner decision 2026-11-01), pinned to an OpenAI model so it is independent of every implementer (Kiro's
+  # `auto` may route to anthropic, minimax or zhipu, and would be vetoed for claude-sonnet's and glm's units). Secret
+  # KIRO_API_KEY in the GitHub environment `l4`; until it is set the profile is skipped. Kiro meters plan credits.
+  kiro-judge:
+    adapter: kiro-cli
+    auth: api_key
+    model: gpt-5.6-terra
+    vendor: openai
+    min_version: "2.32.0"
   mimo-go-judge:
     adapter: opencode
     auth: api_key
@@ -168,14 +193,16 @@ roles:
   - glm
   - claude-sonnet
   # A judge of an implementer's vendor is vetoed for that implementer. Judges are tried in order and one whose hello
-  # fails is skipped, so claude-judge judges the units Claude did not touch, and nemotron, mimo or mimo-go the others.
+  # fails is skipped. Owner decision 2026-11-01: free models and Kiro judge; claude-judge only when none of them can
+  # (it shares the Claude subscription with the implementer and the delegate). The Go judges (mimo-go, qwen) are out
+  # while the Go balance is empty; codex-judge never had a key.
   judges:
-  - claude-judge
   - nemotron-judge
+  - beam-judge
+  - kiro-judge
   - mimo-judge
-  - mimo-go-judge
-  - qwen-judge
-  - codex-judge
+  - glm-judge
+  - claude-judge
   s1_judge:
   - jev
   - laya
@@ -186,9 +213,8 @@ roles:
   verifier_agent:
   - claude-sonnet
   - nemotron-judge
+  - beam-judge
   - mimo-judge
-  - mimo-go-judge
-  - codex-judge
   # Unattended runs: the delegate answers implementer questions read-only and escalates what it cannot check. It runs
   # on a model no implementer or judge uses (delegate.independence: model; doctor DLG-001).
   delegate:
