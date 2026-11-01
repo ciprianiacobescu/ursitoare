@@ -4,17 +4,29 @@ import type { KeyMaterial } from "../audit/index.ts";
 import type { Catalogue } from "../authoring/index.ts";
 import type { Clock } from "../core/index.ts";
 import { entityRef, scopedId } from "../pdp/index.ts";
-import { createFlow, flowOwnerTeam, getFlow, listFlows, listVersions } from "../registry/index.ts";
-import type { FlowActor, FlowRecord, VersionSummary } from "../registry/index.ts";
+import { createFlow, flowOwnerTeam, getFlow, listFlows } from "../registry/index.ts";
+import type { FlowActor, FlowRecord } from "../registry/index.ts";
 import { withTenantTx } from "../tenancy/index.ts";
 import type { TenantContext, TenantPool } from "../tenancy/index.ts";
 import { deriveCursorKey, encodeCursor } from "./cursor.ts";
 import type { CursorKey } from "./cursor.ts";
-import { ApiError } from "./errors.ts";
-import { flowApiError } from "./flow-errors.ts";
+import {
+  FLOW_ID_PATTERN,
+  FLOW_PARAMS,
+  PAGE_QUERY,
+  SUMMARY_SCHEMA,
+  cursorInvalid,
+  engineKeyRequired,
+  flowIdOf,
+  mapped,
+  notFound,
+  pageSchema,
+  unavailable,
+} from "./flow-common.ts";
+import { registerVersionRoutes } from "./flow-versions.ts";
 import { IDEMPOTENCY_HEADER_SCHEMA, respondIdempotent } from "./idempotency.ts";
 import { listPredicate } from "./list-filter.ts";
-import { PAGE_QUERY_SCHEMA, readPage, startAfter } from "./pagination.ts";
+import { readPage, startAfter } from "./pagination.ts";
 import { defineRoute } from "./route.ts";
 import type { ResourceRef } from "./route.ts";
 
@@ -26,22 +38,7 @@ export interface FlowApiDeps {
 }
 
 const FLOWS_SCOPE = "flows";
-const VERSIONS_SCOPE = "flow_versions";
-const FLOW_ID_PATTERN = "^[a-z][a-z0-9]*(-[a-z0-9]+)*$";
 const TEAM_ID_PATTERN = "^[a-z][a-z0-9_-]{0,63}$";
-
-const PAGE_QUERY = {
-  type: "object",
-  additionalProperties: false,
-  properties: { ...(PAGE_QUERY_SCHEMA["properties"] as Record<string, unknown>) },
-};
-
-const FLOW_PARAMS = {
-  type: "object",
-  additionalProperties: false,
-  required: ["flowId"],
-  properties: { flowId: { type: "string", pattern: FLOW_ID_PATTERN, maxLength: 64 } },
-};
 
 const CREATE_BODY = {
   type: "object",
@@ -50,35 +47,6 @@ const CREATE_BODY = {
   properties: {
     name: { type: "string", pattern: FLOW_ID_PATTERN, maxLength: 64 },
     ownerTeam: { type: "string", pattern: TEAM_ID_PATTERN },
-  },
-};
-
-const SUMMARY_SCHEMA = {
-  type: "object",
-  additionalProperties: false,
-  required: [
-    "flowId",
-    "number",
-    "hash",
-    "state",
-    "surface",
-    "author",
-    "requestedBy",
-    "createdAt",
-    "validatedAt",
-    "validationOk",
-  ],
-  properties: {
-    flowId: { type: "string" },
-    number: { type: "integer" },
-    hash: { type: "string" },
-    state: { type: "string" },
-    surface: { type: "string" },
-    author: { type: "string" },
-    requestedBy: { type: ["string", "null"] },
-    createdAt: { type: "string" },
-    validatedAt: { type: ["string", "null"] },
-    validationOk: { type: ["boolean", "null"] },
   },
 };
 
@@ -96,38 +64,6 @@ const FLOW_SCHEMA = {
   },
 };
 
-function pageSchema(item: unknown): unknown {
-  return {
-    type: "object",
-    additionalProperties: false,
-    required: ["items", "next_cursor"],
-    properties: {
-      items: { type: "array", items: item },
-      next_cursor: { type: ["string", "null"] },
-    },
-  };
-}
-
-function unavailable(): ApiError {
-  return new ApiError(503, "AUTHZ_UNAVAILABLE", "Authorization is unavailable");
-}
-
-function engineKeyRequired(): ApiError {
-  return new ApiError(
-    503,
-    "ENGINE_KEY_REQUIRED",
-    "Paging needs the engine key (URSITOARE_ENGINE_KEY_FILE)",
-  );
-}
-
-function cursorInvalid(): ApiError {
-  return new ApiError(400, "CURSOR_INVALID", "Cursor is invalid");
-}
-
-function notFound(): ApiError {
-  return new ApiError(404, "NOT_FOUND", "Resource not found");
-}
-
 function flowRef(tenantId: string, flowId: string, ownerTeam: string): ResourceRef {
   return {
     type: "Flow",
@@ -135,18 +71,6 @@ function flowRef(tenantId: string, flowId: string, ownerTeam: string): ResourceR
     tenantId,
     attrs: { owner_team: entityRef("Team", scopedId(tenantId, ownerTeam)), reviewed: false },
   };
-}
-
-function flowIdOf(request: FastifyRequest): string {
-  return (request.params as { flowId: string }).flowId;
-}
-
-async function mapped<T>(run: () => Promise<T>): Promise<T> {
-  try {
-    return await run();
-  } catch (error) {
-    throw flowApiError(error);
-  }
 }
 
 export function registerFlowRoutes(server: FastifyInstance, deps: FlowApiDeps): void {
@@ -275,53 +199,5 @@ export function registerFlowRoutes(server: FastifyInstance, deps: FlowApiDeps): 
     },
   });
 
-  defineRoute(server, {
-    method: "GET",
-    url: "/api/v1/flows/:flowId/versions",
-    auth: { kind: "session" },
-    action: "read_flow",
-    resource: loadFlowResource,
-    schema: {
-      params: FLOW_PARAMS,
-      querystring: PAGE_QUERY,
-      response: { 200: pageSchema(SUMMARY_SCHEMA) },
-    },
-    errors: ["CURSOR_INVALID", "ENGINE_KEY_REQUIRED", "NOT_FOUND", "VALIDATION_FAILED"],
-    handler: async (request) => {
-      const { pool, tenant } = context(request);
-      const flowId = flowIdOf(request);
-      const page = readPage(request.query);
-      if (key === null && page.cursor !== null) throw engineKeyRequired();
-      let after: number | undefined;
-      if (key !== null) {
-        const position = startAfter(
-          { key, tenantId: tenant.tenantId, scope: VERSIONS_SCOPE },
-          page.cursor,
-        );
-        if (position !== null) {
-          const [id, number] = position;
-          if (position.length !== 2 || id !== flowId || typeof number !== "number") {
-            throw cursorInvalid();
-          }
-          after = number;
-        }
-      }
-      const result = await mapped(() =>
-        withTenantTx(pool, tenant, (tx) =>
-          listVersions(tx, tenant, { flowId, limit: page.limit, after }),
-        ),
-      );
-      const items: VersionSummary[] = result.versions;
-      if (result.next === null) return { items, next_cursor: null };
-      if (key === null) throw engineKeyRequired();
-      return {
-        items,
-        next_cursor: encodeCursor(key, {
-          tenantId: tenant.tenantId,
-          scope: VERSIONS_SCOPE,
-          position: [flowId, result.next],
-        }),
-      };
-    },
-  });
+  registerVersionRoutes(server, deps, key, { context, loadFlowResource });
 }
