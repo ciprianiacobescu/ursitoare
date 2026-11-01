@@ -18,7 +18,7 @@ Tests in `src/authoring/validate/` import from `./index.ts` and `test/support/fl
 
 ## 4. Diagnostics document
 
-- [ ] 4.1 Implement `src/authoring/validate/diagnostics.ts` (`DIAGNOSTICS`, `diagnosticAnchor`, `diagnosticLink`, `renderDiagnosticsDoc`) and create `docs/authoring/diagnostics.md` as its exact output, tested first by `src/authoring/validate/diagnostics.test.ts`, implementing requirement "Diagnostics are documented"
+- [x] 4.1 Implement `src/authoring/validate/diagnostics.ts` (`DIAGNOSTICS`, `diagnosticAnchor`, `diagnosticLink`, `renderDiagnosticsDoc`) and create `docs/authoring/diagnostics.md` as its exact output, tested first by `src/authoring/validate/diagnostics.test.ts`, implementing requirement "Diagnostics are documented"
 
 ## 5. The command
 
