@@ -1,0 +1,251 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/registry",
+      "src/registry/index.ts",
+      "src/api/index.ts",
+      "src/authoring/index.ts",
+      "src/core",
+      "src/tenancy",
+      "src/audit",
+      "src/registry/policy/blocks.cedar",
+      "src/identity",
+      "src/pdp/actions.ts",
+      "src/api/error-codes.test.ts",
+      "src/main.ts",
+      "docs/api/openapi.json",
+      "src/db/migrations/0260_block_registry.sql",
+      "node:assert/strict",
+      "src/api/admin-users.test.ts",
+      "<temp>/registry/policy",
+      "src/identity/roles-policy.test.ts",
+      "src/main.blocks.test.ts",
+      "src/main.admin.test.ts",
+      "src",
+      "test",
+      "src/db",
+      "docs/decisions/0002",
+      "test/arch/modules.ts",
+      "src/registry/{errors,block-input,block-store,catalogue,index}.ts",
+      "src/api/block-routes.ts",
+      "src/identity/policy/roles.cedar",
+      "src/registry/schema.test.ts",
+      "src/registry/block-input.test.ts",
+      "src/registry/errors.ts",
+      "src/registry/block-input.ts",
+      "src/registry/block-read.test.ts",
+      "src/registry/block-store.ts",
+      "src/registry/import.test.ts",
+      "src/registry/catalogue.test.ts",
+      "src/registry/catalogue.ts",
+      "src/identity/index.ts",
+      "src/registry/policy.test.ts",
+      "src/api/block-routes.test.ts",
+      "**/[]",
+      "**/REGISTRY_*",
+      "**/FORMAT_*",
+      "**/*.test.ts",
+      "module <temp>",
+      "module api",
+      "module audit",
+      "module authoring",
+      "module core",
+      "module db",
+      "module docs",
+      "module identity",
+      "module main",
+      "module main.admin.test",
+      "module main.blocks.test",
+      "module node:assert",
+      "module pdp",
+      "module registry",
+      "module tenancy",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-block-registry/.l4/ledger/r-20261101T1334Z-29ab.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-block-registry/.l4/ledger/r-20261101T1542Z-69be.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-block-registry/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/block-routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/block-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0260_block_registry.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.blocks.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/block-input.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/registry/block-input.ts",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/block-read.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/registry/block-store.ts",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/catalogue.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/registry/catalogue.ts",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/errors.ts",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/import.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/registry/policy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/registry/policy/blocks.cedar",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/block-routes.ts, src/api/index.ts, src/main.ts, src/registry/block-input.ts, src/registry/block-store.ts and 2 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/block-routes.ts",
+      "src/api/index.ts",
+      "src/main.ts",
+      "src/registry/block-input.ts",
+      "src/registry/block-store.ts",
+      "src/registry/catalogue.ts",
+      "src/registry/errors.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1328,
+      "passed": 1328,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 27,
+      "new_passed": 27,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
