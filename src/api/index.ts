@@ -13,6 +13,8 @@ export type { AuditApiDeps, AuditVerification, WalkQueue } from "./audit-routes.
 export { registerAuditRoutes, createWalkQueue } from "./audit-routes.ts";
 export type { BlockApiDeps } from "./block-routes.ts";
 export { registerBlockRoutes } from "./block-routes.ts";
+export type { FlowApiDeps } from "./flow-routes.ts";
+export { registerFlowRoutes } from "./flow-routes.ts";
 export { parseAuditQuery, parseDecisionQuery, parseVerifyQuery } from "./audit-query.ts";
 export type { PageBinding } from "./admin-page.ts";
 export { pageRows } from "./admin-page.ts";
