@@ -39,24 +39,30 @@ export interface Catalogue {
   flow(ref: string, major: number): FlowSignature | undefined;
 }
 
-export const emptyCatalogue: Catalogue = {
+export const emptyCatalogue: Catalogue = Object.freeze({
   block(_ref: string): BlockDef | undefined {
-    throw new Error("not implemented");
+    return undefined;
   },
   modelProfile(_ref: string): ModelProfileDef | undefined {
-    throw new Error("not implemented");
+    return undefined;
   },
   role(_name: string): RoleDef | undefined {
-    throw new Error("not implemented");
+    return undefined;
   },
   delegateTarget(_target: string, _workflow: string): DelegateTargetDef | undefined {
-    throw new Error("not implemented");
+    return undefined;
   },
   flow(_ref: string, _major: number): FlowSignature | undefined {
-    throw new Error("not implemented");
+    return undefined;
   },
-};
+});
 
-export function parseVersionedRef(_ref: string): { name: string; major: number } | undefined {
-  throw new Error("not implemented");
+const VERSIONED_REF = /^([a-z][a-z0-9._-]*)@(0|[1-9][0-9]{0,8})$/;
+
+export function parseVersionedRef(ref: string): { name: string; major: number } | undefined {
+  const match = VERSIONED_REF.exec(ref);
+  if (match === null) {
+    return undefined;
+  }
+  return { name: match[1] as string, major: Number(match[2]) };
 }

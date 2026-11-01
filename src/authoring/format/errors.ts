@@ -1,4 +1,4 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
+// Format error types shared by the parser and the canonical functions (design Decisions 1 and 4).
 
 export type FormatErrorCode =
   | "FORMAT_TOO_LARGE"
@@ -10,7 +10,16 @@ export type FormatErrorCode =
   | "FORMAT_UNSUPPORTED_TAG"
   | "FORMAT_NOT_JSON";
 
-export const FORMAT_ERROR_CODES: readonly FormatErrorCode[] = [];
+export const FORMAT_ERROR_CODES: readonly FormatErrorCode[] = [
+  "FORMAT_TOO_LARGE",
+  "FORMAT_TOO_DEEP",
+  "FORMAT_ALIAS_LIMIT",
+  "FORMAT_YAML_SYNTAX",
+  "FORMAT_JSON_SYNTAX",
+  "FORMAT_DUPLICATE_KEY",
+  "FORMAT_UNSUPPORTED_TAG",
+  "FORMAT_NOT_JSON",
+];
 
 export interface ParseError {
   code: FormatErrorCode;
@@ -24,8 +33,10 @@ export class FormatError extends Error {
   readonly code: FormatErrorCode;
   readonly path: string | null;
 
-  constructor(_code: FormatErrorCode, message: string, _path?: string) {
+  constructor(code: FormatErrorCode, message: string, path?: string) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "FormatError";
+    this.code = code;
+    this.path = path ?? null;
   }
 }
