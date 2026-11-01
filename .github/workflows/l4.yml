@@ -70,7 +70,7 @@ jobs:
         with:
           version: "10.34.8"
       - id: l4
-        uses: ciprianiacobescu/l4/.github/actions/l4@0a45c31871c14bbd997abf3eaa6d7577e2559924 # v0.4.51
+        uses: ciprianiacobescu/l4/.github/actions/l4@b5707d29a0854661b4770c52ff6019178b642476 # v0.4.53
         with:
           self-provision: ${{ vars.L4_SELF_PROVISION || 'auto' }}
       - name: doctor
