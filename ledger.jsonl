@@ -45,3 +45,5 @@
 {"at":"2026-11-01T12:13:26Z","branch":"l4/archive/openspec/add-test-catalogue","head":"7ccab5a421167879eb5a4cb2636fa8afa9309147","type":"unit.branch_deleted","unit":"openspec:add-test-catalogue"}
 {"at":"2026-11-01T12:13:27Z","detail":"awaiting_human: no new answers (open: Q-001) (escalated to a person: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-flow-validator"}
 {"at":"2026-11-01T12:19:26Z","by":"harness","reason":"the cause is gone: openspec:add-flow-validator is awaiting_human","type":"plan.resumed"}
+{"at":"2026-11-01T12:19:28Z","attempt":1,"cost_usd":6.036763,"runs":2,"type":"plan.charged","unit":"openspec:add-flow-validator"}
+{"at":"2026-11-01T12:19:28Z","run":"r-20261101T1219Z-efa1","type":"unit.dispatched","unit":"openspec:add-flow-validator"}
