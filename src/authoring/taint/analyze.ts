@@ -6,6 +6,8 @@ import {
   valueFields,
   walkStrings,
 } from "../format/index.ts";
+import type { AppliedHooks } from "./hooks.ts";
+import { collectHooks } from "./hooks.ts";
 import type { Taint } from "./labels.ts";
 import { NO_TAINT, joinTaint, relabelExtract } from "./labels.ts";
 import { describeTool } from "./tools.ts";
@@ -39,6 +41,8 @@ interface Occurrence {
   ref: Ref | undefined;
   raw: string;
   target: string | null;
+  hook: string | null;
+  fromValue: boolean;
 }
 
 interface State {
@@ -84,6 +88,8 @@ function occurrences(id: string, node: unknown): Occurrence[] {
             ref,
             raw: seg.raw,
             target: ref !== undefined && ref.root === "node" ? ref.id : null,
+            hook: null,
+            fromValue: true,
           });
         }
       },
@@ -97,11 +103,28 @@ function referenceTaint(
   states: Map<string, State>,
   nodes: Map<string, unknown>,
   itemTaint: Taint | undefined,
+  wrapped: string,
 ): Taint {
   const ref = occurrence.ref;
   if (ref === undefined) return NO_TAINT;
   if (ref.root === "item") {
-    if (occurrence.field === "with" && itemTaint !== undefined) return itemTaint;
+    if (occurrence.fromValue && occurrence.field === "with" && itemTaint !== undefined) {
+      return itemTaint;
+    }
+    return NO_TAINT;
+  }
+  if (ref.root === "hook") {
+    const state = states.get(wrapped);
+    if (state === undefined) return NO_TAINT;
+    if (ref.scope === "input") return state.input;
+    if (ref.scope === "output") {
+      const first = ref.path[0];
+      if (first !== undefined) {
+        const field = state.fields.get(first);
+        if (field !== undefined) return field;
+      }
+      return state.output;
+    }
     return NO_TAINT;
   }
   if (ref.root !== "node") return NO_TAINT;
@@ -152,7 +175,7 @@ function itemTaintOf(
   let taint: Taint = NO_TAINT;
   for (const occurrence of found) {
     if (occurrence.field !== "items") continue;
-    taint = joinTaint(taint, referenceTaint(occurrence, states, nodes, undefined));
+    taint = joinTaint(taint, referenceTaint(occurrence, states, nodes, undefined, ""));
   }
   return taint;
 }
@@ -233,21 +256,42 @@ function outputFor(
   }
 }
 
+const WIDEN_KINDS = new Set<string>([
+  "block",
+  "code",
+  "llm.extract",
+  "llm.generate",
+  "delegate",
+]);
+
 function evaluate(
+  id: string,
   found: Occurrence[],
   node: unknown,
   states: Map<string, State>,
   nodes: Map<string, unknown>,
   catalogue: Catalogue,
+  hooks: AppliedHooks,
 ): State {
   const kind = kindOf(node);
   const itemTaint = kind === "foreach" ? itemTaintOf(found, states, nodes) : undefined;
   let input: Taint = contextTainted(node, kind) ? UNTRUSTED : NO_TAINT;
   for (const occurrence of found) {
-    input = joinTaint(input, referenceTaint(occurrence, states, nodes, itemTaint));
+    input = joinTaint(input, referenceTaint(occurrence, states, nodes, itemTaint, id));
   }
+  for (const occurrence of hooks.code) {
+    if (occurrence.ref !== undefined && occurrence.ref.root === "hook") continue;
+    input = joinTaint(input, referenceTaint(occurrence, states, nodes, itemTaint, id));
+  }
+  if (hooks.malformed) input = joinTaint(input, UNTRUSTED);
   const result = outputFor(kind, node, input, catalogue);
-  return { input, output: result.output, fields: result.fields };
+  const widens = (hooks.hasCodeHook || hooks.malformed) && kind !== undefined && WIDEN_KINDS.has(kind);
+  if (!widens) return { input, output: result.output, fields: result.fields };
+  const fields = new Map<string, Taint>();
+  for (const [key, value] of result.fields) {
+    fields.set(key, joinTaint(value, input));
+  }
+  return { input, output: joinTaint(result.output, input), fields };
 }
 
 function sameTaint(a: Taint, b: Taint): boolean {
@@ -280,11 +324,20 @@ export function analyzeTaint(flow: Flow, catalogue: Catalogue): TaintAnalysis {
   const nodes = nodeMap(flow);
   const ids = [...nodes.keys()].sort();
   const parsed = new Map<string, Occurrence[]>();
-  for (const id of ids) parsed.set(id, occurrences(id, nodes.get(id)));
+  const hooksByNode = new Map<string, AppliedHooks>();
+  const allOccurrences = new Map<string, Occurrence[]>();
+  for (const id of ids) {
+    const node = nodes.get(id);
+    const found = occurrences(id, node);
+    const hooks = collectHooks(id, node, flow, catalogue);
+    parsed.set(id, found);
+    hooksByNode.set(id, hooks);
+    allOccurrences.set(id, [...found, ...hooks.all]);
+  }
 
   const consumers = new Map<string, Set<string>>();
   for (const id of ids) {
-    for (const occurrence of parsed.get(id) ?? []) {
+    for (const occurrence of allOccurrences.get(id) ?? []) {
       if (occurrence.target === null || !nodes.has(occurrence.target)) continue;
       const set = consumers.get(occurrence.target) ?? new Set<string>();
       set.add(id);
@@ -307,7 +360,15 @@ export function analyzeTaint(flow: Flow, catalogue: Catalogue): TaintAnalysis {
     if (current === undefined) continue;
     const next = joinState(
       current,
-      evaluate(parsed.get(id) ?? [], nodes.get(id), states, nodes, catalogue),
+      evaluate(
+        id,
+        parsed.get(id) ?? [],
+        nodes.get(id),
+        states,
+        nodes,
+        catalogue,
+        hooksByNode.get(id) ?? { all: [], code: [], hasCodeHook: false, malformed: false },
+      ),
     );
     if (sameState(current, next)) continue;
     states.set(id, next);
@@ -337,18 +398,22 @@ export function analyzeTaint(flow: Flow, catalogue: Catalogue): TaintAnalysis {
     const found = parsed.get(id) ?? [];
     const itemTaint =
       kindOf(nodes.get(id)) === "foreach" ? itemTaintOf(found, states, nodes) : undefined;
-    for (const occurrence of found) {
+    for (const occurrence of allOccurrences.get(id) ?? []) {
       const ref = occurrence.ref;
-      const from =
-        ref !== undefined && ref.root === "node" && nodes.has(ref.id) ? ref.id : null;
+      let from: string | null = null;
+      if (ref !== undefined && ref.root === "node" && nodes.has(ref.id)) {
+        from = ref.id;
+      } else if (ref !== undefined && ref.root === "hook" && ref.scope === "output") {
+        from = id;
+      }
       edges.push({
         to: id,
         path: occurrence.path,
         ref: ref !== undefined ? refToString(ref) : occurrence.raw,
         from,
-        taint: referenceTaint(occurrence, states, nodes, itemTaint),
+        taint: referenceTaint(occurrence, states, nodes, itemTaint, id),
         resolved: true,
-        hook: null,
+        hook: occurrence.hook,
       });
     }
   }

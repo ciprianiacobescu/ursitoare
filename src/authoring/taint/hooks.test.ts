@@ -172,7 +172,12 @@ test("C-be8bdbfa Hook references widening and flow rules", () => {
     output: ["untrusted"],
     fields: {},
   });
-  for (const id of ["fetch", "lk", "done"]) {
+  assert.deepEqual(nodeAt(result, "fetch"), {
+    input: [],
+    output: [],
+    fields: { raw_text: ["untrusted"], vendor_name: ["untrusted"] },
+  });
+  for (const id of ["lk", "done"]) {
     assert.deepEqual(nodeAt(result, id), { input: [], output: [], fields: {} }, id);
   }
 
