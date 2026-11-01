@@ -62,3 +62,4 @@
 {"at":"2026-11-01T15:44:12Z","by":"harness","reason":"the cause is gone: openspec:add-block-registry is verifying","type":"plan.resumed"}
 {"at":"2026-11-01T15:44:15Z","attempt":1,"cost_usd":3.128973,"runs":2,"type":"plan.charged","unit":"openspec:add-block-registry"}
 {"at":"2026-11-01T15:44:15Z","run":"r-20261101T1544Z-a2a6","type":"unit.dispatched","unit":"openspec:add-block-registry"}
+{"at":"2026-11-01T16:04:30Z","head":"62462bec67ba5fd8a4229a7c760f6238f7aa27b9","pr":58,"target_before":"079567d24600b8929689d8cbb8bac0228567880c","type":"unit.merge_requested","unit":"openspec:add-block-registry"}
