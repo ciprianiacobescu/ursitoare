@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-01T05:50:31Z",
+  "integrated_revision": "eec9a3b95ec91d8acef4fb84569020e319388a61",
+  "merge_commit": "eec9a3b95ec91d8acef4fb84569020e319388a61",
+  "plan_digest": "17f19b151151b0e3",
+  "plan_id": "m3",
+  "postcheck": "pass",
+  "pr": 47,
+  "receipt_id": "m3/openspec:add-flow-format-model/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "c0066d72ee71f1c896cebbb25d445fce984f04ec",
+  "spec_digest": "01aa0e307081928b",
+  "target": "main",
+  "unit_id": "openspec:add-flow-format-model"
+}
