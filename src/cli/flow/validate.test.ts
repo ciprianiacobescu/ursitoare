@@ -159,7 +159,7 @@ test("C-0aa97fa7 flow validate usage errors exit 2 and listings mention the comm
     const large = join(dir, "large.yaml");
     await writeFile(large, "x".repeat(1_048_577), "utf8");
     const badCatalogue = join(dir, "bad-catalogue.json");
-    await writeFile(badCatalogue, '{"blocks":{"a\u001b@1":{"effect":"x"}}}', "utf8");
+    await writeFile(badCatalogue, '{"blocks":{"a\\u001b@1":{"effect":"x"}}}', "utf8");
 
     const cases: ReadonlyArray<readonly [string[], string]> = [
       [["flow", "validate"], "CLI_USAGE: missing required option --file\n"],
