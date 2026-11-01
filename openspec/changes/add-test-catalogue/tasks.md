@@ -10,7 +10,7 @@ Spec: `specs/test-catalogue/spec.md`; signatures and decisions: `design.md`; how
 
 ## 3. References and reachability
 
-- [ ] 3.1 Write `test/support/catalogue/references.test.ts` first (scenarios "Unknown names are listed, known names are not" and "Reachability follows successors and avoids a node"; flows are inline literals; the catalogue comes from `loadTestCatalogue()`), then implement `unresolvedReferences` and `canReach` in `test/support/catalogue/references.ts` (design.md Decisions 8 and 9; `canReach` uses `successorFields` from `src/authoring/index.ts`), implementing requirement "Flow references are checked against a catalogue"
+- [x] 3.1 Write `test/support/catalogue/references.test.ts` first (scenarios "Unknown names are listed, known names are not" and "Reachability follows successors and avoids a node"; flows are inline literals; the catalogue comes from `loadTestCatalogue()`), then implement `unresolvedReferences` and `canReach` in `test/support/catalogue/references.ts` (design.md Decisions 8 and 9; `canReach` uses `successorFields` from `src/authoring/index.ts`), implementing requirement "Flow references are checked against a catalogue"
 
 ## 4. The RF-1 flows
 
