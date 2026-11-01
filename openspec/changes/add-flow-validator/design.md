@@ -83,12 +83,6 @@ Node tests beside the code, `node:assert/strict`, no database or network. Layer 
 
 ## Decisions made while writing
 
-- **`--file <path>`, not a positional `<file>`:** the runner has `allowPositionals: false`; changing it would touch U20's tests.
-- **Case files** live in `test/support/flow-cases/`, outside the build, like U24's data; `valid/taint-via-code-passes` becomes the invalid `l3-taint-via-code` (`codes.md`).
 - **`INTERNAL_ERROR` is reserved, not a 48th code**, for crashes and `TaintError` (no spare code among the 47).
 - **Role pattern** follows U17 so the four default roles pass L1; **hooks** are accepted by shape and their edges ignored; `ursitoare` stays `"0.1"`.
-- **`jsonSchemaProblem` checks the meta-schema** (D7): real tool schemas carry vendor keywords and remote refs.
-- **`delegateWorkflows`** is an optional `Catalogue` member (U22 Decision 9 allows it) so both delegate codes stay reachable; U26 may implement it.
 - **What the dropped lattice changes:** `code` output keeps its input's taint, so `L3_TAINT_TO_CONSEQUENTIAL` now fires through a `code` node; a block's output inherits its input's taint (union); `W_LETHAL_TRIFECTA` is U23's flow-level capability test (delegates and subflows are untrusted, a block hook counts, an unmarked `read` is private, `kb.search@1` is public); the other taint codes keep the seed's sinks.
-- **Anchors** are the lower-cased code (`#l1_required`), so U28 links from a code alone; **`--json`** is compact (`safeJson`) like U20's admin commands.
-- **Set checks replace the seed's source-grep test** for undocumented codes (each case's codes are in the lists, each listed code is in some case).

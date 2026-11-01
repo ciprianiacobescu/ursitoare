@@ -5,7 +5,7 @@ with the rule that raises it and the number of case files under `test/support/fl
 across 115 files). Every case file starts with `# expect: <codes>` (the distinct error codes, sorted) and a `# note:` line. Six
 files expect two codes, counted under each: `l2-cycle` and `l2-cycle-self-loop` (`L2_CYCLE`, `L2_UNREACHABLE_NODE`),
 `l2-missing-successor`, `l2-unknown-successor` and `l2-unknown-successor-decide-case` (with `L2_UNREACHABLE_NODE`), and
-`l2-no-end` (`L2_MISSING_SUCCESSOR`, `L2_NO_END`). Every issue has `node` (the node id of its path, or null) and a JSON Pointer `path`.
+`l2-no-end` (`L2_MISSING_SUCCESSOR`, `L2_NO_END`).
 
 | Code | Raised when | Cases |
 |---|---|---|

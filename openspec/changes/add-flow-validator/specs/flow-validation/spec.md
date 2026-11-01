@@ -65,7 +65,7 @@ L2 SHALL report an unknown block, role, flow or model profile from the `Catalogu
 `validateFlow` SHALL never throw and SHALL report a failure of its own as an `INTERNAL_ERROR` issue and `ok: false`.
 
 #### Scenario: Crashes, limits and mutations
-- **WHEN** a catalogue whose `block` throws `new Error("boom")` validates RF-1; a chain of 5,000 `wait` nodes (`duration: PT1S`, each `next` the following id) ending in one `end` node is validated; a flow whose input property `x` is `{ anyOf: [{ $ref: "#/properties/x" }] }` is read as `${{ inputs.x }}` into a string parameter; and 1,000 random mutations of RF-1 (a seeded xorshift, 1 to 3 edits each: delete a value or set it to `null`, `0`, `""`, `{}`, `[]`, `"${{"`, `"__proto__"`) are validated
+- **WHEN** a catalogue whose `block` throws `new Error("boom")` validates RF-1; a `switch` `s` on `${{ inputs.k }}` (a required string input) with cases `k0` to `k4999` leading to the `end` nodes `e0` to `e4999` and `default: e0` (5,001 nodes) is validated; a flow whose input property `x` is `{ anyOf: [{ $ref: "#/properties/x" }] }` is read as `${{ inputs.x }}` into a string parameter; and 1,000 random mutations of RF-1 (a seeded xorshift, 1 to 3 edits each: delete a value or set it to `null`, `0`, `""`, `{}`, `[]`, `"${{"`, `"__proto__"`) are validated
 - **THEN** the first has `ok: false` and exactly one error, layer `L2`, code `INTERNAL_ERROR`, message starting `validator crashed: boom`; the second has an `INTERNAL_ERROR` of layer `L3` whose message starts `taint analysis limit exceeded: nodes 5001`; the third and every mutation return without throwing and without `INTERNAL_ERROR`, with `ok === (errors.length === 0)`
 
 ### Requirement: jsonSchemaProblem checks embedded schemas

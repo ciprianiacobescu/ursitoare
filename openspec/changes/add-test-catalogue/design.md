@@ -4,7 +4,7 @@ M3 units test against one shared world, reused by M5 to M12. This unit is that w
 
 ## Interfaces
 
-Declarations omit `export`. The first block is the proposal's "Interfaces given" word for word. Every module is imported by its own path. The scaffold stubs each function (`throw new Error("not implemented")`) and gives the constants their final values.
+Declarations omit `export`. The first block is the proposal's "Interfaces given" word for word. Every module is imported by its own path. The scaffold stubs each function (`throw new Error("not implemented")`) and gives the constants empty values (`""`, `[]`), which this change fills.
 
 ```ts
 // test/support/catalogue/errors.ts
