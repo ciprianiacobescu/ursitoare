@@ -7,6 +7,7 @@ import { parseFlowText } from "../format/index.ts";
 import type { Catalogue, FlowFormat } from "../format/index.ts";
 import { checkL1 } from "./l1.ts";
 import { checkL2 } from "./l2.ts";
+import { checkL3 } from "./l3.ts";
 import { Sink } from "./sink.ts";
 import type { Issue, Layer, ValidationResult } from "./types.ts";
 
@@ -43,6 +44,10 @@ export function validateFlow(doc: unknown, catalogue: Catalogue): ValidationResu
   if (sink.errors.length === 0) {
     layers.push("L2");
     checkL2(doc, catalogue, sink);
+  }
+  if (sink.errors.length === 0) {
+    layers.push("L3");
+    checkL3(doc, catalogue, sink);
   }
   const errors = sortIssues(sink.errors);
   return {
