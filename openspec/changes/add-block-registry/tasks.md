@@ -6,7 +6,7 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 2. Normalising a block
 
-- [ ] 2.1 Write `src/registry/block-input.test.ts` first (scenarios "A block is normalised and hashed" and the `normalizeBlockImport` parts of "Bad blocks are refused", one `assert.throws` per input with `{ code, details }`), then implement `RegistryErrorCode` and `RegistryError` in `src/registry/errors.ts` and `BlockBinding`, `BlockImport`, `NormalizedBlock`, `normalizeBlockImport` and `blockContentHash` in `src/registry/block-input.ts` (design.md Decisions 2 to 4; `jsonSchemaProblem` and `parseVersionedRef` come from `src/authoring/index.ts`), exporting them from `src/registry/index.ts`, implementing requirement "A block is checked and normalised before it is stored"
+- [x] 2.1 Write `src/registry/block-input.test.ts` first (scenarios "A block is normalised and hashed" and the `normalizeBlockImport` parts of "Bad blocks are refused", one `assert.throws` per input with `{ code, details }`), then implement `RegistryErrorCode` and `RegistryError` in `src/registry/errors.ts` and `BlockBinding`, `BlockImport`, `NormalizedBlock`, `normalizeBlockImport` and `blockContentHash` in `src/registry/block-input.ts` (design.md Decisions 2 to 4; `jsonSchemaProblem` and `parseVersionedRef` come from `src/authoring/index.ts`), exporting them from `src/registry/index.ts`, implementing requirement "A block is checked and normalised before it is stored"
 
 ## 3. Reading stored versions
 
