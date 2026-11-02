@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Hold H-796232b4: UI criterion C-84837cec has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-b9374a84: UI criterion C-ba506c1d has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
-| Q-014 | open | none | verdict | Hold H-99f05b4a: UI criterion C-3e0a938c has no end-to-end test; see the generated UI tests table |
+| Q-014 | answered | none | verdict | Hold H-99f05b4a: UI criterion C-3e0a938c has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-2e32408a: UI criterion C-6b221b86 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-c1bc3708: UI criterion C-086f1719 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -366,7 +366,8 @@ accept The hold can be waived. The criterion checks a module registry and the or
 
 ## Q-014: Hold H-99f05b4a: UI criterion C-3e0a938c has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -385,6 +386,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion describes the test stack's catalogue seeding part, which has no page a browser could visit, and the project's rules make a Node test the evidence for test-support parts. The Node test beside the part asserts the scenario: after the first seed the default tenant and tenant B hold exactly the document's block refs with the docs.fetch block definition extended by the two false flags, each with one import event per ref, tenant C holds nothing, a second seed changes no count, the handle's env is empty and discovery lists catalogue after rbac. The part imports the catalogue document's blocks into every tenant routed to the fake issuer and skips the others, and the part file is the one-line re-export discovered in file-name order.
 ---
 
 ## Q-015: Hold H-2e32408a: UI criterion C-6b221b86 has no end-to-end test; see the generated UI tests table
