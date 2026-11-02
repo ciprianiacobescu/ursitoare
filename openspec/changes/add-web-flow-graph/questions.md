@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Hold H-2939d42a: UI criterion C-793687fa has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-5b762cd4: UI criterion C-54028b08 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-ada1ea8a: UI criterion C-5070339e has no end-to-end test; see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-ff7d32cd: UI criterion C-ada22065 has no end-to-end test; see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-ff7d32cd: UI criterion C-ada22065 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-13fe6678: UI criterion C-99ed5dc0 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-d1691d3f: UI criterion C-4ca8acf8 has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-1fadb9d3: UI criterion C-5be45b98 has no end-to-end test; see the generated UI tests table |
@@ -324,7 +324,8 @@ accept Criterion C-5070339e checks the return values of viewBox, drawNodes and d
 
 ## Q-012: Hold H-ff7d32cd: UI criterion C-ada22065 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -343,6 +344,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-ada22065 is a static check of the style sheet and the component source: no raw colour in flow-graph.css, every var() a kit token, every class drawNodes and drawEdges can emit defined along with .flow-graph-svg, no inline style, no dangerouslySetInnerHTML, fill= or stroke= in FlowGraphView.tsx, and the presence of aria-hidden, focusable=false and aria-pressed. These are properties of the source files, not of a rendered page, so a browser test cannot check them. The Node test in view-sources.test.ts reads the three files and asserts each of these points, collecting the drawn classes from the S, ODD and CYCLE layouts, and I read the files it checks: flow-graph.css takes every colour from --ui- tokens that tokens.css defines and declares each of the seven drawn classes and .flow-graph-svg; FlowGraphView.tsx sets aria-hidden true and focusable false on the SVG, aria-pressed on the list buttons, uses className only and holds no raw colour or HTML injection. The browser journey separately passes assert_accessible on the pages that render the drawing. The unit can go on.
 ---
 
 ## Q-013: Hold H-13fe6678: UI criterion C-99ed5dc0 has no end-to-end test; see the generated UI tests table
