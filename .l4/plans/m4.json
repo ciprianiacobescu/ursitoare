@@ -1,0 +1,91 @@
+{
+  "schema": "l4/delivery-plan@1",
+  "plan_id": "m4",
+  "target": "main",
+  "merge": "auto",
+  "limits": {
+    "max_cost_usd": 300,
+    "max_unit_attempts": 3,
+    "max_runs": 72
+  },
+  "external_dependencies": [],
+  "exclude": [],
+  "batches": [
+    {
+      "id": "m4-runs-timeline",
+      "acceptance_profile": "none",
+      "depends_on": [],
+      "units": [
+        {
+          "id": "openspec:add-dbos-runtime",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-envelope-store",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-crash-harness",
+          "depends_on": [
+            "openspec:add-dbos-runtime"
+          ]
+        },
+        {
+          "id": "openspec:add-interpreter-core",
+          "depends_on": [
+            "openspec:add-dbos-runtime",
+            "openspec:add-envelope-store"
+          ]
+        },
+        {
+          "id": "openspec:add-effect-intents",
+          "depends_on": [
+            "openspec:add-crash-harness",
+            "openspec:add-dbos-runtime",
+            "openspec:add-envelope-store",
+            "openspec:add-interpreter-core"
+          ]
+        },
+        {
+          "id": "openspec:add-runs-api",
+          "depends_on": [
+            "openspec:add-dbos-runtime",
+            "openspec:add-envelope-store",
+            "openspec:add-interpreter-core"
+          ]
+        },
+        {
+          "id": "openspec:add-mock-test-runs",
+          "depends_on": [
+            "openspec:add-dbos-runtime",
+            "openspec:add-effect-intents",
+            "openspec:add-envelope-store",
+            "openspec:add-interpreter-core",
+            "openspec:add-runs-api"
+          ]
+        },
+        {
+          "id": "openspec:add-flow-test-cli",
+          "depends_on": [
+            "openspec:add-effect-intents",
+            "openspec:add-envelope-store",
+            "openspec:add-interpreter-core",
+            "openspec:add-mock-test-runs"
+          ]
+        },
+        {
+          "id": "openspec:add-web-run-timeline",
+          "depends_on": [
+            "openspec:add-crash-harness",
+            "openspec:add-dbos-runtime",
+            "openspec:add-effect-intents",
+            "openspec:add-envelope-store",
+            "openspec:add-interpreter-core",
+            "openspec:add-mock-test-runs",
+            "openspec:add-runs-api"
+          ]
+        }
+      ]
+    }
+  ]
+}
