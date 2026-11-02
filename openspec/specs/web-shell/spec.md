@@ -155,7 +155,7 @@ The app SHALL render a banner with the product-name link, `navigation` named "Ma
 - **THEN** the tables are `[{ id: "not-found", path: "*" }]` and `[{ id: "a", path: "/a" }, { id: "b", path: "/b/:id" }, { id: "not-found", path: "*" }]`; the titles are `Page not found · Ursitoare`, `Ursitoare` and `Ursitoare`
 
 #### Scenario: Deep link
-- **WHEN** the journey opens `/flows`
+- **WHEN** the journey opens `/no-such-page-deep-link`, a path no feature owns
 - **THEN** the link "Ursitoare" in the banner and the heading "Page not found" are visible, the page title is `Page not found · Ursitoare`, and the response status is 200
 
 ### Requirement: The offline stack serves the built app and the journey passes
