@@ -7,7 +7,7 @@ from playwright.sync_api import Page, expect
 @pytest.mark.l4("C-0daf92cd")
 def test_deep_link_not_found_shell(page: Page) -> None:
     base_url = os.environ["L4_E2E_BASE_URL"].rstrip("/")
-    response = page.goto(f"{base_url}/flows")
+    response = page.goto(f"{base_url}/no-such-page-deep-link")
     assert response is not None
     assert response.status == 200
 
