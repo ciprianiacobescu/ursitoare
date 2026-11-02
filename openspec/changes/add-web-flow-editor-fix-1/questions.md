@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | technical | Unfreeze the two stale deep-link e2e tests so task 1.1 can point them at an unowned path |
+| Q-001 | answered | 1.1 | technical | Unfreeze the two stale deep-link e2e tests so task 1.1 can point them at an unowned path |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Unfreeze the two stale deep-link e2e tests so task 1.1 can point them at an unowned path
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The conflict is real: e2e/test_m0_skeleton.py (line 227) and e2e/test_l4_c_0daf92cd.py (line 10) open /flows and expect the "Page not found" heading, while web/src/features/70-flows.tsx registers /flows as the spec requires (Flow pages requirement). No production change can satisfy both. But the onl
 - **Blocking tasks:** 1.1
 - **Kind:** technical
@@ -35,3 +35,4 @@ Harness note: this is a fix task. It cannot unfreeze a test or test-support file
 
 ### Answer
 <!-- write below this line -->
+Option 1. The owner chose option 1 and delegated the commit ("unblock U28 as my delegate", 2026-11-02); Claude Code made it as 17bb0bf1d5 on the unit branch, and its message says so: e2e/test_m0_skeleton.py and e2e/test_l4_c_0daf92cd.py now open /no-such-page-deep-link instead of /flows; names, markers, titles and every assertion are unchanged. The requirement they check is "Page not found" for a path no feature owns, and this unit now owns /flows, so the old target was stale; the generated C-5bbabdc1 test already uses the same path. Checked locally on Node 24 with the offline e2e stack: the full e2e suite passes. Task 1.1 needs no other change: keep web/src/features/70-flows.tsx and the /flows route as they are, do not edit the e2e tests again, and run the gates.
