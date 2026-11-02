@@ -1,4 +1,4 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
+// The graph page, the editor panel and their texts (design.md decisions 1 and 10).
 
 import type { VersionRow } from "../flows/versions.ts";
 
@@ -10,24 +10,34 @@ export interface GraphPage {
   capability: string | null;
 }
 
+const FLOW_ID_PATTERN = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
+const FLOW_ID_MAX_LENGTH = 64;
+
 export const GRAPH_PAGE: GraphPage = {
-  id: "",
-  file: "",
-  path: "",
+  id: "flow-graph",
+  file: "75-flow-graph.tsx",
+  path: "/flows/:flowId/graph",
   navLabel: null,
   capability: null,
 };
 
-export const GRAPH_PANEL: { id: string; title: string } = { id: "", title: "" };
+export const GRAPH_PANEL: { id: string; title: string } = { id: "graph", title: "Graph" };
 
-export function graphPath(_flowId: string): string {
-  throw new Error("not implemented");
+export function graphPath(flowId: string): string {
+  if (
+    typeof flowId !== "string" ||
+    flowId.length > FLOW_ID_MAX_LENGTH ||
+    !FLOW_ID_PATTERN.test(flowId)
+  ) {
+    throw new RangeError("flowId must match ^[a-z][a-z0-9]*(-[a-z0-9]+)*$");
+  }
+  return `/flows/${flowId}/graph`;
 }
 
-export function needsDocument(_version: VersionRow | null, _canonical: unknown): boolean {
-  throw new Error("not implemented");
+export function needsDocument(version: VersionRow | null, canonical: unknown): boolean {
+  return version !== null && (canonical === null || canonical === undefined);
 }
 
-export function versionNote(_version: number | null): string {
-  throw new Error("not implemented");
+export function versionNote(version: number | null): string {
+  return version === null ? "No version saved yet." : `Showing version ${version}.`;
 }

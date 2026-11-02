@@ -18,7 +18,7 @@ Spec: `specs/web-flow-graph/spec.md`; data: `reference.md`; signatures and decis
 
 ## 5. The panel, the page and the feature file
 
-- [ ] 5.1 Write `web/src/flow-graph/pages.test.ts` first (scenario "Registration, path and sources of the pages", after `existsSync` of the four files), then implement `GRAPH_PAGE`, `GRAPH_PANEL`, `graphPath`, `needsDocument`, `versionNote` in `web/src/flow-graph/pages.ts`, `GraphPanel` in `web/src/flow-graph/GraphPanel.tsx`, `FlowGraphPage` in `web/src/flow-graph/FlowGraphPage.tsx` and create `web/src/features/75-flow-graph.tsx` as design.md § Component wiring says, implementing requirement "The graph appears in the editor and on its own page"
+- [x] 5.1 Write `web/src/flow-graph/pages.test.ts` first (scenario "Registration, path and sources of the pages", after `existsSync` of the four files), then implement `GRAPH_PAGE`, `GRAPH_PANEL`, `graphPath`, `needsDocument`, `versionNote` in `web/src/flow-graph/pages.ts`, `GraphPanel` in `web/src/flow-graph/GraphPanel.tsx`, `FlowGraphPage` in `web/src/flow-graph/FlowGraphPage.tsx` and create `web/src/features/75-flow-graph.tsx` as design.md § Component wiring says, implementing requirement "The graph appears in the editor and on its own page"
 
 ## 6. Loading and the milestone journey
 
