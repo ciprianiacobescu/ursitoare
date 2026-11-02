@@ -28,7 +28,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-015 | answered | none | verdict | Hold H-1fadb9d3: UI criterion C-5be45b98 has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-abaa3609: UI criterion C-830797f7 has no end-to-end test; see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-32a186e4: UI criterion C-2619a93b has no end-to-end test; see the generated UI tests table |
-| Q-018 | open | none | verdict | Hold H-7eb5a856: UI criterion C-68b2dc11 has no end-to-end test; see the generated UI tests table |
+| Q-018 | answered | none | verdict | Hold H-7eb5a856: UI criterion C-68b2dc11 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -474,7 +474,8 @@ accept Criterion C-2619a93b is alice's browser journey and the committed e2e tes
 
 ## Q-018: Hold H-7eb5a856: UI criterion C-68b2dc11 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -493,3 +494,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-68b2dc11 is bob's browser journey and the committed e2e test test_c_68b2dc11_bob_reads_the_graph_but_cannot_save follows its scenario: alice creates demo-graph and saves GRAPH_GOOD in one context, bob signs in in a second context, opens Flows, finds the demo-graph row in the table named Flows, opens the link demo-graph, sees the Graph region list fetch, route, done and failed, presses route and reads switch in Node details, presses Save version and sees You are not allowed to do this. and Decision id:, with assert_accessible on his editor page. I read the code that produces each expectation: the Flows table has the caption Flows and links each row to the editor; the editor loads the latest version with its canonical document and passes both to the panel, which renders the graph directly with the list buttons and the details section; a refused save is reported through the toast with flowErrorMessage, which appends Decision id and the id to the kit's FORBIDDEN text when the 403 carries a decisionId, and the Node journey against the real engine proves that bob's save is refused with 403 while he reads the same graph as alice. The generated test that failed at head is not in the repository, so its failure cannot be traced to the product, while the committed journey covers the whole scenario. The unit can go on.
