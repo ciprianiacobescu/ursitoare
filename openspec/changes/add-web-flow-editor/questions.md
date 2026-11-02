@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | none | verdict | Criterion C-086f1719 (web-flow-editor › The editor works against the real engine, in logic and in a browser › Alice creates, edits, saves and validates): accept as satisfied? |
 | Q-002 | answered | none | verdict | Hold H-5e7d0c9f: UI criterion C-1f5393c5 has no end-to-end test; see the generated UI tests table |
 | Q-003 | answered | none | verdict | Hold H-35d043eb: UI criterion C-b6b033e0 has no end-to-end test; see the generated UI tests table |
-| Q-004 | open | none | verdict | Hold H-07cda852: UI criterion C-e71f3bcb has no end-to-end test; see the generated UI tests table |
+| Q-004 | answered | none | verdict | Hold H-07cda852: UI criterion C-e71f3bcb has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-38c874c4: UI criterion C-94bf935b has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-67f12272: UI criterion C-92ac8872 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-a353239d: UI criterion C-f4c862cb has no end-to-end test; see the generated UI tests table |
@@ -116,7 +116,8 @@ accept The hold can be waived. The criterion checks parseFlow, flowCells and flo
 
 ## Q-004: Hold H-07cda852: UI criterion C-e71f3bcb has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -135,6 +136,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion checks checkFlowName, checkOwnerTeam and postFlow against exact inputs, a recording client and crafted answers, and the Node test beside the module asserts every clause of the scenario: the empty-name and empty-team messages, the four refused names with the name message, the trimmed valid name, the team checks, the single call with its body and Idempotency-Key header, the two RangeError inputs that send nothing, and the INVALID_RESPONSE rejection. The create form wires those checks and sends postFlow with a fresh key. The generated browser test that failed at the head opened the Flows page without signing in, and the web app sends an unauthenticated visitor to the sign-in page, so that failure describes the generated test and not the code.
 ---
 
 ## Q-005: Hold H-38c874c4: UI criterion C-94bf935b has no end-to-end test; see the generated UI tests table
