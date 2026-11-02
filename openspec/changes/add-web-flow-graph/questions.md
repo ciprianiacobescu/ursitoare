@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-013 | answered | none | verdict | Hold H-13fe6678: UI criterion C-99ed5dc0 has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-d1691d3f: UI criterion C-4ca8acf8 has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-1fadb9d3: UI criterion C-5be45b98 has no end-to-end test; see the generated UI tests table |
-| Q-016 | open | none | verdict | Hold H-abaa3609: UI criterion C-830797f7 has no end-to-end test; see the generated UI tests table |
+| Q-016 | answered | none | verdict | Hold H-abaa3609: UI criterion C-830797f7 has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-32a186e4: UI criterion C-2619a93b has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-7eb5a856: UI criterion C-68b2dc11 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -424,7 +424,8 @@ accept Criterion C-5be45b98 checks the GRAPH_PAGE and GRAPH_PANEL constants, gra
 
 ## Q-016: Hold H-abaa3609: UI criterion C-830797f7 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -443,6 +444,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-830797f7 is the scenario Alice, bob and mallory read graphs from the engine, which the specification itself assigns to the Node journey m3-authoring.test.ts against the e2e stack, not to a browser test. Its committed Node test starts the stack, signs in the three seed users, creates demo-graph and empty-graph, saves GRAPH_GOOD then GRAPH_BAD, and asserts every point of the scenario: saved true and version 2, the layout equal to the parsed GRAPH_BAD layout, the ready message and the four item ids and summaries, the unsaved result for empty-graph, bob's result equal to alice's, 404 NOT_FOUND for mallory and for ghost, and 403 for bob's save. loadLatestGraph in graph-source.ts reads the flow then the version by hash and returns the not-saved result when latest is null, and graphView builds the message and summaries the test checks. The scenario calls logic functions with API clients and has no page to drive, so no end-to-end browser test can trace it, and the committed Node test, which ran red then green, is the right evidence. The unit can go on.
 ---
 
 ## Q-017: Hold H-32a186e4: UI criterion C-2619a93b has no end-to-end test; see the generated UI tests table
