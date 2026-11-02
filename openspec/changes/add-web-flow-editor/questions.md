@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-086f1719 (web-flow-editor › The editor works against the real engine, in logic and in a browser › Alice creates, edits, saves and validates): accept as satisfied? |
-| Q-002 | open | none | verdict | Hold H-5e7d0c9f: UI criterion C-1f5393c5 has no end-to-end test; see the generated UI tests table |
+| Q-002 | answered | none | verdict | Hold H-5e7d0c9f: UI criterion C-1f5393c5 has no end-to-end test; see the generated UI tests table |
 | Q-003 | open | none | verdict | Hold H-35d043eb: UI criterion C-b6b033e0 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-07cda852: UI criterion C-e71f3bcb has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-38c874c4: UI criterion C-94bf935b has no end-to-end test; see the generated UI tests table |
@@ -66,7 +66,8 @@ accept The criterion is satisfied as it stands. The browser journey tagged with 
 
 ## Q-002: Hold H-5e7d0c9f: UI criterion C-1f5393c5 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -85,6 +86,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion is about the values of module exports and the behaviour of the feature registry, which a browser cannot observe, and the project's own rules make Node tests next to the code the evidence for such a criterion. Those tests exist and check the scenario as written: the page table deep-equals the expected list, the registry navigation gives the Flows entry for a reader and nothing for an empty capability set, the feature literal reader gives null for a text without a feature, both feature files are read and compared to their page, and the tables equal the reference data.
 ---
 
 ## Q-003: Hold H-35d043eb: UI criterion C-b6b033e0 has no end-to-end test; see the generated UI tests table
