@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-38c874c4: UI criterion C-94bf935b has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-67f12272: UI criterion C-92ac8872 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-a353239d: UI criterion C-f4c862cb has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-4b5a072c: UI criterion C-36b16be8 has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-4b5a072c: UI criterion C-36b16be8 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-4db2c80f: UI criterion C-f96f8003 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-62ed1c71: UI criterion C-944fd4d1 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-796232b4: UI criterion C-84837cec has no end-to-end test; see the generated UI tests table |
@@ -216,7 +216,8 @@ accept The hold can be waived. The criterion checks starterText, detectFormat an
 
 ## Q-008: Hold H-4b5a072c: UI criterion C-36b16be8 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -235,6 +236,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion checks validateVersion against a recording client, parseValidation against bad shapes, and diagnosticRows, diagnosticHref and diagnosticsSummary against exact inputs, which a browser cannot observe, and the project's rules make Node tests the evidence for such a criterion. The Node tests beside the modules assert every clause: the validate call with the encoded hash, no body and no options, the L9 answer rejecting with INVALID_RESPONSE, the three bad shapes parsing to null, the three rows with their where, href and link text, the six hrefs, and both summaries. The browser-visible outcome of the same requirement, the Diagnostics status reading Not valid with one error and the guide link whose href ends with the l2_unknown_block anchor, is asserted by the repository's own browser journey, and the Node journey checks the same row against the real engine. The generated browser test that failed at the head is not in the repository and failed at the base as well, so it does not describe a defect in the code.
 ---
 
 ## Q-009: Hold H-4db2c80f: UI criterion C-f96f8003 has no end-to-end test; see the generated UI tests table
