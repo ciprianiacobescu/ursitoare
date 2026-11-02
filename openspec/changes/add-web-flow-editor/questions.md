@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-a353239d: UI criterion C-f4c862cb has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-4b5a072c: UI criterion C-36b16be8 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-4db2c80f: UI criterion C-f96f8003 has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-62ed1c71: UI criterion C-944fd4d1 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-62ed1c71: UI criterion C-944fd4d1 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-796232b4: UI criterion C-84837cec has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-b9374a84: UI criterion C-ba506c1d has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
@@ -266,7 +266,8 @@ accept The hold can be waived. The criterion is a parity property between the we
 
 ## Q-010: Hold H-62ed1c71: UI criterion C-944fd4d1 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -285,6 +286,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion checks lineColumnOffset offsets, pointerRange slices and the from, to, severity, message and source of lintItems against exact inputs, none of which the rendered page exposes, and the project's rules make Node tests the evidence for such a criterion. The Node tests beside the modules assert the scenario: the six offsets, the nine YAML slices plus the JSON, escaped-key and empty-text cases, and the four marks in row order with the position row at 8 to 14 and the last at 0 to 7, each carrying its severity, the code-prefixed message and the code as source. The implementations match, the page feeds those marks to the editor, and the Node journey slices the real engine's pointer to the offending block reference.
 ---
 
 ## Q-011: Hold H-796232b4: UI criterion C-84837cec has no end-to-end test; see the generated UI tests table
