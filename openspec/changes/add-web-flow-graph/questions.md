@@ -27,7 +27,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-014 | answered | none | verdict | Hold H-d1691d3f: UI criterion C-4ca8acf8 has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-1fadb9d3: UI criterion C-5be45b98 has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-abaa3609: UI criterion C-830797f7 has no end-to-end test; see the generated UI tests table |
-| Q-017 | open | none | verdict | Hold H-32a186e4: UI criterion C-2619a93b has no end-to-end test; see the generated UI tests table |
+| Q-017 | answered | none | verdict | Hold H-32a186e4: UI criterion C-2619a93b has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-7eb5a856: UI criterion C-68b2dc11 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -449,7 +449,8 @@ accept Criterion C-830797f7 is the scenario Alice, bob and mallory read graphs f
 
 ## Q-017: Hold H-32a186e4: UI criterion C-2619a93b has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -468,6 +469,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-2619a93b is alice's browser journey and the committed e2e test test_c_2619a93b_alice_creates_a_flow_from_yaml_and_reads_its_graph follows its scenario step by step with role and label locators: the UNSAVED text after the create, the Nodes list with fetch, route, done and failed and the ready message after the save, the Diagnostics region with Not valid 1 error and the L2_UNKNOWN_BLOCK guide link, the UNSAVED text again after GRAPH_GOOD is filled, Valid 0 errors and Open version 2 after Validate, aria-pressed true on route and the switch details, the details of done and of the drawn node fetch, the graph page title, heading, Showing version 2 and the four buttons, Back to the editor, the NOT_FOUND alert for ghost, and assert_accessible on each page. I read the code that produces each of these: the editor passes a null version to the panel while the text differs from the baseline, so GraphPanel renders graphView(null, false) with the UNSAVED message; FlowGraphView renders the status message, the list named Nodes with aria-pressed buttons in layout order and the Node details section from nodeDetailRows; FlowGraphPage sets the title, the h1, versionNote and the back link, and shows the kit ErrorPanel, a role alert printing the error code, for a missing flow. The generated test could not be collected because it imported a module named tests that does not exist under e2e, which says nothing about the product. The unit can go on.
 ---
 
 ## Q-018: Hold H-7eb5a856: UI criterion C-68b2dc11 has no end-to-end test; see the generated UI tests table
