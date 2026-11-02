@@ -1,0 +1,3 @@
+{"ts": "2026-11-02T14:57:12.479353Z", "run_id": "r-20261102T1457Z-88b9", "unit": "openspec:add-web-flow-graph", "seq": 1, "type": "run.started", "harness_version": "0.4.53", "harness_commit": "b5707d29a0854661b4770c52ff6019178b642476", "command": "plan --sweep", "branch": "l4/openspec/add-web-flow-graph"}
+{"ts": "2026-11-02T14:57:12.479853Z", "run_id": "r-20261102T1457Z-88b9", "unit": "openspec:add-web-flow-graph", "seq": 2, "type": "resume.hint", "head": "8b608044edcf410c097b963d19304fba94a042cf"}
+{"ts": "2026-11-02T14:57:13.927621Z", "run_id": "r-20261102T1457Z-88b9", "unit": "openspec:add-web-flow-graph", "seq": 3, "type": "run.finished", "exit_code": 0}
