@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-3fb54c46: UI criterion C-cf729adf has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-2939d42a: UI criterion C-793687fa has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-5b762cd4: UI criterion C-54028b08 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-ada1ea8a: UI criterion C-5070339e has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-ada1ea8a: UI criterion C-5070339e has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-ff7d32cd: UI criterion C-ada22065 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-13fe6678: UI criterion C-99ed5dc0 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-d1691d3f: UI criterion C-4ca8acf8 has no end-to-end test; see the generated UI tests table |
@@ -299,7 +299,8 @@ accept Criterion C-54028b08 checks chooseNode: an id of the drawn layout is sele
 
 ## Q-011: Hold H-ada1ea8a: UI criterion C-5070339e has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -318,6 +319,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-5070339e checks the return values of viewBox, drawNodes and drawEdges for the S, ODD and CYCLE layouts and a switch with a long case key: the view box string, each node's geometry, title, subtitle and class names, and each edge's path, class, label and label point. These are pure functions with no DOM, and a page can only show one saved flow, so the per-layout results are not observable as such through the browser. The Node test in drawing.test.ts deep-compares the S nodes and edges with the figures of the scenario, checks the class and subtitle of the unknown unreachable node q, the clipped title, the upward class of the closing edge of CYCLE and the clipped label, and drawing.ts produces exactly these: class names added in the order start, selected, unknown, unreachable, titles cut to 22 characters, labels cut to 24, the edge key and path from the layout coordinates. FlowGraphView renders the drawing from these functions, and the browser journey clicks the drawn node fetch and reads its details, which is what a user can observe. The unit can go on.
 ---
 
 ## Q-012: Hold H-ff7d32cd: UI criterion C-ada22065 has no end-to-end test; see the generated UI tests table
