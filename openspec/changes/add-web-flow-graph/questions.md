@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-afa2b3ee: UI criterion C-1129d3e7 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-3fb54c46: UI criterion C-cf729adf has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-2939d42a: UI criterion C-793687fa has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-5b762cd4: UI criterion C-54028b08 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-5b762cd4: UI criterion C-54028b08 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-ada1ea8a: UI criterion C-5070339e has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-ff7d32cd: UI criterion C-ada22065 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-13fe6678: UI criterion C-99ed5dc0 has no end-to-end test; see the generated UI tests table |
@@ -274,7 +274,8 @@ accept Criterion C-793687fa checks the exact rows nodeDetailRows returns for nod
 
 ## Q-010: Hold H-5b762cd4: UI criterion C-54028b08 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -293,6 +294,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-54028b08 checks chooseNode: an id of the drawn layout is selected, an id that is no node, including __proto__ and toString, leaves the selection unchanged, and without a layout nothing is selected. The Node test asserts the six calls of the scenario and chooseNode looks the id up in a Set of the layout's node ids. The hold arose because the generated test writer was refused a tool call, not because the behaviour is untestable or wrong; the committed browser journey already exercises selection through the page: pressing the list button route gives it aria-pressed true and fills Node details, Enter on done and a click on the drawing node fetch change the details, and FlowGraphView routes every click through chooseNode. The unit can go on.
 ---
 
 ## Q-011: Hold H-ada1ea8a: UI criterion C-5070339e has no end-to-end test; see the generated UI tests table
