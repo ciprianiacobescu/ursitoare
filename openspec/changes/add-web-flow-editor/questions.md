@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-4b5a072c: UI criterion C-36b16be8 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-4db2c80f: UI criterion C-f96f8003 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-62ed1c71: UI criterion C-944fd4d1 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-796232b4: UI criterion C-84837cec has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-796232b4: UI criterion C-84837cec has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-b9374a84: UI criterion C-ba506c1d has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-99f05b4a: UI criterion C-3e0a938c has no end-to-end test; see the generated UI tests table |
@@ -291,7 +291,8 @@ accept The hold can be waived. The criterion checks lineColumnOffset offsets, po
 
 ## Q-011: Hold H-796232b4: UI criterion C-84837cec has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -310,6 +311,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion checks the editor state, the key bindings, the theme, the style sheet, the mount source and the page sources against exact facts, which a browser cannot observe, and the project's rules make Node tests the evidence for such a criterion and leave browser-only facts to the verifier. The Node tests beside the modules assert the scenario: the state holds the text, the label is Flow text, the content attributes carry aria-label and aria-multiline, no binding contains Tab, the theme has no raw colour and uses var tokens, no source read uses an inline style, cspNonce, unsafe-inline, eval or dangerouslySetInnerHTML, the mount attaches an open shadow root and the page uses rel noopener noreferrer. I read the implementation myself: the mount passes the shadow root as root to the EditorView, every var the theme and flows.css use is a token of tokens.css, and flows.css holds no raw colour. The repository's own browser journey adds the browser-visible facts: no Content-Security-Policy console message, overflow-x auto on the scroller and Tab leaving the text box for Save version.
 ---
 
 ## Q-012: Hold H-b9374a84: UI criterion C-ba506c1d has no end-to-end test; see the generated UI tests table
