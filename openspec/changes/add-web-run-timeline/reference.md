@@ -6,6 +6,8 @@
 
 `PAY_ROWS` (rows of `STEPS[2]` with `"completed"`, each `{ term, value, href: null }`): Node `pay`, Kind `block`, State `completed`, Outcome `none`, Started `2026-11-02T10:00:01.000000Z`, Ended `2026-11-02T10:00:01.500000Z`, Effect sequence `0`, Attempt `1`, Idempotency key `"ik1_" + D("d")`, Taint `untrusted`.
 
+`PAY_FAILED_TAIL` (end of the rows of the failed `pay` step of the timeline scenario): Idempotency key `none`, Taint `none`, `{ term: "Error", value: "E_X: failed", href: null }` and `{ term: "Decision", value: "dec_1", href: "/api/v1/policy-decisions?decision_id=dec_1" }`.
+
 `BAD_RENDERERS`: `kind` `"Bad Kind"`, `""` and 41 times `"k"`; `label: "x"`; no `details`; `null`; the string `"block"`. `INPUT` = `{ vendor_name: "ACME", amount: 12.5 }`; `MOCKS` = `{ lookup: [{ output: { vendor_id: "V-1", status: "active" } }], pay: [{ output: { payment_id: "P-1", status: "created" } }] }`; `INPUT_TEXT`, `MOCKS_TEXT` are their `JSON.stringify`. `V` is a `VersionRow` of `demo-pay`, `number` 2.
 
 ## Journey flow
@@ -34,6 +36,14 @@ nodes:
   done: { kind: end, status: completed, output: { payment_id: "${{ nodes.pay.output.payment_id }}" } }
   blocked: { kind: end, status: failed }
 ```
+
+## Calls
+
+`loadSteps` makes `{ path: "/runs/run_1/steps", opts: { query: { limit: 200 }, signal } }`, then the same with `cursor: "c1"` in the query; `loadPayload` makes exactly `{ path: "/runs/run_1/payloads/" + D("4"), opts: { signal } }`.
+
+## Pages
+
+`RUN_PAGES` is `[{ id: "runs", file: "80-runs.tsx", path: "/runs", navLabel: "Runs", capability: "read_run" }, { id: "run", file: "81-run.tsx", path: "/runs/:runId", navLabel: null, capability: null }]`; `TEST_RUN_PANEL` is `{ id: "test-run", title: "Test run" }`. The panel views are `{ kind: "message", reason: "unavailable", text: "Your permissions could not be loaded. Reload the page." }`, `{ kind: "message", reason: "denied", text: "Only authors can start a test run." }` and `{ kind: "message", reason: "no_version", text: "Save and validate a version to test-run it." }`; `parseTestInputs` gives, in the order of the scenario, `{ ok: true, input: {}, mocks: {} }`, `ok` true with `INPUT` and `MOCKS`, `errors` `{ input: "Enter a JSON object." }`, `errors` `{ input: "Enter a JSON object, for example {}." }`, `errors` `{ input: "This is not valid JSON.", mocks: "Enter a JSON object, for example {}." }`, and `ok` true.
 
 ## Messages
 

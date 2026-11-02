@@ -2,6 +2,8 @@
 
 Exit tests 1 and 2 kill the engine with SIGKILL in a durable run and expect it to finish once. U34 needs one harness for that; the product must have no way to arm a crash. Observable result: `test/support/crash/` starts every discovered e2e part on a private embedded Postgres, runs a scenario module a test built in a child process, kills it hard at an armed fault point or on request, restarts it on the same database, and counts effects by idempotency key. The `FaultPoints` port in `src/config` fires once per marker file; no production config or module can create one, and an architecture test proves it. The harness proves itself with its workflow `crash.counter`: armed at `after:two` its step log reads `one, two, two, three, done` and it ends `SUCCESS`; at `before:two`, `one, two, three, done`.
 
+Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: the harness that kills and restarts engines, so the kill proofs of U34 can run.
+
 ## What Changes
 
 `src/config/faults.ts` and its re-export; `test/arch/fault-points.ts`; `test/support/crash/` (`observer`, `effects`, `cluster`, `engine`, `child`, `counter-scenario`, `index`). The child runs scenario modules, never `src/main.ts` (D4); the interpreter's SIGKILL proofs are U34's (D5).

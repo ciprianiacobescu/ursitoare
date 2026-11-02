@@ -19,11 +19,13 @@ const FALLBACK_MESSAGE: string
 function messageFor(code: string): string
 function registerMessages(messages: Readonly<Record<string, string>>): void
 function errorPanelModel(error: unknown): { code: string; status: number | null; title: string; message: string; decisionId: string | null }
-// web/src/kit/data/: cursor-list.ts:23, page-fetcher.ts:29, form-errors.ts:7, :67
+// web/src/kit/data/: data-table.ts:134 (tableView), cursor-list.ts:23, :54, page-fetcher.ts:29, form-errors.ts:7, :67
 type FetchPage<T> = (request: { cursor: string | null; limit: number; signal: AbortSignal }) => Promise<{ items: readonly T[]; next_cursor: string | null }>
 function cursorPageFetcher<T>(client: Pick<ApiClient, "get">, path: string, opts: { parseItem: (raw: unknown) => T | null; query?: O["query"] }): FetchPage<T>
 type FormErrors = Readonly<Record<string, string>>   // "$form" is the form-level message
 function mapEnvelopeErrors(error: unknown, fields: readonly string[]): FormErrors
+function createCursorList<T>(fetchPage: FetchPage<T>, opts?: { pageSize?: number }): CursorList<T>   // getState(), load(), retry(); state { status: "idle" | "loading" | "loaded" | "error"; items; nextCursor; error }
+function tableView(state: CursorListState<unknown>): TableView   // status error, no rows: retry "again", retryLabel "Try again" ("Start over" for CURSOR_INVALID), showError true; loaded: retryLabel null
 // also used (props as the files declare): DataTable.tsx:13, Form.tsx:14, Field.tsx:19, ErrorPanel.tsx:6, LoadingState.tsx:5, browser-session.ts:4 (browserSession.api: ApiClient)
 // kit/contrast.ts:146, :166; test/support/e2e-stack/stack.ts:101; test/journeys/session.ts:35, :68; flows/flows.ts:133, versions.ts:204, :230
 function findRawColours(css: string): SourceHit[]
@@ -45,4 +47,5 @@ At main@e06fdb3.
 - `web/src/kit/messages.ts:38-60`: `registerMessages` throws `KIT_MESSAGE_DUPLICATE` for a registered code with other text; `web/src/admin/messages.ts:12-13` registers `OPERATION_REFUSED` and `ENGINE_KEY_REQUIRED` at load (`features/60-admin-users.tsx:5`). This unit registers only its three own codes.
 - `web/src/kit/data/DataTable.tsx:59-61,127`: a loaded table is a `role="group"` named by the caption holding a `role="region"` of that name and a `<table>` with `<caption>`; a `rowHeader` column is `<th scope="row">`. `ErrorPanel.tsx:6-20`: `<section role="alert">` with "Error code: `<code>`".
 - `web/src/features/index.ts:4-8`: every `./*.tsx` exports `feature`; `test/arch/web-routes.ts:17,86-115`: `path` must be a string literal; `src/api/web.ts:192-211`: a non-file path without an asset extension gets `index.html`.
+- `web/src/auth/session-client.ts:40`, `return-to.ts:84-93`: a 401 on any `browserSession.api` call sends the page to `/sign-in` (merged kit; no test here).
 - `e2e/test_l4_c_133bb26a.py:10,29-30` (frozen): `/runs/r1/` signed out shows `main` and the link "Ursitoare"; so does `/flows`.

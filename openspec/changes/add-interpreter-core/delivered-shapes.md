@@ -27,6 +27,7 @@ function loadTestFlow(name: string): Flow
 
 - `src/authoring/format/refs.ts:24`: `const SEG = /^[A-Za-z0-9_]+$/;` so `inputs.invoice.tags.0` parses; `:101`: `error: "unterminated ${{ (missing }})"` is a segment with `error`.
 - `src/authoring/validate/jsonschema.ts:122`: ``reason: `${here} is an array; paths cannot index into arrays ...` ``; `l2.ts:211`: `` `cycle ${...}; v0 flows must be acyclic` `` (`L2_CYCLE`): a validated version never visits a node twice.
+- `src/tenancy/context.ts:12`: `export const TENANT_ID_PATTERN: RegExp = /^[A-Za-z0-9_-]{1,64}$/;`.
 - `src/authoring/validate/jsonschema.ts:6`: `import { Ajv2020 } from "ajv/dist/2020.js";`; `package.json:34`: `"ajv": "8.20.0"`.
 - `src/core/ids.ts:76`: ``const id = `${prefix}_00000000-0000-7000-8000-${hex(counter, 12)}`;`` so `sequentialIds(0).next("run")` is `run_00000000-0000-7000-8000-000000000000`.
 - `test/support/catalogue/blocks.v0.json:38-43,73`: `erp.lookup_vendor@1` (effect `read`; output `status` enum `["active", "blocked"]`, required `vendor_id`, `status`); `erp.create_payment@1` (effect `pay`; output requires `payment_id`, `status`).
