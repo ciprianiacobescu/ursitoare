@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Hold H-ada1ea8a: UI criterion C-5070339e has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-ff7d32cd: UI criterion C-ada22065 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-13fe6678: UI criterion C-99ed5dc0 has no end-to-end test; see the generated UI tests table |
-| Q-014 | open | none | verdict | Hold H-d1691d3f: UI criterion C-4ca8acf8 has no end-to-end test; see the generated UI tests table |
+| Q-014 | answered | none | verdict | Hold H-d1691d3f: UI criterion C-4ca8acf8 has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-1fadb9d3: UI criterion C-5be45b98 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-abaa3609: UI criterion C-830797f7 has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-32a186e4: UI criterion C-2619a93b has no end-to-end test; see the generated UI tests table |
@@ -374,7 +374,8 @@ accept Criterion C-99ed5dc0 checks the exact request sequence of loadLatestGraph
 
 ## Q-014: Hold H-d1691d3f: UI criterion C-4ca8acf8 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -393,6 +394,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-4ca8acf8 checks needsDocument, loadGraphDocument against a recording client, the GRAPH_LOADING constant, and settleGraphLoad with resolved values and with rejections, including the error panel model of each failure and the mapping of a RangeError to a 404 ApiRequestError. These are return values of pure or fake-backed functions and cannot be observed as such through a page. The Node test in graph-source.test.ts asserts each point of the scenario, and graph-source.ts and pages.ts implement them: needsDocument is true only when a version is set and the canonical document is null or undefined, loadGraphDocument returns the canonical of loadVersion, settleGraphLoad never rejects and wraps a failure with graphLoadError and the label Try again, and graphLoadError maps a RangeError to a 404 NOT_FOUND. GraphPanel and FlowGraphPage use these to show LoadingState, then the graph or the kit ErrorPanel with a retry button, and the browser journey shows the panel's loaded graph after a save and the error alert of the page for a missing flow. The unit can go on.
 ---
 
 ## Q-015: Hold H-1fadb9d3: UI criterion C-5be45b98 has no end-to-end test; see the generated UI tests table
