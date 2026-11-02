@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Hold H-5b762cd4: UI criterion C-54028b08 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-ada1ea8a: UI criterion C-5070339e has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-ff7d32cd: UI criterion C-ada22065 has no end-to-end test; see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-13fe6678: UI criterion C-99ed5dc0 has no end-to-end test; see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-13fe6678: UI criterion C-99ed5dc0 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-d1691d3f: UI criterion C-4ca8acf8 has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-1fadb9d3: UI criterion C-5be45b98 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-abaa3609: UI criterion C-830797f7 has no end-to-end test; see the generated UI tests table |
@@ -349,7 +349,8 @@ accept Criterion C-ada22065 is a static check of the style sheet and the compone
 
 ## Q-013: Hold H-13fe6678: UI criterion C-99ed5dc0 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -368,6 +369,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-99ed5dc0 checks the exact request sequence of loadLatestGraph against a recording client: the flow then the version by hash with the signal, the result with saved, version and canonical, one call only when the flow has no version, an ApiRequestError passed on as the same object, and a RangeError for a malformed id with no request sent. These are the calls and return values of a function with a fake client and cannot be observed as such through a page. The Node test in graph-source.test.ts asserts each of these, and graph-source.ts does exactly this through U28's loadFlow and loadVersion, returning the not-saved result when latest is null and otherwise reading the version by its hash. FlowGraphPage calls loadLatestGraph for the graph page, and the browser journey shows the resulting page for demo-graph with Showing version 2 and the alert with NOT_FOUND for the flow ghost, which is the user-visible outcome of this loader; the Node journey against the real engine checks the results for alice, bob and mallory. The unit can go on.
 ---
 
 ## Q-014: Hold H-d1691d3f: UI criterion C-4ca8acf8 has no end-to-end test; see the generated UI tests table
