@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-02T16:32:24Z",
+  "integrated_revision": "f9196f2474d0dfcbdfe4c779adaf514910e417e6",
+  "merge_commit": "f9196f2474d0dfcbdfe4c779adaf514910e417e6",
+  "plan_digest": "17f19b151151b0e3",
+  "plan_id": "m3",
+  "postcheck": "pass",
+  "pr": 64,
+  "receipt_id": "m3/openspec:add-web-flow-graph/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "55c01b5e102adfc39e2fdc7d4b3b270c54a6f41d",
+  "spec_digest": "83f4788ded08b82d",
+  "target": "main",
+  "unit_id": "openspec:add-web-flow-graph"
+}

@@ -115,3 +115,6 @@
 {"at":"2026-11-02T16:30:30Z","head":"55c01b5e102adfc39e2fdc7d4b3b270c54a6f41d","pr":64,"target_before":"f2167b6abe4a9ead347c378ac3d2d20d4d5a2071","type":"unit.merge_requested","unit":"openspec:add-web-flow-graph"}
 {"at":"2026-11-02T16:30:35Z","ci":"not_run","head":"55c01b5e102adfc39e2fdc7d4b3b270c54a6f41d","merge_commit":"f9196f2474d0dfcbdfe4c779adaf514910e417e6","method":"squash","pr":64,"raced":false,"type":"unit.merged","unit":"openspec:add-web-flow-graph"}
 {"at":"2026-11-02T16:30:43Z","branch":"l4/openspec/add-web-flow-graph","head":"55c01b5e102adfc39e2fdc7d4b3b270c54a6f41d","type":"unit.branch_deleted","unit":"openspec:add-web-flow-graph"}
+{"at":"2026-11-02T16:32:24Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"f9196f2474d0dfcbdfe4c779adaf514910e417e6","status":"pass","type":"unit.postcheck","unit":"openspec:add-web-flow-graph"}
+{"at":"2026-11-02T16:32:24Z","revision":"f9196f2474d0dfcbdfe4c779adaf514910e417e6","type":"unit.integrated","unit":"openspec:add-web-flow-graph"}
+{"at":"2026-11-02T16:32:24Z","attempt":1,"cost_usd":13.356545,"runs":5,"type":"plan.charged","unit":"openspec:add-web-flow-graph"}
