@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Hold H-35d043eb: UI criterion C-b6b033e0 has no end-to-end test; see the generated UI tests table |
 | Q-004 | answered | none | verdict | Hold H-07cda852: UI criterion C-e71f3bcb has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-38c874c4: UI criterion C-94bf935b has no end-to-end test; see the generated UI tests table |
-| Q-006 | open | none | verdict | Hold H-67f12272: UI criterion C-92ac8872 has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-67f12272: UI criterion C-92ac8872 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-a353239d: UI criterion C-f4c862cb has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-4b5a072c: UI criterion C-36b16be8 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-4db2c80f: UI criterion C-f96f8003 has no end-to-end test; see the generated UI tests table |
@@ -166,7 +166,8 @@ accept The hold can be waived. The criterion checks saveVersion, loadVersion and
 
 ## Q-006: Hold H-67f12272: UI criterion C-92ac8872 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -185,6 +186,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion checks textProblemRow against constructed ApiRequestError values, which no URL or user action can supply, and the project's rules make Node tests the evidence for such a criterion. The Node test beside the module asserts every clause of the scenario: the YAML parse row with its line and column, the JSON parse row with Whole text and no position, the FORMAT_NOT_JSON message, the not_object, name_mismatch and unknown-reason messages, the long message cut to 300 characters ending with an ellipsis, and null for a 409 and for a plain Error. The implementation matches those assertions, and the Node journey test also exercises textProblemRow against the real engine's refusals.
 ---
 
 ## Q-007: Hold H-a353239d: UI criterion C-f4c862cb has no end-to-end test; see the generated UI tests table
