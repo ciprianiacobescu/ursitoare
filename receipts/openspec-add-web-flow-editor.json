@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-02T10:16:39Z",
+  "integrated_revision": "3b03da35f3d239a8e379cd2c45ef000a0acb88e3",
+  "merge_commit": "3b03da35f3d239a8e379cd2c45ef000a0acb88e3",
+  "plan_digest": "17f19b151151b0e3",
+  "plan_id": "m3",
+  "postcheck": "pass",
+  "pr": 62,
+  "receipt_id": "m3/openspec:add-web-flow-editor/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "defe1e2d0b610fc2d7badd836458478b4fdebd1b",
+  "spec_digest": "d5483d58a472ffdf",
+  "target": "main",
+  "unit_id": "openspec:add-web-flow-editor"
+}
