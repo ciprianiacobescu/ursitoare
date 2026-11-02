@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-flow-editor: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-web-flow-editor: PASS (round 3)
 
 traceability: 14/15 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 14/15 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base main@4a082ec3c6 contained |
-| 1 | integrity | ok | 78.5 | 11 sub-checks; scope: 49 changed file(s) |
-| 2 | build | ok | 18.0 |  |
-| 3 | tests | ok | 107.6 |  |
-| 4 | traceability | ok | 0.1 | 14/15 criteria covered |
-| 4a | audit sampling | ok | 334.6 | 1 not_testable, 1 rejected, 3 skipped; support files at the base: 18 |
-| 5 | ui test generation | ok | 1730.7 | 3 fails_at_head, 10 not_testable, 2 writer_failed |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: test/support/e2e-stack/catalogue-part.ts, test/support/e2e-stack/parts/35-catalogue.ts, web/src/features/70-flows.tsx, web/src/features/71-flow-editor.tsx, web/src/flows/CodeEditor.tsx and 12 more |
-| 8 | s1 judge | ok | 1.2 | 8/15 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 1287.9 | 6 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
+| 4a | audit sampling | reused | 0.0 | reused (round 2) |
+| 5 | ui test generation | reused | 0.0 | reused (round 2) |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -249,6 +249,25 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 - C-36b16be8: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_36b16be8_r2.py
 
+## Answers to verdict questions
+
+- Q-001 accept C-086f1719 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser journey tagged with this criterion performs every step of the scenario and asserts every clause of its THEN: the title, the Diagnostics region status and guide link with its href, the lint range, the valid status after the good text, the overflow-...
+- Q-002 accept H-5e7d0c9f by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion is about the values of module exports and the behaviour of the feature registry, which a browser cannot observe, and the project's own rules make Node tests next to the code the evidence for such a criterion. Those tests exist and check the scenario as written: ...
+- Q-003 accept H-35d043eb by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion checks parseFlow, flowCells and flowListFetcher against recorded client calls and crafted answers, which nothing in the page exposes, and the project's rules make Node tests the evidence for such a criterion. The Node test beside the module asserts the scenario:...
+- Q-004 accept H-07cda852 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion checks checkFlowName, checkOwnerTeam and postFlow against exact inputs, a recording client and crafted answers, and the Node test beside the module asserts every clause of the scenario: the empty-name and empty-team messages, the four refused names with the name...
+- Q-005 accept H-38c874c4 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion checks saveVersion, loadVersion and saveMessage against a recording client, crafted answers and exact inputs, none of which a browser can observe, and the project's rules make Node tests the evidence for such a criterion. The Node tests beside the modules assert...
+- Q-006 accept H-67f12272 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion checks textProblemRow against constructed ApiRequestError values, which no URL or user action can supply, and the project's rules make Node tests the evidence for such a criterion. The Node test beside the module asserts every clause of the scenario: the YAML pa...
+- Q-007 accept H-a353239d by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion checks starterText, detectFormat and the engine's parseFlowText and validateFlow with exact inputs and a thrown RangeError, none of which a browser page exposes, and the project's rules make Node tests the evidence for such a criterion. The Node parity test unde...
+- Q-008 accept H-4b5a072c by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion checks validateVersion against a recording client, parseValidation against bad shapes, and diagnosticRows, diagnosticHref and diagnosticsSummary against exact inputs, which a browser cannot observe, and the project's rules make Node tests the evidence for such a...
+- Q-009 accept H-4db2c80f by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion is a parity property between the web module's diagnosticHref and the engine's diagnosticLink over every published code, which has no browser-observable outcome, and the design places that check in a Node test under test. That test exists and asserts the scenario...
+- Q-010 accept H-62ed1c71 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion checks lineColumnOffset offsets, pointerRange slices and the from, to, severity, message and source of lintItems against exact inputs, none of which the rendered page exposes, and the project's rules make Node tests the evidence for such a criterion. The Node te...
+- Q-011 accept H-796232b4 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion checks the editor state, the key bindings, the theme, the style sheet, the mount source and the page sources against exact facts, which a browser cannot observe, and the project's rules make Node tests the evidence for such a criterion and leave browser-only fac...
+- Q-012 accept H-b9374a84 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion checks editorStatus, planValidate and flowErrorMessage against constructed baselines and error values, none of which a browser page can supply, and the project's rules make Node tests next to the code the evidence for such a criterion. The Node tests beside the ...
+- Q-013 accept H-bbd88603 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion checks a module registry and the order of calls in a source file, neither of which a browser can observe, and the project's rules make Node tests the evidence for such a criterion. The Node test beside the module asserts the scenario: a valid panel registers and...
+- Q-014 accept H-99f05b4a by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion describes the test stack's catalogue seeding part, which has no page a browser could visit, and the project's rules make a Node test the evidence for test-support parts. The Node test beside the part asserts the scenario: after the first seed the default tenant ...
+- Q-015 accept H-2e32408a by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion is the logic journey against the real engine: four signed-in API clients, recorded results, status codes and error codes, which a single browser page cannot drive, and the spec itself names the Node journey file as the test. That Node journey starts the stack, s...
+- Q-016 accept H-c1bc3708 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion is the browser journey in which alice creates, edits, saves and validates a flow, and the repository holds that journey as a pytest-playwright test tagged with this criterion. It performs every step of the scenario and asserts every clause of its THEN: the Flows...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -267,7 +286,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-159129bd | web-flow-editor › Other units can add panels to the editor page › The panel registry | pass | pass | the judge passed it and a discriminating test passes |
 | C-3e0a938c | web-flow-editor › The e2e stack seeds the test blocks › Seed, re-seed, skip | pass | pass | the judge passed it and a discriminating test passes |
 | C-6b221b86 | web-flow-editor › The editor works against the real engine, in logic and in a browser › Alice, bob, carol and mallory | pass | pass | the judge passed it and a discriminating test passes |
-| C-086f1719 | web-flow-editor › The editor works against the real engine, in logic and in a browser › Alice creates, edits, saves and validates | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-086f1719 | web-flow-editor › The editor works against the real engine, in logic and in a browser › Alice creates, edits, saves and validates | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The browser journey tagged with this criterion performs every step of the scenario and asserts every clause of its THEN: the title, the Diagnostics region status and guide link with its href, the li... |
 
 ## Findings
 
@@ -288,24 +307,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-3e0a938c): No end-to-end test traces criterion C-3e0a938c (web-flow-editor › The e2e stack seeds the test blocks › Seed, re-seed, skip); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-6b221b86): No end-to-end test traces criterion C-6b221b86 (web-flow-editor › The editor works against the real engine, in logic and in a browser › Alice, bob, carol and mallory); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-086f1719): The end-to-end test test_m3_flow_editor::test_c_086f1719_alice_creates_edits_saves_and_validates[chromium] traces criterion C-086f1719 (web-flow-editor › The editor works against the real engine, in logic and in a browser › Alice creates, edits, saves and validates), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
-
-## Needs a human
-
-- UI criterion C-1f5393c5 has no end-to-end test; see the generated UI tests table
-- UI criterion C-b6b033e0 has no end-to-end test; see the generated UI tests table
-- UI criterion C-e71f3bcb has no end-to-end test; see the generated UI tests table
-- UI criterion C-94bf935b has no end-to-end test; see the generated UI tests table
-- UI criterion C-92ac8872 has no end-to-end test; see the generated UI tests table
-- UI criterion C-f4c862cb has no end-to-end test; see the generated UI tests table
-- UI criterion C-36b16be8 has no end-to-end test; see the generated UI tests table
-- UI criterion C-f96f8003 has no end-to-end test; see the generated UI tests table
-- UI criterion C-944fd4d1 has no end-to-end test; see the generated UI tests table
-- UI criterion C-84837cec has no end-to-end test; see the generated UI tests table
-- UI criterion C-ba506c1d has no end-to-end test; see the generated UI tests table
-- UI criterion C-159129bd has no end-to-end test; see the generated UI tests table
-- UI criterion C-3e0a938c has no end-to-end test; see the generated UI tests table
-- UI criterion C-6b221b86 has no end-to-end test; see the generated UI tests table
-- UI criterion C-086f1719 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
