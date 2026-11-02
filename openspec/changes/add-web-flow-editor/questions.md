@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-013 | answered | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-99f05b4a: UI criterion C-3e0a938c has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-2e32408a: UI criterion C-6b221b86 has no end-to-end test; see the generated UI tests table |
-| Q-016 | open | none | verdict | Hold H-c1bc3708: UI criterion C-086f1719 has no end-to-end test; see the generated UI tests table |
+| Q-016 | answered | none | verdict | Hold H-c1bc3708: UI criterion C-086f1719 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -416,7 +416,8 @@ accept The hold can be waived. The criterion is the logic journey against the re
 
 ## Q-016: Hold H-c1bc3708: UI criterion C-086f1719 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -435,3 +436,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion is the browser journey in which alice creates, edits, saves and validates a flow, and the repository holds that journey as a pytest-playwright test tagged with this criterion. It performs every step of the scenario and asserts every clause of its THEN: the Flows and editor titles, the Diagnostics region status containing Not valid with one error, the guide link for L2_UNKNOWN_BLOCK whose href ends with the l2_unknown_block anchor, the lint error range, the Valid status after the good text, overflow-x auto on the scroller, no Content Security Policy console message, Tab moving focus from the text box to Save version, and the accessibility check on both pages. The code implements each of those facts: the create form with the Flow name and Owner team labels and the Create flow button, the editor page with the status paragraph, the Diagnostics section with its status and guide links opened in a new tab, the Save version and Validate buttons, the text box named Flow text with aria-multiline, and the mount in an open shadow root passed as root to the editor view. The only reason the verifier set the test aside is that it has no red record, which the project's own rules make impossible: a red step runs only the Node gate and a criterion that only browser tests check is left to the verifier. The e2e gate runs the whole e2e folder and passed in the latest round together with build, typecheck and tests. The step 5 writer failed on its own output schema, which describes the harness and not the code, and the typecheck excerpt about null nav fields does not match the current feature file, which omits those fields.
