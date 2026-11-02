@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Hold H-b9374a84: UI criterion C-ba506c1d has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-99f05b4a: UI criterion C-3e0a938c has no end-to-end test; see the generated UI tests table |
-| Q-015 | open | none | verdict | Hold H-2e32408a: UI criterion C-6b221b86 has no end-to-end test; see the generated UI tests table |
+| Q-015 | answered | none | verdict | Hold H-2e32408a: UI criterion C-6b221b86 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-c1bc3708: UI criterion C-086f1719 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -391,7 +391,8 @@ accept The hold can be waived. The criterion describes the test stack's catalogu
 
 ## Q-015: Hold H-2e32408a: UI criterion C-6b221b86 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -410,6 +411,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion is the logic journey against the real engine: four signed-in API clients, recorded results, status codes and error codes, which a single browser page cannot drive, and the spec itself names the Node journey file as the test. That Node journey starts the stack, signs in alice, bob, carol and mallory and asserts every clause of the scenario: the created flow's team, count and null latest, the first save created with number 1, draft and yaml, the repeat not created with the same hash, the validated state with an ok result and no row, the loaded result and text, the version pages [2] then [1], the bad text as number 2 with one L2_UNKNOWN_BLOCK row at the fetch node and the pointer slicing to the missing block, the YAML syntax code with a position, the name mismatch row, bob's list and 403 with the decision id text, mallory's 404 NOT_FOUND and the empty lists of carol and mallory. The generated browser test failed at the base as well as at the head, so it does not discriminate and says nothing about the code; the repository's own browser journey covers the browser part of the requirement.
 ---
 
 ## Q-016: Hold H-c1bc3708: UI criterion C-086f1719 has no end-to-end test; see the generated UI tests table
