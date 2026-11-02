@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-5a9601e2: UI criterion C-024a069e has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-62f40190: UI criterion C-1616f6aa has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-afa2b3ee: UI criterion C-1129d3e7 has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-3fb54c46: UI criterion C-cf729adf has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-3fb54c46: UI criterion C-cf729adf has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-2939d42a: UI criterion C-793687fa has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-5b762cd4: UI criterion C-54028b08 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-ada1ea8a: UI criterion C-5070339e has no end-to-end test; see the generated UI tests table |
@@ -224,7 +224,8 @@ accept Criterion C-1129d3e7 asks that layoutFlow give fixed coordinates for the 
 
 ## Q-008: Hold H-3fb54c46: UI criterion C-cf729adf has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -243,6 +244,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-cf729adf drives graphView and kindText with hand-built documents such as a string, an object without nodes, an empty flow and a flow of 201 nodes, and checks the state, message, items and layout it returns. The page shows only the document saved for a flow and offers no way to inject these documents, so the scenario is checked by its Node test, which asserts every state and message of reference.md and the item lists for S, ODD, ONE and NOSTART. graph-model.ts holds the UNSAVED, NOT_MAPPING, NO_NODES, EMPTY and TOO_LARGE texts, builds the summaries with the separator and the Start, Next and Not reachable parts, and cuts the label to 80. The browser journey shows the ready message and the UNSAVED text on the page. The unit can go on.
 ---
 
 ## Q-009: Hold H-2939d42a: UI criterion C-793687fa has no end-to-end test; see the generated UI tests table
