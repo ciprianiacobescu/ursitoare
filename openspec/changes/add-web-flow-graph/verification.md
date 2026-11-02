@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-flow-graph: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-web-flow-graph: PASS (round 3)
 
 traceability: 14/16 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 14/16 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.8 | base merged: main@f2167b6abe as d42ab184d3 (1 commit) |
-| 1 | integrity | ok | 126.0 | 11 sub-checks; scope: 32 changed file(s) |
-| 2 | build | ok | 31.8 |  |
-| 3 | tests | ok | 173.1 |  |
-| 4 | traceability | ok | 0.2 | 14/16 criteria covered |
-| 4a | audit sampling | ok | 330.9 | 2 rejected, 3 skipped; support files at the base: 10 |
-| 5 | ui test generation | ok | 1307.6 | 2 fails_at_head, 12 not_testable, 1 uncollectable, 1 writer_failed |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/features/75-flow-graph.tsx, web/src/flow-graph/FlowGraphPage.tsx, web/src/flow-graph/FlowGraphView.tsx, web/src/flow-graph/GraphPanel.tsx, web/src/flow-graph/drawing.ts and 4 more |
-| 8 | s1 judge | ok | 1.3 | 12/16 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 125.5 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
+| 4a | audit sampling | reused | 0.0 | reused (round 2) |
+| 5 | ui test generation | reused | 0.0 | reused (round 2) |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -188,6 +188,27 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - C-54028b08: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_54028b08_r2.py
 - C-cf729adf: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_cf729adf_r2.py
 
+## Answers to verdict questions
+
+- Q-001 accept C-2619a93b by the delegate (claude-fable-5-1 via claude-code): The journey test e2e/test_m3_authoring.py follows the scenario step by step, and every assertion it makes is produced by code I read. The editor hands the panel a null version while the text differs from the saved baseline, so the Graph region shows the UNSAVED text after the create and after GRAPH_...
+- Q-002 accept C-68b2dc11 by the delegate (claude-fable-5-1 via claude-code): Bob's journey in e2e/test_m3_authoring.py matches the scenario and each expectation is produced by code I read. The Flows table has the caption Flows and each row links the flow id, so bob reaches the editor of demo-graph. The editor loads the latest version with its canonical document and passes bo...
+- Q-003 accept H-d0c803fb by the delegate (claude-fable-5-1 via claude-code): Criterion C-c1de3761 checks the return value of layoutFlow for the small flow S, for S with its node keys reversed, for a deep-frozen S, for SLASH and ONE, and the values of the GRAPH_GEOMETRY and MAX_GRAPH_NODES constants. These are structured results of a pure function with no DOM and two exported...
+- Q-004 accept H-dd6ec34f by the delegate (claude-fable-5-1 via claude-code): Criterion C-7a375c7a describes the layout results of layoutFlow for cycles, loops, unreachable nodes, unknown kinds and missing targets, a pure function with no DOM. The Node test deep-compares the CYCLE, LOOP, ODD, NOSTART and UNREACH layouts with the figures of reference.md, and layout.ts implemen...
+- Q-005 accept H-5a9601e2 by the delegate (claude-fable-5-1 via claude-code): Criterion C-024a069e describes the return values of layoutFlow for non-objects, documents without nodes, the empty flow and the 200-node bound. layoutFlow is a pure function with no DOM, and its invalid and too_large results are not observable as such through a page, so an end-to-end test cannot che...
+- Q-006 accept H-62f40190 by the delegate (claude-fable-5-1 via claude-code): Criterion C-1616f6aa compares successorTargets and GRAPH_NODE_KINDS of the browser bundle with U22's successorFields and NODE_KINDS. Both are pure functions and constants with no user-visible behaviour, so no end-to-end test can observe them. The Node test under test/web-flow-graph/ feeds every kind...
+- Q-007 accept H-afa2b3ee by the delegate (claude-fable-5-1 via claude-code): Criterion C-1129d3e7 asks that layoutFlow give fixed coordinates for the RF-1 catalogue flow and for the parsed GRAPH_GOOD and GRAPH_BAD documents, and that validateFlow report exactly one L2_UNKNOWN_BLOCK error for GRAPH_BAD. These are return values of pure functions compared with the figures of re...
+- Q-008 accept H-3fb54c46 by the delegate (claude-fable-5-1 via claude-code): Criterion C-cf729adf drives graphView and kindText with hand-built documents such as a string, an object without nodes, an empty flow and a flow of 201 nodes, and checks the state, message, items and layout it returns. The page shows only the document saved for a flow and offers no way to inject the...
+- Q-009 accept H-2939d42a by the delegate (claude-fable-5-1 via claude-code): Criterion C-793687fa checks the exact rows nodeDetailRows returns for nodes of S and ODD, a node with a 400-character string and other field types, and a node parsed with a __proto__ key. The Node test asserts each row list of the scenario and the implementation produces them: the fixed Node, Kind a...
+- Q-010 accept H-5b762cd4 by the delegate (claude-fable-5-1 via claude-code): Criterion C-54028b08 checks chooseNode: an id of the drawn layout is selected, an id that is no node, including __proto__ and toString, leaves the selection unchanged, and without a layout nothing is selected. The Node test asserts the six calls of the scenario and chooseNode looks the id up in a Se...
+- Q-011 accept H-ada1ea8a by the delegate (claude-fable-5-1 via claude-code): Criterion C-5070339e checks the return values of viewBox, drawNodes and drawEdges for the S, ODD and CYCLE layouts and a switch with a long case key: the view box string, each node's geometry, title, subtitle and class names, and each edge's path, class, label and label point. These are pure functio...
+- Q-012 accept H-ff7d32cd by the delegate (claude-fable-5-1 via claude-code): Criterion C-ada22065 is a static check of the style sheet and the component source: no raw colour in flow-graph.css, every var() a kit token, every class drawNodes and drawEdges can emit defined along with .flow-graph-svg, no inline style, no dangerouslySetInnerHTML, fill= or stroke= in FlowGraphVie...
+- Q-013 accept H-13fe6678 by the delegate (claude-fable-5-1 via claude-code): Criterion C-99ed5dc0 checks the exact request sequence of loadLatestGraph against a recording client: the flow then the version by hash with the signal, the result with saved, version and canonical, one call only when the flow has no version, an ApiRequestError passed on as the same object, and a Ra...
+- Q-014 accept H-d1691d3f by the delegate (claude-fable-5-1 via claude-code): Criterion C-4ca8acf8 checks needsDocument, loadGraphDocument against a recording client, the GRAPH_LOADING constant, and settleGraphLoad with resolved values and with rejections, including the error panel model of each failure and the mapping of a RangeError to a 404 ApiRequestError. These are retur...
+- Q-015 accept H-1fadb9d3 by the delegate (claude-fable-5-1 via claude-code): Criterion C-5be45b98 checks the GRAPH_PAGE and GRAPH_PANEL constants, graphPath and versionNote, the contents of a feature registry and an editor panel registry built in the test, and the literals and strings of the three .tsx sources. These are constants, pure functions and source-file properties t...
+- Q-016 accept H-abaa3609 by the delegate (claude-fable-5-1 via claude-code): Criterion C-830797f7 is the scenario Alice, bob and mallory read graphs from the engine, which the specification itself assigns to the Node journey m3-authoring.test.ts against the e2e stack, not to a browser test. Its committed Node test starts the stack, signs in the three seed users, creates demo...
+- Q-017 accept H-32a186e4 by the delegate (claude-fable-5-1 via claude-code): Criterion C-2619a93b is alice's browser journey and the committed e2e test test_c_2619a93b_alice_creates_a_flow_from_yaml_and_reads_its_graph follows its scenario step by step with role and label locators: the UNSAVED text after the create, the Nodes list with fetch, route, done and failed and the r...
+- Q-018 accept H-7eb5a856 by the delegate (claude-fable-5-1 via claude-code): Criterion C-68b2dc11 is bob's browser journey and the committed e2e test test_c_68b2dc11_bob_reads_the_graph_but_cannot_save follows its scenario: alice creates demo-graph and saves GRAPH_GOOD in one context, bob signs in in a second context, opens Flows, finds the demo-graph row in the table named ...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -206,8 +227,8 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-4ca8acf8 | web-flow-graph › The graph loads the saved version it shows › The panel loads a missing document and says when it fails | pass | pass | the judge passed it and a discriminating test passes |
 | C-5be45b98 | web-flow-graph › The graph appears in the editor and on its own page › Registration, path and sources of the pages | pass | pass | the judge passed it and a discriminating test passes |
 | C-830797f7 | web-flow-graph › The graph logic works against the real engine › Alice, bob and mallory read graphs from the engine | pass | pass | the judge passed it and a discriminating test passes |
-| C-2619a93b | web-flow-graph › The M3 journey proves authoring in a browser › Alice creates a flow from YAML and reads its graph | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-68b2dc11 | web-flow-graph › The M3 journey proves authoring in a browser › Bob reads the graph but cannot save | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-2619a93b | web-flow-graph › The M3 journey proves authoring in a browser › Alice creates a flow from YAML and reads its graph | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The journey test e2e/test_m3_authoring.py follows the scenario step by step, and every assertion it makes is produced by code I read. The editor hands the panel a null version while the text differs from the saved baseline, so the Graph re... |
+| C-68b2dc11 | web-flow-graph › The M3 journey proves authoring in a browser › Bob reads the graph but cannot save | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): Bob's journey in e2e/test_m3_authoring.py matches the scenario and each expectation is produced by code I read. The Flows table has the caption Flows and each row links the flow id, so bob reaches the editor of demo-graph. The editor loads... |
 
 ## Findings
 
@@ -232,25 +253,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-2619a93b): The end-to-end test test_m3_authoring::test_c_2619a93b_alice_creates_a_flow_from_yaml_and_reads_its_graph[chromium] traces criterion C-2619a93b (web-flow-graph › The M3 journey proves authoring in a browser › Alice creates a flow from YAML and reads its graph), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-68b2dc11): The end-to-end test test_m3_authoring::test_c_68b2dc11_bob_reads_the_graph_but_cannot_save[chromium] traces criterion C-68b2dc11 (web-flow-graph › The M3 journey proves authoring in a browser › Bob reads the graph but cannot save), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, judge] start naming a non-existent node is unpinned (spec gap) (criterion C-7a375c7a): No scenario pins down layoutFlow when doc.start is a string that names no node. The committed code treats start as absent (all nodes unreachable layer 0); another reasonable implementation could reject it. This is observable only outside the specified scenarios.
-
-## Needs a human
-
-- UI criterion C-c1de3761 has no end-to-end test; see the generated UI tests table
-- UI criterion C-7a375c7a has no end-to-end test; see the generated UI tests table
-- UI criterion C-024a069e has no end-to-end test; see the generated UI tests table
-- UI criterion C-1616f6aa has no end-to-end test; see the generated UI tests table
-- UI criterion C-1129d3e7 has no end-to-end test; see the generated UI tests table
-- UI criterion C-cf729adf has no end-to-end test; see the generated UI tests table
-- UI criterion C-793687fa has no end-to-end test; see the generated UI tests table
-- UI criterion C-54028b08 has no end-to-end test; see the generated UI tests table
-- UI criterion C-5070339e has no end-to-end test; see the generated UI tests table
-- UI criterion C-ada22065 has no end-to-end test; see the generated UI tests table
-- UI criterion C-99ed5dc0 has no end-to-end test; see the generated UI tests table
-- UI criterion C-4ca8acf8 has no end-to-end test; see the generated UI tests table
-- UI criterion C-5be45b98 has no end-to-end test; see the generated UI tests table
-- UI criterion C-830797f7 has no end-to-end test; see the generated UI tests table
-- UI criterion C-2619a93b has no end-to-end test; see the generated UI tests table
-- UI criterion C-68b2dc11 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
