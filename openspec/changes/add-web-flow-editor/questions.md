@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Hold H-07cda852: UI criterion C-e71f3bcb has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-38c874c4: UI criterion C-94bf935b has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-67f12272: UI criterion C-92ac8872 has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-a353239d: UI criterion C-f4c862cb has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-a353239d: UI criterion C-f4c862cb has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-4b5a072c: UI criterion C-36b16be8 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-4db2c80f: UI criterion C-f96f8003 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-62ed1c71: UI criterion C-944fd4d1 has no end-to-end test; see the generated UI tests table |
@@ -191,7 +191,8 @@ accept The hold can be waived. The criterion checks textProblemRow against const
 
 ## Q-007: Hold H-a353239d: UI criterion C-f4c862cb has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -210,6 +211,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion checks starterText, detectFormat and the engine's parseFlowText and validateFlow with exact inputs and a thrown RangeError, none of which a browser page exposes, and the project's rules make Node tests the evidence for such a criterion. The Node parity test under test asserts the scenario: the starter text for demo-flow equals the reference document exactly, Bad_Name throws RangeError, the three format detections give json, yaml and yaml, and the parsed starter has flow demo-flow and validates ok with no error against the empty catalogue. The implementation builds exactly that text and refuses an id that breaks the flow-id pattern.
 ---
 
 ## Q-008: Hold H-4b5a072c: UI criterion C-36b16be8 has no end-to-end test; see the generated UI tests table
