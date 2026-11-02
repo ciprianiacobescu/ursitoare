@@ -197,8 +197,11 @@ roles:
   # (it shares the Claude subscription with the implementer and the delegate). The Go judges (mimo-go, qwen) are out
   # while the Go balance is empty; codex-judge never had a key.
   judges:
-  - nemotron-judge
+  # 2026-11-02: beam first while plan m4's readiness review runs. nemotron's reply to a plan-review subject hit its
+  # output limit ("the stream ended without a final stop (last reason: length)") and the plan review does not fall
+  # through to the next judge. Restore nemotron first once m4 is READY.
   - beam-judge
+  - nemotron-judge
   - kiro-judge
   - mimo-judge
   - glm-judge
