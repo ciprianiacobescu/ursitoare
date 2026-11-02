@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Hold H-62f40190: UI criterion C-1616f6aa has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-afa2b3ee: UI criterion C-1129d3e7 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-3fb54c46: UI criterion C-cf729adf has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-2939d42a: UI criterion C-793687fa has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-2939d42a: UI criterion C-793687fa has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-5b762cd4: UI criterion C-54028b08 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-ada1ea8a: UI criterion C-5070339e has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-ff7d32cd: UI criterion C-ada22065 has no end-to-end test; see the generated UI tests table |
@@ -249,7 +249,8 @@ accept Criterion C-cf729adf drives graphView and kindText with hand-built docume
 
 ## Q-009: Hold H-2939d42a: UI criterion C-793687fa has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -268,6 +269,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-793687fa checks the exact rows nodeDetailRows returns for nodes of S and ODD, a node with a 400-character string and other field types, and a node parsed with a __proto__ key. The Node test asserts each row list of the scenario and the implementation produces them: the fixed Node, Kind and Successors rows, Reachability only for an unreachable node, then the own fields except kind sorted by name, strings cut at 300 with clip, objects and arrays as compact JSON, numbers, booleans and null as String. The browser journey shows the details rows of route, done and fetch on the page, which is what a user can observe. The unit can go on.
 ---
 
 ## Q-010: Hold H-5b762cd4: UI criterion C-54028b08 has no end-to-end test; see the generated UI tests table
