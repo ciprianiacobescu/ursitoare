@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | none | verdict | Criterion C-2619a93b (web-flow-graph › The M3 journey proves authoring in a browser › Alice creates a flow from YAML and reads its graph): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-68b2dc11 (web-flow-graph › The M3 journey proves authoring in a browser › Bob reads the graph but cannot save): accept as satisfied? |
 | Q-003 | open | none | verdict | Hold H-d0c803fb: UI criterion C-c1de3761 has no end-to-end test; see the generated UI tests table |
-| Q-004 | open | none | verdict | Hold H-dd6ec34f: UI criterion C-7a375c7a has no end-to-end test; see the generated UI tests table |
+| Q-004 | answered | none | verdict | Hold H-dd6ec34f: UI criterion C-7a375c7a has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-5a9601e2: UI criterion C-024a069e has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-62f40190: UI criterion C-1616f6aa has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-afa2b3ee: UI criterion C-1129d3e7 has no end-to-end test; see the generated UI tests table |
@@ -124,7 +124,8 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ## Q-004: Hold H-dd6ec34f: UI criterion C-7a375c7a has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -143,6 +144,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-7a375c7a describes the layout results of layoutFlow for cycles, loops, unreachable nodes, unknown kinds and missing targets, a pure function with no DOM. The Node test deep-compares the CYCLE, LOOP, ODD, NOSTART and UNREACH layouts with the figures of reference.md, and layout.ts implements each rule: a closing edge is kept with upward true and ignored for layering, unreachable nodes go to the layer after the last reached one, a successor naming no node is listed in missing, and known is false for an unknown kind or a non-object node. These structured results are not observable as such through a page, so no end-to-end test can check them, and the unit can go on.
 ---
 
 ## Q-005: Hold H-5a9601e2: UI criterion C-024a069e has no end-to-end test; see the generated UI tests table
