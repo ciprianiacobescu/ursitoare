@@ -14,7 +14,7 @@ Spec: `specs/web-flow-graph/spec.md`; data: `reference.md`; signatures and decis
 
 ## 4. The view component and its styles
 
-- [ ] 4.1 Write `web/src/flow-graph/view-sources.test.ts` first (scenario "Styles and sources follow the policy", after `existsSync` of both files; the classes come from `drawNodes` and `drawEdges` on the layouts of `S`, `ODD` and `CYCLE`), then implement `FlowGraphView` in `web/src/flow-graph/FlowGraphView.tsx` and create `web/src/flow-graph/flow-graph.css` as design.md § Component wiring says, implementing requirement "The drawing is decorative and uses kit tokens only"
+- [x] 4.1 Write `web/src/flow-graph/view-sources.test.ts` first (scenario "Styles and sources follow the policy", after `existsSync` of both files; the classes come from `drawNodes` and `drawEdges` on the layouts of `S`, `ODD` and `CYCLE`), then implement `FlowGraphView` in `web/src/flow-graph/FlowGraphView.tsx` and create `web/src/flow-graph/flow-graph.css` as design.md § Component wiring says, implementing requirement "The drawing is decorative and uses kit tokens only"
 
 ## 5. The panel, the page and the feature file
 

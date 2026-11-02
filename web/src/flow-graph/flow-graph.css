@@ -1,0 +1,123 @@
+.flow-graph {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-3);
+  color: var(--ui-color-text);
+}
+
+.flow-graph-note {
+  margin: 0;
+  color: var(--ui-color-text-muted);
+}
+
+.flow-graph-body {
+  overflow: visible;
+}
+
+.flow-graph-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.flow-graph-node {
+  fill: var(--ui-color-surface);
+  stroke: var(--ui-color-border);
+  stroke-width: 1;
+}
+
+.flow-graph-node--start {
+  stroke: var(--ui-color-accent);
+}
+
+.flow-graph-node--selected {
+  stroke: var(--ui-color-focus);
+  stroke-width: 3;
+}
+
+.flow-graph-node--unknown {
+  stroke-dasharray: 6 4;
+}
+
+.flow-graph-node--unreachable {
+  fill: var(--ui-color-bg);
+  stroke-dasharray: 2 4;
+}
+
+.flow-graph-node-group {
+  cursor: pointer;
+}
+
+.flow-graph-title {
+  fill: var(--ui-color-text);
+  font-family: var(--ui-font-sans);
+  font-size: 0.8125rem;
+}
+
+.flow-graph-kind {
+  fill: var(--ui-color-text-muted);
+  font-family: var(--ui-font-sans);
+  font-size: 0.75rem;
+}
+
+.flow-graph-edge {
+  fill: none;
+  stroke: var(--ui-color-border);
+  stroke-width: 1.5;
+}
+
+.flow-graph-edge--upward {
+  stroke-dasharray: 5 4;
+}
+
+.flow-graph-edge-label {
+  fill: var(--ui-color-text-muted);
+  font-family: var(--ui-font-sans);
+  font-size: 0.75rem;
+}
+
+.flow-graph-arrow {
+  fill: var(--ui-color-border);
+}
+
+.flow-graph-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flow-graph-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-space-2);
+}
+
+.flow-graph-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+  padding: var(--ui-space-3);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-color-bg);
+}
+
+.flow-graph-details dl {
+  display: grid;
+  grid-template-columns: minmax(8rem, max-content) 1fr;
+  gap: var(--ui-space-2);
+  margin: 0;
+}
+
+.flow-graph-details dt {
+  color: var(--ui-color-text-muted);
+}
+
+.flow-graph-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
