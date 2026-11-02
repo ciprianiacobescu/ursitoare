@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-086f1719 (web-flow-editor › The editor works against the real engine, in logic and in a browser › Alice creates, edits, saves and validates): accept as satisfied? |
 | Q-002 | answered | none | verdict | Hold H-5e7d0c9f: UI criterion C-1f5393c5 has no end-to-end test; see the generated UI tests table |
-| Q-003 | open | none | verdict | Hold H-35d043eb: UI criterion C-b6b033e0 has no end-to-end test; see the generated UI tests table |
+| Q-003 | answered | none | verdict | Hold H-35d043eb: UI criterion C-b6b033e0 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-07cda852: UI criterion C-e71f3bcb has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-38c874c4: UI criterion C-94bf935b has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-67f12272: UI criterion C-92ac8872 has no end-to-end test; see the generated UI tests table |
@@ -91,7 +91,8 @@ accept The hold can be waived. The criterion is about the values of module expor
 
 ## Q-003: Hold H-35d043eb: UI criterion C-b6b033e0 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -110,6 +111,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion checks parseFlow, flowCells and flowListFetcher against recorded client calls and crafted answers, which nothing in the page exposes, and the project's rules make Node tests the evidence for such a criterion. The Node test beside the module asserts the scenario: the valid flows parse to themselves, each rule-breaking variant gives null, the three cell shapes match, the client records exactly the first-page and cursor queries, and a bad item rejects with the INVALID_RESPONSE code.
 ---
 
 ## Q-004: Hold H-07cda852: UI criterion C-e71f3bcb has no end-to-end test; see the generated UI tests table
