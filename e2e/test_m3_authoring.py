@@ -95,7 +95,7 @@ def test_c_2619a93b_alice_creates_a_flow_from_yaml_and_reads_its_graph(
     page.get_by_role("button", name="Validate", exact=True).click()
     expect(diagnostics.get_by_role("status")).to_contain_text("Valid. 0 errors")
     _expect_nodes(graph)
-    expect(page.get_by_role("link", name="Open version 2", exact=True)).to_be_visible()
+    expect(page.get_by_role("button", name="Open version 2", exact=True)).to_be_visible()
 
     route = graph.get_by_role("button", name="route", exact=True)
     route.click()
@@ -110,7 +110,7 @@ def test_c_2619a93b_alice_creates_a_flow_from_yaml_and_reads_its_graph(
     page.keyboard.press("Enter")
     expect(details).to_contain_text("completed")
 
-    page.locator("svg.flow-graph-svg g.flow-graph-node").filter(has_text="fetch").first.click()
+    page.locator("svg.flow-graph-svg g.flow-graph-node-group").filter(has_text="fetch").first.click()
     expect(details).to_contain_text("docs.fetch@1")
     assert_accessible(page)
 
@@ -142,7 +142,7 @@ def test_c_68b2dc11_bob_reads_the_graph_but_cannot_save(
     _create_flow(page, "demo-graph")
     page.get_by_role("textbox", name="Flow text", exact=True).fill(GRAPH_GOOD)
     page.get_by_role("button", name="Save version", exact=True).click()
-    expect(page.get_by_role("link", name="Open version 1", exact=True)).to_be_visible()
+    expect(page.get_by_role("button", name="Open version 1", exact=True)).to_be_visible()
 
     context = browser.new_context(base_url=base_url)
     try:
