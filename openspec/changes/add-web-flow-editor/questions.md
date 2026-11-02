@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Hold H-67f12272: UI criterion C-92ac8872 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-a353239d: UI criterion C-f4c862cb has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-4b5a072c: UI criterion C-36b16be8 has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-4db2c80f: UI criterion C-f96f8003 has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-4db2c80f: UI criterion C-f96f8003 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-62ed1c71: UI criterion C-944fd4d1 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-796232b4: UI criterion C-84837cec has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-b9374a84: UI criterion C-ba506c1d has no end-to-end test; see the generated UI tests table |
@@ -241,7 +241,8 @@ accept The hold can be waived. The criterion checks validateVersion against a re
 
 ## Q-009: Hold H-4db2c80f: UI criterion C-f96f8003 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -260,6 +261,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion is a parity property between the web module's diagnosticHref and the engine's diagnosticLink over every published code, which has no browser-observable outcome, and the design places that check in a Node test under test. That test exists and asserts the scenario: REPO_DOCS_BASE is the repository's main-branch URL and, for every code of FLOW_ERROR_CODES, FLOW_WARNING_CODES and FLOW_RESERVED_CODES, the web href equals the base plus the engine link. The implementations agree: the engine links every known code to the diagnostics document with the lower-case code as anchor, and the web rule accepts exactly the L1, L2, L3 and W prefixes plus INTERNAL_ERROR, which is the whole code list.
 ---
 
 ## Q-010: Hold H-62ed1c71: UI criterion C-944fd4d1 has no end-to-end test; see the generated UI tests table
