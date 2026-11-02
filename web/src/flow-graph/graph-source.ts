@@ -1,6 +1,9 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
+// Loads the saved version the graph shows (design.md decisions 8 and 10).
 
 import type { Api } from "../admin/shared.ts";
+import { ApiRequestError } from "../api/client.ts";
+import { loadFlow } from "../flows/flows.ts";
+import { loadVersion } from "../flows/versions.ts";
 
 export interface LatestGraph {
   saved: boolean;
@@ -9,24 +12,34 @@ export interface LatestGraph {
 }
 
 export async function loadGraphDocument(
-  _client: Api<"get">,
-  _flowId: string,
-  _hash: string,
-  _signal?: AbortSignal,
+  client: Api<"get">,
+  flowId: string,
+  hash: string,
+  signal?: AbortSignal,
 ): Promise<unknown> {
-  throw new Error("not implemented");
+  const detail = await loadVersion(client, flowId, hash, signal);
+  return detail.canonical;
 }
 
 export async function loadLatestGraph(
-  _client: Api<"get">,
-  _flowId: string,
-  _signal?: AbortSignal,
+  client: Api<"get">,
+  flowId: string,
+  signal?: AbortSignal,
 ): Promise<LatestGraph> {
-  throw new Error("not implemented");
+  const flow = await loadFlow(client, flowId, signal);
+  const latest = flow.latest;
+  if (latest === null) {
+    return { saved: false, version: null, canonical: null };
+  }
+  const detail = await loadVersion(client, flowId, latest.hash, signal);
+  return { saved: true, version: latest.number, canonical: detail.canonical };
 }
 
-export function graphLoadError(_error: unknown): unknown {
-  throw new Error("not implemented");
+export function graphLoadError(error: unknown): unknown {
+  if (error instanceof RangeError) {
+    return new ApiRequestError(404, "NOT_FOUND", "Not found");
+  }
+  return error;
 }
 
 export type GraphLoad =
@@ -34,8 +47,12 @@ export type GraphLoad =
   | { phase: "ready"; value: unknown }
   | { phase: "error"; error: unknown; retryLabel: string };
 
-export const GRAPH_LOADING: GraphLoad = { phase: "loading", label: "" };
+export const GRAPH_LOADING: GraphLoad = { phase: "loading", label: "Loading graph" };
 
-export async function settleGraphLoad(_load: Promise<unknown>): Promise<GraphLoad> {
-  throw new Error("not implemented");
+export async function settleGraphLoad(load: Promise<unknown>): Promise<GraphLoad> {
+  try {
+    return { phase: "ready", value: await load };
+  } catch (error) {
+    return { phase: "error", error: graphLoadError(error), retryLabel: "Try again" };
+  }
 }
