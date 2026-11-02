@@ -59,5 +59,5 @@ export function collectImports(file: SourceFile): ImportRef[] {
 - `test/support/e2e-stack/stack.ts:91` sets `URSITOARE_ROLE: "all"`; `:266-277` runs `runner.seedAll()` then `main(...)` in the same process; `:211-217` closes handles in reverse part order; `:315-323` closes the engine, then the handles.
 - `test/support/e2e-stack/stack.db.test.ts:213-221` (frozen): every `ursitoare_e2e` session not named `e2e-stack` or `e2e-test` uses `ursitoare_app`.
 - `test/support/global-setup.ts:52`: `await prepareDatabase(ownerPool, systemClock);`; the owner pool ends in `finally`, before any clone. `src/tenancy/tx.ts:21`: `await client.query("SELECT set_config('app.tenant_id', $1, true)", [ctx.tenantId]);`.
-- `test/arch/modules.ts:19-20`: `durable: { allowed: ["core", "config", "db", "observability"] },` and `runs: { allowed: ["core", "db", "tenancy", "durable"] },`. `package.json:31-39` lists seven dependencies, no DBOS.
+- `test/arch/modules.ts:19-20`: `durable: { allowed: ["core", "config", "db", "observability"] },` and `runs: { allowed: ["core", "db", "tenancy", "durable"] },`. `package.json:33` (scaffold eb7ef13) pins `"@dbos-inc/dbos-sdk": "5.3.0",`; no task of this change touches `package.json` or the lockfile.
 - DBOS 5.3.0 facts (spike `ursitoare-spikes/dbos-reset`, a probe on embedded Postgres 18.4): `design.md` decisions 3 and 5.

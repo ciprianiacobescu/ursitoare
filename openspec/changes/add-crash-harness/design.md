@@ -67,7 +67,7 @@ export function checkFaultPoints(s: Snapshot): Violation[];   // code ARCH_FAULT
 
 ## Failure cases
 
-Bad options are refused before any file or process exists. A child that dies or hangs before its ready line gives `CRASH_START_FAILED` and leaves no live process; a failed `restart()` leaves the engine dead; concurrent restarts never leave two live children. A failed part start, seed or env merge closes what started and removes the directory.
+Bad options are refused before any file or process exists. A child that dies or hangs before its ready line gives `CRASH_START_FAILED` and leaves no live process; a failed `restart()` leaves the engine dead (`pid` keeps the last started child's pid, `deaths` is unchanged, the serial chain continues); concurrent restarts never leave two live children. A failed part start, seed or env merge closes what started and removes the directory.
 
 ## Security
 

@@ -16,8 +16,12 @@ export async function withTestDatabase(opts?: { migrated?: boolean; cluster?: Te
 // src/db/pool.ts:5-8, 56
 export interface EndpointLike { url: string; password: { reveal(): string } | null; }
 export function createPool(source: string | EndpointLike, opts: PoolOptions = {}): pg.Pool
-// src/core/clock.ts:11; ids.ts:63; config/config.ts:209
+// src/core/clock.ts:1-3, 5, 11; ids.ts:6-8, 61, 63; config/config.ts:209
+export interface Clock { now(): Date; }
+export const systemClock: Clock = { now(): Date { return new Date(); } };
 export function fixedClock(iso: string): Clock
+export interface IdSource { next(prefix: string): string; }
+export const systemIds: IdSource = createIds(systemClock);
 export function sequentialIds(seed = 0): IdSource
 export function loadConfig(env: Env, readSecret?: SecretReader): AppConfig
 // src/authoring: canonical.ts:114; validate/validate.ts:51; format/catalogue.ts:5-14 (BlockDef.unsafe_to_retry?: boolean)

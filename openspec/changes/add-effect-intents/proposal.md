@@ -4,6 +4,8 @@ The interpreter (U33) ships only an `EffectGate` that does nothing, so a kill be
 
 Observable result: `createEffectIntents(pool)` is an `EffectGate` for U33's `executeRun`. Before a block with `effect` other than `read` calls its tool, a row `effect_intent` in state `intent` exists under `idemKey(tenantId, lineageId, nodeId, effectSeq)` (`ik1_` plus 64 hex digits); after the call it is `done` with the result stored. A run killed with SIGKILL after the tool returned and before the step was checkpointed, then restarted, completes with the same key sent twice and `countEffects` reporting one effect and one duplicate; for a tool marked `unsafe_to_retry` the same kill ends the run `failed` with `INTERPRETER_EFFECT_UNKNOWN`, the tool called once and the row `unknown`. Rows are recorded in every mode and carry `mode`; the table is tenant-isolated.
 
+Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: every consequential call is recorded as an intent first, so a kill between the intent and the done gives exactly one effect.
+
 ## What Changes
 
 - `src/db/migrations/0340_effect_intent.sql`; `src/runs/intents/` exported from `src/runs/index.ts`; tests beside the code, among them three SIGKILL tests on U32's harness (D5); test support `test/support/crash/pay-once.ts`, `flows/pay-once.yaml` and the scenario module `intents-scenario.ts`; one documentation line for `run-wait.ts` in `test/support/README.md`.

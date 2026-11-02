@@ -4,6 +4,8 @@ Nothing yet walks a flow. U34, U35 and U36 need one interpreter: it takes a regi
 
 Observable result: `startRun` accepts only a stored version (`flowId` + `hash`) of kinds `block`, `switch`, `wait` and `end` whose blocks the catalogue knows, stores a `queued` run and enqueues `ursitoare.run`. `executeRun` moves it `running`, then `completed` or `failed`, writes `step_execution` rows with `seq` 0, 1, 2 in visit order (a replay reuses them), and ends a failed run with a `RunError` that never holds a raw tool error. In `mock` mode a `wait` sleeps nothing and records outcome `skipped`; the gate is called in every mode.
 
+Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: it executes a validated version node by node as one durable workflow, deterministically on replay.
+
 ## What Changes
 
 - `src/interpreter/`, `test/support/node-conformance.ts` (the kit every node runtime passes) and `test/support/run-wait.ts`. No `src/main.ts` edit (U35 wires it), migration, route, policy or `ERROR_CODES` entry.

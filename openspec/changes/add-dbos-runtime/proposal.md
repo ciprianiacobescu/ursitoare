@@ -6,7 +6,7 @@ Observable result: with the `dbos` schema prepared by the owner, `main` launches
 
 ## What Changes
 
-- `src/durable/`, the call in `src/main.ts`, `@dbos-inc/dbos-sdk` `5.3.0` in `package.json`.
+- `src/durable/` and the call in `src/main.ts` (the scaffold already pins `@dbos-inc/dbos-sdk` `5.3.0` in `package.json`).
 - `test/support/global-setup.ts` prepares the test template; `test/support/e2e-stack/{part,reset}.ts` gain `beforeReset`; new `durable-part.ts` and `parts/40-durable.ts`; a bullet in `docs/testing.md`; the rule `test/arch/dbos-access.ts`.
 
 ## Impact
