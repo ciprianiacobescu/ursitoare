@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-2619a93b (web-flow-graph › The M3 journey proves authoring in a browser › Alice creates a flow from YAML and reads its graph): accept as satisfied? |
+| Q-001 | answered | none | verdict | Criterion C-2619a93b (web-flow-graph › The M3 journey proves authoring in a browser › Alice creates a flow from YAML and reads its graph): accept as satisfied? |
 | Q-002 | open | none | verdict | Criterion C-68b2dc11 (web-flow-graph › The M3 journey proves authoring in a browser › Bob reads the graph but cannot save): accept as satisfied? |
 | Q-003 | open | none | verdict | Hold H-d0c803fb: UI criterion C-c1de3761 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-dd6ec34f: UI criterion C-7a375c7a has no end-to-end test; see the generated UI tests table |
@@ -35,7 +35,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-2619a93b (web-flow-graph › The M3 journey proves authoring in a browser › Alice creates a flow from YAML and reads its graph): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -62,6 +63,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The journey test e2e/test_m3_authoring.py follows the scenario step by step, and every assertion it makes is produced by code I read. The editor hands the panel a null version while the text differs from the saved baseline, so the Graph region shows the UNSAVED text after the create and after GRAPH_GOOD is filled; with a saved version the panel loads the document and FlowGraphView renders the status message, the list named Nodes with aria-pressed buttons in layout order and the Node details section whose rows come from nodeDetailRows (kind, successors, cases, default, on, status, uses). The graph page sets the title, the h1, the version note and the link back to the editor, and a missing flow surfaces the engine's 404 in the kit ErrorPanel, which is a role alert that prints the error code. The Node journey against the real engine confirms the message, the item order and the NOT_FOUND rejection for ghost. The generated test's failure was an import of a module named tests that does not exist in e2e, not a product failure.
 ---
 
 ## Q-002: Criterion C-68b2dc11 (web-flow-graph › The M3 journey proves authoring in a browser › Bob reads the graph but cannot save): accept as satisfied?
