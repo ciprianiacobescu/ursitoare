@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Hold H-dd6ec34f: UI criterion C-7a375c7a has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-5a9601e2: UI criterion C-024a069e has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-62f40190: UI criterion C-1616f6aa has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-afa2b3ee: UI criterion C-1129d3e7 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-afa2b3ee: UI criterion C-1129d3e7 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-3fb54c46: UI criterion C-cf729adf has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-2939d42a: UI criterion C-793687fa has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-5b762cd4: UI criterion C-54028b08 has no end-to-end test; see the generated UI tests table |
@@ -199,7 +199,8 @@ accept Criterion C-1616f6aa compares successorTargets and GRAPH_NODE_KINDS of th
 
 ## Q-007: Hold H-afa2b3ee: UI criterion C-1129d3e7 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -218,6 +219,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-1129d3e7 asks that layoutFlow give fixed coordinates for the RF-1 catalogue flow and for the parsed GRAPH_GOOD and GRAPH_BAD documents, and that validateFlow report exactly one L2_UNKNOWN_BLOCK error for GRAPH_BAD. These are return values of pure functions compared with the figures of reference.md and are not observable as such through a page. The Node test under test/web-flow-graph/ deep-compares the RF-1 layout and its canonical form with the eleven nodes and twelve edges of the reference, the two G layouts with the G section, and checks the validator results. The browser journey separately shows the four G nodes and the L2_UNKNOWN_BLOCK diagnostic. The unit can go on.
 ---
 
 ## Q-008: Hold H-3fb54c46: UI criterion C-cf729adf has no end-to-end test; see the generated UI tests table
