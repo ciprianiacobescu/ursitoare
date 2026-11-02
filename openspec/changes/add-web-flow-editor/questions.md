@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Hold H-62ed1c71: UI criterion C-944fd4d1 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-796232b4: UI criterion C-84837cec has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-b9374a84: UI criterion C-ba506c1d has no end-to-end test; see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-99f05b4a: UI criterion C-3e0a938c has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-2e32408a: UI criterion C-6b221b86 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-c1bc3708: UI criterion C-086f1719 has no end-to-end test; see the generated UI tests table |
@@ -341,7 +341,8 @@ accept The hold can be waived. The criterion checks editorStatus, planValidate a
 
 ## Q-013: Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -360,6 +361,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion checks a module registry and the order of calls in a source file, neither of which a browser can observe, and the project's rules make Node tests the evidence for such a criterion. The Node test beside the module asserts the scenario: a valid panel registers and is listed, the duplicate id gives EDITOR_PANEL_DUPLICATE, each bad id, title and render gives EDITOR_PANEL_INVALID, and mutating the returned list does not change the registry. A second Node test asserts that every call of listEditorPanels follows the FlowEditorPage function in its source. The implementation enforces the id pattern and the title length, copies the list, and the page reads the panels while rendering and renders each as a section labelled by its title heading.
 ---
 
 ## Q-014: Hold H-99f05b4a: UI criterion C-3e0a938c has no end-to-end test; see the generated UI tests table
