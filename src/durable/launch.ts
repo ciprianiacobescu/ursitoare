@@ -1,5 +1,6 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
+import type pg from "pg";
 import type { EndpointLike } from "../db/index.ts";
 import type { Logger } from "../observability/index.ts";
 
@@ -48,6 +49,7 @@ export interface LaunchOptions {
   pollingIntervalMs?: number;
   concurrency?: number;
   stepObserver?: StepObserver;
+  closePool?: (pool: pg.Pool) => Promise<void>;
 }
 
 export async function launchDurable(_opts: LaunchOptions): Promise<DurableRuntime> {

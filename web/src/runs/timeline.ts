@@ -42,3 +42,11 @@ export function runErrorText(_error: RunError | null): string | null {
 export function payloadShown(_ref: string | null, _load: PayloadLoad | undefined): string {
   throw new Error("not implemented");
 }
+
+export function setPayloadLoad(
+  _loads: ReadonlyMap<string, PayloadLoad>,
+  _digest: string,
+  _load: PayloadLoad,
+): Map<string, PayloadLoad> {
+  throw new Error("not implemented");
+}
