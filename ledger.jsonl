@@ -112,3 +112,4 @@
 {"at":"2026-11-02T16:16:14Z","run":"r-20261102T1616Z-9af8","type":"unit.dispatched","unit":"openspec:add-web-flow-graph"}
 {"at":"2026-11-02T16:19:40Z","attempt":1,"cost_usd":13.356545,"runs":5,"type":"plan.charged","unit":"openspec:add-web-flow-graph"}
 {"at":"2026-11-02T16:19:40Z","run":"r-20261102T1619Z-b34a","type":"unit.dispatched","unit":"openspec:add-web-flow-graph"}
+{"at":"2026-11-02T16:30:30Z","head":"55c01b5e102adfc39e2fdc7d4b3b270c54a6f41d","pr":64,"target_before":"f2167b6abe4a9ead347c378ac3d2d20d4d5a2071","type":"unit.merge_requested","unit":"openspec:add-web-flow-graph"}
