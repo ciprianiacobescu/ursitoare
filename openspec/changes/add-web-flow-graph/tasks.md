@@ -6,7 +6,7 @@ Spec: `specs/web-flow-graph/spec.md`; data: `reference.md`; signatures and decis
 
 ## 2. The text model
 
-- [ ] 2.1 Write `web/src/flow-graph/graph-model.test.ts` first (scenarios "States, messages and the node list", "Node details are read-only text" and "Selecting a node"; the layouts come from `layoutFlow`), then implement `graphView`, `kindText`, `nodeDetailRows`, `chooseNode` and the types in `web/src/flow-graph/graph-model.ts` (imports `layout.ts` and `clip`; texts and cuts: `reference.md` § Numbers, § Texts), implementing requirement "The graph has a text equivalent and a state for every case"
+- [x] 2.1 Write `web/src/flow-graph/graph-model.test.ts` first (scenarios "States, messages and the node list", "Node details are read-only text" and "Selecting a node"; the layouts come from `layoutFlow`), then implement `graphView`, `kindText`, `nodeDetailRows`, `chooseNode` and the types in `web/src/flow-graph/graph-model.ts` (imports `layout.ts` and `clip`; texts and cuts: `reference.md` § Numbers, § Texts), implementing requirement "The graph has a text equivalent and a state for every case"
 
 ## 3. The drawing model
 
