@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Hold H-4db2c80f: UI criterion C-f96f8003 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-62ed1c71: UI criterion C-944fd4d1 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-796232b4: UI criterion C-84837cec has no end-to-end test; see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-b9374a84: UI criterion C-ba506c1d has no end-to-end test; see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-b9374a84: UI criterion C-ba506c1d has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-99f05b4a: UI criterion C-3e0a938c has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-2e32408a: UI criterion C-6b221b86 has no end-to-end test; see the generated UI tests table |
@@ -316,7 +316,8 @@ accept The hold can be waived. The criterion checks the editor state, the key bi
 
 ## Q-012: Hold H-b9374a84: UI criterion C-ba506c1d has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -335,6 +336,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion checks editorStatus, planValidate and flowErrorMessage against constructed baselines and error values, none of which a browser page can supply, and the project's rules make Node tests next to the code the evidence for such a criterion. The Node tests beside the modules assert every clause of the scenario: the five statuses, the three plans, the ALREADY_EXISTS and FLOW_TEXT_INVALID texts, the 403 text ending with the decision id, the RangeError message passed through and the kit's fallback for a plain Error. The implementations produce exactly those texts and the page shows the status in a status paragraph. The generated browser test failed to parse, which describes the generator and not the code.
 ---
 
 ## Q-013: Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table
