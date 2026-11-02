@@ -101,3 +101,5 @@
 {"at":"2026-11-02T10:18:00Z","branch":"l4/archive/openspec/add-web-flow-editor","head":"17e35b4be73d6976553dec336d7b23911811f77b","type":"unit.branch_deleted","unit":"openspec:add-web-flow-editor"}
 {"at":"2026-11-02T10:18:01Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-web-flow-graph"}
 {"at":"2026-11-02T10:18:01Z","run":"r-20261102T1017Z-2f08","type":"unit.dispatched","unit":"openspec:add-web-flow-graph"}
+{"at":"2026-11-02T12:07:50Z","attempt":1,"cost_usd":2.034971,"runs":1,"type":"plan.charged","unit":"openspec:add-web-flow-graph"}
+{"at":"2026-11-02T12:07:50Z","detail":"task 1.1: max_task_attempts (3) reached in single; last failure: `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` failed: exit code 1; failing: test_m3_authoring::test_c_2619a93b_alice_creates_a_flow_from_yaml_and_reads_it","reason":"unit_halted","type":"plan.stopped","unit":"openspec:add-web-flow-graph"}
