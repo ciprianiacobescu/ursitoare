@@ -1,0 +1,11 @@
+Spec: `specs/ops-cli/spec.md`; decisions and fixtures: `design.md`; merged shapes: `delivered-shapes.md`. Every test file starts with `assert.equal(typeof <the function it tests>, "function")`, wraps a call that reaches a scaffold stub (async: `p.then((v) => v, (e: unknown) => e)`) and asserts on the value, uses `node:assert/strict`, and has no `.`, `[` or `::` in test names. The command tests use their own registry, so they pass before task 2.1. Each scenario is one `test()`.
+
+## 1. The command
+
+- [ ] 1.1 Write `src/cli/flow/test.test.ts` first (scenario "A completed and a failed mock run": the three runs, the `--json` line, the fetch recorder), then implement `flowTestCommand` in `src/cli/flow/test.ts` with the options, flow, run and output of design.md Decisions 1, 6 and 7 and the success paths of Decisions 2, 3 and 5 (no `INVALID`, `MOCKS` or `FAILED <code> -` line, no JSON or object check), implementing requirement "flow test runs a flow offline against mocks"
+- [ ] 1.2 Write `src/cli/flow/test-refusals.test.ts` first (scenario "Invalid flow, mock problems and a refused input"), then add the `INVALID`, `MOCKS` and `FAILED <code> -` paths of design.md Decisions 3 to 5 to `src/cli/flow/test.ts`, implementing requirement "flow test runs a flow offline against mocks"
+- [ ] 1.3 Write `src/cli/flow/test-usage.test.ts` first (scenario "Usage errors and help": the five usage errors and `--help`), then add the file reading and JSON checks of design.md Decision 2 to `src/cli/flow/test.ts`, implementing requirement "flow test runs a flow offline against mocks"
+
+## 2. Registration
+
+- [ ] 2.1 Write `src/cli/flow/test-registry.test.ts` first (scenario "The default registry through cliMain": `cliMain(["help"])`, `registerAdminCommands`, `registerFlowCommands` and `createDefaultRegistry` on fresh registries), change in place the existing test `src/cli/main.test.ts::C-2687097e registerAdminCommands and createDefaultRegistry list the five admin commands` so that it expects `[...ADMIN_COMMANDS, "flow test", "flow validate"]` (it fails by assertion until green), then add `registry.registerCommand("flow test", flowTestCommand)` to `registerFlowCommands` in `src/cli/flow/index.ts`, implementing the modified requirement "The entry point runs the default registry"

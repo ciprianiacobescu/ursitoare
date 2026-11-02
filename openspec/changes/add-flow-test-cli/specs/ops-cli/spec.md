@@ -1,0 +1,29 @@
+## ADDED Requirements
+
+### Requirement: flow test runs a flow offline against mocks
+`ursitoare flow test --file <path> --mocks <path>` SHALL validate the flow, check the mocks, run the flow in mode `mock` on an in-memory store without a database, print one line per step and a final `COMPLETED <terminal node>` or `FAILED <code> <node>`, and exit 0 for a completed run and 1 for a failed run, an invalid flow or a mock problem.
+
+#### Scenario: A completed and a failed mock run
+- **WHEN** `FILE` holds `JSON.stringify(payOnceVersion().flow)` as `flow.json`, `CAT` is `TEST_CATALOGUE_PATH`, and `cliMain(["flow", "test", "--file", FILE, "--mocks", M, "--input", I, "--catalogue", CAT], { env: {}, registry, ... })` runs with `MOCKS` (and again with `--json`), with `lookup` answering `{ vendor_id: "v2", status: "blocked" }`, and with `pay: [{ error: { code: "E_DOWN", message: "secret-text" } }]`, while `globalThis.fetch` is a recorder
+- **THEN** the first exits 0 with empty stderr and stdout `0 lookup block completed\n1 route switch completed active\n2 pay block completed\n3 done end completed\nCOMPLETED done\n`; the `--json` run prints one line whose parse equals `{ state: "completed", terminalNode: "done", error: null, output: { payment_id: "pay-1" }, steps }` with the four steps as `{ seq, nodeId, kind, state, outcome, error }`; the second exits 1 with stdout `0 lookup block completed\n1 route switch completed default\n2 rejected end failed\nFAILED FLOW_FAILED rejected\n`; the third exits 1 with last lines `2 pay block failed` and `FAILED INTERPRETER_TOOL_FAILED pay`, and neither `secret-text` nor `E_DOWN` in stdout or stderr; the recorder saw no call, and `flowTestCommand.database` is `false`
+
+#### Scenario: Invalid flow, mock problems and a refused input
+- **WHEN** `flow test` runs with the same `FILE` and `MOCKS` but no `--catalogue`; with `--catalogue CAT` and mocks `{}`; with mocks `{ lookup: [{ output: { status: "active" } }], pay: [{ output: PAID }] }`; and with `--input` holding `{"vendor":"Acme"}`
+- **THEN** each exits 1, with stdout: a first line beginning `INVALID <FILE>: ` and ending `error(s)` and a last line `  hint: no --catalogue given, so every block is unknown`, then `MOCKS 2 problem(s)\n  lookup missing: no mock entry\n  pay missing: no mock entry\n`, then `MOCKS 1 problem(s)\n  lookup[0] schema: / required\n`, then `FAILED INTERPRETER_INPUT_INVALID -\n` and one `  <key>: <value>` line per entry of the error's `details`, among them `  path: /\n` and `  keyword: required\n`; no run is started for the first three
+
+#### Scenario: Usage errors and help
+- **WHEN** `flow test` runs with no `--mocks`; with a `--mocks` path that does not exist; with a `--file` path that does not exist; with a mocks file holding `{`; with an `--input` file holding `[]`; and with `--help`
+- **THEN** the first five exit 2 with stdout empty and stderr `CLI_USAGE: missing required option --mocks`, `CLI_USAGE: cannot read --mocks (ENOENT)`, `CLI_USAGE: cannot read --file (ENOENT)`, `CLI_USAGE: --mocks is not valid JSON` and `CLI_USAGE: --input must be a JSON object`; `--help` exits 0 with stdout lines `usage: node src/cli/main.ts flow test --file <string> --mocks <string> [--input <string>] [--catalogue <string>] [--json]` and `run a flow offline against mocks` first
+
+## MODIFIED Requirements
+
+### Requirement: The entry point runs the default registry
+`cliMain` SHALL run `runCli` with `createDefaultRegistry()`, `readProcessEnv()` and the process streams unless overridden; `src/cli/main.ts` run as the entry script SHALL set `process.exitCode` from it.
+
+#### Scenario: The default registry through cliMain
+- **WHEN** `cliMain` gets `["help"]`, `["admin", "list-users"]` and `["nope"]`, with `env` `{}`
+- **THEN** they resolve to 0, 1 and 2; the first prints a line for each command `createDefaultRegistry()` registers, in the order of `list()`: `admin bootstrap-admin`, `admin grant-role`, `admin list-users`, `admin revoke-role`, `admin verify-audit`, `flow test` and `flow validate`, the `flow test` line being `flow test  run a flow offline against mocks`; the second a `CLI_OWNER_REQUIRED: ` line on stderr; `registerAdminCommands` on a fresh registry lists exactly the five admin names, `registerFlowCommands` on a fresh registry lists exactly `flow test` and `flow validate`, and `createDefaultRegistry().list()` holds the seven names above and no other
+
+#### Scenario: The process environment
+- **WHEN** a test sets `process.env.URSITOARE_CLI_PROBE` to `x`, calls `readProcessEnv()`, sets that key on the result to `y`, reads `process.env.URSITOARE_CLI_PROBE` and deletes it
+- **THEN** the result first held `"x"`; `process.env` still holds `"x"`

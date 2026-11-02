@@ -1,0 +1,8 @@
+## MODIFIED Requirements
+
+### Requirement: The routes are session routes under the flow actions
+The seven routes SHALL be defined with `auth: { kind: "session" }` and the actions of design.md § Interfaces, and the engine SHALL serve them and list them in `docs/api/openapi.json`.
+
+#### Scenario: The route table and the real engine
+- **WHEN** `registerFlowRoutes` is called on a server with the PEP and `listDefinedRoutes` is read; a request without a cookie and a `POST` with a cookie but no `x-csrf-token` are sent; `main` starts with no database and `inspectServers`, and `docs/api/openapi.json` is parsed
+- **THEN** the rows `method url action` are exactly `GET /api/v1/flows read_flow`, `POST /api/v1/flows edit_flow`, `GET /api/v1/flows/:flowId read_flow`, `GET /api/v1/flows/:flowId/versions read_flow`, `POST /api/v1/flows/:flowId/versions edit_flow`, `GET /api/v1/flows/:flowId/versions/:hash read_flow`, `POST /api/v1/flows/:flowId/versions/:hash/validate edit_flow`, each with auth `session` and, in its `errors`, at least the codes of design.md § Interfaces; the first request is 401 `UNAUTHENTICATED` and the second 403 `CSRF_INVALID`; the public server of `main` defines the same seven routes and one more, `POST /api/v1/flows/:flowId/versions/:hash/test` with action `test_flow`, which `registerFlowRoutes` does not register (requirement "The engine binds the interpreter before it launches the runtime" of `flow-testing`), `unregisteredRouteErrors` over them is `[]`, and the document holds the paths `/api/v1/flows`, `/api/v1/flows/{flowId}`, `/api/v1/flows/{flowId}/versions`, `/api/v1/flows/{flowId}/versions/{hash}`, `/api/v1/flows/{flowId}/versions/{hash}/validate` and `/api/v1/flows/{flowId}/versions/{hash}/test`

@@ -28,7 +28,7 @@ architecture v0.1-r5 (§13 Phase-1 plan and exit tests 1–23). Owner decisions:
 | M1 | A user signs in through OIDC into their tenant; every API call is authenticated, policy-checked and, when refused, audited | U08–U16 | `test_m1_sign_in.py` | — |
 | M2 | An admin manages roles, teams and IdP group mappings and reads a verified audit log; the first admin is bootstrapped | U17–U21 | `test_m2_admin.py` | — |
 | M3 | An author creates a flow from YAML, sees diagnostics and a read-only graph, and saves validated versions | U22–U29 | `test_m3_authoring.py` | — |
-| M4 | An author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill | U30–U37 | `test_m4_runs.py` | — |
+| M4 | An author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill | U30–U37, U35b | `test_m4_runs.py` | — |
 | M5 | Flows with pure `code` nodes and pre/post hooks run durably; hook routes into effect nodes are rejected | U38–U44 | `test_m5_code_hooks.py` | — |
 | M6 | Admins register tool servers and grant tools per role and step; an attended dry run reads through the broker with a one-step token and shows each effect's permit while stubbing it | U45–U52 | `test_m6_grants.py` | — |
 | M7 | An admin adds an HTTP/OpenAPI, MCP or code-block tool, approves its surface and stores its credential; a flow calls it (F9) | U53–U56 | `test_m7_tools.py` | — |
@@ -72,7 +72,7 @@ order of their edges, one at a time.
   (U50); only `src/identity` (OIDC) and `src/observability` (OTLP) make other outbound calls, and the architecture tests
   (U04) enforce it from M0; refusals are audited in their own transaction.
 - **No real effect before publish.** Mocked test runs (U35) and attended dry runs (U51) never perform a `write`,
-  `send` or `pay` effect; they evaluate and record its permit. Only published versions run live (U77).
+  `send` or `pay` effect; from M6 they evaluate and record its permit (M4 has no `invoke_tool` permits, M4 decision D8). Only published versions run live (U77).
 - **External inputs are untrusted by default:** documents, tool and MCP results, webhook bodies (U78) and MCP caller
   arguments (U89) carry the `untrusted` label.
 - **Shared files have one extension point.** The e2e stack grows only through part files under
@@ -82,7 +82,7 @@ order of their edges, one at a time.
   a part returns the env and `*_FILE` paths the engine needs, and the crash harness (U32) boots its child engines from
   the same parts. The web app grows through feature files `web/src/features/NN-<name>.tsx` collected by `registerFeature` (U07) and `stepRenderers` (U37); the interpreter through
   `registerNodeRuntime` (U33); policy through per-module fragments `src/<module>/policy/*.cedar` (U11b); the CLI through
-  its command registry (U20), where a unit adding CLI commands edits `src/cli/builtin.ts` in a named task
+  its command registry (U20), where a unit adding CLI commands edits its group's index (`src/cli/<group>/index.ts`), or `src/cli/builtin.ts` for a new group, in a named task
   (`registry.registerCommand(name, command)`) and two such units in one milestone need a depends_on edge; architecture rules are added as `test/arch/<rule>.ts` with its test (U04's `Violation` with an `ARCH_*` code); the module graph lives in `test/arch/modules.ts` (U04); a unit that needs a new module or
   edge changes it in its red step and says why in its design. A unit that changes what the engine needs at boot, or what
   journeys need seeded, names the part file it adds.
@@ -113,6 +113,7 @@ order of their edges, one at a time.
   6 for `c` (U08 `0080_audit.sql`, U11b `0115_<topic>.sql`). Versions are unique, gaps are allowed, pending files apply in
   ascending order. Only `prepareDatabase` (U02: migrate, then ensurePartitions) applies them: the test global setup, the
   e2e database part, and the one-shot owner job (U59). The engine process never holds the owner credentials.
+- **The DBOS schema** `dbos` is not a migration file: `prepareDurable(ownerUrl)` (U30) runs `DBOS.migrate` as the owner, next to `prepareDatabase`; the engine never migrates (M4 decision D1).
 - **Public repository:** no secret, and no description of an unfixed vulnerability in any dependency, in any spec.
 
 ## Unit catalogue
@@ -176,12 +177,13 @@ All units start as `planned`.
 
 | U | Change id | Cap | Module | Scope | Depends on | Exit | Seed | Status |
 |---|---|---|---|---|---|---|---|---|
-| U30 | `add-dbos-runtime` | `durable-runtime` | `durable` | `src/durable`: DBOS 5.3.0 on the same Postgres, constant `applicationVersion`, the `runs` WorkflowQueue, the role DBOS connects as (tested), RLS honoured inside DBOS steps, a guard that only the runtime and run-data repositories touch `dbos.*`; stack part `parts/40-durable.ts` | U02, U03, U04, U06 | — | `core-dbos/src` | planned |
+| U30 | `add-dbos-runtime` | `durable-runtime` | `durable` | `src/durable`: DBOS 5.3.0 on the same Postgres, constant `applicationVersion`, the `runs` WorkflowQueue, the role DBOS connects as (tested), RLS honoured inside DBOS steps, a guard that only the runtime and run-data repositories touch `dbos.*`; stack part `parts/40-durable.ts`; `prepareDurable` creates the `dbos` schema (D1); the stack's reset suspends and resumes the runtime and checks the `runs` queue (D3: `part.ts`, `reset.ts`, `global-setup.ts`) | U02, U03, U04, U06 | — | `core-dbos/src` | planned |
 | U31 | `add-envelope-store` | `run-data` | `runs` | `src/runs/store`: `run`, `step_execution` partitioned by day (key includes the day), content-addressed `envelope_payload`, `event` partitioned by month; repositories with tenant checks | U03 | — | — | planned |
 | U32 | `add-crash-harness` | `test-crash-harness` | `config` | `test/support/crash/`: `spawnEngine({ faultPoints })` booting child engines from the e2e stack's parts, `kill()`, `restart()`, `withDedicatedCluster()`; a `FaultPoints` port in `src/config` that production config cannot enable (arch test); child engines boot from the e2e stack's `discoverParts()` | U01, U02, U06, U30 | 1, 2 (harness) | `shared/harness` | planned |
 | U33 | `add-interpreter-core` | `interpreter` | `interpreter` | `src/interpreter`: the node visit structure of the hooks spike (hook lists empty), `registerNodeRuntime(kind, runtime)` with a conformance kit, kinds `switch`, `wait`, `end` and `block` through `ToolInvoker`, the run's `EffectMode` (`live`, `mock`, `stub`), reference resolution, step records; starts only by registry id and hash | U22, U24, U27, U30, U31 | 1 (part) | `node-hooks/src/interpreter.ts`, `core-dbos/src` | planned |
-| U34 | `add-effect-intents` | `idempotency` | `runs` | `src/runs/intents`: run lineage, `idem_key = lineage:node:effect_seq`, `effect_intent` before every consequential call; a kill between intent and done gives one effect | U31, U32, U33 | 2 (RT-8 foundation), 3 | — | planned |
-| U35 | `add-mock-test-runs` | `flow-testing` | `api`, `interpreter`, `cli` | `POST /api/v1/flows/{id}/versions/{hash}/test`: mock mode, every effectful node mocked or the test fails, never egresses; `test_flow` scoped to the owner team; `ursitoare flow test <file>` | U13, U14, U20, U27, U33, U34 | — | `shared/harness` | planned |
+| U34 | `add-effect-intents` | `idempotency` | `runs` | `src/runs/intents`: run lineage, `idem_key = idemKey(tenant, lineage, node, effect_seq, generation)` (`ik1_` + sha256, ADR-08, M4 decision D9), `effect_intent` before every consequential call; a kill between intent and done gives one effect | U31, U32, U33 | 2 (RT-8 foundation), 3 | — | planned |
+| U35 | `add-mock-test-runs` | `flow-testing` | `api`, `interpreter` | `POST /api/v1/flows/{id}/versions/{hash}/test`: mock mode, every effectful node mocked or the test fails, never egresses; `test_flow` scoped to the owner team | U13, U14, U27, U33, U34, U36 | — | `shared/harness` | planned |
+| U35b | `add-flow-test-cli` | `ops-cli` | `cli` | `ursitoare flow test --file <path> --mocks <path>`: offline and in-process with in-memory stores (M4 decisions D14, D15: split from U35); the default-registry scenario lists every command | U20, U33, U34, U35 | — | — | planned |
 | U36 | `add-runs-api` | `runs-api` | `api`, `runs` | `GET /api/v1/runs` (filtered by `read_run`), `GET /runs/{id}`, steps, payloads, `POST /runs/{id}/cancel` (`debug_run`); `read_run` scoped to the owner team and the run principal | U13, U14, U31, U33 | — | — | planned |
 | U37 | `add-web-run-timeline` | `web-runs` | `web` | Run list and the timeline with a `stepRenderers` registry, inputs and outputs, outcomes, decision links, polling; "Test run" with a mocks editor; journey `test_m4_runs.py`. **Closing** | U29, U30–U36 | — | — | planned |
 
@@ -226,7 +228,7 @@ All units start as `planned`.
 |---|---|---|---|---|---|---|---|---|
 | U57 | `add-init-secrets` | `deploy-secrets` | `cli` | `ursitoare init-secrets --dir <path>`: `.env` (mode 0600) and `secrets/*` (engine key, KEK, signing seed, service tokens, Keycloak admin, database and OIDC client secrets, the first user's one-time password), every value non-empty, never overwrites; keys are text of at least 32 characters; registered as a top-level command in U20's registry; the engine key is 64 hex characters | U01, U20 | 12 (part) | `deploy/mintkey-footprint/gen-secrets.sh` | planned |
 | U58 | `add-keycloak-realm` | `deploy-keycloak` | — | The realm (organisation, `ursitoare-engine` and `ursitoare-mcp` clients, group mapper emitting plain group names (full path off), as the fake provider does, `ursitoare-admins`, `ursitoare-authors` and `team-default` holding the first user) rendered from the generated secrets; its init script; a test against the fake OIDC claim contract; the `idp-external` profile | U09, U17, U57 | 19 (part) | `deploy/keycloak-footprint` | planned |
-| U59 | `add-hobbyist-compose` | `deploy-compose` | — | The engine image (`URSITOARE_ROLE`; runs from source with `src/db/migrations`; no test support or fakes inside, tested), `deploy/compose.yaml` with exactly six long-running containers, the §4.3 limits, networks with egress only from the proxy, published ports (the Mintkey vault's port is published to no host port); a static test of these rules; `docs/deploy.md` and `docs/operations.md` (backup and restore of KEK, seed, vault file and `.env`; LAN access; TLS; upgrades); a one-shot owner job runs `prepareDatabase` with the owner credentials, then `admin bootstrap-admin` (U20), before the engine starts (the engine never holds the credentials); the engine container sets `URSITOARE_HOST=0.0.0.0` while the host publish stays `127.0.0.1:8080` | U46, U57, U58 | 10 (static) | `deploy/mintkey-footprint` | planned |
+| U59 | `add-hobbyist-compose` | `deploy-compose` | — | The engine image (`URSITOARE_ROLE`; runs from source with `src/db/migrations`; no test support or fakes inside, tested), `deploy/compose.yaml` with exactly six long-running containers, the §4.3 limits, networks with egress only from the proxy, published ports (the Mintkey vault's port is published to no host port); a static test of these rules; `docs/deploy.md` and `docs/operations.md` (backup and restore of KEK, seed, vault file and `.env`; LAN access; TLS; upgrades); a one-shot owner job runs `prepareDatabase` and `prepareDurable` (U30) with the owner credentials, then `admin bootstrap-admin` (U20), before the engine starts (the engine never holds the credentials); the engine container sets `URSITOARE_HOST=0.0.0.0` while the host publish stays `127.0.0.1:8080` | U46, U57, U58 | 10 (static) | `deploy/mintkey-footprint` | planned |
 | U60 | `add-audit-sink` | `audit-sink` | `api`, `audit` | The internal listener (`buildInternalServer`, `service_token`): `POST /v1/internal/audit/emit` appends broker and proxy events with `origin = mintkey`, 2xx only after commit; it accepts the broker's and the proxy's service tokens, which differ; route kind `mintkey_tenant`; the reconciliation job; e2e part `parts/70-internal.ts` (service token file) | U08, U13, U45, U50 | — | `deploy/mintkey-footprint/audit_sink.py` | planned |
 | U61 | `add-stack-overlay` | `e2e-stack` | — | `deploy/compose.e2e.yaml` (a fakes container behind the proxy, network aliases under `fake.test`), a test realm overlay (journey users with their groups, organisation B), `scripts/stack-e2e.sh` (up, reset the engine database never the vault, run, stop) | U45b, U57, U58, U59, U60 | — | — | planned |
 | U61b | `add-stack-seeding` | `e2e-stack-seeding` | — | `login` against real Keycloak and the API-driven seed fixtures for the stack profile in `e2e/conftest.py` (the fake profile keeps `fresh_state`); local origins flagged | U16, U56, U61 | — | — | planned |
@@ -311,7 +313,7 @@ All units start as `planned`.
 
 | Exit | Units (gates) | Outside L4 |
 |---|---|---|
-| 1 | U32 (harness), U33, U50, U86 | — |
+| 1 | U32 (harness), U34 (the kill proofs, M4 decision D5), U50, U86 | — |
 | 2 | U32 (harness), U34, U74 (RT-9), U82 (RT-10), U83 (RT-8), U86 (RT-1), U88 (RT-7) | — |
 | 3 | U34, U92 | — |
 | 4 | U23, U40, U68, U69 | — |
@@ -367,11 +369,11 @@ Each unit's spec defines its interfaces in full; this table fixes the names so t
 | Gateway | `requestToken(permit)`, `send(permit, request)`; `validateOrigin(url, { local })` (U47); `ServiceResolver { resolve(binding): { serviceId; origin } }` | U46, U48 |
 | Grants | `reconfirmationsFor(oldHash, newHash)` | U49 |
 | Authority | `diffAuthority(oldVersion, newVersion): AuthorityDiff` (`widens_*` flags) | U65 |
-| CLI | `registerCommand(name, command)` under `ursitoare admin`, `ursitoare flow` and top level; a unit adding commands edits `src/cli/builtin.ts` in a named task (`registry.registerCommand(name, command)`), and two such units in one milestone need a depends_on edge | U20 |
+| CLI | `registerCommand(name, command)` under `ursitoare admin`, `ursitoare flow` and top level; a unit adding commands edits its group's index (`src/cli/<group>/index.ts`), or `src/cli/builtin.ts` for a new group, in a named task (`registry.registerCommand(name, command)`), and two such units in one milestone need a depends_on edge | U20 |
 | Run data | `RunRepository`, `StepRepository`, `EnvelopeStore` | U31 |
 | Crash harness | `spawnEngine(opts)`, `kill()`, `restart()`, `withDedicatedCluster()` | U32 |
 | Step context | `StepContext` | U33 |
-| Effect intents | `recordIntent`, `completeIntent`, `idemKey(lineage, node, effectSeq)` | U34 |
+| Effect intents | `recordIntent`, `completeIntent`, `idemKey(tenantId, lineageId, nodeId, effectSeq, generation = 0)` | U34 |
 | Sandbox | `WorkerSandbox.run(code, input, limits)` | U38 |
 | LLM | `LlmProvider`, `invokeLlm(request, ctx)` | U63 |
 | Human tasks | `createTask`, `decideTask`, `TaskDecision` | U74 |

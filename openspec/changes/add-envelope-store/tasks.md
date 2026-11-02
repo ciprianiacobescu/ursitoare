@@ -1,0 +1,25 @@
+Spec: `specs/run-data/spec.md`; signatures, decisions, tables: `design.md`; merged shapes and facts: `delivered-shapes.md`. Fixtures: design.md § Test plan. Every test file imports from `src/runs/index.ts`, starts with `assert.equal(typeof <the function it tests>, "function")`, wraps a call that reaches a scaffold stub (async: `p.then((v) => v, (e: unknown) => e)`; sync, such as `payloadDigest` and `createMemoryRunStore`: try/catch) so the error is asserted, never thrown, and asserts errors by `code`; test names have no `.`, `[` or `::`.
+
+## 1. The tables
+
+- [ ] 1.1 Write `src/runs/store/schema.test.ts` first (scenarios "Objects, isolation and privileges" and "Rows land in the daily and monthly partitions"; it starts with `assert.ok` on the ledger row `version = 310`; each refused statement in its own `withTenantTx(db.appPool, ...)` with `await assert.rejects(p, { code })`) and change the existing test `src/db/prepare.test.ts::C-58e0ebf0 prepareDatabase migrates first and then creates the partition window` in place, so that `first.partitions` lists, sorted as strings, the five `audit_event` names, the five `ursitoare.event_p202609` to `_p202701`, the five `policy_decision` names and the 153 names `ursitoare.step_execution_p20260901` to `_p20270131` (computed in the test); then add `src/db/migrations/0310_run_data.sql` (design.md § Data model), implementing requirement "Run tables are tenant tables with narrow privileges"
+
+## 2. Payloads
+
+- [ ] 2.1 Write `src/runs/store/canonical.test.ts` first (scenario "Canonical JSON and the digest"), then implement `RunDataErrorCode` and `RunDataError` in `src/runs/store/errors.ts`, the types of design.md § Interfaces in `src/runs/store/types.ts`, `payloadDigest` in `src/runs/store/canonical.ts` and the value checks in `src/runs/store/validate.ts`, implementing requirement "Payloads are content-addressed by their canonical JSON"
+- [ ] 2.2 Write `src/runs/store/envelope-store.test.ts` first (scenario "The envelope store keeps each value once per tenant"), then implement `envelopeStore.put` and `envelopeStore.get` in `src/runs/store/envelope-store.ts`, implementing requirement "Payloads are content-addressed by their canonical JSON"
+
+## 3. Runs
+
+- [ ] 3.1 Write `src/runs/store/run-repository.test.ts` first (scenarios "Create is idempotent and validated" and "A transition applies only from the listed states"; two connections of `db.appPool` for each concurrent case), then implement `runRepository.create`, `runRepository.get` and `runRepository.transition` in `src/runs/store/run-repository.ts` and the time-string and id checks in `src/runs/store/validate.ts`, implementing requirement "A run is created once and moves only along the states a transition allows"
+- [ ] 3.2 Write `src/runs/store/run-list.test.ts` first (scenario "List pages newest first and applies the filter"; runs made with `create`, then moved with `transition`), then implement `runRepository.list` and `RUN_LIST_FILTER_FIRST` in `src/runs/store/run-repository.ts`, implementing requirement "A run is created once and moves only along the states a transition allows"
+
+## 4. Steps and events
+
+- [ ] 4.1 Write `src/runs/store/step-repository.test.ts` first (scenarios "A step is recorded once per key, in its run's day" and "Steps page by seq and a payload belongs to the runs that reference it"), then implement `stepRepository.upsert` and `stepRepository.list` in `src/runs/store/step-repository.ts` and `envelopeStore.referencedBy` in `src/runs/store/envelope-store.ts`, implementing requirement "A step is one row per attempt key"
+- [ ] 4.2 Write `src/runs/store/events.test.ts` first (scenario "Events are appended and a replay is ignored"), then implement `appendEvent` in `src/runs/store/events.ts`, implementing requirement "An event is appended once and never changed"
+
+## 5. Tenant checks and the stores
+
+- [ ] 5.1 Write `src/runs/store/isolation.test.ts` first (scenario "Two tenants never see each other's run data"), then create `src/runs/store/tenant.ts` (module-internal `assertTenantMatches(tx, ctx)`), call it first in every function of `src/runs/store/envelope-store.ts`, `src/runs/store/run-repository.ts`, `src/runs/store/step-repository.ts` and `src/runs/store/events.ts`, and implement `createRunStore` in `src/runs/store/run-store.ts`, implementing requirement "Every repository call checks its transaction's tenant"
+- [ ] 5.2 Write `src/runs/store/store-contract.test.ts` first (scenario "One operation sequence gives equal results in both stores": one function runs the sequence against a store and returns the list of results or error codes, called for both stores), then implement `createMemoryRunStore` in `src/runs/store/memory-store.ts`, implementing requirement "The in-memory store obeys the database store's contract"
