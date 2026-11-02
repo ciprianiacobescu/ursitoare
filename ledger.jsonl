@@ -94,3 +94,4 @@
 {"at":"2026-11-02T10:03:21Z","run":"r-20261102T1003Z-867b","type":"unit.dispatched","unit":"openspec:add-web-flow-editor"}
 {"at":"2026-11-02T10:14:05Z","head":"defe1e2d0b610fc2d7badd836458478b4fdebd1b","pr":62,"target_before":"4a082ec3c6ae59bd593d7117bc8151f4c787f86b","type":"unit.merge_requested","unit":"openspec:add-web-flow-editor"}
 {"at":"2026-11-02T10:14:10Z","ci":"not_run","head":"defe1e2d0b610fc2d7badd836458478b4fdebd1b","merge_commit":"3b03da35f3d239a8e379cd2c45ef000a0acb88e3","method":"squash","pr":62,"raced":false,"type":"unit.merged","unit":"openspec:add-web-flow-editor"}
+{"at":"2026-11-02T10:14:14Z","branch":"l4/openspec/add-web-flow-editor","head":"defe1e2d0b610fc2d7badd836458478b4fdebd1b","type":"unit.branch_deleted","unit":"openspec:add-web-flow-editor"}
