@@ -224,7 +224,7 @@ def test_shell_landmarks_and_skip_link(
 def test_deep_link_returns_the_app(
     page: Page, base_url: str, fresh_state: None
 ) -> None:
-    response = page.goto(f"{base_url}/flows")
+    response = page.goto(f"{base_url}/no-such-page-deep-link")
     assert response is not None
     assert response.status == 200
 

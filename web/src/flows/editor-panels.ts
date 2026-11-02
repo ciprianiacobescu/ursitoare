@@ -27,20 +27,48 @@ export interface EditorPanelRegistry {
 export class EditorPanelError extends Error {
   readonly code: "EDITOR_PANEL_INVALID" | "EDITOR_PANEL_DUPLICATE";
 
-  constructor(_code: EditorPanelError["code"], message: string) {
+  constructor(code: EditorPanelError["code"], message: string) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "EditorPanelError";
+    this.code = code;
   }
 }
 
+const PANEL_ID = /^[a-z][a-z0-9-]{0,39}$/;
+
 export function createEditorPanelRegistry(): EditorPanelRegistry {
-  throw new Error("not implemented");
+  const panels: EditorPanel[] = [];
+  return {
+    register(panel: EditorPanel): void {
+      if (
+        typeof panel !== "object" ||
+        panel === null ||
+        typeof panel.id !== "string" ||
+        !PANEL_ID.test(panel.id) ||
+        typeof panel.title !== "string" ||
+        panel.title.length < 1 ||
+        panel.title.length > 60 ||
+        typeof panel.render !== "function"
+      ) {
+        throw new EditorPanelError("EDITOR_PANEL_INVALID", "The editor panel is not valid.");
+      }
+      if (panels.some((p) => p.id === panel.id)) {
+        throw new EditorPanelError("EDITOR_PANEL_DUPLICATE", `The editor panel ${panel.id} is already registered.`);
+      }
+      panels.push(panel);
+    },
+    list(): readonly EditorPanel[] {
+      return [...panels];
+    },
+  };
 }
 
-export function registerEditorPanel(_panel: EditorPanel): void {
-  throw new Error("not implemented");
+const defaultRegistry = createEditorPanelRegistry();
+
+export function registerEditorPanel(panel: EditorPanel): void {
+  defaultRegistry.register(panel);
 }
 
 export function listEditorPanels(): readonly EditorPanel[] {
-  throw new Error("not implemented");
+  return defaultRegistry.list();
 }
