@@ -106,3 +106,5 @@
 {"at":"2026-11-02T14:58:59Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"add-web-flow-graph halted on a wrong e2e test; 8b60804 fixed the test (3 lines, verified locally 56/56) and the unit was retried; continue the plan.","type":"plan.resumed"}
 {"at":"2026-11-02T15:00:15Z","attempt":1,"cost_usd":2.034971,"runs":2,"type":"plan.charged","unit":"openspec:add-web-flow-graph"}
 {"at":"2026-11-02T15:00:15Z","run":"r-20261102T1500Z-d5d5","type":"unit.dispatched","unit":"openspec:add-web-flow-graph"}
+{"at":"2026-11-02T16:06:49Z","attempt":1,"cost_usd":5.760581,"runs":3,"type":"plan.charged","unit":"openspec:add-web-flow-graph"}
+{"at":"2026-11-02T16:06:49Z","run":"r-20261102T1606Z-fa14","type":"unit.dispatched","unit":"openspec:add-web-flow-graph"}
