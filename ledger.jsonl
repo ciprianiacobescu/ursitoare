@@ -120,3 +120,4 @@
 {"at":"2026-11-02T16:32:24Z","attempt":1,"cost_usd":13.356545,"runs":5,"type":"plan.charged","unit":"openspec:add-web-flow-graph"}
 {"at":"2026-11-02T16:34:10Z","branch":"l4/archive/openspec/add-web-flow-graph","head":"e06fdb35492da52729f23b396a7dba3d34a63604","type":"unit.branch_deleted","unit":"openspec:add-web-flow-graph"}
 {"at":"2026-11-02T16:34:12Z","batch":"m3-flow-authoring","profile":"none","revision":"e06fdb35492da52729f23b396a7dba3d34a63604","type":"batch.accepted"}
+{"at":"2026-11-02T16:36:04Z","revision":"e06fdb35492da52729f23b396a7dba3d34a63604","type":"plan.completed"}

@@ -1,12 +1,12 @@
 # Delivery plan m3
 
-- Status: stopped
+- Status: completed
 - Repository: https://github.com/ciprianiacobescu/ursitoare
-- Target: main at f2167b6abe4a9ead347c378ac3d2d20d4d5a2071
+- Target: main at e06fdb35492da52729f23b396a7dba3d34a63604
 - Merge: auto
 - No promotion target is set. Promotion was not performed.
-- Written: 2026-11-02T12:07:50Z
-- Stopped: unit_halted (openspec:add-web-flow-graph): task 1.1: max_task_attempts (3) reached in single; last failure: `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` failed: exit code 1; failing: test_m3_authoring::test_c_2619a93b_alice_creates_a_flow_from_yaml_and_reads_it
+- Written: 2026-11-02T16:36:04Z
+- Completed at: e06fdb35492da52729f23b396a7dba3d34a63604
 
 ## Units
 
@@ -60,18 +60,18 @@
 - Usage: $18.07, 5 run(s), 1 attempt(s)
 
 ### openspec:add-web-flow-graph
-- Result: not integrated
-- Pull request: <forge>/ciprianiacobescu/ursitoare/pull/64
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $2.03, 1 run(s), 1 attempt(s)
+- Result: integrated at f9196f2474d0dfcbdfe4c779adaf514910e417e6
+- Pull request: 64
+- Merge commit: f9196f2474d0dfcbdfe4c779adaf514910e417e6
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $13.36, 5 run(s), 1 attempt(s)
 
 ## Batches
 
-- m3-flow-authoring (profile none): not checked
+- m3-flow-authoring (profile none): accepted at e06fdb35492da52729f23b396a7dba3d34a63604
 
 ## Usage
 
-- Cost: $70.66
+- Cost: $81.98
 - Of which the readiness review: $27.15
-- Runs that dispatched a unit: 19
+- Runs that dispatched a unit: 23
