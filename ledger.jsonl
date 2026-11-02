@@ -99,3 +99,5 @@
 {"at":"2026-11-02T10:16:39Z","revision":"3b03da35f3d239a8e379cd2c45ef000a0acb88e3","type":"unit.integrated","unit":"openspec:add-web-flow-editor"}
 {"at":"2026-11-02T10:16:39Z","attempt":1,"cost_usd":18.072614,"runs":5,"type":"plan.charged","unit":"openspec:add-web-flow-editor"}
 {"at":"2026-11-02T10:18:00Z","branch":"l4/archive/openspec/add-web-flow-editor","head":"17e35b4be73d6976553dec336d7b23911811f77b","type":"unit.branch_deleted","unit":"openspec:add-web-flow-editor"}
+{"at":"2026-11-02T10:18:01Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-web-flow-graph"}
+{"at":"2026-11-02T10:18:01Z","run":"r-20261102T1017Z-2f08","type":"unit.dispatched","unit":"openspec:add-web-flow-graph"}
