@@ -1,0 +1,255 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "web/src/features/index.ts",
+      "src/authoring",
+      "test/web-flow-graph",
+      ".../versions/{hash}",
+      "e2e/test_m2_admin.py",
+      "docs/decisions/0002",
+      "web/src/features/75-flow-graph.tsx",
+      "test/support/catalogue/flows.ts",
+      ".../loader.ts",
+      "src/authoring/index.ts",
+      "web/src/admin/shared.ts",
+      "specs/web-flow-graph/spec.md",
+      "node:assert/strict",
+      "test/support",
+      "web/src/flow-graph/layout.test.ts",
+      "test/web-flow-graph/successor-parity.test.ts",
+      "test/web-flow-graph/layout-rf1.test.ts",
+      "web/src/flow-graph/layout.ts",
+      "src",
+      "web/src/flow-graph/graph-model.test.ts",
+      "web/src/flow-graph/graph-model.ts",
+      "web/src/flow-graph/drawing.test.ts",
+      "web/src/flow-graph/drawing.ts",
+      "web/src/flow-graph/view-sources.test.ts",
+      "web/src/flow-graph/FlowGraphView.tsx",
+      "web/src/flow-graph/flow-graph.css",
+      "web/src/flow-graph/pages.test.ts",
+      "web/src/flow-graph/pages.ts",
+      "web/src/flow-graph/GraphPanel.tsx",
+      "web/src/flow-graph/FlowGraphPage.tsx",
+      "web/src/flow-graph/graph-source.test.ts",
+      "test/journeys/m3-authoring.test.ts",
+      "e2e/test_m3_authoring.py",
+      "e2e",
+      "web/src/flow-graph/graph-source.ts",
+      "**/nodes[id]",
+      "**/layout.ts",
+      "**/drawing.ts",
+      "**/^[a-z][a-z0-9]*",
+      "**/section[aria-labelledby]",
+      "**/[",
+      "module ...",
+      "module authoring",
+      "module docs",
+      "module e2e",
+      "module node:assert",
+      "module specs",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m3_authoring.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-flow-graph/.l4/ledger/r-20261102T1017Z-2f08.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-flow-graph/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/journeys/m3-authoring.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/web-flow-graph/layout-rf1.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/web-flow-graph/successor-parity.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/features/75-flow-graph.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/FlowGraphPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/FlowGraphView.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/GraphPanel.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/drawing.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flow-graph/drawing.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/flow-graph.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/graph-model.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flow-graph/graph-model.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/graph-source.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flow-graph/graph-source.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/layout.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flow-graph/layout.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/pages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flow-graph/pages.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/view-sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/features/75-flow-graph.tsx, web/src/flow-graph/FlowGraphPage.tsx, web/src/flow-graph/FlowGraphView.tsx, web/src/flow-graph/GraphPanel.tsx, web/src/flow-graph/drawing.ts and 4 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/features/75-flow-graph.tsx",
+      "web/src/flow-graph/FlowGraphPage.tsx",
+      "web/src/flow-graph/FlowGraphView.tsx",
+      "web/src/flow-graph/GraphPanel.tsx",
+      "web/src/flow-graph/drawing.ts",
+      "web/src/flow-graph/graph-model.ts",
+      "web/src/flow-graph/graph-source.ts",
+      "web/src/flow-graph/layout.ts",
+      "web/src/flow-graph/pages.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 1455,
+      "passed": 1453,
+      "failed": 2,
+      "errored": 0,
+      "skipped": 0,
+      "new": 27,
+      "new_passed": 25,
+      "skipped_unchanged": []
+    },
+    "findings": [
+      {
+        "severity": "blocker",
+        "title": "new tests failed",
+        "detail": "test_m3_authoring::test_c_2619a93b_alice_creates_a_flow_from_yaml_and_reads_its_graph[chromium], test_m3_authoring::test_c_68b2dc11_bob_reads_the_graph_but_cannot_save[chromium]"
+      }
+    ]
+  }
+}
