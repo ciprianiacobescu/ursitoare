@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-086f1719 (web-flow-editor › The editor works against the real engine, in logic and in a browser › Alice creates, edits, saves and validates): accept as satisfied? |
+| Q-001 | answered | none | verdict | Criterion C-086f1719 (web-flow-editor › The editor works against the real engine, in logic and in a browser › Alice creates, edits, saves and validates): accept as satisfied? |
 | Q-002 | open | none | verdict | Hold H-5e7d0c9f: UI criterion C-1f5393c5 has no end-to-end test; see the generated UI tests table |
 | Q-003 | open | none | verdict | Hold H-35d043eb: UI criterion C-b6b033e0 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-07cda852: UI criterion C-e71f3bcb has no end-to-end test; see the generated UI tests table |
@@ -33,7 +33,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-086f1719 (web-flow-editor › The editor works against the real engine, in logic and in a browser › Alice creates, edits, saves and validates): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -60,6 +61,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The browser journey tagged with this criterion performs every step of the scenario and asserts every clause of its THEN: the title, the Diagnostics region status and guide link with its href, the lint range, the valid status after the good text, the overflow-x of the scroller, the absence of Content-Security-Policy console messages, Tab moving focus to Save version, and the accessibility check on both pages. The page, the editor configuration and the shadow-root mount implement each of those facts, and the design records the measured behaviour under the engine's policy. The only reason the verifier set the criterion aside is that the browser test has no red record, which the project's own rules make impossible: a red step runs only the Node gate and a criterion that only browser tests check is left to the verifier. The e2e gate runs the whole e2e folder, so this test is exercised in every verification round.
 ---
 
 ## Q-002: Hold H-5e7d0c9f: UI criterion C-1f5393c5 has no end-to-end test; see the generated UI tests table
