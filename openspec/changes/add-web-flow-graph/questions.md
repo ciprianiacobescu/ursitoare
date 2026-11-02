@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-68b2dc11 (web-flow-graph › The M3 journey proves authoring in a browser › Bob reads the graph but cannot save): accept as satisfied? |
 | Q-003 | open | none | verdict | Hold H-d0c803fb: UI criterion C-c1de3761 has no end-to-end test; see the generated UI tests table |
 | Q-004 | answered | none | verdict | Hold H-dd6ec34f: UI criterion C-7a375c7a has no end-to-end test; see the generated UI tests table |
-| Q-005 | open | none | verdict | Hold H-5a9601e2: UI criterion C-024a069e has no end-to-end test; see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-5a9601e2: UI criterion C-024a069e has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-62f40190: UI criterion C-1616f6aa has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-afa2b3ee: UI criterion C-1129d3e7 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-3fb54c46: UI criterion C-cf729adf has no end-to-end test; see the generated UI tests table |
@@ -149,7 +149,8 @@ accept Criterion C-7a375c7a describes the layout results of layoutFlow for cycle
 
 ## Q-005: Hold H-5a9601e2: UI criterion C-024a069e has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -168,6 +169,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-024a069e describes the return values of layoutFlow for non-objects, documents without nodes, the empty flow and the 200-node bound. layoutFlow is a pure function with no DOM, and its invalid and too_large results are not observable as such through a page, so an end-to-end test cannot check them and none is needed. The Node test asserts each result against the figures of reference.md, and layout.ts returns not_object, no_nodes, the empty layout and too_large before any work above 200 nodes.
 ---
 
 ## Q-006: Hold H-62f40190: UI criterion C-1616f6aa has no end-to-end test; see the generated UI tests table
