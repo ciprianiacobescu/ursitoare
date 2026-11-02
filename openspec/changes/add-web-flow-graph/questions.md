@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-2619a93b (web-flow-graph › The M3 journey proves authoring in a browser › Alice creates a flow from YAML and reads its graph): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-68b2dc11 (web-flow-graph › The M3 journey proves authoring in a browser › Bob reads the graph but cannot save): accept as satisfied? |
-| Q-003 | open | none | verdict | Hold H-d0c803fb: UI criterion C-c1de3761 has no end-to-end test; see the generated UI tests table |
+| Q-003 | answered | none | verdict | Hold H-d0c803fb: UI criterion C-c1de3761 has no end-to-end test; see the generated UI tests table |
 | Q-004 | answered | none | verdict | Hold H-dd6ec34f: UI criterion C-7a375c7a has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-5a9601e2: UI criterion C-024a069e has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-62f40190: UI criterion C-1616f6aa has no end-to-end test; see the generated UI tests table |
@@ -101,7 +101,8 @@ accept Bob's journey in e2e/test_m3_authoring.py matches the scenario and each e
 
 ## Q-003: Hold H-d0c803fb: UI criterion C-c1de3761 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -120,6 +121,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-c1de3761 checks the return value of layoutFlow for the small flow S, for S with its node keys reversed, for a deep-frozen S, for SLASH and ONE, and the values of the GRAPH_GEOMETRY and MAX_GRAPH_NODES constants. These are structured results of a pure function with no DOM and two exported constants, which a browser page cannot show as such, so no end-to-end test can trace this criterion and none is needed. The Node test in layout.test.ts asserts every point of the scenario: the first result deep-equals the ok result with the S layout of reference.md, the reversed-key and frozen runs deep-equal the same layout without throwing, SLASH gives the merged label a/b, c~d, default and ONE a single node with no edge, the geometry constant is the five figures of the scenario and the bound is 200. I read layout.ts and it produces these values: ids are sorted by code unit so key order does not matter, nodes are only read through a Map and never written, case keys are decoded from the JSON pointer escapes for the label, and a lone next gives a null label. The browser journey separately shows the drawn graph and the node list in layout order for the saved flow, which is what a user can observe. The unit can go on.
 ---
 
 ## Q-004: Hold H-dd6ec34f: UI criterion C-7a375c7a has no end-to-end test; see the generated UI tests table
