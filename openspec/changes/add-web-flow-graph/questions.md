@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | open | none | verdict | Hold H-d0c803fb: UI criterion C-c1de3761 has no end-to-end test; see the generated UI tests table |
 | Q-004 | answered | none | verdict | Hold H-dd6ec34f: UI criterion C-7a375c7a has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-5a9601e2: UI criterion C-024a069e has no end-to-end test; see the generated UI tests table |
-| Q-006 | open | none | verdict | Hold H-62f40190: UI criterion C-1616f6aa has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-62f40190: UI criterion C-1616f6aa has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-afa2b3ee: UI criterion C-1129d3e7 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-3fb54c46: UI criterion C-cf729adf has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-2939d42a: UI criterion C-793687fa has no end-to-end test; see the generated UI tests table |
@@ -174,7 +174,8 @@ accept Criterion C-024a069e describes the return values of layoutFlow for non-ob
 
 ## Q-006: Hold H-62f40190: UI criterion C-1616f6aa has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -193,6 +194,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-1616f6aa compares successorTargets and GRAPH_NODE_KINDS of the browser bundle with U22's successorFields and NODE_KINDS. Both are pure functions and constants with no user-visible behaviour, so no end-to-end test can observe them. The Node test under test/web-flow-graph/ feeds every kind of NODE_KINDS plus the five non-node inputs to both tables and compares the pairs, and I read both implementations: the fourteen kinds are listed in the same order and each case of the switch adds the same paths in the same order, with case keys escaped the same way. The unit can go on.
 ---
 
 ## Q-007: Hold H-afa2b3ee: UI criterion C-1129d3e7 has no end-to-end test; see the generated UI tests table
