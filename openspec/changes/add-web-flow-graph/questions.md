@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Hold H-ff7d32cd: UI criterion C-ada22065 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-13fe6678: UI criterion C-99ed5dc0 has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-d1691d3f: UI criterion C-4ca8acf8 has no end-to-end test; see the generated UI tests table |
-| Q-015 | open | none | verdict | Hold H-1fadb9d3: UI criterion C-5be45b98 has no end-to-end test; see the generated UI tests table |
+| Q-015 | answered | none | verdict | Hold H-1fadb9d3: UI criterion C-5be45b98 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-abaa3609: UI criterion C-830797f7 has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-32a186e4: UI criterion C-2619a93b has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-7eb5a856: UI criterion C-68b2dc11 has no end-to-end test; see the generated UI tests table |
@@ -399,7 +399,8 @@ accept Criterion C-4ca8acf8 checks needsDocument, loadGraphDocument against a re
 
 ## Q-015: Hold H-1fadb9d3: UI criterion C-5be45b98 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -418,6 +419,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-5be45b98 checks the GRAPH_PAGE and GRAPH_PANEL constants, graphPath and versionNote, the contents of a feature registry and an editor panel registry built in the test, and the literals and strings of the three .tsx sources. These are constants, pure functions and source-file properties that no browser test can observe as such. The Node test in pages.test.ts asserts every point of the scenario: the two constants, the path for demo-graph and the RangeError for Bad_Name, ../x and the empty string, the two version notes, the registry listing flows, flow-editor and flow-graph with the single Flows navigation entry, the panel registering as graph, the feature literals of 75-flow-graph.tsx with registerEditorPanel( and GRAPH_PANEL, and no inline style or dangerouslySetInnerHTML in the three sources. I read pages.ts and the feature file and they match: the feature file registers the panel at module level with the GRAPH_PANEL id and title and exports the feature with the literals written out. The browser journey proves the registration in use: the editor shows the region Graph, the link Open the graph on its own page reaches a page titled Graph of demo-graph with Showing version 2, and Back to the editor returns. The unit can go on.
 ---
 
 ## Q-016: Hold H-abaa3609: UI criterion C-830797f7 has no end-to-end test; see the generated UI tests table
