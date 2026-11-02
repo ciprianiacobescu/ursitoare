@@ -10,7 +10,7 @@ Spec: `specs/web-flow-graph/spec.md`; data: `reference.md`; signatures and decis
 
 ## 3. The drawing model
 
-- [ ] 3.1 Write `web/src/flow-graph/drawing.test.ts` first (scenario "The drawing model"), then implement `viewBox`, `drawNodes`, `drawEdges` and the types in `web/src/flow-graph/drawing.ts` (design.md decision 7), implementing requirement "The drawing is decorative and uses kit tokens only"
+- [x] 3.1 Write `web/src/flow-graph/drawing.test.ts` first (scenario "The drawing model"), then implement `viewBox`, `drawNodes`, `drawEdges` and the types in `web/src/flow-graph/drawing.ts` (design.md decision 7), implementing requirement "The drawing is decorative and uses kit tokens only"
 
 ## 4. The view component and its styles
 
