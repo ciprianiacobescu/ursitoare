@@ -118,3 +118,4 @@
 {"at":"2026-11-02T16:32:24Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"f9196f2474d0dfcbdfe4c779adaf514910e417e6","status":"pass","type":"unit.postcheck","unit":"openspec:add-web-flow-graph"}
 {"at":"2026-11-02T16:32:24Z","revision":"f9196f2474d0dfcbdfe4c779adaf514910e417e6","type":"unit.integrated","unit":"openspec:add-web-flow-graph"}
 {"at":"2026-11-02T16:32:24Z","attempt":1,"cost_usd":13.356545,"runs":5,"type":"plan.charged","unit":"openspec:add-web-flow-graph"}
+{"at":"2026-11-02T16:34:10Z","branch":"l4/archive/openspec/add-web-flow-graph","head":"e06fdb35492da52729f23b396a7dba3d34a63604","type":"unit.branch_deleted","unit":"openspec:add-web-flow-graph"}
