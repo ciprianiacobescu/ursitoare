@@ -31,6 +31,8 @@ No endpoint, table or PEP action: the command acts on local files the caller nam
 
 ## Test plan
 
+Environment: the gates run on GitHub's Linux runners (`.github/workflows/l4.yml`, `runs-on: ubuntu-24.04`) and locally on macOS. Both are POSIX, which the repository already needs (embedded Postgres, `bash` setup), and `mkfifo` and `/dev/null` belong to it. No Windows support is claimed.
+
 `flow.json` is `JSON.stringify(payOnceVersion().flow)` written to a `mkdtemp` directory with the mocks and input files; `CAT` is `TEST_CATALOGUE_PATH`; `MOCKS` is `{ lookup: [{ output: { vendor_id: "v1", status: "active" } }], pay: [{ output: PAY_ONCE_PAID_OUTPUT }] }`, `PAID` is `PAY_ONCE_PAID_OUTPUT`, the input file holds `PAY_ONCE_INPUT`. The directory case passes the `mkdtemp` directory itself; the oversized case a file of 1,048,577 `x` characters; the device case `/dev/null`; the FIFO case `execFileSync("mkfifo", [path])` in the `mkdtemp` directory (available on macOS and Linux). `FLOW0` is `payOnceVersion().flow` with `inputs` `{ type: "object" }`, `lookup.with` `{ vendor_name: "Acme" }` and `pay.with` `{ vendor_id: "${{ nodes.lookup.output.vendor_id }}", amount: 120, currency: "EUR", reference: "inv-1" }`, written as `flow0.json`. Each test builds `registry = createCommandRegistry()` with `registerCommand("flow test", flowTestCommand)` and calls `cliMain(argv, { env: {}, registry, stdout, stderr, ids: sequentialIds(0) })` with capturing outputs; `globalThis.fetch` is replaced by a recorder and restored in `finally`. The registry scenario uses `createDefaultRegistry()` and `cliMain(["help"])` without a custom registry.
 
 ## Decisions made while writing

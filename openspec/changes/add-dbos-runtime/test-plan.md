@@ -20,8 +20,13 @@
 
 The `launchDurable` calls of "Refusals", in order. On `withTestDatabase({ migrated: false })` (no `dbos`): (1) valid options; then with options (2) `concurrency` 0 and (3) `pollingIntervalMs` 5, and endpoint `url`s (4) `mysql://ursitoare_app@127.0.0.1:1/x`, (5) `postgres://ursitoare_app@127.0.0.1:1`, (6) `postgres://ursitoare_app:pw@127.0.0.1:1/x`, (7) `postgres://ursitoare_app@127.0.0.1:1/x?foo=1` (`createPool` refuses the parameter), (8) `postgres://ursitoare_app@127.0.0.1:1/x` (a closed port). Then `prepareDurable(db.ownerUrl)`, and: (9) the owner copies `dbos.dbos_migrations`, deletes its rows (the preflight finds the table, `DBOS.launch` finds version 0), launches, restores the rows; (10) the owner inserts a `dbos.queues` row `runs` with `application_name` `other-app` and launches; (11) the owner deletes that row and launches; (12) launches again while (11) runs.
 
+## Queue sequence
+
+(1) Read `dbos.queues`. (2) `suspendDurable()`. (3) The three calls `rt.enqueue("t.echo", "x", "hi")`, `rt.cancel("x")`, `rt.status("x")`. (4) The owner deletes the rows of `dbos.queues` and `dbos.application_versions`. (5) `resumeDurable()` twice. (6) `rt.enqueue("t.echo", "after-reset", "hi")`, polled to a terminal state within 20 s. (7) `rt.shutdown()` twice at once (`Promise.all`), then the three calls again. (8) `launchDurable({ endpoint, logger })` (same endpoint and logger) giving `rt2`; read `dbos.queues`; `resumeDurable()`. (9) `suspendDurable()`, `resumeDurable()` and `rt2.shutdown()` called in a row without awaiting.
+
 ## Fixtures
 
+- Null runtime: after `databasePart.start` and `databasePart.seed` with a hand-made `PartContext` (as `database-part.test.ts` does) and no `main`, so `suspendDurable()` and `resumeDurable()` give `null`: run `durablePart.start`, `beforeReset`, `seed` and the handle's `close`; the owner then reads `dbos.workflow_status` in `ursitoare_e2e`.
 - Bad `checkDurableReady` options: `timeoutMs` 0, 60001, 1.5; `pollMs` 0; `pollMs` 11 with `timeoutMs` 10.
 - `closePool`: `async (pool) => { await pool.end(); throw new Error("boom"); }`.
 - Probe table: the owner creates `ursitoare.rls_probe (tenant_id text)` with rows `tenant_a` and `tenant_b`, `ENABLE` and `FORCE ROW LEVEL SECURITY`, the policy `tenant_id = current_setting('app.tenant_id', true)` and `GRANT SELECT` to the app role, after `seedTwoTenants(db)`.
