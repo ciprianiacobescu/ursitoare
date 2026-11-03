@@ -6,7 +6,9 @@ import { createPool } from "../db/index.ts";
 import type { EndpointLike } from "../db/index.ts";
 import type { Logger } from "../observability/index.ts";
 import { DurableError } from "./errors.ts";
+import { isDurableJson } from "./json.ts";
 import { DBOS_SCHEMA } from "./prepare.ts";
+import { isRegistered } from "./registry.ts";
 
 export type DurableJson =
   | null
@@ -244,22 +246,66 @@ async function startEngine(opts: LaunchOptions, concurrency: number, polling: nu
   return pool;
 }
 
+function checkId(workflowId: string): void {
+  if (!WORKFLOW_ID.test(workflowId)) {
+    throw new DurableError("DURABLE_INVALID", "invalid workflow id", { reason: "bad_workflow_id" });
+  }
+}
+
+async function dbosCall(call: () => Promise<unknown>): Promise<void> {
+  try {
+    await call();
+  } catch (error) {
+    if (error instanceof DurableError) {
+      throw error;
+    }
+    throw new DurableError("DURABLE_UNAVAILABLE", "the durable call failed", {
+      reason: "dbos_failed",
+    });
+  }
+}
+
+export function launchBusy(): boolean {
+  return pending > 0 || active?.kind === "running";
+}
+
 function makeHandle(): DurableRuntime {
   const handle: DurableRuntime = {
     applicationVersion: APPLICATION_VERSION,
-    async enqueue(): Promise<void> {
-      throw new Error("not implemented");
+    enqueue(workflow: string, workflowId: string, input: DurableJson): Promise<void> {
+      return guarded(handle, async () => {
+        if (!isRegistered(workflow)) {
+          throw new DurableError("DURABLE_WORKFLOW_UNKNOWN", "unknown workflow", {
+            reason: "not_registered",
+          });
+        }
+        checkId(workflowId);
+        if (!isDurableJson(input)) {
+          throw new DurableError("DURABLE_INVALID", "invalid workflow input", { reason: "bad_input" });
+        }
+        await dbosCall(async () => {
+          await DBOS.enqueueWorkflowWithOptions(
+            {
+              workflowName: workflow,
+              queueName: RUNS_QUEUE,
+              workflowID: workflowId,
+              appVersion: APPLICATION_VERSION,
+              workflowIDReusePolicy: "return-existing",
+            },
+            input,
+          );
+        });
+      });
     },
-    async cancel(): Promise<void> {
-      throw new Error("not implemented");
+    cancel(workflowId: string): Promise<void> {
+      return guarded(handle, async () => {
+        checkId(workflowId);
+        await dbosCall(() => DBOS.cancelWorkflow(workflowId));
+      });
     },
     status(workflowId: string): Promise<WorkflowInfo | null> {
       return guarded(handle, async () => {
-        if (!WORKFLOW_ID.test(workflowId)) {
-          throw new DurableError("DURABLE_INVALID", "invalid workflow id", {
-            reason: "bad_workflow_id",
-          });
-        }
+        checkId(workflowId);
         try {
           const found = await DBOS.getWorkflowStatus(workflowId);
           if (found === null) {

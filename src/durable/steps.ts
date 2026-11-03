@@ -1,4 +1,4 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
+import { DBOS, Error as DBOSErrors } from "@dbos-inc/dbos-sdk";
 
 import type { DurableJson } from "./launch.ts";
 
@@ -7,12 +7,17 @@ export interface StepOptions {
   retryable?: (error: unknown) => boolean;
 }
 
+export function isDurableCancellation(error: unknown): boolean {
+  return error instanceof DBOSErrors.DBOSWorkflowCancelledError;
+}
+
+// Plain step: DBOS must see its own cancellation error, so nothing is translated here (3.1 adds the rest).
 export async function runStep<T extends DurableJson>(
-  _name: string,
-  _fn: () => Promise<T>,
+  name: string,
+  fn: () => Promise<T>,
   _opts?: StepOptions,
 ): Promise<T> {
-  throw new Error("not implemented");
+  return DBOS.runStep(fn, { name });
 }
 
 export async function durableSleep(_ms: number): Promise<void> {
@@ -20,9 +25,5 @@ export async function durableSleep(_ms: number): Promise<void> {
 }
 
 export function currentWorkflowId(): string {
-  throw new Error("not implemented");
-}
-
-export function isDurableCancellation(_error: unknown): boolean {
   throw new Error("not implemented");
 }
