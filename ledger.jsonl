@@ -31,3 +31,5 @@
 {"at":"2026-11-03T10:41:13Z","run":"r-20261103T1041Z-ce84","type":"unit.dispatched","unit":"openspec:add-dbos-runtime"}
 {"at":"2026-11-03T10:47:03Z","detail":"awaiting_human: no new answers (verdicts open: Q-017) (escalated to a person: Q-017)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-dbos-runtime"}
 {"at":"2026-11-03T18:08:23Z","by":"harness","reason":"the cause is gone: openspec:add-dbos-runtime is awaiting_human","type":"plan.resumed"}
+{"at":"2026-11-03T18:08:25Z","attempt":1,"cost_usd":11.313189,"runs":6,"type":"plan.charged","unit":"openspec:add-dbos-runtime"}
+{"at":"2026-11-03T18:08:25Z","run":"r-20261103T1808Z-bab9","type":"unit.dispatched","unit":"openspec:add-dbos-runtime"}
