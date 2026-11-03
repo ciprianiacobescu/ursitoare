@@ -52,6 +52,8 @@ nodes:
 
 ## Calls
 
+The flow-id grammar is `^[a-z][a-z0-9]*(-[a-z0-9]+)*$` with at most 64 characters, the hash grammar `^sha256:[0-9a-f]{64}$` (`delivered-shapes.md`); `demo-pay` fits, `Bad_Id` and `sha256:xyz` do not.
+
 `loadSteps` makes `{ path: "/runs/run_1/steps", opts: { query: { limit: 200 }, signal } }`, then the same with `cursor: "c1"` in the query; `loadPayload` makes exactly `{ path: "/runs/run_1/payloads/" + D("4"), opts: { signal } }`.
 
 ## Pages

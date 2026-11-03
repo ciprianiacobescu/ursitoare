@@ -68,6 +68,7 @@ export const start: ScenarioStart;
 - From `add-interpreter-core`: `EffectGate`, `EffectDecision`, `ToolCall`, `ToolResult`, `ToolInvoker`, `StepContext`, `LoadedVersion`, `InterpreterDeps`, `startRun`, `executeRun`, `registerRunWorkflow`, `bindInterpreter`, `memoryWorkflowOps`, `waitForRun`.
 - From `add-crash-harness`: `withDedicatedCluster`, `spawnEngine`, `EngineProcess`, `CrashCluster`, `ScenarioStart`, `ScenarioContext`, `faultMarkerDir`, `appendEffect`, `countEffects`. From `add-dbos-runtime`: `launchDurable`, `DurableRuntime`.
 - From `add-test-catalogue`: `loadTestCatalogue`, `parseCatalogueFlow`. From `add-flow-format-model`: `Catalogue`, `canonicalizeFlow`. From `add-flow-validator`: `validateFlow`.
+- From `add-interpreter-core` (added in readiness round 5): `workflowIdOf`, the DBOS workflow id of a run (`<tenantId>:<runId>`).
 - From `add-engine-skeleton`: `fixedClock`, `systemClock`, `systemIds`, `sequentialIds`, `loadConfig`. From `add-db-foundation`: `createPool`, `withTestDatabase`. From `add-tenancy-foundation`: `withTenantTx`, `checkTenancyCatalog`, `seedTwoTenants`. From `add-e2e-stack`: `E2E_TENANT_NAME`.
 
 Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@e06fdb3, checked line by line), with the sibling shapes used quoted from their folders.

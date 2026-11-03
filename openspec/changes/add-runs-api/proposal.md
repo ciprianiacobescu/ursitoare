@@ -55,7 +55,7 @@ Endpoints under `/api/v1`, all `session`; lists answer `{ items, next_cursor }`:
 
 - From `add-envelope-store`: `runRepository`, `stepRepository`, `envelopeStore`, `appendEvent`, `RUN_LIST_FILTER_FIRST` (7: the list filter's first two placeholders), `payloadDigest` (tests), `RunRecord`, `StepRecord`, `RunState`, `StepState`, `RunMode`, `RunError`, `PayloadValue`, `TenantContext`.
 - From `add-dbos-runtime`: `DurableRuntime` (its `cancel(workflowId: string): Promise<void>`, which per that change's requirement "A workflow id runs once, and status and cancel report it" cancels a queued workflow and marks a running one `CANCELLED`, stopping at its next step boundary).
-- From `add-interpreter-core`: the step layout (its design Decisions 5-8: one row per visit, numbered in visit order, `end` included) and `RUN_WORKFLOW` (the workflow id of a run is its `runId`).
+- From `add-interpreter-core`: the step layout (its design Decisions 5-8: one row per visit, numbered in visit order, `end` included) and `workflowIdOf(tenantId: string, runId: string): string` (`<tenantId>:<runId>`, the workflow id U33 enqueues a run under; cancel passes it to `DurableRuntime.cancel`).
 - From merged code (`delivered-shapes.md`): the `src/api` route, PEP, cursor and error names, the policy engine and `entityRef`, `withTenantTx`, `createTestSession`, `seedFlowActors`, `Clock` and `IdSource`.
 
 Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@e06fdb3, checked line by line).

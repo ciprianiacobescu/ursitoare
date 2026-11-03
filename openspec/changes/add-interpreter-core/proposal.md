@@ -2,7 +2,7 @@
 
 Nothing yet walks a flow. U34, U35 and U36 need one interpreter: it takes a registry version, visits its nodes, records one numbered step row per visit, calls tools only through an injected `ToolInvoker` and `EffectGate`, and runs on DBOS and in memory.
 
-Observable result: `startRun` accepts only a stored version (`flowId` + `hash`) of kinds `block`, `switch`, `wait` and `end` whose blocks the catalogue knows, stores a `queued` run and enqueues `ursitoare.run`. `executeRun` moves it `running`, then `completed` or `failed`, writes `step_execution` rows with `seq` 0, 1, 2 in visit order (a replay reuses them), and ends a failed run with a `RunError` that never holds a raw tool error. In `mock` mode a `wait` sleeps nothing and records outcome `skipped`; the gate is called in every mode.
+Observable result: `startRun` accepts only a stored version (`flowId` + `hash`) of kinds `block`, `switch`, `wait` and `end` whose blocks the catalogue knows, stores a `queued` run and enqueues `ursitoare.run` under `workflowIdOf(tenantId, runId)`, so two tenants' equal run ids never share a workflow. `executeRun` moves it `running`, then `completed` or `failed`, writes `step_execution` rows with `seq` 0, 1, 2 in visit order (a replay reuses them), and ends a failed run with a `RunError` that never holds a raw tool error. In `mock` mode a `wait` sleeps nothing and records outcome `skipped`; the gate is called in every mode.
 
 Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: it executes a validated version node by node as one durable workflow, deterministically on replay. The plan runs acceptance profile `all` after this unit merges: every configured gate (setup, build, lint, typecheck, test, e2e) on the target; the batch outcome itself is proven by the closing unit's journey `e2e/test_m4_runs.py`.
 
@@ -79,6 +79,7 @@ interface StartRunRequest {
   principal: RunPrincipal; actorChain: readonly string[]; runId?: string;
 }
 const RUN_WORKFLOW = "ursitoare.run";
+function workflowIdOf(tenantId: string, runId: string): string;  // `${tenantId}:${runId}`
 function registerRunWorkflow(): void;
 function bindInterpreter(deps: InterpreterDeps): void;
 function startRun(deps: InterpreterDeps, ctx: TenantContext, req: StartRunRequest): Promise<RunRecord>;

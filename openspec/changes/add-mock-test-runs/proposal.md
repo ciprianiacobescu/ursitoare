@@ -47,7 +47,7 @@ export function seedMockRunFlows(db: TestDatabase, ctx: TenantContext, clock: Cl
 
 **Interfaces taken:**
 
-- From `add-interpreter-core`: `startRun`, `executeRun`, `InterpreterDeps`, `ToolInvoker`, `VersionLoader`, `LoadedVersion`, `InterpreterError`, `registerRunWorkflow`, `bindInterpreter`, `memoryWorkflowOps`, `waitForRun`.
+- From `add-interpreter-core`: `startRun`, `executeRun`, `InterpreterDeps`, `ToolInvoker`, `VersionLoader`, `LoadedVersion`, `InterpreterError`, `registerRunWorkflow`, `bindInterpreter`, `memoryWorkflowOps`, `waitForRun`, `workflowIdOf`.
 - From `add-effect-intents`: `createEffectIntents`, `getIntent`, `idemKey`, `payOnceVersion`, `payOnceCatalogue`, `PAY_ONCE_INPUT`, `PAY_ONCE_PAID_OUTPUT`.
 - From `add-envelope-store`: `RunStore`, `createRunStore`, `createMemoryRunStore`, `NewRun`, `RunRecord`, `TenantPool`, `TenantContext`, `payloadDigest`.
 - From `add-dbos-runtime`: `launchDurable`, `DurableRuntime`. From `add-runs-api`: `RunView`, `toRunView`, `RUN_VIEW_SCHEMA`, `RUNS_UNAVAILABLE`.

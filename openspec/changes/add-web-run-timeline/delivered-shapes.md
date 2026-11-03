@@ -42,6 +42,7 @@ function postFlow(client, input: { name: string; ownerTeam: string }, key: strin
 
 At main@e06fdb3.
 
+- `web/src/flows/flows.ts:29-30` and `versions.ts:47-49`: `const FLOW_ID_PATTERN = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;`, `const FLOW_ID_MAX_LENGTH = 64;` (a flow id also needs length 64 or less), `const HASH_PATTERN = /^sha256:[0-9a-f]{64}$/;`; both loaders throw `RangeError` before any request on a value outside them.
 - `web/src/flows/FlowEditorPage.tsx:270,277,364-378`: each registered panel is a `<section aria-labelledby=...>` with `<h2>{panel.title}</h2>`, rendered with `version: unchanged ? (baseline?.version ?? null) : null` (`unchanged = baseline !== null && baseline.text === text`), so the panel is the region named by its title and `version` is null while the text differs from the saved one. Buttons "Save version", "Validate" (`:320-323`); textbox "Flow text" (`editor-config.ts:10`).
 - `src/api/me.ts:80-83`, `src/pdp/actions.ts:88,113,123`: `/me.capabilities` lists the allowed actions with `capability: true` (`read_run`, `test_flow` are such); `use-session.ts:14-33` reads the cached `/me`. `fake-oidc/seed.ts:52-53`, `rbac-part.ts:26-28`: alice is `author` in team `finance`, bob `approver` in `finance`.
 - `web/src/kit/messages.ts:38-60`: `registerMessages` throws `KIT_MESSAGE_DUPLICATE` for a registered code with other text; `web/src/admin/messages.ts:12-13` registers `OPERATION_REFUSED` and `ENGINE_KEY_REQUIRED` at load (`features/60-admin-users.tsx:5`). This unit registers only its three own codes.

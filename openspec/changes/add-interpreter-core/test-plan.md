@@ -8,3 +8,7 @@ Flow `pay-once` (hash `"sha256:" + "a".repeat(64)`, state `validated`, team `fin
 
 Test-file fakes: a recording invoker (answers by tool, rejects an `Error` value, logs `{ call, ctx }`), a recording gate, tagged ops (over `memoryWorkflowOps`; log the running step's name, capture results), `deps(over)` (memory store, `durable: null`, `sequentialIds(0)`). The DBOS test uses `withTestDatabase()` (U30's `global-setup` prepares the template), one launch, `rt.shutdown()` in `finally`, a local 20 ms poll (20 s deadline) on `rt.status`, a silent logger.
 
+`DBOS_SETUP`: on `withTestDatabase()` and tenant A of `seedTwoTenants(db)`, `registerRunWorkflow()` runs twice; `bindInterpreter` gets deps over `createRunStore(db.appPool)` with `durable: null`, the fixtures above and `NO_EFFECT_GATE`; `launchDurable({ endpoint: db.appEndpoint, logger, stepObserver })` resolves; `startRun` is then called with that runtime as `durable`. `W_A(id)` is `workflowIdOf("tenant_a", id)`.
+
+`R` (kit scenario): a local `NodeRuntime` that resolves `node.on` through `services.resolve` and answers `{ output: null, outcome: "a", next: "x", end: null }`.
+

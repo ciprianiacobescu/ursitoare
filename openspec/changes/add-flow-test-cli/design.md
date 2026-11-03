@@ -23,7 +23,7 @@ export const flowTestCommand: CliCommand;   // database: false; summary "run a f
 
 ## Failure cases
 
-An unreadable, oversized or malformed file: exit 2, nothing run. An invalid flow, a mock problem, a refused input or a failed run: exit 1 with the reason on stdout. An error on the run path that is not an `InterpreterError` (a `RunDataError` for U+0000 in the input, or one raised in `executeRun`): `CLI_INTERNAL: command failed`, exit 1, no other text.
+An unreadable, oversized or malformed file: exit 2, nothing run. An invalid flow, a mock problem, a refused input or a failed run: exit 1 with the reason on stdout. An error from the run path that is not an `InterpreterError` (proven case: `startRun`'s store write refuses U+0000 in `--input` with `RunDataError`): `CLI_INTERNAL: command failed`, exit 1, no other text. Errors during node visits are mapped by U33 itself.
 
 ## Security
 
