@@ -54,3 +54,4 @@
 {"at":"2026-11-03T22:27:34Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"797762fcc30e6968acc8e620013ce70cb97bdd35","status":"pass","type":"unit.postcheck","unit":"openspec:add-envelope-store"}
 {"at":"2026-11-03T22:27:34Z","revision":"797762fcc30e6968acc8e620013ce70cb97bdd35","type":"unit.integrated","unit":"openspec:add-envelope-store"}
 {"at":"2026-11-03T22:27:34Z","attempt":1,"cost_usd":1.284474,"runs":2,"type":"plan.charged","unit":"openspec:add-envelope-store"}
+{"at":"2026-11-03T22:29:38Z","branch":"l4/archive/openspec/add-envelope-store","head":"72d0901386910b5c5fd39067d762d0a575ff7da3","type":"unit.branch_deleted","unit":"openspec:add-envelope-store"}
