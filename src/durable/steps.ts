@@ -22,3 +22,7 @@ export async function durableSleep(_ms: number): Promise<void> {
 export function currentWorkflowId(): string {
   throw new Error("not implemented");
 }
+
+export function isDurableCancellation(_error: unknown): boolean {
+  throw new Error("not implemented");
+}

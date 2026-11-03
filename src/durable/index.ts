@@ -21,4 +21,4 @@ export {
 } from "./launch.ts";
 export { registerWorkflow } from "./registry.ts";
 export type { StepOptions } from "./steps.ts";
-export { runStep, durableSleep, currentWorkflowId } from "./steps.ts";
+export { runStep, durableSleep, currentWorkflowId, isDurableCancellation } from "./steps.ts";
