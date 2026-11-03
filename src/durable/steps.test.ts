@@ -191,6 +191,41 @@ async function badWorkflow(_input: DurableJson): Promise<DurableJson> {
   return 0;
 }
 
+const afterObserverError = new Error("after observer failed");
+let boomFnRuns = 0;
+let boomBeforeCalls = 0;
+let boomAfterCalls = 0;
+let boomStepError: unknown;
+
+async function afterObserverWorkflow(_input: DurableJson): Promise<DurableJson> {
+  boomFnRuns = 0;
+  try {
+    await runStep(
+      "observe",
+      async () => {
+        boomFnRuns += 1;
+        return 42;
+      },
+      { retries: 2 },
+    );
+  } catch (error) {
+    boomStepError = error;
+  }
+  return 0;
+}
+
+const afterObserver: StepObserver = (phase, step) => {
+  if (step !== "observe") {
+    return;
+  }
+  if (phase === "before") {
+    boomBeforeCalls += 1;
+    return;
+  }
+  boomAfterCalls += 1;
+  throw afterObserverError;
+};
+
 let ownerPool: pg.Pool | undefined;
 let dropStepError: unknown;
 let dropSleepError: unknown;
@@ -339,6 +374,41 @@ test("C-706487fb steps are observed retried only on request and need a workflow"
   } finally {
     await runtime?.shutdown().catch(() => undefined);
     ownerPool = undefined;
+    await db.close();
+  }
+});
+
+test("C-706487fb C-0601de63 an after observer failure fails the step without retrying fn", async () => {
+  boomFnRuns = 0;
+  boomBeforeCalls = 0;
+  boomAfterCalls = 0;
+  boomStepError = undefined;
+
+  const db = await withTestDatabase();
+  const logger = createLogger({ level: "silent", destination: silent });
+  let runtime: DurableRuntime | undefined;
+  try {
+    assert.doesNotThrow(() => {
+      registerWorkflow("t.after", afterObserverWorkflow);
+    });
+
+    const rt = await launchDurable({
+      endpoint: db.appEndpoint,
+      logger,
+      pollingIntervalMs: 20,
+      stepObserver: afterObserver,
+    });
+    runtime = rt;
+
+    await rt.enqueue("t.after", "s-after-observer", null);
+    const info = await waitForState(rt, "s-after-observer", TERMINAL);
+    assert.equal(info.state, "SUCCESS", "the workflow caught the observer failure");
+    assert.equal(boomFnRuns, 1, "fn ran exactly once despite the after observer failure");
+    assert.equal(boomStepError, afterObserverError, "the step rejected with the observer error unchanged");
+    assert.equal(boomBeforeCalls, 1, "the before observer ran once");
+    assert.equal(boomAfterCalls, 1, "the after observer ran once and its failure was not retried");
+  } finally {
+    await runtime?.shutdown().catch(() => undefined);
     await db.close();
   }
 });
