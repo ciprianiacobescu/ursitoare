@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-web-run-timeline
 
-Declarations from main@e06fdb3, `export` dropped. Names of U31 and U33-U36: proposal.md § Interfaces taken.
+Declarations from main@e06fdb3, `export` dropped. U31 and U33-U36 names: proposal.md.
 
 ```ts
 // web/src/api/client.ts:13-33, :43-50
@@ -45,7 +45,7 @@ At main@e06fdb3.
 - `web/src/flows/FlowEditorPage.tsx:270,277,364-378`: each registered panel is a `<section aria-labelledby=...>` with `<h2>{panel.title}</h2>`, rendered with `version: unchanged ? (baseline?.version ?? null) : null` (`unchanged = baseline !== null && baseline.text === text`), so the panel is the region named by its title and `version` is null while the text differs from the saved one. Buttons "Save version", "Validate" (`:320-323`); textbox "Flow text" (`editor-config.ts:10`).
 - `src/api/me.ts:80-83`, `src/pdp/actions.ts:88,113,123`: `/me.capabilities` lists the allowed actions with `capability: true` (`read_run`, `test_flow` are such); `use-session.ts:14-33` reads the cached `/me`. `fake-oidc/seed.ts:52-53`, `rbac-part.ts:26-28`: alice is `author` in team `finance`, bob `approver` in `finance`.
 - `web/src/kit/messages.ts:38-60`: `registerMessages` throws `KIT_MESSAGE_DUPLICATE` for a registered code with other text; `web/src/admin/messages.ts:12-13` registers `OPERATION_REFUSED` and `ENGINE_KEY_REQUIRED` at load (`features/60-admin-users.tsx:5`). This unit registers only its three own codes.
-- `web/src/kit/data/DataTable.tsx:59-61,127`: a loaded table is a `role="group"` named by the caption holding a `role="region"` of that name and a `<table>` with `<caption>`; a `rowHeader` column is `<th scope="row">`. `ErrorPanel.tsx:6-20`: `<section role="alert">` with "Error code: `<code>`".
+- `web/src/kit/data/DataTable.tsx:59-61,127`: a loaded table is a `role="group"` named by the caption holding a `role="region"` of that name and a `<table>` with `<caption>`; a `rowHeader` column is `<th scope="row">`. `ErrorPanel.tsx:6-20`: `<section role="alert">` with "Error code: `<code>`". `kit/error-panel.ts:20-33`: 404 is "Not found", 403 "Not allowed" (with the decision id); `messages.ts:13`: `NOT_FOUND` is "That item does not exist, or you cannot see it."
 - `web/src/features/index.ts:4-8`: every `./*.tsx` exports `feature`; `test/arch/web-routes.ts:17,86-115`: `path` must be a string literal; `src/api/web.ts:192-211`: a non-file path without an asset extension gets `index.html`.
 - `web/src/auth/session-client.ts:40`, `return-to.ts:84-93`: a 401 on any `browserSession.api` call sends the page to `/sign-in` (merged kit; no test here).
 - `e2e/test_l4_c_133bb26a.py:10,29-30` (frozen): `/runs/r1/` signed out shows `main` and the link "Ursitoare"; so does `/flows`.

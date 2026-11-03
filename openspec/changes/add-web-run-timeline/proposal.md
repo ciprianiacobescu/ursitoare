@@ -2,9 +2,9 @@
 
 U35 starts mocked test runs and U36 reads runs, but no page shows one. This change adds the run list, the run page with a step timeline (inputs, outputs, outcomes, polling to the end) and the editor panel "Test run", and proves milestone M4 in a browser.
 
-Observable result: an author saves and validates `demo-pay`, gives the panel "Test run" an input and mocks, presses "Start test run" and follows the link `Open run <runId>` to a page that reads `State: completed`, with the steps `lookup`, `route`, `pay`, `done` and, for a chosen step, its details and payloads (`P-1` for `pay`). "Runs" lists the runs of the user's teams; a team reader sees a run but cannot start one; an unknown run is a `NOT_FOUND` alert (`e2e/test_m4_runs.py`).
+Observable result: an author saves and validates `demo-pay`, gives the panel "Test run" input and mocks, presses "Start test run" and follows the link `Open run <runId>` to a page that reads `State: completed`, with the steps `lookup`, `route`, `pay`, `done` and, for a chosen step, its details and payloads (`P-1` for `pay`). "Runs" lists the runs of the user's teams; a team reader sees a run but cannot start one; an unknown run is a `NOT_FOUND` alert (`e2e/test_m4_runs.py`).
 
-Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: the run pages, the timeline and the Test run panel, proven by the closing journey.
+Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: the run pages, timeline and Test run panel, proven by the closing journey.
 
 ## What Changes
 

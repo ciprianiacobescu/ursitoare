@@ -37,6 +37,19 @@ nodes:
   blocked: { kind: end, status: failed }
 ```
 
+## Failures
+
+`E500` is `ApiRequestError(500, "INTERNAL", "m")`; `E403` is `ApiRequestError(403, "FORBIDDEN", "m", { details: { decisionId: "d-1" } })`, `SNAP` is `{ run: { ...RUN, state: "running" }, steps: STEPS, truncated: false }`. `NOT_FOUND_VIEW` is `{ model: { code: "NOT_FOUND", status: 404, title: "Not found", message: "That item does not exist, or you cannot see it.", decisionId: null }, retryLabel: "Try again" }` (the kit's `errorPanelModel` of a 404 `NOT_FOUND`).
+
+| Case | Outcome |
+|---|---|
+| `followRun` whose first `/runs/run_1` answer rejects `E500`; then a second `followRun` (restart) on a client answering `completed` | the first rejects with `E500`, `onUpdate` not called; the restart resolves with the `completed` snapshot |
+| `followRun` on a client answering `E403` | rejects with `E403`; the client was asked `/runs/run_1` once (no restart by itself); `failureView(E403)` is `{ model: errorPanelModel(E403), retryLabel: "Try again" }` with code `FORBIDDEN`, status 403, title "Not allowed" and `decisionId` "d-1", shown by the `ErrorPanel` as "Decision id: d-1" |
+| `followRun` on a working client with a `sleep` that aborts the signal and rejects with its reason | rejects with an `AbortError`; `onUpdate` was called once, for the snapshot before the abort, and not after; with an already aborted signal it rejects with `AbortError` and the client got no request |
+| `failureView(ApiRequestError(200, "INVALID_RESPONSE", "m"))` | title "Something went wrong", message "The engine sent an answer this page cannot read.", status 200, `retryLabel` "Try again" |
+| `loadRun(client, "bad id!")`; `failureView` of the `RangeError` it rejects with | no request is made; the view equals `NOT_FOUND_VIEW` and equals `failureView(ApiRequestError(404, "NOT_FOUND", "m"))` |
+| `runPageView(null, undefined)`, `(SNAP, undefined)`, `(SNAP, E500)`, `(null, RangeError)` | `{ loading: true, polling: true, snapshot: null, failure: null }`; `{ loading: false, polling: true, snapshot: SNAP, failure: null }`; `{ loading: false, polling: false, snapshot: SNAP, failure: failureView(E500) }`; `{ loading: false, polling: false, snapshot: null, failure: NOT_FOUND_VIEW }` |
+
 ## Calls
 
 `loadSteps` makes `{ path: "/runs/run_1/steps", opts: { query: { limit: 200 }, signal } }`, then the same with `cursor: "c1"` in the query; `loadPayload` makes exactly `{ path: "/runs/run_1/payloads/" + D("4"), opts: { signal } }`.

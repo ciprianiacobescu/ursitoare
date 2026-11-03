@@ -1,8 +1,8 @@
-Spec: `specs/web-runs/spec.md`; fixtures: `reference.md`; decisions: `design.md`. Each Node test begins with `assert.equal(typeof <function>, "function")`, wraps each call that reaches a stub in `assert.doesNotThrow` (or `.then((v) => v, (e: unknown) => e)`), asserts with `node:assert/strict`, records every argument in its fakes, and has no `.`, `[` or `::` in its name. The `.tsx` files are thin.
+Spec: `specs/web-runs/spec.md`; data: `reference.md`; decisions: `design.md`. Each Node test begins with `assert.equal(typeof <function>, "function")`, wraps each call that reaches a stub in `assert.doesNotThrow` (or `.then((v) => v, (e: unknown) => e)`), asserts with `node:assert/strict`, records every argument in its fakes, and has no `.`, `[` or `::` in its name. The `.tsx` files are thin.
 
 ## 1. Views and loaders
 
-- [ ] 1.1 Write `web/src/runs/types.test.ts` and `web/src/runs/runs-source.test.ts` first (scenarios "Views are parsed strictly" and "Loaders call exactly the run routes" (list failure: the kit's `createCursorList`, `tableView`)), then implement `parseRunView`, `parseStepView`, `parsePayloadView` in `web/src/runs/types.ts` and `runListFetcher`, `loadRun`, `loadSteps`, `loadPayload` in `web/src/runs/runs-source.ts`, implementing requirement "Run views are parsed strictly and read through four loaders"
+- [ ] 1.1 Write `web/src/runs/types.test.ts` and `web/src/runs/runs-source.test.ts` first (scenarios "Views are parsed strictly" and "Loaders call exactly the run routes"), then implement `parseRunView`, `parseStepView`, `parsePayloadView` in `web/src/runs/types.ts` and `runListFetcher`, `loadRun`, `loadSteps`, `loadPayload` in `web/src/runs/runs-source.ts`, implementing requirement "Run views are parsed strictly and read through four loaders"
 
 ## 2. Step renderers
 
