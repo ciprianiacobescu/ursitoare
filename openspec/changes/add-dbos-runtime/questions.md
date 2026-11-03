@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Criterion C-cb0c606e (durable-runtime › The runs queue is registered after every launch › Launch, lose the rows, launch again): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-57d8e403 (durable-runtime › A launch that cannot succeed fails with a stable code and leaves nothing behind › Refusals): accept as satisfied? |
 | Q-007 | answered | none | verdict | Criterion C-5d9b866b (durable-runtime › Workflows are registered before launch under a checked name › Registration rules): accept as satisfied? |
-| Q-008 | open | none | verdict | Criterion C-e0745e1c (durable-runtime › A workflow id runs once, and status and cancel report it › Once per id, status, cancel): accept as satisfied? |
+| Q-008 | answered | none | verdict | Criterion C-e0745e1c (durable-runtime › A workflow id runs once, and status and cancel report it › Once per id, status, cancel): accept as satisfied? |
 | Q-009 | open | none | verdict | Criterion C-706487fb (durable-runtime › Steps are observed, retried only on request, and need a workflow › Steps and durable calls): accept as satisfied? |
 | Q-010 | open | none | verdict | Criterion C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps): accept as satisfied? |
 | Q-011 | open | none | verdict | Criterion C-c37d6095 (durable-runtime › main launches the runtime after the routes and closes it before the database › When it launches and the close order): accept as satisfied? |
@@ -249,7 +249,8 @@ accept The tracing test asserts every clause: registerWorkflow("t.count", f) twi
 
 ## Q-008: Criterion C-e0745e1c (durable-runtime › A workflow id runs once, and status and cancel report it › Once per id, status, cancel): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -276,6 +277,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test runs the eight steps of the once-per-id sequence on a runtime launched with concurrency 1 and asserts every clause: status of w-gate is exactly { workflowId: w-gate, workflow: t.gate, state: PENDING }, w-1 is ENQUEUED then CANCELLED after cancel, cancel of never resolves and its status is null, w-gate and w-2 reach SUCCESS with the counter at 1 after two enqueues of w-2, the w-2 row has application_version ursitoare-1 and queue_name runs, w-park is CANCELLED before and after its promise opens with step two never run, isDurableCancellation is true for the caught error and false for new Error and the name-only object, status, cancel and enqueue with a bad id and a 201-character id reject bad_workflow_id, the seven refused inputs reject bad_input, and d-200, d-64 and d-null reach SUCCESS. The implementation checks the registry, the id grammar and the DurableJson depth rule before calling enqueueWorkflowWithOptions with queue runs, the application version and return-existing, maps DBOS status and cancel, and recognises cancellation by instanceof. The test passed by assertion.
 ---
 
 ## Q-009: Criterion C-706487fb (durable-runtime › Steps are observed, retried only on request, and need a workflow › Steps and durable calls): accept as satisfied?
