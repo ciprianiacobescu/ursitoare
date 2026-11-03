@@ -30,7 +30,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-017 | answered | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
 | Q-018 | answered | none | verdict | Finding F-233c28d7: dbosLogger rewrites entries instead of forwarding String(entry) |
 | Q-019 | answered | none | verdict | Finding F-1216922b: An after-observer failure is retried instead of failing the step |
-| Q-020 | open | none | verdict | Finding F-da2b0827: dbosLogger rewrites valid logger messages |
+| Q-020 | answered | none | verdict | Finding F-da2b0827: dbosLogger rewrites valid logger messages |
 <!-- l4:index:end -->
 
 ---
@@ -632,7 +632,8 @@ reject The finding holds. In src/durable/steps.ts the JSON check of fn's result 
 
 ## Q-020: Finding F-da2b0827: dbosLogger rewrites valid logger messages
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
@@ -653,3 +654,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The finding repeats F-233c28d7, which Q-018 waived for the same unchanged code, and the repository supports that waiver. The adapter does forward String(entry) for every level with { component: "dbos" }, and only replaces a lowercase pg-style "error: ..." tail with "error: [redacted]". The same scenario in spec.md line 19 requires that after pg_terminate_backend no log line holds "terminating connection", the frozen launch test asserts exactly that, and design decision 2 and security point 4 say DBOS and pg error text is never copied because it can hold a URL. DBOS writes its own system-database client errors through this adapter, so forwarding the text unchanged would violate those clauses; confining redaction to the pool-error path, as the judge suggests, would not cover DBOS's own lines. The literal "String(entry)" wording conflicts with the stricter clauses and Q-018 already recorded that a follow-up amends the spec text; the code is not what needs to change.
