@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 5.2 | technical | test/support/e2e-stack/durable-part.test.ts:379 keeps a template pool open before databasePart.seed |
+| Q-001 | accepted | 5.2 | technical | test/support/e2e-stack/durable-part.test.ts:379 keeps a template pool open before databasePart.seed |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: test/support/e2e-stack/durable-part.test.ts:379 keeps a template pool open before databasePart.seed
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.2
 - **Kind:** technical
 - **Asked:** 2026-11-03T08:46Z by deepseek-free, run r-20261103T0741Z-7374, task 5.2
