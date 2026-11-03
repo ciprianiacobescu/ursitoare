@@ -14,6 +14,7 @@ import {
   ensureRoles,
   prepareDatabase,
 } from "../../src/db/index.ts";
+import { prepareDurable } from "../../src/durable/index.ts";
 import { startCluster, type Cluster, type TestCluster } from "./pg.ts";
 
 const TEMPLATE = "ursitoare_template";
@@ -50,6 +51,7 @@ export async function globalSetup(): Promise<void> {
 
       ownerPool = createPool(roleUrl(cluster, ROLE_OWNER, ownerPassword, TEMPLATE), { max: 2 });
       await prepareDatabase(ownerPool, systemClock);
+      await prepareDurable(roleUrl(cluster, ROLE_OWNER, ownerPassword, TEMPLATE));
     } finally {
       if (ownerPool !== undefined) {
         await ownerPool.end();

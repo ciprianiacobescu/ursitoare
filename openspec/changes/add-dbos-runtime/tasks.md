@@ -2,7 +2,7 @@ Spec: `specs/durable-runtime/spec.md`; decisions: `design.md`; merged shapes: `d
 
 ## 1. The schema step
 
-- [ ] 1.1 Write `src/durable/prepare.test.ts` first (scenario "Prepare, repeat, refuse"), then implement `DurableErrorCode` and `DurableError` in `src/durable/errors.ts`, `DBOS_SCHEMA` and `prepareDurable` in `src/durable/prepare.ts`, export them from `src/durable/index.ts`, and in `test/support/global-setup.ts` call `prepareDurable` with the owner URL of the template right after `prepareDatabase(ownerPool, systemClock)`, implementing requirement "The owner prepares the DBOS schema and the engine never does"
+- [x] 1.1 Write `src/durable/prepare.test.ts` first (scenario "Prepare, repeat, refuse"), then implement `DurableErrorCode` and `DurableError` in `src/durable/errors.ts`, `DBOS_SCHEMA` and `prepareDurable` in `src/durable/prepare.ts`, export them from `src/durable/index.ts`, and in `test/support/global-setup.ts` call `prepareDurable` with the owner URL of the template right after `prepareDatabase(ownerPool, systemClock)`, implementing requirement "The owner prepares the DBOS schema and the engine never does"
 
 ## 2. The runtime
 

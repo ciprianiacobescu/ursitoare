@@ -1,5 +1,3 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 export type DurableErrorCode =
   | "DURABLE_UNAVAILABLE"
   | "DURABLE_INVALID"
@@ -11,8 +9,10 @@ export class DurableError extends Error {
   readonly code: DurableErrorCode;
   readonly details: Readonly<Record<string, string>>;
 
-  constructor(_code: DurableErrorCode, message: string, _details?: Record<string, string>) {
+  constructor(code: DurableErrorCode, message: string, details: Record<string, string> = {}) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "DurableError";
+    this.code = code;
+    this.details = details;
   }
 }
