@@ -1,4 +1,4 @@
-# Verification: openspec:add-dbos-runtime: NEEDS_HUMAN (round 4)
+# Verification: openspec:add-dbos-runtime: PASS (round 5)
 
 traceability: 15/15 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 15/15 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.6 | base main@0254914c19 contained |
-| 1 | integrity | ok | 102.2 | 11 sub-checks (+1 unfrozen by human answers); scope: 50 changed file(s) |
-| 2 | build | ok | 23.8 |  |
-| 3 | tests | ok | 179.7 |  |
-| 4 | traceability | ok | 0.1 | 15/15 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 4) |
+| 1 | integrity | reused | 0.0 | reused (round 4) |
+| 2 | build | reused | 0.0 | reused (round 4) |
+| 3 | tests | reused | 0.0 | reused (round 4) |
+| 4 | traceability | reused | 0.0 | reused (round 4) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/durable/errors.ts, src/durable/json.ts, src/durable/launch.ts, src/durable/prepare.ts, src/durable/registry.ts and 8 more |
-| 8 | s1 judge | ok | 1.5 | 14/15 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 201.0 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 4) |
+| 8 | s1 judge | reused | 0.0 | reused (round 4) |
+| 9 | judge | reused | 0.0 | reused (round 4) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -223,6 +223,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - Q-014 accept C-2c0ae21b by the delegate (claude-fable-5-1 via claude-code): The tracing tests cover the whole scenario. The first builds fake parts p1, p2, p3 that record hook:<name> and seed:<name>, with p2 having no hook, and asserts that seedAll logs seed:p1, seed:p2, seed:p3 with no hook, that one reset adds hook:p3, hook:p1, seed:p1, seed:p2, seed:p3, that a reset whos...
 - Q-015 accept C-769418cc by the delegate (claude-fable-5-1 via claude-code): The nine tracing tests cover every clause. With a fake clock advanced by sleep and workflowId ready-1, the success case asserts one enqueue of stack.ready with input ping, 3 status calls and 2 sleeps of 100; the always-ENQUEUED case asserts STACK_DURABLE_NOT_READY with details.state ENQUEUED after 5...
 - Q-016 accept C-7732f592 by the delegate (claude-fable-5-1 via claude-code): The tracing test boots the stack with the shipped parts, the database part wrapped so its close records the ursitoare-durable session count polled for up to 5 s, and asserts that dbos.workflow_status is empty before the first reset; that each of three resets answers 204 and leaves exactly one row wi...
+- Q-020 accept F-da2b0827 by the delegate (claude-fable-5-1 via claude-code): The finding repeats F-233c28d7, which Q-018 waived for the same unchanged code, and the repository supports that waiver. The adapter does forward String(entry) for every level with { component: "dbos" }, and only replaces a lowercase pg-style "error: ..." tail with "error: [redacted]". The same scen...
 
 ## Criteria
 
@@ -247,7 +248,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Findings
 
-- [major, judge] dbosLogger rewrites valid logger messages (criterion C-da1b0c83): The adapter changes messages matching lowercase "error: ", although the requirement says each level forwards String(entry). The traced logger test checks Error: boom but misses this observable input.
+- [minor, judge] dbosLogger rewrites valid logger messages (criterion C-da1b0c83): The adapter changes messages matching lowercase "error: ", although the requirement says each level forwards String(entry). The traced logger test checks Error: boom but misses this observable input. (waived by the delegate (claude-fable-5-1 via claude-code): The finding repeats F-233c28d7, which Q-018 waived for the same unchanged code, and the repository supports that waiver. The adapter does forward String(entry) for every level with { component: "dbos" }, and only replaces a lowercase pg-style "error: ..." tail with "error: [redacted]". The same scenario in spec.md line 19 requires that af...
 - [minor, judge] Invalid step-name precedence outside a workflow is unspecified (spec gap) (criterion C-706487fb): The scenario tests runStep outside a workflow only with a valid name. The committed implementation checks the step name before it checks workflow context, so an invalid-name call outside a workflow reports bad_step_name rather than outside_workflow; either validation order is a reasonable interpretation absent a scenario.
 - [minor, judge] the judge called a test inadequate (criterion C-da1b0c83): src.durable.launch.test.ts::C-da1b0c83 prepared database gives the expected config logger sessions and pool warning
 
