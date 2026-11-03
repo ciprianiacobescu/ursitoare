@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-013 | answered | none | verdict | Criterion C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree): accept as satisfied? |
 | Q-014 | answered | none | verdict | Criterion C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure): accept as satisfied? |
 | Q-015 | answered | none | verdict | Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied? |
-| Q-016 | open | none | verdict | Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied? |
+| Q-016 | answered | none | verdict | Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied? |
 | Q-017 | open | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
 <!-- l4:index:end -->
 
@@ -513,7 +513,8 @@ accept The nine tracing tests cover every clause. With a fake clock advanced by 
 
 ## Q-016: Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -540,6 +541,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test boots the stack with the shipped parts, the database part wrapped so its close records the ursitoare-durable session count polled for up to 5 s, and asserts that dbos.workflow_status is empty before the first reset; that each of three resets answers 204 and leaves exactly one row with name stack.ready, status SUCCESS and queue_name runs, that dbos.queues holds runs, that ursitoare_e2e_template has dbos.dbos_migrations, and that /health is 200 with checks exactly { db: ok }; that after close the wrapped close saw 0 sessions and resumeDurable() gives null; that docs/testing.md contains the reset bullet; and that a second boot in the same process starts, answers 204 to a reset and holds one stack.ready row. The stack starts the parts before main launches the engine in-process, so the module-level registration flag prevents name_taken on the second boot, and parts close in reverse order after the engine. The docs bullet is present. The test passed by assertion.
 ---
 
 ## Q-017: Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s)
