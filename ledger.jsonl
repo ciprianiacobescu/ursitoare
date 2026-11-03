@@ -33,3 +33,5 @@
 {"at":"2026-11-03T18:08:23Z","by":"harness","reason":"the cause is gone: openspec:add-dbos-runtime is awaiting_human","type":"plan.resumed"}
 {"at":"2026-11-03T18:08:25Z","attempt":1,"cost_usd":11.313189,"runs":6,"type":"plan.charged","unit":"openspec:add-dbos-runtime"}
 {"at":"2026-11-03T18:08:25Z","run":"r-20261103T1808Z-bab9","type":"unit.dispatched","unit":"openspec:add-dbos-runtime"}
+{"at":"2026-11-03T18:28:53Z","attempt":1,"cost_usd":13.108962,"runs":7,"type":"plan.charged","unit":"openspec:add-dbos-runtime"}
+{"at":"2026-11-03T18:28:53Z","run":"r-20261103T1827Z-6d81","type":"unit.dispatched","unit":"openspec:add-dbos-runtime"}
