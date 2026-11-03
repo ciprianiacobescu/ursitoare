@@ -16,7 +16,7 @@ Spec: `specs/durable-runtime/spec.md`; decisions: `design.md`; merged shapes: `d
 
 ## 4. The guard
 
-- [ ] 4.1 Write `test/arch/dbos-access.test.ts` first (scenario "Rule fixtures and the real tree"), then implement `checkDbosAccess` in `test/arch/dbos-access.ts` (code `ARCH_DBOS_ACCESS`, pure, using `collectImports` and the TypeScript AST), implementing requirement "Only src/durable imports DBOS and only src/durable and src/runs name its schema"
+- [x] 4.1 Write `test/arch/dbos-access.test.ts` first (scenario "Rule fixtures and the real tree"), then implement `checkDbosAccess` in `test/arch/dbos-access.ts` (code `ARCH_DBOS_ACCESS`, pure, using `collectImports` and the TypeScript AST), implementing requirement "Only src/durable imports DBOS and only src/durable and src/runs name its schema"
 
 ## 5. The e2e stack
 
