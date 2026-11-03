@@ -1,6 +1,6 @@
 # Delivered shapes (main@e06fdb3)
 
-Declarations this change takes, from the merged code, grouped by file; then the behaviour facts its scenarios rely on.
+Declarations taken from the merged code, grouped by file; then the behaviour facts the scenarios rely on.
 
 ```ts
 // src/db/pool.ts:5-8, :56

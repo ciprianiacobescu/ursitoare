@@ -14,10 +14,10 @@ Observable result: with the `dbos` schema prepared by the owner, `main` launches
 ## Impact
 
 - **Scaffold:** Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them. The scaffold installs `@dbos-inc/dbos-sdk` `5.3.0` (MIT); no lockfile edits. Not scaffolded, because they change existing files: `beforeReset` in `part.ts` and `reset.ts`, the call in `src/main.ts`, `global-setup.ts`, `docs/testing.md`, and `parts/40-durable.ts` (discovered at once).
-- **Depends on:** `add-db-foundation` (U02), `add-tenancy-foundation` (U03), `add-supply-chain-gate` (U04: licence policy), `add-e2e-stack` (U06), as the roadmap says; beyond the row `add-engine-skeleton` (U01: `src/main.ts` and `MainDeps`, `Logger`, `AppConfig.database.app`) and `add-architecture-fitness` (U05: `Snapshot`, `collectImports` for the rule). `test/arch/modules.ts` needs no change (`durable` may import `core`, `config`, `db`, `observability`).
-- **Changed:** `src/main.ts`, `test/support/global-setup.ts`, `test/support/e2e-stack/{part,reset}.ts`, `docs/testing.md`. No archived scenario is modified: the frozen tests that touch these files (`C-fb007fe9`, `C-f55456d0`, `C-20bba381`, `C-ea25f674`, `C-6d93e8d5`) stay true, because the launch is skipped when `config.database.app` is null, `/health` is unchanged (D2), `beforeReset` is optional and the template only gains a schema. U36 and U35 edit `src/main.ts` after this change.
+- **Depends on:** `add-db-foundation` (U02), `add-tenancy-foundation` (U03), `add-supply-chain-gate` (U04: licence policy), `add-e2e-stack` (U06), as the roadmap says; beyond the row `add-engine-skeleton` (U01: `src/main.ts` and `MainDeps`, `Logger`, `AppConfig.database.app`) and `add-architecture-fitness` (U05: `Snapshot`, `collectImports` for the rule). `test/arch/modules.ts` needs no change.
+- **Changed:** `src/main.ts`, `test/support/global-setup.ts`, `test/support/e2e-stack/{part,reset}.ts`, `docs/testing.md`. No archived scenario is modified: the frozen tests that touch these files (`C-fb007fe9`, `C-f55456d0`, `C-20bba381`, `C-ea25f674`, `C-6d93e8d5`) stay true: the launch is skipped when `config.database.app` is null, `/health` is unchanged (D2), `beforeReset` is optional and the template only gains a schema. U36 and U35 edit `src/main.ts` after this change.
 - **Migrations:** none (DBOS's SQL has `CREATE INDEX CONCURRENTLY`, which `src/db/migrate.ts` cannot run; D1: `prepareDurable` is a second owner-run step). **Tables:** none of ours; DBOS creates `dbos.*`. **Endpoints, env vars, audit events:** none. **Error codes:** `DURABLE_*` and the stack code `STACK_DURABLE_NOT_READY` are not in `ERROR_CODES`.
-- **Seam deviations from the card** (forced by D3; nothing renamed): (1) new exports `suspendDurable` and `resumeDurable`, because the stack must stop and restart the runtime `main` launched (handles stay valid across them); (2) the member `E2eStackPart.beforeReset`, the stack hook around the reset; (3) `checkDurableReady`, `ReadyOptions`, `DURABLE_READY_WORKFLOW` and the stack code `STACK_DURABLE_NOT_READY`, the readiness check; (4) the optional, test-only `LaunchOptions.closePool` (default `pool.end()`), the seam that lets a test make closing fail; (5) `enqueue` does not re-ensure the queue row (DBOS 5.3.0 rejects that on a running runtime); the queue is registered after every launch instead.
+- **Seam deviations from the card** (forced by D3; nothing renamed): (1) `suspendDurable` and `resumeDurable`, so the stack can restart the runtime `main` launched (handles stay valid); (2) `E2eStackPart.beforeReset`, the hook around the reset; (3) `checkDurableReady`, `ReadyOptions`, `DURABLE_READY_WORKFLOW` and the stack code `STACK_DURABLE_NOT_READY`; (4) the test-only `LaunchOptions.closePool` (default `pool.end()`); (5) the pure `dbosConfig` and `dbosLogger`, testable without a launch; (6) `enqueue` does not re-ensure the queue row (DBOS 5.3.0 rejects that on a running runtime); the queue is registered after every launch.
 
 **Interfaces given** (declarations omit `export`; the block of `design.md` § Interfaces)
 
@@ -35,23 +35,25 @@ interface StepOptions { retries?: number; retryable?: (error: unknown) => boolea
 type WorkflowState = "ENQUEUED" | "PENDING" | "SUCCESS" | "ERROR" | "CANCELLED" | "MAX_RECOVERY_ATTEMPTS_EXCEEDED" | "DELAYED"
 interface WorkflowInfo { workflowId: string; workflow: string; state: WorkflowState }
 interface DurableRuntime { readonly applicationVersion: string; enqueue(workflow: string, workflowId: string, input: DurableJson): Promise<void>; status(workflowId: string): Promise<WorkflowInfo | null>; cancel(workflowId: string): Promise<void>; shutdown(): Promise<void> }
-interface LaunchOptions { endpoint: EndpointLike; logger: Logger; pollingIntervalMs?: number; concurrency?: number; stepObserver?: StepObserver; closePool?: (pool: pg.Pool) => Promise<void> }   // closePool: test only, default pool.end() (D3 addition)
+interface LaunchOptions { endpoint: EndpointLike; logger: Logger; pollingIntervalMs?: number; concurrency?: number; stepObserver?: StepObserver; closePool?: (pool: pg.Pool) => Promise<void> }   // closePool: test only
 function registerWorkflow<I extends DurableJson, O extends DurableJson>(name: string, fn: (input: I) => Promise<O>): void
 function runStep<T extends DurableJson>(name: string, fn: () => Promise<T>, opts?: StepOptions): Promise<T>
 function durableSleep(ms: number): Promise<void>
 function currentWorkflowId(): string
-function isDurableCancellation(error: unknown): boolean   // error instanceof DBOS's DBOSWorkflowCancelledError
+function isDurableCancellation(error: unknown): boolean   // instanceof DBOS's DBOSWorkflowCancelledError
 function launchDurable(opts: LaunchOptions): Promise<DurableRuntime>
 function prepareDurable(ownerUrl: string): Promise<void>
-function suspendDurable(): Promise<DurableRuntime | null>   // D3
-function resumeDurable(): Promise<DurableRuntime | null>    // D3
+function dbosConfig(opts: LaunchOptions, pool: pg.Pool): DBOSConfig   // what launchDurable passes to DBOS.setConfig
+function dbosLogger(logger: Logger): DLogger   // DBOS log adapter
+function suspendDurable(): Promise<DurableRuntime | null>
+function resumeDurable(): Promise<DurableRuntime | null>
 // src/main.ts: MainDeps gains launchDurable?: typeof launchDurable
-// test/support/e2e-stack/part.ts: E2eStackPart gains beforeReset?(ctx: PartContext): Promise<void>   // D3
+// test/support/e2e-stack/part.ts: E2eStackPart gains beforeReset?(ctx: PartContext): Promise<void>
 // test/support/e2e-stack/durable-part.ts (parts/40-durable.ts is its one-line re-export)
-const durablePart: E2eStackPart   // name "durable", env {}
-const DURABLE_READY_WORKFLOW = "stack.ready"   // D3
-interface ReadyOptions { timeoutMs?: number; pollMs?: number; now?: () => number; sleep?: (ms: number) => Promise<void>; workflowId?: string }   // D3
-function checkDurableReady(runtime: DurableRuntime, opts?: ReadyOptions): Promise<void>   // D3; rejects E2eStackError STACK_DURABLE_NOT_READY
+const durablePart: E2eStackPart   // name "durable"
+const DURABLE_READY_WORKFLOW = "stack.ready"
+interface ReadyOptions { timeoutMs?: number; pollMs?: number; now?: () => number; sleep?: (ms: number) => Promise<void>; workflowId?: string }
+function checkDurableReady(runtime: DurableRuntime, opts?: ReadyOptions): Promise<void>   // rejects STACK_DURABLE_NOT_READY
 // test/arch/dbos-access.ts
 function checkDbosAccess(s: Snapshot): Violation[]   // code ARCH_DBOS_ACCESS
 ```

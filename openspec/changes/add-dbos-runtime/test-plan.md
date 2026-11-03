@@ -2,10 +2,10 @@
 
 ## Conventions
 
-- Database tests use `withTestDatabase()` (the template is prepared), or `{ migrated: false }` plus `prepareDurable(db.ownerUrl)`. A test that launches a runtime shuts it down in `finally`.
+- Database tests use `withTestDatabase()` (the template is prepared), or `{ migrated: false }` plus `prepareDurable(db.ownerUrl)`.
 - Workflow functions are module-level (the registry is process-global), registered inside `try` before the launch, with state in module variables. Waits use a local `waitForState(rt, id, states, 20000)` polling `rt.status` every 20 ms; session counts poll `pg_stat_activity` as owner for up to 5 s (`application_name` is visible to the owner). No bare `setTimeout`.
 - Terminating the runtime's sessions needs a superuser (the owner gets `permission denied to terminate process`): use `readTestCluster().adminUrl`.
-- A capturing logger is `createLogger({ level: "debug", destination })`; kept lines are parsed as JSON.
+- A capturing logger is `createLogger({ level: "debug", destination })`; lines are parsed as JSON.
 
 ## Workflows
 
@@ -31,6 +31,10 @@ The `launchDurable` calls of "Refusals", in order. On `withTestDatabase({ migrat
 Input fixtures: depth 64 is `[` repeated 64 times then `]` repeated 64 times (the innermost `[]` has depth 1); depth 65 has 65 of each; the null-prototype object is `Object.create(null)` with one key; the cycle is `c = {}; c.self = c`.
 
 ## Fixtures
+
+- Rule messages: `@dbos-inc/dbos-sdk is imported only in src/durable` (SDK) and `the dbos schema is named only in src/durable and src/runs` (schema).
+- `dbosConfig`/`dbosLogger`: `opts` is `{ endpoint: { url: "postgres://ursitoare_app@127.0.0.1:5432/x", password: { reveal: () => "pw" } }, logger }`, `pool` is `{} as pg.Pool`; the URL check is `new URL(config.systemDatabaseUrl).password === ""`. `log` records `[level, object, message]` for `info`, `debug`, `warn`, `error`; the check is `dbosLogger(log).info("x")` giving `["info", { component: "dbos" }, "x"]`.
+- Dependency failures of `checkDurableReady`: `status` answers `ENQUEUED` then rejects `err2`; `sleep` rejects `err3` on its first call; `now` throws `err4` on its first.
 
 - Null runtime: after `databasePart.start` and `databasePart.seed` with a hand-made `PartContext` (as `database-part.test.ts` does) and no `main`, so `suspendDurable()` and `resumeDurable()` give `null`: run `durablePart.start`, `beforeReset`, `seed` and the handle's `close`; the owner then reads `dbos.workflow_status` in `ursitoare_e2e`.
 - Bad `checkDurableReady` options: `timeoutMs` 0, 60001, 1.5; `pollMs` 0; `pollMs` 11 with `timeoutMs` 10.
