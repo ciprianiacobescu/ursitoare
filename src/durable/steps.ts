@@ -95,18 +95,11 @@ export async function runStep<T extends DurableJson>(
         stepObserver("before", name, workflowId);
       }
       let attempt = 0;
+      let result: T;
       for (;;) {
         try {
-          const result = await fn();
-          if (!isDurableJson(result)) {
-            throw new DurableError("DURABLE_INVALID", "invalid step result", {
-              reason: "bad_step_result",
-            });
-          }
-          if (stepObserver !== undefined) {
-            stepObserver("after", name, workflowId);
-          }
-          return result;
+          result = await fn();
+          break;
         } catch (error) {
           if (attempt >= retries || (retryable !== undefined && !retryable(error))) {
             throw error;
@@ -114,6 +107,15 @@ export async function runStep<T extends DurableJson>(
           attempt += 1;
         }
       }
+      if (!isDurableJson(result)) {
+        throw new DurableError("DURABLE_INVALID", "invalid step result", {
+          reason: "bad_step_result",
+        });
+      }
+      if (stepObserver !== undefined) {
+        stepObserver("after", name, workflowId);
+      }
+      return result;
     } catch (error) {
       callbackFailed = true;
       callbackError = error;
