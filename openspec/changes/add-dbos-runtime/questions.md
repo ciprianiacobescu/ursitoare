@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Criterion C-706487fb (durable-runtime › Steps are observed, retried only on request, and need a workflow › Steps and durable calls): accept as satisfied? |
 | Q-010 | answered | none | verdict | Criterion C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps): accept as satisfied? |
 | Q-011 | answered | none | verdict | Criterion C-c37d6095 (durable-runtime › main launches the runtime after the routes and closes it before the database › When it launches and the close order): accept as satisfied? |
-| Q-012 | open | none | verdict | Criterion C-073558f4 (durable-runtime › main launches the runtime after the routes and closes it before the database › A failed launch and the unchanged health): accept as satisfied? |
+| Q-012 | answered | none | verdict | Criterion C-073558f4 (durable-runtime › main launches the runtime after the routes and closes it before the database › A failed launch and the unchanged health): accept as satisfied? |
 | Q-013 | open | none | verdict | Criterion C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree): accept as satisfied? |
 | Q-014 | open | none | verdict | Criterion C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure): accept as satisfied? |
 | Q-015 | open | none | verdict | Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied? |
@@ -381,7 +381,8 @@ accept The tracing test runs main with the fakes of the test plan for the roles 
 
 ## Q-012: Criterion C-073558f4 (durable-runtime › main launches the runtime after the routes and closes it before the database › A failed launch and the unchanged health): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -408,6 +409,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test runs main with the real launchDurable three times. On a clone whose dbos schema the owner dropped it asserts main resolves null, exit got 1 once and exactly one fatal line holds code DURABLE_UNAVAILABLE, msg startup failed and reason not_prepared, with no URL in any line. On an intact clone it asserts /health answers 200 with checks exactly { db: ok }, that at least one ursitoare-durable session exists and every one belongs to ursitoare_app, that a launch from the test rejects DURABLE_ALREADY_LAUNCHED running while main runs and resolves after close. On an intact clone with the port held by a node:net listener it asserts main resolves null, exit got 1, the fatal line has code EADDRINUSE, no ursitoare-durable session is left within 5 s and the test's launch then resolves. main's launch failure path closes the servers and the database and writes one fatal line, and a listen failure goes through closeAll which shuts the runtime down. The test passed by assertion.
 ---
 
 ## Q-013: Criterion C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree): accept as satisfied?
