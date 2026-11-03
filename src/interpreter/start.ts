@@ -10,3 +10,7 @@ export async function startRun(
 ): Promise<RunRecord> {
   throw new Error("not implemented");
 }
+
+export function workflowIdOf(_tenantId: string, _runId: string): string {
+  throw new Error("not implemented");
+}

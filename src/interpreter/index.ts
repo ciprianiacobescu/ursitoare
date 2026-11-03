@@ -24,7 +24,7 @@ export type { MemoryWorkflowOps } from "./ops.ts";
 export { memoryWorkflowOps } from "./ops.ts";
 export { registerNodeRuntime, nodeRuntimeFor, SUPPORTED_KINDS } from "./registry.ts";
 export { RUN_WORKFLOW, registerRunWorkflow, bindInterpreter, dbosWorkflowOps } from "./workflow.ts";
-export { startRun } from "./start.ts";
+export { startRun, workflowIdOf } from "./start.ts";
 export { executeRun } from "./execute.ts";
 export { resolveValue, durationMs } from "./refs.ts";
 export type { InterpreterErrorCode } from "./errors.ts";
