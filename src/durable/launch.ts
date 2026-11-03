@@ -9,6 +9,7 @@ import { DurableError } from "./errors.ts";
 import { isDurableJson } from "./json.ts";
 import { DBOS_SCHEMA } from "./prepare.ts";
 import { isRegistered } from "./registry.ts";
+import { setStepObserver } from "./steps.ts";
 
 export type DurableJson =
   | null
@@ -243,6 +244,7 @@ async function startEngine(opts: LaunchOptions, concurrency: number, polling: nu
   } catch (error) {
     return fail("queue_failed", error, true);
   }
+  setStepObserver(opts.stepObserver);
   return pool;
 }
 

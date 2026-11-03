@@ -12,7 +12,7 @@ Spec: `specs/durable-runtime/spec.md`; decisions: `design.md`; merged shapes: `d
 
 ## 3. Steps
 
-- [ ] 3.1 Write `src/durable/steps.test.ts` first (scenario "Steps and durable calls": the workflows of test-plan.md) and `src/durable/rls.test.ts` (scenario "Two tenants in steps"; `seedTwoTenants`; `t.read` and its `Map` result channel as test-plan.md says), then complete `runStep` and implement `StepOptions`, `durableSleep` and `currentWorkflowId` in `src/durable/steps.ts`, hand the launch's `stepObserver` to it from `src/durable/launch.ts`, map SDK and driver failures of `runStep` (in `steps.ts`) and of `enqueue`, `status` and `cancel` (in `launch.ts`) to `dbos_failed`, and export all names from `src/durable/index.ts`, implementing requirements "Steps are observed, retried only on request, and need a workflow" and "Row-level security holds inside durable steps"
+- [x] 3.1 Write `src/durable/steps.test.ts` first (scenario "Steps and durable calls": the workflows of test-plan.md) and `src/durable/rls.test.ts` (scenario "Two tenants in steps"; `seedTwoTenants`; `t.read` and its `Map` result channel as test-plan.md says), then complete `runStep` and implement `StepOptions`, `durableSleep` and `currentWorkflowId` in `src/durable/steps.ts`, hand the launch's `stepObserver` to it from `src/durable/launch.ts`, map SDK and driver failures of `runStep` (in `steps.ts`) and of `enqueue`, `status` and `cancel` (in `launch.ts`) to `dbos_failed`, and export all names from `src/durable/index.ts`, implementing requirements "Steps are observed, retried only on request, and need a workflow" and "Row-level security holds inside durable steps"
 
 ## 4. The guard
 
