@@ -4,7 +4,7 @@ Batch `m4-runs-timeline` delivers M4; its units, in plan order, are `add-dbos-ru
 
 Every run is a DBOS workflow. U31-U37 need one module that owns DBOS: it starts on the same Postgres under the app role, queues work on `runs`, and survives the e2e stack's database reset, which silently kills a DBOS queue (spike `dbos-reset`, D3).
 
-Observable result: with the `dbos` schema prepared by the owner, `main` launches the runtime as `ursitoare_app` (never as owner, never migrating); a workflow enqueued under one id runs once; steps report to an observer; `/health` still answers `{ db: "ok" }`. Without the schema the engine writes one fatal line `DURABLE_UNAVAILABLE` and exits 1. The e2e stack shuts the runtime down before each reset and relaunches it after, and a reset answers 204 only when a workflow queued on `runs` has succeeded. A guard fails the build if anything but `src/durable` imports DBOS.
+Observable result: with the `dbos` schema prepared by the owner, `main` launches the runtime as `ursitoare_app` (never as owner, never migrating); a workflow enqueued under one id runs once; steps report to an observer; `/health` still answers `{ db: "ok" }`. Without the schema the engine writes one fatal line `DURABLE_UNAVAILABLE` and exits 1. The e2e stack shuts the runtime down before each reset and relaunches it after, and a reset answers 204 only when a workflow queued on `runs` has succeeded. A guard fails the build if a non-test `src` file outside `src/durable` imports the DBOS SDK, or one outside `src/durable` and `src/runs` names its schema (`dbos.` SQL, `DBOS_SCHEMA`).
 
 ## What Changes
 

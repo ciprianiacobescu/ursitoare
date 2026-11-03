@@ -32,8 +32,9 @@ Input fixtures: depth 64 is `[` repeated 64 times then `]` repeated 64 times (th
 
 ## Fixtures
 
+- Bad `prepareDurable` URLs: `"not a url"`, `mysql://o:p@h/db` (scheme), `postgres://o:p@h` (no database path), `postgres://o:p@h/` (empty database path); user and password are allowed in a good one.
 - Rule messages: `@dbos-inc/dbos-sdk is imported only in src/durable` (SDK) and `the dbos schema is named only in src/durable and src/runs` (schema).
-- `dbosConfig`/`dbosLogger`: `opts` is `{ endpoint: { url: "postgres://ursitoare_app@127.0.0.1:5432/x", password: { reveal: () => "pw" } }, logger }`, `pool` is `{} as pg.Pool`; the URL check is `new URL(config.systemDatabaseUrl).password === ""`. `log` records `[level, object, message]` for `info`, `debug`, `warn`, `error`; the check is `dbosLogger(log).info("x")` giving `["info", { component: "dbos" }, "x"]`.
+- `dbosConfig`/`dbosLogger`: `opts` is `{ endpoint: { url: "postgres://ursitoare_app@127.0.0.1:5432/x", password: { reveal: () => "pw" } }, logger }`, `pool` is `{} as pg.Pool`; the URL check is `new URL(config.systemDatabaseUrl).password === ""`. `log` records `[level, object, message]` for `info`, `debug`, `warn`, `error`; the checks are `dbosLogger(log).info("x")` giving `["info", { component: "dbos" }, "x"]`, `debug("d")` and `warn("w")` likewise, and `error(new Error("boom"))` giving `["error", { component: "dbos" }, "Error: boom"]`.
 - Dependency failures of `checkDurableReady`: `status` answers `ENQUEUED` then rejects `err2`; `sleep` rejects `err3` on its first call; `now` throws `err4` on its first.
 
 - Null runtime: after `databasePart.start` and `databasePart.seed` with a hand-made `PartContext` (as `database-part.test.ts` does) and no `main`, so `suspendDurable()` and `resumeDurable()` give `null`: run `durablePart.start`, `beforeReset`, `seed` and the handle's `close`; the owner then reads `dbos.workflow_status` in `ursitoare_e2e`.
