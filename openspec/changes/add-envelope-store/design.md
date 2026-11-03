@@ -117,7 +117,7 @@ Migration `src/db/migrations/0310_run_data.sql`. Every table has `tenant_id text
 ## Failure cases
 
 - Input outside Decision 14, not plain JSON, or a transaction of another tenant: `RUN_DATA_INVALID`; over 1,048,576 canonical bytes: `RUN_DATA_TOO_LARGE`; nothing is written.
-- `create` of an existing id: the stored row, no new payload. A losing concurrent `create` returns the stored row and adds no run, step or event row, but may leave its content-addressed payload rows, which the app role cannot delete: they stay unreferenced until another run uses them, then expire. `transition` of an absent run, outside `from`, or the loser of a race: `null`, nothing stored. `upsert` for an absent run or a repeated `seq`: `RUN_DATA_INVALID`. An event replay: ignored.
+- A tenant id with no `tenant` row: `create` and `put` (the tables with the tenant foreign key) map SQLSTATE `23503` to `RunDataError` `RUN_DATA_INVALID` with the fixed message `unknown_tenant` (the seam's error has no `details`); `createMemoryRunStore` does not check tenants. `create` of an existing id: the stored row, no new payload. A losing concurrent `create` returns the stored row and adds no run, step or event row, but may leave its content-addressed payload rows, which the app role cannot delete: they stay unreferenced until another run uses them, then expire. `transition` of an absent run, outside `from`, or the loser of a race: `null`, nothing stored. `upsert` for an absent run or a repeated `seq`: `RUN_DATA_INVALID`. An event replay: ignored.
 - A lost connection or other database error rejects as is and `withTenantTx` rolls back. An absent or foreign row gives `null`, an empty page or `false`.
 
 ## Security

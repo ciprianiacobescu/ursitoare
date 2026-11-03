@@ -2,7 +2,7 @@
 
 `add-mock-test-runs` lets an author test a stored version through the API. An author editing a file on disk needs the same check without a server or a database: validate the flow, check the mocks, run it, see each step.
 
-Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: the offline `flow test` command, which runs the same mocked test without a server or a database.
+Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: the offline `flow test` command, which runs the same mocked test without a server or a database. The plan runs acceptance profile `all` after this unit merges: every configured gate (setup, build, lint, typecheck, test, e2e) on the target; the batch outcome itself is proven by the closing unit's journey `e2e/test_m4_runs.py`. This unit's command is not exercised by the journey; its own scenarios are its acceptance.
 
 Observable result: `ursitoare flow test --file <path> --mocks <path>` prints one line per step and `COMPLETED <terminal node>` (exit 0) or `FAILED <code> <node>` (exit 1). An invalid flow, a missing or malformed mock and a refused input also exit 1 with a stated reason; a bad option or unreadable file exits 2. It runs in-process on the in-memory run store, calls no tool and opens no connection. `ursitoare help` lists `flow test` next to `flow validate`.
 

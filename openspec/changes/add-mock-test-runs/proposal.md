@@ -4,7 +4,7 @@ An author needs to know a flow works before it touches anything real. U33 walks 
 
 Observable result: `POST /api/v1/flows/{flowId}/versions/{hash}/test` takes `{ input, mocks }` and, for an author of the flow's owner team, stores a `queued` run in mode `mock`, enqueues it and answers 202 `{ run }`; the run completes with the mocks as its step outputs and its effect intents recorded with mode `mock`, and no tool is called. A block reachable from `start` without a mock answers 422 `TEST_MOCK_MISSING`; a mock that does not fit its node or its block's output schema answers 422 `TEST_MOCK_INVALID`; neither stores a run.
 
-Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: the test-run endpoint starts a mocked run of one exact flow version that never egresses.
+Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: the test-run endpoint starts a mocked run of one exact flow version that never egresses. The plan runs acceptance profile `all` after this unit merges: every configured gate (setup, build, lint, typecheck, test, e2e) on the target; the batch outcome itself is proven by the closing unit's journey `e2e/test_m4_runs.py`.
 
 ## What Changes
 

@@ -4,7 +4,7 @@ Spec: `specs/ops-cli/spec.md`; decisions and fixtures: `design.md`; merged shape
 
 - [ ] 1.1 Write `src/cli/flow/test.test.ts` first (scenario "A completed and a failed mock run": the three runs, the `--json` line, the fetch recorder), then implement `flowTestCommand` in `src/cli/flow/test.ts` with the options, flow, run and output of design.md Decisions 1, 6 and 7 and the success paths of Decisions 2, 3 and 5 (no `INVALID`, `MOCKS` or `FAILED <code> -` line, no JSON or object check), implementing requirement "flow test runs a flow offline against mocks"
 - [ ] 1.2 Write `src/cli/flow/test-refusals.test.ts` first (scenario "Invalid flow, mock problems, a refused input and an internal failure": the five cases, the last with `CLI_INTERNAL: command failed`), then add the `INVALID`, `MOCKS` and `FAILED <code> -` paths of design.md Decisions 3 to 5 to `src/cli/flow/test.ts`, implementing requirement "flow test runs a flow offline against mocks"
-- [ ] 1.3 Write `src/cli/flow/test-usage.test.ts` first (scenario "Usage errors and help": the nine usage errors, with the directory, oversized-file and catalogue cases, and `--help` against the exact text), then add the file reading and JSON checks of design.md Decision 2 to `src/cli/flow/test.ts`, implementing requirement "flow test runs a flow offline against mocks"
+- [ ] 1.3 Write `src/cli/flow/test-usage.test.ts` first (scenario "Usage errors and help": the twelve usage errors, with the `--input`, directory, `/dev/null`, oversized-file and catalogue cases, and `--help` against the exact text), then add the file reading and JSON checks of design.md Decision 2 to `src/cli/flow/test.ts`, implementing requirement "flow test runs a flow offline against mocks"
 
 ## 2. Registration
 

@@ -17,7 +17,7 @@ Spec: `specs/flow-testing/spec.md`; decisions, fixtures and interfaces: `design.
 ## 4. The endpoint
 
 - [ ] 4.1 Write `src/api/test-run-routes.test.ts` first (scenarios "A mock run from request to completion", "Idempotency-Key replays the same run" and "Who may test which flow" over the design.md § Test plan fixture), then implement `TestRunApiDeps` and `registerTestRunRoutes` in `src/api/test-run-routes.ts` with the route, its resource loader, the idempotency and the handler order of design.md Decision 5 without the `TEST_MOCK_*` answers and the `startRun` error map, and export both names from `src/api/index.ts`, implementing requirements "The test endpoint starts a mock run as the requesting user" and "The test endpoint refuses what it cannot run"
-- [ ] 4.2 Write `src/api/test-run-refusals.test.ts` first (scenario "Versions, bodies, mocks and a runtime that is down", with the switchable `enqueue` and a second server whose `interpreter` is `null`), then complete the `startRun` error mapping and the `TEST_MOCK_*` answers in `src/api/test-run-routes.ts`, implementing requirement "The test endpoint refuses what it cannot run"
+- [ ] 4.2 Write `src/api/test-run-refusals.test.ts` first (scenario "Versions, bodies, mocks and a runtime that is down", with the switchable `enqueue` and a second server whose `interpreter` is `null` and a third whose `interpreter.durable` is `null`), then complete the `startRun` error mapping and the `TEST_MOCK_*` answers in `src/api/test-run-routes.ts`, implementing requirement "The test endpoint refuses what it cannot run"
 
 ## 5. Engine wiring and API document
 

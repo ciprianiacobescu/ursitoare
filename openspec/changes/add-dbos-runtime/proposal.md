@@ -1,6 +1,6 @@
 ## Why
 
-Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: the durable runtime that runs and recovers each run, and the stack that resets it safely.
+Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: the durable runtime that runs and recovers each run, and the stack that resets it safely. The plan runs acceptance profile `all` after this unit merges: every configured gate (setup, build, lint, typecheck, test, e2e) on the target; the batch outcome itself is proven by the closing unit's journey `e2e/test_m4_runs.py`.
 
 Every run is a DBOS workflow. U31-U37 need one module that owns DBOS: it starts on the same Postgres under the app role, queues work on `runs`, and survives the e2e stack's database reset, which silently kills a DBOS queue (spike `ursitoare-spikes/dbos-reset`, decision D3).
 
