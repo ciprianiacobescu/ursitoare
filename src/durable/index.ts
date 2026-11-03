@@ -18,6 +18,8 @@ export {
   launchDurable,
   suspendDurable,
   resumeDurable,
+  dbosConfig,
+  dbosLogger,
 } from "./launch.ts";
 export { registerWorkflow } from "./registry.ts";
 export type { StepOptions } from "./steps.ts";

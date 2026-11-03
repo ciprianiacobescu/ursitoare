@@ -1,5 +1,6 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
+import type { DBOSConfig, DLogger } from "@dbos-inc/dbos-sdk";
 import type pg from "pg";
 import type { EndpointLike } from "../db/index.ts";
 import type { Logger } from "../observability/index.ts";
@@ -61,5 +62,13 @@ export async function suspendDurable(): Promise<DurableRuntime | null> {
 }
 
 export async function resumeDurable(): Promise<DurableRuntime | null> {
+  throw new Error("not implemented");
+}
+
+export function dbosConfig(_opts: LaunchOptions, _pool: pg.Pool): DBOSConfig {
+  throw new Error("not implemented");
+}
+
+export function dbosLogger(_logger: Logger): DLogger {
   throw new Error("not implemented");
 }
