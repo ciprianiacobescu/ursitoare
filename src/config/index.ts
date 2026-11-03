@@ -9,5 +9,7 @@ export type { SecretReader } from "./secret.ts";
 export { Secret } from "./secret.ts";
 export type { ConfigErrorCode } from "./errors.ts";
 export { ConfigError } from "./errors.ts";
+export type { FaultPoints } from "./faults.ts";
+export { NO_FAULT_POINTS, createFaultPoints } from "./faults.ts";
 export { loadConfigFromProcess } from "./process.ts";
 export { readProcessEnv } from "./environment.ts";

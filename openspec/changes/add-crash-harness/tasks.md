@@ -2,7 +2,7 @@ Spec: `specs/test-crash-harness/spec.md`; decisions: `design.md`; merged shapes:
 
 ## 1. The fault port
 
-- [ ] 1.1 Write `src/config/faults.test.ts` first (scenarios "Armed point, marker, second hit", "A marker that cannot be written" and "Refusals and the null port"), then implement `FaultPoints`, `NO_FAULT_POINTS` and `createFaultPoints` in `src/config/faults.ts` and add their re-export to `src/config/index.ts`, implementing requirements "A fault point fires once, and its marker is written before the kill" and "A bad spec is refused and the null port does nothing"
+- [x] 1.1 Write `src/config/faults.test.ts` first (scenarios "Armed point, marker, second hit", "A marker that cannot be written" and "Refusals and the null port"), then implement `FaultPoints`, `NO_FAULT_POINTS` and `createFaultPoints` in `src/config/faults.ts` and add their re-export to `src/config/index.ts`, implementing requirements "A fault point fires once, and its marker is written before the kill" and "A bad spec is refused and the null port does nothing"
 - [ ] 1.2 Write `test/arch/fault-points.test.ts` first (scenario "Rule fixtures, the real tree and the config", the `loadConfig` checks asserted in the same test as `checkFaultPoints`, so none holds at red), then implement `checkFaultPoints` in `test/arch/fault-points.ts` (pure, code `ARCH_FAULT_POINTS`, `collectImports`, `resolveSpecifier`, `sortViolations` and the TypeScript AST), implementing requirement "Production config cannot create or enable fault points"
 
 ## 2. Observer and effects
