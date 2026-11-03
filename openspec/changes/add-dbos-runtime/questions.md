@@ -13,6 +13,21 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 5.2 | technical | test/support/e2e-stack/durable-part.test.ts:379 keeps a template pool open before databasePart.seed |
 | Q-002 | accepted | 5.2 | technical | test/support/e2e-stack/durable-part.test.ts:395 queries a nonexistent dbos.workflow_status column |
+| Q-003 | open | none | verdict | Criterion C-25c32649 (durable-runtime › The owner prepares the DBOS schema and the engine never does › Prepare, repeat, refuse): accept as satisfied? |
+| Q-004 | open | none | verdict | Criterion C-da1b0c83 (durable-runtime › The runtime connects with the endpoint it is given and never migrates › A prepared database): accept as satisfied? |
+| Q-005 | open | none | verdict | Criterion C-cb0c606e (durable-runtime › The runs queue is registered after every launch › Launch, lose the rows, launch again): accept as satisfied? |
+| Q-006 | open | none | verdict | Criterion C-57d8e403 (durable-runtime › A launch that cannot succeed fails with a stable code and leaves nothing behind › Refusals): accept as satisfied? |
+| Q-007 | open | none | verdict | Criterion C-5d9b866b (durable-runtime › Workflows are registered before launch under a checked name › Registration rules): accept as satisfied? |
+| Q-008 | open | none | verdict | Criterion C-e0745e1c (durable-runtime › A workflow id runs once, and status and cancel report it › Once per id, status, cancel): accept as satisfied? |
+| Q-009 | open | none | verdict | Criterion C-706487fb (durable-runtime › Steps are observed, retried only on request, and need a workflow › Steps and durable calls): accept as satisfied? |
+| Q-010 | open | none | verdict | Criterion C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps): accept as satisfied? |
+| Q-011 | open | none | verdict | Criterion C-c37d6095 (durable-runtime › main launches the runtime after the routes and closes it before the database › When it launches and the close order): accept as satisfied? |
+| Q-012 | open | none | verdict | Criterion C-073558f4 (durable-runtime › main launches the runtime after the routes and closes it before the database › A failed launch and the unchanged health): accept as satisfied? |
+| Q-013 | open | none | verdict | Criterion C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree): accept as satisfied? |
+| Q-014 | open | none | verdict | Criterion C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure): accept as satisfied? |
+| Q-015 | open | none | verdict | Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied? |
+| Q-016 | open | none | verdict | Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied? |
+| Q-017 | open | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
 <!-- l4:index:end -->
 
 ---
@@ -61,6 +76,461 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `test/support/e2e-stack/durable-part.test.ts`: replace `WHERE workflow_name = 'stack.ready'` with `WHERE name = 'stack.ready'` in the query at line 395.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-003: Criterion C-25c32649 (durable-runtime › The owner prepares the DBOS schema and the engine never does › Prepare, repeat, refuse): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-25c32649 (durable-runtime › The owner prepares the DBOS schema and the engine never does › Prepare, repeat, refuse)
+
+### Context
+Criterion C-25c32649 (durable-runtime › The owner prepares the DBOS schema and the engine never does › Prepare, repeat, refuse) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `prepareDurable(db.ownerUrl)` runs twice on `withTestDatabase({ migrated: false })`, then with the four bad URLs of test-plan.md, `other.appUrl` of a second such database and an owner URL on a closed port; `withTestDatabase()` clones
+\- **THEN** after the first call `dbos` exists, owned by `ursitoare_owner`; `ursitoare_app` has USAGE, not CREATE, and `CREATE TABLE dbos.x (i int)` as it rejects `42501`; the second call resolves, `dbos.dbos_migrations` unchanged; the refusals are `DURABLE_INVALID bad_url` (4 times, no connection), `DURABLE_UNAVAILABLE 42501` and `migrate_failed`, no message containing `postgres://`; the default clone has `dbos.dbos_migrations`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.durable.prepare.test.ts::C-25c32649 prepareDurable creates the dbos schema and repeats as a no-op (passed, red_assertion); src.durable.prepare.test.ts::C-25c32649 prepareDurable refuses bad owner URLs and an unmigrated app role (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Criterion C-da1b0c83 (durable-runtime › The runtime connects with the endpoint it is given and never migrates › A prepared database): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-da1b0c83 (durable-runtime › The runtime connects with the endpoint it is given and never migrates › A prepared database)
+
+### Context
+Criterion C-da1b0c83 (durable-runtime › The runtime connects with the endpoint it is given and never migrates › A prepared database) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `dbosConfig` and `dbosLogger` are called on the fixtures of test-plan.md; `launchDurable({ endpoint: db.appEndpoint, logger })` runs on a prepared clone with a capturing debug logger; the owner reads `pg_stat_activity` and `dbos.application_versions`; the admin connection then runs `pg_terminate_backend` on the `ursitoare-durable` sessions
+\- **THEN** `dbosConfig` gives `runMigrations` false, `enableOTLP` false, `name` `ursitoare`, `systemDatabaseSchemaName` `DBOS_SCHEMA`, `applicationVersion` `APPLICATION_VERSION`, the given pool and a URL with no password; `dbosLogger(log)` `info`, `debug`, `warn`, `error` call `log` at that level with `{ component: "dbos" }` and the message (`String(entry)`); `applicationVersion` is `"ursitoare-1"`; the `ursitoare-durable` sessions (at least one) are `ursitoare_app`'s; `dbos.application_versions` has `ursitoare-1`; an `info` line (level 30) has `component` `dbos`, none the password; within 5 s a line has `msg` `durable pool error`, `component` `dbos` and `code` `57P01`, none holding `terminating connection`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.durable.launch.test.ts::C-da1b0c83 prepared database gives the expected config logger sessions and pool warning (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Criterion C-cb0c606e (durable-runtime › The runs queue is registered after every launch › Launch, lose the rows, launch again): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-cb0c606e (durable-runtime › The runs queue is registered after every launch › Launch, lose the rows, launch again)
+
+### Context
+Criterion C-cb0c606e (durable-runtime › The runs queue is registered after every launch › Launch, lose the rows, launch again) is needs human after round 1.
+
+Scenario:
+\- **WHEN** a runtime `rt` is launched with `pollingIntervalMs` 20, `concurrency` 3, a capturing `logger`, the test-only `closePool` and the ten steps of test-plan.md § Queue sequence run
+\- **THEN** the first read has one row `runs`, `worker_concurrency` 3, `polling_interval_sec` 0.02 (±1e-9); `suspendDurable()` resolves `rt`; the step-3 calls reject `DURABLE_NOT_LAUNCHED suspended`; the step-4 resume rejects `launch_failed`, `rt.status("x")` stays `suspended`; `resumeDurable()` resolves `rt`, then `null`; the row is back, `after-reset` succeeds; both `shutdown()` calls resolve; the step-7 calls reject `DURABLE_NOT_LAUNCHED shut_down`; the capture has exactly two `durable shutdown failed` warnings, no `boom`; after the second launch the row holds the defaults 4 and 0.05 and `resumeDurable()` gives `null`; the concurrent `enqueue` rejects `DURABLE_NOT_LAUNCHED suspended`, the others resolve `rt2`, `rt2`, `undefined`; `rt2.status("x")` rejects `shut_down`; the unawaited `rt3.enqueue` (step 10) resolves and its `d-drain` row exists; within 5 s no `ursitoare-durable` session is left
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.durable.queue.test.ts::C-cb0c606e launch suspend resume and shutdown keep the runs queue (passed, pre_satisfied)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-006: Criterion C-57d8e403 (durable-runtime › A launch that cannot succeed fails with a stable code and leaves nothing behind › Refusals): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-57d8e403 (durable-runtime › A launch that cannot succeed fails with a stable code and leaves nothing behind › Refusals)
+
+### Context
+Criterion C-57d8e403 (durable-runtime › A launch that cannot succeed fails with a stable code and leaves nothing behind › Refusals) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `launchDurable` runs the twelve calls of test-plan.md § Refusal sequence, in order
+\- **THEN** the rejections are `DURABLE_UNAVAILABLE not_prepared`, `DURABLE_INVALID bad_option` twice (`details.option` `concurrency`, `pollingIntervalMs`), `DURABLE_INVALID` `bad_endpoint` twice, `password_in_url`, then `DURABLE_UNAVAILABLE` `config_failed`, `launch_failed` (closed port), `launch_failed` (ledger emptied), `queue_failed`; after the first, eighth, ninth, tenth no `ursitoare-durable` session is left within 5 s; after the tenth `dbos.workflow_status` is empty and `dbos.queues` has only the foreign row; the eleventh resolves; the twelfth rejects `DURABLE_ALREADY_LAUNCHED running`; its runtime answers `status("none")` `null`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.durable.launch.test.ts::C-57d8e403 launchDurable refuses bad options endpoints and databases (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-007: Criterion C-5d9b866b (durable-runtime › Workflows are registered before launch under a checked name › Registration rules): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-5d9b866b (durable-runtime › Workflows are registered before launch under a checked name › Registration rules)
+
+### Context
+Criterion C-5d9b866b (durable-runtime › Workflows are registered before launch under a checked name › Registration rules) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `registerWorkflow("t.count", f)` runs twice, then with `g`, then `("Bad Name", f)`, `("a".repeat(65), f)`; `launchDurable(...)` is called unawaited and `registerWorkflow("t.late2", f)` runs; after it resolves, `registerWorkflow("t.late", f)` and `rt.enqueue("t.unknown", "w-u", null)` run
+\- **THEN** the first two return `undefined`; the third throws `DURABLE_INVALID name_taken` and the next two `bad_name`; `t.late2`, `t.late` throw `DURABLE_ALREADY_LAUNCHED running`; the enqueue rejects `DURABLE_WORKFLOW_UNKNOWN not_registered`, leaving no `w-u` row
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.durable.workflows.test.ts::C-5d9b866b registerWorkflow checks names and refuses late registration (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-008: Criterion C-e0745e1c (durable-runtime › A workflow id runs once, and status and cancel report it › Once per id, status, cancel): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-e0745e1c (durable-runtime › A workflow id runs once, and status and cancel report it › Once per id, status, cancel)
+
+### Context
+Criterion C-e0745e1c (durable-runtime › A workflow id runs once, and status and cancel report it › Once per id, status, cancel) is needs human after round 1.
+
+Scenario:
+\- **WHEN** a runtime is launched with `concurrency` 1 and the eight steps of test-plan.md § Once-per-id sequence run
+\- **THEN** `status("w-gate")` is `{ workflowId: "w-gate", workflow: "t.gate", state: "PENDING" }`, `status("w-1")` `ENQUEUED`, then `CANCELLED`; `cancel("never")` resolves, `status("never")` `null`; `w-gate`, `w-2` succeed; the counter is 1; the `w-2` row has `application_version` `ursitoare-1`, `queue_name` `runs`; `w-park` is `CANCELLED` before and after its promise opens, `two` never ran; `isDurableCancellation` is true for the error `t.park` caught from `two`, false for `new Error("x")` and `{ name: "DBOSWorkflowCancelledError" }`; bad ids reject `DURABLE_INVALID bad_workflow_id`; the refused inputs of step 7 reject `bad_input`; `d-200`, `d-64`, `d-null` succeed
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.durable.workflows.test.ts::C-e0745e1c a workflow id runs once and status and cancel report it (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-009: Criterion C-706487fb (durable-runtime › Steps are observed, retried only on request, and need a workflow › Steps and durable calls): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-706487fb (durable-runtime › Steps are observed, retried only on request, and need a workflow › Steps and durable calls)
+
+### Context
+Criterion C-706487fb (durable-runtime › Steps are observed, retried only on request, and need a workflow › Steps and durable calls) is needs human after round 1.
+
+Scenario:
+\- **WHEN** a runtime is launched with a recording `stepObserver`; the workflows `t.steps`, `t.retry`, `t.once`, `t.names`, `t.bad` and `t.drop` (test-plan.md) are enqueued in that order and awaited; `runStep`, `durableSleep(1)`, `currentWorkflowId()` run outside a workflow; after `t.drop`, `rt.status`, `rt.cancel`, `rt.enqueue` run
+\- **THEN** the observer calls for `t.steps` are exactly `[["before","a",id],["after","a",id],["before","b",id],["after","b",id]]` (`id` the enqueue id and `currentWorkflowId()`), the sleep took 900 to under 5000 ms; `flaky` ran 3 times, returned 7, with one `before` and `after`; `always` ran once, `t.once` caught `e1` itself; in `t.bad`, `bad` is `bad_step_result` with no `after`, the three names `bad_step_name`, the other two `bad_option`; the `t.names` steps ran in order; outside a workflow the three give `DURABLE_NOT_LAUNCHED outside_workflow`; the `t.drop` `runStep`, its `durableSleep` and the three calls reject `DURABLE_UNAVAILABLE dbos_failed`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.durable.steps.test.ts::C-706487fb steps are observed retried only on request and need a workflow (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-010: Criterion C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps)
+
+### Context
+Criterion C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `seedTwoTenants(db)` runs, the owner creates the probe table (test-plan.md), a runtime is launched on `db.appEndpoint` and `t.read` is enqueued as `r-a`, `r-b`, `r-none` with `tenantId` `tenant_a`, `tenant_b`, null and `userId` `u1`, each awaited to `SUCCESS`
+\- **THEN** the map entries `r-a`, `r-b`, `r-none` have `ids` `["tenant_a"]`, `["tenant_b"]` and `[]`, and every `user` is `ursitoare_app`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.durable.rls.test.ts::C-c27b0f1a row level security holds inside durable steps (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-011: Criterion C-c37d6095 (durable-runtime › main launches the runtime after the routes and closes it before the database › When it launches and the close order): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-c37d6095 (durable-runtime › main launches the runtime after the routes and closes it before the database › When it launches and the close order)
+
+### Context
+Criterion C-c37d6095 (durable-runtime › main launches the runtime after the routes and closes it before the database › When it launches and the close order) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `main` runs with the fakes of test-plan.md, for the roles `all`, `worker`, `api`, `sandbox` with `database.app` an endpoint `E`, and for `all` with `database.app` null; then the first server gets `SIGTERM`
+\- **THEN** the fake is called once each for `all` and `worker`, with exactly `{ endpoint: E, logger }` (`endpoint === E`), and never for `api`, `sandbox` or the null endpoint; after `SIGTERM` the records are `["durable.shutdown", "database.close"]` and `exit` got `0`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.main.durable.test.ts::C-c37d6095 main launches the runtime only for the all and worker roles and closes it before the database (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-012: Criterion C-073558f4 (durable-runtime › main launches the runtime after the routes and closes it before the database › A failed launch and the unchanged health): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-073558f4 (durable-runtime › main launches the runtime after the routes and closes it before the database › A failed launch and the unchanged health)
+
+### Context
+Criterion C-073558f4 (durable-runtime › main launches the runtime after the routes and closes it before the database › A failed launch and the unchanged health) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `main` runs with the real `launchDurable` and a capturing log destination on a clone whose `dbos` schema the owner dropped (`DROP SCHEMA dbos CASCADE`), then on an intact clone where `/health` and the `ursitoare-durable` sessions are read and the test calls `launchDurable` while it runs and after `close()`; and once more on an intact clone with the listener port held by another listener
+\- **THEN** the first resolves `null`, `exit` got `1` once, the destination holds exactly one fatal line (`DURABLE_UNAVAILABLE`, `startup failed`, `not_prepared`); for the second `/health` is 200 with `checks` `{ db: "ok" }`, every `ursitoare-durable` session is `ursitoare_app`'s, and the test's launch rejects `DURABLE_ALREADY_LAUNCHED` while `main` runs, resolves after `close()`; for the third `main` resolves `null`, `exit` got `1`, the fatal line has `code` `EADDRINUSE`, within 5 s no `ursitoare-durable` session is left and the test's launch resolves
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: src.main.durable.test.ts::C-073558f4 main launches as the app role, keeps health unchanged, fails without the schema and closes after a listen failure (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-013: Criterion C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree)
+
+### Context
+Criterion C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `checkDbosAccess(snapshotOf(files))` runs on the rule fixtures `src/api/a.ts` to `f.ts` and the allowed `g.ts`, `h.ts`, `i.test.ts`, `j.ts` (test-plan.md); then on `readSnapshot()`; `package.json` is read
+\- **THEN** the violations are exactly `ARCH_DBOS_ACCESS` at line 1 of `a.ts` to `f.ts` in order, with the SDK message for `a.ts`-`c.ts` and the schema message for `d.ts`-`f.ts` (test-plan.md); the real tree has none; `dependencies["@dbos-inc/dbos-sdk"]` is `"5.3.0"`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: test.arch.dbos-access.test.ts::C-77ae2063: SDK imports and schema names outside the allowed modules are violations (passed, red_assertion); test.arch.dbos-access.test.ts::C-77ae2063: the allowed forms, the real tree and the pinned SDK version pass (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-014: Criterion C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure)
+
+### Context
+Criterion C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure) is needs human after round 1.
+
+Scenario:
+\- **WHEN** fake parts `p1`, `p2`, `p3` record `hook:<name>` and `seed:<name>` (`p2` has no hook); `seedAll()` then `reset()` run; `p3`'s hook rejects and `reset()` runs; then it is fixed and `reset()` runs; and a registry registers a part with `beforeReset: "x"`
+\- **THEN** the log after `seedAll()` is `seed:p1, seed:p2, seed:p3`; one reset adds `hook:p3, hook:p1, seed:p1, seed:p2, seed:p3`; the failing reset rejects `STACK_RESET_FAILED` (`details.part` `p3`), adding no `hook:p1` or `seed:`; the next passes; registering it throws `STACK_PART_INVALID`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: test.support.e2e-stack.reset.hooks.test.ts::C-2c0ae21b beforeReset hooks run in reverse part order before the seeds and a failed hook rejects STACK_RESET_FAILED naming the part (passed, red_assertion); test.support.e2e-stack.reset.hooks.test.ts::C-2c0ae21b registry refuses a part whose beforeReset is not a function (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-015: Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed)
+
+### Context
+Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `checkDurableReady(fake, opts)` runs with a clock that `sleep` advances, `workflowId` `ready-1`, against a fake whose `status` answers `ENQUEUED, ENQUEUED, SUCCESS` (`pollMs` 100); always `ENQUEUED` with `timeoutMs` 5000 and `pollMs` 100, and with neither (defaults 5000, 20); `ERROR`; a fake whose `enqueue` rejects with `err`; the five bad options and the three dependency failures of test-plan.md; and, on a started database part with no engine, `durablePart.start`, `beforeReset`, `seed`, `close` run
+\- **THEN** the first resolves after one `enqueue("stack.ready", "ready-1", "ping")`, 3 `status`, 2 `sleep(100)`; the second rejects `STACK_DURABLE_NOT_READY` with `details.state` `ENQUEUED` after 51 `status` and 50 `sleep(100)`, and with the defaults after 251 `status` and 250 `sleep(20)`; the third at once with `ERROR`; the fourth with `err` itself; `err2` after 2 `status` and 1 `sleep`, `err3` and `err4` as themselves; the bad options reject `bad_option` with no `enqueue`; the four part calls resolve and `ursitoare_e2e` holds no `stack.ready` row
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: test.support.e2e-stack.durable-part.test.ts::C-769418cc checkDurableReady defaults to a 5000 ms timeout and a 20 ms poll (passed, red_assertion); test.support.e2e-stack.durable-part.test.ts::C-769418cc checkDurableReady enqueues the ready workflow and resolves once it succeeds (passed, red_assertion); test.support.e2e-stack.durable-part.test.ts::C-769418cc checkDurableReady lets an enqueue rejection propagate unchanged (passed, red_assertion); test.support.e2e-stack.durable-part.test.ts::C-769418cc checkDurableReady lets status, sleep and clock failures propagate unchanged (passed, red_assertion); test.support.e2e-stack.durable-part.test.ts::C-769418cc checkDurableReady refuses the five bad options before enqueueing (passed, red_assertion); test.support.e2e-stack.durable-part.test.ts::C-769418cc checkDurableReady rejects STACK_DURABLE_NOT_READY with the state when the deadline passes (passed, red_assertion); test.support.e2e-stack.durable-part.test.ts::C-769418cc checkDurableReady rejects at once with a failed workflow state (passed, red_assertion); test.support.e2e-stack.durable-part.test.ts::C-769418cc discovery lists the durable part after the catalogue (passed, red_assertion); test.support.e2e-stack.durable-part.test.ts::C-769418cc the durable part prepares the template and does nothing without a runtime (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-016: Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close)
+
+### Context
+Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `startE2eStack({ port: 0, controlPort: 0, dataDir })` runs with the shipped parts, the owner reads `dbos.workflow_status` before the first reset and, with `dbos.queues` and `/health`, after each of three resets; `close()` runs with the wrapped database part (test-plan.md); a second `startE2eStack` boots, resets once, closes; `docs/testing.md` is read
+\- **THEN** before the first reset there are no workflow rows; each reset answers 204 with one row (`stack.ready`, `SUCCESS`, `runs`), `dbos.queues` has `runs`, `ursitoare_e2e_template` has `dbos.dbos_migrations`, and `/health` is 200 with `checks` exactly `{ db: "ok" }`; the wrapped close saw 0 sessions, `resumeDurable()` gives `null`; the second boot starts (no `name_taken`), its reset answers 204 with one `stack.ready` row; `docs/testing.md` contains `A reset discards every durable workflow`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: test.support.e2e-stack.stack.durable.test.ts::C-7732f592 three resets under the live engine then the close (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-017: Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s)
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s)
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
 
 ### Answer
 <!-- write below this line -->

@@ -1,0 +1,335 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/db/pool.ts",
+      "@dbos-inc/dbos-sdk",
+      "src/durable",
+      "src/runs",
+      "docs/decisions/0002",
+      "src/main.ts",
+      "docs/testing.md",
+      "parts/40-durable.ts",
+      "test/arch/modules.ts",
+      "test/support/global-setup.ts",
+      "test/support/e2e-stack/{part,reset}.ts",
+      "src/db/migrate.ts",
+      "specs/durable-runtime/spec.md",
+      "src/durable/prepare.test.ts",
+      "src/durable/errors.ts",
+      "src/durable/prepare.ts",
+      "src/durable/index.ts",
+      "src/durable/launch.test.ts",
+      "src/durable/launch.ts",
+      "src/durable/json.ts",
+      "src/durable/workflows.test.ts",
+      "src/durable/registry.ts",
+      "src/durable/steps.ts",
+      "src/durable/queue.test.ts",
+      "src/durable/steps.test.ts",
+      "src/durable/rls.test.ts",
+      "test/arch/dbos-access.test.ts",
+      "test/arch/dbos-access.ts",
+      "test/support/e2e-stack/reset.hooks.test.ts",
+      "test/support/e2e-stack/part.ts",
+      "test/support/e2e-stack/reset.ts",
+      "test/support/e2e-stack/durable-part.test.ts",
+      "test/support/e2e-stack/durable-part.ts",
+      "test/support/e2e-stack/parts/40-durable.ts",
+      "src/main.durable.test.ts",
+      "src/main.configure.test.ts",
+      "test/support/e2e-stack/stack.durable.test.ts",
+      "**/^[A-Za-z0-9_-][A-Za-z0-9_.:-]{0,199}$",
+      "**/^[A-Za-z0-9_-]{1,128}$",
+      "**/[]",
+      "**/^[^\\u0000-\\u001f\\u007f]{1,200}$",
+      "**/durable?.shutdown",
+      "**/dbos.*",
+      "**/part.ts",
+      "**/reset.ts",
+      "**/DURABLE_*",
+      "**/[",
+      "**/steps.ts",
+      "**/launch.ts",
+      "module @dbos-inc",
+      "module config",
+      "module db",
+      "module docs",
+      "module durable",
+      "module main",
+      "module main.configure.test",
+      "module main.durable.test",
+      "module parts",
+      "module runs",
+      "module specs",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/testing.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dbos-runtime/.l4/ledger/r-20261103T0422Z-3162.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dbos-runtime/.l4/ledger/r-20261103T0739Z-ce44.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dbos-runtime/.l4/ledger/r-20261103T0741Z-7374.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dbos-runtime/.l4/ledger/r-20261103T0849Z-634b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dbos-runtime/.l4/ledger/r-20261103T0902Z-3db1.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dbos-runtime/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dbos-runtime/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/durable/errors.ts",
+        "module": "durable",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/durable/json.ts",
+        "module": "durable",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/durable/launch.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/durable/launch.ts",
+        "module": "durable",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/durable/prepare.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/durable/prepare.ts",
+        "module": "durable",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/durable/queue.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/durable/registry.ts",
+        "module": "durable",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/durable/rls.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/durable/steps.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/durable/steps.ts",
+        "module": "durable",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/durable/workflows.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.durable.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/arch/dbos-access.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/arch/dbos-access.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/durable-part.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/durable-part.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/part.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/parts/40-durable.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/reset.hooks.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/reset.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/stack.durable.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/global-setup.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/durable/errors.ts, src/durable/json.ts, src/durable/launch.ts, src/durable/prepare.ts, src/durable/registry.ts and 8 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/durable/errors.ts",
+      "src/durable/json.ts",
+      "src/durable/launch.ts",
+      "src/durable/prepare.ts",
+      "src/durable/registry.ts",
+      "src/durable/steps.ts",
+      "src/main.ts",
+      "test/arch/dbos-access.ts",
+      "test/support/e2e-stack/durable-part.ts",
+      "test/support/e2e-stack/part.ts",
+      "test/support/e2e-stack/parts/40-durable.ts",
+      "test/support/e2e-stack/reset.ts",
+      "test/support/global-setup.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1480,
+      "passed": 1480,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 25,
+      "new_passed": 25,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
