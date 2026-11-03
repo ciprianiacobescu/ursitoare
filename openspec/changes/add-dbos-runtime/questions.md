@@ -29,7 +29,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-016 | answered | none | verdict | Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied? |
 | Q-017 | answered | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
 | Q-018 | open | none | verdict | Finding F-233c28d7: dbosLogger rewrites entries instead of forwarding String(entry) |
-| Q-019 | open | none | verdict | Finding F-1216922b: An after-observer failure is retried instead of failing the step |
+| Q-019 | answered | none | verdict | Finding F-1216922b: An after-observer failure is retried instead of failing the step |
 <!-- l4:index:end -->
 
 ---
@@ -602,7 +602,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-019: Finding F-1216922b: An after-observer failure is retried instead of failing the step
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -623,3 +624,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding holds. In src/durable/steps.ts the JSON check of fn's result and the after observer call sit inside the per-attempt try whose catch counts an attempt and loops, so with retries above 0 and no retryable predicate an after observer that throws, or a non-JSON result, makes fn run again after it already succeeded. Design decision 6 says fn runs up to retries plus one times, the result is then checked, the after observer runs once, and an observer that throws fails the step; the spec says only fn is retried while retryable allows. Only errors thrown by fn itself may be retried. WHEN runStep runs with retries 2 and fn resolves a valid DurableJson but the after observer throws THEN fn has run exactly once, the step rejects with the observer's error unchanged and no second attempt of fn is made.
