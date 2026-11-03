@@ -82,6 +82,42 @@ async function closeDatabase(database: { name: string; pool: pg.Pool }): Promise
     .catch(() => undefined);
 }
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+function monthNames(table: string): string[] {
+  const names: string[] = [];
+  for (let offset = 0; offset < 5; offset += 1) {
+    const date = new Date(Date.UTC(2026, 8 + offset, 1));
+    const stamp = `${date.getUTCFullYear()}${String(date.getUTCMonth() + 1).padStart(2, "0")}`;
+    names.push(`ursitoare.${table}_p${stamp}`);
+  }
+  return names;
+}
+
+function stepExecutionNames(): string[] {
+  const names: string[] = [];
+  const end = Date.UTC(2027, 1, 1);
+  for (let time = Date.UTC(2026, 8, 1); time < end; time += DAY_MS) {
+    const date = new Date(time);
+    const stamp = `${date.getUTCFullYear()}${String(date.getUTCMonth() + 1).padStart(2, "0")}${String(
+      date.getUTCDate(),
+    ).padStart(2, "0")}`;
+    names.push(`ursitoare.step_execution_p${stamp}`);
+  }
+  return names;
+}
+
+function partitionWindow(): string[] {
+  const steps = stepExecutionNames();
+  assert.equal(steps.length, 153, "the window holds 153 step partitions");
+  return [
+    ...monthNames("audit_event"),
+    ...monthNames("event"),
+    ...monthNames("policy_decision"),
+    ...steps,
+  ].sort();
+}
+
 test("C-58e0ebf0 prepareDatabase migrates first and then creates the partition window", async () => {
   assert.ok(
     existsSync(join(DEFAULT_MIGRATIONS_DIR, BASE_FILE)),
@@ -97,18 +133,7 @@ test("C-58e0ebf0 prepareDatabase migrates first and then creates the partition w
     const clock = { now: () => new Date("2026-10-15T12:00:00Z") };
     const first = await resolved(() => prepareDatabase(database.pool, clock));
     assert.deepEqual(first.applied, expectedApplied);
-    assert.deepEqual(first.partitions, [
-      "ursitoare.audit_event_p202609",
-      "ursitoare.audit_event_p202610",
-      "ursitoare.audit_event_p202611",
-      "ursitoare.audit_event_p202612",
-      "ursitoare.audit_event_p202701",
-      "ursitoare.policy_decision_p202609",
-      "ursitoare.policy_decision_p202610",
-      "ursitoare.policy_decision_p202611",
-      "ursitoare.policy_decision_p202612",
-      "ursitoare.policy_decision_p202701",
-    ]);
+    assert.deepEqual(first.partitions, partitionWindow());
 
     await database.pool.query(
       "CREATE TABLE ursitoare.pt_month (at timestamptz) PARTITION BY RANGE (at)",

@@ -1,0 +1,288 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/runs",
+      "src/tenancy",
+      "src/runs/store",
+      "src/runs/index.ts",
+      "src/db/migrations/0310_run_data.sql",
+      "application/json",
+      "src/db/prepare.test.ts",
+      "docs/decisions/0002",
+      "test/arch/modules.ts",
+      "test/support/tenants.ts",
+      "src/db",
+      "test/support/pg.ts",
+      "specs/run-data/spec.md",
+      "src/runs/store/schema.test.ts",
+      "src/runs/store/canonical.test.ts",
+      "src/runs/store/errors.ts",
+      "src/runs/store/types.ts",
+      "src/runs/store/canonical.ts",
+      "src/runs/store/validate.ts",
+      "src/runs/store/envelope-store.test.ts",
+      "src/runs/store/envelope-store.ts",
+      "src/runs/store/run-repository.test.ts",
+      "src/runs/store/run-repository.ts",
+      "src/runs/store/run-list.test.ts",
+      "src/runs/store/step-repository.test.ts",
+      "src/runs/store/step-repository.ts",
+      "src/runs/store/events.test.ts",
+      "src/runs/store/events.ts",
+      "src/runs/store/isolation.test.ts",
+      "src/runs/store/failure.test.ts",
+      "src/runs/store/tenant.ts",
+      "src/runs/store/run-store.ts",
+      "src/runs/store/store-contract.test.ts",
+      "src/runs/store/memory-store.ts",
+      "**/errors.ts",
+      "**/types.ts",
+      "**/canonical.ts",
+      "**/events.ts",
+      "**/validate.ts",
+      "**/tenant.ts",
+      "**/filter.sql",
+      "**/*_ref",
+      "**/^[A-Za-z0-9_-]{1,128}$",
+      "**/^[a-z][a-z0-9]*",
+      "**/^sha256:[0-9a-f]{64}$",
+      "**/^[a-z][a-z0-9_-]{0,63}$",
+      "**/^[a-z][a-z0-9_]{0,127}$",
+      "**/^[A-Za-z][A-Za-z0-9_.-]{0,63}$",
+      "**/^[a-z][a-z0-9_.]{0,63}$",
+      "**/^[A-Za-z0-9_.:-]{1,128}$",
+      "**/[]",
+      "**/[",
+      "module application",
+      "module db",
+      "module docs",
+      "module runs",
+      "module specs",
+      "module tenancy",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-envelope-store/.l4/ledger/r-20261103T1925Z-0eec.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-envelope-store/.l4/ledger/r-20261103T2047Z-7671.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-envelope-store/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-envelope-store/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/db/migrations/0310_run_data.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/prepare.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/canonical.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/canonical.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/envelope-store.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/envelope-store.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/errors.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/events.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/events.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/failure.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/isolation.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/memory-store.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/run-list.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/run-repository.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/run-repository.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/run-store.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/step-repository.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/step-repository.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/store-contract.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/tenant.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/validate.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/runs/store/canonical.ts, src/runs/store/envelope-store.ts, src/runs/store/errors.ts, src/runs/store/events.ts, src/runs/store/memory-store.ts and 5 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/runs/store/canonical.ts",
+      "src/runs/store/envelope-store.ts",
+      "src/runs/store/errors.ts",
+      "src/runs/store/events.ts",
+      "src/runs/store/memory-store.ts",
+      "src/runs/store/run-repository.ts",
+      "src/runs/store/run-store.ts",
+      "src/runs/store/step-repository.ts",
+      "src/runs/store/tenant.ts",
+      "src/runs/store/validate.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1504,
+      "passed": 1504,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 23,
+      "new_passed": 23,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
