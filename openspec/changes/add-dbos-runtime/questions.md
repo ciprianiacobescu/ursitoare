@@ -28,7 +28,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-015 | answered | none | verdict | Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied? |
 | Q-016 | answered | none | verdict | Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied? |
 | Q-017 | answered | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
-| Q-018 | open | none | verdict | Finding F-233c28d7: dbosLogger rewrites entries instead of forwarding String(entry) |
+| Q-018 | answered | none | verdict | Finding F-233c28d7: dbosLogger rewrites entries instead of forwarding String(entry) |
 | Q-019 | answered | none | verdict | Finding F-1216922b: An after-observer failure is retried instead of failing the step |
 <!-- l4:index:end -->
 
@@ -576,7 +576,7 @@ WHEN a recovered or forked workflow replays a step whose fn had thrown, or fn re
 
 ## Q-018: Finding F-233c28d7: dbosLogger rewrites entries instead of forwarding String(entry)
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The finding is accurate against the code: src/durable/launch.ts:130 rewrites any entry matching "error: ..." to "error: [redacted]" rather than forwarding String(entry). But the same scenario also requires that after pg_terminate_backend no log line holds "terminating connection", and design decisio
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -598,6 +598,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept: the redaction serves a stricter clause of the same scenario. spec.md:19 also requires that within 5 s of the pool-error test no log line holds 'terminating connection'. DBOS 5.3.0 itself logs `Unexpected error in system database client: ${err}` (system_database.js:180 and 184), where a pg error stringifies as 'error: terminating connection …' and can carry a host. Forwarding String(entry) unchanged would break that clause and put driver text in the logs. The literal 'String(entry)' in spec.md:19 and design.md:9 conflicts with that clause. A follow-up amends the spec text to: the adapter forwards String(entry), with a lowercase pg 'error: …' tail replaced by 'error: [redacted]'. Verified by the orchestrator against the spec and the SDK source.
 ---
 
 ## Q-019: Finding F-1216922b: An after-observer failure is retried instead of failing the step
