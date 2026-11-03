@@ -46,3 +46,5 @@
 {"at":"2026-11-03T19:26:57Z","branch":"l4/archive/openspec/add-dbos-runtime","head":"fc0d8c2586c4cf71241c3eaf20edd9a48674fd2d","type":"unit.branch_deleted","unit":"openspec:add-dbos-runtime"}
 {"at":"2026-11-03T19:27:04Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-envelope-store"}
 {"at":"2026-11-03T19:27:04Z","run":"r-20261103T1925Z-0eec","type":"unit.dispatched","unit":"openspec:add-envelope-store"}
+{"at":"2026-11-03T20:47:25Z","attempt":1,"cost_usd":0.848334,"runs":2,"type":"plan.charged","unit":"openspec:add-envelope-store"}
+{"at":"2026-11-03T20:47:25Z","run":"r-20261103T2047Z-7671","type":"unit.dispatched","unit":"openspec:add-envelope-store"}
