@@ -13,7 +13,7 @@
 - `t.steps()` runs `runStep("a", ...)` and `runStep("b", ...)` (values 1 and 2), reads `currentWorkflowId()`, times `durableSleep(1000)` with `Date.now()`, and records both.
 - `t.retry()` runs `runStep("flaky", f, { retries: 2 })`, `f` throwing twice then returning 7. `t.once()` runs `runStep("always", g, { retries: 3, retryable: () => false })`, `g` throwing the object `e1`; it records the caught error.
 - `t.names()` runs one step each named `run:load`, `pay`, `pay#done`, `run:finish`. `t.bad()` records the error of each of: `runStep("bad", async () => undefined as never)`, `runStep("x", f, { retries: -1 })`, `durableSleep(1.5)`, and `runStep` named `""`, `"a\nb"` and `"x".repeat(201)`.
-- `t.drop()` runs a step whose function has the owner pool run `DROP SCHEMA dbos CASCADE` and returns 1, and records the error `runStep` then throws (the later DBOS calls fail with SQLSTATE `42P01`; this must be the last use of the runtime).
+- `t.drop()` runs a step whose function has the owner pool run `DROP SCHEMA dbos CASCADE` and returns 1, and records the error `runStep` then throws, then calls `durableSleep(10)` and records its error (the later DBOS calls fail with SQLSTATE `42P01`; this must be the last use of the runtime).
 - `t.read({ tenantId, userId })` runs one `runStep` that calls `withTenantTx(db.appPool, { tenantId, reviewProfile: "solo" }, ...)`, or a plain `db.appPool.query` for a null `tenantId`, selecting `tenant_id` from `ursitoare.rls_probe` and `current_user`, and stores `{ ids, user }` in a module `Map` keyed by workflow id; the test reads the map after `status` reaches `SUCCESS`.
 
 ## Refusal sequence

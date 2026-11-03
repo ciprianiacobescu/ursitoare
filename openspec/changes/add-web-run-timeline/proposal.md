@@ -2,9 +2,9 @@
 
 U35 starts mocked test runs and U36 reads runs, but no page shows one. This change adds the run list, the run page with a step timeline (inputs, outputs, outcomes, polling to the end) and the editor panel "Test run", and proves milestone M4 in a browser.
 
-Observable result: an author saves and validates `demo-pay`, gives the panel "Test run" input and mocks, presses "Start test run" and follows the link `Open run <runId>` to a page that reads `State: completed`, with the steps `lookup`, `route`, `pay`, `done` and, for a chosen step, its details and payloads (`P-1` for `pay`). "Runs" lists the runs of the user's teams; a team reader sees a run but cannot start one; an unknown run is a `NOT_FOUND` alert (`e2e/test_m4_runs.py`).
+Observable result: an author saves and validates `demo-pay`, gives the panel "Test run" input and mocks, presses "Start test run" and follows the link `Open run <runId>` to a page that reads `State: completed`, with the steps `lookup`, `route`, `pay`, `done` and, for a chosen step, its details and payloads (`P-1` for `pay`). "Runs" lists the user's teams' runs; a team reader sees a run but cannot start one; an unknown run is a `NOT_FOUND` alert; a failed poll shows "Try again".
 
-Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: the run pages, timeline and Test run panel, proven by the closing journey.
+Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit: the run pages, timeline and Test run panel, proven by the closing journey.
 
 ## What Changes
 
@@ -36,18 +36,18 @@ function nextPollDelay(state: RunState, polls: number): number | null
 function followRun(client: Pick<ApiClient, "get">, runId: string, opts?: FollowOptions): Promise<RunSnapshot>
 ```
 
-Also given, in the second block of design.md § Interfaces: the views `RunView`, `StepView`, `PayloadView`, parsers, loaders, timeline, failure, panel, message and page functions, and the components `RunsPage`, `RunPage`, `TestRunPanel`.
+Also given, in the second block of design.md § Interfaces: `RunView`, `StepView`, `PayloadView`, their parsers and loaders, and the timeline, failure, panel, message and page functions and components. The feature files export `feature: FeatureSpec`.
 
 **Interfaces taken:**
 
-- From `add-runs-api`: `RunView`, `StepView`, `PayloadView` (restated in `types.ts`), `RUNS_UNAVAILABLE`, and the routes `GET /api/v1/runs`, `/runs/{runId}`, `/runs/{runId}/steps` and `/runs/{runId}/payloads/{sha256}`.
+- From `add-runs-api`: `RunView`, `StepView`, `PayloadView` (restated in `types.ts`), `RUNS_UNAVAILABLE`, and the routes `GET /api/v1/runs`, `/runs/{runId}`, `/steps` and `/payloads/{sha256}` under it.
 - From `add-envelope-store`: `RunState`, `StepState`, `RunMode`, `RunError`, `PayloadValue`.
-- From `add-mock-test-runs`: `POST /api/v1/flows/{flowId}/versions/{hash}/test` (body `{ input, mocks }`, 202 `{ run }`), `TEST_MOCK_MISSING` (`details.nodes`), `TEST_MOCK_INVALID` (`details.problems`, as `MockProblem`).
+- From `add-mock-test-runs`: `POST /api/v1/flows/{flowId}/versions/{hash}/test` (body `{ input, mocks }`, 202 `{ run }`), `TEST_MOCK_MISSING` (`details.nodes`), `TEST_MOCK_INVALID` (`details.problems`: `MockProblem`).
 - From `add-interpreter-core`: the step layout of its decisions 5 to 8 (one row per visit; kinds block, switch, wait, end; outcome skipped for a mocked wait). From `add-dbos-runtime`: `durablePart`. From `add-web-flow-editor`: `registerEditorPanel`, `EditorPanelContext`, `VersionRow`, `flowFeatureLiterals`, and in tests `postFlow`, `saveVersion`, `validateVersion`.
 - From merged code: the web kit, session and e2e names of `delivered-shapes.md`; `login`, `users`, `fresh_state`, `assert_accessible`.
 
-Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@e06fdb3, checked line by line). Fixtures and texts: `reference.md`.
+Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@e06fdb3, checked line by line). Data: `reference.md`.
 
 ## Out of scope
 
-Cancelling a run, list filters, a live stream, retry, a decisions page (the link opens U19's JSON route), the hooks view (M5), `llm.*` and `code` steps, and any change to U28's or U29's files.
+Cancelling a run, list filters, a live stream, a decisions page (the link opens U19's JSON route), the hooks view (M5), `llm.*` and `code` steps, and changes to U28's or U29's files.

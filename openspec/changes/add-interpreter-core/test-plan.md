@@ -10,5 +10,7 @@ Test-file fakes: a recording invoker (answers by tool, rejects an `Error` value,
 
 `DBOS_SETUP`: on `withTestDatabase()` and tenant A of `seedTwoTenants(db)`, `registerRunWorkflow()` runs twice; `bindInterpreter` gets deps over `createRunStore(db.appPool)` with `durable: null`, the fixtures above and `NO_EFFECT_GATE`; `launchDurable({ endpoint: db.appEndpoint, logger, stepObserver })` resolves; `startRun` is then called with that runtime as `durable`. `W_A(id)` is `workflowIdOf("tenant_a", id)`.
 
+`E_SECRET` `new Error("connect failed password=hunter2")`; `BLOCKED` `{ vendor_id: "v2", status: "blocked" }`.
+
 `R` (kit scenario): a local `NodeRuntime` that resolves `node.on` through `services.resolve` and answers `{ output: null, outcome: "a", next: "x", end: null }`.
 
