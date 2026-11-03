@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Criterion C-5d9b866b (durable-runtime › Workflows are registered before launch under a checked name › Registration rules): accept as satisfied? |
 | Q-008 | answered | none | verdict | Criterion C-e0745e1c (durable-runtime › A workflow id runs once, and status and cancel report it › Once per id, status, cancel): accept as satisfied? |
 | Q-009 | answered | none | verdict | Criterion C-706487fb (durable-runtime › Steps are observed, retried only on request, and need a workflow › Steps and durable calls): accept as satisfied? |
-| Q-010 | open | none | verdict | Criterion C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps): accept as satisfied? |
+| Q-010 | answered | none | verdict | Criterion C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps): accept as satisfied? |
 | Q-011 | open | none | verdict | Criterion C-c37d6095 (durable-runtime › main launches the runtime after the routes and closes it before the database › When it launches and the close order): accept as satisfied? |
 | Q-012 | open | none | verdict | Criterion C-073558f4 (durable-runtime › main launches the runtime after the routes and closes it before the database › A failed launch and the unchanged health): accept as satisfied? |
 | Q-013 | open | none | verdict | Criterion C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree): accept as satisfied? |
@@ -315,7 +315,8 @@ accept The tracing test launches with a recording stepObserver, runs t.steps, t.
 
 ## Q-010: Criterion C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -342,6 +343,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test seeds two tenants, has the owner create the ursitoare.rls_probe table with the two rows, forced row-level security, the tenant policy and the SELECT grant to the app role, launches the runtime on db.appEndpoint, enqueues t.read as r-a, r-b and r-none with tenantId tenant_a, tenant_b and null and userId u1, awaits each to SUCCESS and asserts the map entries are ids [tenant_a], [tenant_b] and [] with user ursitoare_app in every case. The workflow reads inside a runStep through withTenantTx for a tenant and through the plain app pool for null. The test passed by assertion.
 ---
 
 ## Q-011: Criterion C-c37d6095 (durable-runtime › main launches the runtime after the routes and closes it before the database › When it launches and the close order): accept as satisfied?
