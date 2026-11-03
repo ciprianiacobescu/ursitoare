@@ -21,3 +21,5 @@
 {"at":"2026-11-03T06:07:37Z","attempt":1,"cost_usd":2.398682,"runs":1,"type":"plan.charged","unit":"openspec:add-dbos-runtime"}
 {"at":"2026-11-03T06:07:37Z","detail":"task 2.3: max_task_attempts (3) reached in red; last failure: not discriminating: C-cb0c606e (no project source module is imported by those tests; none of its new tests fails by assertion against the unit base code)","reason":"unit_halted","type":"plan.stopped","unit":"openspec:add-dbos-runtime"}
 {"at":"2026-11-03T07:40:01Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"L4 0.4.54 (pinned 6b11cd5) holds a TS task whose behaviour an earlier task already built with a pre_satisfied question instead of refuting it; add-dbos-runtime 2.3 is retried. Resumed by Claude Code as the owner's delegate.","type":"plan.resumed"}
+{"at":"2026-11-03T07:41:26Z","attempt":1,"cost_usd":2.398682,"runs":2,"type":"plan.charged","unit":"openspec:add-dbos-runtime"}
+{"at":"2026-11-03T07:41:26Z","run":"r-20261103T0741Z-7374","type":"unit.dispatched","unit":"openspec:add-dbos-runtime"}
