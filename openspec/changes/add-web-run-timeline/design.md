@@ -17,7 +17,7 @@ This unit is the browser side of U33-U36 and the closing journey of M4: a runs l
 
 ## Roles and names
 
-Markup the journey locates by (more names are in the scenarios): h1 `Run <runId>` / `Runs`; the status is `p role="status" aria-label="Run state"` with the text `State: <state>`; "Timeline" and "Step details" are `section aria-labelledby` an `h2` (regions); "Steps" is `ol aria-label="Steps"` whose `li` each hold one `button type="button"` named exactly the node id, with `aria-expanded` and `aria-controls` (the id of "Step details"), then the item text; the details are a `dl`, then `h3` "Input" and `h3` "Output", each followed by a `pre`; a Decision row is a link `Decision <id> (opens in a new tab)`; the run link sits in the row-header cell of the table; a failure is `ErrorPanel` (role alert, "Error code: NOT_FOUND") followed by `button` "Try again"; the panel is the editor's region "Test run" and after a start holds the status `Started test run <runId>.` and the one link `Open run <runId>`.
+Markup the journey locates by (more names are in the scenarios): h1 `Run <runId>` / `Runs`; the status is `p role="status" aria-label="Run state"` with the text `State: <state>`; "Timeline" and "Step details" are `section aria-labelledby` an `h2` (regions); "Steps" is `ol aria-label="Steps"` whose `li` each hold one `button type="button"` named exactly the node id, with `aria-expanded` and `aria-controls` (the id of "Step details"), then the item text; the details are a `dl`, then two `section aria-labelledby` an `h3` (regions "Input" and "Output"), each holding its `pre`; a Decision row is a link `Decision <id> (opens in a new tab)`; the run link sits in the row-header cell of the table; a failure is `ErrorPanel` (role alert, "Error code: NOT_FOUND") followed by `button` "Try again"; the panel is the editor's region "Test run" and after a start holds the status `Started test run <runId>.` and the one link `Open run <runId>`.
 
 ## Interfaces
 
@@ -96,6 +96,8 @@ function TestRunPanel(props: { context: EditorPanelContext }): ReactNode
 ```
 
 ## Failure cases
+
+The page wiring of `runPageView` and `failureView` is exercised by the journey's 404 path (`/runs/ghost`); a failure of a later poll only through the pure functions, since a browser cannot force it without a fault seam.
 
 Pure: `failureView`, `runPageView`, `setPayloadLoad`, the kit's `tableView`; the components only render them. The signed-out redirect is the merged kit's (a 401 on `browserSession.api` goes to `/sign-in`, `delivered-shapes.md`); no test here.
 

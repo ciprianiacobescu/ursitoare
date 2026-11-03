@@ -54,7 +54,7 @@ nodes:
 
 The flow-id grammar is `^[a-z][a-z0-9]*(-[a-z0-9]+)*$` with at most 64 characters, the hash grammar `^sha256:[0-9a-f]{64}$` (`delivered-shapes.md`); `demo-pay` fits, `Bad_Id` and `sha256:xyz` do not.
 
-`loadSteps` makes `{ path: "/runs/run_1/steps", opts: { query: { limit: 200 }, signal } }`, then the same with `cursor: "c1"` in the query; `loadPayload` makes exactly `{ path: "/runs/run_1/payloads/" + D("4"), opts: { signal } }`.
+`loadSteps` makes `{ path: "/runs/run_1/steps", opts: { query: { limit: 200 }, signal } }`, then the same with `cursor: "c1"` in the query; `loadPayload` makes exactly `{ path: "/runs/run_1/payloads/" + D("3"), opts: { signal } }` and `{ path: "/runs/run_1/payloads/" + D("4"), opts: { signal } }`; the answers `{ sha256: D("3"), mediaType: "application/json", size: 69, data: PAY_INPUT }` and `{ sha256: D("4"), mediaType: "application/json", size: 38, data: { payment_id: "P-1", status: "created" } }` parse to the same values. `PAY_INPUT` is `{ vendor_id: "V-1", amount: 12.5, currency: "EUR", reference: "demo" }`, the resolved `with` of `pay` for `INPUT` and `MOCKS`.
 
 ## Pages
 
