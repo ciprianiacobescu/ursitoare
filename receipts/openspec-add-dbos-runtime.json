@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-03T19:17:37Z",
+  "integrated_revision": "12341308e6a9feb693424c7bc878c147f9c59f9d",
+  "merge_commit": "12341308e6a9feb693424c7bc878c147f9c59f9d",
+  "plan_digest": "d4a60ec43090d2fa",
+  "plan_id": "m4",
+  "postcheck": "pass",
+  "pr": 66,
+  "receipt_id": "m4/openspec:add-dbos-runtime/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "90c0e67e81e08598f4d4489c706be1ad0048f9ba",
+  "spec_digest": "7a3707f0037af66e",
+  "target": "main",
+  "unit_id": "openspec:add-dbos-runtime"
+}
