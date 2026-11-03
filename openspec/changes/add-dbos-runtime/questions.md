@@ -27,7 +27,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-014 | answered | none | verdict | Criterion C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure): accept as satisfied? |
 | Q-015 | answered | none | verdict | Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied? |
 | Q-016 | answered | none | verdict | Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied? |
-| Q-017 | open | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
+| Q-017 | answered | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
 <!-- l4:index:end -->
 
 ---
@@ -546,7 +546,7 @@ accept The tracing test boots the stack with the shipped parts, the database par
 
 ## Q-017: Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s)
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The hold records that the judge's reply for part 1 of 2 of the diff was discarded on timeout, so the judge never reviewed that part. The hold names no files, so I cannot identify which part of the diff went unreviewed or read one of its files to cite, which the rules require before accepting such a
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -563,3 +563,9 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+reject: Q-017's judge (nemotron) timed out, so the orchestrator reviewed the whole diff instead: three session-model reviewers (spec conformance, lifecycle and failure paths, security and tests) and kiro-cli gpt-5.6-terra. Three defects in src/durable were confirmed against the code and the DBOS 5.3.0 SDK.
+(1) runStep (steps.ts:124-134) turns a REPLAYED step error into DURABLE_UNAVAILABLE dbos_failed. On recovery, DBOS rethrows the recorded error rebuilt by serialize-error (dbos-executor.js:579-584, serialization.js:339). The rebuilt error keeps name, message, code and details, but it is a new object and not instanceof DurableError (checked by running serialize-error), so the catch maps it to dbos_failed. A recovered workflow then takes a different path than its first run. Tell the two apart by marking fn's own error inside the callback before DBOS records it, for example with an enumerable marker property that serialize-error keeps. Rethrow a marked error unchanged, and rebuild a revived DurableError (name "DurableError" with code and details) as a DurableError. A test can replay recorded steps in-process with DBOS.forkWorkflow from a later step; test files may import DBOS.
+(2) The JSON check of fn's result and the "after" observer sit inside the retry try (steps.ts:98-116). With retries above 0, a non-JSON result or a throwing observer calls fn again after it had succeeded, which design decision 6 forbids.
+(3) isDurableJson (json.ts:30-41) recurses before it checks depth. An input 20,000 arrays deep, which JSON.parse accepts and an HTTP body can carry, throws RangeError (verified) instead of DURABLE_INVALID bad_input. Check the depth before recursing.
+Follow-ups that are not this fix: pending is decremented one microtask late (launch.ts:78-90); checkId accepts null; the step observer is set after DBOS.launch; dbos_failed does not log the original; a cancellation inside handle calls is masked; the guard misses a template-literal import; the logger redaction needs a spec amendment.
+WHEN a recovered or forked workflow replays a step whose fn had thrown, or fn resolves a non-JSON value or the after observer throws with retries 2, or enqueue gets an input nested 20,000 levels deep, THEN the replayed runStep rejects with an error of the same name, message, code and details (a DurableError stays a DurableError) and never DURABLE_UNAVAILABLE dbos_failed, fn runs exactly once and the step fails with that error, and enqueue rejects DURABLE_INVALID bad_input with no RangeError.
