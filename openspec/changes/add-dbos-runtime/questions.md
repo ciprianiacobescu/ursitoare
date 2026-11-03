@@ -547,6 +547,7 @@ accept The tracing test boots the stack with the shipped parts, the database par
 ## Q-017: Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s)
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The hold records that the judge's reply for part 1 of 2 of the diff was discarded on timeout, so the judge never reviewed that part. The hold names no files, so I cannot identify which part of the diff went unreviewed or read one of its files to cite, which the rules require before accepting such a
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
