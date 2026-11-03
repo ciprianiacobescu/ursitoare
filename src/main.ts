@@ -28,6 +28,8 @@ import { ConfigError, loadConfigFromProcess, parseInternalPort } from "./config/
 import { systemClock, systemIds } from "./core/index.ts";
 import type { Database } from "./db/index.ts";
 import { openDatabase } from "./db/index.ts";
+import type { DurableRuntime } from "./durable/index.ts";
+import { launchDurable } from "./durable/index.ts";
 import { registerOidcRoutes } from "./identity/index.ts";
 import type { LogDestination, Logger } from "./observability/index.ts";
 import { createLogger, noopTracer } from "./observability/index.ts";
@@ -106,6 +108,7 @@ export interface MainDeps {
   signals: SignalSource;
   exit: (code: number) => void;
   openDatabase?: typeof openDatabase;
+  launchDurable?: typeof launchDurable;
   configureServer?: (server: FastifyInstance) => void | Promise<void>;
   inspectServers?: (s: {
     public: FastifyInstance;
@@ -248,9 +251,32 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     return null;
   }
 
+  let durable: DurableRuntime | null = null;
+  const appEndpoint = config.database.app;
+  if (
+    database !== null &&
+    appEndpoint !== null &&
+    (config.role === "all" || config.role === "worker")
+  ) {
+    try {
+      durable = await (deps.launchDurable ?? launchDurable)({
+        endpoint: appEndpoint,
+        logger,
+      });
+    } catch (error) {
+      await internal?.close().catch(() => undefined);
+      await server.close().catch(() => undefined);
+      await database.close().catch(() => undefined);
+      bootstrap.fatal(fatalFields(error), fatalMessage(error));
+      exit(1);
+      return null;
+    }
+  }
+
   const closeAll = async (): Promise<void> => {
     await server.close().catch(() => undefined);
     await internal?.close().catch(() => undefined);
+    await durable?.shutdown().catch(() => undefined);
     await database?.close().catch(() => undefined);
   };
 
