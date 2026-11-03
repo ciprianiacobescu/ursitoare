@@ -1,6 +1,6 @@
 import { canonicalJson } from "./canonical.ts";
 import { RunDataError } from "./errors.ts";
-import { assertTenantTx } from "./tenant.ts";
+import { assertTenantMatches } from "./tenant.ts";
 import {
   assertDate,
   assertEventId,
@@ -27,6 +27,8 @@ export async function appendEvent(
   ctx: TenantContext,
   event: EventWrite,
 ): Promise<void> {
+  await assertTenantMatches(tx, ctx);
+
   assertEventId(event.eventId);
   if (event.runId !== null) {
     assertRunId(event.runId);
@@ -42,8 +44,6 @@ export async function appendEvent(
   if (Buffer.byteLength(text, "utf8") > MAX_PAYLOAD_BYTES) {
     throw new RunDataError("RUN_DATA_TOO_LARGE", "payload too large");
   }
-
-  await assertTenantTx(tx, ctx);
 
   await tx.query(
     `INSERT INTO ursitoare.event (tenant_id, event_id, "time", run_id, correlation_id, type, data)

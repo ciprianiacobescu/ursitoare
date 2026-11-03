@@ -1,7 +1,7 @@
 import { RunDataError } from "./errors.ts";
 import type { TenantContext, TenantTx } from "./types.ts";
 
-export async function assertTenantTx(tx: TenantTx, ctx: TenantContext): Promise<void> {
+export async function assertTenantMatches(tx: TenantTx, ctx: TenantContext): Promise<void> {
   const { rows } = await tx.query<{ tenant_id: string | null }>(
     "SELECT current_setting('app.tenant_id', true) AS tenant_id",
   );

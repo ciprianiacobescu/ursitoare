@@ -1,6 +1,6 @@
 import { envelopeStore } from "./envelope-store.ts";
 import { RunDataError } from "./errors.ts";
-import { assertTenantTx, isSqlState } from "./tenant.ts";
+import { assertTenantMatches, isSqlState } from "./tenant.ts";
 import {
   assertDate,
   assertFlowId,
@@ -152,9 +152,10 @@ function unknownTenant(error: unknown): never {
 
 export const runRepository: RunRepository = {
   async create(tx, ctx, run: NewRun, at: Date) {
+    await assertTenantMatches(tx, ctx);
+
     assertNewRun(run);
     assertDate(at);
-    await assertTenantTx(tx, ctx);
 
     const existing = await selectRun(tx, ctx.tenantId, run.runId);
     if (existing !== null) {
@@ -200,14 +201,16 @@ export const runRepository: RunRepository = {
   },
 
   async get(tx, ctx, runId: string) {
+    await assertTenantMatches(tx, ctx);
+
     assertRunId(runId);
-    await assertTenantTx(tx, ctx);
     return selectRun(tx, ctx.tenantId, runId);
   },
 
   async list(tx, ctx, query: RunListQuery) {
+    await assertTenantMatches(tx, ctx);
+
     assertListQuery(query);
-    await assertTenantTx(tx, ctx);
 
     const after = query.after;
     const cursorAt = after === undefined ? null : parseCursor(after.createdAt);
@@ -250,9 +253,10 @@ export const runRepository: RunRepository = {
   },
 
   async transition(tx, ctx, runId: string, change) {
+    await assertTenantMatches(tx, ctx);
+
     assertRunId(runId);
     assertRunTransition(change);
-    await assertTenantTx(tx, ctx);
 
     const { rows } = await tx.query<RunRow>(SELECT_RUN_FOR_UPDATE, [ctx.tenantId, runId]);
     const current = rows[0];

@@ -1,6 +1,8 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
+import { withTenantTx } from "../../tenancy/index.ts";
 import type { TenantContext, TenantPool } from "../../tenancy/index.ts";
+import { envelopeStore } from "./envelope-store.ts";
+import { runRepository } from "./run-repository.ts";
+import { stepRepository } from "./step-repository.ts";
 import type {
   NewRun,
   RunRecord,
@@ -23,6 +25,25 @@ export interface RunStore {
   getPayload(ctx: TenantContext, sha256: string): Promise<StoredPayload | null>;
 }
 
-export function createRunStore(_pool: TenantPool): RunStore {
-  throw new Error("not implemented");
+export function createRunStore(pool: TenantPool): RunStore {
+  return {
+    createRun(ctx, run, at) {
+      return withTenantTx(pool, ctx, (tx) => runRepository.create(tx, ctx, run, at));
+    },
+    getRun(ctx, runId) {
+      return withTenantTx(pool, ctx, (tx) => runRepository.get(tx, ctx, runId));
+    },
+    transition(ctx, runId, change) {
+      return withTenantTx(pool, ctx, (tx) => runRepository.transition(tx, ctx, runId, change));
+    },
+    recordStep(ctx, step) {
+      return withTenantTx(pool, ctx, (tx) => stepRepository.upsert(tx, ctx, step));
+    },
+    listSteps(ctx, runId, q) {
+      return withTenantTx(pool, ctx, (tx) => stepRepository.list(tx, ctx, runId, q));
+    },
+    getPayload(ctx, sha256) {
+      return withTenantTx(pool, ctx, (tx) => envelopeStore.get(tx, ctx, sha256));
+    },
+  };
 }

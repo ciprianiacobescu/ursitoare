@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 
 import { canonicalJson } from "./canonical.ts";
 import { RunDataError } from "./errors.ts";
-import { assertTenantTx, isSqlState } from "./tenant.ts";
+import { assertTenantMatches, isSqlState } from "./tenant.ts";
 import { assertRunId } from "./validate.ts";
 import type { EnvelopeStore, PayloadValue, StoredPayload } from "./types.ts";
 
@@ -16,6 +16,8 @@ function invalid(message: string): never {
 
 export const envelopeStore: EnvelopeStore = {
   async put(tx, ctx, value: PayloadValue) {
+    await assertTenantMatches(tx, ctx);
+
     const text = canonicalJson(value);
     const size = Buffer.byteLength(text, "utf8");
     if (size > MAX_PAYLOAD_BYTES) {
@@ -23,7 +25,6 @@ export const envelopeStore: EnvelopeStore = {
     }
 
     const sha256 = payloadDigestOf(text);
-    await assertTenantTx(tx, ctx);
 
     try {
       await tx.query(
@@ -41,11 +42,11 @@ export const envelopeStore: EnvelopeStore = {
   },
 
   async get(tx, ctx, sha256: string): Promise<StoredPayload | null> {
+    await assertTenantMatches(tx, ctx);
+
     if (typeof sha256 !== "string" || !SHA256_PATTERN.test(sha256)) {
       invalid("invalid payload digest");
     }
-
-    await assertTenantTx(tx, ctx);
 
     const { rows } = await tx.query<{
       sha256: string;
@@ -73,12 +74,12 @@ export const envelopeStore: EnvelopeStore = {
   },
 
   async referencedBy(tx, ctx, runId: string, sha256: string): Promise<boolean> {
+    await assertTenantMatches(tx, ctx);
+
     assertRunId(runId);
     if (typeof sha256 !== "string" || !SHA256_PATTERN.test(sha256)) {
       invalid("invalid payload digest");
     }
-
-    await assertTenantTx(tx, ctx);
 
     const { rows } = await tx.query<{ referenced: boolean }>(
       `SELECT EXISTS (

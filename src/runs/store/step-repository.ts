@@ -1,5 +1,5 @@
 import { envelopeStore } from "./envelope-store.ts";
-import { assertTenantTx, isSqlState } from "./tenant.ts";
+import { assertTenantMatches, isSqlState } from "./tenant.ts";
 import { assertIntInRange, assertRunId, assertStepWrite, formatTimestamp, invalid } from "./validate.ts";
 import type { RunError, StepRecord, StepRepository, StepState, StepWrite } from "./types.ts";
 
@@ -61,8 +61,9 @@ function assertListQuery(query: { limit: number; afterSeq?: number }): void {
 
 export const stepRepository: StepRepository = {
   async upsert(tx, ctx, step: StepWrite) {
+    await assertTenantMatches(tx, ctx);
+
     assertStepWrite(step);
-    await assertTenantTx(tx, ctx);
 
     const input = step.input === null ? null : await envelopeStore.put(tx, ctx, step.input);
     const output = step.output === null ? null : await envelopeStore.put(tx, ctx, step.output);
@@ -127,9 +128,10 @@ export const stepRepository: StepRepository = {
   },
 
   async list(tx, ctx, runId: string, query: { limit: number; afterSeq?: number }) {
+    await assertTenantMatches(tx, ctx);
+
     assertRunId(runId);
     assertListQuery(query);
-    await assertTenantTx(tx, ctx);
 
     const afterSeq = query.afterSeq ?? null;
     const { rows } = await tx.query<StepRow>(
