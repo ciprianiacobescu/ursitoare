@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 5.2 | technical | test/support/e2e-stack/durable-part.test.ts:379 keeps a template pool open before databasePart.seed |
 | Q-002 | accepted | 5.2 | technical | test/support/e2e-stack/durable-part.test.ts:395 queries a nonexistent dbos.workflow_status column |
-| Q-003 | open | none | verdict | Criterion C-25c32649 (durable-runtime › The owner prepares the DBOS schema and the engine never does › Prepare, repeat, refuse): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-25c32649 (durable-runtime › The owner prepares the DBOS schema and the engine never does › Prepare, repeat, refuse): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-da1b0c83 (durable-runtime › The runtime connects with the endpoint it is given and never migrates › A prepared database): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-cb0c606e (durable-runtime › The runs queue is registered after every launch › Launch, lose the rows, launch again): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-57d8e403 (durable-runtime › A launch that cannot succeed fails with a stable code and leaves nothing behind › Refusals): accept as satisfied? |
@@ -84,7 +84,8 @@ Edit `test/support/e2e-stack/durable-part.test.ts`: replace `WHERE workflow_name
 
 ## Q-003: Criterion C-25c32649 (durable-runtime › The owner prepares the DBOS schema and the engine never does › Prepare, repeat, refuse): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -111,6 +112,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The two tracing tests check every clause of the scenario: after the first prepareDurable call the dbos schema exists owned by ursitoare_owner, ursitoare_app has USAGE but not CREATE and its CREATE TABLE dbos.x rejects 42501, the second call resolves with the dbos_migrations ledger unchanged, the four bad URLs of test-plan.md reject DURABLE_INVALID bad_url, other.appUrl of a second unmigrated database rejects DURABLE_UNAVAILABLE 42501, an owner URL on a free port rejects migrate_failed, every refusal's message is checked not to contain postgres://, and the default clone has dbos.dbos_migrations. The implementation parses the URL before any connection and maps a DBOS.migrate failure to the SQLSTATE or migrate_failed with a fixed message. Both tests passed.
 ---
 
 ## Q-004: Criterion C-da1b0c83 (durable-runtime › The runtime connects with the endpoint it is given and never migrates › A prepared database): accept as satisfied?
