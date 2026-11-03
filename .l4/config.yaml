@@ -197,9 +197,12 @@ roles:
   # (it shares the Claude subscription with the implementer and the delegate). The Go judges (mimo-go, qwen) are out
   # while the Go balance is empty; codex-judge never had a key.
   judges:
+  # 2026-11-03: kiro first for unit verification. On add-dbos-runtime (a 3.6k-line diff) nemotron timed out 3 times
+  # in 47 min and returned no usable verdict: a timeout splits the criteria across the same judge and never falls
+  # through to the next one, so the unit sat on a verdict hold. Kiro answered 16 plan-review rounds of 30-66k chars.
+  - kiro-judge
   - nemotron-judge
   - beam-judge
-  - kiro-judge
   - mimo-judge
   - glm-judge
   - claude-judge
