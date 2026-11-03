@@ -577,6 +577,7 @@ WHEN a recovered or forked workflow replays a step whose fn had thrown, or fn re
 ## Q-018: Finding F-233c28d7: dbosLogger rewrites entries instead of forwarding String(entry)
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The finding is accurate against the code: src/durable/launch.ts:130 rewrites any entry matching "error: ..." to "error: [redacted]" rather than forwarding String(entry). But the same scenario also requires that after pg_terminate_backend no log line holds "terminating connection", and design decisio
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
