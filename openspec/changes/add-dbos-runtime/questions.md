@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Criterion C-073558f4 (durable-runtime › main launches the runtime after the routes and closes it before the database › A failed launch and the unchanged health): accept as satisfied? |
 | Q-013 | answered | none | verdict | Criterion C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree): accept as satisfied? |
 | Q-014 | answered | none | verdict | Criterion C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure): accept as satisfied? |
-| Q-015 | open | none | verdict | Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied? |
+| Q-015 | answered | none | verdict | Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied? |
 | Q-016 | open | none | verdict | Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied? |
 | Q-017 | open | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
 <!-- l4:index:end -->
@@ -480,7 +480,8 @@ accept The tracing tests cover the whole scenario. The first builds fake parts p
 
 ## Q-015: Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -507,6 +508,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The nine tracing tests cover every clause. With a fake clock advanced by sleep and workflowId ready-1, the success case asserts one enqueue of stack.ready with input ping, 3 status calls and 2 sleeps of 100; the always-ENQUEUED case asserts STACK_DURABLE_NOT_READY with details.state ENQUEUED after 51 status calls and 50 sleeps of 100 with timeoutMs 5000 and pollMs 100, and after 251 status calls and 250 sleeps of 20 with the defaults; ERROR rejects at once with state ERROR after one status and no sleep; an enqueue rejection propagates as err itself with no status; err2 propagates after 2 status calls and one sleep, err3 and err4 as themselves; the five bad options of test-plan.md reject bad_option with no enqueue; and on a started database part with no engine, durablePart.start prepares dbos.dbos_migrations in the template without a durable session, beforeReset, seed and close resolve, and ursitoare_e2e holds no stack.ready row. The implementation validates timeoutMs 1..60000 and pollMs 1..timeoutMs with defaults 5000 and min(20, timeoutMs) before enqueueing, polls status before each deadline check, rejects on the failed states, and lets dependency errors propagate; the part suspends in beforeReset, resumes then checks in seed, and does nothing on a null runtime. All tests passed by assertion.
 ---
 
 ## Q-016: Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied?
