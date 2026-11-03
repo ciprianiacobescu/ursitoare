@@ -7,7 +7,7 @@ Spec: `specs/test-crash-harness/spec.md`; decisions: `design.md`; merged shapes:
 
 ## 2. Observer and effects
 
-- [ ] 2.1 Write `test/support/crash/observer.test.ts` first (scenario "Names, one call each, error passthrough"), then implement `faultObserver` in `test/support/crash/observer.ts`, implementing requirement "The step observer names fault points as phase and step"
+- [x] 2.1 Write `test/support/crash/observer.test.ts` first (scenario "Names, one call each, error passthrough"), then implement `faultObserver` in `test/support/crash/observer.ts`, implementing requirement "The step observer names fault points as phase and step"
 - [ ] 2.2 Write `test/support/crash/effects.test.ts` first (scenario "A fixed file, the empty file, the bad inputs"), then implement `appendEffect` and `countEffects` in `test/support/crash/effects.ts`, implementing requirement "Effects are counted by idempotency key"
 
 ## 3. The cluster

@@ -3,6 +3,8 @@
 import type { FaultPoints } from "../../../src/config/faults.ts";
 import type { StepObserver } from "../../../src/durable/index.ts";
 
-export function faultObserver(_points: FaultPoints): StepObserver {
-  throw new Error("not implemented");
+export function faultObserver(points: FaultPoints): StepObserver {
+  return (phase, step) => {
+    points.hit(`${phase}:${step}`);
+  };
 }
