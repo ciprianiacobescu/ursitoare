@@ -15,6 +15,6 @@ export function failureView(_error: unknown): FailureView {
 export function runPageView(
   _snapshot: RunSnapshot | null,
   _error: unknown,
-): { loading: boolean; snapshot: RunSnapshot | null; failure: FailureView | null } {
+): { loading: boolean; polling: boolean; snapshot: RunSnapshot | null; failure: FailureView | null } {
   throw new Error("not implemented");
 }
