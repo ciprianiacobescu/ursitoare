@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-da1b0c83 (durable-runtime › The runtime connects with the endpoint it is given and never migrates › A prepared database): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-cb0c606e (durable-runtime › The runs queue is registered after every launch › Launch, lose the rows, launch again): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-57d8e403 (durable-runtime › A launch that cannot succeed fails with a stable code and leaves nothing behind › Refusals): accept as satisfied? |
-| Q-007 | open | none | verdict | Criterion C-5d9b866b (durable-runtime › Workflows are registered before launch under a checked name › Registration rules): accept as satisfied? |
+| Q-007 | answered | none | verdict | Criterion C-5d9b866b (durable-runtime › Workflows are registered before launch under a checked name › Registration rules): accept as satisfied? |
 | Q-008 | open | none | verdict | Criterion C-e0745e1c (durable-runtime › A workflow id runs once, and status and cancel report it › Once per id, status, cancel): accept as satisfied? |
 | Q-009 | open | none | verdict | Criterion C-706487fb (durable-runtime › Steps are observed, retried only on request, and need a workflow › Steps and durable calls): accept as satisfied? |
 | Q-010 | open | none | verdict | Criterion C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps): accept as satisfied? |
@@ -216,7 +216,8 @@ accept The tracing test runs the twelve launchDurable calls of the refusal seque
 
 ## Q-007: Criterion C-5d9b866b (durable-runtime › Workflows are registered before launch under a checked name › Registration rules): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -243,6 +244,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test asserts every clause: registerWorkflow("t.count", f) twice returns undefined, the same name with another function throws DURABLE_INVALID name_taken, "Bad Name" and a 65-character name throw bad_name, registering t.late2 while launchDurable is pending and t.late after it resolved both throw DURABLE_ALREADY_LAUNCHED running, and enqueue of the unregistered t.unknown rejects DURABLE_WORKFLOW_UNKNOWN not_registered leaving no w-u row in dbos.workflow_status. The registry checks launchBusy, which is true while a launch is queued or a runtime runs, validates the name against the specified pattern, ignores a repeat of the same function and refuses another function under a known name; enqueue checks the registry before any DBOS call. The test passed.
 ---
 
 ## Q-008: Criterion C-e0745e1c (durable-runtime › A workflow id runs once, and status and cancel report it › Once per id, status, cancel): accept as satisfied?
