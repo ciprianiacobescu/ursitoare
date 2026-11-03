@@ -376,6 +376,9 @@ test("C-769418cc the durable part prepares the template and does nothing without
     );
     assert.equal(sessions.rows[0]?.count, 0, "preparing the template leaves no durable session");
 
+    await templatePool.end();
+    templatePool = undefined;
+
     await must(() =>
       databasePart.seed?.(contextFor("database", databaseDir, handles)) ?? Promise.resolve(),
     );
@@ -389,7 +392,7 @@ test("C-769418cc the durable part prepares the template and does nothing without
 
     e2ePool = createPool(api.ownerUrl, { max: 1, applicationName: "e2e-durable-part" });
     const ready = await e2ePool.query<{ count: number }>(
-      "SELECT count(*)::int AS count FROM dbos.workflow_status WHERE workflow_name = 'stack.ready'",
+      "SELECT count(*)::int AS count FROM dbos.workflow_status WHERE name = 'stack.ready'",
     );
     assert.equal(ready.rows[0]?.count, 0, "the e2e database holds no stack.ready row");
   } finally {
