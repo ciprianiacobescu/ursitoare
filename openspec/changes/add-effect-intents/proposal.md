@@ -64,7 +64,7 @@ export const start: ScenarioStart;
 
 **Interfaces taken:**
 
-- From `add-envelope-store`: `TenantContext`, `TenantTx`, `TenantPool`, `PayloadValue`, `RunMode`, `createRunStore`, `envelopeStore`, `payloadDigest`, `RunDataError`.
+- From `add-envelope-store` (run and lineage ids use its id grammar, design decision 14): `TenantContext`, `TenantTx`, `TenantPool`, `PayloadValue`, `RunMode`, `createRunStore`, `envelopeStore`, `payloadDigest`, `RunDataError`.
 - From `add-interpreter-core`: `EffectGate`, `EffectDecision`, `ToolCall`, `ToolResult`, `ToolInvoker`, `StepContext`, `LoadedVersion`, `InterpreterDeps`, `startRun`, `executeRun`, `registerRunWorkflow`, `bindInterpreter`, `memoryWorkflowOps`, `waitForRun`.
 - From `add-crash-harness`: `withDedicatedCluster`, `spawnEngine`, `EngineProcess`, `CrashCluster`, `ScenarioStart`, `ScenarioContext`, `faultMarkerDir`, `appendEffect`, `countEffects`. From `add-dbos-runtime`: `launchDurable`, `DurableRuntime`.
 - From `add-test-catalogue`: `loadTestCatalogue`, `parseCatalogueFlow`. From `add-flow-format-model`: `Catalogue`, `canonicalizeFlow`. From `add-flow-validator`: `validateFlow`.

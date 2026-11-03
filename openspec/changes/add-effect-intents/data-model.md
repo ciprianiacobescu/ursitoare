@@ -24,9 +24,20 @@ ALTER TABLE ursitoare.effect_intent FORCE ROW LEVEL SECURITY;
 CREATE POLICY effect_intent_isolation ON ursitoare.effect_intent USING (tenant_id = current_setting('app.tenant_id', true)) WITH CHECK (tenant_id = current_setting('app.tenant_id', true));
 GRANT SELECT, INSERT ON TABLE ursitoare.effect_intent TO ursitoare_app;
 GRANT UPDATE (state, result_ref, completed_at) ON TABLE ursitoare.effect_intent TO ursitoare_app;
+CREATE FUNCTION ursitoare.effect_intent_check_transition() RETURNS trigger
+LANGUAGE plpgsql SET search_path = pg_catalog, pg_temp AS $fn$
+BEGIN
+  IF (OLD.state, NEW.state) NOT IN (('intent', 'done'), ('intent', 'unknown'), ('unknown', 'done')) THEN
+    RAISE EXCEPTION 'effect intent transition is not allowed' USING ERRCODE = 'U3401';
+  END IF;
+  RETURN NEW;
+END;
+$fn$;
+CREATE TRIGGER effect_intent_transition BEFORE UPDATE ON ursitoare.effect_intent
+  FOR EACH ROW EXECUTE FUNCTION ursitoare.effect_intent_check_transition();
 ```
 
-`result_ref` is plain text, as U31's `*_ref` columns (a payload may expire). The table is not partitioned. `state` is `intent` (before the call), `done` (result under `result_ref`) or `unknown` (an unsafe tool may or may not have run).
+`result_ref` is plain text, as U31's `*_ref` columns (a payload may expire). The table is not partitioned. `state` is `intent` (before the call), `done` (result under `result_ref`) or `unknown` (an unsafe tool may or may not have run). The trigger (the precedent is `src/db/migrations/0080_audit.sql:45-50`) allows only `intent` to `done`, `intent` to `unknown` and `unknown` to `done`; any other update, including one that rewrites a `done` row, raises `U3401`.
 
 ## `test/support/crash/flows/pay-once.yaml`
 
