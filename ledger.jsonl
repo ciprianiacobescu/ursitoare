@@ -39,3 +39,4 @@
 {"at":"2026-11-03T19:03:42Z","run":"r-20261103T1902Z-8312","type":"unit.dispatched","unit":"openspec:add-dbos-runtime"}
 {"at":"2026-11-03T19:15:13Z","head":"90c0e67e81e08598f4d4489c706be1ad0048f9ba","pr":66,"target_before":"0254914c196d02a111706c4d1adc71f9831bc2ea","type":"unit.merge_requested","unit":"openspec:add-dbos-runtime"}
 {"at":"2026-11-03T19:15:24Z","ci":"not_run","head":"90c0e67e81e08598f4d4489c706be1ad0048f9ba","merge_commit":"12341308e6a9feb693424c7bc878c147f9c59f9d","method":"squash","pr":66,"raced":false,"type":"unit.merged","unit":"openspec:add-dbos-runtime"}
+{"at":"2026-11-03T19:15:42Z","branch":"l4/openspec/add-dbos-runtime","head":"90c0e67e81e08598f4d4489c706be1ad0048f9ba","type":"unit.branch_deleted","unit":"openspec:add-dbos-runtime"}
