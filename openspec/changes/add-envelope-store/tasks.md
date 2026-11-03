@@ -12,7 +12,7 @@ Spec: `specs/run-data/spec.md`; signatures, decisions, tables: `design.md`; merg
 ## 3. Runs
 
 - [x] 3.1 Write `src/runs/store/run-repository.test.ts` first (scenarios "Create is idempotent and validated" and "A transition applies only from the listed states"; two connections of `db.appPool` for each concurrent case), then implement `runRepository.create`, `runRepository.get` and `runRepository.transition` in `src/runs/store/run-repository.ts` and the time-string and id checks in `src/runs/store/validate.ts`, implementing requirement "A run is created once and moves only along the states a transition allows"
-- [ ] 3.2 Write `src/runs/store/run-list.test.ts` first (scenario "List pages newest first and applies the filter"; runs made with `create`, then moved with `transition`), then implement `runRepository.list` and `RUN_LIST_FILTER_FIRST` in `src/runs/store/run-repository.ts`, implementing requirement "A run is created once and moves only along the states a transition allows"
+- [x] 3.2 Write `src/runs/store/run-list.test.ts` first (scenario "List pages newest first and applies the filter"; runs made with `create`, then moved with `transition`), then implement `runRepository.list` and `RUN_LIST_FILTER_FIRST` in `src/runs/store/run-repository.ts`, implementing requirement "A run is created once and moves only along the states a transition allows"
 
 ## 4. Steps and events
 

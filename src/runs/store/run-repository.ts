@@ -3,15 +3,66 @@ import { RunDataError } from "./errors.ts";
 import { assertTenantTx, isSqlState } from "./tenant.ts";
 import {
   assertDate,
+  assertFlowId,
   assertNewRun,
   assertRunId,
+  assertRunState,
   assertRunTransition,
   formatRunDay,
   formatTimestamp,
+  invalid,
 } from "./validate.ts";
-import type { NewRun, RunError, RunMode, RunRecord, RunRepository, RunState } from "./types.ts";
+import type {
+  NewRun,
+  RunCursor,
+  RunError,
+  RunListQuery,
+  RunMode,
+  RunRecord,
+  RunRepository,
+  RunState,
+} from "./types.ts";
 
 export const RUN_LIST_FILTER_FIRST = 7;
+
+const MAX_LIST_LIMIT = 1000;
+
+function parseCursor(value: unknown): Date {
+  if (typeof value !== "string") {
+    invalid();
+  }
+  const date = new Date(value);
+  assertDate(date);
+  if (formatTimestamp(date) !== value) {
+    invalid();
+  }
+  return date;
+}
+
+function assertListQuery(query: RunListQuery): void {
+  if (!Number.isInteger(query.limit) || query.limit < 1 || query.limit > MAX_LIST_LIMIT) {
+    invalid();
+  }
+  if (query.after !== undefined) {
+    parseCursor(query.after.createdAt);
+    assertRunId(query.after.runId);
+  }
+  if (query.flowId !== undefined) {
+    assertFlowId(query.flowId);
+  }
+  if (query.state !== undefined) {
+    assertRunState(query.state);
+  }
+  const filter = query.filter;
+  if (
+    typeof filter !== "object" ||
+    filter === null ||
+    typeof filter.sql !== "string" ||
+    !Array.isArray(filter.values)
+  ) {
+    invalid();
+  }
+}
 
 interface RunRow {
   run_id: string;
@@ -154,8 +205,48 @@ export const runRepository: RunRepository = {
     return selectRun(tx, ctx.tenantId, runId);
   },
 
-  async list() {
-    throw new Error("not implemented");
+  async list(tx, ctx, query: RunListQuery) {
+    assertListQuery(query);
+    await assertTenantTx(tx, ctx);
+
+    const after = query.after;
+    const cursorAt = after === undefined ? null : parseCursor(after.createdAt);
+    const cursorRunId = after === undefined ? null : after.runId;
+    const flowId = query.flowId ?? null;
+    const state = query.state ?? null;
+
+    const conditions = [
+      "r.tenant_id = $1",
+      "($3::timestamptz IS NULL OR r.created_at < $3::timestamptz OR (r.created_at = $3::timestamptz AND r.run_id COLLATE \"C\" < $4::text COLLATE \"C\"))",
+      "($5::text IS NULL OR r.flow_id = $5)",
+      "($6::text IS NULL OR r.state = $6)",
+      `(${query.filter.sql})`,
+    ];
+
+    const { rows } = await tx.query<RunRow>(
+      `SELECT ${RUN_COLUMNS} FROM ursitoare.run r
+        WHERE ${conditions.join(" AND ")}
+        ORDER BY r.created_at DESC, r.run_id COLLATE "C" DESC
+        LIMIT $2`,
+      [
+        ctx.tenantId,
+        query.limit + 1,
+        cursorAt,
+        cursorRunId,
+        flowId,
+        state,
+        ...query.filter.values,
+      ],
+    );
+
+    const pageRows = rows.slice(0, query.limit);
+    const last = pageRows[pageRows.length - 1];
+    const next: RunCursor | null =
+      rows.length > query.limit && last !== undefined
+        ? { createdAt: formatTimestamp(last.created_at), runId: last.run_id }
+        : null;
+
+    return { runs: pageRows.map(toRunRecord), next };
   },
 
   async transition(tx, ctx, runId: string, change) {
