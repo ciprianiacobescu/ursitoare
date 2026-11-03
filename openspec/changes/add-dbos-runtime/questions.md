@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Criterion C-c37d6095 (durable-runtime › main launches the runtime after the routes and closes it before the database › When it launches and the close order): accept as satisfied? |
 | Q-012 | answered | none | verdict | Criterion C-073558f4 (durable-runtime › main launches the runtime after the routes and closes it before the database › A failed launch and the unchanged health): accept as satisfied? |
 | Q-013 | answered | none | verdict | Criterion C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree): accept as satisfied? |
-| Q-014 | open | none | verdict | Criterion C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure): accept as satisfied? |
+| Q-014 | answered | none | verdict | Criterion C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure): accept as satisfied? |
 | Q-015 | open | none | verdict | Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied? |
 | Q-016 | open | none | verdict | Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied? |
 | Q-017 | open | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
@@ -447,7 +447,8 @@ accept The two tracing tests check every clause of the scenario. The first runs 
 
 ## Q-014: Criterion C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -474,6 +475,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing tests cover the whole scenario. The first builds fake parts p1, p2, p3 that record hook:<name> and seed:<name>, with p2 having no hook, and asserts that seedAll logs seed:p1, seed:p2, seed:p3 with no hook, that one reset adds hook:p3, hook:p1, seed:p1, seed:p2, seed:p3, that a reset whose p3 hook rejects fails with STACK_RESET_FAILED and details.part p3 after adding only hook:p3, and that the next reset passes with the full order again. The second asserts that a registry refuses a part whose beforeReset is the string x with STACK_PART_INVALID and leaves it unregistered. The reset runner iterates parts in reverse for the hooks before the seeds and wraps a hook failure as STACK_RESET_FAILED naming the part, and validatePart rejects a defined non-function beforeReset. Both tests passed by assertion.
 ---
 
 ## Q-015: Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied?
