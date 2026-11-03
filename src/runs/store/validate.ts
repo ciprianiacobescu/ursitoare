@@ -22,6 +22,7 @@ const OWNER_TEAM_PATTERN = /^[a-z][a-z0-9_-]{0,63}$/;
 const NODE_ID_PATTERN = /^[a-z][a-z0-9_]{0,127}$/;
 const ERROR_CODE_PATTERN = /^[A-Za-z][A-Za-z0-9_.-]{0,63}$/;
 const KIND_PATTERN = /^[a-z][a-z0-9_.]{0,63}$/;
+const EVENT_ID_PATTERN = /^[A-Za-z0-9_.:-]{1,128}$/;
 const INT_MAX = 2_147_483_647;
 
 export function invalid(): never {
@@ -194,6 +195,14 @@ export function assertStepState(value: unknown): asserts value is StepState {
 }
 
 export function assertKind(value: unknown): asserts value is string {
+  assertMatching(value, KIND_PATTERN);
+}
+
+export function assertEventId(value: unknown): asserts value is string {
+  assertMatching(value, EVENT_ID_PATTERN);
+}
+
+export function assertEventType(value: unknown): asserts value is string {
   assertMatching(value, KIND_PATTERN);
 }
 
