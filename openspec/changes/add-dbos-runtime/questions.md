@@ -28,6 +28,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-015 | answered | none | verdict | Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied? |
 | Q-016 | answered | none | verdict | Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied? |
 | Q-017 | answered | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
+| Q-018 | open | none | verdict | Finding F-233c28d7: dbosLogger rewrites entries instead of forwarding String(entry) |
+| Q-019 | open | none | verdict | Finding F-1216922b: An after-observer failure is retried instead of failing the step |
 <!-- l4:index:end -->
 
 ---
@@ -569,3 +571,54 @@ reject: Q-017's judge (nemotron) timed out, so the orchestrator reviewed the who
 (3) isDurableJson (json.ts:30-41) recurses before it checks depth. An input 20,000 arrays deep, which JSON.parse accepts and an HTTP body can carry, throws RangeError (verified) instead of DURABLE_INVALID bad_input. Check the depth before recursing.
 Follow-ups that are not this fix: pending is decremented one microtask late (launch.ts:78-90); checkId accepts null; the step observer is set after DBOS.launch; dbos_failed does not log the original; a cancellation inside handle calls is masked; the guard misses a template-literal import; the logger redaction needs a spec amendment.
 WHEN a recovered or forked workflow replays a step whose fn had thrown, or fn resolves a non-JSON value or the after observer throws with retries 2, or enqueue gets an input nested 20,000 levels deep, THEN the replayed runStep rejects with an error of the same name, message, code and details (a DurableError stays a DurableError) and never DURABLE_UNAVAILABLE dbos_failed, fn runs exactly once and the step fails with that error, and enqueue rejects DURABLE_INVALID bad_input with no RangeError.
+
+---
+
+## Q-018: Finding F-233c28d7: dbosLogger rewrites entries instead of forwarding String(entry)
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+The judge raised a major finding in round 2, and no deterministic check confirms it (criterion C-da1b0c83).
+
+Title: dbosLogger rewrites entries instead of forwarding String(entry)
+Detail: The adapter replaces lowercase pg-style "error: ..." messages with "error: [redacted]", although the criterion requires every adapter level to call the supplied logger with String(entry). The shown test misses this because String(new Error("boom")) begins with uppercase "Error:".
+Suggested fix: Forward String(entry) unchanged in dbosLogger for every adapter method.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-da1b0c83 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-019: Finding F-1216922b: An after-observer failure is retried instead of failing the step
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+The judge raised a major finding in round 2, and no deterministic check confirms it (criterion C-706487fb).
+
+Title: An after-observer failure is retried instead of failing the step
+Detail: src/durable/steps.ts places the after observer inside the retry catch. A transient after-observer error with retries enabled reruns fn and may make the workflow succeed, contrary to the specified rule that an observer error fails the step.
+Suggested fix: Keep observer calls outside the retryable fn-attempt catch so an observer exception is rethrown immediately.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-706487fb as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
