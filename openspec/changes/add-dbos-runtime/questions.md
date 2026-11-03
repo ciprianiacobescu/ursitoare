@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 5.2 | technical | test/support/e2e-stack/durable-part.test.ts:379 keeps a template pool open before databasePart.seed |
-| Q-002 | open | 5.2 | technical | test/support/e2e-stack/durable-part.test.ts:395 queries a nonexistent dbos.workflow_status column |
+| Q-002 | accepted | 5.2 | technical | test/support/e2e-stack/durable-part.test.ts:395 queries a nonexistent dbos.workflow_status column |
 <!-- l4:index:end -->
 
 ---
@@ -44,7 +44,8 @@ Edit `test/support/e2e-stack/durable-part.test.ts`: after the `sessions.rows[0]?
 
 ## Q-002: test/support/e2e-stack/durable-part.test.ts:395 queries a nonexistent dbos.workflow_status column
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.2
 - **Kind:** technical
 - **Asked:** 2026-11-03T08:58Z by deepseek-free, run r-20261103T0849Z-634b, task 5.2
