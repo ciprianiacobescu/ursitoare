@@ -1,4 +1,4 @@
-# Verification: openspec:add-dbos-runtime: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-dbos-runtime: FAIL (round 3)
 
 traceability: 14/14 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 14/14 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.4 | base merged: main@0254914c19 as c1be52ca4f (1 commit) |
-| 1 | integrity | ok | 130.4 | 11 sub-checks (+1 unfrozen by human answers); scope: 37 changed file(s) |
-| 2 | build | ok | 31.7 |  |
-| 3 | tests | ok | 217.4 |  |
-| 4 | traceability | ok | 0.2 | 14/14 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/durable/errors.ts, src/durable/json.ts, src/durable/launch.ts, src/durable/prepare.ts, src/durable/registry.ts and 8 more |
-| 8 | s1 judge | ok | 1.2 | 13/14 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 296.2 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -204,6 +204,8 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - Q-014 accept C-2c0ae21b by the delegate (claude-fable-5-1 via claude-code): The tracing tests cover the whole scenario. The first builds fake parts p1, p2, p3 that record hook:<name> and seed:<name>, with p2 having no hook, and asserts that seedAll logs seed:p1, seed:p2, seed:p3 with no hook, that one reset adds hook:p3, hook:p1, seed:p1, seed:p2, seed:p3, that a reset whos...
 - Q-015 accept C-769418cc by the delegate (claude-fable-5-1 via claude-code): The nine tracing tests cover every clause. With a fake clock advanced by sleep and workflowId ready-1, the success case asserts one enqueue of stack.ready with input ping, 3 status calls and 2 sleeps of 100; the always-ENQUEUED case asserts STACK_DURABLE_NOT_READY with details.state ENQUEUED after 5...
 - Q-016 accept C-7732f592 by the delegate (claude-fable-5-1 via claude-code): The tracing test boots the stack with the shipped parts, the database part wrapped so its close records the ursitoare-durable session count polled for up to 5 s, and asserts that dbos.workflow_status is empty before the first reset; that each of three resets answers 204 and leaves exactly one row wi...
+- Q-018 accept F-233c28d7 by agent (CLAUDECODE): the redaction serves a stricter clause of the same scenario. spec.md:19 also requires that within 5 s of the pool-error test no log line holds 'terminating connection'. DBOS 5.3.0 itself logs `Unexpected error in system database client: ${err}` (system_database.js:180 and 184), where a pg error stri...
+- Q-019 reject F-1216922b by the delegate (claude-fable-5-1 via claude-code): The finding holds. In src/durable/steps.ts the JSON check of fn's result and the after observer call sit inside the per-attempt try whose catch counts an attempt and loops, so with retries above 0 and no retryable predicate an after observer that throws, or a non-JSON result, makes fn run again afte...
 
 ## Criteria
 
@@ -228,12 +230,17 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Findings
 
-- [major, judge] dbosLogger rewrites entries instead of forwarding String(entry) (criterion C-da1b0c83): The adapter replaces lowercase pg-style "error: ..." messages with "error: [redacted]", although the criterion requires every adapter level to call the supplied logger with String(entry). The shown test misses this because String(new Error("boom")) begins with uppercase "Error:".
-- [major, judge] An after-observer failure is retried instead of failing the step (criterion C-706487fb): src/durable/steps.ts places the after observer inside the retry catch. A transient after-observer error with retries enabled reruns fn and may make the workflow succeed, contrary to the specified rule that an observer error fails the step.
+- [minor, judge] dbosLogger rewrites entries instead of forwarding String(entry) (criterion C-da1b0c83): The adapter replaces lowercase pg-style "error: ..." messages with "error: [redacted]", although the criterion requires every adapter level to call the supplied logger with String(entry). The shown test misses this because String(new Error("boom")) begins with uppercase "Error:". (waived by agent (CLAUDECODE): the redaction serves a stricter clause of the same scenario. spec.md:19 also requires that within 5 s of the pool-error test no log line holds 'terminating connection'. DBOS 5.3.0 itself logs `Unexpected error in system database client: ${err}` (system_database.js:180 and 184), where a p...
+- [major, human] An after-observer failure is retried instead of failing the step (criterion C-706487fb): src/durable/steps.ts places the after observer inside the retry catch. A transient after-observer error with retries enabled reruns fn and may make the workflow succeed, contrary to the specified rule that an observer error fails the step. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding holds. In src/durable/steps.ts the JSON check of fn's result and the after observer call sit inside the per-attempt try whose catch counts an attempt and loops, so with retries above 0 and no retryable predicate an after observer that throws, or a non-JSON result, makes fn run again af...
 - [minor, judge] Step validation precedence outside a workflow is unspecified (spec gap) (criterion C-706487fb): No scenario specifies which error wins when runStep is called outside a workflow with a control character in its name. This implementation validates the name before checking workflow context.
 - [minor, judge] Retry-option validation precedence outside a workflow is unspecified (spec gap) (criterion C-706487fb): No scenario specifies whether a bad retries option or outside_workflow wins when both apply. This implementation validates retries before checking workflow context.
 - [minor, judge] Sleep-option validation precedence outside a workflow is unspecified (spec gap) (criterion C-706487fb): No scenario specifies whether an invalid sleep duration or outside_workflow wins when both apply. This implementation validates the duration first.
 - [minor, judge] the judge called a test inadequate (criterion C-da1b0c83): src.durable.launch.test.ts::C-da1b0c83 prepared database gives the expected config logger sessions and pool warning
+
+## Fix unit
+
+Fix unit 1 is created for these tasks:
+- F-1216922b An after-observer failure is retried instead of failing the step
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
