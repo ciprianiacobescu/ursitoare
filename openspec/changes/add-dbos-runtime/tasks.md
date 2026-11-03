@@ -20,7 +20,7 @@ Spec: `specs/durable-runtime/spec.md`; decisions: `design.md`; merged shapes: `d
 
 ## 5. The e2e stack
 
-- [ ] 5.1 Write `test/support/e2e-stack/reset.hooks.test.ts` first (scenario "Hook order and failure": fake parts recording into one array), then add the optional `beforeReset` member and its check in `validatePart` to `test/support/e2e-stack/part.ts` and the reverse-order hook loop to `reset()` in `test/support/e2e-stack/reset.ts`, implementing requirement "The e2e stack shuts the runtime down before a reset and checks it after" (hook part)
+- [x] 5.1 Write `test/support/e2e-stack/reset.hooks.test.ts` first (scenario "Hook order and failure": fake parts recording into one array), then add the optional `beforeReset` member and its check in `validatePart` to `test/support/e2e-stack/part.ts` and the reverse-order hook loop to `reset()` in `test/support/e2e-stack/reset.ts`, implementing requirement "The e2e stack shuts the runtime down before a reset and checks it after" (hook part)
 - [ ] 5.2 Write `test/support/e2e-stack/durable-part.test.ts` first (scenario "Ready, late, failed" with fake runtimes, a fake clock, the bad options and the null-runtime calls of test-plan.md; plus `durablePart.start` after `databasePart.start` leaves `dbos.dbos_migrations` in `ursitoare_e2e_template` with no session on it and `discoverParts()` lists `durable` after `catalogue`), then create `test/support/e2e-stack/durable-part.ts` (`DURABLE_READY_WORKFLOW`, `ReadyOptions`, `checkDurableReady`, `durablePart`) and `test/support/e2e-stack/parts/40-durable.ts` (one line: `export { durablePart as part } from "../durable-part.ts";`), implementing requirement "The e2e stack shuts the runtime down before a reset and checks it after" (readiness part)
 
 ## 6. Boot
