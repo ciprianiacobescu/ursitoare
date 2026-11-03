@@ -22,7 +22,13 @@ The `launchDurable` calls of "Refusals", in order. On `withTestDatabase({ migrat
 
 ## Queue sequence
 
-(1) Read `dbos.queues`. (2) `suspendDurable()`. (3) The three calls `rt.enqueue("t.echo", "x", "hi")`, `rt.cancel("x")`, `rt.status("x")`. (4) The owner deletes the rows of `dbos.queues` and `dbos.application_versions`. (5) `resumeDurable()` twice. (6) `rt.enqueue("t.echo", "after-reset", "hi")`, polled to a terminal state within 20 s. (7) `rt.shutdown()` twice at once (`Promise.all`), then the three calls again. (8) `launchDurable({ endpoint, logger })` (same endpoint and logger) giving `rt2`; read `dbos.queues`; `resumeDurable()`. (9) `suspendDurable()`, `resumeDurable()` and `rt2.shutdown()` called in a row without awaiting.
+(1) Read `dbos.queues`. (2) `suspendDurable()`. (3) The three calls `rt.enqueue("t.echo", "x", "hi")`, `rt.cancel("x")`, `rt.status("x")`. (4) The owner deletes the rows of `dbos.queues` and `dbos.application_versions`. (5) `resumeDurable()` twice. (6) `rt.enqueue("t.echo", "after-reset", "hi")`, polled to a terminal state within 20 s. (7) `rt.shutdown()` twice at once (`Promise.all`), then the three calls again. (8) `launchDurable({ endpoint, logger })` (same endpoint and logger) giving `rt2`; read `dbos.queues`; `resumeDurable()`. (9) `suspendDurable()`, `rt2.enqueue("t.echo", "y", "hi")`, `resumeDurable()` and `rt2.shutdown()` called in a row without awaiting (the enqueue waits for the suspend, then finds the runtime suspended; it leaves no row `y`).
+
+## Once-per-id sequence
+
+(1) `t.gate` as `w-gate`, awaited to `PENDING`; (2) `t.count` as `w-1`, `status("w-1")` read, then `cancel("w-1")`, `cancel("never")`, `status("never")`; (3) the gate opens; (4) `t.count` as `w-2` with input 2 and again with 3; (5) `t.park` as `w-park`, awaited to `PENDING` with `one` done, cancelled, then its promise opens; (6) `status`, `cancel` and `enqueue` with the id `"bad id!"`, and `enqueue` with a 201-character id; (7) `t.count` as `d-200` (a 200-character id), `d-64` (input depth 64), `d-null` (input a null-prototype object) and, each with a fresh id, the refused inputs `undefined`, `NaN`, `Infinity`, a function, a `Date`, a cycle and depth 65; (8) wait for `w-gate`, `w-2`, `d-200`, `d-64`, `d-null` to reach `SUCCESS`.
+
+Input fixtures: depth 64 is `[` repeated 64 times then `]` repeated 64 times (the innermost `[]` has depth 1); depth 65 has 65 of each; the null-prototype object is `Object.create(null)` with one key; the cycle is `c = {}; c.self = c`.
 
 ## Fixtures
 
