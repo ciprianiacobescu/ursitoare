@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Criterion C-57d8e403 (durable-runtime › A launch that cannot succeed fails with a stable code and leaves nothing behind › Refusals): accept as satisfied? |
 | Q-007 | answered | none | verdict | Criterion C-5d9b866b (durable-runtime › Workflows are registered before launch under a checked name › Registration rules): accept as satisfied? |
 | Q-008 | answered | none | verdict | Criterion C-e0745e1c (durable-runtime › A workflow id runs once, and status and cancel report it › Once per id, status, cancel): accept as satisfied? |
-| Q-009 | open | none | verdict | Criterion C-706487fb (durable-runtime › Steps are observed, retried only on request, and need a workflow › Steps and durable calls): accept as satisfied? |
+| Q-009 | answered | none | verdict | Criterion C-706487fb (durable-runtime › Steps are observed, retried only on request, and need a workflow › Steps and durable calls): accept as satisfied? |
 | Q-010 | open | none | verdict | Criterion C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps): accept as satisfied? |
 | Q-011 | open | none | verdict | Criterion C-c37d6095 (durable-runtime › main launches the runtime after the routes and closes it before the database › When it launches and the close order): accept as satisfied? |
 | Q-012 | open | none | verdict | Criterion C-073558f4 (durable-runtime › main launches the runtime after the routes and closes it before the database › A failed launch and the unchanged health): accept as satisfied? |
@@ -282,7 +282,8 @@ accept The tracing test runs the eight steps of the once-per-id sequence on a ru
 
 ## Q-009: Criterion C-706487fb (durable-runtime › Steps are observed, retried only on request, and need a workflow › Steps and durable calls): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -309,6 +310,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test launches with a recording stepObserver, runs t.steps, t.retry, t.once, t.names, t.bad and t.drop in that order and asserts every clause: the observer calls for s-steps are exactly before a, after a, before b, after b with the enqueue id, currentWorkflowId equals the enqueue id, the durable sleep took 900 to under 5000 ms, flaky ran 3 times and returned 7 with one before and one after, always ran once and t.once caught e1 itself, the t.names steps ran in order, in t.bad the bad step is bad_step_result with no after, the three names are bad_step_name and the retries and sleep options are bad_option, runStep, durableSleep and currentWorkflowId outside a workflow give DURABLE_NOT_LAUNCHED outside_workflow, and after the schema drop the runStep, the durableSleep and the status, cancel and enqueue calls reject DURABLE_UNAVAILABLE dbos_failed. The implementation validates the name and retries, requires a workflow, runs the observer before and after inside one DBOS step, retries only while retryable allows, passes the callback's own error and DBOS's cancellation unchanged and maps other SDK failures to dbos_failed. The test passed by assertion.
 ---
 
 ## Q-010: Criterion C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps): accept as satisfied?
