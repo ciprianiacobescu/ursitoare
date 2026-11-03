@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Criterion C-c27b0f1a (durable-runtime › Row-level security holds inside durable steps › Two tenants in steps): accept as satisfied? |
 | Q-011 | answered | none | verdict | Criterion C-c37d6095 (durable-runtime › main launches the runtime after the routes and closes it before the database › When it launches and the close order): accept as satisfied? |
 | Q-012 | answered | none | verdict | Criterion C-073558f4 (durable-runtime › main launches the runtime after the routes and closes it before the database › A failed launch and the unchanged health): accept as satisfied? |
-| Q-013 | open | none | verdict | Criterion C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree): accept as satisfied? |
+| Q-013 | answered | none | verdict | Criterion C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree): accept as satisfied? |
 | Q-014 | open | none | verdict | Criterion C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure): accept as satisfied? |
 | Q-015 | open | none | verdict | Criterion C-769418cc (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Ready, late, failed): accept as satisfied? |
 | Q-016 | open | none | verdict | Criterion C-7732f592 (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Three resets under the live engine, then the close): accept as satisfied? |
@@ -414,7 +414,8 @@ accept The tracing test runs main with the real launchDurable three times. On a 
 
 ## Q-013: Criterion C-77ae2063 (durable-runtime › Only src/durable imports DBOS and only src/durable and src/runs name its schema › Rule fixtures and the real tree): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -441,6 +442,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The two tracing tests check every clause of the scenario. The first runs checkDbosAccess on the ten rule fixtures of test-plan.md and asserts the violations are exactly ARCH_DBOS_ACCESS at line 1 of src/api/a.ts to f.ts in that order, with the SDK message for a to c and the schema message for d to f. The second repeats that, asserts that the allowed g.ts, h.ts, i.test.ts and j.ts alone give no violation, that readSnapshot() of the real tree gives none, and that package.json pins @dbos-inc/dbos-sdk at 5.3.0. The rule skips test files, flags any collectImports specifier equal to or under the SDK package outside src/durable, and outside src/durable and src/runs flags string and template parts matching the design's schema regex and the identifier DBOS_SCHEMA, sorted by file and line. In the real tree the SDK is imported only under src/durable and dbos. or DBOS_SCHEMA appear only there; package.json line 33 pins 5.3.0. Both tests passed by assertion.
 ---
 
 ## Q-014: Criterion C-2c0ae21b (durable-runtime › The e2e stack shuts the runtime down before a reset and checks it after › Hook order and failure): accept as satisfied?
