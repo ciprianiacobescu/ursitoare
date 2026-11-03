@@ -6,7 +6,7 @@ Spec: `specs/run-data/spec.md`; signatures, decisions, tables: `design.md`; merg
 
 ## 2. Payloads
 
-- [ ] 2.1 Write `src/runs/store/canonical.test.ts` first (scenario "Canonical JSON and the digest"), then implement `RunDataErrorCode` and `RunDataError` in `src/runs/store/errors.ts`, the types of design.md § Interfaces in `src/runs/store/types.ts`, `payloadDigest` in `src/runs/store/canonical.ts` and the value checks in `src/runs/store/validate.ts`, implementing requirement "Payloads are content-addressed by their canonical JSON"
+- [x] 2.1 Write `src/runs/store/canonical.test.ts` first (scenario "Canonical JSON and the digest"), then implement `RunDataErrorCode` and `RunDataError` in `src/runs/store/errors.ts`, the types of design.md § Interfaces in `src/runs/store/types.ts`, `payloadDigest` in `src/runs/store/canonical.ts` and the value checks in `src/runs/store/validate.ts`, implementing requirement "Payloads are content-addressed by their canonical JSON"
 - [ ] 2.2 Write `src/runs/store/envelope-store.test.ts` first (scenario "The envelope store keeps each value once per tenant"), then implement `envelopeStore.put` and `envelopeStore.get` in `src/runs/store/envelope-store.ts`, implementing requirement "Payloads are content-addressed by their canonical JSON"
 
 ## 3. Runs
