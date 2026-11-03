@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-03T22:27:34Z",
+  "integrated_revision": "797762fcc30e6968acc8e620013ce70cb97bdd35",
+  "merge_commit": "797762fcc30e6968acc8e620013ce70cb97bdd35",
+  "plan_digest": "d4a60ec43090d2fa",
+  "plan_id": "m4",
+  "postcheck": "pass",
+  "pr": 68,
+  "receipt_id": "m4/openspec:add-envelope-store/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "834396069aee649eb9a06ab730541efad483609e",
+  "spec_digest": "efd19d970eba21b1",
+  "target": "main",
+  "unit_id": "openspec:add-envelope-store"
+}
