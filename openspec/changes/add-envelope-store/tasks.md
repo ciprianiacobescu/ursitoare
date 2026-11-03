@@ -16,7 +16,7 @@ Spec: `specs/run-data/spec.md`; signatures, decisions, tables: `design.md`; merg
 
 ## 4. Steps and events
 
-- [ ] 4.1 Write `src/runs/store/step-repository.test.ts` first (scenarios "A step is recorded once per key, in its run's day" and "Steps page by seq and a payload belongs to the runs that reference it"), then implement `stepRepository.upsert` and `stepRepository.list` in `src/runs/store/step-repository.ts` and `envelopeStore.referencedBy` in `src/runs/store/envelope-store.ts`, implementing requirement "A step is one row per attempt key"
+- [x] 4.1 Write `src/runs/store/step-repository.test.ts` first (scenarios "A step is recorded once per key, in its run's day" and "Steps page by seq and a payload belongs to the runs that reference it"), then implement `stepRepository.upsert` and `stepRepository.list` in `src/runs/store/step-repository.ts` and `envelopeStore.referencedBy` in `src/runs/store/envelope-store.ts`, implementing requirement "A step is one row per attempt key"
 - [ ] 4.2 Write `src/runs/store/events.test.ts` first (scenario "Events are appended and a replay is ignored"), then implement `appendEvent` in `src/runs/store/events.ts`, implementing requirement "An event is appended once and never changed"
 
 ## 5. Tenant checks and the stores

@@ -7,6 +7,8 @@ import type {
   RunPrincipalRecord,
   RunState,
   RunTransition,
+  StepState,
+  StepWrite,
 } from "./types.ts";
 
 const MAX_DEPTH = 64;
@@ -19,6 +21,8 @@ const FLOW_HASH_PATTERN = /^sha256:[0-9a-f]{64}$/;
 const OWNER_TEAM_PATTERN = /^[a-z][a-z0-9_-]{0,63}$/;
 const NODE_ID_PATTERN = /^[a-z][a-z0-9_]{0,127}$/;
 const ERROR_CODE_PATTERN = /^[A-Za-z][A-Za-z0-9_.-]{0,63}$/;
+const KIND_PATTERN = /^[a-z][a-z0-9_.]{0,63}$/;
+const INT_MAX = 2_147_483_647;
 
 export function invalid(): never {
   throw new RunDataError("RUN_DATA_INVALID", INVALID_MESSAGE);
@@ -180,6 +184,66 @@ export function assertRunTransition(change: RunTransition): void {
   }
   if (change.terminalNode !== undefined) {
     assertNodeId(change.terminalNode);
+  }
+}
+
+export function assertStepState(value: unknown): asserts value is StepState {
+  if (value !== "started" && value !== "completed" && value !== "failed" && value !== "skipped") {
+    invalid();
+  }
+}
+
+export function assertKind(value: unknown): asserts value is string {
+  assertMatching(value, KIND_PATTERN);
+}
+
+export function assertIntInRange(value: unknown, min: number, max: number): void {
+  if (typeof value !== "number" || !Number.isInteger(value) || value < min || value > max) {
+    invalid();
+  }
+}
+
+export function assertTaint(value: unknown): asserts value is readonly string[] {
+  if (!Array.isArray(value) || value.length > 32) {
+    invalid();
+  }
+  for (const label of value) {
+    assertBoundedText(label, 64);
+  }
+}
+
+export function assertStepWrite(step: StepWrite): void {
+  assertRunId(step.runId);
+  assertNodeId(step.nodeId);
+  assertIntInRange(step.effectSeq, 0, INT_MAX);
+  assertIntInRange(step.turn, 0, INT_MAX);
+  assertIntInRange(step.attempt, 1, INT_MAX);
+  assertIntInRange(step.generation, 0, INT_MAX);
+  assertIntInRange(step.seq, 0, INT_MAX);
+  assertKind(step.kind);
+  assertStepState(step.state);
+  if (step.input !== null) {
+    assertPayloadValue(step.input);
+  }
+  if (step.output !== null) {
+    assertPayloadValue(step.output);
+  }
+  if (step.outcome !== null) {
+    assertBoundedText(step.outcome, 128);
+  }
+  if (step.error !== null) {
+    assertRunError(step.error);
+  }
+  assertTaint(step.taint);
+  if (step.policyDecisionId !== null) {
+    assertBoundedText(step.policyDecisionId, 256);
+  }
+  if (step.idemKey !== null) {
+    assertBoundedText(step.idemKey, 256);
+  }
+  assertDate(step.startedAt);
+  if (step.endedAt !== null) {
+    assertDate(step.endedAt);
   }
 }
 

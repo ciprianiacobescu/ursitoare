@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { canonicalJson } from "./canonical.ts";
 import { RunDataError } from "./errors.ts";
 import { assertTenantTx, isSqlState } from "./tenant.ts";
+import { assertRunId } from "./validate.ts";
 import type { EnvelopeStore, PayloadValue, StoredPayload } from "./types.ts";
 
 const MAX_PAYLOAD_BYTES = 1_048_576;
@@ -71,8 +72,29 @@ export const envelopeStore: EnvelopeStore = {
     };
   },
 
-  async referencedBy() {
-    throw new Error("not implemented");
+  async referencedBy(tx, ctx, runId: string, sha256: string): Promise<boolean> {
+    assertRunId(runId);
+    if (typeof sha256 !== "string" || !SHA256_PATTERN.test(sha256)) {
+      invalid("invalid payload digest");
+    }
+
+    await assertTenantTx(tx, ctx);
+
+    const { rows } = await tx.query<{ referenced: boolean }>(
+      `SELECT EXISTS (
+         SELECT 1 FROM ursitoare.run r
+          WHERE r.tenant_id = $1 AND r.run_id = $2
+            AND ($3 = r.input_ref OR $3 = r.mocks_ref OR $3 = r.output_ref
+              OR EXISTS (
+                SELECT 1 FROM ursitoare.step_execution s
+                 WHERE s.tenant_id = $1 AND s.run_id = r.run_id
+                   AND ($3 = s.input_ref OR $3 = s.output_ref)
+              ))
+       ) AS referenced`,
+      [ctx.tenantId, runId, sha256],
+    );
+
+    return rows[0]?.referenced === true;
   },
 };
 

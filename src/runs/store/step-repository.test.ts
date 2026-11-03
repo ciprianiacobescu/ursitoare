@@ -351,11 +351,11 @@ test("C-101276df steps page by seq with an exclusive cursor", async () => {
     );
     assert.deepEqual(empty, { steps: [], next: null });
 
-    assert.equal(
+    assert.deepEqual(
       await withTenantTx(db.appPool, a, (tx) => listOk(tx, a, "r_unknown", { limit: 10 })),
       { steps: [], next: null },
     );
-    assert.equal(
+    assert.deepEqual(
       await withTenantTx(db.appPool, b, (tx) => listOk(tx, b, "r_1", { limit: 10 })),
       { steps: [], next: null },
     );
