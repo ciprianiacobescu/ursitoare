@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | accepted | 5.2 | technical | test/support/e2e-stack/durable-part.test.ts:395 queries a nonexistent dbos.workflow_status column |
 | Q-003 | answered | none | verdict | Criterion C-25c32649 (durable-runtime › The owner prepares the DBOS schema and the engine never does › Prepare, repeat, refuse): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-da1b0c83 (durable-runtime › The runtime connects with the endpoint it is given and never migrates › A prepared database): accept as satisfied? |
-| Q-005 | open | none | verdict | Criterion C-cb0c606e (durable-runtime › The runs queue is registered after every launch › Launch, lose the rows, launch again): accept as satisfied? |
+| Q-005 | answered | none | verdict | Criterion C-cb0c606e (durable-runtime › The runs queue is registered after every launch › Launch, lose the rows, launch again): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-57d8e403 (durable-runtime › A launch that cannot succeed fails with a stable code and leaves nothing behind › Refusals): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-5d9b866b (durable-runtime › Workflows are registered before launch under a checked name › Registration rules): accept as satisfied? |
 | Q-008 | open | none | verdict | Criterion C-e0745e1c (durable-runtime › A workflow id runs once, and status and cancel report it › Once per id, status, cancel): accept as satisfied? |
@@ -150,7 +150,8 @@ accept The tracing test asserts every clause: dbosConfig on the test-plan fixtur
 
 ## Q-005: Criterion C-cb0c606e (durable-runtime › The runs queue is registered after every launch › Launch, lose the rows, launch again): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -177,6 +178,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test runs the ten steps of the queue sequence and asserts each THEN clause: the runs row with worker_concurrency 3 and polling_interval_sec 0.02 within 1e-9, suspendDurable resolving the same handle, the three calls rejecting DURABLE_NOT_LAUNCHED suspended, the resume on an emptied ledger rejecting launch_failed with status still suspended, resumeDurable resolving the handle then null, the row back and after-reset reaching SUCCESS, two concurrent shutdowns resolving, the three calls then rejecting shut_down, exactly two durable shutdown failed warnings and no boom text, the relaunch row with defaults 4 and 0.05 and resumeDurable null, the concurrent enqueue rejecting suspended while suspend, resume and shutdown resolve rt2, rt2 and undefined with no y row, rt2.status rejecting shut_down, the unawaited rt3.enqueue resolving with its d-drain row, and no ursitoare-durable session within 5 s. The implementation serialises lifecycle calls through one chain, makes handle calls wait for pending lifecycle calls, and makes shutdown and suspend settle in-flight calls before closing DBOS and the pool, with each close failure logged once. The test passed; its pre_satisfied marker reflects that the lifecycle code already existed when the test was added, not a gap in the criterion.
 ---
 
 ## Q-006: Criterion C-57d8e403 (durable-runtime › A launch that cannot succeed fails with a stable code and leaves nothing behind › Refusals): accept as satisfied?
