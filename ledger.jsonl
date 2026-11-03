@@ -27,3 +27,5 @@
 {"at":"2026-11-03T08:49:48Z","run":"r-20261103T0849Z-634b","type":"unit.dispatched","unit":"openspec:add-dbos-runtime"}
 {"at":"2026-11-03T09:02:49Z","attempt":1,"cost_usd":4.852566,"runs":4,"type":"plan.charged","unit":"openspec:add-dbos-runtime"}
 {"at":"2026-11-03T09:02:49Z","run":"r-20261103T0902Z-3db1","type":"unit.dispatched","unit":"openspec:add-dbos-runtime"}
+{"at":"2026-11-03T10:41:13Z","attempt":1,"cost_usd":7.015175,"runs":5,"type":"plan.charged","unit":"openspec:add-dbos-runtime"}
+{"at":"2026-11-03T10:41:13Z","run":"r-20261103T1041Z-ce84","type":"unit.dispatched","unit":"openspec:add-dbos-runtime"}
