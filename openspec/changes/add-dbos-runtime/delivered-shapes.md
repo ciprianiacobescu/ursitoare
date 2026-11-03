@@ -25,10 +25,9 @@ export async function withTenantTx<T>(pool: TenantPool, ctx: TenantContext, fn: 
 export interface TenantContext { readonly tenantId: string; readonly reviewProfile: ReviewProfile; }
 // test/support/tenants.ts:7-9
 export async function seedTwoTenants(db: TestDatabase): Promise<{ a: TenantContext; b: TenantContext }> {
-// test/support/pg.ts:208-217, :280-283, :53
+// test/support/pg.ts:208-217, :280-283
 export interface TestDatabase { name: string; ownerUrl: string; appUrl: string; ownerEndpoint: EndpointLike; appEndpoint: EndpointLike; ownerPool: pg.Pool; appPool: pg.Pool; close(): Promise<void>; }
 export async function withTestDatabase(opts?: { migrated?: boolean; cluster?: TestCluster; }): Promise<TestDatabase> {
-export function freePort(): Promise<number> {
 // test/support/e2e-stack/part.ts:19-38 (E2eStackError :3-17 has code, details, cause)
 export interface PartHandle { readonly env: Readonly<Record<string, string>>; readonly api?: unknown; close(): Promise<void>; }
 export type PartContext = Readonly<{ name: string; dataDir: string; engineOrigin: string; controlOrigin: string; env: Readonly<Record<string, string>>; handles: ReadonlyMap<string, PartHandle>; }>;

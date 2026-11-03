@@ -1,6 +1,6 @@
 ## Why
 
-Batch `m4-runs-timeline` (U30-U37 and U35b; closing unit `add-web-run-timeline`, journey `e2e/test_m4_runs.py`) delivers M4: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: the durable runtime that runs and recovers each run, and the stack that resets it safely. The plan runs acceptance profile `all` after this unit merges: every configured gate (setup, build, lint, typecheck, test, e2e) on the target; the batch outcome itself is proven by the closing unit's journey `e2e/test_m4_runs.py`.
+Batch `m4-runs-timeline` delivers M4; its units, in plan order, are `add-dbos-runtime`, `add-envelope-store`, `add-crash-harness`, `add-interpreter-core`, `add-effect-intents`, `add-runs-api`, `add-mock-test-runs`, `add-flow-test-cli` and the closing unit `add-web-run-timeline`, which depends on this unit. Outcome: an author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill. This unit's part: the durable runtime that runs and recovers each run, and the stack that resets it safely. The plan runs acceptance profile `all` after this unit merges: every configured gate (setup, build, lint, typecheck, test, e2e) on the target; the batch outcome is proven by the closing unit's journey `e2e/test_m4_runs.py`: alice starts a mocked test run from the editor's "Test run" panel through U35's endpoint, it executes on U33's interpreter, and she follows each step on the run timeline to `completed`; bob reads the run but cannot start one.
 
 Every run is a DBOS workflow. U31-U37 need one module that owns DBOS: it starts on the same Postgres under the app role, queues work on `runs`, and survives the e2e stack's database reset, which silently kills a DBOS queue (spike `dbos-reset`, D3).
 
@@ -40,6 +40,7 @@ function registerWorkflow<I extends DurableJson, O extends DurableJson>(name: st
 function runStep<T extends DurableJson>(name: string, fn: () => Promise<T>, opts?: StepOptions): Promise<T>
 function durableSleep(ms: number): Promise<void>
 function currentWorkflowId(): string
+function isDurableCancellation(error: unknown): boolean   // error instanceof DBOS's DBOSWorkflowCancelledError
 function launchDurable(opts: LaunchOptions): Promise<DurableRuntime>
 function prepareDurable(ownerUrl: string): Promise<void>
 function suspendDurable(): Promise<DurableRuntime | null>   // D3
@@ -57,7 +58,7 @@ function checkDbosAccess(s: Snapshot): Violation[]   // code ARCH_DBOS_ACCESS
 
 **Interfaces taken:**
 
-- from `add-db-foundation` (U02): `createPool`, `EndpointLike`, `PoolOptions`, `ROLE_APP`, `ROLE_OWNER`, `withTestDatabase`, `TestDatabase`, `freePort`, `globalSetup`.
+- from `add-db-foundation` (U02): `createPool`, `EndpointLike`, `PoolOptions`, `ROLE_APP`, `ROLE_OWNER`, `withTestDatabase`, `TestDatabase`, `globalSetup`.
 - from `add-engine-skeleton` (U01): `Logger`, `createLogger`, `AppConfig`, `main`, `MainDeps`.
 - from `add-tenancy-foundation` (U03): `TenantContext`, `withTenantTx`, `seedTwoTenants`.
 - from `add-e2e-stack` (U06): `E2eStackPart`, `PartContext`, `PartHandle`, `E2eStackError`, `createPartRegistry`, `createResetRunner`, `databaseApi`, `E2E_TEMPLATE`, `startE2eStack`, `discoverParts`.
@@ -67,4 +68,4 @@ Shapes of the delivered names above: `delivered-shapes.md` in this folder (decla
 
 ## Out of scope
 
-Run tables (U31); the crash harness and fault points (U32; `stepObserver` is its hook); the interpreter and `registerRunWorkflow` (U33); effect intents (U34); run routes (U36); a `durable` health check (D2, M8); automatic retries beyond the caller's `retries` (D18); a DBOS client for the `api` role; the deployment job that runs `prepareDurable` (M8).
+Run tables (U31); the crash harness (U32; `stepObserver` is its hook); the interpreter and `registerRunWorkflow` (U33); effect intents (U34); run routes (U36); a `durable` health check (D2, M8); retries beyond the caller's `retries` (D18); a DBOS client for the `api` role; the deployment job that runs `prepareDurable` (M8).

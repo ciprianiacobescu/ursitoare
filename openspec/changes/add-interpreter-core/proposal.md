@@ -110,7 +110,7 @@ function waitForRun(store: RunStore, ctx: TenantContext, runId: string,
 
 **Interfaces taken:**
 
-- U30: `registerWorkflow`, `runStep`, `durableSleep`, `currentWorkflowId`, `DurableRuntime`, `launchDurable`, `StepObserver` (tests). U31: `RunStore`, `RunRecord`, `RunState`, `RunError`, `NewRun`, `StepWrite`, `StepRecord`, `TenantContext` (type), `createRunStore`, `createMemoryRunStore`, `payloadDigest`.
+- U30: `isDurableCancellation(error: unknown): boolean`, `registerWorkflow`, `runStep`, `durableSleep`, `currentWorkflowId`, `DurableRuntime`, `launchDurable`, `StepObserver` (tests). U31: `RunStore`, `RunRecord`, `RunState`, `RunError`, `NewRun`, `StepWrite`, `StepRecord`, `TenantContext` (type), `createRunStore`, `createMemoryRunStore`, `payloadDigest`.
 - U22: `Flow`, `FlowNode`, `NodeKind`, `NODE_KINDS`, `Effect`, `JsonValue`, `Catalogue`, `BlockDef`, `scanTemplate`, `isSingleRef`. U27: `VersionState`. U01: `Clock`, `IdSource`, `fixedClock`, `sequentialIds`. U24: `loadTestCatalogue`, `loadTestFlow`. U02/U03: `withTestDatabase`, `seedTwoTenants`. Root dependency `ajv` (`Ajv2020`).
 
 Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@e06fdb3, checked line by line). U30 and U31 are siblings: see their folders.

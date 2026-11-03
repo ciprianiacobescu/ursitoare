@@ -12,5 +12,13 @@ Test-file fakes: a recording invoker (answers by tool, rejects an `Error` value,
 
 `E_SECRET` `new Error("connect failed password=hunter2")`; `BLOCKED` `{ vendor_id: "v2", status: "blocked" }`.
 
+`E_GATE` `new Error("gate secret")`; `REUSED` `{ payment_id: "pay-0", status: "paid" }`; `CANCELLED` `new DBOSWorkflowCancelledError("w1")` imported from `@dbos-inc/dbos-sdk` (a test file may import it; the DBOS guard checks non-test files), for which `isDurableCancellation` is true. `BAD_INPUTS`: `{ tenantId: "bad tenant", runId: "r_1", reviewProfile: "solo" }`, `{ tenantId: "tenant_a", runId: "../r", reviewProfile: "solo" }`, `{ tenantId: "tenant_a", runId: "r_1", reviewProfile: "other" }` (one bad field each).
+
+`UNRESOLVED` (in order; the first has `details.ref` `inputs.missing`): `"${{ inputs.missing }}"`, `"${{ inputs.invoice.tags.0 }}"`, `"${{ inputs.invoice.id.length }}"`, `"${{ inputs.invoice.constructor }}"`, `"${{ nodes.route.output.x }}"`, `"${{ nodes.lookup.outcome }}"`, `"${{ inputs.invoice.id"`.
+
+`BAD_DURATIONS`: `P1Y`, `PT1.5H`, `PT1H1`, the empty string, `P`, `pt1h`, `P367D`, `PT31622400.001S`, `P` + 400 `9`s + `D`.
+
+`SW` `{ kind: "switch", on: "${{ inputs.k }}", cases: { "2": "two", gold: "g", "true": "yes" }, default: "dflt" }`; `END_OUT` `{ kind: "end", status: "completed", output: { id: "${{ inputs.k }}" } }`.
+
 `R` (kit scenario): a local `NodeRuntime` that resolves `node.on` through `services.resolve` and answers `{ output: null, outcome: "a", next: "x", end: null }`.
 
