@@ -43,3 +43,4 @@
 {"at":"2026-11-03T19:17:37Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"12341308e6a9feb693424c7bc878c147f9c59f9d","status":"pass","type":"unit.postcheck","unit":"openspec:add-dbos-runtime"}
 {"at":"2026-11-03T19:17:37Z","revision":"12341308e6a9feb693424c7bc878c147f9c59f9d","type":"unit.integrated","unit":"openspec:add-dbos-runtime"}
 {"at":"2026-11-03T19:17:37Z","attempt":1,"cost_usd":14.561702,"runs":8,"type":"plan.charged","unit":"openspec:add-dbos-runtime"}
+{"at":"2026-11-03T19:26:57Z","branch":"l4/archive/openspec/add-dbos-runtime","head":"fc0d8c2586c4cf71241c3eaf20edd9a48674fd2d","type":"unit.branch_deleted","unit":"openspec:add-dbos-runtime"}
