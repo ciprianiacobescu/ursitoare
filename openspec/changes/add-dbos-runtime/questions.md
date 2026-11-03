@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 5.2 | technical | test/support/e2e-stack/durable-part.test.ts:379 keeps a template pool open before databasePart.seed |
 | Q-002 | accepted | 5.2 | technical | test/support/e2e-stack/durable-part.test.ts:395 queries a nonexistent dbos.workflow_status column |
 | Q-003 | answered | none | verdict | Criterion C-25c32649 (durable-runtime › The owner prepares the DBOS schema and the engine never does › Prepare, repeat, refuse): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-da1b0c83 (durable-runtime › The runtime connects with the endpoint it is given and never migrates › A prepared database): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-da1b0c83 (durable-runtime › The runtime connects with the endpoint it is given and never migrates › A prepared database): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-cb0c606e (durable-runtime › The runs queue is registered after every launch › Launch, lose the rows, launch again): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-57d8e403 (durable-runtime › A launch that cannot succeed fails with a stable code and leaves nothing behind › Refusals): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-5d9b866b (durable-runtime › Workflows are registered before launch under a checked name › Registration rules): accept as satisfied? |
@@ -117,7 +117,8 @@ accept The two tracing tests check every clause of the scenario: after the first
 
 ## Q-004: Criterion C-da1b0c83 (durable-runtime › The runtime connects with the endpoint it is given and never migrates › A prepared database): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -144,6 +145,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test asserts every clause: dbosConfig on the test-plan fixtures gives runMigrations false, enableOTLP false, name ursitoare, systemDatabaseSchemaName dbos, applicationVersion ursitoare-1, the given pool and a URL whose parsed password is empty; dbosLogger routes info, debug, warn and error to the logger at that level with { component: "dbos" } and String(entry), including Error: boom; after a real launch on a prepared clone the runtime's applicationVersion is ursitoare-1, at least one ursitoare-durable session exists and all of them belong to ursitoare_app, dbos.application_versions holds ursitoare-1, an info line at level 30 has component dbos, no line holds the app password, and after the admin terminates the sessions a warning with msg durable pool error, component dbos and code 57P01 appears within 5 s with no line holding the driver text. The implementation builds exactly that config, logs the pool error with only its code, and redacts pg error text in DBOS's own log lines so the driver message never reaches the log. The test passed.
 ---
 
 ## Q-005: Criterion C-cb0c606e (durable-runtime › The runs queue is registered after every launch › Launch, lose the rows, launch again): accept as satisfied?
