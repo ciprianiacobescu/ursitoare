@@ -30,6 +30,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-017 | answered | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
 | Q-018 | answered | none | verdict | Finding F-233c28d7: dbosLogger rewrites entries instead of forwarding String(entry) |
 | Q-019 | answered | none | verdict | Finding F-1216922b: An after-observer failure is retried instead of failing the step |
+| Q-020 | open | none | verdict | Finding F-da2b0827: dbosLogger rewrites valid logger messages |
 <!-- l4:index:end -->
 
 ---
@@ -626,3 +627,29 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ### Answer
 <!-- write below this line -->
 reject The finding holds. In src/durable/steps.ts the JSON check of fn's result and the after observer call sit inside the per-attempt try whose catch counts an attempt and loops, so with retries above 0 and no retryable predicate an after observer that throws, or a non-JSON result, makes fn run again after it already succeeded. Design decision 6 says fn runs up to retries plus one times, the result is then checked, the after observer runs once, and an observer that throws fails the step; the spec says only fn is retried while retryable allows. Only errors thrown by fn itself may be retried. WHEN runStep runs with retries 2 and fn resolves a valid DurableJson but the after observer throws THEN fn has run exactly once, the step rejects with the observer's error unchanged and no second attempt of fn is made.
+
+---
+
+## Q-020: Finding F-da2b0827: dbosLogger rewrites valid logger messages
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+
+### Context
+The judge raised a major finding in round 4, and no deterministic check confirms it (criterion C-da1b0c83).
+
+Title: dbosLogger rewrites valid logger messages
+Detail: The adapter changes messages matching lowercase "error: ", although the requirement says each level forwards String(entry). The traced logger test checks Error: boom but misses this observable input.
+Suggested fix: Forward String(entry) unchanged in dbosLogger and keep driver-error redaction confined to the pool-error logging path.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-da1b0c83 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
