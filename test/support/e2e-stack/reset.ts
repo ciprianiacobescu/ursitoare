@@ -39,6 +39,25 @@ export function createResetRunner(deps: {
     }
   }
 
+  async function runResetHooks(): Promise<void> {
+    for (let index = deps.parts.length - 1; index >= 0; index -= 1) {
+      const part = deps.parts[index];
+      if (part === undefined || typeof part.beforeReset !== "function") {
+        continue;
+      }
+      try {
+        await part.beforeReset(deps.context(part));
+      } catch (error) {
+        throw new E2eStackError(
+          "STACK_RESET_FAILED",
+          `Reset hook failed for part: ${part.name}`,
+          { part: part.name },
+          { cause: error },
+        );
+      }
+    }
+  }
+
   async function probeEngine(): Promise<void> {
     for (let attempt = 0; attempt < HEALTH_PROBES; attempt += 1) {
       if (await deps.engineHealthy()) {
@@ -57,6 +76,7 @@ export function createResetRunner(deps: {
     reset(): Promise<void> {
       return enqueue(async () => {
         deps.faults.clear();
+        await runResetHooks();
         await seedParts("STACK_RESET_FAILED");
         await probeEngine();
       });

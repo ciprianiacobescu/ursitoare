@@ -34,12 +34,14 @@ export type PartContext = Readonly<{
 export interface E2eStackPart {
   name: string;
   start(ctx: PartContext): Promise<PartHandle>;
+  beforeReset?(ctx: PartContext): Promise<void>;
   seed?(ctx: PartContext): Promise<void>;
 }
 
 interface PartShape {
   name?: unknown;
   start?: unknown;
+  beforeReset?: unknown;
   seed?: unknown;
 }
 
@@ -50,6 +52,7 @@ function validatePart(part: E2eStackPart): void {
     !PART_NAME_PATTERN.test(candidate.name) ||
     candidate.name === "engine" ||
     typeof candidate.start !== "function" ||
+    (candidate.beforeReset !== undefined && typeof candidate.beforeReset !== "function") ||
     (candidate.seed !== undefined && typeof candidate.seed !== "function")
   ) {
     throw new E2eStackError("STACK_PART_INVALID", "Invalid part");

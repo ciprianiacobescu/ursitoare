@@ -42,6 +42,7 @@ Each fake lives in `test/support/`, is owned by one change (see `test/support/RE
   listener (`POST /reset`); on the stack profile, journeys use unique names instead. Seed users: `alice` (author, team
   finance), `bob` (approver, team finance), `carol` (admin), `mallory` (tenant B, author); their groups come from the
   fake OIDC provider and map through `parts/30-rbac.ts`.
+- A reset discards every durable workflow: a journey never relies on a workflow enqueued before its `fresh_state`.
 - Journeys seed only through the fixtures of `e2e/conftest.py` (`fresh_state` and the seed fixtures).
 - `assert_accessible(page)` (axe-core, served offline) runs in every journey; the stack's `POST /faults` delays or
   fails a route so loading and error states can be shown.
