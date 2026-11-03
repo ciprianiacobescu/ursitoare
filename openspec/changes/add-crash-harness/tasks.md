@@ -12,7 +12,7 @@ Spec: `specs/test-crash-harness/spec.md`; decisions: `design.md`; merged shapes:
 
 ## 3. The cluster
 
-- [ ] 3.1 Write `test/support/crash/cluster.test.ts` first (scenarios "Real parts, a value and a throw" (a throw, a returned value, `close()` twice) and "Order, rollback, conflict, missing database"), then implement `CrashCluster`, `startCrashCluster` and `withDedicatedCluster` in `test/support/crash/cluster.ts` and make `test/support/crash/index.ts` re-export `observer.ts`, `effects.ts`, `cluster.ts` and `engine.ts`, implementing requirement "A dedicated cluster starts every part, seeds them, and cleans up"
+- [x] 3.1 Write `test/support/crash/cluster.test.ts` first (scenarios "Real parts, a value and a throw" (a throw, a returned value, `close()` twice) and "Order, rollback, conflict, missing database"), then implement `CrashCluster`, `startCrashCluster` and `withDedicatedCluster` in `test/support/crash/cluster.ts` and make `test/support/crash/index.ts` re-export `observer.ts`, `effects.ts`, `cluster.ts` and `engine.ts`, implementing requirement "A dedicated cluster starts every part, seeds them, and cleans up"
 
 ## 4. The child process
 
