@@ -12,6 +12,9 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 4.1 | harness | Task 4.1: the pre-satisfied check could not decide |
+| Q-002 | open | none | verdict | Criterion C-0f1c4174 (test-crash-harness › A scenario child starts with a closed environment and reports ready › Option errors and start failures): accept as satisfied? |
+| Q-003 | open | none | verdict | Finding F-2c3fda0e: spawnEngine accepts non-plain args objects |
+| Q-004 | open | none | verdict | Finding F-fb0ff054: Duplicate part names leak the first part handle |
 <!-- l4:index:end -->
 
 ---
@@ -140,3 +143,85 @@ accept: the orchestrator checked the captured test (held patch 4.1-pre_satisfied
 - the probe line and CRASH_READY in engine.log;
 - no HOME on a second spawn after HOME is deleted.
 It reads the child's own probe.json, so it checks real behaviour. It fails at the unit base only by error because spawnEngine is the scaffold stub there, and the base run reported 'fail only by an error', not 'pass'.
+
+---
+
+## Q-002: Criterion C-0f1c4174 (test-crash-harness › A scenario child starts with a closed environment and reports ready › Option errors and start failures): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-0f1c4174 (test-crash-harness › A scenario child starts with a closed environment and reports ready › Option errors and start failures)
+
+### Context
+Criterion C-0f1c4174 (test-crash-harness › A scenario child starts with a closed environment and reports ready › Option errors and start failures) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `spawnEngine` runs with a relative `scenario`, a missing `scenario` file, `faultPoints: ["pay"]` and `args: { a: 1 }` (cast), and `spawnEngineTuned` with a valid scenario and `readyTimeoutMs` `0`, `-1`, `1.5`, `NaN`, `600001`; then with test-written scenarios that throw an error with `code` `"E_X"`, return without `ready()`, export no `start`, hold a syntax error, and write `fatal thing` with `writeSync(2, ...)` then `process.exit(3)`; then `spawnEngineTuned` with `1500` runs on a scenario whose `start` never settles; and `READY_TIMEOUT_MS` is read
+\- **THEN** the first nine reject `E2eStackError` `CRASH_OPTIONS_INVALID` with `details.field` `scenario`, `scenario`, `faultPoints`, `args`, and the five bad timeouts with `readyTimeoutMs`; no child was spawned and no `engine.log` exists; the next five scripted ones reject `CRASH_START_FAILED` with `details.reason` `exited`, `details.line` `crash-child: scenario_failed E_X`, `crash-child: scenario_not_ready`, `crash-child: scenario_invalid`, `crash-child: scenario_unloadable`, `fatal thing` and `details.exitCode` `1`, `1`, `1`, `1`, `3`; the hanging one rejects with `details.reason` `timeout` and a `details.pid` that is dead; `READY_TIMEOUT_MS` is `30000`
+
+Why: judge fail counted as insufficient_evidence: counterexample unexecuted (not executed in M0: the verifier worktree is M1 (verifier 1.5))
+Judge: fail
+Tracing tests: test.support.crash.engine.test.ts::C-0f1c4174: a child that cannot become ready rejects with its failure line and no live process (passed, pre_satisfied); test.support.crash.engine.test.ts::C-0f1c4174: unusable spawn options are refused before a child or a log exists (passed, pre_satisfied)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-003: Finding F-2c3fda0e: spawnEngine accepts non-plain args objects
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it (criterion C-0f1c4174).
+
+Title: spawnEngine accepts non-plain args objects
+Detail: The spawn boundary must accept a plain object of string values. test/support/crash/engine.ts validates only that args is a non-null non-array object with string Object.values, so Date and class instances are accepted and silently spread into an empty payload object.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-0f1c4174 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Finding F-fb0ff054: Duplicate part names leak the first part handle
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it (criterion C-5f05917f). It reports behaviour that no scenario pins down.
+
+Title: Duplicate part names leak the first part handle
+Detail: startCrashCluster stores handles by name. A later successfully started part with the same name overwrites the first handle; shutdown iterates the duplicate names and closes the final handle twice while leaving the first handle unclosed.
+Suggested fix: WHEN startCrashCluster receives two successfully started parts with the same name THEN it overwrites the first handle and closes the second handle twice without closing the first handle.
+The suggested fix describes what the code does now, and a reject does not use it: to pin that behaviour, end the reason with it.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-5f05917f as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
