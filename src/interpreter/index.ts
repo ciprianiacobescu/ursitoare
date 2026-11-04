@@ -1,5 +1,14 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
+import { registerNodeRuntime } from "./registry.ts";
+import { endRuntime } from "./runtimes/end.ts";
+import { switchRuntime } from "./runtimes/switch.ts";
+import { waitRuntime } from "./runtimes/wait.ts";
+
+registerNodeRuntime("switch", switchRuntime);
+registerNodeRuntime("end", endRuntime);
+registerNodeRuntime("wait", waitRuntime);
+
 export type {
   EffectMode,
   ToolCall,
