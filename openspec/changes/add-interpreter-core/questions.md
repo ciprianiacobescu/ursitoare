@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 2.3 | harness | Task 2.3: the pre-satisfied check could not decide |
+| Q-001 | answered | 2.3 | harness | Task 2.3: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 2.3: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 2.3
 - **Kind:** harness
 - **Asked:** 2026-11-04T22:39Z by claude-sonnet, run r-20261104T2014Z-19d3, task 2.3
@@ -212,3 +213,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: The claim that task 2.3 is already satisfied holds: the effect path of the block runtime is already implemented at the unit head by task 2.2's commit. In src/interpreter/runtimes/block.ts the non-read branch calls the gate's before inside the step named after the node, fails an unknown decision with INTERPRETER_EFFECT_UNKNOWN before any invoke, takes the reuse result without invoking, invokes with the decision's idemKey, then in the step named node#done calls after before the output check, and maps any gate or invoker rejection to INTERPRETER_TOOL_FAILED with the fixed message node execution failed. Traced against that code, memoryWorkflowOps (which pushes the step name before running the callback and propagates errors unchanged), InterpreterError (which carries code and node) and the test catalogue (erp.create_payment@1 has effect pay and an output schema requiring payment_id and status), all nine new tests pass without a production change. The base run could not discriminate only because the unit base is the scaffold whose stubs throw before any assertion runs, so an error rather than an assertion failure is the expected shape there. Note for the verifier: the test named each gate call runs in the step named after the node checks only the order of gate calls and the executed step names, not that after ran inside node#done as the scenario's tagged ops would; the step-tagging coverage of the criterion is weaker than the scenario describes.
