@@ -1,0 +1,336 @@
+diff --git a/test/support/crash/engine.test.ts b/test/support/crash/engine.test.ts
+new file mode 100644
+index 0000000..a5403b6
+--- /dev/null
++++ b/test/support/crash/engine.test.ts
+@@ -0,0 +1,330 @@
++import assert from "node:assert/strict";
++import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
++import os from "node:os";
++import { join } from "node:path";
++import { after, test } from "node:test";
++
++import { E2eStackError } from "../e2e-stack/part.ts";
++import type { CrashCluster } from "./cluster.ts";
++import {
++  READY_TIMEOUT_MS,
++  spawnEngine,
++  spawnEngineTuned,
++  type EngineProcess,
++} from "./engine.ts";
++
++const tempDirs: string[] = [];
++
++after(() => {
++  for (const dir of tempDirs) {
++    rmSync(dir, { recursive: true, force: true });
++  }
++});
++
++function tempRoot(): string {
++  const dir = mkdtempSync(join(os.tmpdir(), "crash-engine-"));
++  tempDirs.push(dir);
++  return dir;
++}
++
++function clusterFor(dataDir: string, env: Readonly<Record<string, string>> = {}): CrashCluster {
++  return {
++    env,
++    ownerUrl: "postgres://owner@127.0.0.1:1/ursitoare",
++    appEndpoint: {
++      url: "postgres://ursitoare_app@127.0.0.1:1/ursitoare",
++      password: null,
++    },
++    dataDir,
++  };
++}
++
++function scenarioFile(dir: string, name: string, source: string): string {
++  const file = join(dir, name);
++  writeFileSync(file, source);
++  return file;
++}
++
++function isAlive(pid: number): boolean {
++  try {
++    process.kill(pid, 0);
++    return true;
++  } catch (error) {
++    return (error as NodeJS.ErrnoException).code !== "ESRCH";
++  }
++}
++
++async function waitForDeath(pid: number): Promise<void> {
++  const deadline = Date.now() + 20_000;
++  while (Date.now() < deadline) {
++    if (!isAlive(pid)) {
++      return;
++    }
++    await new Promise((resolve) => setTimeout(resolve, 25));
++  }
++  assert.equal(isAlive(pid), false, `the engine pid ${pid} ended`);
++}
++
++function killQuietly(pid: number | undefined): void {
++  if (pid === undefined || !isAlive(pid)) {
++    return;
++  }
++  try {
++    process.kill(pid, "SIGKILL");
++  } catch {
++    // The child is already gone.
++  }
++}
++
++function optionsError(error: unknown): E2eStackError {
++  assert.ok(error instanceof E2eStackError, `expected an E2eStackError, got ${String(error)}`);
++  assert.equal(error.code, "CRASH_OPTIONS_INVALID");
++  return error;
++}
++
++function startError(error: unknown): E2eStackError {
++  assert.ok(error instanceof E2eStackError, `expected an E2eStackError, got ${String(error)}`);
++  assert.equal(error.code, "CRASH_START_FAILED");
++  return error;
++}
++
++async function rejection(call: Promise<unknown>): Promise<unknown> {
++  try {
++    await call;
++  } catch (error) {
++    return error;
++  }
++  assert.fail("expected the call to reject");
++}
++
++function readJson(file: string): Record<string, unknown> {
++  const parsed: unknown = JSON.parse(readFileSync(file, "utf8"));
++  assert.ok(typeof parsed === "object" && parsed !== null && !Array.isArray(parsed));
++  return parsed as Record<string, unknown>;
++}
++
++function logLines(file: string): string[] {
++  return readFileSync(file, "utf8").split(/\r?\n/);
++}
++
++const PROBE = `
++import { appendFileSync, writeFileSync } from "node:fs";
++import { join } from "node:path";
++
++export async function start(ctx) {
++  appendFileSync(join(ctx.dataDir, "pids.log"), process.pid + "\\n");
++  writeFileSync(
++    join(ctx.dataDir, "probe.json"),
++    JSON.stringify({
++      env: process.env,
++      ctxEnv: ctx.env,
++      args: ctx.args,
++      armed: ctx.faultPoints.armed,
++      dataDir: ctx.dataDir,
++      version: process.version,
++    }),
++  );
++  ctx.logger.info({}, "probe line");
++  ctx.ready();
++}
++`;
++
++const IDLE = `
++export async function start(ctx) {
++  ctx.ready();
++}
++`;
++
++test("C-dfcb53d2: a spawned child starts closed with its arguments and writes the ready line", async () => {
++  const root = tempRoot();
++  const dataDir = join(root, "data");
++  mkdirSync(dataDir, { recursive: true });
++  const cluster = clusterFor(dataDir, { URSITOARE_PROBE: "p1", L4_X: "leak" });
++  const scenario = scenarioFile(root, "probe.mjs", PROBE);
++  const parentPath = process.env["PATH"];
++  const parentHome = process.env["HOME"];
++  const previousParentOnly = process.env["CRASH_PARENT_ONLY"];
++  process.env["CRASH_PARENT_ONLY"] = "parent-only";
++
++  let first: EngineProcess | undefined;
++  let second: EngineProcess | undefined;
++
++  try {
++    first = await spawnEngine({ cluster, scenario, faultPoints: ["before:x"], args: { a: "1" } });
++    assert.ok(Number.isInteger(first.pid) && first.pid > 0, "the engine reports a positive pid");
++    assert.equal(isAlive(first.pid), true, "the engine process is alive");
++    assert.equal(first.deaths, 0, "a running child has no deaths");
++
++    const probe = readJson(join(dataDir, "probe.json"));
++    assert.ok(
++      typeof probe["version"] === "string" && probe["version"].startsWith("v24."),
++      "the child runs Node 24",
++    );
++    assert.deepEqual(probe["args"], { a: "1" });
++    assert.deepEqual(probe["armed"], ["before:x"]);
++    assert.equal(probe["dataDir"], cluster.dataDir);
++
++    const env = probe["env"] as Record<string, string>;
++    const ctxEnv = probe["ctxEnv"] as Record<string, string>;
++    assert.equal(env["URSITOARE_PROBE"], "p1");
++    assert.equal(ctxEnv["URSITOARE_PROBE"], "p1");
++    if (parentPath !== undefined) {
++      assert.equal(env["PATH"], parentPath, "the child keeps the parent PATH");
++    }
++    if (parentHome !== undefined) {
++      assert.equal(env["HOME"], parentHome, "the child keeps the parent HOME");
++    }
++    for (const keys of [Object.keys(env), Object.keys(ctxEnv)]) {
++      assert.equal(keys.includes("L4_X"), false, "L4_X is not in the child environment");
++      assert.equal(
++        keys.includes("CRASH_PARENT_ONLY"),
++        false,
++        "CRASH_PARENT_ONLY is not in the child environment",
++      );
++      assert.deepEqual(
++        keys.filter((key) => key.startsWith("L4_")),
++        [],
++        "no L4_ key reaches the child environment",
++      );
++    }
++
++    const lines = logLines(join(dataDir, "engine.log"));
++    assert.ok(
++      lines.some((line) => line.includes("probe line")),
++      "engine.log holds the child log line",
++    );
++    assert.ok(lines.includes("CRASH_READY"), "engine.log holds the ready line");
++
++    const firstPid = first.pid;
++    killQuietly(firstPid);
++    await waitForDeath(firstPid);
++
++    delete process.env["HOME"];
++    second = await spawnEngine({ cluster, scenario, faultPoints: [], args: {} });
++    assert.equal(isAlive(second.pid), true, "the second engine process is alive");
++    const secondProbe = readJson(join(dataDir, "probe.json"));
++    const secondEnv = secondProbe["env"] as Record<string, string>;
++    assert.equal(Object.hasOwn(secondEnv, "HOME"), false, "a missing parent HOME stays missing");
++  } finally {
++    killQuietly(first?.pid);
++    killQuietly(second?.pid);
++    if (parentHome === undefined) {
++      delete process.env["HOME"];
++    } else {
++      process.env["HOME"] = parentHome;
++    }
++    if (previousParentOnly === undefined) {
++      delete process.env["CRASH_PARENT_ONLY"];
++    } else {
++      process.env["CRASH_PARENT_ONLY"] = previousParentOnly;
++    }
++  }
++});
++
++test("C-0f1c4174: unusable spawn options are refused before a child or a log exists", async () => {
++  const root = tempRoot();
++  const dataDir = join(root, "data");
++  mkdirSync(dataDir, { recursive: true });
++  const cluster = clusterFor(dataDir);
++  const scenario = scenarioFile(root, "idle.mjs", IDLE);
++  const log = join(dataDir, "engine.log");
++
++  const cases: Array<{ field: string; opts: Parameters<typeof spawnEngine>[0] }> = [
++    {
++      field: "scenario",
++      opts: { cluster, scenario: "relative/idle.mjs" },
++    },
++    {
++      field: "scenario",
++      opts: { cluster, scenario: join(dataDir, "missing.mjs") },
++    },
++    {
++      field: "faultPoints",
++      opts: { cluster, scenario, faultPoints: ["pay"] },
++    },
++    {
++      field: "args",
++      opts: { cluster, scenario, args: { a: 1 } as unknown as Record<string, string> },
++    },
++  ];
++
++  for (const entry of cases) {
++    const error = optionsError(await rejection(spawnEngine(entry.opts)));
++    assert.equal(error.details["field"], entry.field, `the refusal names ${entry.field}`);
++  }
++
++  for (const readyTimeoutMs of [0, -1, 1.5, Number.NaN, 600001]) {
++    const error = optionsError(
++      await rejection(spawnEngineTuned({ cluster, scenario }, { readyTimeoutMs })),
++    );
++    assert.equal(error.details["field"], "readyTimeoutMs", "the refusal names the timeout");
++  }
++
++  assert.equal(existsSync(log), false, "no engine log exists after the option refusals");
++  assert.equal(existsSync(join(dataDir, "pids.log")), false, "no child was spawned");
++});
++
++test("C-0f1c4174: a child that cannot become ready rejects with its failure line and no live process", async () => {
++  const root = tempRoot();
++  const dataDir = join(root, "data");
++  mkdirSync(dataDir, { recursive: true });
++  const cluster = clusterFor(dataDir);
++
++  const failureCases: Array<{ file: string; line: string; exitCode: number }> = [
++    {
++      file: scenarioFile(
++        root,
++        "failed.mjs",
++        'export async function start() {\n  throw Object.assign(new Error("x"), { code: "E_X" });\n}\n',
++      ),
++      line: "crash-child: scenario_failed E_X",
++      exitCode: 1,
++    },
++    {
++      file: scenarioFile(root, "not-ready.mjs", "export async function start() {}\n"),
++      line: "crash-child: scenario_not_ready",
++      exitCode: 1,
++    },
++    {
++      file: scenarioFile(root, "no-start.mjs", "export const other = 1;\n"),
++      line: "crash-child: scenario_invalid",
++      exitCode: 1,
++    },
++    {
++      file: scenarioFile(root, "syntax.mjs", "export function start( {\n"),
++      line: "crash-child: scenario_unloadable",
++      exitCode: 1,
++    },
++    {
++      file: scenarioFile(
++        root,
++        "fatal.mjs",
++        'import { writeSync } from "node:fs";\nexport async function start() {\n  writeSync(2, "fatal thing\\n");\n  process.exit(3);\n}\n',
++      ),
++      line: "fatal thing",
++      exitCode: 3,
++    },
++  ];
++
++  for (const entry of failureCases) {
++    const error = startError(await rejection(spawnEngine({ cluster, scenario: entry.file })));
++    assert.equal(error.details["reason"], "exited", "the child exited before it was ready");
++    assert.equal(error.details["line"], entry.line, "the rejection carries the last failure line");
++    assert.equal(error.details["exitCode"], entry.exitCode, "the rejection carries the exit code");
++  }
++
++  const hanging = scenarioFile(
++    root,
++    "hanging.mjs",
++    "export async function start() {\n  setInterval(() => {}, 1000);\n  await new Promise(() => {});\n}\n",
++  );
++  const timedOut = startError(
++    await rejection(spawnEngineTuned({ cluster, scenario: hanging }, { readyTimeoutMs: 1500 })),
++  );
++  assert.equal(timedOut.details["reason"], "timeout", "the hanging child times out");
++  const pid = timedOut.details["pid"];
++  assert.ok(typeof pid === "number", "the timeout names the child pid");
++  assert.equal(isAlive(pid), false, "the timed out child is dead");
++
++  assert.equal(READY_TIMEOUT_MS, 30000, "the default ready timeout is 30 s");
++});
