@@ -57,3 +57,4 @@
 {"at":"2026-11-03T22:29:38Z","branch":"l4/archive/openspec/add-envelope-store","head":"72d0901386910b5c5fd39067d762d0a575ff7da3","type":"unit.branch_deleted","unit":"openspec:add-envelope-store"}
 {"at":"2026-11-03T22:29:40Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-crash-harness"}
 {"at":"2026-11-03T22:29:40Z","run":"r-20261103T2229Z-1f61","type":"unit.dispatched","unit":"openspec:add-crash-harness"}
+{"at":"2026-11-04T00:26:06Z","detail":"awaiting_human: no new answers (open: Q-001) (harness check inconclusive: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-crash-harness"}
