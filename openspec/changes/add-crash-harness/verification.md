@@ -1,4 +1,4 @@
-# Verification: openspec:add-crash-harness: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-crash-harness: PASS (round 2)
 
 traceability: 14/14 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 14/14 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.4 | base main@72d0901386 contained |
-| 1 | integrity | ok | 164.7 | 11 sub-checks; scope: 21 changed file(s) |
-| 2 | build | ok | 31.9 |  |
-| 3 | tests | ok | 258.8 |  |
-| 4 | traceability | ok | 0.2 | 14/14 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/config/faults.ts, src/config/index.ts, test/arch/fault-points.ts, test/support/crash/child.ts, test/support/crash/cluster.ts and 4 more |
-| 8 | s1 judge | ok | 1.1 | 12/14 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 177.1 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -133,6 +133,12 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-ffd3df2c | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-b965721e | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
 
+## Answers to verdict questions
+
+- Q-002 accept C-0f1c4174 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as written. validateOptions runs before any directory, log or child exists and names scenario, faultPoints, args and readyTimeoutMs with the bounds the scenario gives; the child writes one stderr line and exits 1 for scenario_failed, scenario_not_ready, scenario_invalid an...
+- Q-003 accept F-2c3fda0e by the delegate (claude-fable-5-1 via claude-code): The finding is waived. The args option is typed Readonly<Record<string, string>> on a test-only harness, so a Date or class instance reaches validateOptions only through an explicit cast in test code. The validation refuses a non-object, null, an array and any non-string own value, which is what the...
+- Q-004 accept F-fb0ff054 by the delegate (claude-fable-5-1 via claude-code): The finding is waived. Part names are the key of the e2e stack's handle map by contract: PartContext.handles is a ReadonlyMap keyed by name and parts find each other through it, so two parts with one name are unsupported everywhere in the stack. Both discoverParts and the part registry reject a dupl...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -145,7 +151,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-43ecafdc | test-crash-harness › A dedicated cluster starts every part, seeds them, and cleans up › Real parts, a value and a throw | pass | pass | the judge passed it and a discriminating test passes |
 | C-5f05917f | test-crash-harness › A dedicated cluster starts every part, seeds them, and cleans up › Order, rollback, conflict, missing database | pass | pass | the judge passed it and a discriminating test passes |
 | C-dfcb53d2 | test-crash-harness › A scenario child starts with a closed environment and reports ready › Ready, environment, arguments, log | pass | pass | the judge passed it and a discriminating test passes |
-| C-0f1c4174 | test-crash-harness › A scenario child starts with a closed environment and reports ready › Option errors and start failures | fail | needs_human | judge fail counted as insufficient_evidence: counterexample unexecuted (not executed in M0: the verifier worktree is M1 (verifier 1.5)) |
+| C-0f1c4174 | test-crash-harness › A scenario child starts with a closed environment and reports ready › Option errors and start failures | fail | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as written. validateOptions runs before any directory, log or child exists and names scenario, faultPoints, args and readyTimeoutMs with the bounds the scenario gives; the child writes one stderr line and exits 1... |
 | C-59216c23 | test-crash-harness › Kill is hard and idempotent, restart brings the child back, stop ends the engine › Kill, restart, stop, deaths | pass | pass | the judge passed it and a discriminating test passes |
 | C-fb4b5ad9 | test-crash-harness › Kill is hard and idempotent, restart brings the child back, stop ends the engine › Restart and stop issued together | pass | pass | the judge passed it and a discriminating test passes |
 | C-5bff336f | test-crash-harness › A failed restart leaves the engine dead and the next restart can recover it › A restart that fails, then one that works | pass | pass | the judge passed it and a discriminating test passes |
@@ -155,8 +161,8 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Findings
 
-- [major, judge] spawnEngine accepts non-plain args objects (criterion C-0f1c4174): The spawn boundary must accept a plain object of string values. test/support/crash/engine.ts validates only that args is a non-null non-array object with string Object.values, so Date and class instances are accepted and silently spread into an empty payload object.
-- [major, judge] Duplicate part names leak the first part handle (spec gap) (criterion C-5f05917f): startCrashCluster stores handles by name. A later successfully started part with the same name overwrites the first handle; shutdown iterates the duplicate names and closes the final handle twice while leaving the first handle unclosed.
+- [minor, judge] spawnEngine accepts non-plain args objects (criterion C-0f1c4174): The spawn boundary must accept a plain object of string values. test/support/crash/engine.ts validates only that args is a non-null non-array object with string Object.values, so Date and class instances are accepted and silently spread into an empty payload object. (waived by the delegate (claude-fable-5-1 via claude-code): The finding is waived. The args option is typed Readonly<Record<string, string>> on a test-only harness, so a Date or class instance reaches validateOptions only through an explicit cast in test code. The validation refuses a non-object, null, an array and any non-string o...
+- [minor, judge] Duplicate part names leak the first part handle (spec gap) (criterion C-5f05917f): startCrashCluster stores handles by name. A later successfully started part with the same name overwrites the first handle; shutdown iterates the duplicate names and closes the final handle twice while leaving the first handle unclosed. (waived by the delegate (claude-fable-5-1 via claude-code): The finding is waived. Part names are the key of the e2e stack's handle map by contract: PartContext.handles is a ReadonlyMap keyed by name and parts find each other through it, so two parts with one name are unsupported everywhere in the stack. Both discoverParts and the part registry reject a duplica...
 - [minor, judge] Effect logs without a terminal newline are accepted (spec gap) (criterion C-b965721e): The scenarios cover files written by appendEffect and malformed lines, but do not define whether a final valid JSON record without a newline is a valid JSON line. The committed parser accepts it.
 
 ## New tests (red then green, `task.red_ok` in the ledger)
