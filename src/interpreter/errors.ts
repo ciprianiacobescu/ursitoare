@@ -1,5 +1,3 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 export type InterpreterErrorCode =
   | "INTERPRETER_VERSION_NOT_FOUND"
   | "INTERPRETER_VERSION_NOT_RUNNABLE"
@@ -22,12 +20,15 @@ export class InterpreterError extends Error {
   readonly details: Readonly<Record<string, string | string[]>>;
 
   constructor(
-    _code: InterpreterErrorCode,
+    code: InterpreterErrorCode,
     message: string,
-    _node?: string | null,
-    _details?: Record<string, string | string[]>,
+    node?: string | null,
+    details?: Record<string, string | string[]>,
   ) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "InterpreterError";
+    this.code = code;
+    this.node = node ?? null;
+    this.details = details ?? {};
   }
 }
