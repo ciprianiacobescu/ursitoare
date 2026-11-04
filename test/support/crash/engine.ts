@@ -203,7 +203,6 @@ function startChild(state: EngineState): Promise<ChildRecord> {
     };
 
     state.current = record;
-    state.lastPid = record.pid;
 
     const timer = setTimeout(() => {
       timedOut = true;
@@ -221,6 +220,7 @@ function startChild(state: EngineState): Promise<ChildRecord> {
       }
       settled = true;
       clearTimeout(timer);
+      state.lastPid = record.pid;
       resolve(record);
     }
 
