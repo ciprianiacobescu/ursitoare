@@ -2,7 +2,7 @@
 
 import type { InterpreterDeps, WorkflowOps } from "./types.ts";
 
-export const RUN_WORKFLOW: string = "";
+export const RUN_WORKFLOW = "ursitoare.run";
 
 export function registerRunWorkflow(): void {
   throw new Error("not implemented");
