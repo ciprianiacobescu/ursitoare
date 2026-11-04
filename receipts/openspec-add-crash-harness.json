@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-04T20:12:45Z",
+  "integrated_revision": "b0f72e389d565ed65fbb0def0c760be680873de1",
+  "merge_commit": "b0f72e389d565ed65fbb0def0c760be680873de1",
+  "plan_digest": "d4a60ec43090d2fa",
+  "plan_id": "m4",
+  "postcheck": "pass",
+  "pr": 70,
+  "receipt_id": "m4/openspec:add-crash-harness/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "cfb3f812299f02be300d2a5ab50e4190910590f5",
+  "spec_digest": "087670dce0d41ffc",
+  "target": "main",
+  "unit_id": "openspec:add-crash-harness"
+}
