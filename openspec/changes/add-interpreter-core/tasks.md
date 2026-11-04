@@ -14,7 +14,7 @@ Spec: `specs/interpreter/spec.md`; decisions: `design.md`; fixtures: `test-plan.
 ## 3. The run
 
 - [x] 3.1 Write `src/interpreter/start.test.ts` first (scenario "Refusals, enqueue and idempotence"), then implement `startRun` and `workflowIdOf` in `src/interpreter/start.ts`, implementing requirement "A run starts only by registry id and hash"
-- [ ] 3.2 Write `src/interpreter/execute.test.ts` first (scenarios "A run walks block, switch, block and end" and "Replay reuses the numbers and the recorded results"; the tagged ops capture the `runStep` values), then implement `executeRun` in `src/interpreter/execute.ts` and `src/interpreter/visit.ts`, implementing requirement "A run records one numbered row per node visit"
+- [x] 3.2 Write `src/interpreter/execute.test.ts` first (scenarios "A run walks block, switch, block and end" and "Replay reuses the numbers and the recorded results"; the tagged ops capture the `runStep` values), then implement `executeRun` in `src/interpreter/execute.ts` and `src/interpreter/visit.ts`, implementing requirement "A run records one numbered row per node visit"
 - [ ] 3.3 Write `src/interpreter/execute-failures.test.ts` first (scenarios "Node failures" and "Run-level failures and nothing to do"), then complete the failure mapping, revisit guard and terminal-run shortcut in `src/interpreter/execute.ts` and `src/interpreter/visit.ts`, implementing requirement "A failing run ends failed with a RunError and leaks nothing"
 
 ## 4. Durable workflow
