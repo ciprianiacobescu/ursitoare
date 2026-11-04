@@ -70,3 +70,5 @@
 {"at":"2026-11-04T20:12:45Z","revision":"b0f72e389d565ed65fbb0def0c760be680873de1","type":"unit.integrated","unit":"openspec:add-crash-harness"}
 {"at":"2026-11-04T20:12:45Z","attempt":1,"cost_usd":2.314726,"runs":3,"type":"plan.charged","unit":"openspec:add-crash-harness"}
 {"at":"2026-11-04T20:14:13Z","branch":"l4/archive/openspec/add-crash-harness","head":"20d9db95f03b06b9b6c798b7b2dd11bd9c225ece","type":"unit.branch_deleted","unit":"openspec:add-crash-harness"}
+{"at":"2026-11-04T20:14:15Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-interpreter-core"}
+{"at":"2026-11-04T20:14:15Z","run":"r-20261104T2014Z-19d3","type":"unit.dispatched","unit":"openspec:add-interpreter-core"}
