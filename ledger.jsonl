@@ -61,3 +61,5 @@
 {"at":"2026-11-04T18:55:42Z","by":"harness","reason":"the cause is gone: openspec:add-crash-harness is awaiting_human","type":"plan.resumed"}
 {"at":"2026-11-04T18:55:43Z","attempt":1,"cost_usd":0.70191,"runs":2,"type":"plan.charged","unit":"openspec:add-crash-harness"}
 {"at":"2026-11-04T18:55:43Z","run":"r-20261104T1855Z-7394","type":"unit.dispatched","unit":"openspec:add-crash-harness"}
+{"at":"2026-11-04T19:58:31Z","attempt":1,"cost_usd":2.314726,"runs":3,"type":"plan.charged","unit":"openspec:add-crash-harness"}
+{"at":"2026-11-04T19:58:31Z","run":"r-20261104T1958Z-2455","type":"unit.dispatched","unit":"openspec:add-crash-harness"}
