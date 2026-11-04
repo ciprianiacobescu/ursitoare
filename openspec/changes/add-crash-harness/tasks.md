@@ -21,4 +21,4 @@ Spec: `specs/test-crash-harness/spec.md`; decisions: `design.md`; merged shapes:
 
 ## 5. The counter proof
 
-- [ ] 5.1 Write `test/support/crash/counter.test.ts` first (scenario "Counter with after:two, before:two and no fault"; the test never calls `launchDurable`), then implement `test/support/crash/counter-scenario.ts` (workflow `crash.counter` and `start` as design.md decision 9 says), implementing requirement "A fault point kills the scenario child once and the workflow completes after restart"
+- [x] 5.1 Write `test/support/crash/counter.test.ts` first (scenario "Counter with after:two, before:two and no fault"; the test never calls `launchDurable`), then implement `test/support/crash/counter-scenario.ts` (workflow `crash.counter` and `start` as design.md decision 9 says), implementing requirement "A fault point kills the scenario child once and the workflow completes after restart"
