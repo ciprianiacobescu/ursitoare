@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 4.1 | harness | Task 4.1: the pre-satisfied check could not decide |
 | Q-002 | answered | none | verdict | Criterion C-0f1c4174 (test-crash-harness › A scenario child starts with a closed environment and reports ready › Option errors and start failures): accept as satisfied? |
-| Q-003 | open | none | verdict | Finding F-2c3fda0e: spawnEngine accepts non-plain args objects |
+| Q-003 | answered | none | verdict | Finding F-2c3fda0e: spawnEngine accepts non-plain args objects |
 | Q-004 | open | none | verdict | Finding F-fb0ff054: Duplicate part names leak the first part handle |
 <!-- l4:index:end -->
 
@@ -181,7 +181,8 @@ accept The criterion is satisfied as written. validateOptions runs before any di
 
 ## Q-003: Finding F-2c3fda0e: spawnEngine accepts non-plain args objects
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -201,6 +202,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived. The args option is typed Readonly<Record<string, string>> on a test-only harness, so a Date or class instance reaches validateOptions only through an explicit cast in test code. The validation refuses a non-object, null, an array and any non-string own value, which is what the specification's scenario pins down with args { a: 1 }; an object with string own fields is copied correctly, and the child re-validates the payload. An empty args from a Date has no effect on production code, no security impact and no scenario that it breaks, so a fix unit is not warranted.
 ---
 
 ## Q-004: Finding F-fb0ff054: Duplicate part names leak the first part handle
