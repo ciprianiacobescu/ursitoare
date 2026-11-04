@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | 4.1 | harness | Task 4.1: the pre-satisfied check could not decide |
 | Q-002 | answered | none | verdict | Criterion C-0f1c4174 (test-crash-harness › A scenario child starts with a closed environment and reports ready › Option errors and start failures): accept as satisfied? |
 | Q-003 | answered | none | verdict | Finding F-2c3fda0e: spawnEngine accepts non-plain args objects |
-| Q-004 | open | none | verdict | Finding F-fb0ff054: Duplicate part names leak the first part handle |
+| Q-004 | answered | none | verdict | Finding F-fb0ff054: Duplicate part names leak the first part handle |
 <!-- l4:index:end -->
 
 ---
@@ -207,7 +207,8 @@ accept The finding is waived. The args option is typed Readonly<Record<string, s
 
 ## Q-004: Finding F-fb0ff054: Duplicate part names leak the first part handle
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -229,3 +230,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived. Part names are the key of the e2e stack's handle map by contract: PartContext.handles is a ReadonlyMap keyed by name and parts find each other through it, so two parts with one name are unsupported everywhere in the stack. Both discoverParts and the part registry reject a duplicate name with STACK_PART_DUPLICATE before startCrashCluster sees the list, and withDedicatedCluster passes only the discovered list. startCrashCluster stores and closes handles exactly as startE2eStack does, which design decision 5 asks for. No scenario pins the duplicate-name case, and a test handing in two same-named fakes would be misusing the part model, not exposing a defect of this unit.
