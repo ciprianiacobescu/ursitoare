@@ -59,3 +59,5 @@
 {"at":"2026-11-03T22:29:40Z","run":"r-20261103T2229Z-1f61","type":"unit.dispatched","unit":"openspec:add-crash-harness"}
 {"at":"2026-11-04T00:26:06Z","detail":"awaiting_human: no new answers (open: Q-001) (harness check inconclusive: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-crash-harness"}
 {"at":"2026-11-04T18:55:42Z","by":"harness","reason":"the cause is gone: openspec:add-crash-harness is awaiting_human","type":"plan.resumed"}
+{"at":"2026-11-04T18:55:43Z","attempt":1,"cost_usd":0.70191,"runs":2,"type":"plan.charged","unit":"openspec:add-crash-harness"}
+{"at":"2026-11-04T18:55:43Z","run":"r-20261104T1855Z-7394","type":"unit.dispatched","unit":"openspec:add-crash-harness"}
