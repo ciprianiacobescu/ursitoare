@@ -1,0 +1,92 @@
+# test-crash-harness Specification
+
+## Purpose
+The crash harness: a one-shot fault port only test code can arm, a dedicated cluster of the e2e stack's parts, a child running a test-built scenario, hard kill and restart, and effect counting by idempotency key.
+
+## Requirements
+
+### Requirement: A fault point fires once, and its marker is written before the kill
+`createFaultPoints(spec)` SHALL return a `FaultPoints` whose `hit(point)` does nothing for a point outside `armed` and, for an armed point, creates the file `<markerDir>/<sha256 hex of point>` exclusively (creating `markerDir` when absent) and then calls `spec.kill()` once; a later `hit` of that point, also through another `createFaultPoints` on the same `markerDir`, SHALL call nothing; an error from creating the directory or the marker other than the marker already existing SHALL propagate without calling `kill`.
+
+#### Scenario: Armed point, marker, second hit
+- **WHEN** `createFaultPoints({ armed: ["after:pay", "before:mail"], markerDir, kill })` runs with `markerDir` an absent subdirectory `m` of a temp directory and `kill` a fake recording `readdirSync(markerDir)` and its argument count at call time; then `hit("after:pay")` twice, `hit("after:other")` and `hit("before:mail")` run; then a second `createFaultPoints` with the same `spec` and a second fake runs `hit("after:pay")` and `hit("before:mail")`
+- **THEN** `points.armed` deep-equals `["after:pay", "before:mail"]` and is frozen; the first fake was called twice with no argument, first seeing `[sha256hex("after:pay")]`, then both hashes in sorted order; every `hit` returned `undefined`; the file `sha256hex("after:pay")` holds `after:pay`; the second fake was called 0 times; the final listing of `m` is the two hashes, none for `after:other`
+
+#### Scenario: A marker that cannot be written
+- **WHEN** `hit("after:pay")` runs on a port from `createFaultPoints({ armed: ["after:pay"], markerDir, kill })` with a recording `kill`, once with `markerDir` the path of a regular file `f` and once with `f/sub`
+- **THEN** the first call throws an error with `code` `EEXIST` and the second with `code` `ENOTDIR`; `kill` was called 0 times; `f` is still a regular file and nothing was created under it
+
+### Requirement: A bad spec is refused and the null port does nothing
+`createFaultPoints` SHALL throw `ConfigError` (`CONFIG_INVALID`, `variable` `armed`, `markerDir` or `kill`) for an entry not shaped `before:<step>` or `after:<step>` (`<step>` 1 to 128 characters of letters, digits, `_`, `.`, `:`, `-`, starting with a letter or digit), a non-array `armed`, a relative `markerDir` or a non-function `kill`, creating no file; `NO_FAULT_POINTS` SHALL be a frozen port with `armed` `[]` whose `hit` does nothing.
+
+#### Scenario: Refusals and the null port
+- **WHEN** `createFaultPoints` runs with `armed` `["pay"]`, `["after:"]`, `["after:../x"]`, `["after:" + "a".repeat(129)]` and the string `"after:pay"` (cast), then with `markerDir` `"relative/dir"` and `""`, then with `kill` `undefined` (cast), the other fields valid and `markerDir` in a temp directory; then with `armed: []` and `hit("after:pay")`; then `NO_FAULT_POINTS.hit("after:pay")` and `NO_FAULT_POINTS.hit("")` run
+- **THEN** the first five throw `ConfigError` with `code` `CONFIG_INVALID` and `variable` `armed`, the next two `markerDir`, the last `kill`; the temp directory listing is `[]`; the empty-`armed` port never calls its `kill` fake; `NO_FAULT_POINTS` and `NO_FAULT_POINTS.armed` are frozen, `armed` deep-equals `[]`, and both `hit` calls return `undefined`
+
+### Requirement: The step observer names fault points as phase and step
+`faultObserver(points)` SHALL return a `StepObserver` that calls `points.hit` once per call with the single argument `` `${phase}:${step}` `` and returns `undefined`, letting an error from `hit` propagate.
+
+#### Scenario: Names, one call each, error passthrough
+- **WHEN** an observer over a recording `FaultPoints` fake (`hit` records its argument list) is called with `("before", "pay", "wf-1")`, `("after", "pay", "wf-1")` and `("after", "mail:send", "wf-2")`; an observer over a fake whose `hit` throws `err = new Error("stop")` is called with `("after", "x", "w")`; and `faultObserver(NO_FAULT_POINTS)("after", "pay", "w")` runs
+- **THEN** the recorded calls deep-equal `[["before:pay"], ["after:pay"], ["after:mail:send"]]` and each call returned `undefined`; the second observer throws `err` itself (`===`); the last call returns `undefined`
+
+### Requirement: Production config cannot create or enable fault points
+`AppConfig` and `loadConfig` SHALL carry no fault member and read no fault variable, and `checkFaultPoints` SHALL report `ARCH_FAULT_POINTS` for a non-test `src` file other than `src/config/faults.ts` and `src/config/index.ts` that names `createFaultPoints`, for `src/config/faults.ts` naming `process`, and for a non-test file other than `src/config/index.ts` that imports `src/config/faults.ts`.
+
+#### Scenario: Rule fixtures, the real tree and the config
+- **WHEN** `checkFaultPoints(snapshotOf(files))` runs on the fixtures of `design.md` § Test plan: the violating `src/api/a.ts`, `src/runs/b.ts`, `src/config/config.ts`, `src/config/faults.ts` and the clean `src/config/index.ts`, `src/api/c.test.ts`, `src/api/d.ts`, `src/tools/e.ts`; then on `readSnapshot()`; and `loadConfig` runs on `{ URSITOARE_DATABASE_URL: "postgres://ursitoare_app@127.0.0.1:5432/x" }` and on the same plus `URSITOARE_FAULT_POINTS` `after:pay`, `URSITOARE_FAULT_MARKER_DIR` `/tmp/m` and `URSITOARE_CRASH_POINTS`
+- **THEN** the violations are exactly, in this order: `src/api/a.ts` line 1 with message `createFaultPoints is named only in src/config/faults.ts and src/config/index.ts`; `src/config/config.ts` line 1 with `only src/config/index.ts imports src/config/faults.ts`; `src/config/faults.ts` line 2 with `src/config/faults.ts does not touch process`; `src/runs/b.ts` line 1 with the first message; each has `code` `ARCH_FAULT_POINTS`; the real tree has none; the two configs deep-equal each other and neither its `Object.keys` nor its `JSON.stringify` contains `fault` in any case
+
+### Requirement: A dedicated cluster starts every part, seeds them, and cleans up
+`withDedicatedCluster(fn)` SHALL start the parts of `discoverParts()` in order in a new directory `ursitoare-crash-*` under the OS temp directory, run every part's `seed` once all have started, call `fn` with a `CrashCluster` whose `env` merges the parts' env, and, when `fn` settles or throws, stop the engines spawned on it, close the parts in reverse order and remove the directory; `startCrashCluster(parts)` SHALL do the same for a given list, with an idempotent `close()`, and on a failed start or seed, a duplicate env key or a missing `database` part close what started first.
+
+#### Scenario: Real parts, a value and a throw
+- **WHEN** `withDedicatedCluster` runs (1) an `fn` that throws `new Error("boom")`; (2) an `fn` that reads the cluster and returns the record `R` of design.md § Test plan; and `startCrashCluster(await discoverParts())` then spawns an engine from a test-written `idle.mjs` and calls `close()` twice. `dataDir` and the port of `appEndpoint.url` are noted in all three
+- **THEN** (1) rejects with that error (`===`); (2) resolves `R`, checked after the call returned: `u` `ursitoare_app`, `d` `ursitoare_e2e`, `ok` `true`, `mode` `0o600`, `text` `secret` plus a newline, `env.URSITOARE_DATABASE_URL` equal to `url`, no password in it, and `dirs` holding `database`, `durable` and `oidc`, `parent` equal to `realpathSync(os.tmpdir())` and `basename(dataDir)` starting `ursitoare-crash-`; (3) the first `close()` resolves, the engine's pid is dead, and the second `close()` resolves; in all three `dataDir` is absent (`ENOENT`) and the recorded port refuses TCP connections
+
+#### Scenario: Order, rollback, conflict, missing database
+- **WHEN** `startCrashCluster` runs on fake parts `p1`, `p2`, `p3` (env `{ K1: "v1" }`, `{ K2: "v2" }`, `{ K3: "v3" }`) that push `start:<name>`, `seed:<name>` and `close:<name>` to one log and record their `PartContext`; then with `p2` rejecting in `start`; then with `p2` env `{ K1: "x" }`; then with `p3` rejecting in `seed`
+- **THEN** the first rejects `E2eStackError` `STACK_PART_MISSING` (`details.part` `database`) with log `start:p1, start:p2, start:p3, seed:p1, seed:p2, seed:p3, close:p3, close:p2, close:p1`; `p2` saw `ctx.env` `{ K1: "v1" }`, `basename(ctx.dataDir)` `p2`, `ctx.handles` holding `p1`, and different `engineOrigin` and `controlOrigin` values matching `^http://127\.0\.0\.1:\d+$`; the second rejects `STACK_PART_FAILED` with `details.part` `p2`, log `start:p1, start:p2, close:p1`; the third `STACK_ENV_CONFLICT` with `details.key` `K1`, log `start:p1, start:p2, close:p2, close:p1`; the fourth `STACK_PART_FAILED` with `details.part` `p3`, log ending `seed:p3, close:p3, close:p2, close:p1`; in every case the directory above `p2`'s `dataDir` is gone
+
+### Requirement: A scenario child starts with a closed environment and reports ready
+`spawnEngine(opts)` SHALL run `test/support/crash/child.ts` with `process.execPath` (Node 24 strips the types itself; no flag, loader or `NODE_OPTIONS`) and the environment `cluster.env` without every key starting `L4_`, plus `PATH` and `HOME` when the parent has them, and no other parent variable, load `opts.scenario`, and resolve once the scenario calls `ready()`, with its output in `<cluster.dataDir>/engine.log` by then; it SHALL reject an unusable option as `CRASH_OPTIONS_INVALID` and a child that cannot become ready as `CRASH_START_FAILED`.
+
+#### Scenario: Ready, environment, arguments, log
+- **WHEN** the parent sets `CRASH_PARENT_ONLY`, and `spawnEngine({ cluster, scenario, faultPoints: ["before:x"], args: { a: "1" } })` runs with a cluster whose `env` is `{ URSITOARE_PROBE: "p1", L4_X: "leak" }` and the test-written `probe.mjs` (design.md § Test plan)
+- **THEN** it resolves with `pid` a positive integer of a live process and `deaths` `0`; in the file `version` starts `v24.`, `args` is `{ a: "1" }`, `armed` is `["before:x"]`, `dataDir` equals `cluster.dataDir`, `env.URSITOARE_PROBE` and `ctxEnv.URSITOARE_PROBE` are `p1`, `env.PATH` equals the parent's `PATH`, and neither `env` nor `ctxEnv` has `L4_X`, `CRASH_PARENT_ONLY` or any key starting `L4_`; `env.HOME` equals the parent's `HOME`; `engine.log` holds a line with `probe line` and the line `CRASH_READY`; with `HOME` deleted from the parent's env, a second spawn gives a probe `env` without the key `HOME`
+
+#### Scenario: Option errors and start failures
+- **WHEN** `spawnEngine` runs with a relative `scenario`, a missing `scenario` file, `faultPoints: ["pay"]` and `args: { a: 1 }` (cast), and `spawnEngineTuned` with a valid scenario and `readyTimeoutMs` `0`, `-1`, `1.5`, `NaN`, `600001`; then with test-written scenarios that throw an error with `code` `"E_X"`, return without `ready()`, export no `start`, hold a syntax error, and write `fatal thing` with `writeSync(2, ...)` then `process.exit(3)`; then `spawnEngineTuned` with `1500` runs on a scenario whose `start` never settles; and `READY_TIMEOUT_MS` is read
+- **THEN** the first nine reject `E2eStackError` `CRASH_OPTIONS_INVALID` with `details.field` `scenario`, `scenario`, `faultPoints`, `args`, and the five bad timeouts with `readyTimeoutMs`; no child was spawned and no `engine.log` exists; the next five scripted ones reject `CRASH_START_FAILED` with `details.reason` `exited`, `details.line` `crash-child: scenario_failed E_X`, `crash-child: scenario_not_ready`, `crash-child: scenario_invalid`, `crash-child: scenario_unloadable`, `fatal thing` and `details.exitCode` `1`, `1`, `1`, `1`, `3`; the hanging one rejects with `details.reason` `timeout` and a `details.pid` that is dead; `READY_TIMEOUT_MS` is `30000`
+
+### Requirement: Kill is hard and idempotent, restart brings the child back, stop ends the engine
+`kill()` SHALL send SIGKILL and resolve once the child has closed, also when it is dead; `restart()` SHALL kill a live child, spawn again with the same options and resolve when ready; `stop()` SHALL kill and make a later `restart()` reject `CRASH_STOPPED`; all three run on one chain per engine, so a `stop()` issued during a pending `restart()` waits for it and stops the replacement; `deaths` SHALL count the ready children that ended without a `kill`, `restart` or `stop` asking for it.
+
+#### Scenario: Kill, restart, stop, deaths
+- **WHEN** an engine is spawned from the test-written `idle.mjs`; then `kill()` runs twice, `restart()` once, `restart()` again while alive, `Promise.all([restart(), restart()])`, `stop()` twice, `kill()` and `restart()`; and a second engine from `exit-once.mjs` is spawned, `deaths` is polled to `1` (20 s), and `kill()` then `restart()` run
+- **THEN** after the first `kill()` the first pid is dead (`process.kill(pid, 0)` throws `ESRCH`) and `deaths` is `0`; the second `kill()` resolves; each `restart()` gives a new `pid`, the previous one dead; after the concurrent pair only the current `pid` of `pids.log` is alive; after `stop()` it is dead, the second `stop()` and the `kill()` resolve, the `restart()` rejects `CRASH_STOPPED` and `deaths` is `0`; the second engine reaches `deaths` `1`, its `kill()` resolves at once, its `restart()` gives a new `pid`
+
+#### Scenario: Restart and stop issued together
+- **WHEN** an engine is spawned from `idle.mjs`; then `restart()` and `stop()` are called back to back without awaiting, and `Promise.allSettled` awaits both
+- **THEN** both are `fulfilled`; every pid in `pids.log` is dead, the replacement included; a later `restart()` rejects `CRASH_STOPPED`; `deaths` is `0`
+
+### Requirement: A failed restart leaves the engine dead and the next restart can recover it
+When `restart()` kills the live child and the new child cannot become ready, it SHALL reject `CRASH_START_FAILED` and leave no live child; `pid` SHALL stay the last started child's pid (now dead), `deaths` SHALL not change, `kill()` and `stop()` SHALL resolve, and a later `restart()` SHALL spawn again.
+
+#### Scenario: A restart that fails, then one that works
+- **WHEN** an engine is spawned from the test-written `flaky.mjs` (fails with `code` `"E_NEXT"` while `<dataDir>/fail-next` exists); the test records `pid` as `old`, creates `fail-next`, calls `restart()`, then `kill()`, removes `fail-next` and calls `restart()` again
+- **THEN** the first `restart()` rejects `E2eStackError` `CRASH_START_FAILED` with `details.reason` `exited`, `details.line` `crash-child: scenario_failed E_NEXT` and `details.exitCode` `1`; no pid in `pids.log` is alive (`old` and the failed child); `pid` still equals `old`; `deaths` is `0`; `kill()` resolves; the second `restart()` resolves with a live `pid` other than `old`, `deaths` still `0`
+
+### Requirement: A fault point kills the scenario child once and the workflow completes after restart
+With `faultPoints` armed through `spawnEngine`, the counter scenario (`counter-scenario.ts`, workflow `crash.counter`, steps `one`, `two`, `three`) SHALL make the child die by SIGKILL at the armed point exactly once, and after `restart()` its workflow SHALL reach `SUCCESS` in `dbos.workflow_status` with a step log showing which steps re-ran.
+
+#### Scenario: Counter with after:two, before:two and no fault
+- **WHEN** inside one `withDedicatedCluster` three engines run in turn on `counter-scenario.ts` with `args` `{ workflowId, log }` `("w-after", "after.log")`, `("w-before", "before.log")`, `("w-none", "none.log")` and `faultPoints` `["after:two"]`, `["before:two"]`, none; each armed one is polled to `deaths` `1` (20 s), then `restart()`ed; then `dbos.workflow_status` is read as owner through `cluster.ownerUrl` until the id's `status` is `SUCCESS` (20 s); the parent launches no `DurableRuntime`
+- **THEN** the logs hold the lines `one`, `two`, `two`, `three`, `done` (`after.log`), `one`, `two`, `three`, `done` (`before.log`) and `one`, `two`, `three`, `done` (`none.log`); when `deaths` reached `1`, `after.log` held `one`, `two` and `before.log` held `one`; `faultMarkerDir(cluster.dataDir)` held `sha256hex("after:two")` and `sha256hex("before:two")` only; `deaths` stayed `1`, `1`, `0`; each id has one row with `status` `SUCCESS` and `application_version` `ursitoare-1`; each engine but the last is stopped before the next; the last engine's `pid` is dead once `withDedicatedCluster` returns
+
+### Requirement: Effects are counted by idempotency key
+`appendEffect(file, entry)` SHALL append one JSON line, creating the file and its directory, and `countEffects(file)` SHALL return `calls` (lines), `effects` (per tool the distinct non-null `idemKey` values, plus one for every null key) summed over the tools, `duplicates` as `calls - effects`, and the same three numbers per tool in `byTool`.
+
+#### Scenario: A fixed file, the empty file, the bad inputs
+- **WHEN** `appendEffect` writes seven entries (tool, idemKey, nodeId) `(pay,"k1",n1)`, `(pay,"k1",n1)`, `(pay,"k2",n2)`, `(mail,null,n3)`, `(mail,null,n3)`, `(mail,"k1",n3)` and `(__proto__,"x",n4)` to a file in an absent directory, and `countEffects` reads it and an absent file, then files whose line 2 is `not json`, whose line 1 is `{}`, and whose line 1 is `{"tool":5,"idemKey":null,"nodeId":"n"}`; `appendEffect` runs with tool `""`, with `idemKey` `""` and with `nodeId` `""`, each on its own absent path
+- **THEN** the result is `calls` 7, `effects` 6, `duplicates` 1 and `byTool` equal to `Object.fromEntries([["pay", { calls: 3, effects: 2, duplicates: 1 }], ["mail", { calls: 3, effects: 3, duplicates: 0 }], ["__proto__", { calls: 1, effects: 1, duplicates: 0 }]])` with `Object.hasOwn(byTool, "__proto__")`; the absent file gives zeros and `byTool` `{}`; the three bad files throw `E2eStackError` `CRASH_EFFECT_LOG_INVALID` with `details.line` `2`, `1`, `1`; the three bad entries throw `CRASH_OPTIONS_INVALID` with `details.field` `tool`, `idemKey` and `nodeId` and none of the three paths exists
