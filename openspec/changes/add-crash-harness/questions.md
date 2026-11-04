@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 4.1 | harness | Task 4.1: the pre-satisfied check could not decide |
+| Q-001 | answered | 4.1 | harness | Task 4.1: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 4.1: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** 4.1
 - **Kind:** harness
 - **Asked:** 2026-11-04T00:24Z by deepseek-free, run r-20261103T2229Z-1f61, task 4.1
@@ -131,3 +131,12 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: the orchestrator checked the captured test (held patch 4.1-pre_satisfied.patch) against the scenario 'Ready, environment, arguments, log', clause by clause. It asserts every clause:
+- a live positive pid and deaths 0;
+- version v24., args {a:'1'}, armed ['before:x'] and dataDir;
+- URSITOARE_PROBE p1 in both env and ctxEnv;
+- PATH and HOME equal to the parent's;
+- no L4_X, no CRASH_PARENT_ONLY and no L4_ key in env or ctxEnv;
+- the probe line and CRASH_READY in engine.log;
+- no HOME on a second spawn after HOME is deleted.
+It reads the child's own probe.json, so it checks real behaviour. It fails at the unit base only by error because spawnEngine is the scaffold stub there, and the base run reported 'fail only by an error', not 'pass'.
