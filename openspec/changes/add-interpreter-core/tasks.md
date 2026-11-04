@@ -3,7 +3,7 @@ Spec: `specs/interpreter/spec.md`; decisions: `design.md`; fixtures: `test-plan.
 ## 1. Registry, values and ops
 
 - [x] 1.1 Write `src/interpreter/refs.test.ts` first (scenario "References, templates and unresolved paths"), then implement `InterpreterError` in `src/interpreter/errors.ts`, `registerNodeRuntime`, `nodeRuntimeFor`, `SUPPORTED_KINDS` in `src/interpreter/registry.ts` and `resolveValue` in `src/interpreter/refs.ts`, implementing requirement "Values resolve over recorded outputs"
-- [ ] 1.2 Write `src/interpreter/ops.test.ts`, `test/support/node-conformance.test.ts` and `test/support/run-wait.test.ts` first (scenario "Kit verdicts and a bounded wait"; `ops.test.ts` holds the function parts of the replay scenario of 3.2 and `NO_EFFECT_GATE`), then implement `memoryWorkflowOps` in `src/interpreter/ops.ts` and `NO_EFFECT_GATE` in `src/interpreter/gate.ts`, create `test/support/node-conformance.ts` and `test/support/run-wait.ts`, implementing requirements "A run records one numbered row per node visit" and "The conformance kit and waitForRun support the tests"
+- [x] 1.2 Write `src/interpreter/ops.test.ts`, `test/support/node-conformance.test.ts` and `test/support/run-wait.test.ts` first (scenario "Kit verdicts and a bounded wait"; `ops.test.ts` holds the function parts of the replay scenario of 3.2 and `NO_EFFECT_GATE`), then implement `memoryWorkflowOps` in `src/interpreter/ops.ts` and `NO_EFFECT_GATE` in `src/interpreter/gate.ts`, create `test/support/node-conformance.ts` and `test/support/run-wait.ts`, implementing requirements "A run records one numbered row per node visit" and "The conformance kit and waitForRun support the tests"
 
 ## 2. Node runtimes
 
