@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 4.1 | harness | Task 4.1: the pre-satisfied check could not decide |
-| Q-002 | open | none | verdict | Criterion C-0f1c4174 (test-crash-harness › A scenario child starts with a closed environment and reports ready › Option errors and start failures): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-0f1c4174 (test-crash-harness › A scenario child starts with a closed environment and reports ready › Option errors and start failures): accept as satisfied? |
 | Q-003 | open | none | verdict | Finding F-2c3fda0e: spawnEngine accepts non-plain args objects |
 | Q-004 | open | none | verdict | Finding F-fb0ff054: Duplicate part names leak the first part handle |
 <!-- l4:index:end -->
@@ -148,7 +148,8 @@ It reads the child's own probe.json, so it checks real behaviour. It fails at th
 
 ## Q-002: Criterion C-0f1c4174 (test-crash-harness › A scenario child starts with a closed environment and reports ready › Option errors and start failures): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -175,6 +176,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as written. validateOptions runs before any directory, log or child exists and names scenario, faultPoints, args and readyTimeoutMs with the bounds the scenario gives; the child writes one stderr line and exits 1 for scenario_failed, scenario_not_ready, scenario_invalid and scenario_unloadable, the parent keeps the last non-empty stderr line and the exit code in CRASH_START_FAILED, a ready timeout SIGKILLs the child and rejects with reason timeout and the dead pid, and READY_TIMEOUT_MS is 30000. The two tracing tests assert every clause of the scenario, including the five failure lines, the exit codes 1, 1, 1, 1, 3, the dead timed-out pid and the absent engine.log, and both passed. The judge's fail came only from an unexecuted counterexample about non-plain args objects, which this scenario does not pin down.
 ---
 
 ## Q-003: Finding F-2c3fda0e: spawnEngine accepts non-plain args objects
