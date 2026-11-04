@@ -64,3 +64,4 @@
 {"at":"2026-11-04T19:58:31Z","attempt":1,"cost_usd":2.314726,"runs":3,"type":"plan.charged","unit":"openspec:add-crash-harness"}
 {"at":"2026-11-04T19:58:31Z","run":"r-20261104T1958Z-2455","type":"unit.dispatched","unit":"openspec:add-crash-harness"}
 {"at":"2026-11-04T20:09:15Z","head":"cfb3f812299f02be300d2a5ab50e4190910590f5","pr":70,"target_before":"72d0901386910b5c5fd39067d762d0a575ff7da3","type":"unit.merge_requested","unit":"openspec:add-crash-harness"}
+{"at":"2026-11-04T20:09:19Z","ci":"not_run","head":"cfb3f812299f02be300d2a5ab50e4190910590f5","merge_commit":"b0f72e389d565ed65fbb0def0c760be680873de1","method":"squash","pr":70,"raced":false,"type":"unit.merged","unit":"openspec:add-crash-harness"}
