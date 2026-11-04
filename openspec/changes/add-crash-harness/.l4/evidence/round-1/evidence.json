@@ -1,0 +1,262 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/main.ts",
+      "src/config/faults.ts",
+      "test/arch/fault-points.ts",
+      "test/support/crash/{observer,effects,cluster,engine,child,counter-scenario,index}.ts",
+      "test/arch/owner-endpoint.ts",
+      "src",
+      "src/config/index.ts",
+      "http://127.0.0.1:<freePort",
+      "<dir>/<name>",
+      "<dataDir>/engine.log",
+      "<dataDir>/pids.log",
+      "<dataDir>/probe.json",
+      "<dataDir>/once",
+      "<dataDir>/fail-next",
+      "src/api/a.ts",
+      "src/runs/b.ts",
+      "src/config/config.ts",
+      "src/api/c.test.ts",
+      "src/api/d.ts",
+      "src/tools/e.ts",
+      "src/config/faults.test.ts",
+      "test/arch/fault-points.test.ts",
+      "test/arch/owner-endpoint.test.ts",
+      "docs/decisions/0002",
+      "parts/40-durable.ts",
+      "specs/test-crash-harness/spec.md",
+      "test/support/crash/observer.test.ts",
+      "test/support/crash/observer.ts",
+      "test/support/crash/effects.test.ts",
+      "test/support/crash/effects.ts",
+      "test/support/crash/cluster.test.ts",
+      "test/support/crash/cluster.ts",
+      "test/support/crash/index.ts",
+      "test/support/crash/engine.test.ts",
+      "test/support/crash/engine.ts",
+      "test/support/crash/child.ts",
+      "test/support/crash/engine.control.test.ts",
+      "test/support/crash/counter.test.ts",
+      "test/support/crash/counter-scenario.ts",
+      "**/index.ts",
+      "**/child.ts",
+      "**/cluster.ts",
+      "**/faults.ts",
+      "**/L4_*",
+      "**/probe.mjs",
+      "**/idle.mjs",
+      "**/flaky.mjs",
+      "**/observer.test.ts",
+      "**/effects.test.ts",
+      "**/engine.test.ts",
+      "**/engine.control.test.ts",
+      "**/cluster.test.ts",
+      "**/counter.test.ts",
+      "**/[",
+      "**/observer.ts",
+      "**/effects.ts",
+      "**/engine.ts",
+      "module <dataDir>",
+      "module <dir>",
+      "module api",
+      "module config",
+      "module docs",
+      "module http:",
+      "module main",
+      "module parts",
+      "module runs",
+      "module specs",
+      "module test",
+      "module tools"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-crash-harness/.l4/ledger/r-20261103T2229Z-1f61.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-crash-harness/.l4/ledger/r-20261104T1855Z-7394.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-crash-harness/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-crash-harness/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/config/faults.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/config/faults.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/index.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/arch/fault-points.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/arch/fault-points.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/crash/child.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/crash/cluster.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/crash/cluster.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/crash/counter-scenario.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/crash/counter.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/crash/effects.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/crash/effects.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/crash/engine.control.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/crash/engine.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/crash/engine.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/crash/observer.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/crash/observer.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/config/faults.ts, src/config/index.ts, test/arch/fault-points.ts, test/support/crash/child.ts, test/support/crash/cluster.ts and 4 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/config/faults.ts",
+      "src/config/index.ts",
+      "test/arch/fault-points.ts",
+      "test/support/crash/child.ts",
+      "test/support/crash/cluster.ts",
+      "test/support/crash/counter-scenario.ts",
+      "test/support/crash/effects.ts",
+      "test/support/crash/engine.ts",
+      "test/support/crash/observer.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1522,
+      "passed": 1522,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 18,
+      "new_passed": 18,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
