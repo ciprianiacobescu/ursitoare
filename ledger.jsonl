@@ -113,3 +113,5 @@
 {"at":"2026-11-05T07:30:56Z","revision":"dbbfa5441c2d4cfab54535bb7acfcbfaba4a67bf","type":"unit.integrated","unit":"openspec:add-runs-api"}
 {"at":"2026-11-05T07:30:56Z","attempt":1,"cost_usd":2.238082,"runs":3,"type":"plan.charged","unit":"openspec:add-runs-api"}
 {"at":"2026-11-05T07:32:15Z","branch":"l4/archive/openspec/add-runs-api","head":"7ebad186ab30588aee7f96f914c66bff3b562d78","type":"unit.branch_deleted","unit":"openspec:add-runs-api"}
+{"at":"2026-11-05T07:32:16Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-mock-test-runs"}
+{"at":"2026-11-05T07:32:16Z","run":"r-20261105T0732Z-bd14","type":"unit.dispatched","unit":"openspec:add-mock-test-runs"}
