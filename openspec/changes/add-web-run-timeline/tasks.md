@@ -18,7 +18,7 @@ Spec: `specs/web-runs/spec.md`; data: `reference.md`; decisions: `design.md`. Ea
 
 ## 5. Pages and features
 
-- [ ] 5.1 Write `web/src/runs/pages.test.ts` first (scenario "Registration, names and sources"), then implement the constants and functions of `web/src/runs/pages.ts` and create `web/src/runs/RunsPage.tsx`, `web/src/runs/RunPage.tsx`, `web/src/runs/TestRunPanel.tsx`, `web/src/runs/runs.css`, `web/src/features/80-runs.tsx` and `web/src/features/81-run.tsx`, as design.md decisions 1, 8, 9, 10 and § Roles and names say, implementing requirement "The run pages are registered with fixed names"
+- [x] 5.1 Write `web/src/runs/pages.test.ts` first (scenario "Registration, names and sources"), then implement the constants and functions of `web/src/runs/pages.ts` and create `web/src/runs/RunsPage.tsx`, `web/src/runs/RunPage.tsx`, `web/src/runs/TestRunPanel.tsx`, `web/src/runs/runs.css`, `web/src/features/80-runs.tsx` and `web/src/features/81-run.tsx`, as design.md decisions 1, 8, 9, 10 and § Roles and names say, implementing requirement "The run pages are registered with fixed names"
 
 ## 6. Polling and the M4 journeys
 
