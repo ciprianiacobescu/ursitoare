@@ -1,15 +1,14 @@
-# Verification: openspec:add-interpreter-core: FAIL (round 2)
+# Verification: openspec:add-interpreter-core: PASS (round 3)
 
-traceability: 13/13 criteria covered by a discriminating test
+traceability: 15/15 criteria covered by a discriminating test
 
 - Base: `20d9db95f03b06b9b6c798b7b2dd11bd9c225ece`
-- Head: `044b64c6fce5a99ba52354d5f882b002a92c755b`
+- Head: `7faeaff2e97a94eca0d28c96f5eba16af5e71d56`
 - Implementer profiles: deepseek-free, claude-sonnet
-- Judge: kiro-judge, 3 call(s), judged in 2 parts and 1 follow-up, prompt sha256 `c1d3f94bb15fa2885c4a92df46038f923f3f122b7a0d976eff68386c567daa48`
-  - part 1: 22 file(s), 106033 characters, profile kiro-judge, reply valid
-  - part 2: 9 file(s), 51713 characters, profile kiro-judge, reply valid
-  - follow-up 1: C-7961e8d0; files of parts 1 and 2: 7 file(s), 20448 characters, profile kiro-judge, reply valid
-- Judge replies of kiro-judge (this unit, all rounds): valid 3, repaired 0, retried 0, discarded 0; this round: valid
+- Judge: kiro-judge, 2 call(s), judged in 2 parts, prompt sha256 `6e8425d97a991f5f0d9a6c214693a74132b0c0494209fe038a370bd76438227d`
+  - part 1: 24 file(s), 117520 characters, profile kiro-judge, reply valid
+  - part 2: 13 file(s), 54701 characters, profile kiro-judge, reply valid
+- Judge replies of kiro-judge (this unit, all rounds): valid 5, repaired 0, retried 0, discarded 0; this round: valid
 - independence: declared (unverified): kiro-judge openai (declared), deepseek-free deepseek (declared), claude-sonnet anthropic (tool)
 - Cost: $0.0000
 
@@ -17,40 +16,42 @@ traceability: 13/13 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | reused | 0.0 | reused (round 1) |
-| 1 | integrity | reused | 0.0 | reused (round 1) |
-| 2 | build | reused | 0.0 | reused (round 1) |
-| 3 | tests | reused | 0.0 | reused (round 1) |
-| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 0 | preconditions | ok | 0.8 | base main@20d9db95f0 contained |
+| 1 | integrity | ok | 178.0 | 11 sub-checks; scope: 52 changed file(s) |
+| 2 | build | ok | 33.8 |  |
+| 3 | tests | ok | 267.1 |  |
+| 4 | traceability | ok | 0.2 | 15/15 criteria covered |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | reused | 0.0 | reused (round 1) |
-| 8 | s1 judge | reused | 0.0 | reused (round 1) |
-| 9 | judge | reused | 0.0 | reused (round 1) |
-| 10 | aggregation | ok | 0.0 | FAIL |
+| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/interpreter/errors.ts, src/interpreter/execute.ts, src/interpreter/gate.ts, src/interpreter/index.ts, src/interpreter/ops.ts and 13 more |
+| 8 | s1 judge | ok | 0.7 | 9/15 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
+| 9 | judge | ok | 257.9 | 2 call(s) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
 | Gate | Status | Command | Log |
 |---|---|---|---|
-| setup | pass | `pnpm install --frozen-lockfile` | .l4-out/gates/r-20261104T2245Z-acec/094-setup.log |
-| setup | pass | `uv sync --project e2e --frozen` | .l4-out/gates/r-20261104T2245Z-acec/095-setup.log |
-| build | pass | `pnpm run build` | .l4-out/gates/r-20261104T2245Z-acec/096-build.log |
-| lint | pass | `pnpm run lint` | .l4-out/gates/r-20261104T2245Z-acec/097-lint.log |
-| typecheck | pass | `pnpm run typecheck` | .l4-out/gates/r-20261104T2245Z-acec/098-typecheck.log |
-| test | pass | `pnpm run test` | .l4-out/gates/r-20261104T2245Z-acec/099-test.log |
-| e2e | pass | `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` | .l4-out/gates/r-20261104T2245Z-acec/100-e2e.log |
+| setup | pass | `pnpm install --frozen-lockfile` | .l4-out/gates/r-20261105T0058Z-dc2c/034-setup.log |
+| setup | pass | `uv sync --project e2e --frozen` | .l4-out/gates/r-20261105T0058Z-dc2c/035-setup.log |
+| build | pass | `pnpm run build` | .l4-out/gates/r-20261105T0058Z-dc2c/036-build.log |
+| lint | pass | `pnpm run lint` | .l4-out/gates/r-20261105T0058Z-dc2c/037-lint.log |
+| typecheck | pass | `pnpm run typecheck` | .l4-out/gates/r-20261105T0058Z-dc2c/038-typecheck.log |
+| test | pass | `pnpm run test` | .l4-out/gates/r-20261105T0058Z-dc2c/039-test.log |
+| e2e | pass | `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` | .l4-out/gates/r-20261105T0058Z-dc2c/040-e2e.log |
 
 ## Files by part
 
+- part 1: openspec/changes/add-interpreter-core-fix-1/.openspec.yaml (314 characters)
 - part 1: src/interpreter/runtimes/block.test.ts (5658 characters)
-- part 1: src/interpreter/runtimes/block.ts (5436 characters)
-- part 1: src/interpreter/runtimes/block-effect.test.ts (9374 characters)
+- part 1: src/interpreter/runtimes/block.ts (4694 characters)
+- part 1: src/interpreter/runtimes/block-effect.test.ts (11858 characters)
 - part 1: src/interpreter/runtimes/control.test.ts (5274 characters)
+- part 1: src/interpreter/copied-errors.test.ts (5659 characters)
 - part 1: src/interpreter/runtimes/end.ts (887 characters)
-- part 1: src/interpreter/errors.ts (998 characters)
+- part 1: src/interpreter/errors.ts (2720 characters)
 - part 1: src/interpreter/execute.test.ts (12359 characters)
-- part 1: src/interpreter/execute.ts (10522 characters)
+- part 1: src/interpreter/execute.ts (9945 characters)
 - part 1: src/interpreter/execute-failures.test.ts (21247 characters)
 - part 1: src/interpreter/gate.ts (574 characters)
 - part 1: src/interpreter/index.ts (769 characters)
@@ -58,18 +59,22 @@ traceability: 13/13 criteria covered by a discriminating test
 - part 1: test/support/node-conformance.ts (4085 characters)
 - part 1: src/interpreter/ops.test.ts (4629 characters)
 - part 1: src/interpreter/ops.ts (1470 characters)
+- part 1: openspec/changes/add-interpreter-core-fix-1/proposal.md (3579 characters)
 - part 1: src/interpreter/refs.test.ts (4269 characters)
 - part 1: src/interpreter/refs.ts (5313 characters)
 - part 1: src/interpreter/registry.test.ts (2420 characters)
 - part 1: src/interpreter/registry.ts (1631 characters)
 - part 1: test/support/run-wait.test.ts (2451 characters)
 - part 1: test/support/run-wait.ts (1306 characters)
-- part 1: src/interpreter/schema.ts (952 characters)
+- part 2: src/interpreter/schema.ts (952 characters)
+- part 2: openspec/changes/add-interpreter-core-fix-1/specs/interpreter/spec.md (1825 characters)
 - part 2: src/interpreter/start.test.ts (14038 characters)
 - part 2: src/interpreter/start.ts (4680 characters)
 - part 2: src/interpreter/runtimes/switch.ts (1259 characters)
+- part 2: openspec/changes/add-interpreter-core-fix-1/tasks.md (496 characters)
 - part 2: openspec/changes/add-interpreter-core/tasks.md (7520 characters)
-- part 2: src/interpreter/visit.ts (7451 characters)
+- part 2: src/runs/store/types.ts (362 characters)
+- part 2: src/interpreter/visit.ts (6804 characters)
 - part 2: src/interpreter/runtimes/wait.test.ts (5728 characters)
 - part 2: src/interpreter/runtimes/wait.ts (1218 characters)
 - part 2: src/interpreter/workflow.db.test.ts (6880 characters)
@@ -81,33 +86,35 @@ traceability: 13/13 criteria covered by a discriminating test
 |---|---|---|
 | protected paths | ok | no protected path differs from the base |
 | pre-existing tests | skipped | no test file changed |
-| red-green freeze | ok | 7 task(s): red and green compared |
-| test path freeze | ok | 7 harness step commit(s) checked |
+| red-green freeze | ok | 8 task(s): red and green compared |
+| test path freeze | ok | 8 harness step commit(s) checked |
 | content scan | ok | no result-manipulating construct in the changed support and runner files |
 | gate configuration | skipped | no gate or runner configuration file changed |
 | test awareness | ok | no production line reacts to the test run |
-| suppressions | skipped | not checked: python only; changed files outside it: src/interpreter/errors.ts, src/interpreter/execute-failures.test.ts, src/interpreter/execute.test.ts, src/interpreter/execute.ts, src/interpreter/gate.ts (+25 more) |
-| tdd history | ok | 9 task(s); red tests passing at head: step 3 |
+| suppressions | skipped | not checked: python only; changed files outside it: src/interpreter/copied-errors.test.ts, src/interpreter/errors.ts, src/interpreter/execute-failures.test.ts, src/interpreter/execute.test.ts, src/interpreter/execute.ts (+27 more) |
+| tdd history | ok | 11 task(s); red tests passing at head: step 3 |
 | python encoding | skipped | no Python file added or changed |
-| pre-existing tests still pass | ok | 1466 of 1466 base tests pass on the unit's code with its 13 test and support files at the base (base: not needed) |
+| pre-existing tests still pass | ok | 1466 of 1466 base tests pass on the unit's code with its 14 test and support files at the base (base: not needed) |
 
 ## Traceability
 
 | Id | Criterion | State | Tests (status, proof) | Not evidence | S1 p |
 |---|---|---|---|---|---|
 | C-f3de9ac6 | interpreter › Node runtimes are registered once per kind › Built-in kinds and registration rules | covered | src.interpreter.registry.test.ts::C-f3de9ac6 built-in kinds are registered and the rest are not (passed, red_assertion); src.interpreter.registry.test.ts::C-f3de9ac6 registration refuses duplicates and invalid runtimes (passed, red_assertion) | - | 0.94 |
-| C-18f9cf20 | interpreter › Values resolve over recorded outputs › References, templates and unresolved paths | covered | src.interpreter.refs.test.ts::C-18f9cf20 own proto keys are copied without changing the prototype (passed, red_assertion); src.interpreter.refs.test.ts::C-18f9cf20 single references keep their type and templates stringify (passed, red_assertion); src.interpreter.refs.test.ts::C-18f9cf20 unresolved r... | - | 0.92 |
+| C-18f9cf20 | interpreter › Values resolve over recorded outputs › References, templates and unresolved paths | covered | src.interpreter.refs.test.ts::C-18f9cf20 own proto keys are copied without changing the prototype (passed, red_assertion); src.interpreter.refs.test.ts::C-18f9cf20 single references keep their type and templates stringify (passed, red_assertion); src.interpreter.refs.test.ts::C-18f9cf20 unresolved r... | - | 0.93 |
 | C-7961e8d0 | interpreter › Switch and end nodes finish without a tool › Switch cases and end outputs through the conformance kit | covered | src.interpreter.runtimes.control.test.ts::C-7961e8d0 end returns its status and its resolved output (passed, red_assertion); src.interpreter.runtimes.control.test.ts::C-7961e8d0 switch routes own keys and falls back to the default (passed, red_assertion) | - | 0.92 |
 | C-99fa375d | interpreter › A block calls its tool through the invoker › A read block, with schema and tool failures | covered | src.interpreter.runtimes.block.test.ts::C-99fa375d a block missing from the services is not runnable (passed, red_assertion); src.interpreter.runtimes.block.test.ts::C-99fa375d a read block calls the invoker once and returns its output (passed, red_assertion); src.interpreter.runtimes.block.test.ts:... | - | - |
-| C-9d40929b | interpreter › An effectful block runs inside the effect gate in every mode › Gate order, decisions and failures | covered | src.interpreter.runtimes.block-effect.test.ts::C-9d40929b a rejecting after maps to TOOL_FAILED without the message (passed, pre_satisfied, accepted by the delegate (claude-fable-5-1 via claude-code) through Q-001: the check was inconclusive); src.interpreter.runtimes.block-effect.test.ts::C-9d40929... | - | - |
+| C-9d40929b | interpreter › An effectful block runs inside the effect gate in every mode › Gate order, decisions and failures | covered | src.interpreter.runtimes.block-effect.test.ts::C-9d40929b C-cb54b30e each gate and invoker call logs the step that is running (passed, pre_satisfied, accepted by the delegate (claude-fable-5-1 via claude-code) through Q-001: the check was inconclusive); src.interpreter.runtimes.block-effect.test.ts:... | - | - |
 | C-6b747ab8 | interpreter › A wait sleeps in live mode and is skipped in mock mode › Sleeping, skipping and parsing durations | covered | src.interpreter.runtimes.wait.test.ts::C-6b747ab8 durationMs converts every supported component (passed, red_assertion); src.interpreter.runtimes.wait.test.ts::C-6b747ab8 durationMs refuses malformed and oversized durations (passed, red_assertion); src.interpreter.runtimes.wait.test.ts::C-6b747ab8 w... | - | - |
 | C-c56d71ac | interpreter › A run records one numbered row per node visit › A run walks block, switch, block and end | covered | src.interpreter.execute.test.ts::C-c56d71ac a run walks block switch block and end recording numbered rows (passed, red_assertion) | - | 0.92 |
 | C-9272817b | interpreter › A run records one numbered row per node visit › Replay reuses the numbers and the recorded results | covered | src.interpreter.execute.test.ts::C-9272817b replay reuses the recorded numbers and results (passed, red_assertion); src.interpreter.ops.test.ts::C-9272817b later steps run once and are listed in execution order (passed, red_assertion); src.interpreter.ops.test.ts::C-9272817b recorded steps replay by... | - | 0.93 |
 | C-acbe41c3 | interpreter › A failing run ends failed with a RunError and leaks nothing › Node failures | covered | src.interpreter.execute-failures.test.ts::C-acbe41c3 a failed end node fails the run at that node (passed, pre_satisfied); src.interpreter.execute-failures.test.ts::C-acbe41c3 a rejecting invoker fails the run without leaking its message (passed, pre_satisfied); src.interpreter.execute-failures.test... | - | - |
-| C-e3cb0a11 | interpreter › A failing run ends failed with a RunError and leaks nothing › Run-level failures and nothing to do | covered | src.interpreter.execute-failures.test.ts::C-e3cb0a11 a cancelled workflow rejection propagates unchanged (passed, pre_satisfied); src.interpreter.execute-failures.test.ts::C-e3cb0a11 a looping flow fails at the revisited node (passed, pre_satisfied); src.interpreter.execute-failures.test.ts::C-e3cb0... | - | - |
+| C-e3cb0a11 | interpreter › A failing run ends failed with a RunError and leaks nothing › Run-level failures and nothing to do | covered | src.interpreter.copied-errors.test.ts::C-e3cb0a11 C-3414e2db a copied interpreter error fails the run with its own code node and details (passed, red_assertion); src.interpreter.execute-failures.test.ts::C-e3cb0a11 a cancelled workflow rejection propagates unchanged (passed, pre_satisfied); src.inte... | - | - |
 | C-d807f118 | interpreter › A run starts only by registry id and hash › Refusals, enqueue and idempotence | covered | src.interpreter.start.test.ts::C-d807f118 a rejected enqueue fails the run and reports it as unbound (passed, red_assertion); src.interpreter.start.test.ts::C-d807f118 startRun answers the stored run and keeps tenants apart (passed, red_assertion); src.interpreter.start.test.ts::C-d807f118 startRun ... | - | - |
 | C-b56c7793 | interpreter › The run workflow is durable › A run on DBOS | covered | src.interpreter.workflow.db.test.ts::C-b56c7793 a started run completes on DBOS and bad workflow input ends in ERROR (passed, red_assertion) | - | 0.92 |
-| C-b758e565 | interpreter › The conformance kit and waitForRun support the tests › Kit verdicts and a bounded wait | covered | test.support.node-conformance.test.ts::C-b758e565 kit reports a foreign runtime error as unexpected (passed, red_assertion); test.support.node-conformance.test.ts::C-b758e565 kit reports each outcome and error verdict in case order (passed, red_assertion); test.support.run-wait.test.ts::C-b758e565 w... | - | 0.93 |
+| C-b758e565 | interpreter › The conformance kit and waitForRun support the tests › Kit verdicts and a bounded wait | covered | test.support.node-conformance.test.ts::C-b758e565 kit reports a foreign runtime error as unexpected (passed, red_assertion); test.support.node-conformance.test.ts::C-b758e565 kit reports each outcome and error verdict in case order (passed, red_assertion); test.support.run-wait.test.ts::C-b758e565 w... | - | 0.94 |
+| C-cb54b30e | interpreter › An effectful block runs inside the effect gate in every mode — regression 1 › task 2.3: gate-step test does not observe the active durable step | covered | src.interpreter.runtimes.block-effect.test.ts::C-9d40929b C-cb54b30e each gate and invoker call logs the step that is running (passed, pre_satisfied, accepted by the delegate (claude-fable-5-1 via claude-code) through Q-001: the check was inconclusive) | - | 0.91 |
+| C-3414e2db | interpreter › A failing run ends failed with a RunError and leaks nothing — regression 1 › Copied interpreter errors are remapped as tool failures | covered | src.interpreter.copied-errors.test.ts::C-3414e2db the block runtime keeps a copied interpreter error (passed, red_assertion); src.interpreter.copied-errors.test.ts::C-e3cb0a11 C-3414e2db a copied interpreter error fails the run with its own code node and details (passed, red_assertion) | - | 0.93 |
 
 ## Evidence
 
@@ -119,11 +126,27 @@ Nothing needs attention.
 
 | Path | Module | Label | Why |
 |---|---|---|---|
+| `openspec/changes/add-interpreter-core-fix-1/.l4/fix.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core-fix-1/.openspec.yaml` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core-fix-1/proposal.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core-fix-1/questions.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core-fix-1/specs/interpreter/spec.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core-fix-1/tasks.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core/.l4/evidence/round-1/evidence.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core/.l4/evidence/round-1/verdict.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core/.l4/evidence/round-1/verification.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core/.l4/evidence/round-2/evidence.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core/.l4/evidence/round-2/verdict.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core/.l4/evidence/round-2/verification.md` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-interpreter-core/.l4/ledger/r-20261104T2014Z-19d3.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-interpreter-core/.l4/ledger/r-20261104T2240Z-52a0.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-interpreter-core/.l4/ledger/r-20261104T2245Z-acec.jsonl` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core/.l4/ledger/r-20261105T0040Z-f642.jsonl` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core/.l4/ledger/r-20261105T0058Z-dc2c.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-interpreter-core/questions.md` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-interpreter-core/tasks.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-interpreter-core/verification.md` |  | none | exempt: harness, spec or documentation path |
+| `src/interpreter/copied-errors.test.ts` |  | relevant | new test file |
 | `src/interpreter/errors.ts` | interpreter | relevant | named in the spec |
 | `src/interpreter/execute-failures.test.ts` |  | relevant | new test file |
 | `src/interpreter/execute.test.ts` |  | relevant | new test file |
@@ -150,6 +173,7 @@ Nothing needs attention.
 | `src/interpreter/visit.ts` | interpreter | relevant | named in the spec |
 | `src/interpreter/workflow.db.test.ts` |  | relevant | new test file |
 | `src/interpreter/workflow.ts` | interpreter | relevant | named in the spec |
+| `src/runs/store/types.ts` | runs | relevant | named in the spec |
 | `test/support/node-conformance.test.ts` |  | relevant | new test file |
 | `test/support/node-conformance.ts` | test | relevant | named in the spec |
 | `test/support/run-wait.test.ts` |  | relevant | new test file |
@@ -157,19 +181,19 @@ Nothing needs attention.
 
 ### Changed functions
 
-Diff coverage not measured: diff coverage measures python only; changed code outside it: src/interpreter/errors.ts, src/interpreter/execute.ts, src/interpreter/gate.ts, src/interpreter/index.ts, src/interpreter/ops.ts and 12 more
+Diff coverage not measured: diff coverage measures python only; changed code outside it: src/interpreter/errors.ts, src/interpreter/execute.ts, src/interpreter/gate.ts, src/interpreter/index.ts, src/interpreter/ops.ts and 13 more
 
 ### Tests
 
-1579 of 1579 passed, 0 failed, 0 errored, 0 skipped.
-57 of 57 new tests passed.
+1582 of 1582 passed, 0 failed, 0 errored, 0 skipped.
+60 of 60 new tests passed.
 
 ## S1 (recorded for calibration, never decides)
 
 | Criterion | Status | p | Model | Engine | Note |
 |---|---|---|---|---|---|
 | C-f3de9ac6 | ok | 0.940 | jev-1.13.0 | jev | evidence cut to fit the budget |
-| C-18f9cf20 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-18f9cf20 | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-7961e8d0 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-99fa375d | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
 | C-9d40929b | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
@@ -180,12 +204,12 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-e3cb0a11 | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
 | C-d807f118 | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
 | C-b56c7793 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
-| C-b758e565 | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-b758e565 | ok | 0.940 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-cb54b30e | ok | 0.910 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-3414e2db | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
 ## Answers to verdict questions
 
-- Q-002 reject F-a71db6eb by agent (CLAUDECODE): The finding holds as a test gap, not a code defect. src/interpreter/runtimes/block.ts calls EffectGate.before inside runStep(nodeId) and EffectGate.after inside runStep(`${nodeId}#done`), and moving after into the node step fails two tests (checked by mutation on the unit head). But the scenario "Ga...
-- Q-003 reject F-257bab9b by the delegate (claude-fable-5-1 via claude-code): The finding is correct against the design. Design Decision 9 says a thrown value is an interpreter error when its code is in InterpreterErrorCode, not by instanceof, because a workflow engine may rethrow a recorded step error as a copy whose shape is inferred and unchecked. The predicate shared by v...
 - Q-004 accept F-8da8966d by the delegate (claude-fable-5-1 via claude-code): The finding is waived: the judge saw only the part of the diff without visit.ts, and the task's text is done at the unit head. The failure test file exists with tests for both the node-failure and run-level scenarios. execute.ts holds the revisit guard that fails a twice-visited node with INTERPRETE...
 
 ## Criteria
@@ -194,7 +218,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 |---|---|---|---|---|
 | C-f3de9ac6 | interpreter › Node runtimes are registered once per kind › Built-in kinds and registration rules | pass | pass | the judge passed it and a discriminating test passes |
 | C-18f9cf20 | interpreter › Values resolve over recorded outputs › References, templates and unresolved paths | pass | pass | the judge passed it and a discriminating test passes |
-| C-7961e8d0 | interpreter › Switch and end nodes finish without a tool › Switch cases and end outputs through the conformance kit | pass | pass | the judge passed it and a discriminating test passes; its evidence was split over parts 1 and 2 of the diff: follow-up call 1 judged its 7 files of those parts together and answered pass |
+| C-7961e8d0 | interpreter › Switch and end nodes finish without a tool › Switch cases and end outputs through the conformance kit | pass | pass | the judge passed it and a discriminating test passes |
 | C-99fa375d | interpreter › A block calls its tool through the invoker › A read block, with schema and tool failures | pass | pass | the judge passed it and a discriminating test passes |
 | C-9d40929b | interpreter › An effectful block runs inside the effect gate in every mode › Gate order, decisions and failures | pass | pass | the judge passed it and a discriminating test passes |
 | C-6b747ab8 | interpreter › A wait sleeps in live mode and is skipped in mock mode › Sleeping, skipping and parsing durations | pass | pass | the judge passed it and a discriminating test passes |
@@ -205,25 +229,18 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-d807f118 | interpreter › A run starts only by registry id and hash › Refusals, enqueue and idempotence | pass | pass | the judge passed it and a discriminating test passes |
 | C-b56c7793 | interpreter › The run workflow is durable › A run on DBOS | pass | pass | the judge passed it and a discriminating test passes |
 | C-b758e565 | interpreter › The conformance kit and waitForRun support the tests › Kit verdicts and a bounded wait | pass | pass | the judge passed it and a discriminating test passes |
+| C-cb54b30e | interpreter › An effectful block runs inside the effect gate in every mode — regression 1 › task 2.3: gate-step test does not observe the active durable step | pass | pass | the judge passed it and a discriminating test passes |
+| C-3414e2db | interpreter › A failing run ends failed with a RunError and leaks nothing — regression 1 › Copied interpreter errors are remapped as tool failures | pass | pass | the judge passed it and a discriminating test passes |
 
 ## Findings
 
-- [major, human] task 2.3: gate-step test does not observe the active durable step (criterion C-9d40929b): The test named "each gate call runs in the step named after the node" sets current to the running step in its WorkflowOps wrapper, but the logging gate never reads current. It therefore cannot distinguish before and after running in the required node and node#done steps from any other steps with the same execution list. [rejected by agent (CLAUDECODE) (The finding holds as a test gap, not a code defect. src/interpreter/runtimes/block.ts calls EffectGate.before inside runStep(nodeId) and EffectGate.after inside runStep(`${nodeId}#done`), and moving after into the node step fails two tests (chec...
-- [minor, judge] resolveValue has unspecified behavior for non-JSON undefined input (spec gap) (criterion C-18f9cf20): resolveValue accepts unknown input but falls through to return undefined cast as JsonValue. The scenarios cover JSON values only, leaving callers with no specified contract for undefined despite the JsonValue return type.
-- [major, human] Copied interpreter errors are remapped as tool failures (criterion C-e3cb0a11): The durable-error rule says code-bearing interpreter errors must be recognized without instanceof because durable replay can rethrow a copied error. src/interpreter/visit.ts instead requires both a recognized code and error instanceof Error. A copied InterpreterError-like value therefore reaches the fallback and becomes INTERPRETER_TOOL_FAILED, losing its original code. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding is correct against the design. Design Decision 9 says a thrown value is an interpreter error when its code is in InterpreterErrorCode, not by instanceof,...
-- [minor, judge] Start validation precedence for simultaneously invalid requests is unspecified (spec gap) (criterion C-d807f118): startRun loads the requested version before validating a supplied runId. The scenarios test these errors separately, so they do not specify which error wins when both the flow reference and run id are invalid.
-- [minor, judge] Workflow handling of additional input fields is unspecified (spec gap) (criterion C-b56c7793): The workflow validator checks only tenantId, runId, and reviewProfile, then returns a new object containing only those fields. The scenarios cover malformed required fields but do not state whether otherwise valid workflow input may carry additional fields.
-- [minor, judge] the judge called a test inadequate (criterion C-9d40929b): src.interpreter.runtimes.block-effect.test.ts::C-9d40929b each gate call runs in the step named after the node
-- [minor, judge] task 3.3 is ticked as already satisfied, but its text is not done: not in this part: src/interpreter/visit.ts is required by task 3.3 and is listed in part 2. (waived by the delegate (claude-fable-5-1 via claude-code): The finding is waived: the judge saw only the part of the diff without visit.ts, and the task's text is done at the unit head. The failure test file exists with tests for both the node-failure and run-level scenarios. execute.ts holds the revisit guard that fails a twice-visited node with INTERPRETER_LOOP_LIMIT, the terminal-run shortcut that returns a terminal run after run:load, and the run-level failure mapping for a missing invoker and unlo...
-
-## Fix unit
-
-Fix unit 1 is created for these tasks:
-- F-a71db6eb task 2.3: gate-step test does not observe the active durable step
-- F-257bab9b Copied interpreter errors are remapped as tool failures
+- [minor, judge] Workflow input handling for additional properties is unspecified (spec gap) (criterion C-b56c7793): workflow.ts validates only tenantId, runId, and reviewProfile, then returns a new object containing only those properties. The scenarios cover malformed required fields but do not define whether extra workflow-input properties must be rejected or ignored.
+- [minor, judge] task 3.3 is ticked as already satisfied, but its text is not done: not in this part: src/interpreter/visit.ts, required by the task's failure-mapping and failed-row requirements, is listed in part 2. (waived by the delegate (claude-fable-5-1 via claude-code): The finding is waived: the judge saw only the part of the diff without visit.ts, and the task's text is done at the unit head. The failure test file exists with tests for both the node-failure and run-level scenarios. execute.ts holds the revisit guard that fails a twice-visited node with INTERPRETER_LOOP_LIMIT, the terminal-run shortcut that returns a terminal run after run:load, and the run-level failu...
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
+- `src.interpreter.copied-errors.test.ts::C-3414e2db the block runtime keeps a copied interpreter error` (task 1.2): passed
+- `src.interpreter.copied-errors.test.ts::C-e3cb0a11 C-3414e2db a copied interpreter error fails the run with its own code node and details` (task 1.2): passed
 - `src.interpreter.execute-failures.test.ts::C-acbe41c3 a failed end node fails the run at that node` (task 3.3): passed
 - `src.interpreter.execute-failures.test.ts::C-acbe41c3 a rejecting invoker fails the run without leaking its message` (task 3.3): passed
 - `src.interpreter.execute-failures.test.ts::C-acbe41c3 a run fails when a later node has an unresolved reference` (task 3.3): passed
@@ -247,6 +264,7 @@ Fix unit 1 is created for these tasks:
 - `src.interpreter.refs.test.ts::C-18f9cf20 unresolved references throw with the reference and never a value` (task 1.1): passed
 - `src.interpreter.registry.test.ts::C-f3de9ac6 built-in kinds are registered and the rest are not` (task 2.2): passed
 - `src.interpreter.registry.test.ts::C-f3de9ac6 registration refuses duplicates and invalid runtimes` (task 2.2): passed
+- `src.interpreter.runtimes.block-effect.test.ts::C-9d40929b C-cb54b30e each gate and invoker call logs the step that is running` (task 1.1): passed
 - `src.interpreter.runtimes.block-effect.test.ts::C-9d40929b a rejecting after maps to TOOL_FAILED without the message` (task 2.3): passed
 - `src.interpreter.runtimes.block-effect.test.ts::C-9d40929b a rejecting before maps to TOOL_FAILED without invoking` (task 2.3): passed
 - `src.interpreter.runtimes.block-effect.test.ts::C-9d40929b a rejecting invoker maps to TOOL_FAILED and skips after` (task 2.3): passed
@@ -271,9 +289,6 @@ Fix unit 1 is created for these tasks:
 - `src.interpreter.runtimes.wait.test.ts::C-6b747ab8 wait sleeps in chunks and continues in live mode` (task 2.1): passed
 - `src.interpreter.start.test.ts::C-d807f118 a rejected enqueue fails the run and reports it as unbound` (task 3.1): passed
 - `src.interpreter.start.test.ts::C-d807f118 startRun answers the stored run and keeps tenants apart` (task 3.1): passed
-- `src.interpreter.start.test.ts::C-d807f118 startRun derives an id skips enqueue and names the workflow` (task 3.1): passed
-- `src.interpreter.start.test.ts::C-d807f118 startRun propagates loader and catalogue rejections unchanged` (task 3.1): passed
-- `src.interpreter.start.test.ts::C-d807f118 startRun refuses ill-typed input and an invalid run id` (task 3.1): passed
 
 ## Guard events
 
