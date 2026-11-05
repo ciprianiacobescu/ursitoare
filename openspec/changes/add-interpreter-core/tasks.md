@@ -19,4 +19,4 @@ Spec: `specs/interpreter/spec.md`; decisions: `design.md`; fixtures: `test-plan.
 
 ## 4. Durable workflow
 
-- [ ] 4.1 Write `src/interpreter/workflow.db.test.ts` first (scenario "A run on DBOS"), then implement `registerRunWorkflow`, `bindInterpreter`, `dbosWorkflowOps` in `src/interpreter/workflow.ts` and the exports of `src/interpreter/index.ts`, implementing requirement "The run workflow is durable"
+- [x] 4.1 Write `src/interpreter/workflow.db.test.ts` first (scenario "A run on DBOS"), then implement `registerRunWorkflow`, `bindInterpreter`, `dbosWorkflowOps` in `src/interpreter/workflow.ts` and the exports of `src/interpreter/index.ts`, implementing requirement "The run workflow is durable"
