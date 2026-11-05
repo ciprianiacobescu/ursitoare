@@ -23,7 +23,7 @@ interface KeptServers {
 interface FlowRouteRow {
   method: DefinedRoute["method"];
   url: string;
-  action: "read_flow" | "edit_flow";
+  action: "read_flow" | "edit_flow" | "test_flow";
   errors: readonly string[];
 }
 
@@ -83,6 +83,20 @@ const FLOW_ROUTES: readonly FlowRouteRow[] = [
     action: "edit_flow",
     errors: ["NOT_FOUND", "VALIDATION_FAILED"],
   },
+  {
+    method: "POST",
+    url: "/api/v1/flows/:flowId/versions/:hash/test",
+    action: "test_flow",
+    errors: [
+      "IDEMPOTENCY_IN_PROGRESS",
+      "IDEMPOTENCY_KEY_REUSED",
+      "OPERATION_REFUSED",
+      "RUNS_UNAVAILABLE",
+      "TEST_MOCK_INVALID",
+      "TEST_MOCK_MISSING",
+      "VALIDATION_FAILED",
+    ],
+  },
 ];
 
 const FLOW_OPENAPI_PATHS: readonly string[] = [
@@ -91,6 +105,7 @@ const FLOW_OPENAPI_PATHS: readonly string[] = [
   "/api/v1/flows/{flowId}/versions",
   "/api/v1/flows/{flowId}/versions/{hash}",
   "/api/v1/flows/{flowId}/versions/{hash}/validate",
+  "/api/v1/flows/{flowId}/versions/{hash}/test",
 ];
 
 function appConfig(): AppConfig {
@@ -156,7 +171,7 @@ test("C-f696603a the real engine serves and documents the flow routes", async ()
     assert.equal(
       flowRoutes.length,
       FLOW_ROUTES.length,
-      `the public server defines exactly the seven flow routes: ${JSON.stringify(
+      `the public server defines exactly the eight flow routes: ${JSON.stringify(
         flowRoutes.map((route) => `${route.method} ${route.url}`),
       )}`,
     );
