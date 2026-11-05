@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | open | none | verdict | Criterion C-4ef9cb9c (web-runs › The M4 journey proves test runs and the timeline in a browser › Alice test-runs a flow and follows the run): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-bffa668a (web-runs › The M4 journey proves test runs and the timeline in a browser › Bob reads the run but cannot start one): accept as satisfied? |
 | Q-005 | answered | none | verdict | Finding F-81bc478e: Payload parser accepts values outside PayloadValue |
-| Q-006 | open | none | verdict | Hold H-e62fdc45: UI criterion C-2ceae13f has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-e62fdc45: UI criterion C-2ceae13f has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-eec0048a: UI criterion C-8a285469 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-32069270: UI criterion C-44473e25 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-07248f6f: UI criterion C-95befb77 has no end-to-end test; see the generated UI tests table |
@@ -181,7 +181,8 @@ accept The finding is waived. The counterexample, a payload answer whose data pr
 
 ## Q-006: Hold H-e62fdc45: UI criterion C-2ceae13f has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -200,6 +201,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold is waived. The criterion exercises the pure parser functions parseRunView, parseStepView and parsePayloadView with hand-built inputs and asks for deep equality, copies and null results. Nothing in it is visible in a browser, so an end-to-end test cannot check it. The three Node tests in types.test.ts cover its inputs and pass.
 ---
 
 ## Q-007: Hold H-eec0048a: UI criterion C-8a285469 has no end-to-end test; see the generated UI tests table
