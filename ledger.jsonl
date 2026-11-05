@@ -78,3 +78,5 @@
 {"at":"2026-11-04T22:45:14Z","run":"r-20261104T2245Z-acec","type":"unit.dispatched","unit":"openspec:add-interpreter-core"}
 {"at":"2026-11-05T00:36:05Z","detail":"awaiting_human: no new answers (verdicts open: Q-002)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-interpreter-core"}
 {"at":"2026-11-05T00:40:21Z","by":"harness","reason":"the cause is gone: openspec:add-interpreter-core is awaiting_human","type":"plan.resumed"}
+{"at":"2026-11-05T00:40:23Z","attempt":1,"cost_usd":8.097538,"runs":4,"type":"plan.charged","unit":"openspec:add-interpreter-core"}
+{"at":"2026-11-05T00:40:23Z","run":"r-20261105T0040Z-f642","type":"unit.dispatched","unit":"openspec:add-interpreter-core"}
