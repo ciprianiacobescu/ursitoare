@@ -1,4 +1,4 @@
-# Verification: openspec:add-dbos-runtime-followup-1: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-dbos-runtime-followup-1: PASS (round 2)
 
 traceability: 15/15 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 15/15 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base merged: main@a6b5fb3792 as 255101cc39 (8 commits) |
-| 1 | integrity | ok | 162.0 | 11 sub-checks; scope: 10 changed file(s) |
-| 2 | build | ok | 25.9 |  |
-| 3 | tests | ok | 240.9 |  |
-| 4 | traceability | ok | 0.2 | 15/15 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/durable/steps.ts |
-| 8 | s1 judge | ok | 1.2 | 14/15 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 93.4 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -113,6 +113,10 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-769418cc | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
 | C-7732f592 | ok | 0.820 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-001 accept F-bb483e74 by agent (CLAUDECODE): The finding is waived. The scenario of C-607153ef holds: a replayed DurableError and a plain Error with a code reject with the same name, message, code and details, the DurableError is instanceof DurableError, fn is not called again and neither is dbos_failed; src/durable/steps.test.ts proves it red...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -135,11 +139,11 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Findings
 
-- [major, judge] Replay classification depends on errors being extensible (spec gap) (criterion C-607153ef): markStepError silently ignores Object.defineProperty failures. A non-extensible callback error therefore reaches DBOS without STEP_ERROR_MARK, and the replay catch cannot recognize it as a callback outcome, so it falls through to dbosFailed(). The stated scenarios do not define behavior for non-extensible errors.
+- [minor, judge] Replay classification depends on errors being extensible (spec gap) (criterion C-607153ef): markStepError silently ignores Object.defineProperty failures. A non-extensible callback error therefore reaches DBOS without STEP_ERROR_MARK, and the replay catch cannot recognize it as a callback outcome, so it falls through to dbosFailed(). The stated scenarios do not define behavior for non-extensible errors. (waived by agent (CLAUDECODE): The finding is waived. The scenario of C-607153ef holds: a replayed DurableError and a plain Error with a code reject with the same name, message, code and details, the DurableError is instanceof DurableError, fn is not called again and neither is dbos_f...
 
 ## Feedback
 
-- FB-001: judged addressed, pending a PASS round: src/durable/steps.ts:57-110 and src/durable/steps.ts:179-199 mark callback errors with an enumerable marker and revive marked DurableErrors; src.durable.steps.test.ts::C-607153ef passed.
+- FB-001: addressed at 255101cc39: src/durable/steps.ts:57-110 and src/durable/steps.ts:179-199 mark callback errors with an enumerable marker and revive marked DurableErrors; src.durable.steps.test.ts::C-607153ef passed.
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
