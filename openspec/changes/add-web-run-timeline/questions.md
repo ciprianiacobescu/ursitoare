@@ -306,6 +306,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ## Q-011: Hold H-7a90109b: UI criterion C-b67fc6a7 has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The hold rests on a generated browser test, test_l4_c_b67fc6a7.py, that fails at the head after two attempts. The file is not in the repository (e2e/ holds no such file) and neither are its screenshot or trace, so I cannot read what it asserted or why it failed, and I cannot rule out a browser-visib
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
