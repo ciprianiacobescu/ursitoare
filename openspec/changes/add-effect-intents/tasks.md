@@ -11,7 +11,7 @@ Spec: `specs/idempotency/spec.md`; signatures, decisions, fixtures: `design.md`;
 ## 3. The journal
 
 - [x] 3.1 Write `src/runs/intents/repository.test.ts` first (scenario "Recording an intent once"), then implement `IntentState`, `IntentRecord`, `IntentWrite`, `recordIntent`, `getIntent` in `src/runs/intents/repository.ts` and the module-internal checks in `src/runs/intents/validate.ts`, implementing requirement "recordIntent writes one row per key and keeps the first"
-- [ ] 3.2 Write `src/runs/intents/transitions.test.ts` first (scenario "Completing and marking unknown"), then implement `completeIntent`, `markIntentUnknown` in `src/runs/intents/repository.ts`, implementing requirement "An intent moves only forward"
+- [x] 3.2 Write `src/runs/intents/transitions.test.ts` first (scenario "Completing and marking unknown"), then implement `completeIntent`, `markIntentUnknown` in `src/runs/intents/repository.ts`, implementing requirement "An intent moves only forward"
 
 ## 4. The gate
 
