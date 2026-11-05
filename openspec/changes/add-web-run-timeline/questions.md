@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | open | none | verdict | Hold H-420abdfd: UI criterion C-f2512ba4 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-7a90109b: UI criterion C-b67fc6a7 has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-ed380471: UI criterion C-a8d83d86 has no end-to-end test; see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-c59c8e20: UI criterion C-c7363684 has no end-to-end test; see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-c59c8e20: UI criterion C-c7363684 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-ac6e12a7: UI criterion C-e75f18dc has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-36f31dc8: UI criterion C-4ef9cb9c has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-70326357: UI criterion C-bffa668a has no end-to-end test; see the generated UI tests table |
@@ -354,7 +354,8 @@ accept The hold is waived. The criterion's scenario calls testPanelView and pars
 
 ## Q-013: Hold H-c59c8e20: UI criterion C-c7363684 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -373,6 +374,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold is waived. The criterion's scenario drives startTestRun with a recording client and asserts the exact POST path, body and Idempotency-Key header, an INVALID_RESPONSE rejection for a run outside the union, RangeError rejections without a request for a bad flow id or hash, that registerRunMessages can run twice, and the exact FormErrors value of testRunFormErrors for each error of reference.md § Messages. These are call records, thrown error types and returned objects that a browser cannot observe, so an end-to-end test cannot check the criterion as written. The six Node tests in test-run.test.ts assert every clause, and test-run.ts implements the flow-id and hash patterns, the encoded path, the parseRunView check and the message mapping. The engine-side refusal path is also proven on the real stack by the Node journey, where a missing mock gives the TEST_MOCK_MISSING form error.
 ---
 
 ## Q-014: Hold H-ac6e12a7: UI criterion C-e75f18dc has no end-to-end test; see the generated UI tests table
