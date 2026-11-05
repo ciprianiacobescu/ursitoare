@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-05T19:32:21Z",
+  "integrated_revision": "acf4128a970235175bca5496d5d8a3709281b8f2",
+  "merge_commit": "acf4128a970235175bca5496d5d8a3709281b8f2",
+  "plan_digest": "d4a60ec43090d2fa",
+  "plan_id": "m4",
+  "postcheck": "pass",
+  "pr": 82,
+  "receipt_id": "m4/openspec:add-web-run-timeline/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "9cbcb639287d4e89519691bba503851f63a862d6",
+  "spec_digest": "6799ea1e53f40355",
+  "target": "main",
+  "unit_id": "openspec:add-web-run-timeline"
+}
