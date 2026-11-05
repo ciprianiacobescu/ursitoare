@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | open | none | verdict | Criterion C-bffa668a (web-runs › The M4 journey proves test runs and the timeline in a browser › Bob reads the run but cannot start one): accept as satisfied? |
 | Q-005 | answered | none | verdict | Finding F-81bc478e: Payload parser accepts values outside PayloadValue |
 | Q-006 | answered | none | verdict | Hold H-e62fdc45: UI criterion C-2ceae13f has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-eec0048a: UI criterion C-8a285469 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-eec0048a: UI criterion C-8a285469 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-32069270: UI criterion C-44473e25 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-07248f6f: UI criterion C-95befb77 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-420abdfd: UI criterion C-f2512ba4 has no end-to-end test; see the generated UI tests table |
@@ -206,7 +206,8 @@ accept The hold is waived. The criterion exercises the pure parser functions par
 
 ## Q-007: Hold H-eec0048a: UI criterion C-8a285469 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -225,6 +226,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold is waived. The criterion's scenario drives runListFetcher, loadRun, loadSteps and loadPayload with an in-process recording client and asserts the exact paths, query options, signals, parsed values, the five-page cap and the RangeError raised before any request; none of that is observable in a browser, so an end-to-end test cannot check it. The Node tests in runs-source.test.ts assert every clause of the scenario against the implementation in runs-source.ts and the kit's cursorPageFetcher, and the run list and run page that use these loaders are exercised in the browser by the M4 journey.
 ---
 
 ## Q-008: Hold H-32069270: UI criterion C-44473e25 has no end-to-end test; see the generated UI tests table
