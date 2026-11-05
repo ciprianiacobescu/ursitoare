@@ -158,3 +158,4 @@
 {"at":"2026-11-05T19:32:21Z","revision":"acf4128a970235175bca5496d5d8a3709281b8f2","type":"unit.integrated","unit":"openspec:add-web-run-timeline"}
 {"at":"2026-11-05T19:32:21Z","attempt":1,"cost_usd":11.364685,"runs":5,"type":"plan.charged","unit":"openspec:add-web-run-timeline"}
 {"at":"2026-11-05T19:33:44Z","branch":"l4/archive/openspec/add-web-run-timeline","head":"a6b5fb379201b1bb1334bc5bf5d4866ad95f1b0e","type":"unit.branch_deleted","unit":"openspec:add-web-run-timeline"}
+{"at":"2026-11-05T19:33:45Z","batch":"m4-runs-timeline","profile":"none","revision":"a6b5fb379201b1bb1334bc5bf5d4866ad95f1b0e","type":"batch.accepted"}
