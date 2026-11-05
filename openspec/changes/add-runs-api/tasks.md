@@ -1,6 +1,6 @@
 ## 1. Views
 
-- [ ] 1.1 Write `src/api/run-views.test.ts` first (scenario "Views, schemas and the policy resource": `Object.keys` of both views, the copies checked with `notEqual`, the schemas' `required` and `Object.keys(properties ?? {})` against the view's key list, `runResource` with `entityRef`), then implement `RunView`, `StepView`, `PayloadView`, `toRunView`, `toStepView`, `RUN_VIEW_SCHEMA`, `STEP_VIEW_SCHEMA` and `runResource` in `src/api/run-views.ts` and export them from `src/api/index.ts`, implementing requirement "Run and step views expose the stored rows"
+- [x] 1.1 Write `src/api/run-views.test.ts` first (scenario "Views, schemas and the policy resource": `Object.keys` of both views, the copies checked with `notEqual`, the schemas' `required` and `Object.keys(properties ?? {})` against the view's key list, `runResource` with `entityRef`), then implement `RunView`, `StepView`, `PayloadView`, `toRunView`, `toStepView`, `RUN_VIEW_SCHEMA`, `STEP_VIEW_SCHEMA` and `runResource` in `src/api/run-views.ts` and export them from `src/api/index.ts`, implementing requirement "Run and step views expose the stored rows"
 
 ## 2. The policy fragment
 
