@@ -1846,6 +1846,316 @@
         ]
       }
     },
+    "/api/v1/flows/{flowId}/versions/{hash}/test": {
+      "post": {
+        "operationId": "post_api_v1_flows_flowId_versions_hash_test",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "flowId",
+            "required": true,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "hash",
+            "required": true,
+            "schema": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "idempotency-key",
+            "required": false,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[!-~]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "input": {
+                    "type": "object"
+                  },
+                  "mocks": {
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "input",
+                  "mocks"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "run": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "endedAt": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "error": {
+                          "anyOf": [
+                            {
+                              "type": "null"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "code": {
+                                  "type": "string"
+                                },
+                                "details": {
+                                  "additionalProperties": true,
+                                  "type": "object"
+                                },
+                                "message": {
+                                  "type": "string"
+                                },
+                                "node": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "code",
+                                "message",
+                                "node"
+                              ],
+                              "type": "object"
+                            }
+                          ]
+                        },
+                        "flowHash": {
+                          "type": "string"
+                        },
+                        "flowId": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "inputRef": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "mode": {
+                          "enum": [
+                            "live",
+                            "mock",
+                            "stub"
+                          ],
+                          "type": "string"
+                        },
+                        "outputRef": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "ownerTeam": {
+                          "type": "string"
+                        },
+                        "principal": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "kind": {
+                              "enum": [
+                                "human",
+                                "service"
+                              ],
+                              "type": "string"
+                            },
+                            "userId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "userId",
+                            "kind"
+                          ],
+                          "type": "object"
+                        },
+                        "startedAt": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "state": {
+                          "enum": [
+                            "queued",
+                            "running",
+                            "completed",
+                            "failed",
+                            "cancelled"
+                          ],
+                          "type": "string"
+                        },
+                        "terminalNode": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "trigger": {
+                          "enum": [
+                            "test"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "flowId",
+                        "flowHash",
+                        "mode",
+                        "trigger",
+                        "state",
+                        "ownerTeam",
+                        "principal",
+                        "terminalNode",
+                        "error",
+                        "inputRef",
+                        "outputRef",
+                        "createdAt",
+                        "startedAt",
+                        "endedAt"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "run"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CSRF_INVALID, FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: IDEMPOTENCY_IN_PROGRESS"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: IDEMPOTENCY_KEY_REUSED, OPERATION_REFUSED, TEST_MOCK_INVALID, TEST_MOCK_MISSING"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, RUNS_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "test_flow",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CSRF_INVALID",
+          "FORBIDDEN",
+          "IDEMPOTENCY_IN_PROGRESS",
+          "IDEMPOTENCY_KEY_REUSED",
+          "NOT_FOUND",
+          "OPERATION_REFUSED",
+          "RUNS_UNAVAILABLE",
+          "TEST_MOCK_INVALID",
+          "TEST_MOCK_MISSING",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
     "/api/v1/flows/{flowId}/versions/{hash}/validate": {
       "post": {
         "operationId": "post_api_v1_flows_flowId_versions_hash_validate",
@@ -2909,6 +3219,1127 @@
           "CURSOR_INVALID",
           "ENGINE_KEY_REQUIRED",
           "FORBIDDEN",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/runs": {
+      "get": {
+        "operationId": "get_api_v1_runs",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "maxLength": 1024,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "flowId",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "enum": [
+                "queued",
+                "running",
+                "completed",
+                "failed",
+                "cancelled"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "endedAt": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "error": {
+                            "anyOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "code": {
+                                    "type": "string"
+                                  },
+                                  "details": {
+                                    "additionalProperties": true,
+                                    "type": "object"
+                                  },
+                                  "message": {
+                                    "type": "string"
+                                  },
+                                  "node": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "code",
+                                  "message",
+                                  "node"
+                                ],
+                                "type": "object"
+                              }
+                            ]
+                          },
+                          "flowHash": {
+                            "type": "string"
+                          },
+                          "flowId": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "inputRef": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "mode": {
+                            "enum": [
+                              "live",
+                              "mock",
+                              "stub"
+                            ],
+                            "type": "string"
+                          },
+                          "outputRef": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "ownerTeam": {
+                            "type": "string"
+                          },
+                          "principal": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "human",
+                                  "service"
+                                ],
+                                "type": "string"
+                              },
+                              "userId": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "userId",
+                              "kind"
+                            ],
+                            "type": "object"
+                          },
+                          "startedAt": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "state": {
+                            "enum": [
+                              "queued",
+                              "running",
+                              "completed",
+                              "failed",
+                              "cancelled"
+                            ],
+                            "type": "string"
+                          },
+                          "terminalNode": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "trigger": {
+                            "enum": [
+                              "test"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "flowId",
+                          "flowHash",
+                          "mode",
+                          "trigger",
+                          "state",
+                          "ownerTeam",
+                          "principal",
+                          "terminalNode",
+                          "error",
+                          "inputRef",
+                          "outputRef",
+                          "createdAt",
+                          "startedAt",
+                          "endedAt"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "next_cursor": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "next_cursor"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CURSOR_INVALID, VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, ENGINE_KEY_REQUIRED, RUNS_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "read_run",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CURSOR_INVALID",
+          "ENGINE_KEY_REQUIRED",
+          "FORBIDDEN",
+          "RUNS_UNAVAILABLE",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/runs/{runId}": {
+      "get": {
+        "operationId": "get_api_v1_runs_runId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{1,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "endedAt": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "error": {
+                      "anyOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "details": {
+                              "additionalProperties": true,
+                              "type": "object"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "node": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message",
+                            "node"
+                          ],
+                          "type": "object"
+                        }
+                      ]
+                    },
+                    "flowHash": {
+                      "type": "string"
+                    },
+                    "flowId": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "inputRef": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "mode": {
+                      "enum": [
+                        "live",
+                        "mock",
+                        "stub"
+                      ],
+                      "type": "string"
+                    },
+                    "outputRef": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "ownerTeam": {
+                      "type": "string"
+                    },
+                    "principal": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "enum": [
+                            "human",
+                            "service"
+                          ],
+                          "type": "string"
+                        },
+                        "userId": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "userId",
+                        "kind"
+                      ],
+                      "type": "object"
+                    },
+                    "startedAt": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "state": {
+                      "enum": [
+                        "queued",
+                        "running",
+                        "completed",
+                        "failed",
+                        "cancelled"
+                      ],
+                      "type": "string"
+                    },
+                    "terminalNode": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "trigger": {
+                      "enum": [
+                        "test"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "flowId",
+                    "flowHash",
+                    "mode",
+                    "trigger",
+                    "state",
+                    "ownerTeam",
+                    "principal",
+                    "terminalNode",
+                    "error",
+                    "inputRef",
+                    "outputRef",
+                    "createdAt",
+                    "startedAt",
+                    "endedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, RUNS_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "read_run",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "FORBIDDEN",
+          "NOT_FOUND",
+          "RUNS_UNAVAILABLE",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/runs/{runId}/cancel": {
+      "post": {
+        "operationId": "post_api_v1_runs_runId_cancel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{1,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "endedAt": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "error": {
+                      "anyOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "details": {
+                              "additionalProperties": true,
+                              "type": "object"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "node": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message",
+                            "node"
+                          ],
+                          "type": "object"
+                        }
+                      ]
+                    },
+                    "flowHash": {
+                      "type": "string"
+                    },
+                    "flowId": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "inputRef": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "mode": {
+                      "enum": [
+                        "live",
+                        "mock",
+                        "stub"
+                      ],
+                      "type": "string"
+                    },
+                    "outputRef": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "ownerTeam": {
+                      "type": "string"
+                    },
+                    "principal": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "enum": [
+                            "human",
+                            "service"
+                          ],
+                          "type": "string"
+                        },
+                        "userId": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "userId",
+                        "kind"
+                      ],
+                      "type": "object"
+                    },
+                    "startedAt": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "state": {
+                      "enum": [
+                        "queued",
+                        "running",
+                        "completed",
+                        "failed",
+                        "cancelled"
+                      ],
+                      "type": "string"
+                    },
+                    "terminalNode": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "trigger": {
+                      "enum": [
+                        "test"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "flowId",
+                    "flowHash",
+                    "mode",
+                    "trigger",
+                    "state",
+                    "ownerTeam",
+                    "principal",
+                    "terminalNode",
+                    "error",
+                    "inputRef",
+                    "outputRef",
+                    "createdAt",
+                    "startedAt",
+                    "endedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CSRF_INVALID, FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: OPERATION_REFUSED"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, RUNS_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "debug_run",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CSRF_INVALID",
+          "FORBIDDEN",
+          "NOT_FOUND",
+          "OPERATION_REFUSED",
+          "RUNS_UNAVAILABLE",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/runs/{runId}/payloads/{sha256}": {
+      "get": {
+        "operationId": "get_api_v1_runs_runId_payloads_sha256",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{1,128}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "sha256",
+            "required": true,
+            "schema": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "data": {},
+                    "mediaType": {
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    },
+                    "size": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "sha256",
+                    "mediaType",
+                    "size",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, RUNS_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "read_run",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "FORBIDDEN",
+          "NOT_FOUND",
+          "RUNS_UNAVAILABLE",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/runs/{runId}/steps": {
+      "get": {
+        "operationId": "get_api_v1_runs_runId_steps",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{1,128}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "maxLength": 1024,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "attempt": {
+                            "type": "integer"
+                          },
+                          "effectSeq": {
+                            "type": "integer"
+                          },
+                          "endedAt": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "error": {
+                            "anyOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "code": {
+                                    "type": "string"
+                                  },
+                                  "details": {
+                                    "additionalProperties": true,
+                                    "type": "object"
+                                  },
+                                  "message": {
+                                    "type": "string"
+                                  },
+                                  "node": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "code",
+                                  "message",
+                                  "node"
+                                ],
+                                "type": "object"
+                              }
+                            ]
+                          },
+                          "idemKey": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "inputRef": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "kind": {
+                            "type": "string"
+                          },
+                          "nodeId": {
+                            "type": "string"
+                          },
+                          "outcome": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "outputRef": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "policyDecisionId": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "seq": {
+                            "type": "integer"
+                          },
+                          "startedAt": {
+                            "type": "string"
+                          },
+                          "state": {
+                            "enum": [
+                              "started",
+                              "completed",
+                              "failed",
+                              "skipped"
+                            ],
+                            "type": "string"
+                          },
+                          "taint": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "required": [
+                          "seq",
+                          "nodeId",
+                          "kind",
+                          "effectSeq",
+                          "attempt",
+                          "state",
+                          "outcome",
+                          "error",
+                          "inputRef",
+                          "outputRef",
+                          "idemKey",
+                          "policyDecisionId",
+                          "taint",
+                          "startedAt",
+                          "endedAt"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "next_cursor": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "next_cursor"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CURSOR_INVALID, VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, ENGINE_KEY_REQUIRED, RUNS_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "read_run",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CURSOR_INVALID",
+          "ENGINE_KEY_REQUIRED",
+          "FORBIDDEN",
+          "NOT_FOUND",
+          "RUNS_UNAVAILABLE",
           "UNAUTHENTICATED",
           "VALIDATION_FAILED"
         ]

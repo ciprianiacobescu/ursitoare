@@ -21,7 +21,10 @@ import {
   registerFlowRoutes,
   registerMeRoute,
   registerOpenApiRoute,
+  registerRunRoutes,
+  registerTestRunRoutes,
   registerWebApp,
+  registryVersionLoader,
 } from "./api/index.ts";
 import type { AppConfig } from "./config/index.ts";
 import { ConfigError, loadConfigFromProcess, parseInternalPort } from "./config/index.ts";
@@ -31,9 +34,17 @@ import { openDatabase } from "./db/index.ts";
 import type { DurableRuntime } from "./durable/index.ts";
 import { launchDurable } from "./durable/index.ts";
 import { registerOidcRoutes } from "./identity/index.ts";
+import {
+  bindInterpreter,
+  registerRunWorkflow,
+  testRunInvokers,
+} from "./interpreter/index.ts";
+import type { InterpreterDeps } from "./interpreter/index.ts";
 import type { LogDestination, Logger } from "./observability/index.ts";
 import { createLogger, noopTracer } from "./observability/index.ts";
 import { createPolicyEngine, defaultSrcDir } from "./pdp/index.ts";
+import { loadRegistryCatalogue } from "./registry/index.ts";
+import { createEffectIntents, createRunStore } from "./runs/index.ts";
 
 export const VERSION = "0.0.0";
 
@@ -109,6 +120,8 @@ export interface MainDeps {
   exit: (code: number) => void;
   openDatabase?: typeof openDatabase;
   launchDurable?: typeof launchDurable;
+  registerRunWorkflow?: typeof registerRunWorkflow;
+  bindInterpreter?: typeof bindInterpreter;
   configureServer?: (server: FastifyInstance) => void | Promise<void>;
   inspectServers?: (s: {
     public: FastifyInstance;
@@ -223,8 +236,8 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
       engineKey: config.engineKey,
     });
     registerBlockRoutes(server, { pool: pep.pool, engineKey: config.engineKey });
-    registerFlowRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
-    registerOpenApiRoute(server, { version: VERSION });
+  registerFlowRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
+  registerOpenApiRoute(server, { version: VERSION });
     await definePublicRoutes(server, "oidc", (scoped) =>
       registerOidcRoutes(scoped, {
         config: config.oidc ?? null,
@@ -252,6 +265,7 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
   }
 
   let durable: DurableRuntime | null = null;
+  let interpreter: InterpreterDeps | null = null;
   const appEndpoint = config.database.app;
   if (
     database !== null &&
@@ -259,10 +273,24 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     (config.role === "all" || config.role === "worker")
   ) {
     try {
+      const store = createRunStore(database.appPool);
+      const base: InterpreterDeps = {
+        store,
+        durable: null,
+        loadVersion: registryVersionLoader(database.appPool),
+        catalogueFor: (ctx) => loadRegistryCatalogue(database.appPool, ctx),
+        invokerFor: testRunInvokers(store),
+        effects: createEffectIntents(database.appPool),
+        clock: systemClock,
+        ids: systemIds,
+      };
+      (deps.registerRunWorkflow ?? registerRunWorkflow)();
+      (deps.bindInterpreter ?? bindInterpreter)(base);
       durable = await (deps.launchDurable ?? launchDurable)({
         endpoint: appEndpoint,
         logger,
       });
+      interpreter = { ...base, durable };
     } catch (error) {
       await internal?.close().catch(() => undefined);
       await server.close().catch(() => undefined);
@@ -272,6 +300,21 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
       return null;
     }
   }
+
+  registerRunRoutes(server, {
+    pool: database?.appPool ?? null,
+    clock: systemClock,
+    ids: systemIds,
+    engineKey: config.engineKey,
+    durable,
+  });
+
+  registerTestRunRoutes(server, {
+    pool: database?.appPool ?? null,
+    clock: systemClock,
+    ids: systemIds,
+    interpreter,
+  });
 
   const closeAll = async (): Promise<void> => {
     await server.close().catch(() => undefined);

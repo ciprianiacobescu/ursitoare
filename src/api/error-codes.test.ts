@@ -42,6 +42,9 @@ test("C-96e47324 The registry holds exactly the 16 codes of the API with status 
       message: "Paging needs the engine key (URSITOARE_ENGINE_KEY_FILE)",
     },
     FLOW_TEXT_INVALID: { status: 422, message: "Flow text is not a readable flow document" },
+    RUNS_UNAVAILABLE: { status: 503, message: "Runs are unavailable" },
+    TEST_MOCK_MISSING: { status: 422, message: "A block node has no mock" },
+    TEST_MOCK_INVALID: { status: 422, message: "A mock does not fit its node" },
   };
 
   assert.deepEqual(Object.keys(ERROR_CODES).sort(), Object.keys(EXPECTED_CODES).sort());
