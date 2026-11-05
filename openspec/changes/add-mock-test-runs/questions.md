@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1, 1.2, 2.1, 2.2, 3.1, 4.1, 4.2, 5.1 | ambiguous | Scenarios "Bind order, the route table and a run on DBOS" and "The route table, the document and the wiring" conflict |
+| Q-002 | open | 4.1 | technical | src/api/test-run-routes.test.ts:160 runCount cannot see run rows under forced RLS |
 <!-- l4:index:end -->
 
 ---
@@ -38,3 +39,27 @@ Which behaviour is wanted? Answer below and set Status to answered. If one scena
 ### Answer
 <!-- write below this line -->
 There is no conflict: both scenarios are wanted and neither is deleted. They share only the opening setup (main with no database and inspectServers, and the parsed OpenAPI document); their WHENs then diverge (the flow-testing one starts main a second time with the recording wrappers and the real launchDurable, the runs-api one with a fake launchDurable and a cancel) and their THENs concern disjoint route families. The runs-api "defines exactly" the five run routes is scoped to the routes under /api/v1/runs, as the existing test src/main.runs.test.ts applies it: it filters the public routes to /api/v1/runs and /api/v1/runs/ before counting five, and the test route POST /api/v1/flows/:flowId/versions/:hash/test is not among them. The flow-testing THEN concerns that test route under /api/v1/flows, and this unit's modified flow-registry requirement already states that main's public server defines the seven flow routes and one more, the test route. So one route table of the first main run satisfies both: the five run routes, the eight flow routes (seven plus test), no POST /api/v1/runs, unregisteredRouteErrors [], and a document holding all paths. Implement design.md Decision 7 as written: the bind block before U30's launchDurable call, registerTestRunRoutes directly after registerRunRoutes (which src/main.ts already registers after the launch and before the listener binds), in every case, with interpreter null when no runtime was launched. Both scenarios then pass against the same code; the runs-api scenario keeps passing through its existing test.
+
+---
+
+## Q-002: src/api/test-run-routes.test.ts:160 runCount cannot see run rows under forced RLS
+
+- **Status:** open
+- **Blocking tasks:** 4.1
+- **Kind:** technical
+- **Asked:** 2026-11-05T09:31Z by claude-sonnet, run r-20261105T0735Z-7e59, task 4.1
+
+### Context
+The test helper counts rows with `db.ownerPool.query('SELECT count(*)::int AS n FROM ursitoare.run')`. Migration 0310 sets FORCE ROW LEVEL SECURITY on `ursitoare.run` with policy `tenant_id = current_setting('app.tenant_id', true)`, so a pool with no tenant setting always counts 0. C-7c2a7a3d asserts 2 at line 270, which cannot pass whatever the implementation does. The spec says 'the owner pool counts two run rows'.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/api/test-run-routes.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-mock-test-runs`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/api/test-run-routes.test.ts`: change `runCount` to count inside a transaction on `h.db.ownerPool` that first runs `SELECT set_config('app.tenant_id', 'tenant_a', true)`, or to use `withTenantTx(h.db.ownerPool, h.a, ...)`
+2. Edit `src/api/test-run-routes.test.ts`: change `runCount` to count with `h.deps.store` or `runRepository.list` for tenant A
+
+### Clarifier suggestion
+Edit `src/api/test-run-routes.test.ts`: change `runCount` to count inside a transaction on `h.db.ownerPool` that first runs `SELECT set_config('app.tenant_id', 'tenant_a', true)`, or to use `withTenantTx(h.db.ownerPool, h.a, ...)`
+
+### Answer
+<!-- write below this line -->
