@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 2.1 | technical | src/runs/policy.test.ts:89: ERIN userId does not match the run initiator |
+| Q-001 | accepted | 2.1 | technical | src/runs/policy.test.ts:89: ERIN userId does not match the run initiator |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/runs/policy.test.ts:89: ERIN userId does not match the run initiator
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 2.1
 - **Kind:** technical
 - **Asked:** 2026-11-05T05:43Z by deepseek-free, run r-20261105T0521Z-fb85, task 2.1
