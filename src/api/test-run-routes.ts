@@ -4,8 +4,9 @@ import type { Flow, JsonValue } from "../authoring/index.ts";
 import type { Clock, IdSource } from "../core/index.ts";
 import { entityRef, scopedId } from "../pdp/index.ts";
 import type { InterpreterDeps, VersionLoader } from "../interpreter/index.ts";
-import { startRun } from "../interpreter/index.ts";
+import { checkMocks, InterpreterError, startRun } from "../interpreter/index.ts";
 import { flowOwnerTeam, getVersion } from "../registry/index.ts";
+import { RunDataError } from "../runs/index.ts";
 import type { RunRecord, TenantPool } from "../runs/index.ts";
 import type { TenantContext } from "../tenancy/index.ts";
 import { withTenantTx } from "../tenancy/index.ts";
@@ -53,6 +54,58 @@ function runsUnavailable(): ApiError {
 
 function authorizationUnavailable(): ApiError {
   return new ApiError(503, "AUTHZ_UNAVAILABLE", "Authorization is unavailable");
+}
+
+function stringDetail(details: Readonly<Record<string, string | string[]>>, key: string): string | null {
+  const value = details[key];
+  return typeof value === "string" ? value : null;
+}
+
+function mapStartRunError(error: unknown): never {
+  if (error instanceof InterpreterError) {
+    switch (error.code) {
+      case "INTERPRETER_VERSION_NOT_FOUND":
+        throw notFound();
+      case "INTERPRETER_VERSION_NOT_RUNNABLE": {
+        const details: Record<string, unknown> = {
+          reason: "version_not_runnable",
+          cause: stringDetail(error.details, "reason") ?? "not_runnable",
+        };
+        const blocks = error.details["blocks"];
+        if (Array.isArray(blocks)) {
+          details["blocks"] = blocks;
+        }
+        throw new ApiError(422, "OPERATION_REFUSED", "Operation is refused", details);
+      }
+      case "INTERPRETER_KIND_UNSUPPORTED":
+        throw new ApiError(422, "OPERATION_REFUSED", "Operation is refused", {
+          reason: "kind_unsupported",
+          kinds: error.details["kinds"],
+        });
+      case "INTERPRETER_INPUT_INVALID": {
+        const path = stringDetail(error.details, "path") ?? "/";
+        const keyword = stringDetail(error.details, "keyword") ?? "schema";
+        throw new ApiError(400, "VALIDATION_FAILED", "Request validation failed", {
+          fields: [
+            {
+              field: "body/input",
+              message: `must satisfy the flow inputs (${path} ${keyword})`,
+            },
+          ],
+        });
+      }
+      case "INTERPRETER_UNBOUND":
+        throw runsUnavailable();
+      default:
+        throw error;
+    }
+  }
+  if (error instanceof RunDataError) {
+    throw new ApiError(400, "VALIDATION_FAILED", "Request validation failed", {
+      fields: [{ field: "body", message: "must be plain JSON of at most 1 MiB" }],
+    });
+  }
+  throw error;
 }
 
 export function registryVersionLoader(pool: TenantPool): VersionLoader {
@@ -147,17 +200,35 @@ export function registerTestRunRoutes(server: FastifyInstance, deps: TestRunApiD
         throw notFound();
       }
 
-      const create = (runId: string): Promise<RunRecord> =>
-        startRun(interpreter, tenant, {
-          flowId,
-          hash,
-          mode: "mock",
-          input: body.input,
-          mocks: body.mocks,
-          principal: { userId: principal.userId, kind: principal.kind },
-          actorChain: [principal.userId],
-          runId,
+      const catalogue = await interpreter.catalogueFor(tenant);
+      const checked = checkMocks(version.flow, catalogue, body.mocks);
+      if (checked.problems.length > 0) {
+        if (checked.problems.every((problem) => problem.reason === "missing")) {
+          throw new ApiError(422, "TEST_MOCK_MISSING", "A block node has no mock", {
+            nodes: checked.problems.map((problem) => problem.nodeId),
+          });
+        }
+        throw new ApiError(422, "TEST_MOCK_INVALID", "A mock does not fit its node", {
+          problems: checked.problems,
         });
+      }
+
+      const create = async (runId: string): Promise<RunRecord> => {
+        try {
+          return await startRun(interpreter, tenant, {
+            flowId,
+            hash,
+            mode: "mock",
+            input: body.input,
+            mocks: body.mocks,
+            principal: { userId: principal.userId, kind: principal.kind },
+            actorChain: [principal.userId],
+            runId,
+          });
+        } catch (error) {
+          mapStartRunError(error);
+        }
+      };
 
       const key = idempotencyKeyOf(request);
       let run: RunRecord;
