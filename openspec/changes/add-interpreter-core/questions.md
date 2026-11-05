@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 2.3 | harness | Task 2.3: the pre-satisfied check could not decide |
 | Q-002 | open | none | verdict | Finding F-a71db6eb: task 2.3: gate-step test does not observe the active durable step |
-| Q-003 | open | none | verdict | Finding F-257bab9b: Copied interpreter errors are remapped as tool failures |
+| Q-003 | answered | none | verdict | Finding F-257bab9b: Copied interpreter errors are remapped as tool failures |
 | Q-004 | open | none | verdict | Finding F-8da8966d: task 3.3 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
@@ -247,7 +247,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-003: Finding F-257bab9b: Copied interpreter errors are remapped as tool failures
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -267,6 +268,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct against the design. Design Decision 9 says a thrown value is an interpreter error when its code is in InterpreterErrorCode, not by instanceof, because a workflow engine may rethrow a recorded step error as a copy whose shape is inferred and unchecked. The predicate shared by visit.ts and the block runtime requires error instanceof Error in addition to a recognised code, so a code-bearing copy that is not an Error instance falls to the fallback and becomes INTERPRETER_TOOL_FAILED with the fixed message, losing its code, node and details in the failed row and the run error. The repository does not state the shape of DBOS's replayed step error, which is exactly why the design chose a code-only rule. WHEN a step of a node runtime rethrows a value whose code is an InterpreterErrorCode but which is not an instance of Error, as a replayed copy of a recorded step error may be THEN the visit and the block runtime keep that code, node and details in the failed row and the run error instead of mapping the value to INTERPRETER_TOOL_FAILED.
 ---
 
 ## Q-004: Finding F-8da8966d: task 3.3 is ticked as already satisfied, but its text is not done
