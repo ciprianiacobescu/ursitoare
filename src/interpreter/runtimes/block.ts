@@ -1,31 +1,8 @@
 import type { JsonValue } from "../../authoring/index.ts";
 import { isDurableCancellation } from "../../durable/index.ts";
-import { InterpreterError } from "../errors.ts";
-import type { InterpreterErrorCode } from "../errors.ts";
+import { InterpreterError, toInterpreterError } from "../errors.ts";
 import { checkSchema } from "../schema.ts";
 import type { NodeRuntime, StepContext, ToolCall } from "../types.ts";
-
-const CODES: readonly string[] = [
-  "INTERPRETER_VERSION_NOT_FOUND",
-  "INTERPRETER_VERSION_NOT_RUNNABLE",
-  "INTERPRETER_KIND_UNSUPPORTED",
-  "INTERPRETER_UNBOUND",
-  "INTERPRETER_REF_UNRESOLVED",
-  "INTERPRETER_INPUT_INVALID",
-  "INTERPRETER_OUTPUT_INVALID",
-  "INTERPRETER_TOOL_FAILED",
-  "INTERPRETER_EFFECT_UNKNOWN",
-  "INTERPRETER_NO_INVOKER",
-  "INTERPRETER_LOOP_LIMIT",
-  "NODE_RUNTIME_DUPLICATE",
-  "NODE_RUNTIME_INVALID",
-  "FLOW_FAILED",
-] satisfies InterpreterErrorCode[];
-
-function isInterpreterError(error: unknown): error is InterpreterError {
-  const code = (error as { code?: unknown } | null)?.code;
-  return error instanceof Error && typeof code === "string" && CODES.includes(code);
-}
 
 function toolFailed(nodeId: string, stage: string): InterpreterError {
   return new InterpreterError("INTERPRETER_TOOL_FAILED", "node execution failed", nodeId, { stage });
@@ -33,8 +10,7 @@ function toolFailed(nodeId: string, stage: string): InterpreterError {
 
 function mapFailure(error: unknown, nodeId: string, stage: string): unknown {
   if (isDurableCancellation(error)) return error;
-  if (isInterpreterError(error)) return error;
-  return toolFailed(nodeId, stage);
+  return toInterpreterError(error) ?? toolFailed(nodeId, stage);
 }
 
 export const blockRuntime: NodeRuntime = {
@@ -58,8 +34,9 @@ export const blockRuntime: NodeRuntime = {
       try {
         args = services.resolve(node.with);
       } catch (error) {
-        if (isInterpreterError(error) && error.node === null) {
-          throw new InterpreterError(error.code, error.message, nodeId, { ...error.details });
+        const copied = toInterpreterError(error);
+        if (copied !== null && copied.node === null) {
+          throw new InterpreterError(copied.code, copied.message, nodeId, { ...copied.details });
         }
         throw error;
       }

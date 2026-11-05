@@ -2,8 +2,7 @@ import type { BlockDef, FlowNode, JsonValue } from "../authoring/index.ts";
 import type { RunError, RunRecord, StepWrite, TenantContext } from "../runs/index.ts";
 import { isDurableCancellation } from "../durable/index.ts";
 import { resolveValue } from "./refs.ts";
-import { InterpreterError } from "./errors.ts";
-import type { InterpreterErrorCode } from "./errors.ts";
+import { InterpreterError, toInterpreterError } from "./errors.ts";
 import type {
   EffectGate,
   InterpreterDeps,
@@ -16,34 +15,14 @@ import type {
   WorkflowOps,
 } from "./types.ts";
 
-const CODES: readonly string[] = [
-  "INTERPRETER_VERSION_NOT_FOUND",
-  "INTERPRETER_VERSION_NOT_RUNNABLE",
-  "INTERPRETER_KIND_UNSUPPORTED",
-  "INTERPRETER_UNBOUND",
-  "INTERPRETER_REF_UNRESOLVED",
-  "INTERPRETER_INPUT_INVALID",
-  "INTERPRETER_OUTPUT_INVALID",
-  "INTERPRETER_TOOL_FAILED",
-  "INTERPRETER_EFFECT_UNKNOWN",
-  "INTERPRETER_NO_INVOKER",
-  "INTERPRETER_LOOP_LIMIT",
-  "NODE_RUNTIME_DUPLICATE",
-  "NODE_RUNTIME_INVALID",
-  "FLOW_FAILED",
-] satisfies InterpreterErrorCode[];
-
-function isInterpreterError(error: unknown): error is InterpreterError {
-  const code = (error as { code?: unknown } | null)?.code;
-  return error instanceof Error && typeof code === "string" && CODES.includes(code);
-}
-
 function runErrorOf(error: InterpreterError, nodeId: string): RunError {
-  return {
+  const runError: RunError = {
     code: error.code,
     message: error.message,
     node: error.node ?? nodeId,
   };
+  if (Object.keys(error.details).length > 0) runError.details = { ...error.details };
+  return runError;
 }
 
 export interface VisitRequest {
@@ -223,9 +202,9 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
   } catch (error) {
     if (error === storeWriteError) throw error;
     if (isDurableCancellation(error)) throw error;
-    const mapped = isInterpreterError(error)
-      ? error
-      : new InterpreterError("INTERPRETER_TOOL_FAILED", "node execution failed", nodeId);
+    const mapped =
+      toInterpreterError(error) ??
+      new InterpreterError("INTERPRETER_TOOL_FAILED", "node execution failed", nodeId);
     const rowError = runErrorOf(mapped, nodeId);
     if (wrote) await writeFinal("failed", null, null, rowError, idemKey);
     throw new InterpreterError(mapped.code, mapped.message, mapped.node ?? nodeId, {

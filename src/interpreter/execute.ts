@@ -6,8 +6,7 @@ import type {
   RunTransition,
   TenantContext,
 } from "../runs/index.ts";
-import { InterpreterError } from "./errors.ts";
-import type { InterpreterErrorCode } from "./errors.ts";
+import { InterpreterError, toInterpreterError } from "./errors.ts";
 import { nodeRuntimeFor } from "./registry.ts";
 import type {
   InterpreterDeps,
@@ -27,28 +26,6 @@ interface LoadValue {
 }
 
 const TERMINAL: readonly RunState[] = ["completed", "failed", "cancelled"];
-
-const CODES: readonly string[] = [
-  "INTERPRETER_VERSION_NOT_FOUND",
-  "INTERPRETER_VERSION_NOT_RUNNABLE",
-  "INTERPRETER_KIND_UNSUPPORTED",
-  "INTERPRETER_UNBOUND",
-  "INTERPRETER_REF_UNRESOLVED",
-  "INTERPRETER_INPUT_INVALID",
-  "INTERPRETER_OUTPUT_INVALID",
-  "INTERPRETER_TOOL_FAILED",
-  "INTERPRETER_EFFECT_UNKNOWN",
-  "INTERPRETER_NO_INVOKER",
-  "INTERPRETER_LOOP_LIMIT",
-  "NODE_RUNTIME_DUPLICATE",
-  "NODE_RUNTIME_INVALID",
-  "FLOW_FAILED",
-] satisfies InterpreterErrorCode[];
-
-function isInterpreterError(error: unknown): error is InterpreterError {
-  const code = (error as { code?: unknown } | null)?.code;
-  return error instanceof Error && typeof code === "string" && CODES.includes(code);
-}
 
 function asJson<T>(value: T): JsonValue {
   return value as unknown as JsonValue;
@@ -305,8 +282,9 @@ export async function executeRun(
         now: deps.clock.now(),
       });
     } catch (error) {
-      if (isInterpreterError(error)) {
-        failure = error;
+      const interpreted = toInterpreterError(error);
+      if (interpreted !== null) {
+        failure = interpreted;
         break;
       }
       throw error;
@@ -326,11 +304,13 @@ export async function executeRun(
   }
 
   if (failure !== null) {
-    return finishFailed(ops, deps, ctx, runId, {
+    const runError: RunError = {
       code: failure.code,
       message: failure.message,
       node: failure.node,
-    });
+    };
+    if (Object.keys(failure.details).length > 0) runError.details = { ...failure.details };
+    return finishFailed(ops, deps, ctx, runId, runError);
   }
   if (completed === null) {
     throw new InterpreterError(
