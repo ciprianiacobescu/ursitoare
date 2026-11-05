@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.1 | technical | src/runs/policy.test.ts:89: ERIN userId does not match the run initiator |
 | Q-002 | answered | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
 <!-- l4:index:end -->
 
 ---
@@ -78,7 +78,8 @@ accept The tracing test builds a snapshot whose src/x/a.ts has the throw on line
 
 ## Q-003: Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -105,3 +106,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test builds a snapshot with a registered literal in src/x/ok.ts, a dynamic (identifier) code in src/x/dyn.ts and the literal FLOW_EXISTS in src/x/a.test.ts, and asserts that checkApiErrorCodes returns [] with the default registry, [] with the list ["NOT_FOUND"], and [] over readSnapshot() with the default registry. The checker skips files matching the test-file pattern, only reports string or template literals (an identifier argument yields null and is ignored), and defaults its registered list to Object.keys(ERROR_CODES), which holds NOT_FOUND. The test passed in the latest report, which also proves the real tree is clean.
