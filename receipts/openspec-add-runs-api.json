@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-05T07:30:56Z",
+  "integrated_revision": "dbbfa5441c2d4cfab54535bb7acfcbfaba4a67bf",
+  "merge_commit": "dbbfa5441c2d4cfab54535bb7acfcbfaba4a67bf",
+  "plan_digest": "d4a60ec43090d2fa",
+  "plan_id": "m4",
+  "postcheck": "pass",
+  "pr": 76,
+  "receipt_id": "m4/openspec:add-runs-api/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "fca134bcf76f65174786870842a6610a331c5d82",
+  "spec_digest": "880c525cfda2ad8d",
+  "target": "main",
+  "unit_id": "openspec:add-runs-api"
+}
