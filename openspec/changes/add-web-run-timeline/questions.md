@@ -123,6 +123,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-004: Criterion C-bffa668a (web-runs › The M4 journey proves test runs and the timeline in a browser › Bob reads the run but cannot start one): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): Same situation as Q-003: the criterion is browser-only. The journey test in e2e/test_m4_runs.py asserts the scenario (State: completed, the four step buttons, no Start test run button, the text Only authors can start a test run.) and TestRunPanel.tsx renders the denied message as a paragraph without
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
