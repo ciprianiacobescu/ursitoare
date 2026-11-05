@@ -16,7 +16,7 @@
 
 ## 5. Cancel and isolation
 
-- [ ] 5.1 Write `src/api/run-cancel.test.ts` first (scenarios "Cancelling an active run" (with its `Promise.all` pair), "Cancel refusals leave the run alone" and "No pool and no runtime", with the switchable `durable.cancel` fake and the owner-pool `event` read) and `src/api/run-tenants.test.ts` (scenario "Tenant B reaches nothing of tenant A", ending with alice's cancel of `run-5`), then add `POST /api/v1/runs/:runId/cancel` to `registerRunRoutes` in `src/api/run-routes.ts` (Decision 8), implementing requirements "Cancel stops an active run once", "A missing store or runtime answers RUNS_UNAVAILABLE" and "Tenants never see each other's runs"
+- [x] 5.1 Write `src/api/run-cancel.test.ts` first (scenarios "Cancelling an active run" (with its `Promise.all` pair), "Cancel refusals leave the run alone" and "No pool and no runtime", with the switchable `durable.cancel` fake and the owner-pool `event` read) and `src/api/run-tenants.test.ts` (scenario "Tenant B reaches nothing of tenant A", ending with alice's cancel of `run-5`), then add `POST /api/v1/runs/:runId/cancel` to `registerRunRoutes` in `src/api/run-routes.ts` (Decision 8), implementing requirements "Cancel stops an active run once", "A missing store or runtime answers RUNS_UNAVAILABLE" and "Tenants never see each other's runs"
 
 ## 6. Engine wiring and API document
 

@@ -3,8 +3,10 @@ import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { KeyMaterial } from "../audit/index.ts";
 import type { Clock, IdSource } from "../core/index.ts";
 import type { DurableRuntime } from "../durable/index.ts";
+import { workflowIdOf } from "../interpreter/index.ts";
 import {
   RUN_LIST_FILTER_FIRST,
+  appendEvent,
   envelopeStore,
   runRepository,
   stepRepository,
@@ -91,6 +93,12 @@ const PAYLOAD_SCHEMA = {
 
 function runsUnavailable(): ApiError {
   return new ApiError(503, "RUNS_UNAVAILABLE", "Runs are unavailable");
+}
+
+function runNotActive(): ApiError {
+  return new ApiError(422, "OPERATION_REFUSED", "Operation is refused", {
+    reason: "run_not_active",
+  });
 }
 
 export function registerRunRoutes(server: FastifyInstance, deps: RunApiDeps): void {
@@ -282,6 +290,56 @@ export function registerRunRoutes(server: FastifyInstance, deps: RunApiDeps): vo
         size: payload.size,
         data: payload.data,
       };
+    },
+  });
+
+  defineRoute(server, {
+    method: "POST",
+    url: "/api/v1/runs/:runId/cancel",
+    auth: { kind: "session" },
+    action: "debug_run",
+    resource: loadRun,
+    schema: { params: RUN_PARAMS, response: { 202: RUN_VIEW_SCHEMA } },
+    errors: ["OPERATION_REFUSED", "RUNS_UNAVAILABLE", "VALIDATION_FAILED"],
+    handler: async (request, reply) => {
+      const { pool, tenant } = context(request);
+      if (deps.durable === null) throw runsUnavailable();
+      const principal = request.principal;
+      if (principal === undefined) throw unavailable();
+      const runId = runIdOf(request);
+      const current = await withTenantTx(pool, tenant, (tx) =>
+        runRepository.get(tx, tenant, runId),
+      );
+      if (current === null) throw notFound();
+      if (current.state !== "queued" && current.state !== "running") {
+        throw runNotActive();
+      }
+      try {
+        await deps.durable.cancel(workflowIdOf(tenant.tenantId, runId));
+      } catch {
+        throw runsUnavailable();
+      }
+      const at = deps.clock.now();
+      const transitioned = await withTenantTx(pool, tenant, async (tx) => {
+        const updated = await runRepository.transition(tx, tenant, runId, {
+          state: "cancelled",
+          from: ["queued", "running"],
+          at,
+        });
+        if (updated === null) return null;
+        await appendEvent(tx, tenant, {
+          eventId: deps.ids.next("evt"),
+          runId,
+          correlationId: null,
+          type: "run.cancelled",
+          data: { by: principal.userId, from: current.state },
+          time: at,
+        });
+        return updated;
+      });
+      if (transitioned === null) throw runNotActive();
+      reply.code(202);
+      return toRunView(transitioned);
     },
   });
 }
