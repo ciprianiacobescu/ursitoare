@@ -12,7 +12,7 @@ Spec: `specs/flow-testing/spec.md`; decisions, fixtures and interfaces: `design.
 
 ## 3. The error codes
 
-- [ ] 3.1 Write `src/api/test-run-codes.test.ts` first (`ERROR_CODES.TEST_MOCK_MISSING` and `TEST_MOCK_INVALID` read with `assert.deepEqual`, `isRegisteredCode` true for both), then add the two entries to `ERROR_CODES` in `src/api/error-codes.ts`, implementing the modified requirement "Every error code is registered" of `api-conventions`; red also changes the existing test `src/api/error-codes.test.ts::C-96e47324 The registry holds exactly the 16 codes of the API with status and message` in place, so that its `EXPECTED_CODES` holds its 24 entries plus the two (it fails by assertion until green adds them)
+- [x] 3.1 Write `src/api/test-run-codes.test.ts` first (`ERROR_CODES.TEST_MOCK_MISSING` and `TEST_MOCK_INVALID` read with `assert.deepEqual`, `isRegisteredCode` true for both), then add the two entries to `ERROR_CODES` in `src/api/error-codes.ts`, implementing the modified requirement "Every error code is registered" of `api-conventions`; red also changes the existing test `src/api/error-codes.test.ts::C-96e47324 The registry holds exactly the 16 codes of the API with status and message` in place, so that its `EXPECTED_CODES` holds its 24 entries plus the two (it fails by assertion until green adds them)
 
 ## 4. The endpoint
 
