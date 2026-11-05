@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | 2.3 | harness | Task 2.3: the pre-satisfied check could not decide |
 | Q-002 | open | none | verdict | Finding F-a71db6eb: task 2.3: gate-step test does not observe the active durable step |
 | Q-003 | answered | none | verdict | Finding F-257bab9b: Copied interpreter errors are remapped as tool failures |
-| Q-004 | open | none | verdict | Finding F-8da8966d: task 3.3 is ticked as already satisfied, but its text is not done |
+| Q-004 | answered | none | verdict | Finding F-8da8966d: task 3.3 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
 ---
@@ -273,7 +273,8 @@ reject The finding is correct against the design. Design Decision 9 says a throw
 
 ## Q-004: Finding F-8da8966d: task 3.3 is ticked as already satisfied, but its text is not done
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -293,3 +294,4 @@ This finding cites no criterion: end the reason with one sentence WHEN <the situ
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived: the judge saw only the part of the diff without visit.ts, and the task's text is done at the unit head. The failure test file exists with tests for both the node-failure and run-level scenarios. execute.ts holds the revisit guard that fails a twice-visited node with INTERPRETER_LOOP_LIMIT, the terminal-run shortcut that returns a terminal run after run:load, and the run-level failure mapping for a missing invoker and unloadable versions. visit.ts, the file the judge did not see, holds the node failure mapping that writes a failed row with the RunError and rethrows a fixed InterpreterError, passes durable cancellations and store write errors through unchanged, and never copies a raw tool error. Ticking 3.3 as already satisfied by the 3.2 implementation is therefore consistent with the code.
