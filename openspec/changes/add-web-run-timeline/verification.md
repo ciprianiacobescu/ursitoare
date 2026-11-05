@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-run-timeline: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-web-run-timeline: PASS (round 2)
 
 traceability: 9/11 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 9/11 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.4 | base main@3e0d7e4c20 contained |
-| 1 | integrity | ok | 200.8 | 11 sub-checks (+1 unfrozen by human answers); scope: 28 changed file(s) |
-| 2 | build | ok | 34.1 |  |
-| 3 | tests | ok | 291.6 |  |
-| 4 | traceability | ok | 0.2 | 9/11 criteria covered |
-| 4a | audit sampling | ok | 700.4 | 1 invalid, 1 rejected, 1 skipped; support files at the base: 9 |
-| 5 | ui test generation | ok | 1519.1 | 4 fails_at_head, 7 not_testable |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/features/80-runs.tsx, web/src/features/81-run.tsx, web/src/runs/RunPage.tsx, web/src/runs/RunsPage.tsx, web/src/runs/TestRunPanel.tsx and 9 more |
-| 8 | s1 judge | ok | 0.4 | 3/11 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 277.6 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 4a | audit sampling | reused | 0.0 | reused (round 1) |
+| 5 | ui test generation | reused | 0.0 | reused (round 1) |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -200,11 +200,29 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 - C-44473e25: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_44473e25_r1.py
 
+## Answers to verdict questions
+
+- Q-002 accept C-2ceae13f by the delegate (claude-fable-5-1 via claude-code): The parsers behave as the scenario asks. parseRunView, parseStepView and parsePayloadView build fresh objects from known fields only, so an unknown property such as extra is dropped; principal, error and taint are rebuilt rather than reused, so they are copies. Every malformed input of the scenario ...
+- Q-003 accept C-4ef9cb9c by agent (CLAUDECODE): The journey test e2e/test_m4_runs.py::test_c_4ef9cb9c_alice_test_runs_a_flow_and_follows_the_run asserts this scenario step by step: the Test run panel text and no Start test run button before Validate, the two textboxes and the button after "Valid. 0 errors", the status "Started test run <runId>." ...
+- Q-004 accept C-bffa668a by agent (CLAUDECODE): The journey test e2e/test_m4_runs.py::test_c_bffa668a_bob_reads_the_run_but_cannot_start_one sets up alice's run in one context and signs bob in in a second, then asserts the scenario: bob opens Runs and the run's link, reads "State: completed" and the four step buttons with no Start test run button...
+- Q-005 accept F-81bc478e by the delegate (claude-fable-5-1 via claude-code): The finding is waived. The counterexample, a payload answer whose data property is undefined, cannot reach parsePayloadView: every answer of the runs API goes through the API client, which obtains the body with JSON.parse, and JSON.parse never produces undefined, functions or symbols. Every value JS...
+- Q-006 accept H-e62fdc45 by the delegate (claude-fable-5-1 via claude-code): The hold is waived. The criterion exercises the pure parser functions parseRunView, parseStepView and parsePayloadView with hand-built inputs and asks for deep equality, copies and null results. Nothing in it is visible in a browser, so an end-to-end test cannot check it. The three Node tests in typ...
+- Q-007 accept H-eec0048a by the delegate (claude-fable-5-1 via claude-code): The hold is waived. The criterion's scenario drives runListFetcher, loadRun, loadSteps and loadPayload with an in-process recording client and asserts the exact paths, query options, signals, parsed values, the five-page cap and the RangeError raised before any request; none of that is observable in...
+- Q-008 accept H-32069270 by the delegate (claude-fable-5-1 via claude-code): The hold is waived. The criterion's scenario reads stepRenderers.list(), looks up kinds, registers a renderer and expects StepRendererError codes for duplicates and seven invalid renderers while the list stays unchanged. These are calls to an in-process registry and thrown errors; a browser shows no...
+- Q-009 accept H-07248f6f by the delegate (claude-fable-5-1 via claude-code): The hold is waived. The criterion's scenario calls stepStateLabel, timelineItems, stepDetailRows, decisionHref, runErrorText, payloadShown and setPayloadLoad with hand-built steps and payload loads and asks for exact return values, a new Map and an unchanged input map. These are pure helpers; a brow...
+- Q-010 accept H-420abdfd by agent (CLAUDECODE): The hold is waived. The scenario Delays, a followed run, a deadline and failures calls nextPollDelay and followRun with an injected sleep, clock and client and compares delays, calls, snapshots and failure outcomes; a browser can control none of those, so the criterion is not browser-observable as w...
+- Q-011 accept H-7a90109b by agent (CLAUDECODE): The hold is waived. The scenario Registration, names and sources reads constants (RUN_PAGES, TEST_RUN_PANEL, RUNS_TITLE, runTitle, runPath, runLinkName), a createFeatureRegistry() navigation and the source text of the feature files, CSS and components; none of that is browser-observable as written. ...
+- Q-012 accept H-ed380471 by the delegate (claude-fable-5-1 via claude-code): The hold is waived. The criterion's scenario calls testPanelView and parseTestInputs with hand-built sessions, versions and texts and asks for exact return values: the loading, unavailable, denied, no_version and form views, the parsed objects, an own __proto__ property and the three error texts. Th...
+- Q-013 accept H-c59c8e20 by the delegate (claude-fable-5-1 via claude-code): The hold is waived. The criterion's scenario drives startTestRun with a recording client and asserts the exact POST path, body and Idempotency-Key header, an INVALID_RESPONSE rejection for a run outside the union, RangeError rejections without a request for a bad flow id or hash, that registerRunMes...
+- Q-014 accept H-ac6e12a7 by the delegate (claude-fable-5-1 via claude-code): The hold is waived. The criterion is not a browser criterion: its scenario is the Node journey m4-runs.test.ts, which starts the e2e stack in-process, signs in alice, bob and mallory through the session helpers and calls the logic functions directly against the engine. The test exists, carries the c...
+- Q-015 accept H-36f31dc8 by the delegate (claude-fable-5-1 via claude-code): The hold is waived. The criterion does have an end-to-end test: e2e/test_m4_runs.py tags its alice test with this criterion id and asserts every clause of the scenario in order: the panel's initial text and missing button, the two textboxes after Valid. 0 errors, the status Started test run and the ...
+- Q-016 accept H-70326357 by the delegate (claude-fable-5-1 via claude-code): The hold is waived. The criterion does have an end-to-end test: e2e/test_m4_runs.py tags its bob test with this criterion id. Alice sets up the run in the first context, bob signs in in a second browser context, opens Runs, follows the link Open run of the Runs table, and the test asserts State: com...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
-| C-2ceae13f | web-runs › Run views are parsed strictly and read through four loaders › Views are parsed strictly | fail | needs_human | judge fail counted as insufficient_evidence: counterexample unexecuted (not executed in M0: the verifier worktree is M1 (verifier 1.5)) |
+| C-2ceae13f | web-runs › Run views are parsed strictly and read through four loaders › Views are parsed strictly | fail | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The parsers behave as the scenario asks. parseRunView, parseStepView and parsePayloadView build fresh objects from known fields only, so an unknown property such as extra is dropped; principal, error and taint are rebuilt rather than reuse... |
 | C-8a285469 | web-runs › Run views are parsed strictly and read through four loaders › Loaders call exactly the run routes | pass | pass | the judge passed it and a discriminating test passes |
 | C-44473e25 | web-runs › Step renderers are registered by node kind › Built-ins, a default, registration and refusals | pass | pass | the judge passed it and a discriminating test passes |
 | C-95befb77 | web-runs › The timeline shows every step with its state, details and payload › Items, states, details and payloads | pass | pass | the judge passed it and a discriminating test passes |
@@ -213,8 +231,8 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-a8d83d86 | web-runs › The Test run panel starts a mocked run › What the panel shows and what its inputs must be | pass | pass | the judge passed it and a discriminating test passes |
 | C-c7363684 | web-runs › The Test run panel starts a mocked run › Starting a run and explaining a refusal | pass | pass | the judge passed it and a discriminating test passes |
 | C-e75f18dc | web-runs › The run logic works against the real engine › Alice, bob and mallory use the engine | pass | pass | the judge passed it and a discriminating test passes |
-| C-4ef9cb9c | web-runs › The M4 journey proves test runs and the timeline in a browser › Alice test-runs a flow and follows the run | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-bffa668a | web-runs › The M4 journey proves test runs and the timeline in a browser › Bob reads the run but cannot start one | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-4ef9cb9c | web-runs › The M4 journey proves test runs and the timeline in a browser › Alice test-runs a flow and follows the run | pass | pass | accepted by agent (CLAUDECODE): The journey test e2e/test_m4_runs.py::test_c_4ef9cb9c_alice_test_runs_a_flow_and_follows_the_run asserts this scenario step by step: the Test run panel text and no Start test run button before Validate, the two textboxes and the button after "Valid. 0 errors", the sta... |
+| C-bffa668a | web-runs › The M4 journey proves test runs and the timeline in a browser › Bob reads the run but cannot start one | pass | pass | accepted by agent (CLAUDECODE): The journey test e2e/test_m4_runs.py::test_c_bffa668a_bob_reads_the_run_but_cannot_start_one sets up alice's run in one context and signs bob in in a second, then asserts the scenario: bob opens Runs and the run's link, reads "State: completed" and the four step butto... |
 - C-2ceae13f: counterexample unexecuted (not executed in M0: the verifier worktree is M1 (verifier 1.5))
 
 ## Findings
@@ -237,23 +255,9 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] Duplicate payload digest starts duplicate loads (spec gap) (criterion C-95befb77): RunPage derives `missing` from the two-reference array before either load is written to state. If inputRef and outputRef are the same digest, the loop invokes loadPayload twice for the same cache key.
 - [minor, judge] task 6.1: Bob journey omits accessibility checks during Alice setup: The Bob browser test logs Alice in and calls `_start_run(page)`, which opens the Alice flow editor, but performs no `assert_accessible(page)` for Alice's landing page or flow-editor page. Task 6.1 requires accessibility checks after every page, including the landing page.
 - [minor, judge] Traceability matrix incorrectly marks both browser criteria uncovered: The gate report's traceability section says C-4ef9cb9c and C-bffa668a have "no discriminating test", while the same report lists passed browser tests with those exact scenario names and the shown tests assert their observable outcomes.
-- [major, judge] Payload parser accepts values outside PayloadValue (criterion C-2ceae13f): parsePayloadView accepts any own data property by casting raw["data"] to PayloadValue. Consequently an invalid API response with data: undefined is accepted instead of rejected.
+- [minor, judge] Payload parser accepts values outside PayloadValue (criterion C-2ceae13f): parsePayloadView accepts any own data property by casting raw["data"] to PayloadValue. Consequently an invalid API response with data: undefined is accepted instead of rejected. (waived by the delegate (claude-fable-5-1 via claude-code): The finding is waived. The counterexample, a payload answer whose data property is undefined, cannot reach parsePayloadView: every answer of the runs API goes through the API client, which obtains the body with JSON.parse, and JSON.parse never produces undefined, functions or symbols. Every value JSON.parse can produce (null, boolean, number, string, array, ob...
 - [minor, judge] Valid-parser test omits the required error-copy assertion (criterion C-2ceae13f): The valid-view test states that nested values are copied but uses error: null and only asserts copies for principal and taint. It therefore does not verify the required copy behavior for a non-null RunError.
 - [minor, judge] the judge called a test inadequate (criterion C-2ceae13f): web.src.runs.types.test.ts::C-2ceae13f the parsers keep the valid views with copies of their nested values
-
-## Needs a human
-
-- UI criterion C-2ceae13f has no end-to-end test; see the generated UI tests table
-- UI criterion C-8a285469 has no end-to-end test; see the generated UI tests table
-- UI criterion C-44473e25 has no end-to-end test; see the generated UI tests table
-- UI criterion C-95befb77 has no end-to-end test; see the generated UI tests table
-- UI criterion C-f2512ba4 has no end-to-end test; see the generated UI tests table
-- UI criterion C-b67fc6a7 has no end-to-end test; see the generated UI tests table
-- UI criterion C-a8d83d86 has no end-to-end test; see the generated UI tests table
-- UI criterion C-c7363684 has no end-to-end test; see the generated UI tests table
-- UI criterion C-e75f18dc has no end-to-end test; see the generated UI tests table
-- UI criterion C-4ef9cb9c has no end-to-end test; see the generated UI tests table
-- UI criterion C-bffa668a has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
