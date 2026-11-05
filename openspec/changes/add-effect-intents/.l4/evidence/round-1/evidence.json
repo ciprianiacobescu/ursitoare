@@ -1,0 +1,280 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/runs/intents",
+      "src/tenancy",
+      "flows/pay-once.yaml",
+      "test/support/crash/pay-once.ts",
+      "docs/decisions/0002",
+      "src/runs/index.ts",
+      "test/support/README.md",
+      "src/runs",
+      "test/arch/modules.ts",
+      "specs/idempotency/spec.md",
+      "node:assert/strict",
+      "src/runs/intents/key.test.ts",
+      "src/runs/intents/errors.ts",
+      "src/runs/intents/key.ts",
+      "src/runs/intents/schema.test.ts",
+      "src/db/migrations/0340_effect_intent.sql",
+      "src/runs/intents/repository.test.ts",
+      "src/runs/intents/repository.ts",
+      "src/runs/intents/validate.ts",
+      "src/runs/intents/transitions.test.ts",
+      "src/runs/intents/gate.test.ts",
+      "src/runs/intents/gate.ts",
+      "src/runs/intents/gate-run.test.ts",
+      "test/support/crash/flows/pay-once.yaml",
+      "src/runs/intents/crash-once.test.ts",
+      "src/runs/intents/crash-unsafe.test.ts",
+      "src/runs/intents/crash-steps.test.ts",
+      "test/support/crash/intents-scenario.ts",
+      "src/runs/intents/index.test.ts",
+      "src/runs/intents/index.ts",
+      "**/errors.ts",
+      "**/key.ts",
+      "**/validate.ts",
+      "**/repository.ts",
+      "**/gate.ts",
+      "**/index.ts",
+      "**/^[A-Za-z0-9_-]{1,64}$",
+      "**/^[A-Za-z0-9_-]{1,128}$",
+      "**/^[a-z][a-z0-9_]{0,127}$",
+      "**/^ik1_[0-9a-f]{64}$",
+      "**/InterpreterDeps[\"effects\"]",
+      "**/[A-Za-z0-9_.:-]",
+      "**/INTENT_*",
+      "**/[",
+      "module db",
+      "module docs",
+      "module flows",
+      "module node:assert",
+      "module runs",
+      "module specs",
+      "module tenancy",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-effect-intents/.l4/ledger/r-20261105T0203Z-c925.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-effect-intents/.l4/ledger/r-20261105T0323Z-711f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-effect-intents/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-effect-intents/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/db/migrations/0340_effect_intent.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/index.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/intents/crash-once.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/intents/crash-steps.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/intents/crash-unsafe.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/intents/errors.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/intents/gate-run.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/intents/gate.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/intents/gate.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/intents/index.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/intents/index.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/intents/key.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/intents/key.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/intents/repository.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/intents/repository.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/intents/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/intents/transitions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/intents/validate.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/README.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/crash/flows/pay-once.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/crash/intents-scenario.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/crash/pay-once.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/runs/index.ts, src/runs/intents/errors.ts, src/runs/intents/gate.ts, src/runs/intents/index.ts, src/runs/intents/key.ts and 4 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/runs/index.ts",
+      "src/runs/intents/errors.ts",
+      "src/runs/intents/gate.ts",
+      "src/runs/intents/index.ts",
+      "src/runs/intents/key.ts",
+      "src/runs/intents/repository.ts",
+      "src/runs/intents/validate.ts",
+      "test/support/crash/intents-scenario.ts",
+      "test/support/crash/pay-once.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1602,
+      "passed": 1602,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 20,
+      "new_passed": 20,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
