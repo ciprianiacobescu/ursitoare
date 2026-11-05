@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 2.3 | harness | Task 2.3: the pre-satisfied check could not decide |
-| Q-002 | open | none | verdict | Finding F-a71db6eb: task 2.3: gate-step test does not observe the active durable step |
+| Q-002 | answered | none | verdict | Finding F-a71db6eb: task 2.3: gate-step test does not observe the active durable step |
 | Q-003 | answered | none | verdict | Finding F-257bab9b: Copied interpreter errors are remapped as tool failures |
 | Q-004 | answered | none | verdict | Finding F-8da8966d: task 3.3 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
@@ -222,7 +222,7 @@ accept: The claim that task 2.3 is already satisfied holds: the effect path of t
 
 ## Q-002: Finding F-a71db6eb: task 2.3: gate-step test does not observe the active durable step
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -243,6 +243,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding holds as a test gap, not a code defect. src/interpreter/runtimes/block.ts calls EffectGate.before inside runStep(nodeId) and EffectGate.after inside runStep(`${nodeId}#done`), and moving after into the node step fails two tests (checked by mutation on the unit head). But the scenario "Gate order, decisions and failures" (spec.md:40) pins the step of each gate call: the first case logs exactly `pay: before(CALL, CTX)`, `pay: invoke(CALL, CTX + idemKey ik_1)` and `pay#done: after(CALL, CTX + idemKey ik_1, { output: PAID })`. In block-effect.test.ts the rig tracks the running step in `current`, but no logging gate or invoker reads it, so a block that called after inside the pay step and then ran an empty pay#done step would pass every test. The step that holds each gate call decides what a replay runs again, and U34's effect journal relies on it, so the tagging must be tested as the scenario writes it. Only the test changes: the logging gate and the logging invoker prefix each entry with the step that is running. The Q-003 reject already makes a fix unit, so this adds one test task to it. WHEN the block runtime runs node pay with an effectful tool, a gate answering { action: "invoke", idemKey: "ik_1" } and an invoker answering PAID, on WorkflowOps that record the running step THEN the gate and invoker calls are logged with that step, exactly `pay: before(CALL, CTX)`, `pay: invoke(CALL, CTX + idemKey ik_1)` and `pay#done: after(CALL, CTX + idemKey ik_1, { output: PAID })`, and executed is ["pay", "pay#done"].
 ---
 
 ## Q-003: Finding F-257bab9b: Copied interpreter errors are remapped as tool failures
