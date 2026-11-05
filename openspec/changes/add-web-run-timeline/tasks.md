@@ -14,7 +14,7 @@ Spec: `specs/web-runs/spec.md`; data: `reference.md`; decisions: `design.md`. Ea
 
 ## 4. The Test run panel logic
 
-- [ ] 4.1 Write `web/src/runs/test-run.test.ts` first (scenarios "What the panel shows and what its inputs must be" and "Starting a run and explaining a refusal"), then implement `testPanelView`, `parseTestInputs`, `startTestRun`, `testRunFormErrors` in `web/src/runs/test-run.ts`, implementing requirement "The Test run panel starts a mocked run"
+- [x] 4.1 Write `web/src/runs/test-run.test.ts` first (scenarios "What the panel shows and what its inputs must be" and "Starting a run and explaining a refusal"), then implement `testPanelView`, `parseTestInputs`, `startTestRun`, `testRunFormErrors` in `web/src/runs/test-run.ts`, implementing requirement "The Test run panel starts a mocked run"
 
 ## 5. Pages and features
 
