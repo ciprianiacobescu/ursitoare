@@ -13,6 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1, 1.2, 2.1, 2.2, 3.1, 4.1, 4.2, 5.1 | ambiguous | Scenarios "Bind order, the route table and a run on DBOS" and "The route table, the document and the wiring" conflict |
 | Q-002 | accepted | 4.1 | technical | src/api/test-run-routes.test.ts:160 runCount cannot see run rows under forced RLS |
+| Q-003 | open | 5.1 | technical | src/main.mockruns.test.ts:197 session created with fixedClock but main uses systemClock |
 <!-- l4:index:end -->
 
 ---
@@ -61,6 +62,29 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/api/test-run-routes.test.ts`: change `runCount` to count inside a transaction on `h.db.ownerPool` that first runs `SELECT set_config('app.tenant_id', 'tenant_a', true)`, or to use `withTenantTx(h.db.ownerPool, h.a, ...)`
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-003: src/main.mockruns.test.ts:197 session created with fixedClock but main uses systemClock
+
+- **Status:** open
+- **Blocking tasks:** 5.1
+- **Kind:** technical
+- **Asked:** 2026-11-05T10:59Z by claude-sonnet, run r-20261105T0935Z-8037, task 5.1
+
+### Context
+The test creates alice's session with `fixedClock(NOW)` (2026-11-02T10:00:00Z) and then posts to a `main` whose PEP uses `systemClock`. The session idle timeout is 1800 s, so the session is expired relative to the real clock and the POST answers 401 UNAUTHENTICATED instead of 202. `src/main.runs.test.ts` avoids this by using `systemClock` for `createTestSession`. `main` takes no clock dependency, so green cannot fix this.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/main.mockruns.test.ts`, `src/main.runs.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-mock-test-runs`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/main.mockruns.test.ts`: create the session and seed with `systemClock` (as `src/main.runs.test.ts` does) instead of `fixedClock(NOW)` in the second test (line 197 `const clock = fixedClock(NOW);`)
+
+### Clarifier suggestion
+Edit `src/main.mockruns.test.ts`: create the session and seed with `systemClock` (as `src/main.runs.test.ts` does) instead of `fixedClock(NOW)` in the second test (line 197 `const clock = fixedClock(NOW);`)
 
 ### Answer
 <!-- write below this line -->
