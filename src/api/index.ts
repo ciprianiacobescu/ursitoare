@@ -17,6 +17,8 @@ export type { FlowApiDeps } from "./flow-routes.ts";
 export { registerFlowRoutes } from "./flow-routes.ts";
 export type { RunApiDeps } from "./run-routes.ts";
 export { registerRunRoutes } from "./run-routes.ts";
+export type { TestRunApiDeps } from "./test-run-routes.ts";
+export { registerTestRunRoutes, registryVersionLoader } from "./test-run-routes.ts";
 export type { RunView, StepView, PayloadView } from "./run-views.ts";
 export {
   RUN_VIEW_SCHEMA,

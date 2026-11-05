@@ -16,6 +16,7 @@ service in the stack tier (`docs/testing.md`).
 | `hook-flows/` | `add-test-catalogue` | Synthetic hook flows on the M5 node kinds |
 | `crash/` | `add-crash-harness`; `add-effect-intents` (`pay-once.ts`, `flows/pay-once.yaml`, `intents-scenario.ts`) | Spawn, kill and restart the engine; dedicated clusters |
 | `node-conformance.ts` | `add-interpreter-core` | The kit every node runtime passes |
+| `mock-run-seed.ts` | `add-mock-test-runs` | Blocks and the `pay-once` and `rf-1-core` flows the mock test-run tests use |
 | `run-wait.ts` | `add-interpreter-core` | `waitForRun`: polls a run until it reaches one of the given states or a deadline |
 | `fake-egress/` | `add-fake-egress-proxy` | Broker, proxy and vault contract with per-service upstream routing |
 | `fake-tools/` | `add-fake-tools` | The test-catalogue blocks as tool servers behind the fake proxy |
