@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-eec0048a: UI criterion C-8a285469 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-32069270: UI criterion C-44473e25 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-07248f6f: UI criterion C-95befb77 has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-420abdfd: UI criterion C-f2512ba4 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-420abdfd: UI criterion C-f2512ba4 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-7a90109b: UI criterion C-b67fc6a7 has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-ed380471: UI criterion C-a8d83d86 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-c59c8e20: UI criterion C-c7363684 has no end-to-end test; see the generated UI tests table |
@@ -283,7 +283,7 @@ accept The hold is waived. The criterion's scenario calls stepStateLabel, timeli
 
 ## Q-010: Hold H-420abdfd: UI criterion C-f2512ba4 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The hold rests on a generated browser test, test_l4_c_f2512ba4.py, that fails at the head after two attempts. That file is not in the repository (e2e/ holds no test_l4_c_f2512ba4.py) and its screenshot and trace are not either, so I cannot read what it asserted or why it failed, and I cannot rule ou
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -303,6 +303,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold is waived. The scenario Delays, a followed run, a deadline and failures calls nextPollDelay and followRun with an injected sleep, clock and client and compares delays, calls, snapshots and failure outcomes; a browser can control none of those, so the criterion is not browser-observable as written. Its discriminating tests in web/src/runs/polling.test.ts (red then green) pass and the judge passed it. Why the generated e2e/test_l4_c_f2512ba4.py failed is not known: the file, screenshot and trace were not published (upload_artifacts is off). It failed at head in both attempts, and every generated browser test of this round failed at base and at head alike within about 11 seconds of starting (run 42081317007 log, 18:34-18:47Z), which points at the generated tests rather than the page. The browser-visible effect of polling is proven by the passing journey: RunPage.tsx renders the run state only from followRun's onUpdate (RunPage.tsx:67), and e2e/test_m4_runs.py reads "State: completed" on the run page within 20 seconds of starting the run and then recovers from an injected fault with Try again; it passed in this round's e2e gate (58 tests, 58 passed). Committed by Claude Code as the owner's delegate.
 ---
 
 ## Q-011: Hold H-7a90109b: UI criterion C-b67fc6a7 has no end-to-end test; see the generated UI tests table
