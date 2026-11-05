@@ -15,6 +15,16 @@ export type { BlockApiDeps } from "./block-routes.ts";
 export { registerBlockRoutes } from "./block-routes.ts";
 export type { FlowApiDeps } from "./flow-routes.ts";
 export { registerFlowRoutes } from "./flow-routes.ts";
+export type { RunApiDeps } from "./run-routes.ts";
+export { registerRunRoutes } from "./run-routes.ts";
+export type { RunView, StepView, PayloadView } from "./run-views.ts";
+export {
+  RUN_VIEW_SCHEMA,
+  STEP_VIEW_SCHEMA,
+  runResource,
+  toRunView,
+  toStepView,
+} from "./run-views.ts";
 export { parseAuditQuery, parseDecisionQuery, parseVerifyQuery } from "./audit-query.ts";
 export type { PageBinding } from "./admin-page.ts";
 export { pageRows } from "./admin-page.ts";

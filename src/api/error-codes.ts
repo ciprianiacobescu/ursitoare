@@ -32,6 +32,7 @@ export const ERROR_CODES: Readonly<Record<string, { readonly status: number; rea
       message: "Paging needs the engine key (URSITOARE_ENGINE_KEY_FILE)",
     },
     FLOW_TEXT_INVALID: { status: 422, message: "Flow text is not a readable flow document" },
+    RUNS_UNAVAILABLE: { status: 503, message: "Runs are unavailable" },
   } as const;
 
 export function isRegisteredCode(code: string): boolean {

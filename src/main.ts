@@ -21,6 +21,7 @@ import {
   registerFlowRoutes,
   registerMeRoute,
   registerOpenApiRoute,
+  registerRunRoutes,
   registerWebApp,
 } from "./api/index.ts";
 import type { AppConfig } from "./config/index.ts";
@@ -223,8 +224,8 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
       engineKey: config.engineKey,
     });
     registerBlockRoutes(server, { pool: pep.pool, engineKey: config.engineKey });
-    registerFlowRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
-    registerOpenApiRoute(server, { version: VERSION });
+  registerFlowRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
+  registerOpenApiRoute(server, { version: VERSION });
     await definePublicRoutes(server, "oidc", (scoped) =>
       registerOidcRoutes(scoped, {
         config: config.oidc ?? null,
@@ -272,6 +273,14 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
       return null;
     }
   }
+
+  registerRunRoutes(server, {
+    pool: database?.appPool ?? null,
+    clock: systemClock,
+    ids: systemIds,
+    engineKey: config.engineKey,
+    durable,
+  });
 
   const closeAll = async (): Promise<void> => {
     await server.close().catch(() => undefined);
