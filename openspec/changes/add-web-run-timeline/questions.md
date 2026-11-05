@@ -91,6 +91,7 @@ accept The parsers behave as the scenario asks. parseRunView, parseStepView and 
 ## Q-003: Criterion C-4ef9cb9c (web-runs › The M4 journey proves test runs and the timeline in a browser › Alice test-runs a flow and follows the run): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The criterion is proven only in a browser. I read e2e/test_m4_runs.py and the three components; the locators (h1 Run <runId>, status Run state, list Steps, regions Step details, Input, Output, ErrorPanel plus Try again, table Runs) match the markup. But I cannot run the journey, cannot verify assert
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
