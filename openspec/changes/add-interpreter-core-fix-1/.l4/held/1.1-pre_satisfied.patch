@@ -1,0 +1,105 @@
+diff --git a/src/interpreter/runtimes/block-effect.test.ts b/src/interpreter/runtimes/block-effect.test.ts
+index 6c11eba..15c937d 100644
+--- a/src/interpreter/runtimes/block-effect.test.ts
++++ b/src/interpreter/runtimes/block-effect.test.ts
+@@ -123,6 +123,77 @@ function loggingInvoker(
+   };
+ }
+ 
++interface StepRig {
++  log: string[];
++  ops: MemoryWorkflowOps;
++  step: () => string;
++  services: (effects: EffectGate, invoker: ToolInvoker) => NodeServices;
++}
++
++function stepRig(): StepRig {
++  const log: string[] = [];
++  const base = memoryWorkflowOps("r_1");
++  let current = "";
++  const ops: WorkflowOps = {
++    get workflowId() {
++      return base.workflowId;
++    },
++    async runStep<T extends JsonValue>(name: string, fn: () => Promise<T>): Promise<T> {
++      return base.runStep(name, async () => {
++        const previous = current;
++        current = name;
++        try {
++          return await fn();
++        } finally {
++          current = previous;
++        }
++      });
++    },
++    sleep: (ms) => base.sleep(ms),
++  };
++  return {
++    log,
++    ops: base,
++    step: () => current,
++    services: (effects, invoker) => ({
++      ops,
++      invoker,
++      effects,
++      resolve: () => PAY_ARGS,
++      block: (ref) => CATALOGUE.block(ref),
++    }),
++  };
++}
++
++function stepLoggingGate(
++  log: string[],
++  step: () => string,
++  decision: EffectDecision,
++): EffectGate {
++  return {
++    async before(call, ctx) {
++      log.push(`${step()}: before ${JSON.stringify([call, ctx])}`);
++      return decision;
++    },
++    async after(call, ctx, result) {
++      log.push(`${step()}: after ${JSON.stringify([call, ctx, result])}`);
++    },
++  };
++}
++
++function stepLoggingInvoker(
++  log: string[],
++  step: () => string,
++  answer: ToolResult,
++): ToolInvoker {
++  return {
++    async invoke(call, ctx) {
++      log.push(`${step()}: invoke ${JSON.stringify([call, ctx])}`);
++      return answer;
++    },
++  };
++}
++
+ function run(services: NodeServices, mode: "live" | "mock" | "stub" = "mock"): Promise<NodeOutcome> {
+   const runtime = nodeRuntimeFor("block");
+   assert.ok(runtime !== undefined, "no runtime registered for block");
+@@ -252,6 +323,22 @@ test("C-9d40929b a rejecting after maps to TOOL_FAILED without the message", asy
+   assert.ok(events.some((e) => e.startsWith("after ")));
+ });
+ 
++test("C-9d40929b C-cb54b30e each gate and invoker call logs the step that is running", async () => {
++  const r = stepRig();
++  const events: string[] = [];
++  const effects = stepLoggingGate(events, r.step, { action: "invoke", idemKey: "ik_1" });
++  const invoker = stepLoggingInvoker(events, r.step, { output: PAID });
++  const outcome = await run(r.services(effects, invoker), "mock");
++  const withKey = { ...ctxFor("mock"), idemKey: "ik_1" };
++  assert.deepEqual(events, [
++    `pay: before ${JSON.stringify([CALL, ctxFor("mock")])}`,
++    `pay: invoke ${JSON.stringify([CALL, withKey])}`,
++    `pay#done: after ${JSON.stringify([CALL, withKey, { output: PAID }])}`,
++  ]);
++  assert.deepEqual(outcome, { output: PAID, outcome: null, next: "done", end: null });
++  assert.deepEqual(r.ops.executed, ["pay", "pay#done"]);
++});
++
+ test("C-9d40929b a rejecting invoker maps to TOOL_FAILED and skips after", async () => {
+   const r = rig();
+   const events: string[] = [];
