@@ -141,3 +141,4 @@
 {"at":"2026-11-05T13:40:21Z","run":"r-20261105T1340Z-4a10","type":"unit.dispatched","unit":"openspec:add-web-run-timeline"}
 {"at":"2026-11-05T15:18:28Z","attempt":1,"cost_usd":1.941506,"runs":2,"type":"plan.charged","unit":"openspec:add-web-run-timeline"}
 {"at":"2026-11-05T15:18:28Z","run":"r-20261105T1518Z-4aa2","type":"unit.dispatched","unit":"openspec:add-web-run-timeline"}
+{"at":"2026-11-05T17:39:06Z","detail":"waiting_capacity until 2026-11-05T18:07:42Z","reason":"unit_waiting_capacity","type":"plan.waiting","unit":"openspec:add-web-run-timeline"}
