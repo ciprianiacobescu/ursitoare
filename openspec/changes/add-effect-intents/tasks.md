@@ -15,7 +15,7 @@ Spec: `specs/idempotency/spec.md`; signatures, decisions, fixtures: `design.md`;
 
 ## 4. The gate
 
-- [ ] 4.1 Write `src/runs/intents/gate.test.ts` first (scenarios "The gate decides from the stored state", "The key follows the lineage, not the run" and "Refusals and a pool that is down"), then implement `IntentCall`, `IntentContext`, `IntentDecision`, `EffectIntents`, `createEffectIntents` in `src/runs/intents/gate.ts`, implementing requirements "The gate decides invoke, reuse or unknown from the stored state" and "Bad input and a failing database change nothing"
+- [x] 4.1 Write `src/runs/intents/gate.test.ts` first (scenarios "The gate decides from the stored state", "The key follows the lineage, not the run" and "Refusals and a pool that is down"), then implement `IntentCall`, `IntentContext`, `IntentDecision`, `EffectIntents`, `createEffectIntents` in `src/runs/intents/gate.ts`, implementing requirements "The gate decides invoke, reuse or unknown from the stored state" and "Bad input and a failing database change nothing"
 
 ## 5. The pay-once flow in the interpreter
 
