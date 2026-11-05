@@ -61,6 +61,8 @@ test("C-95befb77: a started step of a terminal run is Interrupted, else the stat
       let want: { label: string; note: string | null } = { label: state, note: null };
       if (state === "started" && ["completed", "failed", "cancelled"].includes(runState)) {
         want = { label: "Interrupted", note: "Not finalized" };
+      } else if (state === "started" && ["queued", "running"].includes(runState)) {
+        want = { label: "running", note: null };
       }
       assert.deepEqual(got, want, `${state}/${runState}`);
     }

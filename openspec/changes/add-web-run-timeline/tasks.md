@@ -10,7 +10,7 @@ Spec: `specs/web-runs/spec.md`; data: `reference.md`; decisions: `design.md`. Ea
 
 ## 3. Timeline and messages
 
-- [ ] 3.1 Write `web/src/runs/timeline.test.ts` first (scenario "Items, states, details and payloads"), then implement `stepStateLabel`, `timelineItems`, `stepDetailRows`, `decisionHref`, `runErrorText`, `payloadShown`, `setPayloadLoad` in `web/src/runs/timeline.ts` and `runErrorMessage`, `registerRunMessages` in `web/src/runs/messages.ts` (`payloadShown` uses `runErrorMessage`), implementing requirement "The timeline shows every step with its state, details and payload"
+- [x] 3.1 Write `web/src/runs/timeline.test.ts` first (scenario "Items, states, details and payloads"), then implement `stepStateLabel`, `timelineItems`, `stepDetailRows`, `decisionHref`, `runErrorText`, `payloadShown`, `setPayloadLoad` in `web/src/runs/timeline.ts` and `runErrorMessage`, `registerRunMessages` in `web/src/runs/messages.ts` (`payloadShown` uses `runErrorMessage`), implementing requirement "The timeline shows every step with its state, details and payload"
 
 ## 4. The Test run panel logic
 
