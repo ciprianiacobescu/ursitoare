@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-32069270: UI criterion C-44473e25 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-07248f6f: UI criterion C-95befb77 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-420abdfd: UI criterion C-f2512ba4 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-7a90109b: UI criterion C-b67fc6a7 has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-7a90109b: UI criterion C-b67fc6a7 has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-ed380471: UI criterion C-a8d83d86 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-c59c8e20: UI criterion C-c7363684 has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-ac6e12a7: UI criterion C-e75f18dc has no end-to-end test; see the generated UI tests table |
@@ -308,7 +308,7 @@ accept The hold is waived. The scenario Delays, a followed run, a deadline and f
 
 ## Q-011: Hold H-7a90109b: UI criterion C-b67fc6a7 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The hold rests on a generated browser test, test_l4_c_b67fc6a7.py, that fails at the head after two attempts. The file is not in the repository (e2e/ holds no such file) and neither are its screenshot or trace, so I cannot read what it asserted or why it failed, and I cannot rule out a browser-visib
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -328,6 +328,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold is waived. The scenario Registration, names and sources reads constants (RUN_PAGES, TEST_RUN_PANEL, RUNS_TITLE, runTitle, runPath, runLinkName), a createFeatureRegistry() navigation and the source text of the feature files, CSS and components; none of that is browser-observable as written. Its discriminating tests in web/src/runs/pages.test.ts (red then green) pass and the judge passed it. Why the generated e2e/test_l4_c_b67fc6a7.py failed is not known: the file, screenshot and trace were not published (upload_artifacts is off). It failed at head in both attempts, and every generated browser test of this round failed at base and at head alike within about 11 seconds of starting (run 42081317007 log, 18:34-18:47Z), which points at the generated tests rather than the pages. The browser-visible half of the requirement is proven by the passing journey e2e/test_m4_runs.py: the navigation link Runs opens a page titled "Runs · Ursitoare" with the heading Runs, the run link opens /runs/<runId> titled "Run <runId> · Ursitoare", and the Test run panel is in the flow editor; it passed in this round's e2e gate (58 tests, 58 passed). Committed by Claude Code as the owner's delegate.
 ---
 
 ## Q-012: Hold H-ed380471: UI criterion C-a8d83d86 has no end-to-end test; see the generated UI tests table
