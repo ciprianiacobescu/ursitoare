@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.1 | technical | src/runs/policy.test.ts:89: ERIN userId does not match the run initiator |
-| Q-002 | open | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
 <!-- l4:index:end -->
 
@@ -45,7 +45,8 @@ Edit `src/runs/policy.test.ts`: change line 89 to `const ERIN = principalWith("t
 
 ## Q-002: Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -72,6 +73,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test builds a snapshot whose src/x/a.ts has the throw on line 3, runs checkApiErrorCodes with the registered list ["NOT_FOUND"], and asserts exactly one violation with code ARCH_API_ERROR_CODE, file src/x/a.ts, line 3 and a message naming FLOW_EXISTS and src/api/error-codes.ts. The checker walks the TypeScript AST of every non-test src/**/*.ts file, reads the second argument of new ApiError( when it is a string literal, and pushes that violation shape with the line of the expression and a message that names the code and the registry file. The test passed in the latest report.
 ---
 
 ## Q-003: Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied?
