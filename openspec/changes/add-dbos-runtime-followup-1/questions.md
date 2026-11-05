@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Finding F-bb483e74: Replay classification depends on errors being extensible |
+| Q-001 | answered | none | verdict | Finding F-bb483e74: Replay classification depends on errors being extensible |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Finding F-bb483e74: Replay classification depends on errors being extensible
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -40,3 +40,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived. The scenario of C-607153ef holds: a replayed DurableError and a plain Error with a code reject with the same name, message, code and details, the DurableError is instanceof DurableError, fn is not called again and neither is dbos_failed; src/durable/steps.test.ts proves it red then green. A non-extensible error does not reach markStepError in this code base: nothing in src freezes, seals or prevents extensions on an error (the Object.freeze calls are on constants and config), DurableError is a plain subclass, and the interpreter's step callbacks throw fresh InterpreterError objects (block.ts maps invoker and effect failures through mapFailure and builds the input and output errors itself), which toInterpreterError rebuilds by shape after replay. Were one to arrive, the outcome is fail-closed: the replay rejects with DURABLE_UNAVAILABLE dbos_failed, the behaviour before this fix, and fn is still not run again, so no effect repeats and no failure turns into a success. Making the classification independent of extensibility (DBOS given a marked copy rather than the caller's error, which also stops the marker from being added to the error the caller sees) goes on the hardening list. Committed by Claude Code as the owner's delegate.
