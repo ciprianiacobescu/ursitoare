@@ -10,7 +10,7 @@ import { unregisteredRouteErrors } from "./api/error-codes.ts";
 import { listDefinedRoutes } from "./api/route.ts";
 import type { AppConfig, DatabaseEndpoint } from "./config/index.ts";
 import { Secret } from "./config/index.ts";
-import { fixedClock } from "./core/index.ts";
+import { systemClock } from "./core/index.ts";
 import type { Database, EndpointLike } from "./db/index.ts";
 import type { DurableRuntime } from "./durable/index.ts";
 import { launchDurable } from "./durable/index.ts";
@@ -56,7 +56,6 @@ interface Captured {
 }
 
 const SILENT: LogDestination = { write(): void {} };
-const NOW = "2026-11-02T10:00:00Z";
 const TEST_URL = "/api/v1/flows/:flowId/versions/:hash/test";
 const TEST_PATH = "/api/v1/flows/{flowId}/versions/{hash}/test";
 const LOOKUP_OK = { vendor_id: "v1", status: "active" };
@@ -194,7 +193,7 @@ test("C-f696603a C-28603f65 main defines the test route and documents it", async
 test("C-28603f65 main binds the interpreter before launching and completes a mock run", async () => {
   const db: TestDatabase = await withTestDatabase();
   const { a } = await seedTwoTenants(db);
-  const clock = fixedClock(NOW);
+  const clock = systemClock;
   const order: string[] = [];
   const captured: Captured = { interpreter: null, runtime: null };
   const kept: { servers?: KeptServers } = {};
