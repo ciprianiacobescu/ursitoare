@@ -86,7 +86,7 @@ async function outcome(engine: PolicyEngine, request: PolicyRequest): Promise<st
 
 const ALICE = principalWith("tenant_a", "alice", ["author"], ["finance"]);
 const BOB = principalWith("tenant_a", "bob", ["approver"], ["finance"]);
-const ERIN = principalWith("tenant_a", "erin", ["author"], ["ops"]);
+const ERIN = principalWith("tenant_a", "u_erin", ["author"], ["ops"]);
 const DAVE = principalWith("tenant_a", "dave", ["author"], ["ops"]);
 const CAROL = principalWith("tenant_a", "carol", ["tenant_admin"], []);
 const MALLORY = principalWith("tenant_b", "mallory", ["author"], ["finance"]);
@@ -105,7 +105,7 @@ test("C-489dbbf9 read and debug on a run follow the owner team and initiator", a
   const expectedRead: Record<string, string> = {
     alice: "allow",
     bob: "allow",
-    erin: "allow",
+    u_erin: "allow",
     dave: "deny",
     carol: "deny",
     mallory: "deny",
@@ -113,7 +113,7 @@ test("C-489dbbf9 read and debug on a run follow the owner team and initiator", a
   const expectedDebug: Record<string, string> = {
     alice: "allow",
     bob: "deny",
-    erin: "deny",
+    u_erin: "deny",
     dave: "deny",
     carol: "deny",
     mallory: "deny",

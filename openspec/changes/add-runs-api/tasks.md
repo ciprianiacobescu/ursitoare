@@ -4,7 +4,7 @@
 
 ## 2. The policy fragment
 
-- [ ] 2.1 Write `src/runs/policy.test.ts` first (scenario "The policy table": `createPolicyEngine` over `defaultSrcDir()`, requests built with `userEntity`, `tenantEntity` and a `Run` entity whose attrs use `entityRef`, as `src/registry/policy.test.ts` does; every decision's `errors` is `[]`; the `runs-` ids sorted), then create `src/runs/policy/runs.cedar` with the four policies of design.md Decision 10, implementing requirement "One policy fragment permits the read and debug actions"
+- [x] 2.1 Write `src/runs/policy.test.ts` first (scenario "The policy table": `createPolicyEngine` over `defaultSrcDir()`, requests built with `userEntity`, `tenantEntity` and a `Run` entity whose attrs use `entityRef`, as `src/registry/policy.test.ts` does; every decision's `errors` is `[]`; the `runs-` ids sorted), then create `src/runs/policy/runs.cedar` with the four policies of design.md Decision 10, implementing requirement "One policy fragment permits the read and debug actions"
 
 ## 3. The list route and the error code
 
