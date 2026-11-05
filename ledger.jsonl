@@ -136,3 +136,4 @@
 {"at":"2026-11-05T13:38:39Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"cfdb07f48aa621eff19ac3b7e0108590d86f9fd8","status":"pass","type":"unit.postcheck","unit":"openspec:add-flow-test-cli"}
 {"at":"2026-11-05T13:38:39Z","revision":"cfdb07f48aa621eff19ac3b7e0108590d86f9fd8","type":"unit.integrated","unit":"openspec:add-flow-test-cli"}
 {"at":"2026-11-05T13:38:39Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-flow-test-cli"}
+{"at":"2026-11-05T13:40:19Z","branch":"l4/archive/openspec/add-flow-test-cli","head":"3e0d7e4c2077280f9a6a6a3a1b12f10b5ee58fd6","type":"unit.branch_deleted","unit":"openspec:add-flow-test-cli"}
