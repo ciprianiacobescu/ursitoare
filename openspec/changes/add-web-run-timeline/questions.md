@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | open | none | verdict | Hold H-7a90109b: UI criterion C-b67fc6a7 has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-ed380471: UI criterion C-a8d83d86 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-c59c8e20: UI criterion C-c7363684 has no end-to-end test; see the generated UI tests table |
-| Q-014 | open | none | verdict | Hold H-ac6e12a7: UI criterion C-e75f18dc has no end-to-end test; see the generated UI tests table |
+| Q-014 | answered | none | verdict | Hold H-ac6e12a7: UI criterion C-e75f18dc has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-36f31dc8: UI criterion C-4ef9cb9c has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-70326357: UI criterion C-bffa668a has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -379,7 +379,8 @@ accept The hold is waived. The criterion's scenario drives startTestRun with a r
 
 ## Q-014: Hold H-ac6e12a7: UI criterion C-e75f18dc has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -398,6 +399,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold is waived. The criterion is not a browser criterion: its scenario is the Node journey m4-runs.test.ts, which starts the e2e stack in-process, signs in alice, bob and mallory through the session helpers and calls the logic functions directly against the engine. The test exists, carries the criterion id, and asserts every clause of the scenario: the start answer's flow, mode, owner team and principal, the completed run with terminal node done, the four steps with their kinds, states and the route outcome, the pay input and output payloads, both lists holding the run id, bob reading the run, bob's 403, mallory's 404 and empty list, the 422 TEST_MOCK_MISSING with its form error text, and the two capability sets. The judge passed it and its tracing test passed from a red assertion. A pytest-playwright test cannot call followRun or loadPayload or read ApiRequestError statuses, so the lack of a generated browser test is expected; the browser side of the same story is the M4 journey's job.
 ---
 
 ## Q-015: Hold H-36f31dc8: UI criterion C-4ef9cb9c has no end-to-end test; see the generated UI tests table
