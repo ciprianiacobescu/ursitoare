@@ -1,0 +1,307 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "web/src/runs",
+      "src",
+      "test/arch/web-routes.ts",
+      "docs/decisions/0002",
+      ".l4/plans/m4.json",
+      "e2e/test_l4_c_133bb26a.py",
+      "specs/web-runs/spec.md",
+      "node:assert/strict",
+      "web/src/runs/types.test.ts",
+      "web/src/runs/runs-source.test.ts",
+      "web/src/runs/types.ts",
+      "web/src/runs/runs-source.ts",
+      "web/src/runs/step-renderers.test.ts",
+      "web/src/runs/step-renderers.ts",
+      "web/src/runs/timeline.test.ts",
+      "web/src/runs/timeline.ts",
+      "web/src/runs/messages.ts",
+      "web/src/runs/test-run.test.ts",
+      "web/src/runs/test-run.ts",
+      "web/src/runs/pages.test.ts",
+      "web/src/runs/pages.ts",
+      "web/src/runs/RunsPage.tsx",
+      "web/src/runs/RunPage.tsx",
+      "web/src/runs/TestRunPanel.tsx",
+      "web/src/runs/runs.css",
+      "web/src/features/80-runs.tsx",
+      "web/src/features/81-run.tsx",
+      "web/src/runs/polling.test.ts",
+      "test/journeys/m4-runs.test.ts",
+      "e2e/test_m4_runs.py",
+      "e2e",
+      "web/src/runs/polling.ts",
+      "web/src/runs/failures.ts",
+      "e2e/test_m3_authoring.py",
+      "**/types.ts",
+      "**/timeline.ts",
+      "**/polling.ts",
+      "**/failures.ts",
+      "**/messages.ts",
+      "**/pages.ts",
+      "**/RunsPage.tsx",
+      "**/RunPage.tsx",
+      "**/TestRunPanel.tsx",
+      "**/^[A-Za-z0-9_-]{1,128}$",
+      "**/^[a-z][a-z0-9]*",
+      "**/*Ref",
+      "**/^[0-9a-f]{64}$",
+      "**/^sha256:[0-9a-f]{64}$",
+      "**/^[a-z][a-z0-9_.]{0,39}$",
+      "**/^[A-Za-z0-9_.:-]{1,128}$",
+      "**/index.html",
+      "**/[",
+      "module .l4",
+      "module docs",
+      "module e2e",
+      "module node:assert",
+      "module runs",
+      "module specs",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m4_runs.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-run-timeline/.l4/ledger/r-20261105T1340Z-4a10.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-run-timeline/.l4/ledger/r-20261105T1518Z-4aa2.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-run-timeline/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-run-timeline/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/journeys/m4-runs.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/features/80-runs.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/features/81-run.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/RunPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/RunsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/TestRunPanel.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/failures.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/messages.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/pages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/pages.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/polling.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/polling.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/runs-source.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/runs-source.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/runs.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/step-renderers.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/step-renderers.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/test-run.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/test-run.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/timeline.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/timeline.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/types.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/types.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/features/80-runs.tsx, web/src/features/81-run.tsx, web/src/runs/RunPage.tsx, web/src/runs/RunsPage.tsx, web/src/runs/TestRunPanel.tsx and 9 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/features/80-runs.tsx",
+      "web/src/features/81-run.tsx",
+      "web/src/runs/RunPage.tsx",
+      "web/src/runs/RunsPage.tsx",
+      "web/src/runs/TestRunPanel.tsx",
+      "web/src/runs/failures.ts",
+      "web/src/runs/messages.ts",
+      "web/src/runs/pages.ts",
+      "web/src/runs/polling.ts",
+      "web/src/runs/runs-source.ts",
+      "web/src/runs/step-renderers.ts",
+      "web/src/runs/test-run.ts",
+      "web/src/runs/timeline.ts",
+      "web/src/runs/types.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1701,
+      "passed": 1701,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 48,
+      "new_passed": 48,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
