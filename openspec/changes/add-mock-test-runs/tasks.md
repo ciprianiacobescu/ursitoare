@@ -7,7 +7,7 @@ Spec: `specs/flow-testing/spec.md`; decisions, fixtures and interfaces: `design.
 
 ## 2. Loader and policy
 
-- [ ] 2.1 Write `src/api/test-run-loader.test.ts` first (scenario "Validated, draft and absent versions"), then create `test/support/mock-run-seed.ts` (`MockRunSeed`, `seedMockRunFlows`, as design.md § Test plan describes) and its row in `test/support/README.md` (owner `add-mock-test-runs`) and implement `registryVersionLoader` in `src/api/test-run-routes.ts`, exported from `src/api/index.ts`, implementing requirement "A stored version is loaded for a test run"
+- [x] 2.1 Write `src/api/test-run-loader.test.ts` first (scenario "Validated, draft and absent versions"), then create `test/support/mock-run-seed.ts` (`MockRunSeed`, `seedMockRunFlows`, as design.md § Test plan describes) and its row in `test/support/README.md` (owner `add-mock-test-runs`) and implement `registryVersionLoader` in `src/api/test-run-routes.ts`, exported from `src/api/index.ts`, implementing requirement "A stored version is loaded for a test run"
 - [ ] 2.2 Write `src/interpreter/flow-testing-policy.test.ts` first (scenario "The policy table", `srcDir: defaultSrcDir()`, requests built with `userEntity`, `tenantEntity` and a `Flow` entity as `src/registry/policy.test.ts` does), then create `src/interpreter/policy/flow-testing.cedar` with the two policies of design.md Decision 6, implementing requirement "test_flow is granted to authors of the owner team"
 
 ## 3. The error codes
