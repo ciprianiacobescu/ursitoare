@@ -149,3 +149,5 @@
 {"at":"2026-11-05T19:06:23Z","run":"r-20261105T1906Z-8e56","type":"unit.dispatched","unit":"openspec:add-web-run-timeline"}
 {"at":"2026-11-05T19:15:58Z","detail":"awaiting_human: no new answers (verdicts open: Q-003, Q-004, Q-010, Q-011) (escalated to a person: Q-003, Q-004, Q-010, Q-011)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-run-timeline"}
 {"at":"2026-11-05T19:18:27Z","by":"harness","reason":"the cause is gone: openspec:add-web-run-timeline is awaiting_human","type":"plan.resumed"}
+{"at":"2026-11-05T19:18:30Z","attempt":1,"cost_usd":11.364685,"runs":5,"type":"plan.charged","unit":"openspec:add-web-run-timeline"}
+{"at":"2026-11-05T19:18:30Z","run":"r-20261105T1918Z-b9c5","type":"unit.dispatched","unit":"openspec:add-web-run-timeline"}
