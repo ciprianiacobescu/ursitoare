@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-05T05:20:36Z",
+  "integrated_revision": "0abb4e1d6c8678252c1c05a2024dea93d55396f3",
+  "merge_commit": "0abb4e1d6c8678252c1c05a2024dea93d55396f3",
+  "plan_digest": "d4a60ec43090d2fa",
+  "plan_id": "m4",
+  "postcheck": "pass",
+  "pr": 74,
+  "receipt_id": "m4/openspec:add-effect-intents/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "f749b360478ab9b35953ff612ece41d7a3e96209",
+  "spec_digest": "25fd7b75c163aef5",
+  "target": "main",
+  "unit_id": "openspec:add-effect-intents"
+}
