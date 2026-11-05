@@ -102,3 +102,5 @@
 {"at":"2026-11-05T05:22:00Z","branch":"l4/archive/openspec/add-effect-intents","head":"c21be3f53200103f0f7be20b91380ecef3565038","type":"unit.branch_deleted","unit":"openspec:add-effect-intents"}
 {"at":"2026-11-05T05:22:01Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-runs-api"}
 {"at":"2026-11-05T05:22:01Z","run":"r-20261105T0521Z-fb85","type":"unit.dispatched","unit":"openspec:add-runs-api"}
+{"at":"2026-11-05T05:46:51Z","attempt":1,"cost_usd":1.248092,"runs":2,"type":"plan.charged","unit":"openspec:add-runs-api"}
+{"at":"2026-11-05T05:46:51Z","run":"r-20261105T0546Z-1861","type":"unit.dispatched","unit":"openspec:add-runs-api"}
