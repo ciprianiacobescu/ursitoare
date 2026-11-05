@@ -151,3 +151,4 @@
 {"at":"2026-11-05T19:18:27Z","by":"harness","reason":"the cause is gone: openspec:add-web-run-timeline is awaiting_human","type":"plan.resumed"}
 {"at":"2026-11-05T19:18:30Z","attempt":1,"cost_usd":11.364685,"runs":5,"type":"plan.charged","unit":"openspec:add-web-run-timeline"}
 {"at":"2026-11-05T19:18:30Z","run":"r-20261105T1918Z-b9c5","type":"unit.dispatched","unit":"openspec:add-web-run-timeline"}
+{"at":"2026-11-05T19:29:24Z","head":"9cbcb639287d4e89519691bba503851f63a862d6","pr":82,"target_before":"3e0d7e4c2077280f9a6a6a3a1b12f10b5ee58fd6","type":"unit.merge_requested","unit":"openspec:add-web-run-timeline"}
