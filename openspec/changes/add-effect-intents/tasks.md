@@ -6,7 +6,7 @@ Spec: `specs/idempotency/spec.md`; signatures, decisions, fixtures: `design.md`;
 
 ## 2. The table
 
-- [ ] 2.1 Write `src/runs/intents/schema.test.ts` first (scenario "Objects, isolation and privileges"; it starts with `assert.ok` on the ledger row `version = 340`; each statement its own `withTenantTx(db.appPool, ...)`), then add `src/db/migrations/0340_effect_intent.sql` holding the SQL of `data-model.md` verbatim, implementing requirement "effect_intent is a tenant table with narrow privileges"
+- [x] 2.1 Write `src/runs/intents/schema.test.ts` first (scenario "Objects, isolation and privileges"; it starts with `assert.ok` on the ledger row `version = 340`; each statement its own `withTenantTx(db.appPool, ...)`), then add `src/db/migrations/0340_effect_intent.sql` holding the SQL of `data-model.md` verbatim, implementing requirement "effect_intent is a tenant table with narrow privileges"
 
 ## 3. The journal
 
