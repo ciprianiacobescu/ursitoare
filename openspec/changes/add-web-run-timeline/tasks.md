@@ -6,7 +6,7 @@ Spec: `specs/web-runs/spec.md`; data: `reference.md`; decisions: `design.md`. Ea
 
 ## 2. Step renderers
 
-- [ ] 2.1 Write `web/src/runs/step-renderers.test.ts` first (scenario "Built-ins, a default, registration and refusals"), then implement `StepRendererError`, `registerStepRenderer`, `stepRendererFor`, `stepRenderers` and the four built-ins in `web/src/runs/step-renderers.ts`, implementing requirement "Step renderers are registered by node kind"
+- [x] 2.1 Write `web/src/runs/step-renderers.test.ts` first (scenario "Built-ins, a default, registration and refusals"), then implement `StepRendererError`, `registerStepRenderer`, `stepRendererFor`, `stepRenderers` and the four built-ins in `web/src/runs/step-renderers.ts`, implementing requirement "Step renderers are registered by node kind"
 
 ## 3. Timeline and messages
 
