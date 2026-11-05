@@ -157,8 +157,10 @@ function post(
 }
 
 async function runCount(h: Harness): Promise<number> {
-  const res = await h.db.ownerPool.query("SELECT count(*)::int AS n FROM ursitoare.run");
-  return (res.rows[0] as { n: number }).n;
+  return withTenantTx(h.db.ownerPool, h.a, async (tx) => {
+    const res = await tx.query("SELECT count(*)::int AS n FROM ursitoare.run");
+    return (res.rows[0] as { n: number }).n;
+  });
 }
 
 async function storedRun(h: Harness, runId: string): Promise<RunRecord> {
