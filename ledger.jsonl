@@ -153,3 +153,4 @@
 {"at":"2026-11-05T19:18:30Z","run":"r-20261105T1918Z-b9c5","type":"unit.dispatched","unit":"openspec:add-web-run-timeline"}
 {"at":"2026-11-05T19:29:24Z","head":"9cbcb639287d4e89519691bba503851f63a862d6","pr":82,"target_before":"3e0d7e4c2077280f9a6a6a3a1b12f10b5ee58fd6","type":"unit.merge_requested","unit":"openspec:add-web-run-timeline"}
 {"at":"2026-11-05T19:29:29Z","ci":"not_run","head":"9cbcb639287d4e89519691bba503851f63a862d6","merge_commit":"acf4128a970235175bca5496d5d8a3709281b8f2","method":"squash","pr":82,"raced":false,"type":"unit.merged","unit":"openspec:add-web-run-timeline"}
+{"at":"2026-11-05T19:29:34Z","branch":"l4/openspec/add-web-run-timeline","head":"9cbcb639287d4e89519691bba503851f63a862d6","type":"unit.branch_deleted","unit":"openspec:add-web-run-timeline"}
