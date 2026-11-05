@@ -3,7 +3,7 @@ Spec: `specs/flow-testing/spec.md`; decisions, fixtures and interfaces: `design.
 ## 1. Mocks
 
 - [x] 1.1 Write `src/interpreter/mocks.test.ts` first (scenarios "Valid mocks pass and are copied" and "Each problem reason, ordering and the cap"), then implement `MockEntry`, `TestMocks`, `MockProblem` and `checkMocks` in `src/interpreter/mocks.ts` and export them from `src/interpreter/index.ts`, implementing requirement "Mocks are checked against the flow before a run exists"
-- [ ] 1.2 Write `src/interpreter/mock-invoker.test.ts` first (scenarios "Entries by attempt, errors and no egress" and "Mocks come from the stored run, in mock mode only"), then add `createMockInvoker` and `testRunInvokers` to `src/interpreter/mocks.ts` and export them from `src/interpreter/index.ts`, implementing requirement "The mock invoker answers from the mocks and nothing else"
+- [x] 1.2 Write `src/interpreter/mock-invoker.test.ts` first (scenarios "Entries by attempt, errors and no egress" and "Mocks come from the stored run, in mock mode only"), then add `createMockInvoker` and `testRunInvokers` to `src/interpreter/mocks.ts` and export them from `src/interpreter/index.ts`, implementing requirement "The mock invoker answers from the mocks and nothing else"
 
 ## 2. Loader and policy
 

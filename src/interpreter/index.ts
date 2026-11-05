@@ -39,6 +39,6 @@ export { startRun, workflowIdOf } from "./start.ts";
 export { executeRun } from "./execute.ts";
 export { resolveValue, durationMs } from "./refs.ts";
 export type { MockEntry, TestMocks, MockProblem } from "./mocks.ts";
-export { checkMocks } from "./mocks.ts";
+export { checkMocks, createMockInvoker, testRunInvokers } from "./mocks.ts";
 export type { InterpreterErrorCode } from "./errors.ts";
 export { InterpreterError } from "./errors.ts";

@@ -2,8 +2,9 @@ import { Ajv2020 } from "ajv/dist/2020.js";
 
 import type { Catalogue, Flow, FlowNode, JsonSchema, JsonValue } from "../authoring/index.ts";
 import { successorFields } from "../authoring/index.ts";
-import type { RunStore } from "../runs/index.ts";
+import type { RunStore, TenantContext } from "../runs/index.ts";
 import type { InterpreterDeps, ToolInvoker } from "./types.ts";
+import { InterpreterError } from "./errors.ts";
 
 export type MockEntry = { output: JsonValue } | { error: { code: string; message: string } };
 
@@ -253,10 +254,64 @@ export function checkMocks(
   return { mocks: structuredClone(mocks) as TestMocks, problems: [] };
 }
 
-export function createMockInvoker(_mocks: TestMocks): ToolInvoker {
-  throw new Error("not implemented");
+function toolFailure(
+  reason: "mock_error" | "mock_exhausted" | "mock_missing" | "mocks_unavailable",
+  nodeId: string,
+  details: Record<string, string | string[]> = {},
+): InterpreterError {
+  return new InterpreterError("INTERPRETER_TOOL_FAILED", `mock ${reason}`, nodeId, {
+    reason,
+    ...details,
+  });
 }
 
-export function testRunInvokers(_store: RunStore): InterpreterDeps["invokerFor"] {
-  throw new Error("not implemented");
+export function createMockInvoker(mocks: TestMocks): ToolInvoker {
+  return {
+    async invoke(call, ctx) {
+      if (!Object.hasOwn(mocks, call.nodeId)) {
+        throw toolFailure("mock_missing", call.nodeId);
+      }
+      const list = mocks[call.nodeId] as MockEntry[];
+      const entry = list[ctx.attempt - 1];
+      if (entry === undefined) {
+        throw toolFailure("mock_exhausted", call.nodeId);
+      }
+      if (Object.hasOwn(entry, "error")) {
+        const error = (entry as { error: { code: string; message: string } }).error;
+        throw toolFailure("mock_error", call.nodeId, { mockCode: error.code });
+      }
+      return { output: structuredClone((entry as { output: JsonValue }).output) };
+    },
+  };
+}
+
+export function testRunInvokers(store: RunStore): InterpreterDeps["invokerFor"] {
+  return async (mode, run) => {
+    if (mode !== "mock") {
+      throw new InterpreterError(
+        "INTERPRETER_NO_INVOKER",
+        `no invoker for mode ${mode}`,
+        null,
+        { mode },
+      );
+    }
+    let loaded: Promise<ToolInvoker> | null = null;
+    const load = async (ctx: TenantContext): Promise<ToolInvoker> => {
+      if (run.mocksRef === null) {
+        throw toolFailure("mocks_unavailable", "");
+      }
+      const payload = await store.getPayload(ctx, run.mocksRef);
+      if (payload === null || !isPlainObject(payload.data)) {
+        throw toolFailure("mocks_unavailable", "");
+      }
+      return createMockInvoker(payload.data as TestMocks);
+    };
+    return {
+      async invoke(call, ctx) {
+        loaded ??= load(ctx.tenant);
+        const invoker = await loaded;
+        return invoker.invoke(call, ctx);
+      },
+    };
+  };
 }
