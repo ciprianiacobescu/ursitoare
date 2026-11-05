@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1, 1.2, 2.1, 2.2, 3.1, 4.1, 4.2, 5.1 | ambiguous | Scenarios "Bind order, the route table and a run on DBOS" and "The route table, the document and the wiring" conflict |
-| Q-002 | open | 4.1 | technical | src/api/test-run-routes.test.ts:160 runCount cannot see run rows under forced RLS |
+| Q-002 | accepted | 4.1 | technical | src/api/test-run-routes.test.ts:160 runCount cannot see run rows under forced RLS |
 <!-- l4:index:end -->
 
 ---
@@ -44,7 +44,8 @@ There is no conflict: both scenarios are wanted and neither is deleted. They sha
 
 ## Q-002: src/api/test-run-routes.test.ts:160 runCount cannot see run rows under forced RLS
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 4.1
 - **Kind:** technical
 - **Asked:** 2026-11-05T09:31Z by claude-sonnet, run r-20261105T0735Z-7e59, task 4.1
