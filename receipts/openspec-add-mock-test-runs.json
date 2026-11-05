@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-05T11:45:44Z",
+  "integrated_revision": "219643a76dfdbc0e38795e603a87e5fd75ed5dd8",
+  "merge_commit": "219643a76dfdbc0e38795e603a87e5fd75ed5dd8",
+  "plan_digest": "d4a60ec43090d2fa",
+  "plan_id": "m4",
+  "postcheck": "pass",
+  "pr": 78,
+  "receipt_id": "m4/openspec:add-mock-test-runs/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "b2e1d5ecdea1fee4fd27983531b568d7242407cb",
+  "spec_digest": "d59d8522bcdc790a",
+  "target": "main",
+  "unit_id": "openspec:add-mock-test-runs"
+}
