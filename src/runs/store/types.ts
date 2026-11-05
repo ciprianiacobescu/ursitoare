@@ -21,6 +21,7 @@ export interface RunError {
   code: string;
   message: string;
   node: string | null;
+  details?: Readonly<Record<string, string | string[]>>;
 }
 
 export interface RunPrincipalRecord {

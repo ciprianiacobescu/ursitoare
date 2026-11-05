@@ -1,5 +1,3 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 import type { JsonValue } from "../authoring/index.ts";
 import type { WorkflowOps } from "./types.ts";
 
@@ -8,9 +6,37 @@ export interface MemoryWorkflowOps extends WorkflowOps {
   readonly slept: readonly number[];
 }
 
+function copy(value: JsonValue): JsonValue {
+  return structuredClone(value);
+}
+
 export function memoryWorkflowOps(
-  _workflowId: string,
-  _recorded?: readonly JsonValue[],
+  workflowId: string,
+  recorded: readonly JsonValue[] = [],
 ): MemoryWorkflowOps {
-  throw new Error("not implemented");
+  const executed: string[] = [];
+  const slept: number[] = [];
+  let position = 0;
+
+  return {
+    workflowId,
+    async runStep<T extends JsonValue>(name: string, fn: () => Promise<T>): Promise<T> {
+      const index = position;
+      position += 1;
+      if (index < recorded.length) {
+        return copy(recorded[index] as JsonValue) as T;
+      }
+      executed.push(name);
+      return copy(await fn()) as T;
+    },
+    async sleep(ms: number): Promise<void> {
+      slept.push(ms);
+    },
+    get executed(): readonly string[] {
+      return executed;
+    },
+    get slept(): readonly number[] {
+      return slept;
+    },
+  };
 }
