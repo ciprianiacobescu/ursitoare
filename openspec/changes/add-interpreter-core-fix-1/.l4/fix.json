@@ -1,0 +1,14 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-interpreter-core",
+  "round": 1,
+  "findings": [
+    "F-a71db6eb",
+    "F-257bab9b"
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": [],
+  "repairs": []
+}
