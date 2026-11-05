@@ -1,0 +1,242 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/api/run-views.ts",
+      "src/api/run-routes.ts",
+      "src/runs/policy/runs.cedar",
+      "src/api/index.ts",
+      "src/api/flow-policy.test.ts",
+      "docs/decisions/0002",
+      "src/main.ts",
+      "docs/api/openapi.json",
+      "test/arch/modules.ts",
+      "src/api/error-codes.ts",
+      "src/api/error-codes.test.ts",
+      "specs/api-conventions/spec.md",
+      "src/api",
+      "src/api/run-views.test.ts",
+      "src/runs/policy.test.ts",
+      "src/registry/policy.test.ts",
+      "src/api/run-list.test.ts",
+      "src/api/run-read.test.ts",
+      "src/api/run-cancel.test.ts",
+      "src/api/run-tenants.test.ts",
+      "src/main.runs.test.ts",
+      "src/main.flows.test.ts",
+      "**/^[A-Za-z0-9_-]{1,128}$",
+      "**/^[0-9a-f]{64}$",
+      "**/position[0]",
+      "**/position[1]",
+      "**/[initiator]",
+      "**/[\"untrusted\"]",
+      "**/[]",
+      "module api",
+      "module docs",
+      "module durable",
+      "module main",
+      "module main.flows.test",
+      "module main.runs.test",
+      "module registry",
+      "module runs",
+      "module specs",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-runs-api/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-runs-api/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-runs-api/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-runs-api/.l4/ledger/r-20261105T0521Z-fb85.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-runs-api/.l4/ledger/r-20261105T0546Z-1861.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-runs-api/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-runs-api/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-runs-api/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/error-codes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/error-codes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/run-cancel.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/run-list.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/run-read.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/run-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/run-tenants.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/run-views.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/run-views.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.runs.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/policy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/policy/runs.cedar",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/error-codes.ts, src/api/index.ts, src/api/run-routes.ts, src/api/run-views.ts, src/main.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/error-codes.ts",
+      "src/api/index.ts",
+      "src/api/run-routes.ts",
+      "src/api/run-views.ts",
+      "src/main.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1621,
+      "passed": 1621,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 19,
+      "new_passed": 19,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
