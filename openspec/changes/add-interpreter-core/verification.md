@@ -1,4 +1,4 @@
-# Verification: openspec:add-interpreter-core: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-interpreter-core: FAIL (round 2)
 
 traceability: 13/13 criteria covered by a discriminating test
 
@@ -17,17 +17,17 @@ traceability: 13/13 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.2 | base main@20d9db95f0 contained |
-| 1 | integrity | ok | 126.5 | 11 sub-checks; scope: 35 changed file(s) |
-| 2 | build | ok | 21.7 |  |
-| 3 | tests | ok | 196.8 |  |
-| 4 | traceability | ok | 0.1 | 13/13 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/interpreter/errors.ts, src/interpreter/execute.ts, src/interpreter/gate.ts, src/interpreter/index.ts, src/interpreter/ops.ts and 12 more |
-| 8 | s1 judge | ok | 1.2 | 7/13 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 312.8 | 3 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -182,6 +182,12 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-b56c7793 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-b758e565 | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-002 reject F-a71db6eb by agent (CLAUDECODE): The finding holds as a test gap, not a code defect. src/interpreter/runtimes/block.ts calls EffectGate.before inside runStep(nodeId) and EffectGate.after inside runStep(`${nodeId}#done`), and moving after into the node step fails two tests (checked by mutation on the unit head). But the scenario "Ga...
+- Q-003 reject F-257bab9b by the delegate (claude-fable-5-1 via claude-code): The finding is correct against the design. Design Decision 9 says a thrown value is an interpreter error when its code is in InterpreterErrorCode, not by instanceof, because a workflow engine may rethrow a recorded step error as a copy whose shape is inferred and unchecked. The predicate shared by v...
+- Q-004 accept F-8da8966d by the delegate (claude-fable-5-1 via claude-code): The finding is waived: the judge saw only the part of the diff without visit.ts, and the task's text is done at the unit head. The failure test file exists with tests for both the node-failure and run-level scenarios. execute.ts holds the revisit guard that fails a twice-visited node with INTERPRETE...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -202,13 +208,19 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Findings
 
-- [major, judge] task 2.3: gate-step test does not observe the active durable step (criterion C-9d40929b): The test named "each gate call runs in the step named after the node" sets current to the running step in its WorkflowOps wrapper, but the logging gate never reads current. It therefore cannot distinguish before and after running in the required node and node#done steps from any other steps with the same execution list.
+- [major, human] task 2.3: gate-step test does not observe the active durable step (criterion C-9d40929b): The test named "each gate call runs in the step named after the node" sets current to the running step in its WorkflowOps wrapper, but the logging gate never reads current. It therefore cannot distinguish before and after running in the required node and node#done steps from any other steps with the same execution list. [rejected by agent (CLAUDECODE) (The finding holds as a test gap, not a code defect. src/interpreter/runtimes/block.ts calls EffectGate.before inside runStep(nodeId) and EffectGate.after inside runStep(`${nodeId}#done`), and moving after into the node step fails two tests (chec...
 - [minor, judge] resolveValue has unspecified behavior for non-JSON undefined input (spec gap) (criterion C-18f9cf20): resolveValue accepts unknown input but falls through to return undefined cast as JsonValue. The scenarios cover JSON values only, leaving callers with no specified contract for undefined despite the JsonValue return type.
-- [major, judge] Copied interpreter errors are remapped as tool failures (criterion C-e3cb0a11): The durable-error rule says code-bearing interpreter errors must be recognized without instanceof because durable replay can rethrow a copied error. src/interpreter/visit.ts instead requires both a recognized code and error instanceof Error. A copied InterpreterError-like value therefore reaches the fallback and becomes INTERPRETER_TOOL_FAILED, losing its original code.
+- [major, human] Copied interpreter errors are remapped as tool failures (criterion C-e3cb0a11): The durable-error rule says code-bearing interpreter errors must be recognized without instanceof because durable replay can rethrow a copied error. src/interpreter/visit.ts instead requires both a recognized code and error instanceof Error. A copied InterpreterError-like value therefore reaches the fallback and becomes INTERPRETER_TOOL_FAILED, losing its original code. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding is correct against the design. Design Decision 9 says a thrown value is an interpreter error when its code is in InterpreterErrorCode, not by instanceof,...
 - [minor, judge] Start validation precedence for simultaneously invalid requests is unspecified (spec gap) (criterion C-d807f118): startRun loads the requested version before validating a supplied runId. The scenarios test these errors separately, so they do not specify which error wins when both the flow reference and run id are invalid.
 - [minor, judge] Workflow handling of additional input fields is unspecified (spec gap) (criterion C-b56c7793): The workflow validator checks only tenantId, runId, and reviewProfile, then returns a new object containing only those fields. The scenarios cover malformed required fields but do not state whether otherwise valid workflow input may carry additional fields.
 - [minor, judge] the judge called a test inadequate (criterion C-9d40929b): src.interpreter.runtimes.block-effect.test.ts::C-9d40929b each gate call runs in the step named after the node
-- [major, judge] task 3.3 is ticked as already satisfied, but its text is not done: not in this part: src/interpreter/visit.ts is required by task 3.3 and is listed in part 2.
+- [minor, judge] task 3.3 is ticked as already satisfied, but its text is not done: not in this part: src/interpreter/visit.ts is required by task 3.3 and is listed in part 2. (waived by the delegate (claude-fable-5-1 via claude-code): The finding is waived: the judge saw only the part of the diff without visit.ts, and the task's text is done at the unit head. The failure test file exists with tests for both the node-failure and run-level scenarios. execute.ts holds the revisit guard that fails a twice-visited node with INTERPRETER_LOOP_LIMIT, the terminal-run shortcut that returns a terminal run after run:load, and the run-level failure mapping for a missing invoker and unlo...
+
+## Fix unit
+
+Fix unit 1 is created for these tasks:
+- F-a71db6eb task 2.3: gate-step test does not observe the active durable step
+- F-257bab9b Copied interpreter errors are remapped as tool failures
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
