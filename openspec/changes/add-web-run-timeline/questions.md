@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Hold H-ed380471: UI criterion C-a8d83d86 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-c59c8e20: UI criterion C-c7363684 has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-ac6e12a7: UI criterion C-e75f18dc has no end-to-end test; see the generated UI tests table |
-| Q-015 | open | none | verdict | Hold H-36f31dc8: UI criterion C-4ef9cb9c has no end-to-end test; see the generated UI tests table |
+| Q-015 | answered | none | verdict | Hold H-36f31dc8: UI criterion C-4ef9cb9c has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-70326357: UI criterion C-bffa668a has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -404,7 +404,8 @@ accept The hold is waived. The criterion is not a browser criterion: its scenari
 
 ## Q-015: Hold H-36f31dc8: UI criterion C-4ef9cb9c has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -423,6 +424,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold is waived. The criterion does have an end-to-end test: e2e/test_m4_runs.py tags its alice test with this criterion id and asserts every clause of the scenario in order: the panel's initial text and missing button, the two textboxes after Valid. 0 errors, the status Started test run and the single link, the run page address, title and heading, State: completed within 20 seconds, the four step buttons in order, aria-expanded on pay with the details, Input lines and Output P-1, active after route, the injected 503 fault giving the alert with Something went wrong and FAULT_INJECTED and the Try again button, the Steps list back after the fault is removed, the Runs page title, heading and table row, the NOT_FOUND alert for /runs/ghost, and assert_accessible on every page from the landing page on. The production code carries the matching roles and names. The project's rules say a red step runs only the Node gate and a browser-only criterion is tagged for the verifier rather than listed in criteria_ids, so the lack of a red record is the project's own convention, not a gap. The generated test of step 5 fails at the base as well as the head, so it does not discriminate and says nothing about the head.
 ---
 
 ## Q-016: Hold H-70326357: UI criterion C-bffa668a has no end-to-end test; see the generated UI tests table
