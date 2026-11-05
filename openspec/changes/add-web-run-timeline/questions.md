@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 3.1 | technical | web/src/runs/timeline.test.ts:61-63: wrong expectation for started step in a live run |
 | Q-002 | answered | none | verdict | Criterion C-2ceae13f (web-runs › Run views are parsed strictly and read through four loaders › Views are parsed strictly): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-4ef9cb9c (web-runs › The M4 journey proves test runs and the timeline in a browser › Alice test-runs a flow and follows the run): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-bffa668a (web-runs › The M4 journey proves test runs and the timeline in a browser › Bob reads the run but cannot start one): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-bffa668a (web-runs › The M4 journey proves test runs and the timeline in a browser › Bob reads the run but cannot start one): accept as satisfied? |
 | Q-005 | answered | none | verdict | Finding F-81bc478e: Payload parser accepts values outside PayloadValue |
 | Q-006 | answered | none | verdict | Hold H-e62fdc45: UI criterion C-2ceae13f has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-eec0048a: UI criterion C-8a285469 has no end-to-end test; see the generated UI tests table |
@@ -123,7 +123,7 @@ accept The journey test e2e/test_m4_runs.py::test_c_4ef9cb9c_alice_test_runs_a_f
 
 ## Q-004: Criterion C-bffa668a (web-runs › The M4 journey proves test runs and the timeline in a browser › Bob reads the run but cannot start one): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): Same situation as Q-003: the criterion is browser-only. The journey test in e2e/test_m4_runs.py asserts the scenario (State: completed, the four step buttons, no Start test run button, the text Only authors can start a test run.) and TestRunPanel.tsx renders the denied message as a paragraph without
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -151,6 +151,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The journey test e2e/test_m4_runs.py::test_c_bffa668a_bob_reads_the_run_but_cannot_start_one sets up alice's run in one context and signs bob in in a second, then asserts the scenario: bob opens Runs and the run's link, reads "State: completed" and the four step buttons with no Start test run button, and on demo-pay sees "Only authors can start a test run." with no Start test run button, with assert_accessible on his pages. It passed in this round's e2e gate (run 42081317007, 18:19Z: 58 tests, 58 passed, 0 failed), and it cannot pass at base because the Runs pages and the Test run panel are new in this unit (absent on main). L4 lacks only a recorded red run, as the journey is not part of the red/green test command. Committed by Claude Code as the owner's delegate.
 ---
 
 ## Q-005: Finding F-81bc478e: Payload parser accepts values outside PayloadValue
