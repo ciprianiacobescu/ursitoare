@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 3.1 | technical | web/src/runs/timeline.test.ts:61-63: wrong expectation for started step in a live run |
 | Q-002 | answered | none | verdict | Criterion C-2ceae13f (web-runs › Run views are parsed strictly and read through four loaders › Views are parsed strictly): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-4ef9cb9c (web-runs › The M4 journey proves test runs and the timeline in a browser › Alice test-runs a flow and follows the run): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-4ef9cb9c (web-runs › The M4 journey proves test runs and the timeline in a browser › Alice test-runs a flow and follows the run): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-bffa668a (web-runs › The M4 journey proves test runs and the timeline in a browser › Bob reads the run but cannot start one): accept as satisfied? |
 | Q-005 | answered | none | verdict | Finding F-81bc478e: Payload parser accepts values outside PayloadValue |
 | Q-006 | answered | none | verdict | Hold H-e62fdc45: UI criterion C-2ceae13f has no end-to-end test; see the generated UI tests table |
@@ -90,7 +90,7 @@ accept The parsers behave as the scenario asks. parseRunView, parseStepView and 
 
 ## Q-003: Criterion C-4ef9cb9c (web-runs › The M4 journey proves test runs and the timeline in a browser › Alice test-runs a flow and follows the run): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The criterion is proven only in a browser. I read e2e/test_m4_runs.py and the three components; the locators (h1 Run <runId>, status Run state, list Steps, regions Step details, Input, Output, ErrorPanel plus Try again, table Runs) match the markup. But I cannot run the journey, cannot verify assert
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -118,6 +118,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The journey test e2e/test_m4_runs.py::test_c_4ef9cb9c_alice_test_runs_a_flow_and_follows_the_run asserts this scenario step by step: the Test run panel text and no Start test run button before Validate, the two textboxes and the button after "Valid. 0 errors", the status "Started test run <runId>." and the one Open run link, the URL, title and heading of /runs/<runId>, "State: completed", the step buttons lookup, route, pay, done in order, aria-expanded and the Step details, Input and Output lines after pay, active after route, the fault alert with Try again, the Runs row, and the NOT_FOUND alert of /runs/ghost, with assert_accessible on each page. It passed in this round's e2e gate (run 42081317007, 18:19Z: 58 tests, 58 passed, 0 failed). It cannot pass at base: TestRunPanel.tsx, RunPage.tsx, RunsPage.tsx and features/80-runs.tsx do not exist on main, so its first panel assertion fails there. L4 lacks only a recorded red run for it, because the journey is not part of the red/green test command. Committed by Claude Code as the owner's delegate.
 ---
 
 ## Q-004: Criterion C-bffa668a (web-runs › The M4 journey proves test runs and the timeline in a browser › Bob reads the run but cannot start one): accept as satisfied?
