@@ -128,3 +128,5 @@
 {"at":"2026-11-05T11:45:44Z","revision":"219643a76dfdbc0e38795e603a87e5fd75ed5dd8","type":"unit.integrated","unit":"openspec:add-mock-test-runs"}
 {"at":"2026-11-05T11:45:44Z","attempt":1,"cost_usd":5.814589,"runs":4,"type":"plan.charged","unit":"openspec:add-mock-test-runs"}
 {"at":"2026-11-05T11:47:17Z","branch":"l4/archive/openspec/add-mock-test-runs","head":"7508e2d64d8606f143f74d7c741493f7b31a0512","type":"unit.branch_deleted","unit":"openspec:add-mock-test-runs"}
+{"at":"2026-11-05T11:47:18Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-flow-test-cli"}
+{"at":"2026-11-05T11:47:18Z","run":"r-20261105T1147Z-48a5","type":"unit.dispatched","unit":"openspec:add-flow-test-cli"}
