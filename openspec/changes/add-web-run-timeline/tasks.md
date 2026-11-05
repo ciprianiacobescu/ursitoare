@@ -2,7 +2,7 @@ Spec: `specs/web-runs/spec.md`; data: `reference.md`; decisions: `design.md`. Ea
 
 ## 1. Views and loaders
 
-- [ ] 1.1 Write `web/src/runs/types.test.ts` and `web/src/runs/runs-source.test.ts` first (scenarios "Views are parsed strictly" and "Loaders call exactly the run routes"), then implement `parseRunView`, `parseStepView`, `parsePayloadView` in `web/src/runs/types.ts` and `runListFetcher`, `loadRun`, `loadSteps`, `loadPayload` in `web/src/runs/runs-source.ts`, implementing requirement "Run views are parsed strictly and read through four loaders"
+- [x] 1.1 Write `web/src/runs/types.test.ts` and `web/src/runs/runs-source.test.ts` first (scenarios "Views are parsed strictly" and "Loaders call exactly the run routes"), then implement `parseRunView`, `parseStepView`, `parsePayloadView` in `web/src/runs/types.ts` and `runListFetcher`, `loadRun`, `loadSteps`, `loadPayload` in `web/src/runs/runs-source.ts`, implementing requirement "Run views are parsed strictly and read through four loaders"
 
 ## 2. Step renderers
 
