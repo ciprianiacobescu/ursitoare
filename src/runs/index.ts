@@ -32,3 +32,20 @@ export { appendEvent } from "./store/events.ts";
 export type { RunStore } from "./store/run-store.ts";
 export { createRunStore } from "./store/run-store.ts";
 export { createMemoryRunStore } from "./store/memory-store.ts";
+export type { IntentErrorCode } from "./intents/errors.ts";
+export { IntentError } from "./intents/errors.ts";
+export { idemKey, lineageOf } from "./intents/key.ts";
+export type { IntentRecord, IntentState, IntentWrite } from "./intents/repository.ts";
+export {
+  completeIntent,
+  getIntent,
+  markIntentUnknown,
+  recordIntent,
+} from "./intents/repository.ts";
+export type {
+  EffectIntents,
+  IntentCall,
+  IntentContext,
+  IntentDecision,
+} from "./intents/gate.ts";
+export { createEffectIntents } from "./intents/gate.ts";
