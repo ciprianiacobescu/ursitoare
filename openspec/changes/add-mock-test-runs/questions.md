@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1, 1.2, 2.1, 2.2, 3.1, 4.1, 4.2, 5.1 | ambiguous | Scenarios "Bind order, the route table and a run on DBOS" and "The route table, the document and the wiring" conflict |
 | Q-002 | accepted | 4.1 | technical | src/api/test-run-routes.test.ts:160 runCount cannot see run rows under forced RLS |
-| Q-003 | open | 5.1 | technical | src/main.mockruns.test.ts:197 session created with fixedClock but main uses systemClock |
+| Q-003 | accepted | 5.1 | technical | src/main.mockruns.test.ts:197 session created with fixedClock but main uses systemClock |
 <!-- l4:index:end -->
 
 ---
@@ -70,7 +70,8 @@ Edit `src/api/test-run-routes.test.ts`: change `runCount` to count inside a tran
 
 ## Q-003: src/main.mockruns.test.ts:197 session created with fixedClock but main uses systemClock
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.1
 - **Kind:** technical
 - **Asked:** 2026-11-05T10:59Z by claude-sonnet, run r-20261105T0935Z-8037, task 5.1
