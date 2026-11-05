@@ -1,0 +1,271 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/interpreter/mocks.ts",
+      "src/interpreter/policy/flow-testing.cedar",
+      "docs/api/openapi.json",
+      "src/api/flow-policy.test.ts",
+      "docs/decisions/0002",
+      "src/interpreter/index.ts",
+      "src/api/index.ts",
+      "src/main.ts",
+      "src/api/error-codes.ts",
+      "test/arch/modules.ts",
+      "src/api/error-codes.test.ts",
+      "src/main.flows.test.ts",
+      "src/api",
+      "specs/flow-testing/spec.md",
+      "node:assert/strict",
+      "src/interpreter/mocks.test.ts",
+      "src/interpreter/mock-invoker.test.ts",
+      "src/api/test-run-loader.test.ts",
+      "test/support/mock-run-seed.ts",
+      "test/support/README.md",
+      "src/api/test-run-routes.ts",
+      "src/interpreter/flow-testing-policy.test.ts",
+      "src/registry/policy.test.ts",
+      "src/api/test-run-codes.test.ts",
+      "src/api/test-run-routes.test.ts",
+      "src/api/test-run-refusals.test.ts",
+      "src/main.mockruns.test.ts",
+      "**/^[A-Za-z][A-Za-z0-9_.-]{0,63}$",
+      "**/mocks[call.nodeId]",
+      "**/^sha256:[0-9a-f]{64}$",
+      "**/[",
+      "**/TEST_MOCK_*",
+      "**/registerRunWorkflow?",
+      "**/bindInterpreter?",
+      "module api",
+      "module db",
+      "module docs",
+      "module interpreter",
+      "module main",
+      "module main.flows.test",
+      "module main.mockruns.test",
+      "module node:assert",
+      "module registry",
+      "module specs",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mock-test-runs/.l4/ledger/r-20261105T0732Z-bd14.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mock-test-runs/.l4/ledger/r-20261105T0735Z-7e59.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mock-test-runs/.l4/ledger/r-20261105T0935Z-8037.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mock-test-runs/.l4/ledger/r-20261105T1102Z-1bd0.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mock-test-runs/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mock-test-runs/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/error-codes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/error-codes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/test-run-codes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/test-run-loader.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/test-run-refusals.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/test-run-routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/test-run-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/flow-testing-policy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/index.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/mock-invoker.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/mocks.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/mocks.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/policy/flow-testing.cedar",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.flows.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.mockruns.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/README.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/mock-run-seed.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/error-codes.ts, src/api/index.ts, src/api/test-run-routes.ts, src/interpreter/index.ts, src/interpreter/mocks.ts and 2 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/error-codes.ts",
+      "src/api/index.ts",
+      "src/api/test-run-routes.ts",
+      "src/interpreter/index.ts",
+      "src/interpreter/mocks.ts",
+      "src/main.ts",
+      "test/support/mock-run-seed.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1648,
+      "passed": 1648,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 27,
+      "new_passed": 27,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
