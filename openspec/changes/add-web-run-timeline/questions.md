@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-2ceae13f (web-runs › Run views are parsed strictly and read through four loaders › Views are parsed strictly): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-4ef9cb9c (web-runs › The M4 journey proves test runs and the timeline in a browser › Alice test-runs a flow and follows the run): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-bffa668a (web-runs › The M4 journey proves test runs and the timeline in a browser › Bob reads the run but cannot start one): accept as satisfied? |
-| Q-005 | open | none | verdict | Finding F-81bc478e: Payload parser accepts values outside PayloadValue |
+| Q-005 | answered | none | verdict | Finding F-81bc478e: Payload parser accepts values outside PayloadValue |
 | Q-006 | open | none | verdict | Hold H-e62fdc45: UI criterion C-2ceae13f has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-eec0048a: UI criterion C-8a285469 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-32069270: UI criterion C-44473e25 has no end-to-end test; see the generated UI tests table |
@@ -154,7 +154,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-005: Finding F-81bc478e: Payload parser accepts values outside PayloadValue
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -175,6 +176,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived. The counterexample, a payload answer whose data property is undefined, cannot reach parsePayloadView: every answer of the runs API goes through the API client, which obtains the body with JSON.parse, and JSON.parse never produces undefined, functions or symbols. Every value JSON.parse can produce (null, boolean, number, string, array, object of such values) is a PayloadValue, so the cast is sound for API answers, which is what the requirement is about. The parser still refuses a payload with no data property, a bad digest, an empty media type or a bad size, as the scenario demands.
 ---
 
 ## Q-006: Hold H-e62fdc45: UI criterion C-2ceae13f has no end-to-end test; see the generated UI tests table
