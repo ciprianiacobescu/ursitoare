@@ -2,7 +2,7 @@ Spec: `specs/idempotency/spec.md`; signatures, decisions, fixtures: `design.md`;
 
 ## 1. The key
 
-- [ ] 1.1 Write `src/runs/intents/key.test.ts` first (scenario "Key vectors and refusals": the three literal keys, the five variants recomputed with `node:crypto`, `lineageOf`, the 12 refusals asserted by `code`), then implement `IntentErrorCode`, `IntentError` in `src/runs/intents/errors.ts` and `idemKey`, `lineageOf` in `src/runs/intents/key.ts`, implementing requirement "The idempotency key follows ADR-08"
+- [x] 1.1 Write `src/runs/intents/key.test.ts` first (scenario "Key vectors and refusals": the three literal keys, the five variants recomputed with `node:crypto`, `lineageOf`, the 12 refusals asserted by `code`), then implement `IntentErrorCode`, `IntentError` in `src/runs/intents/errors.ts` and `idemKey`, `lineageOf` in `src/runs/intents/key.ts`, implementing requirement "The idempotency key follows ADR-08"
 
 ## 2. The table
 
