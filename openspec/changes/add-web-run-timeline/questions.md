@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Hold H-e62fdc45: UI criterion C-2ceae13f has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-eec0048a: UI criterion C-8a285469 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-32069270: UI criterion C-44473e25 has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-07248f6f: UI criterion C-95befb77 has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-07248f6f: UI criterion C-95befb77 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-420abdfd: UI criterion C-f2512ba4 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-7a90109b: UI criterion C-b67fc6a7 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-ed380471: UI criterion C-a8d83d86 has no end-to-end test; see the generated UI tests table |
@@ -256,7 +256,8 @@ accept The hold is waived. The criterion's scenario reads stepRenderers.list(), 
 
 ## Q-009: Hold H-07248f6f: UI criterion C-95befb77 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -275,6 +276,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold is waived. The criterion's scenario calls stepStateLabel, timelineItems, stepDetailRows, decisionHref, runErrorText, payloadShown and setPayloadLoad with hand-built steps and payload loads and asks for exact return values, a new Map and an unchanged input map. These are pure helpers; a browser cannot call them or inspect their results. The Node tests in timeline.test.ts assert every clause of the scenario, including PAY_ROWS and PAY_FAILED_TAIL of reference.md, and timeline.ts implements them. The visible side of the timeline, the step buttons, details and payload text, is proven in the browser by the M4 journey.
 ---
 
 ## Q-010: Hold H-420abdfd: UI criterion C-f2512ba4 has no end-to-end test; see the generated UI tests table
