@@ -23,7 +23,7 @@ Spec: `specs/idempotency/spec.md`; signatures, decisions, fixtures: `design.md`;
 
 ## 6. The kill proofs
 
-- [ ] 6.1 Write `src/runs/intents/crash-once.test.ts`, `src/runs/intents/crash-unsafe.test.ts` and `src/runs/intents/crash-steps.test.ts` first (scenarios "Kill after the call, restart, one effect", "Kill after the call of an unsafe tool parks as unknown" and "Two kills, the work already done is not redone"; the parent is design decision 10), then create `test/support/crash/intents-scenario.ts` (design decision 9, bind before launch), implementing requirements "A kill between the intent and the done gives one effect" and "Completed steps are not repeated across kills"
+- [x] 6.1 Write `src/runs/intents/crash-once.test.ts`, `src/runs/intents/crash-unsafe.test.ts` and `src/runs/intents/crash-steps.test.ts` first (scenarios "Kill after the call, restart, one effect", "Kill after the call of an unsafe tool parks as unknown" and "Two kills, the work already done is not redone"; the parent is design decision 10), then create `test/support/crash/intents-scenario.ts` (design decision 9, bind before launch), implementing requirements "A kill between the intent and the done gives one effect" and "Completed steps are not repeated across kills"
 
 ## 7. Exports
 
