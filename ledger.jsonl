@@ -133,3 +133,6 @@
 {"at":"2026-11-05T13:35:43Z","head":"7cdba45f66d53569f0084fdfe92fddb8b0fd9589","pr":80,"target_before":"7508e2d64d8606f143f74d7c741493f7b31a0512","type":"unit.merge_requested","unit":"openspec:add-flow-test-cli"}
 {"at":"2026-11-05T13:35:48Z","ci":"not_run","head":"7cdba45f66d53569f0084fdfe92fddb8b0fd9589","merge_commit":"cfdb07f48aa621eff19ac3b7e0108590d86f9fd8","method":"squash","pr":80,"raced":false,"type":"unit.merged","unit":"openspec:add-flow-test-cli"}
 {"at":"2026-11-05T13:35:54Z","branch":"l4/openspec/add-flow-test-cli","head":"7cdba45f66d53569f0084fdfe92fddb8b0fd9589","type":"unit.branch_deleted","unit":"openspec:add-flow-test-cli"}
+{"at":"2026-11-05T13:38:39Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"cfdb07f48aa621eff19ac3b7e0108590d86f9fd8","status":"pass","type":"unit.postcheck","unit":"openspec:add-flow-test-cli"}
+{"at":"2026-11-05T13:38:39Z","revision":"cfdb07f48aa621eff19ac3b7e0108590d86f9fd8","type":"unit.integrated","unit":"openspec:add-flow-test-cli"}
+{"at":"2026-11-05T13:38:39Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-flow-test-cli"}

@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-05T13:38:39Z",
+  "integrated_revision": "cfdb07f48aa621eff19ac3b7e0108590d86f9fd8",
+  "merge_commit": "cfdb07f48aa621eff19ac3b7e0108590d86f9fd8",
+  "plan_digest": "d4a60ec43090d2fa",
+  "plan_id": "m4",
+  "postcheck": "pass",
+  "pr": 80,
+  "receipt_id": "m4/openspec:add-flow-test-cli/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "7cdba45f66d53569f0084fdfe92fddb8b0fd9589",
+  "spec_digest": "5def7277312b2ba6",
+  "target": "main",
+  "unit_id": "openspec:add-flow-test-cli"
+}
