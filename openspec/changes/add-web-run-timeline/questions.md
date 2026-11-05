@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 3.1 | technical | web/src/runs/timeline.test.ts:61-63: wrong expectation for started step in a live run |
-| Q-002 | open | none | verdict | Criterion C-2ceae13f (web-runs › Run views are parsed strictly and read through four loaders › Views are parsed strictly): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-2ceae13f (web-runs › Run views are parsed strictly and read through four loaders › Views are parsed strictly): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-4ef9cb9c (web-runs › The M4 journey proves test runs and the timeline in a browser › Alice test-runs a flow and follows the run): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-bffa668a (web-runs › The M4 journey proves test runs and the timeline in a browser › Bob reads the run but cannot start one): accept as satisfied? |
 | Q-005 | open | none | verdict | Finding F-81bc478e: Payload parser accepts values outside PayloadValue |
@@ -57,7 +57,8 @@ Edit `web/src/runs/timeline.test.ts`: in the loop at lines 61-63, make `want` be
 
 ## Q-002: Criterion C-2ceae13f (web-runs › Run views are parsed strictly and read through four loaders › Views are parsed strictly): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -84,6 +85,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The parsers behave as the scenario asks. parseRunView, parseStepView and parsePayloadView build fresh objects from known fields only, so an unknown property such as extra is dropped; principal, error and taint are rebuilt rather than reused, so they are copies. Every malformed input of the scenario is refused with null: a state outside the union, a missing ownerTeam, a principal kind robot, an error missing fields, a 63-character inputRef (the digest pattern requires exactly 64 hex characters), a negative seq, a numeric taint entry, a step state outside the union, a negative size and a payload without a data property. The three tracing tests pass. The judge's counterexample (data: undefined) is outside the scenario and cannot come from the runs API, whose answers are produced by JSON.parse.
 ---
 
 ## Q-003: Criterion C-4ef9cb9c (web-runs › The M4 journey proves test runs and the timeline in a browser › Alice test-runs a flow and follows the run): accept as satisfied?
