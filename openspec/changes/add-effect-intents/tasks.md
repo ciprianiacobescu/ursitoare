@@ -19,7 +19,7 @@ Spec: `specs/idempotency/spec.md`; signatures, decisions, fixtures: `design.md`;
 
 ## 5. The pay-once flow in the interpreter
 
-- [ ] 5.1 Write `src/runs/intents/gate-run.test.ts` first (scenario "The gate inside executeRun, and a replay"; the effect log is a file in a temporary directory), then create `test/support/crash/pay-once.ts` (constants, `payOnceVersion`, `payOnceCatalogue`, `effectLogInvoker`) and `test/support/crash/flows/pay-once.yaml` (the text of `data-model.md` verbatim), implementing requirement "The gate inside the interpreter records the intent around the call"
+- [x] 5.1 Write `src/runs/intents/gate-run.test.ts` first (scenario "The gate inside executeRun, and a replay"; the effect log is a file in a temporary directory), then create `test/support/crash/pay-once.ts` (constants, `payOnceVersion`, `payOnceCatalogue`, `effectLogInvoker`) and `test/support/crash/flows/pay-once.yaml` (the text of `data-model.md` verbatim), implementing requirement "The gate inside the interpreter records the intent around the call"
 
 ## 6. The kill proofs
 
