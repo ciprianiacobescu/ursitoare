@@ -143,3 +143,5 @@
 {"at":"2026-11-05T15:18:28Z","run":"r-20261105T1518Z-4aa2","type":"unit.dispatched","unit":"openspec:add-web-run-timeline"}
 {"at":"2026-11-05T17:39:06Z","detail":"waiting_capacity until 2026-11-05T18:07:42Z","reason":"unit_waiting_capacity","type":"plan.waiting","unit":"openspec:add-web-run-timeline"}
 {"at":"2026-11-05T18:09:33Z","by":"harness","reason":"the cause is gone: openspec:add-web-run-timeline is waiting_capacity","type":"plan.resumed"}
+{"at":"2026-11-05T18:09:36Z","attempt":1,"cost_usd":3.590218,"runs":3,"type":"plan.charged","unit":"openspec:add-web-run-timeline"}
+{"at":"2026-11-05T18:09:36Z","run":"r-20261105T1809Z-9758","type":"unit.dispatched","unit":"openspec:add-web-run-timeline"}
