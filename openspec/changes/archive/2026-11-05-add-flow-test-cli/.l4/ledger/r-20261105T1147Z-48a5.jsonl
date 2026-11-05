@@ -213,3 +213,8 @@
 {"ts": "2026-11-05T13:25:11.095072Z", "run_id": "r-20261105T1147Z-48a5", "unit": "openspec:add-flow-test-cli", "seq": 213, "type": "step.timed", "phase": "verify", "round": 1, "seconds": 1094.5}
 {"ts": "2026-11-05T13:25:11.095576Z", "run_id": "r-20261105T1147Z-48a5", "unit": "openspec:add-flow-test-cli", "seq": 214, "type": "phase.changed", "from": "verifying", "to": "verified", "trigger": "verify_pass", "exit_code": null}
 {"ts": "2026-11-05T13:25:14.418189Z", "run_id": "r-20261105T1147Z-48a5", "unit": "openspec:add-flow-test-cli", "seq": 215, "type": "pr.labels", "number": 80, "labels": ["l4:verified"]}
+{"ts": "2026-11-05T13:25:21.449924Z", "run_id": "r-20261105T1147Z-48a5", "unit": "openspec:add-flow-test-cli", "seq": 216, "type": "pr.ready", "url": "<forge>/ciprianiacobescu/ursitoare/pull/80", "number": 80, "head": "7cdba45f66d53569f0084fdfe92fddb8b0fd9589"}
+{"ts": "2026-11-05T13:25:21.451047Z", "run_id": "r-20261105T1147Z-48a5", "unit": "openspec:add-flow-test-cli", "seq": 217, "type": "phase.changed", "from": "verified", "to": "in_review", "trigger": "hand_off_pushed", "exit_code": 0}
+{"ts": "2026-11-05T13:25:24.704674Z", "run_id": "r-20261105T1147Z-48a5", "unit": "openspec:add-flow-test-cli", "seq": 218, "type": "pr.labels", "number": 80, "labels": ["l4:in_review"]}
+{"ts": "2026-11-05T13:25:25.958066Z", "run_id": "r-20261105T1147Z-48a5", "unit": "openspec:add-flow-test-cli", "seq": 219, "type": "lock.released"}
+{"ts": "2026-11-05T13:25:25.958629Z", "run_id": "r-20261105T1147Z-48a5", "unit": "openspec:add-flow-test-cli", "seq": 220, "type": "run.finished", "exit_code": 0}
