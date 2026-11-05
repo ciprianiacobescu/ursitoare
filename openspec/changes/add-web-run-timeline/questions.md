@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-013 | answered | none | verdict | Hold H-c59c8e20: UI criterion C-c7363684 has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-ac6e12a7: UI criterion C-e75f18dc has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-36f31dc8: UI criterion C-4ef9cb9c has no end-to-end test; see the generated UI tests table |
-| Q-016 | open | none | verdict | Hold H-70326357: UI criterion C-bffa668a has no end-to-end test; see the generated UI tests table |
+| Q-016 | answered | none | verdict | Hold H-70326357: UI criterion C-bffa668a has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -429,7 +429,8 @@ accept The hold is waived. The criterion does have an end-to-end test: e2e/test_
 
 ## Q-016: Hold H-70326357: UI criterion C-bffa668a has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -448,3 +449,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold is waived. The criterion does have an end-to-end test: e2e/test_m4_runs.py tags its bob test with this criterion id. Alice sets up the run in the first context, bob signs in in a second browser context, opens Runs, follows the link Open run of the Runs table, and the test asserts State: completed, the buttons lookup, route, pay, done in order, no button Start test run, then opens Flows and demo-pay and asserts the region Test run shows Only authors can start a test run. with no Start test run button, with assert_accessible on both of bob's pages. That is every clause of the scenario. The denied text comes from testPanelView when the session lacks test_flow, and the Node engine journey proves bob really lacks that capability. The project's rules say browser-only criteria are tagged for the verifier and that a red step cannot run e2e tests, so the lack of a red record is by design. The generated test of step 5 fails at the base as well as the head, so it does not discriminate and says nothing about the head.
