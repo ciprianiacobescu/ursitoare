@@ -89,3 +89,5 @@
 {"at":"2026-11-05T02:01:51Z","revision":"794caa83909857e4e5ddec764ce47036c45a4a56","type":"unit.integrated","unit":"openspec:add-interpreter-core"}
 {"at":"2026-11-05T02:01:51Z","attempt":1,"cost_usd":9.860336,"runs":5,"type":"plan.charged","unit":"openspec:add-interpreter-core"}
 {"at":"2026-11-05T02:03:42Z","branch":"l4/archive/openspec/add-interpreter-core","head":"39485a55fa40c234654221c3b38fc31693d68665","type":"unit.branch_deleted","unit":"openspec:add-interpreter-core"}
+{"at":"2026-11-05T02:03:44Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-effect-intents"}
+{"at":"2026-11-05T02:03:44Z","run":"r-20261105T0203Z-c925","type":"unit.dispatched","unit":"openspec:add-effect-intents"}
