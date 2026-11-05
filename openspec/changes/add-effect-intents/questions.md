@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 3.2 | harness | Task 3.2: the pre-satisfied check could not decide |
+| Q-001 | answered | 3.2 | harness | Task 3.2: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 3.2: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.2
 - **Kind:** harness
 - **Asked:** 2026-11-05T03:19Z by deepseek-free, run r-20261105T0203Z-c925, task 3.2
@@ -213,3 +214,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: The check could not run only because L4's zero-value variation handles Python files and this unit is TypeScript, so a retry without an L4 upgrade would stop at the same point. I checked the claim the check was meant to verify. The agent's exemption says task 3.1 already implemented completeIntent and markIntentUnknown, and the head confirms it: both functions in src/runs/intents/repository.ts are full implementations, with the tenant check, key and date validation, a SELECT FOR UPDATE, INTENT_NOT_FOUND for an absent row, a done row answered unchanged, unknown and done answered unchanged by markIntentUnknown, and the result stored through envelopeStore.put before the UPDATE. The three held tests are not vacuous: they deep-equal the returned records against the exact values of the scenario "Completing and marking unknown" (state, resultRef as payloadDigest(PAID), completedAt 10:01:00 and 10:04:00), assert INTENT_NOT_FOUND for the absent key and for tenant B, INTENT_INVALID for a bad key, RUN_DATA_INVALID for an invalid result with the K3 row still intent, count envelope_payload rows as owner to show the second result was not stored, and read the stored payload back. Every call that reaches the repository is wrapped in assert.doesNotReject, so a stub or a zero-value implementation would fail them by assertion. The tests follow the scenario and the design, and the code they exercise is real, so the real run is enough evidence to count them.
