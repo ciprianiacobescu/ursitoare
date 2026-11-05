@@ -12,7 +12,7 @@
 
 ## 4. Reading one run
 
-- [ ] 4.1 Write `src/api/run-read.test.ts` first (scenarios "Reading one run", "Steps in order and paged" and "Referenced, unreferenced, malformed and expired", with the owner-pool payload delete), then add `GET /api/v1/runs/:runId`, `GET /api/v1/runs/:runId/steps` and `GET /api/v1/runs/:runId/payloads/:sha256` to `registerRunRoutes` in `src/api/run-routes.ts` (the resource loader of Decision 4, Decisions 6 and 7), implementing requirements "A run is read by its owner team and its initiator", "Steps are listed in seq order" and "A payload is served only through a run that references it"
+- [x] 4.1 Write `src/api/run-read.test.ts` first (scenarios "Reading one run", "Steps in order and paged" and "Referenced, unreferenced, malformed and expired", with the owner-pool payload delete), then add `GET /api/v1/runs/:runId`, `GET /api/v1/runs/:runId/steps` and `GET /api/v1/runs/:runId/payloads/:sha256` to `registerRunRoutes` in `src/api/run-routes.ts` (the resource loader of Decision 4, Decisions 6 and 7), implementing requirements "A run is read by its owner team and its initiator", "Steps are listed in seq order" and "A payload is served only through a run that references it"
 
 ## 5. Cancel and isolation
 
