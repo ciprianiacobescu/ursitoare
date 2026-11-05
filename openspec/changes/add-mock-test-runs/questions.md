@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1, 1.2, 2.1, 2.2, 3.1, 4.1, 4.2, 5.1 | ambiguous | Scenarios "Bind order, the route table and a run on DBOS" and "The route table, the document and the wiring" conflict |
+| Q-001 | answered | 1.1, 1.2, 2.1, 2.2, 3.1, 4.1, 4.2, 5.1 | ambiguous | Scenarios "Bind order, the route table and a run on DBOS" and "The route table, the document and the wiring" conflict |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Scenarios "Bind order, the route table and a run on DBOS" and "The route table, the document and the wiring" conflict
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 1.1, 1.2, 2.1, 2.2, 3.1, 4.1, 4.2, 5.1
 - **Kind:** ambiguous
 - **Asked:** intake lint (L4-ODD-004)
@@ -36,3 +37,4 @@ Which behaviour is wanted? Answer below and set Status to answered. If one scena
 
 ### Answer
 <!-- write below this line -->
+There is no conflict: both scenarios are wanted and neither is deleted. They share only the opening setup (main with no database and inspectServers, and the parsed OpenAPI document); their WHENs then diverge (the flow-testing one starts main a second time with the recording wrappers and the real launchDurable, the runs-api one with a fake launchDurable and a cancel) and their THENs concern disjoint route families. The runs-api "defines exactly" the five run routes is scoped to the routes under /api/v1/runs, as the existing test src/main.runs.test.ts applies it: it filters the public routes to /api/v1/runs and /api/v1/runs/ before counting five, and the test route POST /api/v1/flows/:flowId/versions/:hash/test is not among them. The flow-testing THEN concerns that test route under /api/v1/flows, and this unit's modified flow-registry requirement already states that main's public server defines the seven flow routes and one more, the test route. So one route table of the first main run satisfies both: the five run routes, the eight flow routes (seven plus test), no POST /api/v1/runs, unregisteredRouteErrors [], and a document holding all paths. Implement design.md Decision 7 as written: the bind block before U30's launchDurable call, registerTestRunRoutes directly after registerRunRoutes (which src/main.ts already registers after the launch and before the listener binds), in every case, with interpreter null when no runtime was launched. Both scenarios then pass against the same code; the runs-api scenario keeps passing through its existing test.
