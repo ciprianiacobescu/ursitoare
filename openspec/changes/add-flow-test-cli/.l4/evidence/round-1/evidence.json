@@ -1,0 +1,133 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/cli/run.ts",
+      ".github/workflows/l4.yml",
+      "docs/decisions/0002",
+      "src/cli/flow/index.ts",
+      "test/arch/modules.ts",
+      "specs/ops-cli/spec.md",
+      "node:assert/strict",
+      "src/cli/flow/test.test.ts",
+      "src/cli/flow/test.ts",
+      "src/cli/flow/test-refusals.test.ts",
+      "src/cli/flow/test-usage.test.ts",
+      "src/cli/flow/test-registry.test.ts",
+      "src/cli/main.test.ts",
+      "**/run.ts",
+      "**/CLI_*",
+      "**/RBAC_*",
+      "**/IDENTITY_*",
+      "**/AUDIT_*",
+      "**/TENANT_*",
+      "**/?",
+      "**/flow.json",
+      "**/flow0.json",
+      "**/builtin.ts",
+      "**/[",
+      "module .github",
+      "module cli",
+      "module docs",
+      "module node:assert",
+      "module registry",
+      "module specs",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-flow-test-cli/.l4/ledger/r-20261105T1147Z-48a5.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-flow-test-cli/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/cli/flow/index.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/flow/test-refusals.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/flow/test-registry.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/flow/test-usage.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/flow/test.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/flow/test.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/main.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/cli/flow/index.ts, src/cli/flow/test.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/cli/flow/index.ts",
+      "src/cli/flow/test.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1653,
+      "passed": 1653,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 5,
+      "new_passed": 5,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
