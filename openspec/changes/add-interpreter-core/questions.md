@@ -12,6 +12,9 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 2.3 | harness | Task 2.3: the pre-satisfied check could not decide |
+| Q-002 | open | none | verdict | Finding F-a71db6eb: task 2.3: gate-step test does not observe the active durable step |
+| Q-003 | open | none | verdict | Finding F-257bab9b: Copied interpreter errors are remapped as tool failures |
+| Q-004 | open | none | verdict | Finding F-8da8966d: task 3.3 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
 ---
@@ -214,3 +217,77 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: The claim that task 2.3 is already satisfied holds: the effect path of the block runtime is already implemented at the unit head by task 2.2's commit. In src/interpreter/runtimes/block.ts the non-read branch calls the gate's before inside the step named after the node, fails an unknown decision with INTERPRETER_EFFECT_UNKNOWN before any invoke, takes the reuse result without invoking, invokes with the decision's idemKey, then in the step named node#done calls after before the output check, and maps any gate or invoker rejection to INTERPRETER_TOOL_FAILED with the fixed message node execution failed. Traced against that code, memoryWorkflowOps (which pushes the step name before running the callback and propagates errors unchanged), InterpreterError (which carries code and node) and the test catalogue (erp.create_payment@1 has effect pay and an output schema requiring payment_id and status), all nine new tests pass without a production change. The base run could not discriminate only because the unit base is the scaffold whose stubs throw before any assertion runs, so an error rather than an assertion failure is the expected shape there. Note for the verifier: the test named each gate call runs in the step named after the node checks only the order of gate calls and the executed step names, not that after ran inside node#done as the scenario's tagged ops would; the step-tagging coverage of the criterion is weaker than the scenario describes.
+
+---
+
+## Q-002: Finding F-a71db6eb: task 2.3: gate-step test does not observe the active durable step
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it (criterion C-9d40929b).
+
+Title: task 2.3: gate-step test does not observe the active durable step
+Detail: The test named "each gate call runs in the step named after the node" sets current to the running step in its WorkflowOps wrapper, but the logging gate never reads current. It therefore cannot distinguish before and after running in the required node and node#done steps from any other steps with the same execution list.
+Suggested fix: Make the logging gate record the active step name and assert before runs in pay while after runs in pay#done.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-9d40929b as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-003: Finding F-257bab9b: Copied interpreter errors are remapped as tool failures
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it (criterion C-e3cb0a11).
+
+Title: Copied interpreter errors are remapped as tool failures
+Detail: The durable-error rule says code-bearing interpreter errors must be recognized without instanceof because durable replay can rethrow a copied error. src/interpreter/visit.ts instead requires both a recognized code and error instanceof Error. A copied InterpreterError-like value therefore reaches the fallback and becomes INTERPRETER_TOOL_FAILED, losing its original code.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-e3cb0a11 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Finding F-8da8966d: task 3.3 is ticked as already satisfied, but its text is not done
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it.
+
+Title: task 3.3 is ticked as already satisfied, but its text is not done
+Detail: not in this part: src/interpreter/visit.ts is required by task 3.3 and is listed in part 2.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+This finding cites no criterion: end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals, or no fix can be made from the reject.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
