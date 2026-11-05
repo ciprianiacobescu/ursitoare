@@ -282,6 +282,7 @@ accept The hold is waived. The criterion's scenario calls stepStateLabel, timeli
 ## Q-010: Hold H-420abdfd: UI criterion C-f2512ba4 has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The hold rests on a generated browser test, test_l4_c_f2512ba4.py, that fails at the head after two attempts. That file is not in the repository (e2e/ holds no test_l4_c_f2512ba4.py) and its screenshot and trace are not either, so I cannot read what it asserted or why it failed, and I cannot rule ou
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
