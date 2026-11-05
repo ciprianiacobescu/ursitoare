@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-05T02:01:51Z",
+  "integrated_revision": "794caa83909857e4e5ddec764ce47036c45a4a56",
+  "merge_commit": "794caa83909857e4e5ddec764ce47036c45a4a56",
+  "plan_digest": "d4a60ec43090d2fa",
+  "plan_id": "m4",
+  "postcheck": "pass",
+  "pr": 72,
+  "receipt_id": "m4/openspec:add-interpreter-core/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "f6287bed5b0d3edd6b0f050aab6e655a36a40c00",
+  "spec_digest": "d76a4f691391f9d1",
+  "target": "main",
+  "unit_id": "openspec:add-interpreter-core"
+}
