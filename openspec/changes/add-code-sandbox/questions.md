@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 3.5 | harness | Task 3.5: the pre-satisfied check could not decide |
 | Q-002 | answered | 3.6 | harness | Task 3.6: the pre-satisfied check could not decide |
-| Q-003 | open | 3.8 | harness | Task 3.8: the pre-satisfied check could not decide |
+| Q-003 | answered | 3.8 | harness | Task 3.8: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -499,7 +499,8 @@ accept: accept: The held evidence is enough. The seven new tests are not vacuous
 
 ## Q-003: Task 3.8: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.8
 - **Kind:** harness
 - **Asked:** 2026-11-06T22:42Z by deepseek-free, run r-20261106T2145Z-e456, task 3.8
@@ -612,3 +613,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: accept: The held evidence is enough. The new built-worker test is not vacuous: it asserts that tsc exits 0, that the built pool's workerEntryUrl resolves to the file URL of an existing worker-entry.js beside pool.js, that the built pool reports size 1, and that a real run of the normalize body returns ok true with the exact normalize value, with no workerFactory supplied. The behaviour it checks is in the unit head: tsconfig.build.json compiles src without the test files into the chosen outDir with relative .ts imports rewritten to .js, limits.ts maps a .js module URL to worker-entry.js, pool.ts spawns a real Worker at workerEntryUrl(import.meta.url) when no factory is given, and worker-entry.ts answers each job through runCode. The base run could only end in an error because the base branch carries the milestone scaffold stub of the sandbox, whose createWorkerSandbox throws before any assertion runs, so the inconclusive result reflects the scaffold, not the test. tasks.md states that this test is green on arrival by design and that a failure is a build defect to fix in src/sandbox, so a passing real run is the intended evidence. The replay still runs every gate, so a build defect would be caught there.
