@@ -1,0 +1,57 @@
+## Context
+
+M5 gave a hooked run its taint rules: a hook can never remove a label, and a post-hook that changes an output gives the output and every field the join of what the hook could carry (`add-hook-runtime`, requirement "Hooks never remove a taint label"; ruling C1). The static analysis still joins only a code hook's own references into the node's input and widens the output with that input, and the validator skips every hook edge (`taint-checks.ts:33`, `if (edge.hook !== null || ...) continue;`). Two gaps follow, and both must close before U50's taint gate denies a call at run time (architecture §8.7, lines 1229-1230: a flow that passes validation cannot then be denied at run time for taint alone):
+
+1. **C1-static.** A run can label the output of a hooked block `untrusted` while the static `output` is `[]`, so a consumer of a trusted field passes validation and is denied when it runs.
+2. **D14.** A block hook is a tool call with side effects. Untrusted data in its `with` is not checked anywhere before the PEP.
+
+No new name, code, table, route or document: two edits to existing functions, one property test and the changed assertions of one frozen test.
+
+## Decisions
+
+1. **The widening.** In the per-node evaluation of `analyzeTaint` (`evaluate` in `analyze.ts`; after U40 it calls `producedTaint`, which this unit does not touch), when a code hook applies to a node of `WIDEN_KINDS` (`block`, `code`, `llm.extract`, `llm.generate`, `delegate`; unchanged) or the node's hook structure is malformed, let `J` be the join of the node's `input`, its produced `output` and every produced field taint. The node's `output` is `J` and so is each of its `fields`. Nothing else changes: `input` still joins the code hooks' references; a node without an applying code hook, one of another kind, and a node with block hooks only keep their result; no label is ever removed. This is monotone in the input, so the fixpoint still terminates and the result does not depend on insertion order. Before U40 the edit sits at `analyze.ts:300-306` (`WIDEN_KINDS` at `:271`); U40 moves code around it, so the task names the function, not the lines.
+   - **What changes in practice.** A field of `fields` is already `input` joined with `untrusted`, and a block's output is its input, so only the `output` of a `block` with `untrusted_fields` gains `untrusted`. The visible effect is a reference to a trusted field of such a block (`nodes.fetch.output.content_type`), which resolves to `output`: `[]` before, `["untrusted"]` after. It matches the runtime, where a hook-mutated output gives every field and the output the join of every produced label (U42), so a consumer's input taint at run time is never more than the static one.
+   - **Over-approximation, on purpose.** Static analysis cannot tell whether a hook mutates the output, so any applying code hook widens. A hook that never mutates still makes a trusted field of a hooked, untrusted-field block untrusted for validation, and the author must pass it through an `llm.extract` node. Cost accepted for C1 (fail closed, ADR-16 item 6); `llm.decide` (`fields.outcome` stays `[]`) and `switch`, `end`, `wait` (output = input) are not in `WIDEN_KINDS` and need no widening.
+2. **The hook-edge rule.** In `checkTaint`, an edge with `edge.hook !== null` is no longer skipped. A hook edge is an error when it is `resolved`, its taint contains `untrusted`, `refErrorPaths` does not hold its path, its path is `/nodes/<id>/(pre|post)/<i>/with` or `/hooks/<r>/(pre|post)/with` (the `with` itself or a member under it), the hook found at that place in the flow has `kind: "block"`, and `catalogue.block(hook.uses)` exists with `effect !== "read"` (the existing helper `consequential`). A code hook's `input`, a read hook, an `extracted`-only edge (no `untrusted`), an unknown block (it is `H_BLOCK`'s case; the helper answers `false`), an unresolved edge and a hook not found at its path give nothing. The error is `L3_TAINT_TO_CONSEQUENTIAL` with `node` `edge.to`, `path` `edge.path` and the message of Decision 3. A flow rule's hook applied to several nodes already has one edge per wrapped node (`to`), so it gives one error per node; nothing is merged. A throwing catalogue propagates from `consequential` to the `L3` guard, as it does for node blocks.
+3. **The message.** `untrusted data from <from> reaches hook <hook> on <to> through <ref>, a block with side effects; pass it through an llm.extract node first`. `<from>` is `edge.from`, which is the producer of a `nodes.*` or `hook.output.*` reference; for `hook.input.*` the edge has no producer and `<from>` is the hooked node `edge.to` (the card does not define this case; without a rule the existing fallback would print `foreach items`). `<hook>` is the edge's hook `id`; a rule hook without an `id` (allowed by U41) reads `rule.<rule id>`. L3 runs before layer `H`, so a hook id is not yet checked against `^[a-z][a-z0-9_]{0,63}$`; a name outside `^(rule\.)?[a-z][a-z0-9_]{0,63}$` (a NUL, a lone surrogate, spaces, a non-string, 65 characters) reads `(unnamed)`, so the message stays storable in `flow_version.validation` (`jsonb`). `<ref>` is `refToString` of a parsed reference, as for node edges.
+4. **Layers and codes.** `L3_TAINT_TO_CONSEQUENTIAL` is in `FLOW_ERROR_CODES`, so `FLOW_ERROR_CODES`, `DIAGNOSTICS`, `docs/authoring/diagnostics.md` and the web's link parity are unchanged (their frozen tests prove it). The error makes `L3` produce an error, and `validateFlow` runs layer `H` only when L1 to L3 produced none (`add-hook-checker` design 5), so a flow with the error reports `layers_run` `["L1", "L2", "L3"]` and no `H` issue.
+5. **The property.** `src/interpreter/hook-taint-inclusion.test.ts` (in `interpreter`, which may import `sandbox`, `runs`, `authoring` and the test support; `authoring` may import nothing of them) runs every flow of `hookRunNames()` and `taint-hook-bare` through `executeRun` (test-plan.md § Hooked runs) and compares each row with `analyzeTaint`. Verdict first: the nine flows alone pass before the widening, because the one flow with any taint, `taint-hook`, has a hook that reads `nodes.fetch.output.raw_text` and so already joins `fetch`'s input. The copy without that `input` is U42's own variant ("in the copy `use_id` is still `["untrusted"]`"): its `use_id` row is `["untrusted"]` while the old static input is `[]`. Including it is the one reading of the card's list that makes the task red by assertion. U40's property (`inclusionReport`) runs without hooks and is not edited.
+6. **Frozen tests.** One changes: `src/authoring/validate/taint.test.ts::C-f97887e5 hook edges are not checked` (its name says "not checked"; the name stays, the assertions of `taint-via-extract-passes` with a `mail.send@1` pre-hook become the one error, `warnings` `[]` and `layers_run`). The 16 tests of `src/authoring/taint/` (U40 keeps them unedited) pass: the widening leaves `hooks.test.ts::C-be8bdbfa` values as they are (`ex` stays `["extracted", "untrusted"]`). A sweep found no other fixture whose result changes (Verification).
+
+## Interfaces
+
+Given, equal to `proposal.md`. No name is added, so the scaffold stubs nothing. Merged shapes and M5 names: `delivered-shapes.md`.
+
+```ts
+// No new exported name. Existing behaviour changes (named in tasks 1.1, 2.1 and 2.2):
+// src/authoring/taint/analyze.ts          analyzeTaint: the widening of a node with an applying code hook (WIDEN_KINDS unchanged)
+// src/authoring/validate/taint-checks.ts  checkTaint: the hook-edge rule (its helper is module-internal, not exported)
+// Not scaffolded: the changed assertions of src/authoring/validate/taint.test.ts::C-f97887e5, the three new test files
+```
+
+## Failure cases
+
+- A throwing catalogue: `analyzeTaint` lets it propagate (frozen: "Unknown and malformed input fails closed"); `checkTaint` lets it reach the `L3` guard, which reports `INTERNAL_ERROR` (frozen: "Crashes, limits and mutations").
+- A malformed hook (not an object, a `kind` that is neither value, a non-array list, `hooks` not a list): `collectHooks` marks the node malformed, so the node widens and its input is `untrusted`; no hook edge exists for it, so `checkTaint` reports nothing and layer `H` (`H_SCHEMA`) reports the shape.
+- A hook edge whose path is not under a `with`, or whose hook is not found, is skipped, never thrown. `TAINT_TOO_LARGE` still bounds the edges, so the errors.
+
+## Security
+
+1. No endpoint, PEP action, table, secret or log line; no tenant data is read. Flow text reaches a message only as a hook name (filtered by Decision 3) and a `refToString` reference.
+2. Fail closed: the widening only adds labels; the edge rule only adds errors, and an unknown hook block is left to `H_BLOCK`.
+3. Abuse cases: untrusted text into a `mail.send@1`, `slack.post_message@1` or `erp.create_payment@1` hook (P1 to P3, R1, R2); a hook id with a NUL or a lone surrogate (P4); data laundered through a hook's mutated output (the widening sample and `taint-hook-bare`); a rule hook that wraps many nodes (R1).
+
+## Test plan
+
+Fixtures, tables and the harness: `test-plan.md`. Tests: `src/authoring/taint/hook-widening.test.ts` and `src/interpreter/hook-taint-inclusion.test.ts` (task 1.1), `src/authoring/validate/hook-taint.test.ts` (tasks 2.1, 2.2) and the changed `taint.test.ts` (task 2.1). Each file starts with `assert.equal(typeof <function under test>, "function")`.
+
+## Verification
+
+Run on 2026-11-06 in a scratch copy of main@cf34c628 (Node 24.22.2) with both edits applied: the 61 tests of `src/authoring/taint/` and `src/authoring/validate/` pass with the one assertion change (8 of 8 in `taint.test.ts`); eslint is clean on the two files. The sweep (`validateFlowText` over every `flowCases` file in the three groups, the 45 hook flows with `ursitoare` set to `"0.1"`, before and after): the only result that changes is `s17-taint`, which gains the error at `/nodes/fetch_invoice/post/1/with/text` (no M5 test validates it: U41 runs those flows through `checkHooks` only). The nine `add-hook-runtime` flows (rebuilt from its test-plan), `hooks-onion` and `hooks-retry-read` (U41), `notify-pay` (U43), `DEMO_HOOKS` and `DEMO_X3` (U44) validate `ok` at L1 to L3 before and after, with identical results. Samples P1 to R2, N1 to N5, `widen`, `widen-mail` and `taint-hook`, `taint-hook-bare` gave the values of the test plan. **Derived, not run:** layer `H` in every `layers_run` (the repository has none until U41), the rows of § Hooked runs (U42 is not on main; the static column ran), the real `createWorkerSandbox` pool (U38), and that `hookRunNames()` holds exactly nine names (it lists `flows/*.yaml` of U42; this assumes U43's `notify-pay.yaml` sits at the folder root, not under `flows/`).
+
+## Decisions made while writing
+
+- **Fields `a` and `b` of the card's widening sample.** `State.fields` holds only `untrusted_fields` names, so a trusted field is no key of `fields`; it is realized through the node's `output` and a consumer's edge (`content_type`), with `fields` `{ content: ["untrusted"] }` both ways. A reading of the card; no value of the seam changes.
+- **`taint-hook-bare` joins the property** (Decision 5): the card lists `hookRunNames()` only; the copy is U42's own variant.
+- **`<from>`, `<hook>` and `(unnamed)`** (Decision 3): the card gives the message but not these cases.
+- **The property lives in `src/interpreter/`**, not `src/authoring/`, to respect the module graph.

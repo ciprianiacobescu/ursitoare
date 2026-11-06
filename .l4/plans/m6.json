@@ -1,0 +1,117 @@
+{
+  "schema": "l4/delivery-plan@1",
+  "plan_id": "m6",
+  "target": "main",
+  "merge": "auto",
+  "limits": {
+    "max_cost_usd": 400,
+    "max_unit_attempts": 3,
+    "max_runs": 100
+  },
+  "external_dependencies": [],
+  "exclude": [],
+  "batches": [
+    {
+      "id": "m6-grants",
+      "acceptance_profile": "none",
+      "depends_on": [],
+      "units": [
+        {
+          "id": "openspec:add-hook-taint-check",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-fake-egress-proxy",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-gateway-client",
+          "depends_on": [
+            "openspec:add-fake-egress-proxy"
+          ]
+        },
+        {
+          "id": "openspec:add-fake-tools",
+          "depends_on": [
+            "openspec:add-fake-egress-proxy",
+            "openspec:add-gateway-client"
+          ]
+        },
+        {
+          "id": "openspec:add-tool-registry",
+          "depends_on": [
+            "openspec:add-fake-tools"
+          ]
+        },
+        {
+          "id": "openspec:add-credentials",
+          "depends_on": [
+            "openspec:add-fake-egress-proxy",
+            "openspec:add-fake-tools",
+            "openspec:add-gateway-client",
+            "openspec:add-tool-registry"
+          ]
+        },
+        {
+          "id": "openspec:add-grants-model",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-policy-deploy",
+          "depends_on": [
+            "openspec:add-grants-model"
+          ]
+        },
+        {
+          "id": "openspec:add-tool-invocation",
+          "depends_on": [
+            "openspec:add-credentials",
+            "openspec:add-fake-egress-proxy",
+            "openspec:add-fake-tools",
+            "openspec:add-gateway-client",
+            "openspec:add-grants-model",
+            "openspec:add-policy-deploy",
+            "openspec:add-tool-registry"
+          ]
+        },
+        {
+          "id": "openspec:add-dry-runs",
+          "depends_on": [
+            "openspec:add-credentials",
+            "openspec:add-fake-egress-proxy",
+            "openspec:add-fake-tools",
+            "openspec:add-gateway-client",
+            "openspec:add-grants-model",
+            "openspec:add-policy-deploy",
+            "openspec:add-tool-invocation",
+            "openspec:add-tool-registry"
+          ]
+        },
+        {
+          "id": "openspec:add-web-grants",
+          "depends_on": [
+            "openspec:add-grants-model",
+            "openspec:add-policy-deploy",
+            "openspec:add-tool-registry"
+          ]
+        },
+        {
+          "id": "openspec:add-web-dry-runs",
+          "depends_on": [
+            "openspec:add-credentials",
+            "openspec:add-dry-runs",
+            "openspec:add-fake-egress-proxy",
+            "openspec:add-fake-tools",
+            "openspec:add-gateway-client",
+            "openspec:add-grants-model",
+            "openspec:add-hook-taint-check",
+            "openspec:add-policy-deploy",
+            "openspec:add-tool-invocation",
+            "openspec:add-tool-registry",
+            "openspec:add-web-grants"
+          ]
+        }
+      ]
+    }
+  ]
+}
