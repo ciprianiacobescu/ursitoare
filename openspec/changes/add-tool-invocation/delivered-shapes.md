@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-tool-invocation
 
-Declarations from main@cf34c628 (`file:line`; `…` elides unused members). M5 names come from the M5 folders: plan m6 is activated only after plan m5 completes (one active plan per target), so they are implemented on main when this unit runs. The M6 siblings (U45-U49b) are in-plan prerequisites whose folders the judge sees; `ServiceResolver` and `ServiceTarget` are in `add-credentials` Interfaces given.
+Declarations from main@cf34c628 (`file:line`; `…` elides unused members). M5 names come from the M5 folders: plan m6 is activated only after plan m5 completes, so they are implemented on main when this unit runs. The M6 siblings (U45-U49b) are in-plan prerequisites whose folders the judge sees; `ServiceResolver` and `ServiceTarget` are in `add-credentials` Interfaces given.
 
 ```ts
 // src/interpreter (U33)
@@ -38,5 +38,4 @@ export interface HookTaintScope { input: Taint; output: ProducedTaint | null }
 export function valueTaint(value: unknown, taintOf: TaintOf, hook?: HookTaintScope): Taint;
 ```
 
-- add-hook-runtime: an attempt's final row carries the effective input taint (`nodeInputTaint` joined with `H` of each pre-hook that changed the input).
 - add-block-hooks: `StepContext` gains `readonly hook?: { phase: HookPhase; label: string }`; `HOOK_ERROR` has `details` `{ hook, reason }` with reason `tool_failed | input_invalid | output_invalid | args_unresolved | block_missing | effect_unknown | effect_retry`, and `on_error: continue` swallows the first four.

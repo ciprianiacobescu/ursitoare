@@ -2,9 +2,9 @@
 
 A real tool is not a block until an admin has said where it lives, what it accepts and returns and what effect it has, and a second admin has approved exactly that. U47 stores tool servers and surfaces per tenant, turns an approved surface into immutable block versions bound to `{ server, tool }`, disables a server whose surface changes, and gives U50 a directory from block ref to binding.
 
-Observable result: carol (`tenant_admin`) posts `acme` (origin `https://tools.fake.test`, two tools) and gets 201 `pending`. In a team tenant she cannot approve it (422 `approver_is_submitter`) but dave can, and `GET /api/v1/blocks` lists `acme.lookup_vendor@1` and `acme.create_payment@1` with `bound` true beside the 20 unbound test blocks. A `PUT` of a changed surface makes `acme` `drifted`; approving it writes `acme.lookup_vendor@2` and the old ref resolves to `null`. A solo tenant approves its own surface only with `selfApproval: true`.
+Observable result: carol (`tenant_admin`) posts `acme` (two tools) and gets 201 `pending`. In a team tenant she cannot approve it (422 `approver_is_submitter`) but dave can, and `GET /api/v1/blocks` lists its two refs with `bound` true. A `PUT` of a changed surface makes `acme` `drifted`; approving it writes `acme.lookup_vendor@2` and the old ref resolves to `null`. A solo tenant approves its own surface only with `selfApproval: true`.
 
-Batch `m6-grants` (U40b, U45, U46, U45b, U47, U48, U49, U49b, U50, U51, U52, U52b in plan order; closing unit `add-web-dry-runs`, journey `e2e/test_m6_grants.py`) delivers M6: admins register tool servers and grant tools per role and step; an attended dry run reads through the broker with a one-step token and shows each effect's permit while stubbing it. This unit's part: the tool-server registry, surface approval, the bound block versions and the directory the invoke path reads. After this unit merges, L4 runs acceptance profile `all` (every configured gate) on the target; the batch itself has profile `none`, and the closing unit's journey proves the outcome.
+Batch `m6-grants` (closing unit `add-web-dry-runs`, journey `e2e/test_m6_grants.py`) delivers M6: admins register tool servers and grant tools per role and step. This unit's part: the tool-server registry, surface approval, the bound block versions and the directory the invoke path reads. After this unit merges, L4 runs acceptance profile `all` on the target; the batch itself has profile `none`, and the closing unit's journey proves the outcome.
 
 ## What Changes
 
@@ -14,9 +14,9 @@ Batch `m6-grants` (U40b, U45, U46, U45b, U47, U48, U49, U49b, U50, U51, U52, U52
 
 ## Impact
 
-- **Scaffold:** Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them. The `export type` lines of `src/tools/index.ts` for `ToolDirectory`, `ToolBinding`, `ToolServerRecord` and `ToolSurface` are scaffolded (U50's stubs import them). Not scaffolded: its value export lines (task 3.1) and those of `src/api/index.ts`, the module-internal `checkSurface`, `toolBlock`, `toolHash`, `assertTenant`, the migration, the fragment, the `src/main.ts` line, the document, the README row.
+- **Scaffold:** Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them. The `export type` lines of `src/tools/index.ts` for `ToolDirectory`, `ToolBinding`, `ToolServerRecord` and `ToolSurface` are scaffolded (U50's stubs import them). Not scaffolded: its value export lines (task 3.1) and those of `src/api/index.ts`, the module-internal `checkSurface`, `toolBlock`, `toolHash`, `assertTenant`, the migration, the fragment, the `main.ts` line, the document, the README row.
 - **Depends on:** `add-tenancy-foundation`, `add-audit-chain`, `add-pdp-cedar`, `add-policy-catalogue`, `add-api-pep`, `add-api-conventions`, `add-roles-and-memberships`, `add-flow-format-model`, `add-test-catalogue`, `add-block-registry`, `add-fake-tools` (U03, U08, U11, U11b, U13, U14, U17, U22, U24, U26, U45b). Beyond the card's edges, U03, U11, U11b, U17 and U24 are added for names the scenarios call.
-- Shapes of the delivered names above: `delivered-shapes.md` in this folder (declarations from the merged code, main@cf34c628, and from the M5 folders named, checked line by line).
+- Shapes of the delivered names above: `delivered-shapes.md` in this folder (merged code at main@cf34c628 and the M5 folders named, checked line by line).
 
 **Interfaces given** (the block of `design.md` § Interfaces)
 

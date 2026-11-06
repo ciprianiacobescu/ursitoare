@@ -62,6 +62,7 @@ One fake; `mail.send@1` unless stated; `dup` is the `x-fake-tools-duplicate` hea
 | 6 | `slack.post_message@1` `{"channel":"#ap","text":"hi"}`, `ik-03` | 200 `{"ts":"1760000000.062858"}`, dup `false` | 200, `ik-03`, false |
 | 7, 8 | `erp.lookup_vendor@1` `{"vendor_name":"Globex"}`, `ik-r`, twice | 200 `{"vendor_id":"V-GLOBEX","status":"active","payment_terms_days":45}`, dup `false` both | 200, `ik-r`, false (twice) |
 | 9, 10 | `erp.create_payment@1` `{"vendor_id":"V-ACME","amount":2450,"currency":"EUR","reference":"INV-1001"}`, then `{"vendor_id":"V-ACME","amount":1,"currency":"USD","reference":"x"}`, both `ik-01` | 200 `{"payment_id":"PAY-57819766","status":"created"}`, dup `false`, then the same body, dup `true` | 200, `ik-01`, false; 200, `ik-01`, true |
+| 11 | `{}`, key `ik-03` (known from rows 3 and 4; the input fails the schema) | 400 `{"error":"invalid_input","block":"mail.send@1","details":[{"path":"/","keyword":"required"}]}`, no `dup` (the input checks run before the lookup, so it is no replay) | 400, `ik-03`, false; `input` `{}`; appended as R20 is, so `calls()` holds 11 records (`seq` 1 to 11); the kept output of row 3 is unchanged |
 
 ## Refusal rows (scenario "Refusals come first and only parseable calls to known blocks are recorded")
 

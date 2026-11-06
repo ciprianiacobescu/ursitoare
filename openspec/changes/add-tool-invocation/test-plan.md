@@ -10,7 +10,7 @@ Harness, flows, policies and run rows: `test-plan-runs.md`. Digests and keys wer
 
 ## toolRequest rows
 
-Every egress has `serviceId` `S`, `ttlSeconds` 60 and the lower-case host of the origin.
+Every egress has `serviceId` `S`, `ttlSeconds` 60 and the lower-case origin host.
 
 | # | Binding | args | key | `request.headers` | body | egress `method`, `host`, `path`, `bodyDigest` |
 |---|---|---|---|---|---|---|
@@ -35,7 +35,7 @@ V1 with `IK` has V1's egress; `args` are not mutated. **Resource ids:** B1 `tena
 
 Base: `ctx` of `pay` in `read-then-pay` (tenant `{ tenantId: "tenant_a", reviewProfile: "solo" }`, `runId` `r_1`, `flowId` `read-then-pay`, `nodeId` `pay`, `kind` `block`, `attempt` 1, `taint` `["extracted"]`); `principal` alice (human, roles `["author"]`, teams `["finance"]`); `binding` `PAYB`; `flow` `{ ownerTeam: "finance" }`; `args` `{ vendor_id: "V-ACME", amount: toDecimal(12.5), currency: "EUR", reference: "inv-1" }`; `fingerprint` `FP`; `approvals` `pdpApprovals([a1], { bob: ["approver"] }, "tenant_a")`; `egress` V2's.
 
-- **I1** (base): `principal` `{ type: "User", id: "tenant_a/alice" }`, action `invoke_tool`, `resource` `{ type: "Block", id: "tenant_a/read-then-pay/pay" }`, `context` `{ tool: entityRef("Tool", "tenant_a/acme.create_payment@1"), args, taint: ["extracted"], run_initiator: U(alice), sod_excluded: [U(alice)], approvals: [{ approver: U(bob), role: R(approver) }], approvers_by_role: { approver: [U(bob)] }, node_fingerprint: FP }`, `egress` as given; six `entities` in order: `userEntity(alice)`; `{ uid: Block::"tenant_a/read-then-pay/pay", attrs: { tenant: "tenant_a", kind: "block", flow: entityRef("Flow", "tenant_a/read-then-pay") }, parents: [] }`; `{ uid: Flow::"tenant_a/read-then-pay", attrs: { tenant: "tenant_a", owner_team: entityRef("Team", "tenant_a/finance"), reviewed: false }, parents: [] }`; `{ uid: Team::"tenant_a/finance", attrs: { tenant: "tenant_a" }, parents: [] }`; `{ uid: Tool::"tenant_a/acme.create_payment@1", attrs: { tenant: "tenant_a", effect: "pay" }, parents: [] }`; `{ uid: User::"tenant_a/bob", attrs: { tenant: "tenant_a", kind: "human", roles: [R(approver)], teams: [] }, parents: [Role::"approver"] }`. With `amount` `toDecimal(2450)` an engine holding a node grant text and `FORBID` allows it, and denies it by `t-pay-needs-approval` when `approvals` and `approvers_by_role` are empty (ran with a hand-built twin on 2026-11-06).
+- **I1** (base): `principal` `{ type: "User", id: "tenant_a/alice" }`, action `invoke_tool`, `resource` `{ type: "Block", id: "tenant_a/read-then-pay/pay" }`, `context` `{ tool: entityRef("Tool", "tenant_a/acme.create_payment@1"), args, taint: ["extracted"], run_initiator: U(alice), sod_excluded: [U(alice)], approvals: [{ approver: U(bob), role: R(approver) }], approvers_by_role: { approver: [U(bob)] }, node_fingerprint: FP }`, `egress` as given; six `entities` in order, each with `parents: []` unless stated and `attrs.tenant` `"tenant_a"`: `userEntity(alice)`; `Block::"tenant_a/read-then-pay/pay"` (`kind` `"block"`, `flow` `entityRef("Flow", "tenant_a/read-then-pay")`); `Flow::"tenant_a/read-then-pay"` (`owner_team` `entityRef("Team", "tenant_a/finance")`, `reviewed` false); `Team::"tenant_a/finance"`; `Tool::"tenant_a/acme.create_payment@1"` (`effect` `"pay"`); `User::"tenant_a/bob"` (`kind` `"human"`, `roles` `[R(approver)]`, `teams` `[]`, parents `[Role::"approver"]`). With `amount` `toDecimal(2450)` an engine holding a node grant text and `FORBID` allows it, and denies it by `t-pay-needs-approval` when `approvals` and `approvers_by_role` are empty (ran with a hand-built twin on 2026-11-06).
 - **I2** hook: `ctx.flowId` `hooked-pay`, `ctx.hook` `{ phase: "post", label: "notify" }`, `binding` `NOTE`, `args` `{ channel: "#ap", text: "paid P" }`, no approvals: resource `Block::"tenant_a/hooked-pay/pay:post:notify"`, block `kind` `"hook"`, flow ref `Flow::"tenant_a/hooked-pay"`, tool `Tool::"tenant_a/acme.post_message@1"` with `effect` `"send"`, five entities.
 - **I3** `ctx.taint` undefined gives `context.taint` `["untrusted"]`; `[]` gives `[]`; with no approvals there are five entities.
 - **I4** approvers `alice`, `u01` to `u30` (role `approver`): 24 entities, the last `User::"tenant_a/u19"`, no second `alice`; `context.approvals` lists all 31.
@@ -57,7 +57,22 @@ Doubles: `tools.resolve` answers `LV`; `services.resolve` `TARGET`; `principals`
 | R9 | nothing (check allows, the pool rejects) | `{ reason: "decision_unrecorded" }` |
 | R10 | node `pay`, `ctx.hook` `{ phase: "post", label: "notify" }`, `tools.resolve` null | `{ reason: "tool_unbound", hook: "pay:post:notify" }` |
 | R11 | one run each with `tools.resolve`, `services.resolve`, `principals`, `policy.toolArgs`, `loadVersion` or `catalogueFor` rejecting `Error("db down")` | `INTERPRETER_TOOL_FAILED`, `node execution failed`, `{ stage: "authorize" }` each, no `db down` in the error |
-| R12 | the harness of `test-plan-runs.md` with only `G_LOOKUP` deployed, not these doubles: its `principals`, `loadVersion` and `catalogueFor` wrapped to count calls, `principals` answering null from its second call (alice is disabled between two `authorize` of `LOOKUP` on one `liveInvoker` of the live run `r_9`) | the first resolves with a permit and leaves one decision row; the second throws `{ reason: "principal_unknown" }` and adds none; `principals` 2 calls, `loadVersion` and `catalogueFor` 1 call each, the gateway 0 calls (derived, not run) |
+| R12 | the harness of `test-plan-runs.md` with only `G_LOOKUP` deployed, not these doubles; `principals`, `loadVersion` and `catalogueFor` count calls and `principals` answers null from its second call (alice disabled between two `authorize` of `LOOKUP` on one `liveInvoker` of the live run `r_9`) | the first resolves with a permit and one decision row; the second throws `{ reason: "principal_unknown" }`, adds no row; `principals` 2 calls, `loadVersion` and `catalogueFor` 1 each, gateway 0 calls (derived, not run) |
+
+## Policy failure rows
+
+The harness of `test-plan-runs.md` with only `G_LOOKUP` deployed and `runtime.engine.check` replaced by the row's answer (`decidedAt` `2026-11-06T10:00:00.000Z`, the engine's `policySetVersion`). `authorize` runs for `LOOKUP` (run `r_9`, node `lookup`, taint `[]`) and throws `INTERPRETER_TOOL_DENIED`, message `tool call of "lookup" is not permitted (<reason>)`. E1 to E5: 0 gateway calls, 0 `effect_intent` rows.
+
+| # | `check` | `details` | rows of `r_9` |
+|---|---|---|---|
+| E1 | `deny` `dec_e1`, reasons `[]`, errors `["POLICY_SET_UNAVAILABLE"]` (U49b's failed load) | `{ reason: "policy_error", decisionId: "dec_e1", errorCount: "1" }` | `dec_e1`, `deny`, `[]`, the error, no permit |
+| E2 | `deny` `dec_e2`, reasons `["t-x"]`, errors `["PDP_EVALUATION_ERROR:t-a", "PDP_EVALUATION_ERROR:t-b"]` | as E1, `dec_e2`, `errorCount: "2"` | `dec_e2`, `deny`, `["t-x"]`, both errors |
+| E3 | `allow` `dec_e3`, reasons `[G_LOOKUP.id]`, errors `["PDP_EVALUATION_ERROR:t-a"]`, with a permit | as E1 with `dec_e3` | `dec_e3`, `deny`, `[G_LOOKUP.id]`, the error, no permit |
+| E4 | rejects `Object.assign(new Error("db down"), { code: "ECONNREFUSED" })` | `{ reason: "policy_unavailable", code: "ECONNREFUSED" }` | none |
+| E5 | rejects `Error("db down")` | `{ reason: "policy_unavailable", code: "UNKNOWN" }` | none |
+| E6 | E1's answer for `pay`, the real engine for `lookup`; `executeRun` of `read-then-pay` `H1`, amount 12.5, as `r_8` | run `failed` at `pay`, message `... (policy_error)`, E1's `details` | `lookup` `allow`, then E1's row (node `pay`); `pay` row `failed` with `dec_e1`; `effect_intent` 0; fake tools 1 call, gateway 1 `requestToken` and 1 `send` |
+
+Neither the engine nor U49b's runtime rejects `check` (design § Failure cases).
 
 ## Fixtures
 

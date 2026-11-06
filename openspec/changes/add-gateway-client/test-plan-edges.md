@@ -25,14 +25,15 @@ B. `mock.timers.enable({ apis: ["setTimeout"] })`, a stub `fetch` keeping each `
 
 ## Logs (scenario 9)
 
-Capturing trace-level logger, `recordingFetch`, `CFG`, clock `T0`, header `x-caller: hdr-value-3b7d`. Steps: (1) `requestToken`; (2) `send REQ` answered `resp-body-5f6e`; (3) `requestToken` answered 401; (4) `requestToken`, then `send` answered by `new TypeError("fetch failed jwt-secret-8a1c")`; (5) `send` with method `PUT`. The lines minus `time` and `service` deep-equal, in order (6; step 5 adds none):
+Capturing trace-level logger, `recordingFetch`, `CFG`, clock `T0`, header `x-caller: hdr-value-3b7d`. Steps: (1) `requestToken`; (2) `send REQ` answered `resp-body-5f6e`; (3) `requestToken` answered 401; (4) `requestToken`, then `send` answered by `new TypeError("fetch failed jwt-secret-8a1c")`; (5) `send` with method `PUT` (the permit is the `POST` one of step 1, so the permit check refuses it before the token is looked at; the token of step 4 is spent, which does not matter). Every failed call logs one `warn` line, a refusal before the network included: `stage` is `token` for a failed `requestToken` and `send` for a failed `send`, `code` and `details` are the error's (its `details` hold no secret: `field`, `status`, `stage`, `reason`, `limit` or `probe` values only), `runId` and `nodeId` are the tag's when the tag is valid and left out otherwise. The lines minus `time` and `service` deep-equal, in order (7 lines: 1, 1, 2, 2 and 1 for the steps):
 
 1. `{ level: 30, stage: "token", serviceId: S1, status: 200, ms: 0, runId: "r_1", nodeId: "lookup", msg: "gateway token request" }`
 2. `{ level: 30, stage: "send", method: "POST", host: "tools.fake.test", path: "/v1/lookup", status: 200, ms: 0, runId: "r_1", nodeId: "lookup", msg: "gateway send" }`
-3. line 1 with `status: 401`, then `{ level: 40, stage: "token", code: "GATEWAY_TOKEN_REFUSED", runId: "r_1", nodeId: "lookup", msg: "gateway call failed" }`
-4. line 1, then `{ level: 40, stage: "send", code: "GATEWAY_UNAVAILABLE", runId: "r_1", nodeId: "lookup", msg: "gateway call failed" }`
+3. line 1 with `status: 401`, then `{ level: 40, stage: "token", code: "GATEWAY_TOKEN_REFUSED", details: { status: "401" }, runId: "r_1", nodeId: "lookup", msg: "gateway call failed" }`
+4. line 1, then `{ level: 40, stage: "send", code: "GATEWAY_UNAVAILABLE", details: { stage: "send" }, runId: "r_1", nodeId: "lookup", msg: "gateway call failed" }`
+5. `{ level: 40, stage: "send", code: "GATEWAY_PERMIT_MISMATCH", details: { field: "method" }, runId: "r_1", nodeId: "lookup", msg: "gateway call failed" }`, from the refused `PUT` before any network call (the line holds no token, header value, body or query)
 
-The joined lines and each error's `message`, `details` and `util.inspect` hold none of `bt-secret-4d2a`, `jwt-secret-8a1c`, `vendor_name`, `resp-body-5f6e`, `hdr-value-3b7d`, `Bearer`, `id=7`; `error.cause` is `undefined`.
+The joined lines and each error's `message`, `details` and `util.inspect` hold none of `bt-secret-4d2a`, `jwt-secret-8a1c`, `vendor_name`, `resp-body-5f6e`, `hdr-value-3b7d`, `Bearer`, `id=7`; `error.cause` is `undefined`; `fetch` has been called 5 times in all (steps 1 to 4), so step 5 sent nothing.
 
 ## Self-check (scenario 10)
 

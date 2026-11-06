@@ -48,11 +48,11 @@ A response body over `GATEWAY_LIMITS.maxResponseBytes` (1048576) SHALL give `GAT
 - **THEN** 1048576 bytes pass and 1048577 are `TOO_LARGE`, chunked or not; the signal aborts at 30000 ms and not at 29999 (`UNAVAILABLE` with the row's stage); an oversized token answer is `UNAVAILABLE token`; a finished call's signal stays unaborted; a failed send's token is `token_used`
 
 ### Requirement: Logs and errors carry no secret
-The gateway SHALL log one `info` line per answered call and one `warn` line per failed call with only the fields of test-plan-edges.md § Logs, and no line, error `message`, `details`, `cause` or enumerable token member SHALL hold a broker service token, a JWT, a header value, a body or a query string.
+The gateway SHALL log one `info` line per answered call and one `warn` line per failed call, a call refused before the network (a permit mismatch, a foreign permit, an invalid value) included, with only the fields of test-plan-edges.md § Logs, and no line, error `message`, `details`, `cause` or enumerable token member SHALL hold a broker service token, a JWT, a header value, a body or a query string.
 
 #### Scenario: Logs and errors carry no secret
 - **WHEN** the five steps of test-plan-edges.md § Logs run with a trace-level capturing logger and the secrets `bt-secret-4d2a` and `jwt-secret-8a1c`
-- **THEN** the six captured lines deep-equal those there, and `bt-secret-4d2a`, `jwt-secret-8a1c`, `vendor_name`, `resp-body-5f6e`, `hdr-value-3b7d`, `Bearer` and `id=7` appear in no line, message, details or inspected error
+- **THEN** the seven captured lines deep-equal those there (the `PUT` refused before the network adds the last, a `warn` with `GATEWAY_PERMIT_MISMATCH` and `{ field: "method" }`), and `bt-secret-4d2a`, `jwt-secret-8a1c`, `vendor_name`, `resp-body-5f6e`, `hdr-value-3b7d`, `Bearer` and `id=7` appear in no line, message, details or inspected error
 
 ### Requirement: The start-up self-check refuses an open issuer
 `checkEgress(config, deps)` SHALL send `POST <brokerUrl>/v1/issue` and `POST <brokerUrl>/v1/api-keys/resolve` without a service token, in that order, with `redirect: "manual"` and a timeout of `GATEWAY_LIMITS.selfCheckTimeoutMs` (5000); throw `GATEWAY_INSECURE_BROKER` `{ probe }` at once for a 2xx answer; and otherwise return `{ broker: "closed" }` when both answered and `{ broker: "unreachable" }` when either failed to connect or timed out.

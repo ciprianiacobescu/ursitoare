@@ -1,6 +1,6 @@
 # Test plan: fixtures and expected values
 
-**Ran** 2026-11-06 (Node 24.22.2): prototypes over a scratch copy of main@cf34c628 printed every value not marked **derived**, and the page models printed § Page states. **Derived**: from the sibling folders, including U47's `pendingSubmittedBy` in `RAW`, `VIEW` and `APPROVED`.
+**Ran** 2026-11-06 (Node 24.22.2): prototypes over a scratch copy of main@cf34c628 printed every value not marked **derived**, and the page models printed § Page states. **Derived**: from the sibling folders, including U47's `pendingSubmittedBy` in `RAW`, `VIEW` and `APPROVED`. The grant-pattern vectors and the 10-request result of `loadToolRefs` were run against the patterns and a model of the loop (Node 24.22.2).
 
 ## Tool servers
 
@@ -45,8 +45,10 @@ Texts: `toolRows(VIEW)` `[{ name: "lookup_vendor", effect: "read", block: "—",
 | `REC()`, `needs_reconfirm` | `{ id: "grant_1", subject: "role author", tool: "acme.create_payment@1", scope: "pay-run / pay", status: "needs_reconfirm" }`; `role author · acme.create_payment@1 · pay-run / pay · needs_reconfirm`; `{ revoke: true, confirm: true }` |
 | `REC({ id: "grant_2", subject: { kind: "user", userId: "u_bob" }, tool: "acme.lookup_vendor@1", scope: { kind: "any_step" } })`, `active` | subject `user u_bob`, scope `any step`; `user u_bob · acme.lookup_vendor@1 · any step · active`; `{ revoke: true, confirm: false }` |
 | `REC({ id: "grant_3", state: "revoked" })`, `revoked` | `role author · acme.create_payment@1 · pay-run / pay · revoked`; `{ revoke: false, confirm: false }` |
+| boundary role: `REC({ id: "grant_4", subject: { kind: "role", role: "a" + "9" × 31 } })`, `active` | subject `role ` + the 32 characters; `{ revoke: true, confirm: false }` |
+| boundary user: `REC({ id: "grant_5", subject: { kind: "user", userId: "Ab_-" × 16 }, scope: { kind: "node", flowId: "pay-run-2", nodeId: "pay_2" } })`, `active` | subject `user ` + the 64 characters, scope `pay-run-2 / pay_2`; `{ revoke: true, confirm: false }` |
 
-Malformed, each `null` (13): `null`, `5`, `[]`, `{}`, `REC()` with no `status`, status `gone`, `id` `g1`, `tool` `Acme`, subject kind `team`, subject `{ kind: "role" }`, scope `{ kind: "node", flowId: "pay-run" }`, scope kind `flow`, `userId` `a` U+0000 `b`.
+Malformed, each `null` (17): `null`, `5`, `[]`, `{}`, `REC()` with no `status`, status `gone`, `id` `g1`, `tool` `Acme`, subject kind `team`, subject `{ kind: "role" }`, scope `{ kind: "node", flowId: "pay-run" }`, scope kind `flow`, `userId` `a` U+0000 `b`, and one bad value each: role `Author`, `userId` `a/b`, `flowId` `Pay`, `nodeId` `a-b`.
 
 ## grantBody
 
@@ -77,7 +79,7 @@ A fake `get`, `post` or `delete` records `[method, path, body, opts]` and answer
 
 - `loadToolServer(get, "acme")` answers `RAW` and returns `VIEW` (with a signal the opts are `{ signal }`); `approveToolSurface(post, "acme", { digest: DP, selfApproval: false })` answers `{ server: APPROVED, blocks: ["acme.lookup_vendor@1"] }` and returns the view of `APPROVED`. Answers `{ id: 5 }` (load) and `{ blocks: [] }` (approve) reject `ApiRequestError` 200 `INVALID_RESPONSE`; id `a/b` rejects `RangeError` before a call.
 - `postGrant(post, { subjectKind: "user", subject: "u_bob", tool: "acme.lookup_vendor@1", scopeKind: "any_step", flowId: "", nodeId: "" }, "k-1")` answers `REC()` and returns `grant_1` (body: `ROLE_ANY` with subject `{ kind: "user", userId: "u_bob" }`); `confirmGrantById(post, "grant_1")` and `revokeGrantById(delete, "grant_1")` answer a record. `RangeError` before a call: subject `""`, key `""`, id `g/1`; the answer `{ id: 5 }` rejects `INVALID_RESPONSE`.
-- `loadToolRefs(get)`: `{ limit: 100 }` answers items `acme.lookup_vendor@1` (`bound` true), `erp.lookup_vendor@1` (false), `next_cursor` `c1`; `{ limit: 100, cursor: "c1" }` answers `acme.create_payment@1` (true), `next_cursor` `null`; an always-`more` cursor makes 10 calls; an item `{ ref: 5 }` rejects `INVALID_RESPONSE`.
+- `loadToolRefs(get)`: `{ limit: 100 }` answers items `acme.lookup_vendor@1` (`bound` true), `erp.lookup_vendor@1` (false), `next_cursor` `c1`; `{ limit: 100, cursor: "c1" }` answers `acme.create_payment@1` (true), `next_cursor` `null`; an always-`more` fake answers request n with one bound item `acme.t<n>@1` and `next_cursor` `c<n>` (the request has no cursor for n = 1, else `c<n-1>`): `loadToolRefs` makes 10 requests, the tenth with cursor `c9`, and resolves `acme.t1@1` to `acme.t10@1`; an item `{ ref: 5 }` rejects `INVALID_RESPONSE`.
 - `loadPolicy(get)` answers `{ current: REC, pendingGrants: 2 }`; `validatePolicy(post, SRC)` answers `{ ok: false, policySetVersion: null, problems: [{ stage: "parse", ids: [], message: "unexpected end of input" }] }`; `deployPolicy(post, SRC, "k-1")` answers `REC`. Key `""` rejects `RangeError`; the answers `{}` (load), `{ ok: "yes", problems: [] }`, `{ ok: true }` and `{ ok: false, problems: [{ stage: "parse", ids: [] }] }` (validate) and `{ version: "x" }` (deploy) reject `INVALID_RESPONSE`.
 
 ## Pages
