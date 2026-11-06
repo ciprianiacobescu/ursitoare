@@ -22,4 +22,6 @@ export {
   seedOf,
   workerEntryUrl,
 } from "./limits.ts";
+export type { FaultFacts } from "./classify.ts";
+export { classifyFault } from "./classify.ts";
 export { createWorkerSandbox } from "./pool.ts";
