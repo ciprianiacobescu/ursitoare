@@ -53,7 +53,7 @@ E56 ok {good:[1,2,3]}  JSON.stringify=()=>'{"evil":true}'; JSON.parse=()=>({evil
 E59 limits{memoryBytes:16*MiB,timeoutMs:3000} fault memory_limit  const a = []; for (let i = 0; i < 30; i++) a.push(new Array(200000).fill(i)); return { n: a.length };
 ```
 
-E20: at 16 MiB the probe gave `never_settled`; at 64 MiB, and once at 32 MiB, `runtime_error` with the message `Error: ` (a promise flood whose exception object could not be built), so the set has four codes. The flood prints one `Aborted(...)` line to stderr; no test asserts empty stderr. E20 is the concrete disposal-abort case: `Aborted` is `JS_FreeRuntime` failing after the result exists; the result is kept (`never_settled` at 16 MiB), the module dropped, the next run `ok`.
+E20 (Node 24.22.2): 16 MiB (5 runs) and 32 MiB (3 runs) gave `never_settled`; 64 MiB (4 runs) gave `never_settled`, `timeout` and twice `runtime_error`, message `Error: ` (a promise flood whose exception object could not be built): four codes. The flood prints one `Aborted(...)` line to stderr; no test asserts empty stderr. E20 is the concrete disposal-abort case: `Aborted` is `JS_FreeRuntime` failing after the result exists.
 
 ## VARIANTS
 
@@ -119,4 +119,4 @@ newRec  function F(){ new F(); } new F();
 mapCb  function f(){ [1].map(() => f()); } f();
 ```
 
-Probe: `jsonParse` `runtime_error`; `bind`, `promiseChain` `memory_limit`; the rest `stack_overflow`.
+Probe (seed pool, Node 24.22.2, both stacks): `jsonParse` `runtime_error`; `bind`, `promiseChain` `memory_limit`; the rest `stack_overflow`.

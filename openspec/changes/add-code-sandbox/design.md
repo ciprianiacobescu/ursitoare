@@ -2,13 +2,15 @@
 
 ADR-04, § 9.4: pure `code` in a worker pool inside the DBOS step, faults terminal; port of `seed/sandbox-quickjs` (REPORT § 2: F1-F9) without fetch.
 
+**Runtime: Node 24.** `package.json` engines `>=24.11 <25`; CI `node-version: "24"` (`.github/workflows/l4.yml:67`, `e2e.yml:26`). `.ts` worker entries run on Node 24's built-in type stripping (`process.features.typescript` is `"strip"`): the `test` script has no flag, `tsconfig.json` sets `erasableSyntaxOnly`, and the seed's `.ts` worker ran under plain `node` 24.22.2. No other `.ts` worker exists in the repo.
+
 ## Decisions
 
 1. **Files.** `types.ts`, `limits.ts`, `validate.ts` (main-thread checks), `pool.ts`, `worker-entry.ts`, `run-code.ts`, `prelude.ts` (guest source), `wasm.ts` (`WebAssembly` typing, module cache), `index.ts`.
-2. **Protocol.** No ready handshake (Node delivers a message posted before the worker listens: probe, 26.8.1). One message per job, `{ id, code, inputJson, limits, options, stackCapBytes }`, answered `{ id, result }`; the input travels as validated JSON text, so no `DataCloneError`.
-3. **One run.** The seed's `runCode`: a Wasm module per `memoryBucket` (`initial` 256, `maximum` 256 + bucket / 65536 pages; dropped after an abort or fault); `setMemoryLimit`, `setMaxStackSize(clampStack(…))`, an interrupt past the deadline, `executePendingJobs(512)` until settled, `never_settled` when pending with no job. `memBytes` is -1 after `memory_limit`, `sandbox_crash` and a watchdog `timeout` (F9); `ms` is measured in the worker for a settled run, else on the main thread. `classify` and `buildPrelude` are ported (errors read via `getProp`, F6); under `object_or_null`, `undefined` and `null` give `"Onull"`.
+2. **Protocol.** No ready handshake (Node delivers a message posted before the worker listens: probe, 24.22.2). One message per job, `{ id, code, inputJson, limits, options, stackCapBytes }`, answered `{ id, result }`; the input travels as validated JSON text, so no `DataCloneError`.
+3. **One run.** The seed's `runCode`: a Wasm module per `memoryBucket` (`initial` 256, `maximum` 256 + bucket / 65536 pages; dropped after a `sandbox_crash` or an abort while disposing, which keeps the result); `setMemoryLimit`, `setMaxStackSize(clampStack(…))`, an interrupt past the deadline, `executePendingJobs(512)` until settled, `never_settled` when pending with no job. `memBytes` is -1 after `memory_limit`, `sandbox_crash` and a watchdog `timeout` (F9); `ms` is measured in the worker for a settled run, else on the main thread. `classify` and `buildPrelude` are ported (errors read via `getProp`, F6); under `object_or_null`, `undefined` and `null` give `"Onull"`.
 4. **Pool.** `run` reserves a worker synchronously (idle, new below `size`, or a FIFO entry); the seed reserved after an `await` and timed out 5 of 6 concurrent runs. The watchdog starts at `postMessage`. Exit with a job: clear the timer, replace at once, `respawns`++, `sandbox_crash`. Idle exit: remove the slot; the next run spawns (`respawns`++). A throwing factory gives `sandbox_crash`. `createWorkerSandbox` reads `opts` once into a plain copy in a try/catch (`Reflect.ownKeys`, `Reflect.get`, `String(key)`), unknown keys before values. Workers are `unref()`ed; the watchdog timer is not.
-5. **Validation** (main thread; first failure wins in the order `code`, `limits`, `options`, `seed`, `nowIso`, `binding`, `result`, `input`; messages start with the argument's name): `nowIso` matches `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$` and `Date.parse` is finite, and the day is at most its month's length (V8 rolls `2026-02-30` over to 2 March). The input check is the spec's `strictJson` in a try/catch (a throw is `input_invalid`), then at most 8,000,000 JSON characters. No `node:util` (the import rule forbids it).
+5. **Validation** (main thread; first failure wins in the order `code`, `limits`, `options`, `seed`, `nowIso`, `binding`, `result`, `input`; messages start with the argument's name). `limits` and `options` are each read once into a plain copy at their own step, after the non-null-object check (as design 4's `opts`); a throw gives `input_invalid` (no rejection), message `limits could not be read` or `options could not be read`, before any worker is reserved; members are checked on the copy. `nowIso` matches `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$` and `Date.parse` is finite, and the day is at most its month's length (V8 rolls `2026-02-30` over to 2 March). The input check is the spec's `strictJson` in a try/catch (a throw is `input_invalid`), then at most 8,000,000 JSON characters. No `node:util` (the import rule forbids it).
 6. **Sizing** is the caller's: no `size` means 2; U39's `main` passes `poolSize(availableParallelism())` (`node:os` is refused here).
 7. **Typing.** `wasm.ts` declares the `WebAssembly.Memory` members it uses.
 8. **Arch rule.** `checkSandboxIo` resolves relative refs with `resolveSpecifier` and matches bare ones by exact text; every identifier `process` is reported; the result goes through `sortViolations`.
@@ -71,9 +73,38 @@ export function checkEscapeCase(c: EscapeCase, result: SandboxResult, mode: "nod
 export function checkSandboxIo(s: Snapshot): Violation[];   // code ARCH_SANDBOX_IO
 ```
 
-## Failure cases
+## Failure classification
 
-Bad arguments are faults, a closed sandbox rejects, a bad option throws; a Wasm load failure, abort, exiting worker or failed spawn is `sandbox_crash` and the pool survives.
+A closed sandbox rejects and a bad option throws (spec); every other failure is a returned fault with the code of the first matching row. Source: the seed (`runCode`, `classify`, `drive`; probed on Node 24.22.2) minus its fetch rows, so a thrown `FetchDeniedError` is V7. "Interrupted" is the interrupt handler's deadline flag; `T` is `execution exceeded timeoutMs`; `<m>` is the error's message; an `O` text no row refuses is `ok`.
+
+| Row | Condition | Code | Message |
+|---|---|---|---|
+| R1 | an argument is invalid | `input_invalid` | starts with the argument's name |
+| R2 | compiling the wrapper throws; interrupted | `timeout` | `T` |
+| R3 | compiling throws `SyntaxError` | `syntax_error` | `SyntaxError: <m>` |
+| R4 | compiling throws another error (`InternalError: out of memory`) | `runtime_error` | `<name>: <m>` |
+| R5 | the job queue fails with `null`; not interrupted | `memory_limit` | `guest heap exceeded memoryBytes (job queue)` |
+| R6 | the driver call or job queue fails otherwise, or the driver promise is rejected | V1-V7 | on the error value |
+| R7 | the deadline has passed, the promise settled (a result too) or pending | `timeout` | `T` |
+| R8 | an `E` envelope: the body threw or rejected (`Promise.reject(new Error("x"))` is `Error: x`), or the walker refused its output | V1-V7 | on `{ name, message }` |
+| R9 | an `O` text over `maxOutputBytes` UTF-8 bytes (in characters: V5) | `output_too_large` | `output is <bytes> bytes, limit <maxOutputBytes>` |
+| R10 | pending, no job queued | `never_settled` | `the code body returned a promise that can never settle (deadlock, or an out-of-memory failure swallowed inside a promise job)` |
+| R11 | the host throws at any stage: a Wasm trap or abort, V8's `RangeError` through Wasm frames | `sandbox_crash` | `<constructor name>: <m to 300 characters>`; module dropped |
+| R12 | no answer `timeoutMs` + `graceMs` after `postMessage` / the worker exits during the job (a failed Wasm load too) / the factory throws | `timeout` / `sandbox_crash` / `sandbox_crash` | `worker watchdog killed the sandbox after <ms> ms (limit <timeoutMs> + grace <graceMs>)` / `worker thread exited unexpectedly` / `worker thread could not be started` |
+
+Error-value rows (a body can forge V1 and V3-V6, which match a name and message it chooses, but only to codes it reaches honestly):
+
+| Row | Condition | Code | Message |
+|---|---|---|---|
+| V1 | name `NullThrown` (`throw null`, `Promise.reject(null)`, an allocation that left no exception object): not interrupted and Wasm memory within 2 pages of the module's maximum / interrupted / otherwise | `memory_limit` / `timeout` / `runtime_error` | `allocation failed at the Wasm memory ceiling (no exception object could be built)` / `T` / `null was thrown` |
+| V2 | interrupted | `timeout` | `T` |
+| V3 | `InternalError`, message `out of memory` | `memory_limit` | `guest heap exceeded memoryBytes` |
+| V4 | `InternalError` with message `stack overflow`; or `RangeError` matching `Maximum call stack size exceeded` | `stack_overflow` | `<m>` |
+| V5 | name `OutputTooLargeError` (walker: over `maxOutputBytes` characters) | `output_too_large` | `output exceeds size limit` |
+| V6 | name `OutputError` (walker) | `output_invalid` | `output is not JSON-serializable at <path>: <reason>` |
+| V7 | any other (`RangeError`, `InternalError`, a string) | `runtime_error` | `<name>: <m>` |
+
+A thrown object gives name `String(e.name)` (`Error` if undefined) and message `String(e.message)` (`<thrown <typeof> without a message>` if undefined), another value `Error` and `String(value)`, a throw while reading `<unprintable thrown value>`; name is cut to 200, message to 2000 characters. The walker refuses what E54a-q lists, nesting over 64, a `__proto__` key and a `toJSON` member, and reads accessors by descriptor without calling them: a throwing getter is V6 (`accessor property`), a throwing `Proxy` trap V7 (`Error: trap`). R11 probes: 100000 nested `(` gives `RangeError: Maximum call stack size exceeded`; a 70 MB body (32 MiB bucket) `RuntimeError: table index is out of bounds`. The V1 ceiling is sticky: a `memory_limit` keeps the module, so there `throw null` gives `memory_limit` (probed: `runtime_error`, then after a bomb `memory_limit`).
 
 ## Security
 
@@ -90,4 +121,4 @@ Timing is wall-clock, so no `Clock`; assertions use the spec's windows.
 
 ## Unverified
 
-Node 24 (probes ran on 26.8.1; the planner's probe covers 24.22.2 for the core path); the `"hook"` sweep, recording factory, exit worker, child processes; `dist/sandbox/worker-entry.js` in a built image (the built-worker scenario covers the `tsc` build from `node_modules/.cache/`, probed with a stand-in pool, `src/sandbox` being stubs).
+`src/sandbox` on Node 24 (every probe ran on 24.22.2) and its `.ts` worker entry under `node --test`; the throwing `limits` and `options` rows and `MULTI_BAD` (design 5); R5, R6 (rejected promise) and the factory of R12 (no seed body reaches them); the `"hook"` sweep, recording factory, exit worker, child processes; `dist/sandbox/worker-entry.js` in a built image (the built-worker scenario covers the `tsc` build from `node_modules/.cache/`, probed with a stand-in pool, `src/sandbox` being stubs).
