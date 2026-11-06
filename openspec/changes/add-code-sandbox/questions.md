@@ -13,6 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 3.5 | harness | Task 3.5: the pre-satisfied check could not decide |
 | Q-002 | answered | 3.6 | harness | Task 3.6: the pre-satisfied check could not decide |
+| Q-003 | open | 3.8 | harness | Task 3.8: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -493,3 +494,121 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: accept: The held evidence is enough. The seven new tests are not vacuous: they assert the exact fault codes, messages, memBytes, respawn counts, factory call counts and timing windows that the two spec scenarios "Interrupt, late finish and watchdog" and "Exit during a job, idle exit and a factory that throws" prescribe (LOOP interrupted with the execution exceeded timeoutMs message in 200 to 2450 ms and no respawn, LATE a timeout without a respawn before the watchdog, BIG killed by the watchdog with the message naming limit 50 and grace 250 or 1000 and one respawn and two factory calls, an exiting worker giving worker thread exited unexpectedly with an immediate replacement, an idle exit replaced lazily with the respawn counted on the next run, a throwing factory giving worker thread could not be started and the next run succeeding). The behaviour is already in the unit head: pool.ts arms the watchdog at timeoutMs plus graceMs on postMessage, terminates and replaces the worker and counts a respawn, replaces a worker that exits during a job at once and an idle one on the next spawn, and turns a throwing factory into a spawn fault; classify.ts carries the three exact messages; run-code.ts interrupts at the deadline and reports a settled run past its deadline as a timeout. The base run could only end in an error because the base branch carries the milestone scaffold stub of the sandbox index, whose bodies throw not implemented before any assertion runs, so the inconclusive result reflects the scaffold, not the tests. The exit worker support file that the crash tests reference is created by the task's green step as tasks.md 3.6 says; the red-scope guard excluded it from this change. Counting these tests on the real run is sound, and the replay still runs every gate, so a failure there is caught.
+
+---
+
+## Q-003: Task 3.8: the pre-satisfied check could not decide
+
+- **Status:** open
+- **Blocking tasks:** 3.8
+- **Kind:** harness
+- **Asked:** 2026-11-06T22:42Z by deepseek-free, run r-20261106T2145Z-e456, task 3.8
+- **Criteria:** C-ed57e3cd (sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory)
+
+### Context
+L4 could not run the pre-satisfied check of task 3.8, so it does not count the failure against the agent: no attempt was used and no profile was escalated.
+Why: the zero-value run varies Python files only, and src/sandbox/built.test.ts is not a Python file; the base run: its new tests fail against the unit base code only by an error, not by assertion
+Runs: test-base-run
+Kept real: nothing
+Tests: src.sandbox.built.test.ts::C-ed57e3cd: the built worker answers a run without a factory
+
+Changes the replay applies (1 files):
+    added src/sandbox/built.test.ts
+
+Source of the tests (redacted; at most 40 lines each):
+src.sandbox.built.test.ts::C-ed57e3cd: the built worker answers a run without a factory:
+    test("C-ed57e3cd: the built worker answers a run without a factory", async () => {
+      await mkdir(BUILD_CACHE, { recursive: true });
+      const outDir = await mkdtemp(join(BUILD_CACHE, "ursitoare-sandbox-build-"));
+      let sandbox: WorkerSandbox | undefined;
+      try {
+        await writeFile(join(outDir, "package.json"), JSON.stringify({ type: "module" }), "utf8");
+    
+        const build = await runBuild(outDir);
+        assert.equal(build.code, 0, `tsc exits 0: ${build.stdout}${build.stderr}`);
+    
+        const poolPath = join(outDir, "sandbox", "pool.js");
+        const workerEntryPath = join(outDir, "sandbox", "worker-entry.js");
+        const indexUrl = pathToFileURL(join(outDir, "sandbox", "index.js")).href;
+    
+        const built = (await import(indexUrl)) as BuiltModule;
+    
+        const entryUrl = built.workerEntryUrl(pathToFileURL(poolPath).href);
+        assert.equal(entryUrl.protocol, "file:", "the built worker entry is a file URL");
+        assert.equal(
+          entryUrl.href,
+          pathToFileURL(workerEntryPath).href,
+          "the built pool resolves its own worker-entry.js beside it",
+        );
+        assert.equal(existsSync(workerEntryPath), true, "the built worker-entry.js exists");
+    
+        sandbox = built.createWorkerSandbox({ size: 1 });
+        assert.equal(sandbox.size, 1, "the built pool reports the requested size");
+    
+        const result: SandboxResult = await sandbox.run(NORMALIZE, INPUT, LIM, OPT);
+        assert.equal(
+          result.ok,
+          true,
+          result.ok ? "the built run succeeds" : `the built run faulted: ${result.fault.code}: ${result.fault.message}`,
+        );
+        if (result.ok) {
+          assert.deepEqual(result.value, NORMALIZE_VALUE, "the built worker answered the normalize body");
+        }
+      } finally {
+        if (sandbox !== undefined) {
+          await sandbox.close();
+    [cut: 4 more lines]
+
+Diff of src/sandbox/built.test.ts (redacted; at most 40 lines of at most 400 characters shown; a cut says so):
+    diff --git a/src/sandbox/built.test.ts b/src/sandbox/built.test.ts
+    new file mode 100644
+    index 0000000..fdb7750
+    --- /dev/null
+    +++ b/src/sandbox/built.test.ts
+    @@ -0,0 +1,122 @@
+    +import assert from "node:assert/strict";
+    +import { execFile } from "node:child_process";
+    +import { existsSync } from "node:fs";
+    +import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+    +import { join } from "node:path";
+    +import { test } from "node:test";
+    +import { fileURLToPath, pathToFileURL } from "node:url";
+    +
+    +import type {
+    +  SandboxJson,
+    +  SandboxLimits,
+    +  SandboxOptions,
+    +  SandboxResult,
+    +  WorkerSandbox,
+    +  WorkerSandboxOptions,
+    +} from "./index.ts";
+    +
+    +const REPO_ROOT = fileURLToPath(new URL("../../", import.meta.url));
+    +
+    +const BUILD_CACHE = join(REPO_ROOT, "node_modules", ".cache");
+    +
+    +const TSC = join(REPO_ROOT, "node_modules", "typescript", "bin", "tsc");
+    +
+    +const BUILD_TIMEOUT_MS = 60000;
+    +
+    +const LIM: SandboxLimits = {
+    +  timeoutMs: 1000,
+    +  memoryBytes: 33554432,
+    +  maxStackBytes: 262144,
+    +  maxOutputBytes: 1048576,
+    +};
+    +
+    +const OPT: SandboxOptions = {
+    +  seed: "r_1:normalize:1",
+    [cut: 88 more lines; the cut lines are replayed too: the whole change is in `openspec/changes/add-code-sandbox/.l4/held/3.8-pre_satisfied.patch` on the unit branch]
+
+`accept: <why>` replays exactly the saved change of 1 files (the whole patch is in `openspec/changes/add-code-sandbox/.l4/held/3.8-pre_satisfied.patch` on the unit branch): the next run applies it, with every guard and gate an agent's changes get, instead of starting an agent. The accept takes effect only through that replay: if the replay fails a gate or the check refutes a criterion, the accept is used up, and a later step that meets the same inconclusive check is held again with a new question. When the check cannot decide again during the replay, the claim is taken (the verifier and the judge see that it was accepted). A criterion that the check shows not to discriminate still fails the attempt.
+`retry: <note>` runs the check again, for example after an L4 upgrade; the note reaches the agent.
+A person answers; an agent only where `clarifier.answer_by_agents` is true on the base branch.
+
+### Options
+1. accept: count these on the evidence of the real run
+2. retry: run the check again (after an L4 upgrade or a fix)
+
+### Answer
+<!-- write below this line -->
