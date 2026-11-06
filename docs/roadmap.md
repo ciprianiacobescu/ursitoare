@@ -29,7 +29,7 @@ architecture v0.1-r5 (§13 Phase-1 plan and exit tests 1–23). Owner decisions:
 | M2 | An admin manages roles, teams and IdP group mappings and reads a verified audit log; the first admin is bootstrapped | U17–U21 | `test_m2_admin.py` | — |
 | M3 | An author creates a flow from YAML, sees diagnostics and a read-only graph, and saves validated versions | U22–U29 | `test_m3_authoring.py` | — |
 | M4 | An author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill | U30–U37, U35b | `test_m4_runs.py` | — |
-| M5 | Flows with pure `code` nodes and pre/post hooks run durably; hook routes into effect nodes are rejected | U38–U44 | `test_m5_code_hooks.py` | — |
+| M5 | Flows with pure `code` nodes and pre/post hooks run durably; hook routes into effect nodes are rejected | U38–U44, U42b | `test_m5_code_hooks.py` | — |
 | M6 | Admins register tool servers and grant tools per role and step; an attended dry run reads through the broker with a one-step token and shows each effect's permit while stubbing it | U45–U52 | `test_m6_grants.py` | — |
 | M7 | An admin adds an HTTP/OpenAPI, MCP or code-block tool, approves its surface and stores its credential; a flow calls it (F9) | U53–U56 | `test_m7_tools.py` | — |
 | M8 | `docker compose up` runs the six-container hobbyist stack; every journey so far passes against real Keycloak and Mintkey | U57–U61 | all so far | **first stack run**: journeys, contract suites against the real services, exit tests 10 (runtime), 12, 19 |
@@ -191,13 +191,14 @@ All units start as `planned`.
 
 | U | Change id | Cap | Module | Scope | Depends on | Exit | Seed | Status |
 |---|---|---|---|---|---|---|---|---|
-| U38 | `add-code-sandbox` | `sandbox` | `sandbox` | `src/sandbox`: the hardened `WorkerSandbox` (QuickJS-in-Wasm workers with `env: {}`, memory ceilings per bucket, stack clamp, hard kill at timeout + 250 ms, typed non-retryable faults, pool sizing); the escape suite; an arch rule that `src/sandbox` imports no host I/O module other than `node:worker_threads` | U01 | 15 | `sandbox-quickjs` | planned |
-| U39 | `add-code-node-runtime` | `node-code` | `runtimes` | `code` nodes inside their DBOS step, pure; sandbox faults not retried; memory and recursion bombs contained; conformance kit | U32, U33, U38 | 15 | — | planned |
-| U40 | `add-taint-runtime` | `taint` | `interpreter` | Runtime labels on step records with the static algebra; a property test that static taint includes runtime taint on the fixtures | U23, U33, U39 | 4 (part) | — | planned |
-| U41 | `add-hook-checker` | `hooks-static` | `authoring` | Hooks grammar v0.2; `H_SCHEMA`, `H_BLOCK`, `H_ROUTE_TARGET`, `H_ROUTE_HUMAN`, `H_RETRY_SCOPE`, `H_CYCLE`, `H_DOMINANCE`, `W_NO_MATCH`, and `H_ROUTE_EFFECT` (X3, accepted); no `allow_effect_retry` on `pay` | U22, U25 | 21 (static) | `node-hooks/src/check.ts`, `specs/node-hooks-spike-design.md` | planned |
-| U42 | `add-hook-runtime` | `hooks-runtime` | `interpreter` | Pure code hooks fused into the node step, the action matrix, `ctx.next` and `ctx.from`, `input_original`, the pure `approvalsOnPath(steps)`; scenarios C1, C2, C6, S13 and S18c on the synthetic hook flows; the escape suite on hook code | U32, U33, U39, U40, U41 | 21 (part), 22 (part), 23 | `node-hooks/src/hooks.ts` | planned |
-| U43 | `add-block-hooks` | `hooks-block` | `interpreter` | Block hooks as their own steps through `ToolInvoker` (`phase`, `hookId`, invoke context `kind: hook`), `on_error: continue`, hooks in mock mode | U34, U42 | 21 (part) | `node-hooks` | planned |
-| U44 | `add-web-hooks-view` | `web-runs` | `web` | Hooks and hook routes on the graph; hook steps and fused results on the timeline; journey `test_m5_code_hooks.py`. **Closing** | U37, U38–U43 | — | — | planned |
+| U38 | `add-code-sandbox` | `sandbox` | `sandbox` | `src/sandbox`: the hardened `WorkerSandbox` (QuickJS-in-Wasm workers with `env: {}`, memory ceilings per bucket, stack clamp, hard kill at timeout + 250 ms, typed non-retryable faults, pool sizing); the escape suite; an arch rule that `src/sandbox` imports no host I/O module other than `node:worker_threads` | U01, U04, U05 | 15 | `sandbox-quickjs` | planned |
+| U39 | `add-code-node-runtime` | `node-code` | `interpreter` | `code` nodes inside their DBOS step, pure; sandbox faults not retried; memory and recursion bombs contained; conformance kit | U22, U24, U25, U30, U31, U33, U35, U38 | 15 | — | planned |
+| U40 | `add-taint-runtime` | `taint` | `interpreter` | Runtime labels on step records with the static algebra; a property test that static taint includes runtime taint on the fixtures | U22, U23, U24, U25, U31, U33, U38, U39 | 4 (part) | — | planned |
+| U41 | `add-hook-checker` | `hooks-static` | `authoring` | Hooks grammar v0.2; `H_SCHEMA`, `H_BLOCK`, `H_ROUTE_TARGET`, `H_ROUTE_HUMAN`, `H_RETRY_SCOPE`, `H_CYCLE`, `H_DOMINANCE`, `W_NO_MATCH`, and `H_ROUTE_EFFECT` (X3, accepted); no `allow_effect_retry` on `pay` | U22, U23, U24, U25 | 21 (static) | `node-hooks/src/check.ts`, `specs/node-hooks-spike-design.md` | planned |
+| U42 | `add-hook-runtime` | `hooks-runtime` | `interpreter` | Pure code hooks fused into the node step, the action matrix, `ctx.next` and `ctx.from`, retries with a new effect key per attempt; scenarios S13 and S18c on the synthetic hook flows; the escape suite on hook code; the trace persists in U42b, and the SIGKILL proofs C1, C2 and C6 are U43's | U22, U23, U24, U25, U31, U33, U34, U38, U39, U40, U41 | 21 (part), 23 | `node-hooks/src/hooks.ts` | planned |
+| U42b | `add-hook-trace` | `hooks-trace` | `runs`, `api`, `interpreter` | The hook trace on each step row (migration `0425`), `input_original` as a payload, `StepView.hooks`, the pure `approvalsOnPath(steps)` | U24, U31, U33, U36, U38, U39, U41, U42 | 21 (part) | `node-hooks` | planned |
+| U43 | `add-block-hooks` | `hooks-block` | `interpreter` | Block hooks as their own steps through `ToolInvoker` (`phase`, `hookId`, invoke context `kind: hook`), `on_error: continue`, hooks in mock mode; the hook SIGKILL proofs C1, C2 and C6 | U22, U24, U30, U31, U32, U33, U34, U35, U38, U39, U41, U42, U42b | 21 (part), 22 (part) | `node-hooks` | planned |
+| U44 | `add-web-hooks-view` | `web-runs` | `web` | Hooks and hook routes on the graph; hook steps and fused results on the timeline; journey `test_m5_code_hooks.py`. **Closing** | U07, U15, U15b, U16, U24, U25, U27, U28, U29, U35, U36, U37, U38, U39, U40, U41, U42, U42b, U43 | — | — | planned |
 
 ### M6 Egress, tool registry, grants and dry runs
 
@@ -334,7 +335,7 @@ All units start as `planned`.
 | 19 | U09, U58, U61c, U89 | stack run (M8, M13) |
 | 20 | U05, U99 | image SBOM in the stack tier (M15) |
 | 21 | U41, U42, U43, U74b, U85 | — |
-| 22 | U42, U85, U86 | — |
+| 22 | U43 (C1, C2, C6), U85, U86 | — |
 | 23 | U42 | — |
 
 ## Shared conventions and interfaces
@@ -365,7 +366,7 @@ Each unit's spec defines its interfaces in full; this table fixes the names so t
 | Catalogue | `Catalogue { block(ref); modelProfile(ref); role(name); delegateTarget(target, workflow); flow(ref, major): { input; output } \| undefined }` | U22 (interface); filled by U24, U26 (block, role), U67 (modelProfile), U82 (flow), U84 (delegateTarget) |
 | Taint | `Taint` labels, `joinTaint(a, b)`, `flowCapabilities(flow, catalogue)` | U23 |
 | Node runtimes | `registerNodeRuntime(kind, runtime: NodeRuntime)`; `ToolInvoker { invoke(call: ToolCall, ctx: StepContext): Promise<ToolResult> }`; `ToolCall { tool; args; nodeId; effectSeq; phase?: "pre" \| "post"; hookId? }`; `EffectMode = "live" \| "mock" \| "stub"` | U33 |
-| Hooks | `approvalsOnPath(steps): Approval[]` | U42 |
+| Hooks | `approvalsOnPath(steps): Approval[]` | U42b |
 | Gateway | `requestToken(permit)`, `send(permit, request)`; `validateOrigin(url, { local })` (U47); `ServiceResolver { resolve(binding): { serviceId; origin } }` | U46, U48 |
 | Grants | `reconfirmationsFor(oldHash, newHash)` | U49 |
 | Authority | `diffAuthority(oldVersion, newVersion): AuthorityDiff` (`widens_*` flags) | U65 |
@@ -374,7 +375,7 @@ Each unit's spec defines its interfaces in full; this table fixes the names so t
 | Crash harness | `spawnEngine(opts)`, `kill()`, `restart()`, `withDedicatedCluster()` | U32 |
 | Step context | `StepContext` | U33 |
 | Effect intents | `recordIntent`, `completeIntent`, `idemKey(tenantId, lineageId, nodeId, effectSeq, generation = 0)` | U34 |
-| Sandbox | `WorkerSandbox.run(code, input, limits)` | U38 |
+| Sandbox | `WorkerSandbox.run(code, input, limits, options)` | U38 |
 | LLM | `LlmProvider`, `invokeLlm(request, ctx)` | U63 |
 | Human tasks | `createTask`, `decideTask`, `TaskDecision` | U74 |
 
@@ -398,14 +399,14 @@ sub-directories are internal, and other modules import only its `index.ts`. `src
 | `registry` | `core`, `db`, `tenancy`, `audit`, `authoring`, `pdp`, `identity` | — | U26, U27, U71 |
 | `grants` | `core`, `db`, `tenancy`, `audit`, `pdp`, `registry`, `authoring` | — | U49 |
 | `durable` | `core`, `config`, `db`, `observability` | — | U30 |
-| `runs` | `core`, `db`, `tenancy`, `durable` | — | U31, U34, U36, U92 |
+| `runs` | `core`, `db`, `tenancy`, `durable` | — | U31, U34, U36, U42b, U92 |
 | `sandbox` | `core`, `config` | — | U38 |
 | `gateway` | `core`, `config`, `observability`, `pdp` | `tools` | U46 |
 | `tools` | `core`, `db`, `tenancy`, `audit`, `registry`, `gateway`, `pdp` | — | U47, U53, U54, U55 |
 | `credentials` | `core`, `db`, `tenancy`, `audit`, `gateway`, `tools` | — | U48 |
 | `llm` | `core`, `db`, `tenancy`, `gateway`, `pdp`, `credentials`, `registry`, `tools`, `observability` | — | U63, U64, U66, U67 |
-| `interpreter` | `core`, `durable`, `runs`, `registry`, `authoring`, `pdp`, `observability`, `sandbox` | — | U33, U35, U40, U42, U43, U51, U92 |
-| `runtimes` | `core`, `interpreter`, `runs`, `registry`, `grants`, `pdp`, `gateway`, `sandbox`, `llm`, `tools`, `credentials`, `authoring`, `tasks`, `observability` | — | U39, U50, U55, U68, U69, U71, U74b, U82, U83, U84, U88 |
+| `interpreter` | `core`, `durable`, `runs`, `registry`, `authoring`, `pdp`, `observability`, `sandbox` | — | U33, U35, U39, U40, U42, U42b, U43, U51, U92 |
+| `runtimes` | `core`, `interpreter`, `runs`, `registry`, `grants`, `pdp`, `gateway`, `sandbox`, `llm`, `tools`, `credentials`, `authoring`, `tasks`, `observability` | — | U50, U55, U68, U69, U71, U74b, U82, U83, U84, U88 |
 | `tasks` | `core`, `db`, `tenancy`, `audit`, `durable`, `runs`, `pdp` | — | U74, U74b |
 | `publish` | `core`, `db`, `tenancy`, `audit`, `registry`, `grants`, `authority`, `tasks`, `pdp`, `runs`, `durable`, `identity` | — | U76, U77 |
 | `triggers` | `core`, `db`, `tenancy`, `audit`, `durable`, `runs`, `registry`, `pdp`, `publish` | — | U78 |
@@ -413,7 +414,7 @@ sub-directories are internal, and other modules import only its `index.ts`. `src
 | `eval` | `core`, `db`, `tenancy`, `durable`, `interpreter`, `runs`, `registry` | — | U93 |
 | `mcp` | `core`, `identity`, `pdp`, `registry`, `runs`, `interpreter`, `publish` | — | U89 |
 | `templates` | `authoring` | — | U81 |
-| `api` | every module except `sandbox`, `runtimes` and `cli` | — | U01, U07, U13, U14, U17, U18, U19, U35, U36, U51, U60, U67, U77, U84, U91 |
+| `api` | every module except `sandbox`, `runtimes` and `cli` | — | U01, U07, U13, U14, U17, U18, U19, U35, U36, U42b, U51, U60, U67, U77, U84, U91 |
 | `cli` | every module `api` may import, plus `db` owner access | — | U20, U25, U35, U57, U97 |
 
 ## Deferred to Phase 2 (architecture §13)
