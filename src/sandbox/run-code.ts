@@ -3,7 +3,7 @@ import type { QuickJSContext, QuickJSHandle, QuickJSRuntime, QuickJSWASMModule }
 
 import { classifyFault } from "./classify.ts";
 import type { FaultFacts } from "./classify.ts";
-import { clampStack, memoryBucket } from "./limits.ts";
+import { clampStack, memoryBucket, seedOf } from "./limits.ts";
 import { buildPrelude } from "./prelude.ts";
 import { ceilingBytes, getModule, resetModule } from "./wasm.ts";
 import type { SandboxFaultCode, SandboxJson, SandboxLimits, SandboxOptions, SandboxResult, SandboxStats } from "./types.ts";
@@ -110,6 +110,8 @@ export async function runCode(job: SandboxJob): Promise<SandboxResult> {
     };
 
     const prelude = buildPrelude({
+      nowMs,
+      seed: seedOf(job.options.seed),
       maxOutputChars: maxOutputBytes,
       objectOrNull: job.options.result === "object_or_null",
     });
