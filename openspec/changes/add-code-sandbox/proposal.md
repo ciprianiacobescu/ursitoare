@@ -13,8 +13,8 @@ Observable result: `createWorkerSandbox().run` gives `{ ok: true, value: { amoun
 ## Impact
 
 - **Scaffold:** Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them. Not scaffolded: the README row, `test/support/sandbox-exit-worker.ts`, internal files. The scaffold installs the dependencies below.
-- **Dependencies:** `quickjs-emscripten-core` `0.32.0` and `@jitl/quickjs-wasmfile-release-sync` `0.32.0` (transitive `@jitl/quickjs-ffi-types` `0.32.0`), all MIT, exact in the root `package.json`, past `minimumReleaseAge` (`pnpm-workspace.yaml:7`). The variant declares a `prepare` script; after `pnpm add --save-exact` the scaffold checks: no "Ignored build scripts" warning names them, no `requiresBuild` for them in `pnpm-lock.yaml`, `test/arch/licences.test.ts` passes. No scenario tests pnpm.
-- **Depends on**: `add-engine-skeleton` (U01): `src/core` and `src/config`, the only modules `sandbox` may import (`test/arch/modules.ts:21`). `add-architecture-fitness` (U04, edge added): the arch-rule API and the `worker_threads` exception (`test/arch/rules.ts:388-393`). `add-supply-chain-gate` (U05, edge added): the licence and install-time gates.
+- **Dependencies:** `quickjs-emscripten-core` `0.32.0` and `@jitl/quickjs-wasmfile-release-sync` `0.32.0` (transitive `@jitl/quickjs-ffi-types` `0.32.0`), all MIT, exact in the root `package.json`, past `minimumReleaseAge`. The variant declares a `prepare` script; after `pnpm add --save-exact` the scaffold checks: no "Ignored build scripts" warning names them, no `requiresBuild` for them in `pnpm-lock.yaml`, `test/arch/licences.test.ts` passes. No scenario tests pnpm.
+- **Depends on**: `add-engine-skeleton` (U01): `src/core` and `src/config`, the only modules `sandbox` may import. `add-architecture-fitness` (U04, edge added): the arch-rule API and the `worker_threads` exception. `add-supply-chain-gate` (U05, edge added): the licence and install-time gates.
 - **Changed:** two rows appended to `test/support/README.md`; no accepted scenario. No migration, endpoint, error code, policy, e2e part, CLI command, feature file or health check.
 
 **Interfaces given** (as in `design.md` § Interfaces)
@@ -52,9 +52,9 @@ export class SandboxError extends Error {
 }
 // src/sandbox/limits.ts (re-exported from index)
 export const DEFAULT_SANDBOX_LIMITS: Readonly<SandboxLimits>;
-  // { timeoutMs: 1000, memoryBytes: 33554432, maxStackBytes: 262144, maxOutputBytes: 1048576 } [D8]
+  // spec values [D8]
 export const SANDBOX_POOL_DEFAULTS: Readonly<{ size: number; graceMs: number; stackSizeMb: number; stackCapBytes: number; maxOldGenerationSizeMb: number }>;
-  // { size: 2, graceMs: 250, stackSizeMb: 4, stackCapBytes: 262144, maxOldGenerationSizeMb: 512 } [D8]
+  // spec values [D8]
 export const MIN_STACK_BYTES: number;                       // 32768
 export function memoryBucket(memoryBytes: number): number;  // max(1, ceil(n / 16 MiB)) * 16 MiB
 export function clampStack(maxStackBytes: number, capBytes: number): number;  // min(cap, max(MIN_STACK_BYTES, floor(n)))

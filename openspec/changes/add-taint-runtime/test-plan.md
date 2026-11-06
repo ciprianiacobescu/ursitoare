@@ -11,6 +11,26 @@
 - `ops` wraps `memoryWorkflowOps("r_1", recorded)` and pushes each `runStep` result to a list (the `taggedOps` pattern of `src/interpreter/execute.test.ts`); a replay passes `recorded.slice(0, 4)` and `ops.executed` lists the steps that ran fresh.
 - The pool is `createWorkerSandbox({ size: 1 })` from `src/sandbox/index.ts`, closed in `finally`. The replay scenario wraps it as `{ size, respawns, run(...args) { log.push(args); return real.run(...args); }, close: () => real.close() }`.
 
+## Static agreement corpus (scenario "Static results equal the shared rule over the corpus", in `src/authoring/taint/runtime.test.ts`)
+
+- Sources, with `caseCatalogue()` for all of them: `flowCases("invalid")`, `flowCases("valid")` and `flowCases("warnings")` (`test/support/flow-cases/index.ts`), each case parsed with `parseCatalogueFlow(c.text, c.name)` (`test/support/catalogue/flows.ts`), and `loadTestFlow(name)` for the three `TEST_FLOW_NAMES`. Hook flows (`test/support/hook-flows/`) are not in it: the code-hook widening is static-only (design Decision 1), so a hook-widened `llm.extract` node (static `relabelExtract(input)` joined with its input) differs from `producedTaint(node, input)` by design (ran: 6 of the 45 hook flows have such a node, 6 mismatches in 468 nodes).
+- Counts at main@e440ff2e (ran): 115 `invalid`, 29 `valid` and 13 `warnings` cases, of which 3 do not parse (the `invalid/l1-parse-*` ones named in the scenario) and are counted, not skipped silently; 154 + 3 RF-1 = 157 documents; `analyzeTaint` throws for none; 631 nodes (601 + 30). The kinds seen: `block` 246, `end` 166, `llm.extract` 118, `llm.decide` 22, `foreach` 17, `code` 13, `switch` 10, `agent` 9, `delegate` 9, `human.approval` 8, `subflow` 4, `llm.generate` 3, `wait` 3, `human.form` 1, `http` 1 and one node with no `kind`, so the unknown-kind rule is exercised.
+- What is read: the static input is `analysis.nodes[id].input` and the static output and fields are `analysis.nodes[id].output` and `.fields`, all returned by `analyzeTaint`. The static outcome is not returned; the test derives it with the rule `resolveReference` in `analyze.ts` applies to a `.outcome` reference (`N` for `llm.decide` and `human.approval`, else the output). That is sound because the agreement scenario already checks every RF-1 edge against it, and a wrong derivation can only fail the test, never hide a difference.
+- Red: the stub `producedTaint` throws, so the `assert.doesNotThrow` around it fails at red (ran: the stub gives a thrown `not implemented` on the first node). Green: 0 mismatches over 631 nodes with the reference below (ran). The comparison alone cannot show the rules did not change, because after the extraction `analyzeTaint` calls `producedTaint` itself (ran: a changed `producedTaint` keeps the comparison at 0 mismatches); the guard that earlier static results are preserved is the frozen set below (ran: with `llm.extract` returning its input, 6 frozen tests fail; with `subflow` trusted, 1; with `code` trusted, 4). Against the old private `outputFor` (before the extraction) the comparison does catch changed rules (ran: 118 mismatches with `llm.extract` returning its input, 149 with block `untrusted_fields` dropped, 21 with the `llm.decide` outcome not `N`, 3 with `subflow` trusted, 6 with `code` trusted).
+- Reference used (scratch copy of main@e440ff2e, `runtime.ts` written to the design: `producedTaint` as `outputFor` plus `outcome`, `fields` by `Object.fromEntries`, `analyze.ts` calling it, `contextTainted` imported): all counts above.
+
+## Frozen taint tests (file::title; the 16 tests of the M3/M4 taint module, run unedited)
+
+- `src/authoring/taint/analyze.test.ts`: `C-feb77bd3 RF-1 labels and edges`; `C-7e5f540a Code does not launder and fields are precise`; `C-382d778d Cycles self-references and order`.
+- `src/authoring/taint/capabilities.test.ts`: `C-6792eb26 RF-1 and one-block flags`; `C-5e5ffb19 agents hooks subflows context and order`; `C-238ff645 unknown sites fail closed and catalogue errors propagate`; `C-9c5fbf5b malformed hook structures are unknown sites`.
+- `src/authoring/taint/closed.test.ts`: `C-96450187 unknown and malformed input fails closed`; `C-0309b412 size limits`.
+- `src/authoring/taint/hooks.test.ts`: `C-be8bdbfa Hook references widening and flow rules`; `C-218f2fa6 Malformed hook structures fail closed`.
+- `src/authoring/taint/labels.test.ts`: `C-375163e0 join is a union in canonical order`; `C-9dbb1d4e normalize relabel and include`.
+- `src/authoring/taint/sources.test.ts`: `C-9543ab61 sources of untrusted data and the closed outcome`; `C-6b3829ee context sources are untrusted unless approved`.
+- `src/authoring/taint/surface.test.ts`: `C-a609be4d names are exported by the authoring surface`.
+
+Ran on the scratch copy with the extraction applied: 16 of 16 pass (`node --test` on the seven files, Node 24.22.2).
+
 ## Fixtures (`test/support/taint-runs/flows/`, `ursitoare: "0.1"`)
 
 `untrusted-code.yaml` (ran: `validateFlowText(text, "yaml", loadTestCatalogue())` gives `ok: true`, no warning, `layers_run` `["L1","L2","L3"]`):

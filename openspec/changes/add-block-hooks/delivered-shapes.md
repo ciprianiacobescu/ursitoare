@@ -17,8 +17,17 @@ Declarations from main@a6b5fb37 (`file:line`; `…` elides unused members). The 
 // src/runs/intents/gate.ts:19-24  interface IntentCall { tool: string; args: PayloadValue; nodeId: string; effectSeq: number }   :50  keyOf = idemKey(tenantId, lineageId, call.nodeId, call.effectSeq)
 // src/runs/intents/key.ts:26  idemKey(tenantId: string, lineageId: string, nodeId: string, effectSeq: number, generation = 0): string
 // src/runs/store/types.ts:126  interface StepRecord { runId; nodeId; effectSeq; turn; attempt; generation; seq; kind; state: StepState; inputRef; outputRef; outcome; error: RunError | null; taint: string[]; policyDecisionId; idemKey: string | null; startedAt; endedAt }
-// test/support: crash/cluster.ts:59,163 startCrashCluster(parts), withDedicatedCluster(fn)   crash/engine.ts:310 spawnEngine(opts): Promise<EngineProcess> (deaths, kill, restart, stop)   crash/effects.ts:67,73 appendEffect(file, entry), countEffects(file)
-//   hook-flows/index.ts:63 loadHookFlow(name: string): Flow   src/durable/launch.ts:387 launchDurable(opts)
+// test/support/crash (main@e440ff2e)
+engine.ts:12-17  interface SpawnOptions { cluster: CrashCluster; scenario: string; faultPoints?: readonly string[]; args?: Readonly<Record<string, string>> }   (:88-114 scenario: an absolute file path; faultPoints: each matches POINT_PATTERN, :43; args: string values. No env member: the child gets cluster.env less L4_*, plus PATH and HOME, :128-145)
+engine.ts:19-29  interface ScenarioContext { env: Readonly<Record<string, string>>; args: Readonly<Record<string, string>>; dataDir: string; faultPoints: FaultPoints; stepObserver: StepObserver; logger: Logger; ready(): void }   type ScenarioStart = (ctx: ScenarioContext) => Promise<void>
+engine.ts:31-37  interface EngineProcess { readonly pid: number; readonly deaths: number; kill(): Promise<void>; restart(): Promise<void>; stop(): Promise<void> }   (:345-353 restart() starts a new child, so `start` runs again)
+engine.ts:310    spawnEngine(opts: SpawnOptions): Promise<EngineProcess>   C1, C2, C6 pass { cluster, scenario: the absolute path of hooks-scenario.ts, faultPoints: ["after:pay"] / ["after:pay:post:notify"] / ["after:send:r2"], args: { tenantId, reviewProfile, runId, effects, flow } }, no env
+cluster.ts:18-23 interface CrashCluster { readonly env: Readonly<Record<string, string>>; readonly ownerUrl: string; readonly appEndpoint: EndpointLike; readonly dataDir: string }   :59 startCrashCluster(parts: readonly E2eStackPart[]): Promise<{ cluster: CrashCluster; close(): Promise<void> }>   :163 withDedicatedCluster<T>(fn: (cluster: CrashCluster) => Promise<T>): Promise<T>
+e2e-stack/discover.ts:53 discoverParts(dir: string = PARTS_DIR): Promise<E2eStackPart[]>   (outside crash/; cluster.ts:9)
+observer.ts:6    faultObserver(points: FaultPoints): StepObserver
+effects.ts:67,73 appendEffect(file: string, entry: { tool: string; idemKey: string | null; nodeId: string }): void   countEffects(file: string): { calls: number; effects: number; duplicates: number; byTool: Readonly<Record<string, { calls: number; effects: number; duplicates: number }>> }
+intents-scenario.ts:38 export const start: ScenarioStart = async (ctx) => {…}   (hooks-scenario.ts:5 stubs it)
+hook-flows/index.ts:63 loadHookFlow(name: string): Flow   src/durable/launch.ts:387 launchDurable(opts)
 ```
 
 ## Facts from the merged code
@@ -29,4 +38,4 @@ Declarations from main@a6b5fb37 (`file:line`; `…` elides unused members). The 
 - `src/interpreter/runtimes/block.ts:89-127`: an effect block runs `effects.before` then the invoker inside step `<id>` (not on `reuse`; `unknown` throws `INTERPRETER_EFFECT_UNKNOWN`), and `effects.after` plus the output check in `<id>#done`.
 - `src/runs/intents/gate.ts:50-52,89,112` reads only `tool`, `args`, `nodeId`, `effectSeq` of a call; `0340_effect_intent.sql:3-5` keys the row by `(tenant_id, idem_key)`.
 - `src/durable/steps.ts:93-118`: the fault observer runs ``stepObserver("after", name, workflowId)`` after the step function returned and before DBOS records the result, so an armed `after:<step>` kills a step whose effect has happened and is not checkpointed. `src/config/faults.ts:12` ``POINT_PATTERN = /^(before|after):[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/``; a marker file makes each point fire once.
-- `src/runs/intents/crash-once.test.ts:111-150` (M4): ``faultPoints: ["after:pay"]`` gives `erp.create_payment@1` ``{ calls: 1, effects: 1, duplicates: 0 }`` at the death and ``{ calls: 2, effects: 1, duplicates: 1 }`` after `restart()`, one key.
+- `src/runs/intents/crash-once.test.ts:111-160` (M4): `after:pay` gives `erp.create_payment@1` `{ 1, 1, 0 }`, then after `restart()` `{ 2, 1, 1 }`, one key.

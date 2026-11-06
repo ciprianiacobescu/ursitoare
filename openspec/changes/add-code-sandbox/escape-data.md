@@ -1,6 +1,6 @@
 # Escape data
 
-The literal data of the 42 escape cases, their variants and the stack bodies, ported from `seed/sandbox-quickjs/test/escape.test.ts` and `worker.test.ts`. With `test-plan.md` (conventions `LIM`, `MiB`, `DEEP`, `NEST`) it is all that the escape tests and U42's `"hook"`-mode re-run need.
+The literal data of the 42 escape cases, their variants and the stack bodies, ported from `seed/sandbox-quickjs/test/escape.test.ts` and `worker.test.ts`. With the conventions of `test-plan.md` it is all that the escape tests and U42's `"hook"` re-run need.
 
 ## ESCAPE_CASES
 
@@ -53,7 +53,7 @@ E56 ok {good:[1,2,3]}  JSON.stringify=()=>'{"evil":true}'; JSON.parse=()=>({evil
 E59 limits{memoryBytes:16*MiB,timeoutMs:3000} fault memory_limit  const a = []; for (let i = 0; i < 30; i++) a.push(new Array(200000).fill(i)); return { n: a.length };
 ```
 
-E20: at 16 MiB the probe gave `never_settled`; at 64 MiB, and once at 32 MiB, `runtime_error` with the message `Error: ` (a promise flood whose exception object could not be built), so the set has four codes. The flood prints one `Aborted(...)` line to stderr; no test asserts empty stderr. E20 still asserts `ok: false` with one of the four codes. E20 is the concrete disposal-abort case: `Aborted` is `JS_FreeRuntime` failing after the result exists; the result is kept (`never_settled` at 16 MiB), the module dropped, the next run `ok`.
+E20: at 16 MiB the probe gave `never_settled`; at 64 MiB, and once at 32 MiB, `runtime_error` with the message `Error: ` (a promise flood whose exception object could not be built), so the set has four codes. The flood prints one `Aborted(...)` line to stderr; no test asserts empty stderr. E20 is the concrete disposal-abort case: `Aborted` is `JS_FreeRuntime` failing after the result exists; the result is kept (`never_settled` at 16 MiB), the module dropped, the next run `ok`.
 
 ## VARIANTS
 

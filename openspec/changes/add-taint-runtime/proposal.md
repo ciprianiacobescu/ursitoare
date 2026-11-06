@@ -8,7 +8,7 @@ Batch `m5-code-hooks` (U38-U44 and U42b, in plan order U38, U39, U40, U41, U42, 
 
 ## What Changes
 
-- New `src/authoring/taint/runtime.ts` (the shared rules) and `src/interpreter/taint.ts`; `analyze.ts` calls the shared rules with every static result unchanged (the 16 frozen taint tests and the agreement scenario prove it; no test there is edited).
+- New `src/authoring/taint/runtime.ts` (the shared rules) and `src/interpreter/taint.ts`; `analyze.ts` calls the shared rules with every static result unchanged (the 16 frozen taint tests pass unedited, and the corpus scenario compares every static node result of 157 documents with `producedTaint`; no test there is edited).
 - `visit.ts` writes the input taint on the `started` and final rows; `execute.ts` keeps one `RunTaints` per execution and records each visited node's produced taint.
 - `test/support/taint-runs/` (two runnable flows, a loader, the inclusion helper), a README row, and the property that static taint includes runtime taint (exit 4, part).
 

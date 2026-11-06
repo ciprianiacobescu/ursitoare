@@ -1,4 +1,4 @@
-Spec: `specs/sandbox/spec.md`; decisions: `design.md`; fixtures: `test-plan.md`, `escape-data.md`. Every test imports from `src/sandbox/index.ts`, wraps a stub-reaching call (async: `p.then((v) => v, (e: unknown) => e)`; sync: try/catch) so the failure is an assertion, uses `node:assert/strict`, closes pools in `finally`, races a possibly hanging run against 5000 ms, and has no `.`, `[` or `::` in test names. Each task implements only what it names, so a later task's red tests fail by assertion.
+Specs: `specs/sandbox/spec.md`, `specs/sandbox-build/spec.md`; decisions: `design.md`; fixtures: `test-plan.md`, `escape-data.md`. Every test but 3.8 imports from `src/sandbox/index.ts`, wraps a stub-reaching call (async: `p.then((v) => v, (e: unknown) => e)`; sync: try/catch) so the failure is an assertion, uses `node:assert/strict`, closes pools in `finally`, races a possibly hanging run against 5000 ms, and has no `.`, `[` or `::` in test names. Each task implements only what it names, so a later task's red tests fail by assertion.
 
 ## 1. Helpers
 
@@ -17,6 +17,7 @@ Spec: `specs/sandbox/spec.md`; decisions: `design.md`; fixtures: `test-plan.md`,
 - [ ] 3.5 Write `src/sandbox/limits-run.test.ts` first (scenarios "Bombs are contained and buckets are isolated" and "Recursion, clamp, byte limits and walker"), then add memory buckets, `setMemoryLimit`, the stack clamp, the output walker and byte count to `run-code.ts`, `wasm.ts` and `prelude.ts`, implementing requirements "Guest memory is capped per memory bucket" and "Stack depth, output size and nesting are capped"
 - [ ] 3.6 Write `src/sandbox/deadline.test.ts` and `src/sandbox/crash.test.ts` first (scenarios "Interrupt, late finish and watchdog" and "Exit during a job, idle exit and a factory that throws"), create `test/support/sandbox-exit-worker.ts`, then add the interrupt and late-finish rule to `run-code.ts` and the watchdog, replacement and spawn failure to `pool.ts`, implementing requirements "A run past its deadline is a timeout, and a stuck worker is killed" and "A failed worker is replaced and the run reports sandbox_crash"
 - [ ] 3.7 Write `src/sandbox/close.test.ts` first (scenario "Close mid-run, after close and process lifetime"), then complete `close` in `pool.ts` (reject pending runs, idempotent), implementing requirement "A closed sandbox rejects pending and later runs"
+- [ ] 3.8 Write `src/sandbox/built.test.ts` (scenario "The built worker answers without a factory"; `BUILD` of `test-plan.md`); it is green on arrival (no stub after 3.2 and 3.3) and a failure is a build defect to fix in `src/sandbox/`, implementing requirement "The built worker entry answers a run without a factory"
 
 ## 4. The escape suite
 

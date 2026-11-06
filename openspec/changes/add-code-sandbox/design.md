@@ -1,14 +1,14 @@
 ## Context
 
-ADR-04 and § 9.4: pure `code` in a worker pool inside the DBOS step, faults terminal. Port of `seed/sandbox-quickjs` (REPORT § 2: F1-F9), no fetch.
+ADR-04 and § 9.4: pure `code` in a worker pool inside the DBOS step, faults terminal. Port of `seed/sandbox-quickjs` (REPORT § 2: F1-F9) without fetch.
 
 ## Decisions
 
 1. **Files.** `types.ts`, `limits.ts`, `validate.ts` (main-thread checks), `pool.ts`, `worker-entry.ts`, `run-code.ts`, `prelude.ts` (guest source), `wasm.ts` (`WebAssembly` typing, module cache), `index.ts`.
 2. **Protocol.** No ready handshake (Node delivers a message posted before the worker listens: probe, 26.8.1). One message per job, `{ id, code, inputJson, limits, options, stackCapBytes }`, answered `{ id, result }`; the input travels as validated JSON text, so no `DataCloneError`.
 3. **One run.** The seed's `runCode`: a Wasm module per `memoryBucket` (`initial` 256, `maximum` 256 + bucket / 65536 pages; dropped after an abort or fault); `setMemoryLimit`, `setMaxStackSize(clampStack(…))`, an interrupt past the deadline, `executePendingJobs(512)` until settled, `never_settled` when pending with no job. `memBytes` is -1 after `memory_limit`, `sandbox_crash` and a watchdog `timeout` (F9); `ms` is measured in the worker for a settled run, else on the main thread. `classify` and `buildPrelude` are ported (errors read via `getProp`, F6); under `object_or_null`, `undefined` and `null` give `"Onull"`.
-4. **Pool.** `run` reserves a worker synchronously (idle, new below `size`, or a FIFO entry); the seed reserves after an `await`, and 5 of 6 concurrent seed runs returned `timeout`. The watchdog starts at `postMessage`. Exit with a job: clear the timer, replace at once, `respawns`++, `sandbox_crash`. Idle exit: remove the slot; the next run spawns (`respawns`++). A throwing factory gives `sandbox_crash`. Workers are `unref()`ed; the watchdog timer is not.
-5. **Validation** (main thread; first failure wins in the order `code`, `limits`, `seed`, `nowIso`, `binding`, `result`, `input`; messages start with the argument's name): `nowIso` matches `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$` and `Date.parse` is finite, and the day is at most its month's length (V8 rolls `2026-02-30` over to 2 March). The input check is `strictJson` in a try/catch (a throw is `input_invalid`), then at most 8,000,000 JSON characters. `strictJson` accepts exactly, recursively: `null`, a boolean, a finite number, a string; an `Array.isArray` value with prototype `Array.prototype`, own keys exactly its indices and `length`, each index an enumerable data property; an object with prototype `Object.prototype` or `null`, string keys only, every own property an enumerable data property. 65 levels pass, 66 fail, a cycle fails. Everything else fails. A `Proxy` is judged by what its traps report. No `node:util` (the import rule forbids it).
+4. **Pool.** `run` reserves a worker synchronously (idle, new below `size`, or a FIFO entry); the seed reserved after an `await` and timed out 5 of 6 concurrent runs. The watchdog starts at `postMessage`. Exit with a job: clear the timer, replace at once, `respawns`++, `sandbox_crash`. Idle exit: remove the slot; the next run spawns (`respawns`++). A throwing factory gives `sandbox_crash`. Workers are `unref()`ed; the watchdog timer is not.
+5. **Validation** (main thread; first failure wins in the order `code`, `limits`, `options`, `seed`, `nowIso`, `binding`, `result`, `input`; messages start with the argument's name; a `limits` or `options` that is not a non-null object is refused under its own name before any member is read): `nowIso` matches `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$` and `Date.parse` is finite, and the day is at most its month's length (V8 rolls `2026-02-30` over to 2 March). The input check is the spec's `strictJson` in a try/catch (a throw is `input_invalid`), then at most 8,000,000 JSON characters. No `node:util` (the import rule forbids it).
 6. **Sizing** is the caller's: no `size` means 2; U39's `main` passes `poolSize(availableParallelism())` (`node:os` is refused here).
 7. **Typing.** `wasm.ts` declares the `WebAssembly.Memory` members it uses; `tsconfig.json` stays.
 8. **Arch rule.** `checkSandboxIo` resolves relative refs with `resolveSpecifier` and matches bare ones by exact text; every identifier `process` is reported; the result goes through `sortViolations`.
@@ -48,9 +48,9 @@ export class SandboxError extends Error {
 }
 // src/sandbox/limits.ts (re-exported from index)
 export const DEFAULT_SANDBOX_LIMITS: Readonly<SandboxLimits>;
-  // { timeoutMs: 1000, memoryBytes: 33554432, maxStackBytes: 262144, maxOutputBytes: 1048576 } [D8]
+  // spec values [D8]
 export const SANDBOX_POOL_DEFAULTS: Readonly<{ size: number; graceMs: number; stackSizeMb: number; stackCapBytes: number; maxOldGenerationSizeMb: number }>;
-  // { size: 2, graceMs: 250, stackSizeMb: 4, stackCapBytes: 262144, maxOldGenerationSizeMb: 512 } [D8]
+  // spec values [D8]
 export const MIN_STACK_BYTES: number;                       // 32768
 export function memoryBucket(memoryBytes: number): number;  // max(1, ceil(n / 16 MiB)) * 16 MiB
 export function clampStack(maxStackBytes: number, capBytes: number): number;  // min(cap, max(MIN_STACK_BYTES, floor(n)))
@@ -85,9 +85,9 @@ Fixtures: `test-plan.md`, `escape-data.md`. Timing is wall-clock, so no `Clock`;
 
 ## Decisions made while writing
 
-- Added behaviour, not seams (accepted by the coordinator): caps `timeoutMs` 3,600,000, `memoryBytes` 1 GiB, `maxOutputBytes` 64 MiB; `nowIso` needs a zone; `code` must be a string; `run` checks `closed` first; idle-exit replacement is lazy; option, watchdog and spawn-failure messages are fixed.
-- One representative body per multi-body Phase-0 case; `E17` carries 66 nested arrays, `E54` `return undefined;`, `E20` accepts four codes and still asserts a fault.
+- Added behaviour, not seams (accepted by the coordinator): the caps of the spec; `nowIso` needs a zone; `code` must be a string; `run` checks `closed` first; idle-exit replacement is lazy; option, watchdog and spawn-failure messages are fixed.
+- One representative body per multi-body Phase-0 case.
 
 ## Unverified
 
-Node 24 (probes ran on 26.8.1; the planner's probe covers 24.22.2 for the core path); the `"hook"` sweep, recording factory, exit worker, child processes; `dist/sandbox/worker-entry.js` in a built image.
+Node 24 (probes ran on 26.8.1; the planner's probe covers 24.22.2 for the core path); the `"hook"` sweep, recording factory, exit worker, child processes; `dist/sandbox/worker-entry.js` in a built image (the built-worker scenario covers the `tsc` build from `node_modules/.cache/`, probed with a stand-in pool, `src/sandbox` being stubs).

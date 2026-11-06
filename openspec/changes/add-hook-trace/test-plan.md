@@ -36,7 +36,7 @@ Final `list`: seven rows by `seq` 0-6 of `lookup`, `pay`, `done`, `n1`, `n2`, `n
 
 ## Refusals (scenario "Malformed traces are refused")
 
-Every case is `W("bad", 9, { hooks })` and throws `RunDataError` `RUN_DATA_INVALID`; `E1` is `E("post:a")`. Cases (name: `hooks`):
+There are 28 cases. Every case is `W("bad", 9, { hooks })` and throws `RunDataError` `RUN_DATA_INVALID` in both stores, and writes nothing; `E1` is `E("post:a")`. Cases (name: `hooks`):
 
 - `u0000-message`, `lone-surrogate-message`, `msg-501`: one entry `E("post:a", { state: "failed", error: { code: "HOOK_ERROR", message } })` with `message` `"a\u0000b"`, `"a\ud800"`, `"x".repeat(501)`.
 - `error-extra`: `error` `{ code: "HOOK_ERROR", message: "m", node: null }`.
@@ -45,7 +45,10 @@ Every case is `W("bad", 9, { hooks })` and throws `RunDataError` `RUN_DATA_INVAL
 - `attempt-0`, `attempt-1.5`, `attempt-max+1` (2147483648).
 - `bad-to` `to: "Review"`; `bad-tool` `kind: "block", tool: "mail.send"`; `bad-idemkey` `idemKey: "ik1_x"`; `bad-action` `action: "explode"`; `bad-kind` `kind: "llm"`.
 - `extra-member`: `{ ...E1, extra: 1 }`; `missing-member`: `E1` without `tool`.
+- `hooks-extra-member`: `{ inputOriginal: null, entries: [E1], extra: 1 }`; `bad-state`: `E("post:a", { state: "started" })`; `bad-mutated`: `E("post:a", { mutated: "both" })`; `bad-fused`: `E("post:a", { fused: "yes" })`.
 - `orig-nan`: `inputOriginal: NaN`; `orig-u0000`: `inputOriginal: { a: "x\u0000" }`; `orig-undefined-member`: `{ entries: [] }`; `array-hooks`: `[]`.
+
+Layer: all 28 are refused by `assertStepHooks` (called by `assertStepWrite`, which `recordStep` of the memory store and `stepRepository.upsert` both call before any SQL). The check constraint of § Migration, tested alone on the stored shape `{ inputOriginalRef, entries }`, refuses only `entries` that is not an array and a bad `inputOriginalRef` (ran: SQLSTATE `23514` for `entries: "x"`); it accepts an extra top-level member, `state` `started`, `mutated` `both` and `fused` `yes`, so for the last four rows the store is the only layer that refuses, and they hold because the store validates before writing.
 
 Also: `W("leak", 16, { hooks: { inputOriginal: LEAK, entries: <65 times E1> } })` throws `RUN_DATA_INVALID`, and `getPayload(D_LEAK)` is `null` afterwards; `W("big", 15, { hooks: { inputOriginal: { s: "x".repeat(1048577) }, entries: [] } })` throws `RUN_DATA_TOO_LARGE`. After all of them `list` has no row of nodes `bad`, `big` or `leak`.
 
