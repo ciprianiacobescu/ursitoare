@@ -1,6 +1,6 @@
 # Test plan for add-grants-model (part 1: fixtures, fingerprints, compiler, engine)
 
-Part 2 (store, chain, routes, fragment): `test-plan-store.md`. **Ran** in a scratch copy of the worktree (main@cf34c628 plus the unit; Node 24.22.2; embedded Postgres): every value here and in part 2 as assertions. **Derived:** `augmentedSuccessors` and `hookPlacements` are throwing stubs on main (M5 implements them); the scratch used a port of `add-hook-checker` design 1 and 2.
+Part 2 (store, chain, routes, fragment): `test-plan-store.md`. **Ran** in a scratch copy of the worktree (main@cf34c628 plus the unit; Node 24.22.2; embedded Postgres): every value here and in part 2 as assertions. **Derived:** `augmentedSuccessors` and `hookPlacements` (M5's `add-hook-checker`; plan m6 is activated only after plan m5 completes (one active plan per target), so they are implemented on main when this unit runs) were not yet implemented when these values were computed; the scratch used a port of `add-hook-checker` design 1 and 2.
 
 Test-file conventions are in `tasks.md`.
 

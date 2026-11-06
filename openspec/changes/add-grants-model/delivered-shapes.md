@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-grants-model
 
-From main@cf34c628 (`file:line`; `…` elides members this unit does not touch) and, for `augmentedSuccessors`, from the M5 folder `add-hook-checker` (its stub on main throws; the behaviour is the folder's).
+From main@cf34c628 (`file:line`; `…` elides members this unit does not touch) and, for `augmentedSuccessors`, from the M5 folder `add-hook-checker` (an M5 unit: plan m6 is activated only after plan m5 completes (one active plan per target), so it is implemented on main when this unit runs; the shape and behaviour are the folder's).
 
 ```ts
 // src/pdp/types.ts:5 PolicySource { id: string; text: string; layer: "platform" | "tenant" }

@@ -46,7 +46,7 @@ Edge rows (reads, no key; same fake after the samples). Each answer is 200 unles
 | E14 to E16 | `kb.search@1` `{"query":"q","top_k":1}`; `top_k` 0; `top_k` 5 | `[p1("q")]`; `[p1("q")]`; `[p1("q"), p2]` |
 | E17, E18 | `crm.find_customer@1` `bob_smith-jr@example.com`; `x@y.test` | `C-7676E4` `bob smith jr` silver; `C-5980CC` `x` bronze |
 
-After the samples `calls()` holds 20 records, all status 200, with `effect` `read` 9 times, `write` 6, `send` 3, `pay` 2; E1 to E18 add 18 (E2 and E3 with status 404).
+After the samples `calls()` holds 20 records (the counts of the spec); E1 to E18 add 18, E2 and E3 with status 404.
 
 ## Effect rows (scenario "Effects need a key and replay under it")
 
@@ -87,7 +87,7 @@ Fake with `strict` true; `L = /blocks/erp.lookup_vendor@1`; `J` = `content-type:
 | R22 | `POST L`, `pad(1048577)` | 413 `{"error":"body_too_large"}` | |
 | R23 | `POST /blocks/nope@1`, `pad(1048577)` | 404 `unknown_block` (the ref is checked before the size) | |
 
-Every `invalid_input` body is `{"error":"invalid_input","block":<ref>,"details":<details>}`. After R1 to R23 `calls()` holds exactly 10 records, `seq` 1 to 10, `[ref, status]` = lookup 200, lookup 400, lookup 400, lookup 400, lookup 400, `crm.create_ticket@1` 400, `calendar.find_slots@1` 400, `mail.send@1` 400, `mail.send@1` 400, lookup 200. Record 1 has `host` `tools.fake.test` and `input` `{"vendor_name":"Globex"}`; the others have `host` `127.0.0.1:<port>`; record 2 has `input` `{}` and `bodySha256` `D_EMPTY`, record 3 `[]`, record 4 `null`, record 5 `{"vendor_name":5}`; record 8 has `idempotencyKey` `null` and `input` `{}` with `bodySha256` `D_OBJ`, record 9 `k`; every record has `method` `POST` and `path` `/blocks/<ref>` as sent.
+Every `invalid_input` body is `{"error":"invalid_input","block":<ref>,"details":<details>}`. After R1 to R23 `calls()` holds exactly the 10 records of the Rec column (`seq` 1 to 10, each row's ref and the status of its answer). Record 1 has `host` `tools.fake.test` and `input` `{"vendor_name":"Globex"}`; the others have `host` `127.0.0.1:<port>`; record 2 has `input` `{}` and `bodySha256` `D_EMPTY`, record 3 `[]`, record 4 `null`, record 5 `{"vendor_name":5}`; record 8 has `idempotencyKey` `null` and `input` `{}` with `bodySha256` `D_OBJ`, record 9 `k`; every record has `method` `POST` and `path` `/blocks/<ref>` as sent.
 
 Non-strict fake (`startFakeTools({ strict: false })`): N1 `POST L` `{}` gives 200 `{"vendor_id":"V-UNKNOWN","status":"active","payment_terms_days":30}`; N2 body `[]` gives 400 `invalid_input` `[{"path":"/","keyword":"type"}]`; N3 `{"vendor_name":5}` gives 200 `{"vendor_id":"V-5","status":"active","payment_terms_days":30}`.
 

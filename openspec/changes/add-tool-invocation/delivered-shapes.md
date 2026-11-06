@@ -1,6 +1,6 @@
 # Delivered shapes taken by add-tool-invocation
 
-Declarations from main@cf34c628 (`file:line`; `…` elides unused members). M5 names are stubs on main; they come from the M5 folders. The M6 siblings (U45-U49b) are in-plan prerequisites whose folders the judge sees; `ServiceResolver` and `ServiceTarget` are in `add-credentials` Interfaces given.
+Declarations from main@cf34c628 (`file:line`; `…` elides unused members). M5 names come from the M5 folders: plan m6 is activated only after plan m5 completes (one active plan per target), so they are implemented on main when this unit runs. The M6 siblings (U45-U49b) are in-plan prerequisites whose folders the judge sees; `ServiceResolver` and `ServiceTarget` are in `add-credentials` Interfaces given.
 
 ```ts
 // src/interpreter (U33)

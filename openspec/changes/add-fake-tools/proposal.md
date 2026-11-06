@@ -33,7 +33,7 @@ export interface FakeToolCall {
   callHeader: string | null; idempotencyKey: string | null; keyHeaderSeen: boolean;   // never the key's value
   input: unknown; bodySha256: string; status: number; duplicate: boolean;
 }
-export interface FakeToolsOptions { strict?: boolean }   // strict (default true): inputs checked against the block schema
+export interface FakeToolsOptions { strict?: boolean; catalogue?: string }   // strict (default true): inputs checked against the block schema; catalogue: the path given to readCatalogueDocument (default: the checked-in catalogue)
 export interface FakeTools {
   readonly origin: string;                               // http://127.0.0.1:<port>
   calls(filter?: { ref?: string; callHeader?: string }): FakeToolCall[];
@@ -63,7 +63,7 @@ export function fixtureFor(ref: string, input: Record<string, unknown>, key: str
 - From `add-gateway-client`: `egressApi`, `egressPart`.
 - From `add-e2e-stack`: `E2eStackPart`, `PartHandle`, `PartContext`, `E2eStackError`, `discoverParts`.
 - From `add-fake-oidc`: `ContractCheck`.
-- From `add-test-catalogue`: `readCatalogueDocument`, `loadTestCatalogue`.
+- From `add-test-catalogue`: `readCatalogueDocument`, `loadTestCatalogue`, `TEST_CATALOGUE_PATH`, `CatalogueDataError`.
 - From `add-crash-harness`: `startCrashCluster`.
 
 ## Out of scope

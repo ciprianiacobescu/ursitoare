@@ -54,12 +54,19 @@
         },
         {
           "id": "openspec:add-grants-model",
-          "depends_on": []
+          "depends_on": [
+            "openspec:add-gateway-client",
+            "openspec:add-tool-registry",
+            "openspec:add-credentials"
+          ]
         },
         {
           "id": "openspec:add-policy-deploy",
           "depends_on": [
-            "openspec:add-grants-model"
+            "openspec:add-grants-model",
+            "openspec:add-gateway-client",
+            "openspec:add-tool-registry",
+            "openspec:add-credentials"
           ]
         },
         {

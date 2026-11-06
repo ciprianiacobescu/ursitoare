@@ -12,11 +12,11 @@ Migration `0470_tool_registry.sql` SHALL create `tool_server (tenant_id, tool_se
 - **THEN** `schema_migration` holds version 470 named `tool_registry`, `checkTenancyCatalog` returns `[]`, every row ends with its listed outcome (`42501` for updates outside the two grants and each delete; `23514`, `23505`, `23503` for bad values, keys and parents), and `tenant_b` sees 0 rows in each table where `tenant_a` sees 2 servers and 1 surface
 
 ### Requirement: validateOrigin accepts public https origins and refuses unsafe ones
-`validateOrigin(url, { local })` SHALL return `{ ok: true, origin }` (`scheme://host[:port]`, lower case, no trailing dot, default port or slash) or `{ ok: false, reason }` by the order and classes of design.md § validateOrigin, with no DNS lookup. Names under `fake.test` SHALL be ordinary public names.
+`validateOrigin(url, { local })` SHALL return `{ ok: true, origin }` (`scheme://host[:port]`, lower case, no trailing dot, default port or slash) or `{ ok: false, reason }` by the order and classes of design.md § validateOrigin, with no DNS lookup; an IPv6 literal host that no class refuses SHALL be `ipv6`, because the PDP's permit host pattern admits no bracketed host. Names under `fake.test` SHALL be ordinary public names.
 
-#### Scenario: Each of 27 inputs is accepted or refused with its reason
-- **WHEN** `validateOrigin(url, { local })` runs for the 27 rows of test-plan.md § Origins
-- **THEN** each result deep-equals its row, for example `https://2130706433` is `{ ok: false, reason: "loopback" }` and `https://100.64.0.1` is `{ ok: false, reason: "private" }` unless `local`
+#### Scenario: Each of 29 inputs is accepted or refused with its reason
+- **WHEN** `validateOrigin(url, { local })` runs for the 29 rows of test-plan.md § Origins
+- **THEN** each result deep-equals its row, for example `https://2130706433` is `{ ok: false, reason: "loopback" }` and `https://100.64.0.1` is `{ ok: false, reason: "private" }` unless `local`, and `https://[2001:db8::1]` is `{ ok: false, reason: "ipv6" }`
 
 ### Requirement: The surface digest is canonical, fixtureSurface builds fixture surfaces, and block refs are chosen by content
 `surfaceDigest(surface)` SHALL ignore the order of tools and of `untrusted_fields`, treat absent optional members as their defaults and change when any field of any tool changes (design.md § The digest and fixtureSurface). `fixtureSurface(refs, opts)` SHALL return one tool per test-catalogue ref and throw for an unknown ref or two refs of one tool name. `surfaceRefs(serverId, surface, taken)` SHALL give each tool `${serverId}.${name}@${major}` for the lowest major from 1 whose ref is absent from `taken` or held there with the tool's block content hash, and SHALL read no database.

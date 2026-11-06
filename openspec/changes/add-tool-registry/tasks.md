@@ -6,7 +6,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. The pure pieces
 
-- [ ] 2.1 Write `src/tools/origin.test.ts` first (scenario "Each of 27 inputs is accepted or refused with its reason"), then implement `validateOrigin` in `src/tools/origin.ts`, implementing its requirement
+- [ ] 2.1 Write `src/tools/origin.test.ts` first (scenario "Each of 29 inputs is accepted or refused with its reason"), then implement `validateOrigin` in `src/tools/origin.ts`, implementing its requirement
 - [ ] 2.2 Write `src/tools/surface.test.ts` first (the digest and refs parts of "The digest ignores order and fills defaults, fixtureSurface matches the catalogue, and refs take the lowest fitting major": § Digests, § Refs), then implement `surfaceDigest`, `surfaceRefs`, `toolBlock`, `toolHash` in `src/tools/surface.ts`, implementing the digest and refs parts of "The surface digest is canonical, fixtureSurface builds fixture surfaces, and block refs are chosen by content"
 - [ ] 2.3 Write `test/support/tool-surface.test.ts` first (the `fixtureSurface` part of that scenario), then create `test/support/tool-surface.ts` and append its row (owner `add-tool-registry`) to `test/support/README.md`, implementing the `fixtureSurface` part of the same requirement
 

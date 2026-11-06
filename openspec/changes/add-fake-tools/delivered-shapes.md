@@ -15,6 +15,9 @@ export async function discoverParts(dir?: string): Promise<E2eStackPart[]>
 // test/support/catalogue/document.ts (U24)
 :15  export interface CatalogueDocument { blocks: { [ref: string]: BlockDef }; ... }   // BlockDef { effect: Effect; input: JsonSchema; output: JsonSchema; ... } (src/authoring/format/catalogue.ts:5)
 :151 export function readCatalogueDocument(path?: string): CatalogueDocument   // CatalogueDataError when unreadable
+:11  export const TEST_CATALOGUE_PATH: string   // the default path
+// test/support/catalogue/errors.ts:9 (U24)
+export class CatalogueDataError extends Error { readonly code: "CATALOGUE_READ" | "CATALOGUE_INVALID" | "CATALOGUE_UNKNOWN_FLOW" | "CATALOGUE_FLOW_PARSE" }   // name "CatalogueDataError"; (code, message); no `details` member. An unparseable file is CATALOGUE_INVALID `invalid JSON: <first line>`, an unreadable one CATALOGUE_READ `cannot read <path>: <fs message>`
 // test/support/catalogue/loader.ts:85 (U24)
 export function loadTestCatalogue(path?: string): TestCatalogue   // TestCatalogue has blockRefs(): string[] (:15)
 // test/support/crash/cluster.ts:59 (U32)

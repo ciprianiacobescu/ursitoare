@@ -73,7 +73,7 @@ export function invokeHarness(): Promise<InvokeHarness>;
 
 ## Verification
 
-**Ran** (2026-11-06, Node 24.22.2, scratch copy of main@cf34c628): the flows through `validateFlowText` over the `acme.*` catalogue (`read-then-pay` ok; `untrusted-into-write` the one error `L3_TAINT_TO_CONSEQUENTIAL`); the Cedar texts and requests through `createPolicyEngine`; every digest and `idemKey`. **Derived**: the visit wiring (M5's files are stubs on main), replay rows, `toCedarArgs`, `nodeFingerprint`, the fakes. **UNVERIFIED**: `hooked-pay` and `pre-taint-pay` (`"0.1"`, D3) follow U41's folder; main's hook runtime is a stub.
+**Ran** (2026-11-06, Node 24.22.2, scratch copy of main@cf34c628): the flows through `validateFlowText` over the `acme.*` catalogue (`read-then-pay` ok; `untrusted-into-write` the one error `L3_TAINT_TO_CONSEQUENTIAL`); the Cedar texts and requests through `createPolicyEngine`; every digest and `idemKey`. **Derived**: the visit wiring (M5's code was not yet implemented when these were computed; it is on main when this unit runs), replay rows, `toCedarArgs`, `nodeFingerprint`, the fakes. **UNVERIFIED**: `hooked-pay` and `pre-taint-pay` (`"0.1"`, D3) follow U41's folder (M5, on main when this unit runs).
 
 ## Decisions made while writing
 

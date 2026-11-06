@@ -8,7 +8,7 @@ Batch `m6-grants` (U40b, U45, U46, U45b, U47, U48, U49, U49b, U50, U51, U52, U52
 
 ## What Changes
 
-New: `src/interpreter/fakes.ts`, `src/interpreter/policy/dry-runs.cedar`, `src/runtimes/invoke/stub.ts`, `src/api/dry-run-routes.ts`, `src/api/run-decisions.ts`, `test/support/invoke-runs/dry-runs.ts`, tests. Edited in named tasks: `src/interpreter/index.ts`, `src/runtimes/index.ts`, `src/api/index.ts`, `src/api/test-run-routes.ts` (`export` on `mapStartRunError`), `src/api/run-routes.ts` (the steps route's 200 schema description, ruling U51-1), `src/main.ts` (shared, after U46 to U49b), `docs/api/openapi.json` (regenerated), `test/support/invoke-runs/harness.ts` (U50's). Capabilities `flow-testing` and `runs-api`: ADDED requirements only. No migration, API error code, module edge, part or web change.
+New: `src/interpreter/fakes.ts`, `src/interpreter/policy/dry-runs.cedar`, `src/runtimes/invoke/stub.ts`, `src/api/dry-run-routes.ts`, `src/api/run-decisions.ts`, `test/support/invoke-runs/dry-runs.ts`, tests. Edited in named tasks: `src/interpreter/index.ts`, `src/runtimes/index.ts`, `src/api/index.ts`, `src/api/test-run-routes.ts` (`export` on `mapStartRunError`), `src/api/run-routes.ts` (the steps route's 200 schema description, ruling U51-1), `src/main.ts` (shared, after U46 to U49b), `docs/api/openapi.json` (regenerated), `test/support/invoke-runs/harness.ts` (U50's). Capabilities `flow-testing` and `runs-api`: ADDED requirements only. The `checkFakes` requirement had a narrower scope than design decision 2 (hooks of write, send or pay nodes only); decision 2 is right and the requirement now says the same. No migration, API error code, module edge, part or web change.
 
 ## Impact
 

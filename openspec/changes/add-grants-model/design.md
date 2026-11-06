@@ -58,7 +58,7 @@ Bad input is `GRANTS_INVALID`, unknown or unsafe `GRANTS_REFUSED`; nothing is st
 
 ## Risks
 
-The routes need `deploy_policy` (tenant_admin); a grant is a tenant-layer `permit` beside the platform `forbid`s, so untrusted taint into a consequential effect stays denied; role ids are unscoped in Cedar, so each policy pins tool, block and user ids to the tenant. The fingerprint leaves out the node's successors, a dominating approval's `timeout` and `cases`, and a hook's `when` (R1). Policy count grows with grants (about 1.3 µs per policy, ADR-03).
+The routes need `deploy_policy` (tenant_admin); a grant is a tenant-layer `permit` beside the platform `forbid`s, so untrusted taint into a consequential effect stays denied; role ids are unscoped in Cedar, so each policy pins tool, block and user ids to the tenant. The fingerprint leaves out the node's successors and a dominating approval's `timeout` and `cases` (R1); a hook's `when` is in it (decision 2), so switching a hook on needs a new confirmation. Policy count grows with grants (about 1.3 µs per policy, ADR-03).
 
 ## Verification
 

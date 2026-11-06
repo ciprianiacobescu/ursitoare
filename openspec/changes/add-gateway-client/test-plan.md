@@ -1,6 +1,6 @@
 # Test plan for add-gateway-client
 
-Error legend: `PERMIT_FOREIGN`, `PERMIT_MISMATCH <field>`, `TOKEN_REFUSED <status>`, `UNAVAILABLE <stage>`, `TOO_LARGE`, `INSECURE <probe>` and `INVALID <reason>` mean a `GatewayError` with code `GATEWAY_<NAME>` and `details` `{ field }`, `{ status }`, `{ stage }`, `{ limit: "1048576" }`, `{ probe }`, `{ reason }` (`{}` for `PERMIT_FOREIGN`), string values.
+Error legend: `PERMIT_FOREIGN`, `PERMIT_MISMATCH <field>`, `TOKEN_REFUSED <status>`, `UNAVAILABLE <stage>`, `TOO_LARGE`, `INSECURE <probe>` and `INVALID <reason>` mean a `GatewayError` with code `GATEWAY_RESPONSE_TOO_LARGE` for `TOO_LARGE`, `GATEWAY_INSECURE_BROKER` for `INSECURE`, else `GATEWAY_<NAME>` (so `UNAVAILABLE` is `GATEWAY_UNAVAILABLE`), and `details` `{ field }`, `{ status }`, `{ stage }`, `{ limit: "1048576" }`, `{ probe }`, `{ reason }` (`{}` for `PERMIT_FOREIGN`), string values.
 
 ## Constants
 
