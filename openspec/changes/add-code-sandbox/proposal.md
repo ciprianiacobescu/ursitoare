@@ -14,7 +14,7 @@ Observable result: `createWorkerSandbox().run` gives `{ ok: true, value: { amoun
 
 - **Scaffold:** Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them. Not scaffolded: the README row, `test/support/sandbox-exit-worker.ts`, internal files. The scaffold installs the dependencies below.
 - **Dependencies:** `quickjs-emscripten-core` `0.32.0` and `@jitl/quickjs-wasmfile-release-sync` `0.32.0` (transitive `@jitl/quickjs-ffi-types` `0.32.0`), all MIT, exact in the root `package.json`, past `minimumReleaseAge`. The variant declares a `prepare` script; after `pnpm add --save-exact` the scaffold checks: no "Ignored build scripts" warning names them, no `requiresBuild` for them in `pnpm-lock.yaml`, `test/arch/licences.test.ts` passes. No scenario tests pnpm.
-- **Runtime:** Node 24 (`package.json` engines `>=24.11 <25`; CI `node-version: "24"` in `.github/workflows/l4.yml:67` and `e2e.yml:26`); the `.ts` worker entry runs on built-in type stripping, no flag.
+- **Runtime:** Node 24; the `.ts` worker entry runs on built-in type stripping, no flag.
 - **Depends on**: `add-engine-skeleton` (U01): `src/core` and `src/config`, the only modules `sandbox` may import. `add-architecture-fitness` (U04, edge added): the arch-rule API and the `worker_threads` exception. `add-supply-chain-gate` (U05, edge added): the licence and install-time gates.
 - **Changed:** two rows appended to `test/support/README.md`; no accepted scenario. No migration, endpoint, error code, policy, e2e part, CLI command or feature file.
 
@@ -27,12 +27,12 @@ export type SandboxFaultCode =
   | "input_invalid" | "syntax_error" | "runtime_error" | "never_settled" | "sandbox_crash";
 export interface SandboxLimits { timeoutMs: number; memoryBytes: number; maxStackBytes: number; maxOutputBytes: number }
 export interface SandboxOptions {
-  seed: string;                          // hashed with seedOf into the guest PRNG seed
-  nowIso: string;                        // the frozen Date.now() / new Date() of the guest
-  binding: "input" | "ctx";              // the body's parameter name
-  result: "object" | "object_or_null";   // object_or_null: a body returning undefined or null gives value null
+  seed: string; // hashed with seedOf into the guest PRNG seed
+  nowIso: string; // the frozen Date.now() / new Date() of the guest
+  binding: "input" | "ctx"; // the body's parameter name
+  result: "object" | "object_or_null"; // object_or_null: a body returning undefined or null gives value null
 }
-export interface SandboxStats { ms: number; memBytes: number }   // memBytes -1 when not sampled
+export interface SandboxStats { ms: number; memBytes: number } // memBytes -1 when not sampled
 export type SandboxResult =
   | { ok: true; value: { [key: string]: SandboxJson } | null; stats: SandboxStats }
   | { ok: false; fault: { code: SandboxFaultCode; message: string }; stats: SandboxStats };
@@ -44,7 +44,7 @@ export interface WorkerSandbox {
 }
 export interface WorkerSandboxOptions {
   size?: number; graceMs?: number; stackSizeMb?: number; stackCapBytes?: number; maxOldGenerationSizeMb?: number;
-  workerFactory?: (url: URL, options: WorkerOptions) => Worker;   // test only; production passes none
+  workerFactory?: (url: URL, options: WorkerOptions) => Worker; // test only; production passes none
 }
 export type SandboxErrorCode = "SANDBOX_CLOSED" | "SANDBOX_INVALID";
 export class SandboxError extends Error {
@@ -56,24 +56,33 @@ export const DEFAULT_SANDBOX_LIMITS: Readonly<SandboxLimits>;
   // spec values [D8]
 export const SANDBOX_POOL_DEFAULTS: Readonly<{ size: number; graceMs: number; stackSizeMb: number; stackCapBytes: number; maxOldGenerationSizeMb: number }>;
   // spec values [D8]
-export const MIN_STACK_BYTES: number;                       // 32768
-export function memoryBucket(memoryBytes: number): number;  // max(1, ceil(n / 16 MiB)) * 16 MiB
-export function clampStack(maxStackBytes: number, capBytes: number): number;  // min(cap, max(MIN_STACK_BYTES, floor(n)))
-export function poolSize(availableCpus: number): number;    // integer n >= 1: max(1, min(2, n - 1)); else 1
-export function seedOf(seed: string): number;               // FNV-1a 32-bit over UTF-16 code units (the seed's fnv1a)
-export function workerEntryUrl(moduleUrl: string): URL;     // "./worker-entry.ts" when moduleUrl ends with ".ts", else "./worker-entry.js"
+export const MIN_STACK_BYTES: number; // 32768
+export function memoryBucket(memoryBytes: number): number; // max(1, ceil(n / 16 MiB)) * 16 MiB
+export function clampStack(maxStackBytes: number, capBytes: number): number; // min(cap, max(MIN_STACK_BYTES, floor(n)))
+export function poolSize(availableCpus: number): number; // integer n >= 1: max(1, min(2, n - 1)); else 1
+export function seedOf(seed: string): number; // FNV-1a 32-bit over UTF-16 code units (the seed's fnv1a)
+export function workerEntryUrl(moduleUrl: string): URL; // "./worker-entry.ts" when moduleUrl ends with ".ts", else "./worker-entry.js"
+// src/sandbox/classify.ts (re-exported from index)
+export interface FaultFacts {
+  stage: "args" | "compile" | "run" | "jobs" | "output" | "pending" | "host" | "watchdog" | "exit" | "spawn";
+  error?: { name: string; message: string } | null;
+  interrupted?: boolean; nearCeiling?: boolean;
+  bytes?: number; maxBytes?: number;
+  ms?: number; timeoutMs?: number; graceMs?: number;
+}
+export function classifyFault(facts: FaultFacts): { code: SandboxFaultCode; message: string };
 // src/sandbox/pool.ts (re-exported from index)
 export function createWorkerSandbox(opts?: WorkerSandboxOptions): WorkerSandbox;
 // test/support/sandbox-escape.ts
 export type EscapeExpect = { ok: true; value?: SandboxJson } | { fault: SandboxFaultCode | readonly SandboxFaultCode[] };
 export interface EscapeCase {
   id: string; title: string; source: string; input: SandboxJson; limits?: Partial<SandboxLimits>;
-  expect: EscapeExpect; hookExpect?: EscapeExpect;   // hookExpect: the outcome under binding "ctx", result "object_or_null"
+  expect: EscapeExpect; hookExpect?: EscapeExpect; // hookExpect: the outcome under binding "ctx", result "object_or_null"
 }
 export const ESCAPE_CASES: readonly EscapeCase[];
-export function checkEscapeCase(c: EscapeCase, result: SandboxResult, mode: "node" | "hook"): string | null;  // null = pass
+export function checkEscapeCase(c: EscapeCase, result: SandboxResult, mode: "node" | "hook"): string | null; // null = pass
 // test/arch/sandbox-io.ts
-export function checkSandboxIo(s: Snapshot): Violation[];   // code ARCH_SANDBOX_IO
+export function checkSandboxIo(s: Snapshot): Violation[]; // code ARCH_SANDBOX_IO
 ```
 
 **Interfaces taken:**

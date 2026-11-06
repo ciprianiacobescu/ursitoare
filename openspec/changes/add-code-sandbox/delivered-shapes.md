@@ -20,6 +20,6 @@ Declarations from main@a6b5fb37 (`file:line`).
 ## Facts from the merged code
 
 - `test/arch/sources.ts:52`: `const TEST_FILE = /\.test\.[cm]?[jt]sx?$/;`. `:243`: `if (!specifier.startsWith("./") && !specifier.startsWith("../")) return null;` (a bare specifier resolves to `null`). `:162-240`: `collectImports` lists static imports and exports, `import type`, `require("…")` and `import(…)`; a non-literal argument gives `specifier: null`, `dynamic: true`.
-- `test/arch/rules.ts:388`: `const sandbox = moduleName === "sandbox";`, `:391`: `if (ref.typeOnly || ref.specifier === null) continue;`, `:392-393`: `if (isWorkerThreads(ref.specifier)) { if (!sandbox) violations.push(workerThreadsViolation(...)); continue; }`; `test/arch/network.test.ts:54` fixes that `src/sandbox/pool.ts` importing `worker_threads` passes.
+- `test/arch/rules.ts:388-393`: `const sandbox = moduleName === "sandbox";` and `if (isWorkerThreads(ref.specifier)) { if (!sandbox) violations.push(workerThreadsViolation(...)); continue; }` (`:391` skips type-only and computed refs); `test/arch/network.test.ts:54` fixes that `src/sandbox/pool.ts` importing `worker_threads` passes.
 - `test/arch/modules.ts:21`: `sandbox: { allowed: ["core", "config"] },`. `test/arch/licence-policy.ts:9`: `"MIT"` is in `ALLOWED_LICENCES`. `pnpm-workspace.yaml:7`: `minimumReleaseAge: 4320`.
 - `tsconfig.json:4,7`: `"lib": ["es2024"]`, `"types": ["node"]`: no `WebAssembly` namespace (probe: `TS2304`).

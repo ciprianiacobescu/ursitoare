@@ -53,7 +53,7 @@ E56 ok {good:[1,2,3]}  JSON.stringify=()=>'{"evil":true}'; JSON.parse=()=>({evil
 E59 limits{memoryBytes:16*MiB,timeoutMs:3000} fault memory_limit  const a = []; for (let i = 0; i < 30; i++) a.push(new Array(200000).fill(i)); return { n: a.length };
 ```
 
-E20 (Node 24.22.2): 16 MiB (5 runs) and 32 MiB (3 runs) gave `never_settled`; 64 MiB (4 runs) gave `never_settled`, `timeout` and twice `runtime_error`, message `Error: ` (a promise flood whose exception object could not be built): four codes. The flood prints one `Aborted(...)` line to stderr; no test asserts empty stderr. E20 is the concrete disposal-abort case: `Aborted` is `JS_FreeRuntime` failing after the result exists.
+E20 (Node 24.22.2): 16 MiB (5 runs) and 32 MiB (3 runs) gave `never_settled`; 64 MiB (4 runs) gave `never_settled`, `timeout` and twice `runtime_error`, message `Error: ` (a promise flood whose exception object could not be built): four codes. The flood prints one `Aborted(...)` line to stderr; no test asserts empty stderr.
 
 ## VARIANTS
 

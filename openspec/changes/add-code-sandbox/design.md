@@ -6,9 +6,9 @@ ADR-04, § 9.4: pure `code` in a worker pool inside the DBOS step, faults termin
 
 ## Decisions
 
-1. **Files.** `types.ts`, `limits.ts`, `validate.ts` (main-thread checks), `pool.ts`, `worker-entry.ts`, `run-code.ts`, `prelude.ts` (guest source), `wasm.ts` (`WebAssembly` typing, module cache), `index.ts`.
+1. **Files.** `types.ts`, `limits.ts`, `classify.ts` (pure fault classification), `validate.ts` (main-thread checks), `pool.ts`, `worker-entry.ts`, `run-code.ts`, `prelude.ts` (guest source), `wasm.ts` (`WebAssembly` typing, module cache), `index.ts`.
 2. **Protocol.** No ready handshake (Node delivers a message posted before the worker listens: probe, 24.22.2). One message per job, `{ id, code, inputJson, limits, options, stackCapBytes }`, answered `{ id, result }`; the input travels as validated JSON text, so no `DataCloneError`.
-3. **One run.** The seed's `runCode`: a Wasm module per `memoryBucket` (`initial` 256, `maximum` 256 + bucket / 65536 pages; dropped after a `sandbox_crash` or an abort while disposing, which keeps the result); `setMemoryLimit`, `setMaxStackSize(clampStack(…))`, an interrupt past the deadline, `executePendingJobs(512)` until settled, `never_settled` when pending with no job. `memBytes` is -1 after `memory_limit`, `sandbox_crash` and a watchdog `timeout` (F9); `ms` is measured in the worker for a settled run, else on the main thread. `classify` and `buildPrelude` are ported (errors read via `getProp`, F6); under `object_or_null`, `undefined` and `null` give `"Onull"`.
+3. **One run.** The seed's `runCode`: a Wasm module per `memoryBucket` (`initial` 256, `maximum` 256 + bucket / 65536 pages; dropped after a `sandbox_crash` or an abort while disposing, which keeps the result); `setMemoryLimit`, `setMaxStackSize(clampStack(…))`, an interrupt past the deadline, `executePendingJobs(512)` until settled, `never_settled` when pending with no job. `memBytes` is -1 after `memory_limit`, `sandbox_crash` and a watchdog `timeout` (F9); `ms` is measured in the worker for a settled run, else on the main thread. `buildPrelude` is ported and `classify` becomes `classifyFault`; errors are read via `getProp` (F6); under `object_or_null`, `undefined` and `null` give `"Onull"`.
 4. **Pool.** `run` reserves a worker synchronously (idle, new below `size`, or a FIFO entry); the seed reserved after an `await` and timed out 5 of 6 concurrent runs. The watchdog starts at `postMessage`. Exit with a job: clear the timer, replace at once, `respawns`++, `sandbox_crash`. Idle exit: remove the slot; the next run spawns (`respawns`++). A throwing factory gives `sandbox_crash`. `createWorkerSandbox` reads `opts` once into a plain copy in a try/catch (`Reflect.ownKeys`, `Reflect.get`, `String(key)`), unknown keys before values. Workers are `unref()`ed; the watchdog timer is not.
 5. **Validation** (main thread; first failure wins in the order `code`, `limits`, `options`, `seed`, `nowIso`, `binding`, `result`, `input`; messages start with the argument's name). `limits` and `options` are each read once into a plain copy at their own step, after the non-null-object check (as design 4's `opts`); a throw gives `input_invalid` (no rejection), message `limits could not be read` or `options could not be read`, before any worker is reserved; members are checked on the copy. `nowIso` matches `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$` and `Date.parse` is finite, and the day is at most its month's length (V8 rolls `2026-02-30` over to 2 March). The input check is the spec's `strictJson` in a try/catch (a throw is `input_invalid`), then at most 8,000,000 JSON characters. No `node:util` (the import rule forbids it).
 6. **Sizing** is the caller's: no `size` means 2; U39's `main` passes `poolSize(availableParallelism())` (`node:os` is refused here).
@@ -24,12 +24,12 @@ export type SandboxFaultCode =
   | "input_invalid" | "syntax_error" | "runtime_error" | "never_settled" | "sandbox_crash";
 export interface SandboxLimits { timeoutMs: number; memoryBytes: number; maxStackBytes: number; maxOutputBytes: number }
 export interface SandboxOptions {
-  seed: string;                          // hashed with seedOf into the guest PRNG seed
-  nowIso: string;                        // the frozen Date.now() / new Date() of the guest
-  binding: "input" | "ctx";              // the body's parameter name
-  result: "object" | "object_or_null";   // object_or_null: a body returning undefined or null gives value null
+  seed: string; // hashed with seedOf into the guest PRNG seed
+  nowIso: string; // the frozen Date.now() / new Date() of the guest
+  binding: "input" | "ctx"; // the body's parameter name
+  result: "object" | "object_or_null"; // object_or_null: a body returning undefined or null gives value null
 }
-export interface SandboxStats { ms: number; memBytes: number }   // memBytes -1 when not sampled
+export interface SandboxStats { ms: number; memBytes: number } // memBytes -1 when not sampled
 export type SandboxResult =
   | { ok: true; value: { [key: string]: SandboxJson } | null; stats: SandboxStats }
   | { ok: false; fault: { code: SandboxFaultCode; message: string }; stats: SandboxStats };
@@ -41,7 +41,7 @@ export interface WorkerSandbox {
 }
 export interface WorkerSandboxOptions {
   size?: number; graceMs?: number; stackSizeMb?: number; stackCapBytes?: number; maxOldGenerationSizeMb?: number;
-  workerFactory?: (url: URL, options: WorkerOptions) => Worker;   // test only; production passes none
+  workerFactory?: (url: URL, options: WorkerOptions) => Worker; // test only; production passes none
 }
 export type SandboxErrorCode = "SANDBOX_CLOSED" | "SANDBOX_INVALID";
 export class SandboxError extends Error {
@@ -53,29 +53,38 @@ export const DEFAULT_SANDBOX_LIMITS: Readonly<SandboxLimits>;
   // spec values [D8]
 export const SANDBOX_POOL_DEFAULTS: Readonly<{ size: number; graceMs: number; stackSizeMb: number; stackCapBytes: number; maxOldGenerationSizeMb: number }>;
   // spec values [D8]
-export const MIN_STACK_BYTES: number;                       // 32768
-export function memoryBucket(memoryBytes: number): number;  // max(1, ceil(n / 16 MiB)) * 16 MiB
-export function clampStack(maxStackBytes: number, capBytes: number): number;  // min(cap, max(MIN_STACK_BYTES, floor(n)))
-export function poolSize(availableCpus: number): number;    // integer n >= 1: max(1, min(2, n - 1)); else 1
-export function seedOf(seed: string): number;               // FNV-1a 32-bit over UTF-16 code units (the seed's fnv1a)
-export function workerEntryUrl(moduleUrl: string): URL;     // "./worker-entry.ts" when moduleUrl ends with ".ts", else "./worker-entry.js"
+export const MIN_STACK_BYTES: number; // 32768
+export function memoryBucket(memoryBytes: number): number; // max(1, ceil(n / 16 MiB)) * 16 MiB
+export function clampStack(maxStackBytes: number, capBytes: number): number; // min(cap, max(MIN_STACK_BYTES, floor(n)))
+export function poolSize(availableCpus: number): number; // integer n >= 1: max(1, min(2, n - 1)); else 1
+export function seedOf(seed: string): number; // FNV-1a 32-bit over UTF-16 code units (the seed's fnv1a)
+export function workerEntryUrl(moduleUrl: string): URL; // "./worker-entry.ts" when moduleUrl ends with ".ts", else "./worker-entry.js"
+// src/sandbox/classify.ts (re-exported from index)
+export interface FaultFacts {
+  stage: "args" | "compile" | "run" | "jobs" | "output" | "pending" | "host" | "watchdog" | "exit" | "spawn";
+  error?: { name: string; message: string } | null;
+  interrupted?: boolean; nearCeiling?: boolean;
+  bytes?: number; maxBytes?: number;
+  ms?: number; timeoutMs?: number; graceMs?: number;
+}
+export function classifyFault(facts: FaultFacts): { code: SandboxFaultCode; message: string };
 // src/sandbox/pool.ts (re-exported from index)
 export function createWorkerSandbox(opts?: WorkerSandboxOptions): WorkerSandbox;
 // test/support/sandbox-escape.ts
 export type EscapeExpect = { ok: true; value?: SandboxJson } | { fault: SandboxFaultCode | readonly SandboxFaultCode[] };
 export interface EscapeCase {
   id: string; title: string; source: string; input: SandboxJson; limits?: Partial<SandboxLimits>;
-  expect: EscapeExpect; hookExpect?: EscapeExpect;   // hookExpect: the outcome under binding "ctx", result "object_or_null"
+  expect: EscapeExpect; hookExpect?: EscapeExpect; // hookExpect: the outcome under binding "ctx", result "object_or_null"
 }
 export const ESCAPE_CASES: readonly EscapeCase[];
-export function checkEscapeCase(c: EscapeCase, result: SandboxResult, mode: "node" | "hook"): string | null;  // null = pass
+export function checkEscapeCase(c: EscapeCase, result: SandboxResult, mode: "node" | "hook"): string | null; // null = pass
 // test/arch/sandbox-io.ts
-export function checkSandboxIo(s: Snapshot): Violation[];   // code ARCH_SANDBOX_IO
+export function checkSandboxIo(s: Snapshot): Violation[]; // code ARCH_SANDBOX_IO
 ```
 
 ## Failure classification
 
-A closed sandbox rejects and a bad option throws (spec); every other failure is a returned fault with the code of the first matching row. Source: the seed (`runCode`, `classify`, `drive`; probed on Node 24.22.2) minus its fetch rows, so a thrown `FetchDeniedError` is V7. "Interrupted" is the interrupt handler's deadline flag; `T` is `execution exceeded timeoutMs`; `<m>` is the error's message; an `O` text no row refuses is `ok`.
+A closed sandbox rejects and a bad option throws (spec); every other failure is a returned fault, chosen by `classifyFault` (`classify.ts`; pure, called only for a fault) as the code of the first matching row. `validate.ts` builds its `FaultFacts` for R1 (stage `args`, `error.message` the whole message), the worker (`run-code.ts`) for R2-R11 (stage `run`: the driver call, a rejected driver promise or an `E` envelope, R6 and R8), `pool.ts` for R12. Source: the seed (`runCode`, `classify`, `drive`; probed on Node 24.22.2) minus its fetch rows, so a thrown `FetchDeniedError` is V7. "Interrupted" is the deadline flag: the interrupt handler sets it, and so does the worker when it finds the deadline passed at a settled or pending check; `T` is `execution exceeded timeoutMs`; `<m>` is the error's message (V4 and V6 return it); an `O` text no row refuses is `ok`. A `null` error is a thrown null (R5 at the job queue unless interrupted, else V1's `NullThrown`); V1's memory signal is set for an `E` envelope only.
 
 | Row | Condition | Code | Message |
 |---|---|---|---|
@@ -121,4 +130,4 @@ Timing is wall-clock, so no `Clock`; assertions use the spec's windows.
 
 ## Unverified
 
-`src/sandbox` on Node 24 (every probe ran on 24.22.2) and its `.ts` worker entry under `node --test`; the throwing `limits` and `options` rows and `MULTI_BAD` (design 5); R5, R6 (rejected promise) and the factory of R12 (no seed body reaches them); the `"hook"` sweep, recording factory, exit worker, child processes; `dist/sandbox/worker-entry.js` in a built image (the built-worker scenario covers the `tsc` build from `node_modules/.cache/`, probed with a stand-in pool, `src/sandbox` being stubs).
+`src/sandbox` on Node 24 (every probe ran on 24.22.2) and its `.ts` worker entry under `node --test`; the throwing `limits` and `options` rows and `MULTI_BAD` (design 5); the unprobed `classifyFault` vectors (no seed body reaches R2, R5, R6 or the factory of R12, the worker's facts for them are unverified); the `"hook"` sweep, recording factory, exit worker, child processes; `dist/sandbox/worker-entry.js` in a built image (the built-worker scenario covers the `tsc` build from `node_modules/.cache/`, probed with a stand-in pool, `src/sandbox` being stubs).

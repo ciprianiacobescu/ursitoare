@@ -1,6 +1,6 @@
 # Test plan
 
-Every body was run through the Phase-0 pool (`seed/sandbox-quickjs`, Node 24.22.2, 2026-11-06; `LOCAL_BODY` agrees under `TZ` `UTC`, `Asia/Tokyo` and `America/Los_Angeles`); expectations are those results, except `MULTI_BAD` and the throwing `BAD_ARGS` rows (derived from design 5).
+Every body was run through the Phase-0 pool (`seed/sandbox-quickjs`, Node 24.22.2, 2026-11-06; `LOCAL_BODY` agrees under `TZ` `UTC`, `Asia/Tokyo` and `America/Los_Angeles`); expectations are those results, except `MULTI_BAD`, `GOOD_ARGS`, the throwing `BAD_ARGS` rows (design 5), the ordering rows of `BAD_OPTIONS` (design 4) and the vectors without `*`.
 
 ## Conventions
 
@@ -16,8 +16,9 @@ Every body was run through the Phase-0 pool (`seed/sandbox-quickjs`, Node 24.22.
 - `FAULT_BODIES` (`runtime_error` unless shown; no earlier bomb on the pool, V1): `return {` (`syntax_error`, message starts `SyntaxError: `); `null.x;` (starts `TypeError: `); `undefinedName;` (`/^ReferenceError: '?undefinedName'? is not defined$/`); `throw new Error('boom');` (`Error: boom`); `throw 'just a string';` (`Error: just a string`); `throw { code: 42 };` (`Error: <thrown object without a message>`); `throw null;` (`null was thrown`); `throw new RangeError('x');` (`RangeError: x`); `throw new InternalError('x');` (`InternalError: x`); `return Promise.reject(new Error('x'));` (`Error: x`); `await new Promise(() => {}); return {};` (`never_settled`, the text of design R10); `return { get g() { throw new Error('boom'); } };` (`output_invalid`, `output is not JSON-serializable at $.g: accessor property`); `return new Proxy({}, { ownKeys() { throw new Error('trap'); } });` (`Error: trap`).
 - `BAD_ARGS` (the message contains the argument's name, `limits.<member>` for limits): `code` 42; `limits` `null`, `undefined`, `"x"`, one with a throwing `timeoutMs` getter and a `Proxy` whose `ownKeys` throws, and `options` `null`, `undefined`, `5` and one with a throwing `seed` getter (passed as the argument itself, not spread; the name is `limits` or `options`); `timeoutMs` 0, `"100"`, 3600001; `memoryBytes` -1, 1073741825; `maxStackBytes` NaN; `maxOutputBytes` Infinity, 67108865; `seed` `""`, `"a".repeat(1025)`, 1; `nowIso` `"yesterday"`, `"2026-10-24T12:00:00"`, `"2026-02-30T00:00:00Z"`; `binding` `"args"`; `result` `"array"`.
 - `MULTI_BAD` (`NORMALIZE`, the listed arguments changed together; expected: the spec's first): M1 `code` 42, `limits` `null`: `code`; M2 `limits` `null`, `options` 5: `limits`; M3 `seed` `""`, `nowIso` `"yesterday"`, `binding` `"args"`: `seed`; M4 `binding` `"args"`, `result` `"array"`: `binding`; M5 `result` `"array"`, input `undefined`: `result`.
+- `GOOD_ARGS` (`NORMALIZE`; each object is passed itself, not spread; `n` counts reads): G1 `limits` `LIM` with `timeoutMs` a counting getter returning 1000; G2 `options` `OPT` with `seed` a counting getter returning `OPT.seed`. Each gives the `NORMALIZE` value and `n` 1.
 - `BUSY`: `for (let i = 0; i < 3000000; i++) {} return { i: 0 };`. `LOOP`: `for (;;) {}`. `BIG`: `const x = 3n ** 150000n; return { l: (x * x * x * x).toString().length };`. `LATE`: the same with `100000n`.
-- `BAD_OPTIONS` (option: values; range): `size`: 0, 17, 1.5, `"2"`, NaN (1 to 16); `graceMs`: -1, 10001 (0 to 10000); `stackSizeMb`: 0, 65 (1 to 64); `stackCapBytes`: 32767, 1048577 (32768 to 1048576); `maxOldGenerationSizeMb`: 15, 4097 (16 to 4096); `workerFactory`: `"x"` (a function); `opts` (the argument; `opts must be a plain object`): `null`, `5`, `"x"`, `[]`, `new Map()`; `sizes` (`sizes is not an option`): `{ sizes: 2 }`; `opts` (`opts could not be read`): `{ get size() { throw new Error("x"); } }`, `new Proxy({}, { ownKeys() { throw new Error("x"); } })`. `GOOD_OPTIONS`: `undefined` (the argument), `{}`, `Object.create(null)`, `{ size: undefined }`, a counting `{ get size() { n++; return 3; } }` (accepted, `size` 3, `n` 1) and both ends of every range.
+- `BAD_OPTIONS` (option: values; range): `size`: 0, 17, 1.5, `"2"`, NaN (1 to 16); `graceMs`: -1, 10001 (0 to 10000); `stackSizeMb`: 0, 65 (1 to 64); `stackCapBytes`: 32767, 1048577 (32768 to 1048576); `maxOldGenerationSizeMb`: 15, 4097 (16 to 4096); `workerFactory`: `"x"` (a function); `opts` (the argument; `opts must be a plain object`): `null`, `5`, `"x"`, `[]`, `new Map()`; `sizes` (`sizes is not an option`): `{ sizes: 2 }` and `{ get size() { n++; throw new Error("x"); }, sizes: 2 }` and the same with `sizes` first (`option` `sizes`; `n` 0); `opts` (`opts could not be read`): `{ get size() { throw new Error("x"); } }`, `new Proxy({}, { ownKeys() { throw new Error("x"); } })`. `GOOD_OPTIONS`: `undefined` (the argument), `{}`, `Object.create(null)`, `{ size: undefined }`, a counting `{ get size() { n++; return 3; } }` (accepted, `size` 3, `n` 1) and both ends of every range.
 - `CLOCK_RANDOM`: `const r = [Math.random(), Math.random(), Math.random()]; return { now: Date.now(), iso: new Date().toISOString(), str: String(new Date()), r, id: Math.floor(Math.random() * 1e9).toString(36), shuffled: [1,2,3,4,5,6,7,8,9].sort(() => Math.random() - 0.5), plus1h: new Date(Date.now() + 3600000).toISOString(), parts: [new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours()] };`. `CLOCK_BODY`: `return { now: Date.now(), iso: new Date().toISOString(), str: String(new Date()) };`, expected `{ now: 1792843200000, iso: "2026-10-24T12:00:00.000Z", str: "Sat Oct 24 2026 12:00:00 GMT+0000 (UTC)" }`. `RANDOM_BODY`: `return { v: Array.from({ length: 10 }, () => Math.random()) };` against the host reference `mulberry32(seedOf("12345"))`, with `function mulberry32(seed) { let s = seed >>> 0; return () => { s = (s + 0x6d2b79f5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }`. `TZ_BODY`: `return { off: new Date().getTimezoneOffset(), h: new Date(2020,5,1,12).getHours(), s: String(new Date(2020,0,1)), p: Date.parse('2020-06-01T12:00:00'), l: String(Date.parse('Jun 1 2020 12:00')), d: new Date(0).getDate() };`, expected JSON `{"off":0,"h":12,"s":"Wed Jan 01 2020 00:00:00 GMT+0000 (UTC)","p":1591012800000,"l":"NaN","d":1}`. `LOCAL_BODY`: `const d = new Date(); const u = ["FullYear", "Month", "Date", "Day", "Hours", "Minutes"]; return { bare: Date(), eq: Date() === new Date().toString(), off: d.getTimezoneOffset(), local: u.map((k) => d["get" + k]()), utc: u.map((k) => d["getUTC" + k]()), ls: d.toLocaleString() };`. At `nowIso` `"2026-12-31T23:30:15.250Z"` it gives `LOCAL_JSON`: `{"bare":"Thu Dec 31 2026 23:30:15 GMT+0000 (UTC)","eq":true,"off":0,"local":[2026,11,31,4,23,30],"utc":[2026,11,31,4,23,30],"ls":"2026-12-31 23:30:15"}`. A determinism child is `execFileSync(process.execPath, ["--input-type=module", "-e", script], { env: { ...process.env, TZ } })`; the script imports `createWorkerSandbox` from the `file:` URL of `src/sandbox/index.ts`, prints `<sha256 hex> <TZ_BODY JSON> <LOCAL_JSON>` (`LOCAL_BODY` at the `nowIso` above), closes the pool. A lifetime child uses `spawnSync` with `timeout: 20000`, no `close`.
 - `BOMBS`: `const a=[];for(;;)a.push(new Array(100000).fill(1));`, `const a=[];for(let i=0;;i++)a.push("x".repeat(1000)+i);`, `const a=[];for(let i=0;;i++)a.push({i, s: "v" + i});`. `ALLOC`: `const a = []; for (let i = 0; i < 30; i++) a.push(new Array(200000).fill(i)); return { n: a.length };`.
 - `STACK_BODIES`: the 12 bodies of `escape-data.md` (`timeoutMs` 2000, `memoryBytes` 64 MiB). `RECURSE`: `let d = 0; function f() { d++; f(); } try { f(); } catch (e) {} return { d };` gives `d` 1485 at 262144 and 536870912, 368 at 65536, 181 at 1 and 32768.
@@ -25,7 +26,7 @@ Every body was run through the Phase-0 pool (`seed/sandbox-quickjs`, Node 24.22.
 
 ## ARCH_FILES (under `src/sandbox/` unless shown)
 
-`ok.ts`: imports of `node:worker_threads`, `import type … from "worker_threads"`, the two QuickJS packages, `./limits.ts`, `../sandbox/limits.ts`, `../core/index.ts`, `../config/index.ts`. `b.ts`: line 1 `import fs from "node:fs";`, 2 `import { q } from "../db/index.ts";`, 3 `import type { T } from "quickjs-emscripten-core/dist/x";`, 4 `const m = await import("node:path");`, 5 `const n = await import(name);`. `c.ts`: 1 `const a = process.env.X;`, 2 `const b = globalThis.process;`, 3 `const c = "process";`. `g.ts`: 1 `import { z } from "../sandboxish/x.ts";`, 2 `import { i } from "../core/ids.ts";`. `d.test.ts` (also `process.env.X`) and `src/api/e.ts`: `import fs from "node:fs";`.
+`ok.ts`: imports of `node:worker_threads`, `import type … from "worker_threads"`, the two QuickJS packages, `./limits.ts`, `../sandbox/limits.ts`, `../core/index.ts`, `../config/index.ts`. `b.ts`: line 1 `import fs from "node:fs";`, 2 `import { q } from "../db/index.ts";`, 3 `import type { T } from "quickjs-emscripten-core/dist/x";`, 4 `const m = await import("node:path");`, 5 `const n = await import(name);`. `c.ts`: 1 `const a = process.env.X;`, 2 `const b = globalThis.process;`, 3 `const c = "process";`. `g.ts`: 1 `import { z } from "../sandboxish/x.ts";`, 2 `import { i } from "../core/ids.ts";`. `d.test.ts` (also `process.env.X`) and `src/api/e.ts`: `import fs from "node:fs";`. Import messages are `<specifier> is not allowed in src/sandbox; the sandbox uses no host I/O` (specifier as written; `a computed import specifier` for `b.ts` line 5); both `c.ts` messages are `process is not allowed in src/sandbox`.
 
 ## VERDICTS (results carry `stats: { ms: 1, memBytes: 0 }`; text is `<id>: expected <expect>, got <result>`, each side `ok`, `ok <value JSON>` or `fault <code>`, codes joined by `|`)
 
@@ -40,7 +41,7 @@ A `value` passes on `isDeepStrictEqual`; an `ok` without `value` takes any ok; `
 
 ## INVALID_INPUTS
 
-X01-X26 are refused: `NORMALIZE` resolves `ok: false`, `input_invalid`, `stats.memBytes` -1, a message containing `input`, no worker started. A1-A5: `ECHO` (`return { v: arguments[0] };`) resolves `ok: true` with the value shown (A2, A3: plain-data traps; X23: the traps report `Date.prototype`).
+X01-X26 are refused (scenario "Each invalid argument is refused with no worker started"). A1-A5: `ECHO` (`return { v: arguments[0] };`) resolves `ok: true` with the value shown (A2, A3: plain-data traps; X23: the traps report `Date.prototype`).
 
 Refused rows: X01 `undefined`; X02 `{ u: undefined }`; X03 `{ f: () => 1 }`; X04 `{ s: Symbol("x") }`; X05 `{ b: 1n }`; X06 `{ n: NaN }`; X07 `{ n: new Number(1) }`; X08 `{ d: new Date(0) }`; X09 `{ m: new Map() }`; X10 `{ s: new Set() }`; X11 `new (class A {})()`; X12 `{ t: new Uint8Array(2) }`; X13 `[1, , 3]`; X14 `{ get g() { return 1; } }`; X15 `Object.defineProperty({}, "h", { value: 1 })`; X16 `{ [Symbol("k")]: 1 }`; X17 `c` after `const c = {}; c.self = c;`; X18 `Object.defineProperty([], "0", { value: 1 })`; X19 `Object.assign([1], { x: 2 })`; X20 `Object.setPrototypeOf([], null)`; X21 `Object.create({ a: 1 })`; X22 `new Proxy({}, { ownKeys() { throw new Error("x"); } })`; X23 `new Proxy(new Date(0), {})`; X24 `{ a: [{ b: 1n }] }`; X25 `DEEP(66)`; X26 `"x".repeat(7999999)`.
 
@@ -51,3 +52,36 @@ Refused rows: X01 `undefined`; X02 `{ u: undefined }`; X03 `{ f: () => 1 }`; X04
 | A3 | `new Proxy([1, 2], {})` | ok `{ v: [1, 2] }` |
 | A4 | `[]` | ok `{ v: [] }` |
 | A5 | `{}` | ok `{ v: {} }` |
+
+## Classification vectors
+
+`classifyFault(facts)` equals `{ code, message }` for each vector; `facts` is `{ stage, error, ...more }` from the columns (blank `error`: absent; `interrupted`, `nearCeiling`: `true`). `E(n, m)` is `{ name: n, message: m }`; `T` is design's, `NEVER` R10's message, `CEIL` V1's first; an expression gives its value. `*`: same on the Phase-0 pool (Node 24.22.2); the rest unprobed.
+
+|Id|stage|error|more|code|message|
+|---|---|---|---|---|---|
+|R1|args|E("code","code must be a string")||input_invalid|code must be a string|
+|R2|compile|E("InternalError","interrupted")|interrupted|timeout|T|
+|R3*|compile|E("SyntaxError","expecting ';'")||syntax_error|SyntaxError: expecting ';'|
+|R4*|compile|E("InternalError","out of memory")||runtime_error|InternalError: out of memory|
+|R5|jobs|null||memory_limit|guest heap exceeded memoryBytes (job queue)|
+|R6a|jobs|null|interrupted|timeout|T|
+|R6b|jobs|E("InternalError","stack overflow")||stack_overflow|stack overflow|
+|R7a|output||interrupted, bytes 10, maxBytes 100|timeout|T|
+|R7b*|pending||interrupted|timeout|T|
+|R8*|run|E("Error","boom")||runtime_error|Error: boom|
+|R9*|output||bytes 98, maxBytes 97|output_too_large|output is 98 bytes, limit 97|
+|R10*|pending|||never_settled|NEVER|
+|R11|host|E("RangeError","m".repeat(400))||sandbox_crash|"RangeError: " + "m".repeat(300)|
+|R12a*|watchdog||ms 300.6, timeoutMs 50, graceMs 250|timeout|worker watchdog killed the sandbox after 301 ms (limit 50 + grace 250)|
+|R12b|exit|||sandbox_crash|worker thread exited unexpectedly|
+|R12c|spawn|||sandbox_crash|worker thread could not be started|
+|V1a*|run|E("NullThrown","")|nearCeiling|memory_limit|CEIL|
+|V1b|run|null|interrupted, nearCeiling|timeout|T|
+|V1c*|run|E("NullThrown","")||runtime_error|null was thrown|
+|V2|run|E("InternalError","out of memory")|interrupted|timeout|T|
+|V3*|run|E("InternalError","out of memory")||memory_limit|guest heap exceeded memoryBytes|
+|V4a*|run|E("InternalError","stack overflow")||stack_overflow|stack overflow|
+|V4b*|run|E("RangeError","Maximum call stack size exceeded")||stack_overflow|Maximum call stack size exceeded|
+|V5*|run|E("OutputTooLargeError","output exceeds size limit")||output_too_large|output exceeds size limit|
+|V6*|run|E("OutputError","output is not JSON-serializable at $: toJSON present")||output_invalid|output is not JSON-serializable at $: toJSON present|
+|V7*|run|E("InternalError","x")||runtime_error|InternalError: x|
