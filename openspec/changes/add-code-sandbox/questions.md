@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 3.5 | harness | Task 3.5: the pre-satisfied check could not decide |
-| Q-002 | open | 3.6 | harness | Task 3.6: the pre-satisfied check could not decide |
+| Q-002 | answered | 3.6 | harness | Task 3.6: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -220,7 +220,8 @@ accept: The held evidence is enough. The new tests are not vacuous: they assert 
 
 ## Q-002: Task 3.6: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.6
 - **Kind:** harness
 - **Asked:** 2026-11-06T21:22Z by deepseek-free, run r-20261106T2053Z-6f18, task 3.6
@@ -491,3 +492,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: accept: The held evidence is enough. The seven new tests are not vacuous: they assert the exact fault codes, messages, memBytes, respawn counts, factory call counts and timing windows that the two spec scenarios "Interrupt, late finish and watchdog" and "Exit during a job, idle exit and a factory that throws" prescribe (LOOP interrupted with the execution exceeded timeoutMs message in 200 to 2450 ms and no respawn, LATE a timeout without a respawn before the watchdog, BIG killed by the watchdog with the message naming limit 50 and grace 250 or 1000 and one respawn and two factory calls, an exiting worker giving worker thread exited unexpectedly with an immediate replacement, an idle exit replaced lazily with the respawn counted on the next run, a throwing factory giving worker thread could not be started and the next run succeeding). The behaviour is already in the unit head: pool.ts arms the watchdog at timeoutMs plus graceMs on postMessage, terminates and replaces the worker and counts a respawn, replaces a worker that exits during a job at once and an idle one on the next spawn, and turns a throwing factory into a spawn fault; classify.ts carries the three exact messages; run-code.ts interrupts at the deadline and reports a settled run past its deadline as a timeout. The base run could only end in an error because the base branch carries the milestone scaffold stub of the sandbox index, whose bodies throw not implemented before any assertion runs, so the inconclusive result reflects the scaffold, not the tests. The exit worker support file that the crash tests reference is created by the task's green step as tasks.md 3.6 says; the red-scope guard excluded it from this change. Counting these tests on the real run is sound, and the replay still runs every gate, so a failure there is caught.
