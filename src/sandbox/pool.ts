@@ -199,13 +199,15 @@ class PoolSandbox implements WorkerSandbox {
       this.respawnOnNextSpawn = false;
       this.respawnCount += 1;
     }
-    worker.unref();
     const slot: Slot = { worker, job: undefined };
     worker.on("message", (message: unknown) => this.receive(slot, message));
     worker.on("error", () => {
       // The exit handler reports a dead worker.
     });
     worker.on("exit", () => this.onExit(slot));
+    // Unref after the listeners: attaching a message listener refs the worker again, and an idle
+    // worker must not keep the process alive.
+    worker.unref();
     this.slots.push(slot);
     return slot;
   }
