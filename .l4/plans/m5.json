@@ -1,0 +1,83 @@
+{
+  "schema": "l4/delivery-plan@1",
+  "plan_id": "m5",
+  "target": "main",
+  "merge": "auto",
+  "limits": {
+    "max_cost_usd": 300,
+    "max_unit_attempts": 3,
+    "max_runs": 72
+  },
+  "external_dependencies": [],
+  "exclude": [],
+  "batches": [
+    {
+      "id": "m5-code-hooks",
+      "acceptance_profile": "none",
+      "depends_on": [],
+      "units": [
+        {
+          "id": "openspec:add-code-sandbox",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-code-node-runtime",
+          "depends_on": [
+            "openspec:add-code-sandbox"
+          ]
+        },
+        {
+          "id": "openspec:add-taint-runtime",
+          "depends_on": [
+            "openspec:add-code-node-runtime",
+            "openspec:add-code-sandbox"
+          ]
+        },
+        {
+          "id": "openspec:add-hook-checker",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-hook-runtime",
+          "depends_on": [
+            "openspec:add-code-node-runtime",
+            "openspec:add-code-sandbox",
+            "openspec:add-hook-checker",
+            "openspec:add-taint-runtime"
+          ]
+        },
+        {
+          "id": "openspec:add-hook-trace",
+          "depends_on": [
+            "openspec:add-code-node-runtime",
+            "openspec:add-code-sandbox",
+            "openspec:add-hook-checker",
+            "openspec:add-hook-runtime"
+          ]
+        },
+        {
+          "id": "openspec:add-block-hooks",
+          "depends_on": [
+            "openspec:add-code-node-runtime",
+            "openspec:add-code-sandbox",
+            "openspec:add-hook-checker",
+            "openspec:add-hook-runtime",
+            "openspec:add-hook-trace"
+          ]
+        },
+        {
+          "id": "openspec:add-web-hooks-view",
+          "depends_on": [
+            "openspec:add-block-hooks",
+            "openspec:add-code-node-runtime",
+            "openspec:add-code-sandbox",
+            "openspec:add-hook-checker",
+            "openspec:add-hook-runtime",
+            "openspec:add-hook-trace",
+            "openspec:add-taint-runtime"
+          ]
+        }
+      ]
+    }
+  ]
+}
