@@ -30,7 +30,7 @@ architecture v0.1-r5 (§13 Phase-1 plan and exit tests 1–23). Owner decisions:
 | M3 | An author creates a flow from YAML, sees diagnostics and a read-only graph, and saves validated versions | U22–U29 | `test_m3_authoring.py` | — |
 | M4 | An author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill | U30–U37, U35b | `test_m4_runs.py` | — |
 | M5 | Flows with pure `code` nodes and pre/post hooks run durably; hook routes into effect nodes are rejected | U38–U44, U42b | `test_m5_code_hooks.py` | — |
-| M6 | Admins register tool servers and grant tools per role and step; an attended dry run reads through the broker with a one-step token and shows each effect's permit while stubbing it | U45–U52 | `test_m6_grants.py` | — |
+| M6 | Admins register tool servers and grant tools per role and step; an attended dry run reads through the broker with a one-step token and shows each effect's permit while stubbing it | U45–U52, U40b, U49b, U52b | `test_m6_grants.py` | — |
 | M7 | An admin adds an HTTP/OpenAPI, MCP or code-block tool, approves its surface and stores its credential; a flow calls it (F9) | U53–U56 | `test_m7_tools.py` | — |
 | M8 | `docker compose up` runs the six-container hobbyist stack; every journey so far passes against real Keycloak and Mintkey | U57–U61 | all so far | **first stack run**: journeys, contract suites against the real services, exit tests 10 (runtime), 12, 19 |
 | M9 | The RF-1 core flow runs with LLM extract and decide nodes, every call journaled and costed; a `pay` whose amount an LLM extracted is refused when no approval is on the path, with the reason shown | U62–U70 | `test_m9_llm.py` | stack run; exit 11 at the concurrency the broker allows |
@@ -72,7 +72,8 @@ order of their edges, one at a time.
   (U50); only `src/identity` (OIDC) and `src/observability` (OTLP) make other outbound calls, and the architecture tests
   (U04) enforce it from M0; refusals are audited in their own transaction.
 - **No real effect before publish.** Mocked test runs (U35) and attended dry runs (U51) never perform a `write`,
-  `send` or `pay` effect; from M6 they evaluate and record its permit (M4 has no `invoke_tool` permits, M4 decision D8). Only published versions run live (U77).
+  `send` or `pay` effect; from M6 attended dry runs evaluate and record each effect's permit (mock runs never call the
+  PEP, M4 D8 and M6 D5). Only published versions run live (U77).
 - **External inputs are untrusted by default:** documents, tool and MCP results, webhook bodies (U78) and MCP caller
   arguments (U89) carry the `untrusted` label.
 - **Shared files have one extension point.** The e2e stack grows only through part files under
@@ -204,15 +205,18 @@ All units start as `planned`.
 
 | U | Change id | Cap | Module | Scope | Depends on | Exit | Seed | Status |
 |---|---|---|---|---|---|---|---|---|
-| U45 | `add-fake-egress-proxy` | `test-fake-egress` | — | `test/support/fake-egress/`: broker token issue (service-token auth, TTL), proxy `/<service_uuid>/<path>` (bearer check, credential injection), per-service routing to loopback upstreams, streaming and redirect pass-through, recorded requests, audit-event emission to a configured sink, the vault write endpoint with identities; contract suite against a base URL; routes for names under `fake.test`; a credential-less route | — | 13 (fixture) | `deploy/mintkey-footprint` | planned |
-| U45b | `add-fake-tools` | `test-fake-tools` | — | `test/support/fake-tools/`: port `seed/shared/mocks/mock-tools.mjs`: the 20 test-catalogue blocks as loopback handlers behind fake-egress routes (`tools.fake.test`), recorded calls, reset, per-route delay and failure; contract test; e2e part `parts/50-tools.ts` (registers its routes in the fake egress that U46's part started) | U06, U24, U45, U46 | — | `shared/mocks` (mock tools) | planned |
-| U46 | `add-gateway-client` | `gateway` | `gateway` | `src/gateway`: `requestToken(permit)` (the TTL is the permit's), never refreshed; `send(permit, request)` refuses unless method, host, path and body digest equal the permit; manual redirects (a 3xx is returned, never followed); `X-Ursitoare-Call`; run and step ids in the trace; startup self-check (empty secret files, or a broker that issues a token to an unauthenticated caller, refuse start); stack part `parts/45-egress.ts` | U01, U06, U11b, U45 | 12 (part), 13 | — | planned |
-| U47 | `add-tool-registry` | `tool-registry` | `tools` | `src/tools`: `tool_server` with `validateOrigin` (cross-cutting rule 'Origins'), surface-digest approval (team: approver ≠ registrant; solo: explicit, audited self-approval), approval writes immutable `<server>.<tool>` block versions with their binding, drift disables; a `fixture` adapter that binds the test-catalogue blocks to `add-fake-tools` | U08, U13, U14, U26, U45b | — | — | planned |
-| U48 | `add-credentials` | `credentials` | `credentials` | `credential_ref` (egress target, Mintkey service id, pinned target origin; the target stored in Mintkey is the origin only, scheme, host and port, and the gateway sends the full upstream path), write-only `POST /api/v1/credentials` and rotate through the vault endpoint, `manage_credentials`, never logged; the `ServiceResolver` port | U45, U46, U47 | 12 (part) | — | planned |
-| U49 | `add-grants-model` | `grants` | `grants` | `src/grants`: `grant`, the compiler to the Cedar tenant layer, `POST /api/v1/policies/validate` and `/deploy` (tenant layer only; a platform `@id` collision fails), node fingerprints, `reconfirmationsFor(oldHash, newHash)`, `/grants` | U11b, U13, U14, U17, U27 | 16 (part) | `policy-cedar/policies` | planned |
-| U50 | `add-tool-invocation` | `tool-invocation` | `runtimes` | `src/runtimes/invoke`: PEP `invoke_tool` with the full context (taint, `approvalsOnPath`, fingerprint, `sod_excluded` from the initiator, `kind` node or hook) on the input after pre-hooks, then intent, token and send; result taint per `untrusted_result`; `EffectMode` honoured; the C2 static scan with a committed call-site inventory; request-equals-permit | U04, U33, U34, U35, U40, U42, U43, U46, U48, U49 | 1, 6, 13 | — | planned |
-| U51 | `add-dry-runs` | `flow-testing` | `api`, `interpreter` | `POST /api/v1/flows/{id}/versions/{hash}/dry-run`: attended, the caller in the owner team, no `run_as` or trigger; reads live through the invoke path, `write`, `send` and `pay` evaluated, recorded and stubbed; per-node fakes; `dry_run_flow` | U13, U27, U33, U35, U50 | — | — | planned |
-| U52 | `add-web-grants` | `web-tools` | `web` | Tool-server and grant administration, re-confirmations, policy validation and deploy, the "Dry run" button; journey `test_m6_grants.py` (denied without a grant; granted, the read reaches the fake upstream; `pay` stubbed with its permit shown). **Closing** | U21, U37, U45–U51 | — | — | planned |
+| U40b | `add-hook-taint-check` | `taint`, `flow-validation` | `authoring` | Static hook taint matches the M5 runtime: a hook's output widens the node's output and each field as U42 does, and an untrusted reference in the `with` of a non-`read` block hook is `L3_TAINT_TO_CONSEQUENTIAL` (hook edges are checked); a property test that static taint includes runtime taint on hooked runnable flows; it lands before U50's taint gate | U22, U23, U24, U25, U38, U39, U40, U41, U42, U43 | 4 (part) | — | planned |
+| U45 | `add-fake-egress-proxy` | `test-fake-egress` | — | `test/support/fake-egress/`: broker token issue (service-token auth, TTL), proxy `/<service_uuid>/<path>` (bearer check, credential injection), per-service routing to loopback upstreams, streaming and redirect pass-through, recorded requests, audit-event emission to a configured sink, the vault write endpoint with identities; contract suite against a base URL; routes for names under `fake.test`; a credential-less route | U09 | 13 (fixture) | `deploy/mintkey-footprint` | planned |
+| U45b | `add-fake-tools` | `test-fake-tools` | — | `test/support/fake-tools/`: port `seed/shared/mocks/mock-tools.mjs`: the 20 test-catalogue blocks as loopback handlers behind fake-egress routes (`tools.fake.test`), recorded calls, reset, per-route delay and failure; contract test; e2e part `parts/50-tools.ts` (registers its routes in the fake egress that U46's part started) | U06, U09, U24, U32, U45, U46 | — | `shared/mocks` (mock tools) | planned |
+| U46 | `add-gateway-client` | `gateway` | `gateway`, `config`, `pdp` | `src/gateway`: `requestToken(permit, tag)` (the TTL is the permit's), never refreshed; `send(permit, request, token, tag)` refuses unless method, host, path and body digest equal the permit; manual redirects (a 3xx is returned, never followed); `X-Ursitoare-Call`; run and step ids in the trace; startup self-check (empty secret files, or a broker that issues a token to an unauthenticated caller, refuse start); the egress-site inventory (C2 scan) and the runtime check that a permit came from the PDP; stack part `parts/45-egress.ts` | U01, U04, U06, U11, U11b, U32, U45 | 6 (part), 12 (part), 13 | — | planned |
+| U47 | `add-tool-registry` | `tool-registry` | `tools`, `api` | `src/tools`: `tool_server` with `validateOrigin` (cross-cutting rule 'Origins'), surface-digest approval (team: approver ≠ registrant; solo: explicit, audited self-approval), approval writes immutable `<server>.<tool>` block versions with their binding, drift disables; a `fixture` adapter that binds the test-catalogue blocks to `add-fake-tools` | U03, U08, U11, U11b, U13, U14, U17, U22, U24, U26, U45b | — | — | planned |
+| U48 | `add-credentials` | `credentials` | `credentials`, `gateway`, `api` | `credential_ref` (egress target, Mintkey service id, pinned target origin; the target stored in Mintkey is the origin only, scheme, host and port, and the gateway sends the full upstream path), write-only `POST /api/v1/credentials` and rotate through the vault endpoint, `manage_credentials`, never logged; the `ServiceResolver` port; part `52-tool-servers`; API code `EGRESS_UNAVAILABLE` | U03, U06, U08, U11, U11b, U13, U14, U17, U32, U45, U45b, U46, U47 | 12 (part) | — | planned |
+| U49 | `add-grants-model` | `grants` | `grants`, `api` | `src/grants`: `grant`, the compiler to static Cedar, node fingerprints, `reconfirmationsFor`, `/grants` | U08, U11, U11b, U13, U14, U17, U22, U26, U27, U41, U46, U47, U48 | 16 (part) | `policy-cedar/policies` | planned |
+| U49b | `add-policy-deploy` | `policy-deploy` | `grants`, `api`, `pdp` | The tenant layer as stored policy sets (compiled grants plus optional hand-written Cedar); `POST /api/v1/policies/validate` and `/deploy` (tenant layer only; a platform `@id` collision fails); the per-tenant live policy runtime, swapped at deploy so every check uses the current set; `toCedarArgs` for U50 | U08, U11, U11b, U13, U14, U22, U26, U46, U47, U48, U49 | 16 (part) | — | planned |
+| U50 | `add-tool-invocation` | `tool-invocation` | `runtimes`, `interpreter`, `pdp` | `src/runtimes/invoke`: PEP `invoke_tool` with the full context (taint, `approvalsOnPath`, fingerprint, `sod_excluded` from the initiator, `kind` node or hook) on the input after pre-hooks, then intent, token and send; result taint per `untrusted_result`; `EffectMode` honoured; request-equals-permit | U03, U11, U22, U24, U31, U33, U34, U35, U38, U39, U40, U41, U42, U42b, U43, U45, U45b, U46, U47, U48, U49, U49b | 1, 6 (part), 13, 16 (part), 21 (part) | — | planned |
+| U51 | `add-dry-runs` | `flow-testing` | `api`, `interpreter`, `runtimes` | `POST /api/v1/flows/{id}/versions/{hash}/dry-run`: attended, the caller in the owner team, no `run_as` or trigger; reads live through the invoke path, `write`, `send` and `pay` evaluated, recorded and stubbed; per-node fakes; `dry_run_flow`; `GET /api/v1/runs/{runId}/decisions` | U11, U11b, U13, U14, U17, U27, U31, U33, U34, U35, U36, U41, U42b, U43, U45, U45b, U46, U47, U48, U49, U49b, U50 | — | — | planned |
+| U52 | `add-web-grants` | `web-tools` | `web` | Tool-server and grant administration, re-confirmations, policy validation and deploy | U07, U15, U15b, U16, U21, U47, U49, U49b | — | — | planned |
+| U52b | `add-web-dry-runs` | `web-runs` | `web` | The "Dry run" button (input and fakes), each effect's permit and "stubbed" on the run page; journey `test_m6_grants.py` (denied without a grant; granted, the read reaches the fake upstream; `pay` stubbed with its permit shown). **Closing** | U07, U15, U15b, U16, U28, U35, U36, U37, U40b, U44, U45, U45b, U46, U47, U48, U49, U49b, U50, U51, U52 | — | — | planned |
 
 ### M7 Tool adapters (F9)
 
@@ -221,7 +225,7 @@ All units start as `planned`.
 | U53 | `add-http-openapi-tools` | `tool-http` | `tools` | Uploaded (never fetched) OpenAPI documents with remote `$ref` off, operations to tools with an admin-set `effect`, bindings to method and path template, `url_host` from the WHATWG URL parser | U47, U48, U50 | 13 | — | planned |
 | U54 | `add-mcp-client` | `tool-mcp` | `tools` | MCP client (2026-07-28 and the older handshake), `tools/list` to a surface digest, tool namespacing with collisions refused, `tools/call` through the gateway, results untrusted; `test/support/fake-mcp/`, its proxy route and e2e part `parts/55-mcp.ts` | U06, U45, U47, U48, U50 | 6 | — | planned |
 | U55 | `add-code-block-tools` | `tool-code` | `tools`, `runtimes` | `code_block` tool servers: blocks implemented as pure sandboxed code, surface digest over the source | U38, U39, U47, U50 | — | — | planned |
-| U56 | `add-web-tools` | `web-tools` | `web` | Register an MCP URL, an OpenAPI upload or a code block; review and approve the surface with a drift diff; write-only credential entry; journey `test_m7_tools.py` (F9 through a dry run). **Closing** | U52, U53, U54, U55 | — | — | planned |
+| U56 | `add-web-tools` | `web-tools` | `web` | Register an MCP URL, an OpenAPI upload or a code block; review and approve the surface with a drift diff; write-only credential entry; journey `test_m7_tools.py` (F9 through a dry run). **Closing** | U52b, U53, U54, U55 | — | — | planned |
 
 ### M8 Hobbyist stack
 
@@ -317,9 +321,9 @@ All units start as `planned`.
 | 1 | U32 (harness), U34 (the kill proofs, M4 decision D5), U50, U86 | — |
 | 2 | U32 (harness), U34, U74 (RT-9), U82 (RT-10), U83 (RT-8), U86 (RT-1), U88 (RT-7) | — |
 | 3 | U34, U92 | — |
-| 4 | U23, U40, U68, U69 | — |
+| 4 | U23, U40, U40b, U68, U69 | — |
 | 5 | U69, U76, U77 | — |
-| 6 | U04, U11, U13, U50, U54 | — |
+| 6 | U04, U11, U13, U46, U50, U54 | — |
 | 7 | U66, U86, U92 | — |
 | 8 | — (owner decision: out-of-process dedupe) | — |
 | 9 | U100 (harness) | person, Linux host, M15 |
@@ -329,12 +333,12 @@ All units start as `planned`.
 | 13 | U45, U46, U50, U53 | — |
 | 14 | U74b (attended), U78 (unattended) | — |
 | 15 | U38, U39 | — |
-| 16 | U49, U65, U67, U76, U77, U91 | — |
+| 16 | U49, U49b, U50, U65, U67, U76, U77, U91 | — |
 | 17 | U72, U93 (harness) | person with real models (M14), reported |
 | 18 | U03, U10, U11b, U17, U98 | — |
 | 19 | U09, U58, U61c, U89 | stack run (M8, M13) |
 | 20 | U05, U99 | image SBOM in the stack tier (M15) |
-| 21 | U41, U42, U43, U74b, U85 | — |
+| 21 | U41, U42, U43, U50, U74b, U85 | — |
 | 22 | U43 (C1, C2, C6), U85, U86 | — |
 | 23 | U42 | — |
 
@@ -359,16 +363,16 @@ Each unit's spec defines its interfaces in full; this table fixes the names so t
 | Web shell | `registerFeature({ id, path, navLabel?, capability?, element })`; `createApiClient(opts): ApiClient` with `ApiRequestError`; features are files `web/src/features/NN-<name>.tsx`; U07 owns the registry and the pure nav filter; U15 passes `/me` capabilities to it | U07 |
 | Audit | `appendAudit(tx, ctx, event): Promise<{ seq: bigint; hash: string }>`; `appendAuditCommitted(pool, ctx, event)`; `verifyChain(pool, ctx)`; `canonicalize(value): string` | U08 |
 | Principal | `Principal { tenantId; userId; kind: "human" \| "service"; sessionId?; roles: string[]; teams: string[]; actorChain: string[] }` on `request.principal` | U12 (roles and teams filled by U17) |
-| PDP | `createPdp(opts): Promise<Pdp>`; `Pdp.check(req: PolicyRequest): Promise<Decision>`; `Pdp.allowedActions(principal, actions)`; `Decision { decision; decisionId; reasons; errors; policySetVersion; permit?: Permit }`; `Permit { method; host; path; bodyDigest; serviceId; ttlSeconds }` | U11 (engine), U11b (catalogue, `allowedActions`) |
+| PDP | `createPdp(opts): Promise<Pdp>`; `Pdp.check(req: PolicyRequest): Promise<Decision>`; `PolicyEngine.allowedActions(principal, actions)`; `Decision { decision; decisionId; reasons; errors; policySetVersion; permit?: Permit }`; `Permit { method; host; path; bodyDigest; serviceId; ttlSeconds }` | U11 (engine), U11b (catalogue, `allowedActions`) |
 | Routes | `defineRoute(server, { method, url, auth, action?, resource?, schema, errors, handler })`; `auth` is the union of U13 | U13 |
 | API conventions | `Cursor` (`limit`, `cursor`, `next_cursor`), `ERROR_CODES`, `withIdempotency(key, fn)` | U14 |
 | Web kit | `DataTable`, `Form`, `Field`, `SchemaForm`, `EmptyState`, `LoadingState`, `ErrorPanel`, `ConfirmDialog`, `toast()`; `messages.ts` | U15, U15b |
 | Catalogue | `Catalogue { block(ref); modelProfile(ref); role(name); delegateTarget(target, workflow); flow(ref, major): { input; output } \| undefined }` | U22 (interface); filled by U24, U26 (block, role), U67 (modelProfile), U82 (flow), U84 (delegateTarget) |
 | Taint | `Taint` labels, `joinTaint(a, b)`, `flowCapabilities(flow, catalogue)` | U23 |
-| Node runtimes | `registerNodeRuntime(kind, runtime: NodeRuntime)`; `ToolInvoker { invoke(call: ToolCall, ctx: StepContext): Promise<ToolResult> }`; `ToolCall { tool; args; nodeId; effectSeq; phase?: "pre" \| "post"; hookId? }`; `EffectMode = "live" \| "mock" \| "stub"` | U33 |
+| Node runtimes | `registerNodeRuntime(kind, runtime: NodeRuntime)`; `ToolInvoker { invoke(call: ToolCall, ctx: StepContext): Promise<ToolResult>; authorize?(call: ToolCall, ctx: StepContext): Promise<CallAuthorization> }`; `ToolCall { tool; args; nodeId; effectSeq; phase?: "pre" \| "post"; hookId? }`; `EffectMode = "live" \| "mock" \| "stub"` | U33 (`authorize?`: U50) |
 | Hooks | `approvalsOnPath(steps): Approval[]` | U42b |
-| Gateway | `requestToken(permit)`, `send(permit, request)`; `validateOrigin(url, { local })` (U47); `ServiceResolver { resolve(binding): { serviceId; origin } }` | U46, U48 |
-| Grants | `reconfirmationsFor(oldHash, newHash)` | U49 |
+| Gateway | `requestToken(permit, tag)`, `send(permit, request, token, tag)`; `validateOrigin(url, { local })` (U47, in `src/tools`); `ServiceResolver { resolve(ctx, toolServerId): Promise<ServiceTarget \| null> }` (U48) | U46, U47, U48 |
+| Grants | `reconfirmationsFor(pool, ctx, oldHash, newHash, deps)`, `nodeFingerprint(flow, nodeId, catalogue)` | U49 |
 | Authority | `diffAuthority(oldVersion, newVersion): AuthorityDiff` (`widens_*` flags) | U65 |
 | CLI | `registerCommand(name, command)` under `ursitoare admin`, `ursitoare flow` and top level; a unit adding commands edits its group's index (`src/cli/<group>/index.ts`), or `src/cli/builtin.ts` for a new group, in a named task (`registry.registerCommand(name, command)`), and two such units in one milestone need a depends_on edge | U20 |
 | Run data | `RunRepository`, `StepRepository`, `EnvelopeStore` | U31 |
@@ -387,26 +391,26 @@ sub-directories are internal, and other modules import only its `index.ts`. `src
 | Module | May import | Egress | Owner units |
 |---|---|---|---|
 | `core` | — | — | U01 |
-| `config` | `core` | — | U01, U20, U32 |
+| `config` | `core` | — | U01, U20, U32, U46 |
 | `observability` | `core`, `config` | `otlp` | U01, U96 |
 | `db` | `core`, `config`, `observability` | — | U02, U97 |
 | `tenancy` | `core`, `db` | — | U03 |
 | `audit` | `core`, `db`, `tenancy`, `observability` | — | U08, U19, U60 |
 | `identity` | `core`, `config`, `db`, `tenancy`, `audit`, `observability` | `oidc` | U10, U12, U17, U18, U79 |
-| `pdp` | `core`, `db`, `tenancy`, `observability` | — | U11, U11b, U19, U69 |
-| `authoring` | `core` | — | U22, U23, U25, U41 |
+| `pdp` | `core`, `db`, `tenancy`, `observability` | — | U11, U11b, U19, U46, U49b, U50, U69 |
+| `authoring` | `core` | — | U22, U23, U25, U40b, U41 |
 | `authority` | `core`, `authoring`, `grants` | — | U65, U91 |
 | `registry` | `core`, `db`, `tenancy`, `audit`, `authoring`, `pdp`, `identity` | — | U26, U27, U71 |
-| `grants` | `core`, `db`, `tenancy`, `audit`, `pdp`, `registry`, `authoring` | — | U49 |
+| `grants` | `core`, `db`, `tenancy`, `audit`, `pdp`, `registry`, `authoring` | — | U49, U49b |
 | `durable` | `core`, `config`, `db`, `observability` | — | U30 |
 | `runs` | `core`, `db`, `tenancy`, `durable` | — | U31, U34, U36, U42b, U92 |
 | `sandbox` | `core`, `config` | — | U38 |
-| `gateway` | `core`, `config`, `observability`, `pdp` | `tools` | U46 |
+| `gateway` | `core`, `config`, `observability`, `pdp` | `tools` | U46, U48 |
 | `tools` | `core`, `db`, `tenancy`, `audit`, `registry`, `gateway`, `pdp` | — | U47, U53, U54, U55 |
 | `credentials` | `core`, `db`, `tenancy`, `audit`, `gateway`, `tools` | — | U48 |
 | `llm` | `core`, `db`, `tenancy`, `gateway`, `pdp`, `credentials`, `registry`, `tools`, `observability` | — | U63, U64, U66, U67 |
-| `interpreter` | `core`, `durable`, `runs`, `registry`, `authoring`, `pdp`, `observability`, `sandbox` | — | U33, U35, U39, U40, U42, U42b, U43, U51, U92 |
-| `runtimes` | `core`, `interpreter`, `runs`, `registry`, `grants`, `pdp`, `gateway`, `sandbox`, `llm`, `tools`, `credentials`, `authoring`, `tasks`, `observability` | — | U50, U55, U68, U69, U71, U74b, U82, U83, U84, U88 |
+| `interpreter` | `core`, `durable`, `runs`, `registry`, `authoring`, `pdp`, `observability`, `sandbox` | — | U33, U35, U39, U40, U42, U42b, U43, U50, U51, U92 |
+| `runtimes` | `core`, `interpreter`, `runs`, `registry`, `grants`, `pdp`, `gateway`, `sandbox`, `llm`, `tools`, `credentials`, `authoring`, `tasks`, `observability` | — | U50, U51, U55, U68, U69, U71, U74b, U82, U83, U84, U88 |
 | `tasks` | `core`, `db`, `tenancy`, `audit`, `durable`, `runs`, `pdp` | — | U74, U74b |
 | `publish` | `core`, `db`, `tenancy`, `audit`, `registry`, `grants`, `authority`, `tasks`, `pdp`, `runs`, `durable`, `identity` | — | U76, U77 |
 | `triggers` | `core`, `db`, `tenancy`, `audit`, `durable`, `runs`, `registry`, `pdp`, `publish` | — | U78 |
@@ -414,7 +418,7 @@ sub-directories are internal, and other modules import only its `index.ts`. `src
 | `eval` | `core`, `db`, `tenancy`, `durable`, `interpreter`, `runs`, `registry` | — | U93 |
 | `mcp` | `core`, `identity`, `pdp`, `registry`, `runs`, `interpreter`, `publish` | — | U89 |
 | `templates` | `authoring` | — | U81 |
-| `api` | every module except `sandbox`, `runtimes` and `cli` | — | U01, U07, U13, U14, U17, U18, U19, U35, U36, U42b, U51, U60, U67, U77, U84, U91 |
+| `api` | every module except `sandbox`, `runtimes` and `cli` | — | U01, U07, U13, U14, U17, U18, U19, U35, U36, U42b, U47, U48, U49, U49b, U51, U60, U67, U77, U84, U91 |
 | `cli` | every module `api` may import, plus `db` owner access | — | U20, U25, U35, U57, U97 |
 
 ## Deferred to Phase 2 (architecture §13)

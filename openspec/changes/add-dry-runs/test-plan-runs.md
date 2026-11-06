@@ -1,0 +1,33 @@
+# Test plan: add-dry-runs, part 2 (the live proof and main)
+
+`S`, `D_LV`, `D_PAY`, the flows (`read-then-pay` as `H1`), `G_LOOKUP`, `G_PAY`, `LOOKUP_OK` and `invokeHarness()` are add-tool-invocation's (`T0` is `2026-11-06T10:00:00Z`). `RUN_0` is `run_00000000-0000-7000-8000-000000000000`, `PAID` is `{ payment_id: "PAY-1", status: "created" }`, `FK2` is `{ pay: [{ output: PAID }] }`.
+
+## Harness (`test/support/invoke-runs/dry-runs.ts`, a scaffolded stub; task 6.1 implements it)
+
+Task 6.1 extends `invokeHarness()` with `hashes` (`{ "read-then-pay": H1, … }`), `store`, `loadVersion` and `catalogueFor`. `dryHarness(h)` builds `InterpreterDeps` from them (recording `durable.enqueue`, `invokerFor` = `dryRunInvokers(h.path, h.store, testRunInvokers(h.store))`, `createEffectIntents(h.pool)`, `fixedClock(T0)`, `sequentialIds(0)`), a server (`buildServer`, `installPep` over `h.runtime.engine`, both routes with `enabled: true`), alice's session (`createTestSession`), and returns `{ post(body), execute(runId), decisions(runId), steps(runId), close }`: `post` is alice's POST to `/api/v1/flows/read-then-pay/versions/<H1>/dry-run`, `execute` is `executeRun(memoryWorkflowOps(workflowIdOf("tenant_a", runId)), deps, h.ctx, runId)`, `decisions` is `listPolicyDecisions(h.pool, h.ctx, { filter: { runId }, order: "asc", limit: 50 })`, `steps` is `(await h.store.listSteps(h.ctx, runId, { limit: 50 })).steps`.
+
+## Scenario "read-then-pay makes one live call, no pay call, and records both permits"
+
+`h.grant` and `h.deploy` make `G_LOOKUP` and `G_PAY` (confirmed for `H1`) current. Input `{ vendor_name: "Acme GmbH", amount: 12.5 }`.
+
+1. `post({ input, fakes: {} })` is 400 `[{ field: "body/fakes/pay", message: "missing: no fake entry" }]`; `ursitoare.run` has 0 rows, `h.tools.calls()` and `h.egress.issued()` are `[]`.
+2. `post({ input, fakes: FK2 })` is 202 (run `RUN_0`, mode `stub`); `execute(RUN_0)` ends the run `completed`, `terminalNode` `done`, output payload `{ payment_id: "PAY-1" }`.
+3. `h.tools.calls()` holds one call: `ref` `erp.lookup_vendor@1`, `method` `POST`, `host` `tools.fake.test`, `path` `/blocks/erp.lookup_vendor@1`, `callHeader` `run_00000000-0000-7000-8000-000000000000:lookup:1`, `bodySha256` `D_LV`; `h.tools.calls({ ref: "erp.create_payment@1" })` is `[]`. `h.egress.issued()` holds 1 token (`serviceId` `S`, `ttlSeconds` 60), `h.egress.requests()` 1 request (`outcome` `allowed`), `h.gateway.calls` one `requestToken` and one `send`. (Both tools share the service `S`, so the proof is the count: a `pay` token would make it 2.)
+4. `getIntent(tx, h.ctx, idemKey("tenant_a", RUN_0, "pay", 0))` is state `done`, mode `stub`; `lookup` (a read) has no intent.
+5. `decisions(RUN_0)` has two `allow` rows, action `invoke_tool`, principal `User::"tenant_a/alice"`: `lookup` (resource `Block::"tenant_a/read-then-pay/lookup"`, reasons `[G_LOOKUP.id]`, permit V1 `{ method: "POST", host: "tools.fake.test", path: "/blocks/erp.lookup_vendor@1", bodyDigest: D_LV, serviceId: S, ttlSeconds: 60 }`) and `pay` (resource `Block::"tenant_a/read-then-pay/pay"`, reasons `[G_PAY.id]`, permit V2: `path` `/blocks/erp.create_payment@1`, `bodyDigest` `D_PAY`). alice's `GET /api/v1/runs/RUN_0/decisions` returns the same two as views, `next_cursor` `null`. The final `lookup` and `pay` step rows carry those decision ids, `done` carries `null`.
+
+## Scenario "Without a grant the read is denied, and a fake error fails the node"
+
+- **No grant** (a fresh `invokeHarness()` and `dryHarness`, nothing deployed; the **Fake error** bullet starts its own, so each run is `RUN_0`): `post({ input, fakes: FK2 })` is 202; the run ends `failed` with `{ code: "INTERPRETER_TOOL_DENIED", message: 'tool call of "lookup" is not permitted (policy)', node: "lookup", details: { reason: "policy", decisionId } }`, `decisionId` that of the single row of `decisions(RUN_0)` (`deny`, reasons `[]`, `permit` `null`); `h.tools.calls()`, `h.egress.issued()` and `effect_intent` for `RUN_0` are empty.
+- **Fake error** (grants deployed): `post({ input, fakes: { pay: [{ error: { code: "E_DOWN", message: "payment desk is down" } }] } })` is 202; the run ends `failed` with `{ code: "INTERPRETER_TOOL_FAILED", message: "dry run fake_error", node: "pay", details: { reason: "fake_error", fakeCode: "E_DOWN" } }`; `decisions(RUN_0)` holds two `allow` rows (the policy point answered before the fake); `h.tools.calls()` holds the one `lookup` call; `JSON.stringify` of the run error and of every `steps(RUN_0)` row lacks `payment desk is down`.
+
+## Scenario "Egress wires the stub invoker and the route; its absence leaves both off" (`src/main.dryruns.test.ts`)
+
+Config, `bindInterpreter` capture, real `launchDurable`, alice and `seedMockRunFlows` as in `src/main.mockruns.test.ts` (`appConfig({ database: { app: endpointOf(db.appEndpoint), owner: null } })`, role `all`). `EGRESS` = `{ brokerUrl: "http://127.0.0.1:1", proxyUrl: "http://127.0.0.1:1/v1/call", brokerToken: new Secret("bt-secret-4d2a"), agentId: "ursitoare-engine", vault: null }`; U46's `MainDeps.checkEgress` is replaced by a recorder answering `{ broker: "closed" }`. Body: `{ input: PAY_ONCE_INPUT, fakes: { pay: [{ output: PAY_ONCE_PAID_OUTPUT }] } }`.
+
+| # | config | result |
+|---|---|---|
+| M1 | no `egress` | `inspectServers` shows `POST /api/v1/flows/:flowId/versions/:hash/dry-run` (auth `session`, action `dry_run_flow`, `errors` containing `RUNS_UNAVAILABLE`, `VALIDATION_FAILED`) and `GET /api/v1/runs/:runId/decisions` (action `read_run`); alice's post is 503 `RUNS_UNAVAILABLE`; the captured `invokerFor("stub", run)` and `("live", run)` reject `INTERPRETER_NO_INVOKER`; `checkEgress` was not called |
+| M2 | `egress: EGRESS` | alice's post is 202, `run.mode` `stub`; `invokerFor("stub", run)` resolves to an object with functions `invoke` and `authorize`, `("mock", run)` resolves, `("live", run)` rejects `INTERPRETER_NO_INVOKER`; `waitForRun` ends the run `failed`, `INTERPRETER_TOOL_DENIED`, node `lookup`, `details` `{ reason: "tool_unbound" }` (`erp.lookup_vendor@1` has no binding), and `listPolicyDecisions` for the run is `[]`; `checkEgress` was called once with `EGRESS` |
+
+`docs/api/openapi.json` is regenerated by `node test/support/openapi-docs.ts` (no database, so both routes are defined and the dry-run route disabled); the drift test `src/main.conventions.test.ts::C-d150bfa4` passes.

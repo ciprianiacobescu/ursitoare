@@ -57,6 +57,10 @@ delegates; only `identity` talks to the OIDC provider; only `observability` expo
   not-implemented error, so a test whose call reaches a stub wraps it in `assert.doesNotThrow(() => { ... })` or
   `await assert.doesNotReject(async () => { ... })` (`src/observability/logger.test.ts`). Test names contain no `.`,
   `[` or `::`. Every task adds at least one Node test (a browser journey alone is not a red step).
+- Green implements only what its task names. A later task's new tests must fail at red, so behaviour built ahead of
+  its task (option checks in the task that only spawns one worker, say) makes that red fail with "new tests passed
+  before implementation". When earlier code already makes some rows of a scenario true, fold those rows into a test
+  that also asserts what this task adds: every new test function needs one assertion that only this task makes true.
 - A test never lets a driver or SQL error escape (L4 cannot read its kind): a test of a migration first asserts that its
   objects exist (`to_regclass`, `to_regprocedure`) or that the ledger holds the expected versions, and an expected
   failure is `await assert.rejects(p, { code })`. Every symbol a test imports is in its change's Interfaces, so the
