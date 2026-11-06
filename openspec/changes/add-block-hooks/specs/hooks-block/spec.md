@@ -48,7 +48,7 @@ With the crash harness, a SIGKILL after a step function has returned (`after:<st
 - **THEN** at the death `mail.send@1` counts `{ calls: 2, effects: 2, duplicates: 0 }` and the intent of generation 1 is `intent`; after the restart the run is `completed`, `mail.send@1` counts `{ calls: 3, effects: 2, duplicates: 1 }` with the keys `idemKey(tenant, runId, "send", 0, 0)`, `idemKey(…, "send", 0, 1)`, `idemKey(…, "send", 0, 1)` in call order, both intents `done`, and the rows are `send` (attempt 1, `seq` 0, first key), `send` (attempt 2, `seq` 1, second key) and `done` (`seq` 2), all `completed`
 
 ### Requirement: The format document teaches a solo author to run code and hooks
-`docs/authoring/format.md` SHALL hold one section `## Running code and hooks` that contains these fifteen lines, each exactly once and in this order, as whole lines (one sentence for each code semantic, for the hook body and its limits, for the meaning of each outcome, and the two lines of what each phase allows, which are the outcomes of `add-hook-runtime`'s action matrix; `test-plan.md` § Format section quotes the source of each):
+`docs/authoring/format.md` SHALL hold one section `## Running code and hooks` that contains these nineteen lines, each exactly once and in this order, as whole lines (one sentence for each code semantic, for the hook body and its limits, for the meaning of each outcome, the two lines of what each phase allows, which are the outcomes of `add-hook-runtime`'s action matrix, and four lines of `add-hook-checker`'s bounds, retry scope and route rule; `test-plan.md` § Format section quotes the source of each):
 
 ```
 - A code node body reads its input as `input`.
@@ -66,10 +66,14 @@ With the crash harness, a SIGKILL after a step function has returned (`after:<st
 - `fail` lets a pre-hook or a post-hook fail the node and the run with its `reason`.
 - A pre-hook may return: continue (with input), skip (read block or code node only), fail.
 - A post-hook may return: continue (with output on a code or block node), redirect (from a code, switch, wait or block node, to a node in routes, never an effect node), retry (with max_retries; an effect node needs allow_effect_retry; never on pay), fail.
+- A node has at most 16 pre-hooks and 16 post-hooks, a flow at most 16 rules, and a hook or rule id at most 64 characters.
+- `max_retries` is an integer from 1 to 5, set only on a post code hook.
+- A retry never re-pays: `max_retries` is refused (`H_RETRY_SCOPE`) on a `pay` node and when the node's post-hooks hold a `pay` block hook, and a `send`, `write` or unknown-effect node or post block hook needs `allow_effect_retry: true`.
+- A hook route into a node of effect `write`, `send`, `pay` or unknown (an agent, a subflow) is refused (`H_ROUTE_EFFECT`).
 ```
 
-The section also states at most 16 hooks per phase, 16 rules, ids of 64 characters, `max_retries` 1 to 5; a retry re-runs the post chain and never re-pays (a `pay` block hook makes `max_retries` invalid, `H_RETRY_SCOPE`; a `send` or `write` one needs `allow_effect_retry: true`); a hook route into an effect node is `H_ROUTE_EFFECT`. The terms of the frozen `doc-terms.test.ts` SHALL stay named.
+The terms of the frozen `doc-terms.test.ts` SHALL stay named.
 
 #### Scenario: The format document has the section for running code and hooks
 - **WHEN** `docs/authoring/format.md` is read after the edit and `missingDocTerms` runs on it
-- **THEN** the heading `## Running code and hooks` occurs exactly once; its section (up to the next `## `) contains the literal strings `CODE_LIMITS`, `HOOK_LIMITS`, `16 hooks`, `16 rules`, `64 characters`, `allow_effect_retry`, `H_RETRY_SCOPE` and `H_ROUTE_EFFECT`, and also `1000 ms`, `32 MiB`, `ctx` and each of `continue`, `skip`, `redirect`, `retry` and `fail`; the lines of the section that equal any of the fifteen lines of the requirement are exactly those fifteen, in that order (so a deleted, reworded, added, duplicated or reordered line fails), among them, as whole lines, the two lines beginning `- A pre-hook may return:` and `- A post-hook may return:`, each exactly once; `missingDocTerms` returns `[]`
+- **THEN** the heading `## Running code and hooks` occurs exactly once; its section (up to the next `## `) contains the literal strings `CODE_LIMITS`, `HOOK_LIMITS`, `16 hooks`, `16 rules`, `64 characters`, `allow_effect_retry`, `H_RETRY_SCOPE` and `H_ROUTE_EFFECT`, and also `1000 ms`, `32 MiB`, `ctx` and each of `continue`, `skip`, `redirect`, `retry` and `fail`; the lines of the section that equal any of the nineteen lines of the requirement are exactly those nineteen, in that order (so a deleted, reworded, added, duplicated or reordered line fails), among them, as whole lines, the two lines beginning `- A pre-hook may return:` and `- A post-hook may return:`, each exactly once; `missingDocTerms` returns `[]`
