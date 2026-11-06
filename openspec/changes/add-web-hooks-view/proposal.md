@@ -21,7 +21,7 @@ Batch `m5-code-hooks` (U38-U44 and U42b, in plan order U38, U39, U40, U41, U42, 
 - **Shapes and facts from the merged code:** `delivered-shapes.md` (declarations checked line by line, and file and line facts, at main@a6b5fb37).
 - **Changed files, migrations, endpoints, error codes, parts:** none besides the web edits above [D18]. No archived scenario is modified (design decision 2).
 
-**Interfaces given** (declarations as in design.md § Interfaces; `(addition)` marks the four helpers beyond the card)
+**Interfaces given** (declarations as in design.md § Interfaces; `(addition)` marks the six names beyond the card)
 
 ```ts
 // web/src/flow-graph/hook-overlay.ts
@@ -34,6 +34,8 @@ export function hookRouteText(edge: HookRouteEdge): string;                    /
 export function hookBadgeText(badge: HookBadge): string;                       // (addition) `${nodeId}: pre ${ids|none}; post ${ids|none}`
 export function flowRuleText(row: FlowRuleRow): string;                        // (addition) `${id}: match ${match}; pre ${pre|none}; post ${post|none}`
 export function hookRoutePaths(edges: readonly HookRouteEdge[], layout: GraphLayout): { key: string; d: string; className: "hook-route" }[];   // (addition)
+export interface HookSectionView { hooks: string[]; routes: string[]; rules: string[]; missing: string | null }   // (addition)
+export function hookSectionView(doc: unknown, layout: GraphLayout | null): HookSectionView | null;   // (addition) null when layout is null, else the text lines of hookOverlay; `missing` is `Hook routes name nodes that do not exist: ${ids}.` or null
 // web/src/runs/hook-rows.ts
 export interface HookEntryView {
   label: string; kind: "code" | "block"; fused: boolean; attempt: number; state: "completed" | "failed";

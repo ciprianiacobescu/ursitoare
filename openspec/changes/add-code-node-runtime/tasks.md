@@ -11,5 +11,5 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 3. The engine
 
-- [ ] 3.1 Write `src/main.sandbox.test.ts` first (scenario "Roles, closing order and failed starts"; it passes `createSandbox` through a `const` deps object), then add `createSandbox?` to `MainDeps` and the pool creation, `base.sandbox`, the closing in the durable branch's `catch` and in `closeAll` to `src/main.ts`, implementing requirement "The engine owns one sandbox pool"
+- [ ] 3.1 Write `src/main.sandbox.test.ts` first (scenario "Roles, closing order and failed starts"; it passes `createSandbox` through a `const` deps object), then add `createSandbox?` to `MainDeps` and the pool creation, `base.sandbox`, the guarded closing (`durable.shutdown`, `sandbox.close` with its one `warn`, `database.close`) in the durable branch's `catch` and in `closeAll` to `src/main.ts`, implementing requirement "The engine owns one sandbox pool"
 - [ ] 3.2 Write `src/main.codeRuns.test.ts` first (scenario "code-pay through main, a mock for a code node and shutdown"), then implement `seedCodePay` in `test/support/code-pay-seed.ts`, implementing requirement "A mock test run executes code nodes for real"
