@@ -12,3 +12,5 @@
 {"at":"2026-11-06T06:27:18Z","run":"r-20261106T0627Z-1087","type":"unit.dispatched","unit":"openspec:add-code-sandbox"}
 {"at":"2026-11-06T08:48:18Z","attempt":1,"cost_usd":0.0,"runs":2,"type":"plan.charged","unit":"openspec:add-code-sandbox"}
 {"at":"2026-11-06T08:48:18Z","run":"r-20261106T0848Z-8e22","type":"unit.dispatched","unit":"openspec:add-code-sandbox"}
+{"at":"2026-11-06T11:22:33Z","attempt":1,"cost_usd":0.0,"runs":3,"type":"plan.charged","unit":"openspec:add-code-sandbox"}
+{"at":"2026-11-06T11:22:33Z","run":"r-20261106T1122Z-eedc","type":"unit.dispatched","unit":"openspec:add-code-sandbox"}
