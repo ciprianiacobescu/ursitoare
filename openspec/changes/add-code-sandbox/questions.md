@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 3.5 | harness | Task 3.5: the pre-satisfied check could not decide |
+| Q-001 | answered | 3.5 | harness | Task 3.5: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 3.5: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.5
 - **Kind:** harness
 - **Asked:** 2026-11-06T20:30Z by deepseek-free, run r-20261106T1945Z-d26a, task 3.5
@@ -212,3 +213,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: The held evidence is enough. The new tests are not vacuous: they assert the exact fault codes, values, depth relations, timings and respawn counts of the two spec scenarios (memory_limit for nine bomb runs with memBytes -1 and under 2000 ms, bounded RSS growth, ALLOC failing at 16 MiB and passing at 256 MiB, every stack body ending in stack_overflow, runtime_error or memory_limit with respawns 0, RECURSE depths ordered and clamped as the test plan states, EURO and ASCII accepted and refused at their byte boundaries, NEST(65) ok and NEST(66) output_invalid). The behaviour they check is already in the unit head: run-code.ts applies setMemoryLimit and the stack clamp and counts UTF-8 output bytes, wasm.ts builds one module per memory bucket with a bounded maximum, and the prelude's walker refuses nesting deeper than 64, __proto__ keys, toJSON members and oversized output. The base run could only end in an error because index.ts on the base branch is the milestone scaffold stub, whose createWorkerSandbox throws before any assertion runs. Counting these on the real run is sound, and the replay still runs every gate.
