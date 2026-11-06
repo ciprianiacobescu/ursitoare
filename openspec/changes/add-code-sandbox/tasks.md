@@ -22,4 +22,4 @@ Specs: `specs/sandbox/spec.md`, `specs/sandbox-build/spec.md`; decisions: `desig
 
 ## 4. The escape suite
 
-- [ ] 4.1 Write `test/support/sandbox-escape.test.ts` and `src/sandbox/escape.test.ts` first (scenarios "Case data and verdicts" and "Every case on a real pool, variants and the host"; the first asserts the ids equal `ESCAPE_IDS`, the second the two digests of `escape-data.md`, hashing with `node:crypto`), then create `test/support/sandbox-escape.ts` and append its row and the exit worker's to `test/support/README.md`, implementing requirement "The escape suite is shared data and the guest stays contained"
+- [x] 4.1 Write `test/support/sandbox-escape.test.ts` and `src/sandbox/escape.test.ts` first (scenarios "Case data and verdicts" and "Every case on a real pool, variants and the host"; the first asserts the ids equal `ESCAPE_IDS`, the second the two digests of `escape-data.md`, hashing with `node:crypto`), then create `test/support/sandbox-escape.ts` and append its row and the exit worker's to `test/support/README.md`, implementing requirement "The escape suite is shared data and the guest stays contained"
