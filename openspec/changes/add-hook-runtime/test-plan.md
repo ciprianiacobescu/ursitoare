@@ -2,6 +2,11 @@
 
 Every run below was executed except the taint, sweep and gate scenarios and variant `F9` (design.md § Verification). Memory store, `loadTestCatalogue()`, `fixedClock("2026-11-02T10:00:00Z")`, tenant `tenant_a`, run `r_1`, version `hookRunVersion(name)`. `INPUT = { vendor: "  Acme ", amount: 120, currency: "eur" }`. Invoker answers: `erp.lookup_vendor@1` `LOOKUP_OK = { vendor_id: "v1", status: "active" }`, `erp.create_payment@1` `PAID = { payment_id: "pay-1", status: "paid" }`, `mail.send@1` `{ message_id: "m-<n>" }`, `kb.search@1` one passage `{ text: "t0", source: "s0" }` on call 1, two on call 2, `invoices.get@1` `{ invoice_id: "inv-1", raw_text: "<b>hi</b>" }`. The recording gate answers `invoke` with `idemKey(tenant, lineage, nodeId, effectSeq, call.generation ?? 0)` and records every call whole. `SB` is `createWorkerSandbox({ size: 1 })` wrapped by a recorder of `{ code, input, options }`, closed in `finally`. Tagged ops capture each `runStep` value as `V`; a replay runs on the same store over `memoryWorkflowOps("r_1", V.slice(0, k))`. `LEAD` stands for `"run:load", "run:start"` at the head of an `executed` list. `OBS` is the `hookObserver` calls as `node/label` (`*` after the label when `fused`); `OBS_ONION` is `lookup/pre:rule.rule_b*`, `lookup/post:rule.rule_b*`, `pay/pre:rule.rule_a*`, `pay/pre:rule.rule_b*`, `pay/pre:pay_pre_note*`, `pay/post:pay_post_note*`, `pay/post:rule.rule_b*`, `pay/post:rule.rule_a*`. Protocol scenario scope: `inputs` `{ vendor: "Acme", amount: 120, currency: "eur" }`, `nodes` `lookup` `LOOKUP_OK`, `normalize` `{ amount: 120, currency: "EUR" }`, `pay` `PAID`. `M_<node>` is the meta `{ id, kind, effect, tags: [] }`: `read` for `gate` (`switch`), `classify`, `review` (`code`); `pay` for `pay` (`block`).
 
+**Runnable versions.** Every run goes through `deps.loadVersion`, which ignores its `flowId` and `hash` arguments and answers the one `LoadedVersion` (`src/interpreter/types.ts:93-99`: `flowId`, `hash`, `state`, `ownerTeam`, `flow`) the scenario builds. None of these is validated; `validateFlowText` runs only where a scenario says so. `loadHookRun(name)` is `parseCatalogueFlow(readHookRunText(name), name)` (`test/support/catalogue/flows.ts:43`, as `loadHookFlow` at `test/support/hook-flows/index.ts:63`), and `hookRunVersion(name)` is `{ flowId: name, hash: HOOK_RUN_HASH, state: "validated", ownerTeam: "finance", flow: loadHookRun(name) }` (as `payOnceVersion`, `test/support/crash/pay-once.ts:35-44`; a `draft` is refused by `startRun`, `start.ts:45`).
+- The nine `hookRunNames()` flows: `hookRunVersion(name)`.
+- `f-eff`, `f-ret`, `f-ret-exhausted` (the `0.2-draft` flows of `loadHookFlow`, not in `hookRunNames()`): `{ ...hookRunVersion("onion"), flowId: name, flow: loadHookFlow(name) }`.
+- A variant (`onion-own`, `bad-upper`, `F1` to `F9`): `{ ...hookRunVersion(<Of>), flow: parseCatalogueFlow(<text of Of with the replacement>, <variant name>) }`, the text from `readHookRunText(<Of>)`; `flowId` stays that of `Of`.
+
 ## Fixtures (`test/support/hook-runs/flows/<name>.yaml`, `ursitoare: "0.1"`)
 
 `BASE` (flow name = file name):
@@ -84,10 +89,10 @@ nodes:
 | pre | `continue` with `output` | C | F `mutate output in a pre-hook` |
 | pre | `skip` | B-r, C | allowed; B-p, S, W, E: F `skip` |
 | pre | `redirect`; `retry` (`max` 2) | C | F `redirect`; F `retry` |
-| post | `continue` with `output` | B-r, B-p, C | allowed; S, W: F `mutate output` |
+| post | `continue` with `output` | C and every block (B-r, B-s, B-p, effect `null`) | allowed; S, W: F `mutate output` |
 | post | `continue` with `input` | C | F `mutate input in a post-hook` |
 | post | `skip` | C | F `skip in a post-hook` |
-| post | `redirect` to a member of `routes` | C, S, W, B-p | allowed; `human.approval`: F `redirect` |
+| post | `redirect` to a member of `routes` | C, S, W and every block (B-r, B-s, B-p, effect `null`) | allowed; `human.approval`: F `redirect` |
 | post | `redirect` to a non-member, or without `routes` | C | U `redirect` |
 | post | `retry`, `max` 2 | C, B-r | allowed; S, W: F `retry` |
 | post | `retry`, `max` 2 | B-p, B-s | F `retry`; with `flag` true B-s allowed, B-p still F `retry` (X1: never on `pay`, as U41's `H_RETRY_SCOPE`) |

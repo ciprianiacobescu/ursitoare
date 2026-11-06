@@ -1,6 +1,6 @@
 # Escape data
 
-The literal data of the 42 escape cases, their variants and the stack bodies, ported from `seed/sandbox-quickjs/test/escape.test.ts` and `worker.test.ts`. With the conventions of `test-plan.md` it is all that the escape tests and U42's `"hook"` re-run need.
+The literal data of the 42 escape cases, their variants and the stack bodies, ported from `seed/sandbox-quickjs/test/escape.test.ts` and `worker.test.ts`.
 
 ## ESCAPE_CASES
 
@@ -119,4 +119,4 @@ newRec  function F(){ new F(); } new F();
 mapCb  function f(){ [1].map(() => f()); } f();
 ```
 
-Probe: `jsonParse` `runtime_error`, `bind` and `promiseChain` `memory_limit`, the rest `stack_overflow`.
+Probe: `jsonParse` `runtime_error`; `bind`, `promiseChain` `memory_limit`; the rest `stack_overflow`.

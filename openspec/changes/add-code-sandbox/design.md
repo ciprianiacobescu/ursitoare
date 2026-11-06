@@ -1,16 +1,16 @@
 ## Context
 
-ADR-04 and § 9.4: pure `code` in a worker pool inside the DBOS step, faults terminal. Port of `seed/sandbox-quickjs` (REPORT § 2: F1-F9) without fetch.
+ADR-04, § 9.4: pure `code` in a worker pool inside the DBOS step, faults terminal; port of `seed/sandbox-quickjs` (REPORT § 2: F1-F9) without fetch.
 
 ## Decisions
 
 1. **Files.** `types.ts`, `limits.ts`, `validate.ts` (main-thread checks), `pool.ts`, `worker-entry.ts`, `run-code.ts`, `prelude.ts` (guest source), `wasm.ts` (`WebAssembly` typing, module cache), `index.ts`.
 2. **Protocol.** No ready handshake (Node delivers a message posted before the worker listens: probe, 26.8.1). One message per job, `{ id, code, inputJson, limits, options, stackCapBytes }`, answered `{ id, result }`; the input travels as validated JSON text, so no `DataCloneError`.
 3. **One run.** The seed's `runCode`: a Wasm module per `memoryBucket` (`initial` 256, `maximum` 256 + bucket / 65536 pages; dropped after an abort or fault); `setMemoryLimit`, `setMaxStackSize(clampStack(…))`, an interrupt past the deadline, `executePendingJobs(512)` until settled, `never_settled` when pending with no job. `memBytes` is -1 after `memory_limit`, `sandbox_crash` and a watchdog `timeout` (F9); `ms` is measured in the worker for a settled run, else on the main thread. `classify` and `buildPrelude` are ported (errors read via `getProp`, F6); under `object_or_null`, `undefined` and `null` give `"Onull"`.
-4. **Pool.** `run` reserves a worker synchronously (idle, new below `size`, or a FIFO entry); the seed reserved after an `await` and timed out 5 of 6 concurrent runs. The watchdog starts at `postMessage`. Exit with a job: clear the timer, replace at once, `respawns`++, `sandbox_crash`. Idle exit: remove the slot; the next run spawns (`respawns`++). A throwing factory gives `sandbox_crash`. Workers are `unref()`ed; the watchdog timer is not.
-5. **Validation** (main thread; first failure wins in the order `code`, `limits`, `options`, `seed`, `nowIso`, `binding`, `result`, `input`; messages start with the argument's name; a `limits` or `options` that is not a non-null object is refused under its own name before any member is read): `nowIso` matches `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$` and `Date.parse` is finite, and the day is at most its month's length (V8 rolls `2026-02-30` over to 2 March). The input check is the spec's `strictJson` in a try/catch (a throw is `input_invalid`), then at most 8,000,000 JSON characters. No `node:util` (the import rule forbids it).
+4. **Pool.** `run` reserves a worker synchronously (idle, new below `size`, or a FIFO entry); the seed reserved after an `await` and timed out 5 of 6 concurrent runs. The watchdog starts at `postMessage`. Exit with a job: clear the timer, replace at once, `respawns`++, `sandbox_crash`. Idle exit: remove the slot; the next run spawns (`respawns`++). A throwing factory gives `sandbox_crash`. `createWorkerSandbox` reads `opts` once into a plain copy in a try/catch (`Reflect.ownKeys`, `Reflect.get`, `String(key)`), unknown keys before values. Workers are `unref()`ed; the watchdog timer is not.
+5. **Validation** (main thread; first failure wins in the order `code`, `limits`, `options`, `seed`, `nowIso`, `binding`, `result`, `input`; messages start with the argument's name): `nowIso` matches `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$` and `Date.parse` is finite, and the day is at most its month's length (V8 rolls `2026-02-30` over to 2 March). The input check is the spec's `strictJson` in a try/catch (a throw is `input_invalid`), then at most 8,000,000 JSON characters. No `node:util` (the import rule forbids it).
 6. **Sizing** is the caller's: no `size` means 2; U39's `main` passes `poolSize(availableParallelism())` (`node:os` is refused here).
-7. **Typing.** `wasm.ts` declares the `WebAssembly.Memory` members it uses; `tsconfig.json` stays.
+7. **Typing.** `wasm.ts` declares the `WebAssembly.Memory` members it uses.
 8. **Arch rule.** `checkSandboxIo` resolves relative refs with `resolveSpecifier` and matches bare ones by exact text; every identifier `process` is reported; the result goes through `sortViolations`.
 
 ## Interfaces
@@ -73,7 +73,7 @@ export function checkSandboxIo(s: Snapshot): Violation[];   // code ARCH_SANDBOX
 
 ## Failure cases
 
-Bad arguments are faults, a closed sandbox rejects, a bad option throws; a Wasm load failure, abort, exiting worker or failed spawn is `sandbox_crash` and the pool survives; an abort while disposing a run that already has its result (E20, from `JS_FreeRuntime`) keeps that result and drops the module.
+Bad arguments are faults, a closed sandbox rejects, a bad option throws; a Wasm load failure, abort, exiting worker or failed spawn is `sandbox_crash` and the pool survives.
 
 ## Security
 
@@ -81,7 +81,7 @@ Bad arguments are faults, a closed sandbox rejects, a bad option throws; a Wasm 
 
 ## Test plan
 
-Fixtures: `test-plan.md`, `escape-data.md`. Timing is wall-clock, so no `Clock`; assertions use the spec's windows.
+Timing is wall-clock, so no `Clock`; assertions use the spec's windows.
 
 ## Decisions made while writing
 
