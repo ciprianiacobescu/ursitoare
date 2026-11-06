@@ -144,6 +144,30 @@ export interface StepRecord {
   endedAt: string | null;
 }
 
+export interface StepHookEntry {
+  label: string;
+  kind: "code" | "block";
+  fused: boolean;
+  attempt: number;
+  state: "completed" | "failed";
+  action: "continue" | "skip" | "redirect" | "retry" | "fail" | null;
+  mutated: "input" | "output" | null;
+  to: string | null;
+  error: { code: string; message: string } | null;
+  tool: string | null;
+  idemKey: string | null;
+}
+
+export interface StepHooksWrite {
+  inputOriginal: PayloadValue | null;
+  entries: readonly StepHookEntry[];
+}
+
+export interface StepHooks {
+  inputOriginalRef: string | null;
+  entries: StepHookEntry[];
+}
+
 export interface RunRepository {
   create(tx: TenantTx, ctx: TenantContext, run: NewRun, at: Date): Promise<RunRecord>;
   get(tx: TenantTx, ctx: TenantContext, runId: string): Promise<RunRecord | null>;
