@@ -113,16 +113,20 @@ function readPoolOptions(opts: unknown): SandboxConfig {
   return config;
 }
 
+interface Slot {
+  worker: Worker;
+  job: PoolJob | undefined;
+}
+
 class PoolSandbox implements WorkerSandbox {
   readonly size: number;
   private respawnCount = 0;
   private closed = false;
-  /** One lazily spawned worker serves one job at a time in this step; `size` is ignored so far. */
-  private worker: Worker | undefined;
-  private activeJob: PoolJob | undefined;
+  private slots: Slot[] = [];
   private queue: PoolJob[] = [];
   private nextId = 1;
   private respawnOnNextSpawn = false;
+  private closePromise: Promise<void> | undefined;
   private readonly graceMs: number;
   private readonly stackCapBytes: number;
   private readonly resourceLimits: { stackSizeMb: number; maxOldGenerationSizeMb: number };
@@ -186,49 +190,71 @@ class PoolSandbox implements WorkerSandbox {
     });
   }
 
-  private spawn(): Worker {
+  /** Spawn a worker for a new slot and register its handlers. */
+  private spawnSlot(): Slot {
     const url = workerEntryUrl(import.meta.url);
     const options: WorkerOptions = { env: {}, resourceLimits: this.resourceLimits };
-    const created = this.factory === undefined ? new Worker(url, options) : this.factory(url, options);
+    const worker = this.factory === undefined ? new Worker(url, options) : this.factory(url, options);
     if (this.respawnOnNextSpawn) {
       this.respawnOnNextSpawn = false;
       this.respawnCount += 1;
     }
-    created.unref();
-    created.on("message", (message: unknown) => this.receive(created, message));
-    created.on("error", () => {
+    worker.unref();
+    const slot: Slot = { worker, job: undefined };
+    worker.on("message", (message: unknown) => this.receive(slot, message));
+    worker.on("error", () => {
       // The exit handler reports a dead worker.
     });
-    created.on("exit", () => this.onExit(created));
-    return created;
+    worker.on("exit", () => this.onExit(slot));
+    this.slots.push(slot);
+    return slot;
   }
 
+  private removeSlot(slot: Slot): void {
+    const index = this.slots.indexOf(slot);
+    if (index >= 0) this.slots.splice(index, 1);
+  }
+
+  /** Start the next queued job on an idle slot, spawning below `size`, first in, first out. */
   private pump(): void {
-    if (this.closed || this.activeJob !== undefined) return;
-    const job = this.queue.shift();
-    if (job === undefined) return;
-    if (this.worker === undefined) {
-      try {
-        this.worker = this.spawn();
-      } catch {
-        // The factory refused to produce a worker: the run fails on its own, and later runs try again.
-        job.settled = true;
-        job.resolve(faultOf(classifyFault({ stage: "spawn" }), performance.now() - job.t0));
-        this.pump();
-        return;
+    if (this.closed) return;
+    while (this.queue.length > 0) {
+      const idle = this.slots.find((slot) => slot.job === undefined);
+      if (idle !== undefined) {
+        const job = this.queue.shift();
+        if (job !== undefined) this.start(idle, job);
+        continue;
       }
+      if (this.slots.length < this.size) {
+        const job = this.queue.shift();
+        if (job === undefined) return;
+        let slot: Slot;
+        try {
+          slot = this.spawnSlot();
+        } catch {
+          // The factory refused to produce a worker: this run fails, later runs try again.
+          job.settled = true;
+          job.resolve(faultOf(classifyFault({ stage: "spawn" }), performance.now() - job.t0));
+          continue;
+        }
+        this.start(slot, job);
+        continue;
+      }
+      return;
     }
-    this.activeJob = job;
-    job.timer = setTimeout(() => this.watchdog(job), job.timeoutMs + this.graceMs);
-    this.worker.postMessage(job.message);
   }
 
-  private receive(worker: Worker, message: unknown): void {
+  private start(slot: Slot, job: PoolJob): void {
+    slot.job = job;
+    job.timer = setTimeout(() => this.watchdog(slot, job), job.timeoutMs + this.graceMs);
+    slot.worker.postMessage(job.message);
+  }
+
+  private receive(slot: Slot, message: unknown): void {
     const reply = message as { id?: unknown; result?: SandboxResult };
-    const job = this.activeJob;
+    const job = slot.job;
     if (
       job === undefined ||
-      this.worker !== worker ||
       this.closed ||
       job.settled ||
       reply?.id !== job.id ||
@@ -236,80 +262,87 @@ class PoolSandbox implements WorkerSandbox {
     ) {
       return;
     }
-    this.settle(job);
+    this.settle(slot, job);
     job.resolve(reply.result);
+    this.pump();
   }
 
-  private watchdog(job: PoolJob): void {
-    if (this.closed || this.activeJob !== job || job.settled) return;
-    this.settle(job);
-    const worker = this.worker;
-    this.worker = undefined;
+  private watchdog(slot: Slot, job: PoolJob): void {
+    if (this.closed || slot.job !== job || job.settled) return;
+    this.settle(slot, job);
     this.respawnCount += 1;
-    if (worker !== undefined) {
-      void worker.terminate();
-    }
+    this.removeSlot(slot);
+    void slot.worker.terminate();
     const ms = performance.now() - job.t0;
     job.resolve(faultOf(classifyFault({ stage: "watchdog", ms, timeoutMs: job.timeoutMs, graceMs: this.graceMs }), ms));
     try {
-      this.worker = this.spawn();
+      this.spawnSlot();
     } catch {
-      this.worker = undefined;
+      // The next run tries to spawn again.
     }
     this.pump();
   }
 
-  private onExit(worker: Worker): void {
-    if (this.closed || this.worker !== worker) return;
-    this.worker = undefined;
-    const job = this.activeJob;
+  private onExit(slot: Slot): void {
+    if (this.closed || !this.slots.includes(slot)) return;
+    this.removeSlot(slot);
+    const job = slot.job;
     if (job !== undefined && !job.settled) {
-      this.settle(job);
+      this.settle(slot, job);
       this.respawnCount += 1;
       const ms = performance.now() - job.t0;
       job.resolve(faultOf(classifyFault({ stage: "exit" }), ms));
       try {
-        this.worker = this.spawn();
+        this.spawnSlot();
       } catch {
-        this.worker = undefined;
+        // The next run tries to spawn again.
       }
       this.pump();
       return;
     }
-    // Idle exit: the slot stays empty and the next run respawns a worker.
+    // Idle exit: the slot is gone and the next run respawns a worker.
     this.respawnOnNextSpawn = true;
+    this.pump();
   }
 
-  /** Detach the job from the pool: it is about to be settled, and no other path resolves it again. */
-  private settle(job: PoolJob): void {
+  /** Detach the job from its slot: it is about to be settled, and no other path resolves it again. */
+  private settle(slot: Slot, job: PoolJob): void {
     job.settled = true;
     if (job.timer !== undefined) {
       clearTimeout(job.timer);
       job.timer = undefined;
     }
-    if (this.activeJob === job) {
-      this.activeJob = undefined;
+    if (slot.job === job) {
+      slot.job = undefined;
     }
   }
 
-  async close(): Promise<void> {
-    if (this.closed) {
-      return;
+  close(): Promise<void> {
+    if (this.closePromise === undefined) {
+      this.closePromise = this.doClose();
     }
+    return this.closePromise;
+  }
+
+  private async doClose(): Promise<void> {
     this.closed = true;
-    const jobs = [...this.queue, this.activeJob];
+    const jobs = [...this.queue];
     this.queue = [];
-    this.activeJob = undefined;
+    for (const slot of this.slots) {
+      if (slot.job !== undefined) jobs.push(slot.job);
+    }
     for (const job of jobs) {
-      if (job === undefined || job.settled) continue;
-      this.settle(job);
+      if (job.settled) continue;
+      job.settled = true;
+      if (job.timer !== undefined) {
+        clearTimeout(job.timer);
+        job.timer = undefined;
+      }
       job.reject(new SandboxError("SANDBOX_CLOSED", "sandbox is closed"));
     }
-    const worker = this.worker;
-    this.worker = undefined;
-    if (worker !== undefined) {
-      await worker.terminate();
-    }
+    const workers = this.slots.map((slot) => slot.worker);
+    this.slots = [];
+    await Promise.all(workers.map((worker) => worker.terminate()));
   }
 }
 
