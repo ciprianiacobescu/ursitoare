@@ -50,3 +50,14 @@ export function hookRoutePaths(
 ): { key: string; d: string; className: "hook-route" }[] {
   throw new Error("not implemented");
 }
+
+export interface HookSectionView {
+  hooks: string[];
+  routes: string[];
+  rules: string[];
+  missing: string | null;
+}
+
+export function hookSectionView(_doc: unknown, _layout: GraphLayout | null): HookSectionView | null {
+  throw new Error("not implemented");
+}
