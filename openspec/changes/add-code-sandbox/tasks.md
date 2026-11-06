@@ -2,7 +2,7 @@ Specs: `specs/sandbox/spec.md`, `specs/sandbox-build/spec.md`; decisions: `desig
 
 ## 1. Helpers
 
-- [ ] 1.1 Write `src/sandbox/limits.test.ts` first (scenario "Helper vectors, defaults and the error class"), then implement `src/sandbox/limits.ts`, `src/sandbox/types.ts` (types, `SandboxError`) and `src/sandbox/index.ts`, implementing requirement "Pure helpers and default objects fix the sandbox's numbers"
+- [x] 1.1 Write `src/sandbox/limits.test.ts` first (scenario "Helper vectors, defaults and the error class"), then implement `src/sandbox/limits.ts`, `src/sandbox/types.ts` (types, `SandboxError`) and `src/sandbox/index.ts`, implementing requirement "Pure helpers and default objects fix the sandbox's numbers"
 - [ ] 1.2 Write `src/sandbox/classify.test.ts` first (scenario "Every classification row on synthetic facts") against the scaffold stub `classifyFault` (`src/sandbox/classify.ts`), then implement it, implementing requirement "A body runs in a fresh context and every failure is a typed fault"
 
 ## 2. Architecture rule
