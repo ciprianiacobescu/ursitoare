@@ -7,7 +7,7 @@ Specs: `specs/sandbox/spec.md`, `specs/sandbox-build/spec.md`; decisions: `desig
 
 ## 2. Architecture rule
 
-- [ ] 2.1 Write `test/arch/sandbox-io.test.ts` first (scenario "Allowed, refused and ignored files"; it also asserts `checkSandboxIo(readSnapshot())` is `[]`, which later tasks must keep), then implement `checkSandboxIo` in `test/arch/sandbox-io.ts`, implementing requirement "The sandbox imports no host I/O"
+- [x] 2.1 Write `test/arch/sandbox-io.test.ts` first (scenario "Allowed, refused and ignored files"; it also asserts `checkSandboxIo(readSnapshot())` is `[]`, which later tasks must keep), then implement `checkSandboxIo` in `test/arch/sandbox-io.ts`, implementing requirement "The sandbox imports no host I/O"
 
 ## 3. The pool
 
