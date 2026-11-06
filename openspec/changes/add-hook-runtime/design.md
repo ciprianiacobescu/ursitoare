@@ -67,7 +67,7 @@ No endpoint, PEP action, table or secret. The sandbox gets `HookContext` JSON on
 
 ## Verification
 
-Run on 2026-11-06 in a scratch copy of main@a6b5fb37 (Node 26.8.1) with this design ported (pipeline, runtimes, `execute.ts`, `gate.ts`, U41's placement model, a QuickJS stand-in for the pool); the frozen interpreter tests without a database pass unchanged. **Verified by running:** every scenario value except taint, the sweep and the gate; the flows and `onion-own` are `ok` at L1-L3 through `validateFlowText` and clean in the seed `check.ts` (with `ursitoare: "0.2-draft"` set in memory); the key vectors (`idemKey`, Python). **Unverified:** layer `H` of U41's `validateFlow`; the real `createWorkerSandbox` (`F4`, the sweep); the taint rows (U40 is not on main); the database gate scenario; DBOS.
+Run on 2026-11-06 in a scratch copy of main@a6b5fb37 (Node 26.8.1) with this design ported (pipeline, runtimes, `execute.ts`, `gate.ts`, U41's placement model, a QuickJS stand-in for the pool); the frozen interpreter tests without a database pass unchanged. **Verified by running:** every scenario value except taint, the sweep and the gate; the flows and `onion-own` are `ok` at L1-L3 through `validateFlowText` and clean in the seed `check.ts` (with `ursitoare: "0.2-draft"` set in memory); the key vectors (`idemKey`, Python). **Unverified:** layer `H` of U41's `validateFlow`; the real `createWorkerSandbox` (`F4`, the sweep); variant `F9` (a rejecting `run`: the mapping to `sandbox_unavailable` follows U39's rule and was not run); the taint rows (U40 is not on main); the database gate scenario; DBOS.
 
 ## Decisions made while writing
 

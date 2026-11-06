@@ -27,8 +27,10 @@ Run on main@a6b5fb37 (a copy of the worktree, Node 26.8.1, 2026-11-06): `CODE_PA
 | nest 65 | `NEST(65)`, schema `ANY` | `INTERPRETER_OUTPUT_INVALID` | `{ path: "/", keyword: "payload" }` |
 | nest 64 | `NEST(64)`, schema `ANY` | outcome whose `output` is the 64 nested objects | |
 | badkey | `return { ["a\u0000"]: "x" };`, schema `{ type: "object", additionalProperties: { type: "number" } }` | `INTERPRETER_OUTPUT_INVALID` | `{ path: "/", keyword: "type" }` (the Ajv path held U+0000) |
+| longkey | `return { ["k".repeat(300)]: "x" };`, schema `{ type: "object", additionalProperties: { type: "number" } }` | `INTERPRETER_OUTPUT_INVALID` | `{ path: "/", keyword: "type" }` (the raw Ajv `instancePath` was 301 characters) |
+| surrkey | `return { ["\ud800"]: "x" };`, schema `{ type: "object", additionalProperties: { type: "number" } }` | `INTERPRETER_OUTPUT_INVALID` | `{ path: "/", keyword: "type" }` (the raw Ajv `instancePath` was `/\ud800`, ill formed) |
 
-`NEST(n)`: `let o = {}; for (let i = 1; i < n; i++) o = { n: o }; return o;` (n objects: the pool accepts 64 and 65, `assertPayloadValue` refuses 65). The escapes in `nul` and `surrogate` are backslash sequences in the JS source.
+`NEST(n)`: `let o = {}; for (let i = 1; i < n; i++) o = { n: o }; return o;` (n objects: the pool accepts 64 and 65, `assertPayloadValue` refuses 65). The escapes in `nul`, `surrogate`, `badkey` and `surrkey` are backslash sequences in the JS source. The `badkey`, `longkey` and `surrkey` paths were probed with Ajv 2020 (`allErrors: false`) on Node 24.22.2: the raw `instancePath` held U+0000 (length 3), was 301 characters, and was `/\ud800` (length 2, `isWellFormed()` false).
 
 ## Run fixtures
 

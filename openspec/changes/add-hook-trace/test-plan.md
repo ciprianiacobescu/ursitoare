@@ -55,17 +55,17 @@ Also: `W("leak", 16, { hooks: { inputOriginal: LEAK, entries: <65 times E1> } })
 
 ## Rows (scenario "Onion, mutate, retry and failure rows")
 
-Setup as add-hook-runtime's test-plan header: `loadTestCatalogue()`, `fixedClock("2026-11-02T10:00:00Z")`, tenant `tenant_a`, run `r_1`, `hookRunVersion(name)`, the invoker answers and the recording gate (it answers `invoke` with `idemKey(tenant, lineage, node, effectSeq, call.generation ?? 0)`), `INPUT = { vendor: "  Acme ", amount: 120, currency: "eur" }`, `SB = createWorkerSandbox({ size: 1 })` closed in `finally`. `OBSV` records `deps.hookObserver(nodeId, entry)`; `labelsOf(node)` is the `label`s it received for `node` in order. After each run `rows = (await store.listSteps(ctx, "r_1", { limit: 100 })).steps`.
+Setup as add-hook-runtime's test-plan header: `loadTestCatalogue()`, `fixedClock("2026-11-02T10:00:00Z")`, tenant `tenant_a`, run `r_1`, `hookRunVersion(name)`, the invoker answers and the recording gate (it answers `invoke` with `idemKey(tenant, lineage, node, effectSeq, call.generation ?? 0)`), `INPUT = { vendor: "  Acme ", amount: 120, currency: "eur" }`, `SB = createWorkerSandbox({ size: 1 })` closed in `finally`. `OBSV` records `deps.hookObserver(nodeId, entry)`; `labelsOf(node, attempt)` is the `label`s of the entries it received for `node` whose `attempt` equals `attempt`, in order. After each run `rows = (await store.listSteps(ctx, "r_1", { limit: 100 })).steps`.
 
 | Run | Rows (derived) |
 |---|---|
 | `onion` | `lookup` seq 0 `hooks` `{ inputOriginalRef: null, entries: [E("pre:rule.rule_b"), E("post:rule.rule_b")] }`; `normalize` 1, no key; `pay` 2 `idemKey` K_PAY, `entries` `PAY_LABELS.map(E)`; `done` 3, no key |
 | `mutate` | `lookup` 0: `inputOriginalRef` D_ORIG, `[E("pre:trim_name", { mutated: "input" })]`, `inputRef` D_TRIM, `getPayload(D_ORIG).data` is ORIG; `normalize` 1: `{ inputOriginalRef: null, entries: [E("post:upper_currency", { mutated: "output" })] }`; `pay`, `done` no key |
 | `f-ret` with `{ query: "q" }` | `search` attempt 1 seq 0: `[E("post:enough_passages", { fused: false, action: "retry" })]`; `search` attempt 2 seq 1: `[E("post:enough_passages", { fused: false, attempt: 2 })]`; `done` seq 2, no key |
-| `bad-upper` | `lookup` as in `mutate`; `normalize` `failed`, error code `INTERPRETER_OUTPUT_INVALID`; no `pay` row; `(normalize.hooks?.entries ?? []).map(label)` equals `labelsOf("normalize")` |
+| `bad-upper` | `lookup` as in `mutate`; `normalize` `failed`, error code `INTERPRETER_OUTPUT_INVALID`; no `pay` row; `(normalize.hooks?.entries ?? []).map(label)` equals `labelsOf("normalize", 1)` |
 | `pay-once` (add-interpreter-core fixtures) | four rows, none with a `hooks` key |
 
-For every run and row: `(row.hooks?.entries ?? []).map(e => e.label)` equals `labelsOf(row.nodeId)`. `f-ret` is the retry case of add-hook-runtime: `loadHookFlow("f-ret")` as a validated version of flow `f-ret` with `HOOK_RUN_HASH`; `kb.search@1` answers one passage, then two; its `post` hook has `max_retries`, so it is not fused. `E` members not named are the defaults.
+For every run and row: `(row.hooks?.entries ?? []).map(e => e.label)` equals `labelsOf(row.nodeId, row.attempt)` (per node and attempt: the observer holds two entries for `search`, one per attempt, and each `search` row holds one). `f-ret` is the retry case of add-hook-runtime: `loadHookFlow("f-ret")` as a validated version of flow `f-ret` with `HOOK_RUN_HASH`; `kb.search@1` answers one passage, then two; its `post` hook has `max_retries`, so it is not fused. `E` members not named are the defaults.
 
 ## Replay (scenario "Replay of onion-own keeps the trace")
 

@@ -1,6 +1,6 @@
 # Test plan for add-hook-checker
 
-Every fixture was run before its result was written (design.md § Verification). `CAT` is `loadTestCatalogue()`. A case file is the **base** below plus the insertion named for it and a header `# expect: <code>` or `# expect-warnings: <code>`. An issue is written `CODE node path`.
+Every fixture was run before its result was written (design.md § Verification), except M31 to M36 and § Throwing catalogue (derived, unrun). `CAT` is `loadTestCatalogue()`. A case file is the **base** below plus the insertion named for it and a header `# expect: <code>` or `# expect-warnings: <code>`. An issue is written `CODE node path`.
 
 ## Base flow (hookless: `ok: true`, `["L1", "L2", "L3"]`, no issue)
 
@@ -20,7 +20,7 @@ nodes:
 
 ## Case files
 
-An insertion adds the named keys to the named node ("at the end": a new top-level key); a code hook is `id`, `kind: code`, `source: return;`. The base is flow-style YAML for brevity; case files may use block style.
+An insertion adds the named keys to the named node ("at the end": a new top-level key); a code hook is `id`, `kind: code`, `source: return;`. The base is flow-style YAML; case files may use block style.
 
 | File | Insertion | Result (one error, layer `H`) |
 |---|---|---|
@@ -112,10 +112,20 @@ Warning file `hooks-no-match` (`# expect-warnings: W_NO_MATCH`): at the end the 
 | M28 | `lookup.pre` holds 17 code hooks `h1` to `h17` | `/nodes/lookup/pre` |
 | M29 | 17 rules `r1` to `r17`, each `match: {}` with a `pre` code hook | `null /hooks` |
 | M30 | control: `lookup.pre` holds 16 code hooks, `h1` to `h15` and `"a".repeat(64)` | no issue |
+| M31 | `lookup.pre` code hook `{ id: "h", kind: "code" }` (no `source`) | `/nodes/lookup/pre/0` |
+| M32 | `lookup.post` block hook `{ id: "h", kind: "block", uses: "mail.send@1" }` (no `with`) | `/nodes/lookup/post/0` |
+| M33 | rule `r` with `match: {}`, a `pre` code hook `r` and `frob: 1` | `null /hooks/0/frob` |
+| M34 | `lookup.pre` code hook `h` with `when: { frob: 1 }` | `/nodes/lookup/pre/0/when/frob` |
+| M35 | `lookup.post` block hook `h` plus `routes: ["done"]` | `/nodes/lookup/post/0/routes` |
+| M36 | `lookup.pre` code hook `h` plus `on_error: "fail"` | `/nodes/lookup/pre/0/on_error` |
 
 ## Mutation test and deep chain
 
 A xorshift32 seeded `0x2545f491` makes 500 mutants of each flow (`structuredClone`d), each with 1 to 3 edits at a random non-root path: one time in four delete the key (splice an array element), else set it to `null`, `0`, `""`, `{}`, `[]`, `"${{"`, `"__proto__"`, `true` or `["a"]`. Each mutant goes through the four calls of the scenario (`hookPlacements` for every own key of `nodes`); the mutator lives in the test file. The chain: nodes `n0` to `n4999` of kind `switch` (`on: "${{ inputs.k }}"`, `cases: {}`, `default` the next id, `n4999` leading to `e`), the node `e` (`end`, `completed`), `post: [{ id: jump, kind: code, source: "return;", routes: [e] }]` on `n0`, `start` `n0`.
+
+## Throwing catalogue
+
+`TC` is the base flow whose `lookup` gets `post: [peek, jump, retry_lookup]`: `peek` a block hook (`erp.lookup_vendor@1`, `with: { vendor_name: x }`), `jump` a code hook, `routes: [gate, pay]`, `retry_lookup` a code hook, `max_retries: 1` (`validateFlow`: `ok: true` to L3, run). `THROW` is a catalogue whose `block` throws and whose other four methods return `undefined` (`effectClass` of `lookup` and `pay` then throws: run). `checkHooks(TC, THROW)` derives, rule by rule: `H_SCHEMA` none. `H_BLOCK`: the lookup for `peek` throws, so the block is absent: `lookup /nodes/lookup/post/0/uses`. Routes: `gate` is a `switch` (`read`, no catalogue call), `pay` has effect `null`: `H_ROUTE_EFFECT lookup /nodes/lookup/post/1/routes/1`. `retry_lookup`: scope `lookup` and `peek`, both `null`, no `pay`, no flag: `H_RETRY_SCOPE lookup /nodes/lookup/post/2/max_retries`. `H_CYCLE` and `H_DOMINANCE` none (the graph is acyclic; `lookup` dominates `gate` and `pay`, `pay` dominates `done`); no rule, no warning. Result: these three errors in path order, `warnings: []`.
 
 ## Gating inputs
 

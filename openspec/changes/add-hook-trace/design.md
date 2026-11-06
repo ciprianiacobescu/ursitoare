@@ -59,5 +59,5 @@ Run on 2026-11-06 in a scratch copy of main@a6b5fb37 (Node 26.8.1, embedded Post
 
 - Label bound 127 for the id (decision 4), not the card's 63. Entry limit 64 kept (decision 5), matched by U41's bounds (Failure cases).
 - Eleven entry members (the card's seam lists eleven). The check constraint is added to the column (not in the card) so a direct write cannot store a shape the view schema would not describe.
-- The rows scenarios compare a failed attempt's entries with what the observer received, because add-hook-runtime does not say whether a refused hook's entry is observed.
+- The rows scenarios compare each row's entries with what the observer received for that node and that attempt (a retried node such as `search` in `f-ret` has one entry per attempt, so a per-node comparison would fail), including a failed attempt's entries, because add-hook-runtime does not say whether a refused hook's entry is observed.
 - Depends on gains U24 and U38 for names the scenarios call.

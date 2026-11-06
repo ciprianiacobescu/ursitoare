@@ -8,7 +8,7 @@ ADR-04 and § 9.4: pure `code` in a worker pool inside the DBOS step, faults ter
 2. **Protocol.** No ready handshake (Node delivers a message posted before the worker listens: probe, 26.8.1). One message per job, `{ id, code, inputJson, limits, options, stackCapBytes }`, answered `{ id, result }`; the input travels as validated JSON text, so no `DataCloneError`.
 3. **One run.** The seed's `runCode`: a Wasm module per `memoryBucket` (`initial` 256, `maximum` 256 + bucket / 65536 pages; dropped after an abort or fault); `setMemoryLimit`, `setMaxStackSize(clampStack(…))`, an interrupt past the deadline, `executePendingJobs(512)` until settled, `never_settled` when pending with no job. `memBytes` is -1 after `memory_limit`, `sandbox_crash` and a watchdog `timeout` (F9); `ms` is measured in the worker for a settled run, else on the main thread. `classify` and `buildPrelude` are ported (errors read via `getProp`, F6); under `object_or_null`, `undefined` and `null` give `"Onull"`.
 4. **Pool.** `run` reserves a worker synchronously (idle, new below `size`, or a FIFO entry); the seed reserves after an `await`, and 5 of 6 concurrent seed runs returned `timeout`. The watchdog starts at `postMessage`. Exit with a job: clear the timer, replace at once, `respawns`++, `sandbox_crash`. Idle exit: remove the slot; the next run spawns (`respawns`++). A throwing factory gives `sandbox_crash`. Workers are `unref()`ed; the watchdog timer is not.
-5. **Validation** (main thread; first failure wins in the order `code`, `limits`, `seed`, `nowIso`, `binding`, `result`, `input`; messages start with the argument's name): `nowIso` matches `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$` and `Date.parse` is finite, and the day is at most its month's length (V8 rolls `2026-02-30` over to 2 March). The input check is `strictJson` in a try/catch, then at most 8,000,000 JSON characters; 65 nested arrays pass, 66 fail.
+5. **Validation** (main thread; first failure wins in the order `code`, `limits`, `seed`, `nowIso`, `binding`, `result`, `input`; messages start with the argument's name): `nowIso` matches `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$` and `Date.parse` is finite, and the day is at most its month's length (V8 rolls `2026-02-30` over to 2 March). The input check is `strictJson` in a try/catch (a throw is `input_invalid`), then at most 8,000,000 JSON characters. `strictJson` accepts exactly, recursively: `null`, a boolean, a finite number, a string; an `Array.isArray` value with prototype `Array.prototype`, own keys exactly its indices and `length`, each index an enumerable data property; an object with prototype `Object.prototype` or `null`, string keys only, every own property an enumerable data property. 65 levels pass, 66 fail, a cycle fails. Everything else fails. A `Proxy` is judged by what its traps report. No `node:util` (the import rule forbids it).
 6. **Sizing** is the caller's: no `size` means 2; U39's `main` passes `poolSize(availableParallelism())` (`node:os` is refused here).
 7. **Typing.** `wasm.ts` declares the `WebAssembly.Memory` members it uses; `tsconfig.json` stays.
 8. **Arch rule.** `checkSandboxIo` resolves relative refs with `resolveSpecifier` and matches bare ones by exact text; every identifier `process` is reported; the result goes through `sortViolations`.
@@ -81,12 +81,12 @@ Bad arguments are faults, a closed sandbox rejects, a bad option throws; a Wasm 
 
 ## Test plan
 
-Fixtures: `test-plan.md`. Timing is wall-clock, so no `Clock`; assertions use the spec's windows.
+Fixtures: `test-plan.md`, `escape-data.md`. Timing is wall-clock, so no `Clock`; assertions use the spec's windows.
 
 ## Decisions made while writing
 
 - Added behaviour, not seams (accepted by the coordinator): caps `timeoutMs` 3,600,000, `memoryBytes` 1 GiB, `maxOutputBytes` 64 MiB; `nowIso` needs a zone; `code` must be a string; `run` checks `closed` first; idle-exit replacement is lazy; option, watchdog and spawn-failure messages are fixed.
-- One representative body per multi-body seed case; `E17` carries 66 nested arrays, `E54` `return undefined;`, `E20` accepts four codes and still asserts a fault.
+- One representative body per multi-body Phase-0 case; `E17` carries 66 nested arrays, `E54` `return undefined;`, `E20` accepts four codes and still asserts a fault.
 
 ## Unverified
 

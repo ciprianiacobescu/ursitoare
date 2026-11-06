@@ -1,13 +1,13 @@
 # Delivered shapes taken by add-hook-checker
 
-Declarations from the merged code, main@a6b5fb37 (`file:line`; `…` elides unused members).
+Declarations from the merged code, main@a6b5fb37 (`file:line`; `…` elides unused members; lines of `format/types.ts`, `validate/diagnostics.ts` and `validate/index.ts` re-checked at main@cf34c628).
 
 ```ts
 // src/authoring/format/types.ts (U22)
 :17-31  type NodeKind = "block" | "code" | "llm.extract" | "llm.generate" | "llm.decide" | "agent" | "switch" | "human.approval" | "human.form" | "foreach" | "subflow" | "delegate" | "wait" | "end";
 :52-63  interface HookSelector { kind?: NodeKind[]; effect?: (Effect | "human" | "none")[]; nodes?: string[]; tags?: string[] }   interface HookWhen { from?: HookSelector; next?: HookSelector; outcome?: string[] }
-:65-93  type HookDef = CodeHook | BlockHook   // CodeHook { id; kind: "code"; source: string; routes?: string[]; max_retries?: number; allow_effect_retry?: boolean; … }, BlockHook { id; kind: "block"; uses: string; with: Values; … }
-        interface HookRule { id: string; match: HookSelector; pre?: HookDef; post?: HookDef }
+:65-86  type HookDef = CodeHook | BlockHook   // CodeHook { id; kind: "code"; source: string; routes?: string[]; max_retries?: number; allow_effect_retry?: boolean; … }, BlockHook { id; kind: "block"; uses: string; with: Values; … }
+:88-93  interface HookRule { id: string; match: HookSelector; pre?: HookDef; post?: HookDef }   // CHANGED BY THIS UNIT (task 2.1): `match` becomes optional, `match?: HookSelector`; required as delivered
 :234    interface Flow { …; start: string; nodes: { [id: string]: FlowNode }; hooks?: HookRule[]; … }
 // src/authoring/format: catalogue.ts:5,34; nodes.ts:27,67,80; refs.ts:89,159,173
 interface BlockDef { effect: Effect; input: JsonSchema; … }   interface Catalogue { block(ref: string): BlockDef | undefined; … }
@@ -19,7 +19,7 @@ type EffectClass = "read" | "write" | "send" | "pay" | "human" | "none";   funct
 // src/authoring/validate (U25)
 types.ts:3-11  type Layer = "L1" | "L2" | "L3";   interface Issue { layer: Layer; code: string; node: string | null; path: string; message: string }
 validate.ts:41,51,72  function guarded(layer: Layer, sink: Sink, run: () => void): void /* a throw becomes one INTERNAL_ERROR issue of that layer */   function validateFlow(doc: unknown, catalogue: Catalogue): ValidationResult   function validateFlowText(text: string, format: FlowFormat, catalogue: Catalogue): ValidationResult
-diagnostics.ts:10,17-23,25,415,429  function diagnosticLink(code: string): string | null   interface DiagnosticInfo { code: string; layer: Layer | null; severity: "error" | "warning"; summary: string; fix: string }   function isKnownCode(code: string): boolean   const DIAGNOSTICS: readonly DiagnosticInfo[]   function renderDiagnosticsDoc(): string
+diagnostics.ts:6,10,17-23,25,415,429  function diagnosticAnchor(code: string): string /* also exported at validate/index.ts:10 */   function diagnosticLink(code: string): string | null   interface DiagnosticInfo { code: string; layer: Layer | null; severity: "error" | "warning"; summary: string; fix: string }   function isKnownCode(code: string): boolean   const DIAGNOSTICS: readonly DiagnosticInfo[]   function renderDiagnosticsDoc(): string
 codes.ts:1,51,59  const FLOW_ERROR_CODES, FLOW_WARNING_CODES, FLOW_RESERVED_CODES: readonly string[]
 // test/support (U24, U25)
 catalogue/loader.ts:85 function loadTestCatalogue(path?: string): TestCatalogue   catalogue/flows.ts:60 function loadTestFlow(name: string): Flow   hook-flows/index.ts:29,63 function hookFlowNames(group?: "scenario" | "static"): string[]   function loadHookFlow(name: string): Flow

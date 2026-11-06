@@ -1,4 +1,4 @@
-Spec: `specs/sandbox/spec.md`; decisions: `design.md`; fixtures: `test-plan.md`. Every test imports from `src/sandbox/index.ts`, wraps a stub-reaching call (async: `p.then((v) => v, (e: unknown) => e)`; sync: try/catch) so the failure is an assertion, uses `node:assert/strict`, closes pools in `finally`, races a possibly hanging run against 5000 ms, and has no `.`, `[` or `::` in test names. Each task implements only what it names, so a later task's red tests fail by assertion.
+Spec: `specs/sandbox/spec.md`; decisions: `design.md`; fixtures: `test-plan.md`, `escape-data.md`. Every test imports from `src/sandbox/index.ts`, wraps a stub-reaching call (async: `p.then((v) => v, (e: unknown) => e)`; sync: try/catch) so the failure is an assertion, uses `node:assert/strict`, closes pools in `finally`, races a possibly hanging run against 5000 ms, and has no `.`, `[` or `::` in test names. Each task implements only what it names, so a later task's red tests fail by assertion.
 
 ## 1. Helpers
 

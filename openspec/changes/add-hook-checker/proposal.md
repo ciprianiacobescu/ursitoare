@@ -13,7 +13,7 @@ Batch `m5-code-hooks` (U38-U44 and U42b, in plan order U38, U39, U40, U41, U42, 
 
 ## Impact
 
-- **Scaffold:** Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them; the new `src/authoring/hooks/index.ts` is scaffolded with its re-exports of `model.ts`, `check.ts` and `codes.ts`, from which every test imports. Not scaffolded, because they change existing files: the `Layer` union in `validate/types.ts`, the `H` block in `validate.ts`, the export line in `src/authoring/index.ts`, `isKnownCode` and the nine `DIAGNOSTICS` entries, the regenerated diagnostics document and the README row. No dependency.
+- **Scaffold:** Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them; the new `src/authoring/hooks/index.ts` is scaffolded with its re-exports of `model.ts`, `check.ts` and `codes.ts`, from which every test imports. Not scaffolded, because they change existing files: `HookRule.match` becoming optional (`match?: HookSelector`) in `src/authoring/format/types.ts` (task 2.1; shape in `delivered-shapes.md`), the `Layer` union in `validate/types.ts`, the `H` block in `validate.ts`, the export line in `src/authoring/index.ts`, `isKnownCode` and the nine `DIAGNOSTICS` entries, the regenerated diagnostics document and the README row. No dependency.
 - **Depends on:** `add-flow-format-model` (U22), `add-flow-validator` (U25), `add-taint-static` (U23, an added edge: `EffectClass` and `effectClass`, the one source of node effects) and `add-test-catalogue` (U24, an added edge: `loadTestCatalogue` and the 45 hook flows).
 - **Rulings:** D2 (own code lists, layer `H` gated on `declaresHooks`), D3 (format `0.1`; the `0.2-draft` hook flows go through `checkHooks` only), D13, D14, D18.
 - **Changed:** frozen tests changed by task 5.1: `src/authoring/validate/diagnostics.test.ts::C-73b013e5: DIAGNOSTICS has one entry per code in list order with single-line text` and `::C-73b013e5: the file holds exactly one heading per code`. Modified `flow-validation` requirements: "validateFlow runs three gated layers", "Diagnostics are documented" (53 to 62 entries), "The code lists" (text only).
@@ -49,7 +49,7 @@ export function hookCases(group: HookCaseGroup, namePrefix?: string): HookCase[]
 **Interfaces taken:**
 
 - From `add-flow-format-model`: `Flow`, `NodeKind`, `HookDef`, `HookSelector`, `HookWhen`, `Catalogue`, `successorFields`, `valueFields`, `hookValueFields`, `scanTemplate`, `walkStrings`, `escapePointer`.
-- From `add-flow-validator`: `Issue`, `Layer`, `validateFlow`, `validateFlowText`, `DIAGNOSTICS`, `diagnosticLink`, `renderDiagnosticsDoc`, `FLOW_ERROR_CODES`, `FLOW_WARNING_CODES`, `FLOW_RESERVED_CODES`.
+- From `add-flow-validator`: `Issue`, `Layer`, `validateFlow`, `validateFlowText`, `DIAGNOSTICS`, `diagnosticLink`, `diagnosticAnchor`, `renderDiagnosticsDoc`, `FLOW_ERROR_CODES`, `FLOW_WARNING_CODES`, `FLOW_RESERVED_CODES`.
 - From `add-taint-static`: `EffectClass`, `effectClass` (in `src/authoring/taint/hooks.ts`, not re-exported by its index).
 - From `add-test-catalogue`: `loadTestCatalogue`, `loadTestFlow`, `hookFlowNames`, `loadHookFlow`.
 

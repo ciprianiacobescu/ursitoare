@@ -1,6 +1,6 @@
 # Test plan: fixtures and expected values
 
-**Ran**: run on 2026-11-06 in a scratch copy of main@a6b5fb37 with the planned web edits applied (design § Verification). **Derived**: read from a sibling folder, since U39 to U43 are not on main.
+**Ran**: on 2026-11-06 in a scratch copy of main@a6b5fb37 with the web edits applied (design § Verification). **Derived**: read from a sibling folder (U39 to U43 are not on main).
 
 ## Flow texts (D22: the card's `demo-hooks` kept as written; `demo-x3` completes the card's sketch)
 
@@ -41,7 +41,7 @@ nodes:
   blocked: { kind: end, status: failed }
 ```
 
-`DEMO_X3` (**ran**: the same calls, `ok`, L1 to L3; layer `H` **derived** from U41 design 3: exactly one `H_ROUTE_EFFECT`, node `classify`, path `/nodes/classify/post/0/routes/0`, because `pay` uses `erp.create_payment@1`, effect `pay`):
+`DEMO_X3` (**ran**: the same calls, `ok`, L1 to L3, no warning; layer `H` **derived** from U41 design 3: exactly one `H_ROUTE_EFFECT`, node `classify`, path `/nodes/classify/post/0/routes/0`, because `pay` uses `erp.create_payment@1`, effect `pay`; the flow rule `audit` adds no issue, see below it):
 
 ```yaml
 ursitoare: "0.1"
@@ -52,6 +52,8 @@ inputs:
   properties: { vendor_name: { type: string }, amount: { type: number } }
   required: [vendor_name, amount]
 start: lookup
+hooks:
+  - { id: audit, match: { kind: [code] }, post: { kind: code, source: "return;" } }
 nodes:
   lookup: { kind: block, uses: erp.lookup_vendor@1, with: { vendor_name: "${{ inputs.vendor_name }}" }, next: classify }
   classify:
@@ -84,13 +86,13 @@ nodes:
   done: { kind: end, status: completed, output: { payment_id: "${{ nodes.pay.output.payment_id }}" } }
 ```
 
-`pay` does not read `review`, so `H_DOMINANCE` stays silent (the seed checker flags a mutant that does: **ran**).
+`pay` does not read `review`, so `H_DOMINANCE` stays silent (the seed checker flags a mutant that does: **ran**). The rule `audit` (**derived**) is well formed, selects `classify` and `review` (no `W_NO_MATCH`), has no `routes`, `input`, `with` or `when` (no `H_ROUTE_*`, nothing for `H_DOMINANCE`) and is inside the bounds. **Ran** on main@cf34c628: `validateFlowText` with `loadTestCatalogue()` gives `ok`, no warning, `layers_run` L1 to L3; the layout equals the layout without the rule; the seed `check.ts` gives no issue, and `W_NO_MATCH` (`kind: [wait]`) and `H_SCHEMA` (id `Audit`) for two mutants.
 
 `INPUT` is `{"vendor_name": "ACME", "amount": 12.5}`; `MOCKS_HOOKS` is `{"lookup": [{"output": {"vendor_id": "V-1", "status": "active"}}], "pay": [{"output": {"payment_id": "P-1", "status": "created"}}], "pay:post:notify": [{"output": {"ts": "1"}}]}`; the `ts` output fits `slack.post_message@1` (`required: ["ts"]`, string; **ran**, read from `blocks.v0.json`). `MISSING` is "A block node has no mock. Add a list of mocks for every block node.".
 
 ## Overlay fixtures (values **ran** on the prototype)
 
-`HOOKED` and `X3` are `canonicalizeFlow` of the two texts; `L(doc)` is `layoutFlow(doc).layout`. Layout order of `HOOKED`: `lookup`, `normalize`, `route`, `blocked`, `pay`, `done`; of `X3`: `lookup`, `classify`, `review`, `pay`, `done` (`classify` at x 16, y 120; `pay` at x 16, y 328). `graphView(HOOKED, true).message` is "Flow graph: 6 nodes, 5 edges, 5 layers."; `graphView(X3, true).message` is "Flow graph: 5 nodes, 4 edges, 5 layers.".
+`HOOKED` and `X3` are `canonicalizeFlow` of the two texts; `L(doc)` is `layoutFlow(doc).layout`. Layout order of `HOOKED`: `lookup`, `normalize`, `route`, `blocked`, `pay`, `done`; of `X3`: `lookup`, `classify`, `review`, `pay`, `done` (`classify` at x 16, y 120; `pay` at x 16, y 328). `graphView(HOOKED, true).message` is "Flow graph: 6 nodes, 5 edges, 5 layers."; `graphView(X3, true).message` is "Flow graph: 5 nodes, 4 edges, 5 layers.". Overlay of `X3` (rules are not badges, so the badge is unchanged): badges `classify` (pre `[]`, post `["rush"]`); routes `classify>pay rush`; rules `[{ id: "audit", match: "kind code", pre: null, post: "rule.audit" }]`; `missing` `[]`; `hookRoutePaths` `[{ key: "classify>pay:rush", d: "M 112 168 L 112 328", className: "hook-route" }]` (`x` 16 + 160 / 2 + 16, `y1` 120 + 48, `y2` 328; **ran**).
 
 `RULES` is `{"start":"a","nodes":{"a":{"kind":"block","next":"b","post":[{"id":"tidy","kind":"code","source":"x","routes":["b","ghost","ghost","a"]},{"id":"tidy2","kind":"code","source":"x","routes":["b"]}]},"b":{"kind":"end","pre":[{"id":"w"},{"kind":"code"},5,{"id":""}]}},"hooks":[{"id":"audit","match":{"kind":["block"],"effect":["pay","send"]},"pre":{"kind":"code","source":"x"}},{"id":"all","post":{"kind":"block","uses":"x@1","with":{}}},{"id":"","pre":{}},5,{"id":"named","match":{"nodes":["a","b"],"tags":["t1"]},"pre":{"kind":"code"},"post":{"kind":"code","routes":["b","a"]}}]}`. Its overlay: badges `a` (pre `[]`, post `["tidy","tidy2"]`) and `b` (pre `["w"]`, post `[]`); routes `a>b tidy`, `a>a tidy`, `a>b tidy2`; `missing` `["ghost"]`; rules `audit` (match "kind block and effect pay, send", pre "rule.audit", post null), `all` ("all nodes", null, "rule.all"), `named` ("nodes a, b and tags t1", "rule.named", "rule.named routes b, a"; derived).
 
@@ -114,4 +116,5 @@ nodes:
 | `route`, `pay` | outcome `pay`; `pay` input `{ vendor_id: "V-1", amount: 12.5, currency: "EUR", reference: "demo" }`, output `{ payment_id: "P-1", status: "created" }` |
 | missing hook mock | 422 `TEST_MOCK_MISSING`, `details.nodes` `["pay:post:notify"]` (U43); `testRunFormErrors` gives `{ mocks: MISSING + " Missing: pay:post:notify." }` (`test-run.ts:133-139`) |
 | `DEMO_X3` | `Not valid. 1 error, 0 warnings. Layers run: L1, L2, L3, H.`; `where` "Node classify · /nodes/classify/post/0/routes/0"; the editor marker lands on the text `pay` (`pointerRange`, ran); a test run of the draft: 422 `OPERATION_REFUSED`, `details` `{ reason: "version_not_runnable", cause: "draft" }` (`test-run-routes.ts:71`) |
-| graphs | `DEMO_HOOKS`: "Hooks" item `pay: pre guard; post notify`, no "Hook routes" or "Flow rules"; `DEMO_X3`: "Hooks" item `classify: pre none; post rush`, "Hook routes" item `hook rush: classify may route to pay` (ran on the prototype) |
+| graphs | `DEMO_HOOKS`: "Hooks" item `pay: pre guard; post notify`, no "Hook routes" or "Flow rules"; `DEMO_X3`: "Hooks" item `classify: pre none; post rush`, "Hook routes" item `hook rush: classify may route to pay`, "Flow rules" one item `audit: match kind code; pre none; post rule.audit` then the paragraph "Flow rules are listed, not drawn: the graph cannot tell which nodes they match.", and in the graph's `svg` exactly one `path.hook-route` with `d` `M 112 168 L 112 328`, whose computed `stroke-dasharray` is not `none`; the overlay values ran on the prototype, the rendering did not |
+| malformed trace (browser) | steps request `/api/v1/runs/<run id>/steps?limit=200`, rewritten with `hooks: null` on `normalize`: its region "Hooks" holds the note paragraph and no list; `pay` still lists its two items |

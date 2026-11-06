@@ -7,8 +7,8 @@ Specs: `specs/hooks-static`, `specs/flow-validation`; rules: `design.md`; fixtur
 
 ## 2. The checker
 
-- [ ] 2.1 Write `src/authoring/hooks/check-schema.test.ts` first (scenarios "Malformed documents" with the 30 mutations M1 to M30 of `test-plan.md`, and "Mutated hook flows and deep graphs never throw" with the harness inside the test file, and the 5,000-node chain), then add `"H"` to `Layer` in `src/authoring/validate/types.ts` and implement `checkHooks` in `src/authoring/hooks/check.ts` with the `H_SCHEMA` rules (design.md Decision 4), implementing requirement "Malformed hooks give H_SCHEMA and never throw"
-- [ ] 2.2 Write `src/authoring/hooks/check.test.ts` first (scenarios "The 45 hook flows" and "Effect routes and effect retries"), then complete `checkHooks` with `H_BLOCK`, `H_ROUTE_TARGET`, `H_ROUTE_EFFECT`, `H_ROUTE_HUMAN`, `H_RETRY_SCOPE`, `H_CYCLE` (explicit stack), `H_DOMINANCE` and `W_NO_MATCH`, implementing requirement "The checker reports each hook rule with its code"
+- [ ] 2.1 Write `src/authoring/hooks/check-schema.test.ts` first (scenarios "Malformed documents" with the 36 mutations M1 to M36 of `test-plan.md`, and "Mutated hook flows and deep graphs never throw" with the harness inside the test file, and the 5,000-node chain), then add `"H"` to `Layer` in `src/authoring/validate/types.ts`, make `HookRule.match` optional (`match?: HookSelector`, `src/authoring/format/types.ts:88-93`), and implement `checkHooks` in `src/authoring/hooks/check.ts` with the `H_SCHEMA` rules (design.md Decision 4), implementing requirement "Malformed hooks give H_SCHEMA and never throw"
+- [ ] 2.2 Write `src/authoring/hooks/check.test.ts` first (scenarios "The 45 hook flows" and "Effect routes and effect retries", and the throwing-catalogue case of "Mutated hook flows and deep graphs never throw"), then complete `checkHooks` with `H_BLOCK`, `H_ROUTE_TARGET`, `H_ROUTE_EFFECT`, `H_ROUTE_HUMAN`, `H_RETRY_SCOPE`, `H_CYCLE` (explicit stack), `H_DOMINANCE` and `W_NO_MATCH`, implementing requirement "The checker reports each hook rule with its code"
 
 ## 3. The H layer
 
