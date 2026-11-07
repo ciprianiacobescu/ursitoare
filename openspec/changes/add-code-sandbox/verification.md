@@ -1,4 +1,4 @@
-# Verification: openspec:add-code-sandbox: NEEDS_HUMAN (round 4)
+# Verification: openspec:add-code-sandbox: PASS (round 5)
 
 traceability: 17/17 criteria covered by a discriminating test
 
@@ -17,17 +17,17 @@ traceability: 17/17 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 1.1 | base main@199dc45009 contained |
-| 1 | integrity | ok | 188.1 | 11 sub-checks; scope: 58 changed file(s) |
-| 2 | build | ok | 32.7 |  |
-| 3 | tests | ok | 291.7 |  |
-| 4 | traceability | ok | 0.2 | 17/17 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 4) |
+| 1 | integrity | reused | 0.0 | reused (round 4) |
+| 2 | build | reused | 0.0 | reused (round 4) |
+| 3 | tests | reused | 0.0 | reused (round 4) |
+| 4 | traceability | reused | 0.0 | reused (round 4) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/sandbox/classify.ts, src/sandbox/limits.ts, src/sandbox/pool.ts, src/sandbox/prelude.ts, src/sandbox/run-code.ts and 7 more |
-| 8 | s1 judge | ok | 1.2 | 13/17 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 298.1 | 3 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 4) |
+| 8 | s1 judge | reused | 0.0 | reused (round 4) |
+| 9 | judge | reused | 0.0 | reused (round 4) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -221,6 +221,10 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 ## Answers to verdict questions
 
 - Q-004 accept C-061daa6c by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as its scenario is written. The tracing test passed and asserts every clause of the scenario: an empty factory log before the first run, one call after five sequential runs with the worker-entry href and the default env and resourceLimits, size 2 and respawns 0; twelve con...
+- Q-006 accept C-ed57e3cd by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. The tracing test passed in the latest report and asserts every clause of the scenario: tsc exits 0 on tsconfig.build.json into a fresh mkdtemp directory under node_modules/.cache holding a type module package.json, the built index.js is imported, the built workerEntryUrl ...
+- Q-007 accept F-81bb3a33 by the delegate (claude-fable-5-1 via claude-code): The finding is waived. It rests on the judge not seeing run-code.ts and wasm.ts, which were in another part of the diff, not on anything missing from the code. Both files are in the unit head and do what task 3.5 names: wasm.ts caches one QuickJS module per memory bucket with a Wasm memory maximum o...
+- Q-008 accept F-6f5b85ff by the delegate (claude-fable-5-1 via claude-code): The finding is waived. It rests on the judge not seeing run-code.ts and test/support/sandbox-exit-worker.ts, which were in another part of the diff. Both are in the unit head and do what task 3.6 names: the exit worker exits the process with status 1 on its first message, exactly as test-plan.md des...
+- Q-009 accept F-74714d28 by the delegate (claude-fable-5-1 via claude-code): The finding is waived. It rests on the judge not seeing src/sandbox/worker-entry.ts, which was in another part of the diff. The file is in the unit head: it reads parentPort, answers each job message with the result of runCode and turns a thrown host error into a sandbox_crash reply. Task 3.8 only a...
 
 ## Criteria
 
@@ -241,7 +245,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-abbea154 | sandbox › A closed sandbox rejects pending and later runs › Close mid-run, after close and process lifetime | pass | pass | the judge passed it and a discriminating test passes |
 | C-4c8287af | sandbox › The escape suite is shared data and the guest stays contained › Case data and verdicts | pass | pass | the judge passed it and a discriminating test passes |
 | C-7d1dc855 | sandbox › The escape suite is shared data and the guest stays contained › Every case on a real pool, variants and the host | pass | pass | the judge passed it and a discriminating test passes; its evidence was split over parts 1 and 2 of the diff: follow-up call 1 judged its 4 files of those parts together and answered pass |
-| C-ed57e3cd | sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory | insufficient_evidence | needs_human | the judge answered insufficient_evidence; its evidence was split over parts 1 and 2 of the diff: follow-up call 1 judged its 3 files of those parts together and answered insufficient_evidence |
+| C-ed57e3cd | sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory | insufficient_evidence | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. The tracing test passed in the latest report and asserts every clause of the scenario: tsc exits 0 on tsconfig.build.json into a fresh mkdtemp directory under node_modules/.cache holding a type module package.js... |
 | C-c1be5467 | sandbox › The pool spawns workers lazily, one job each, and refuses bad options — regression 2 › Proxy getPrototypeOf traps escape option validation | pass | pass | the judge passed it and a discriminating test passes |
 
 ## Findings
@@ -249,9 +253,9 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] workerEntryUrl query-string behavior is unspecified (spec gap) (criterion C-105b574e): The only URL vectors have extension-bearing pathnames without a query. The implementation selects the worker extension with moduleUrl.endsWith(".ts"), so a TypeScript module URL with a query selects the JavaScript worker entry.
 - [minor, judge] Extra readable limit properties have unspecified behavior (spec gap) (criterion C-3999c476): readLimits copies every own property but validates and returns only the four declared limit members, so additional readable own limit properties are accepted and discarded; the scenarios do not state whether such properties are valid.
 - [minor, judge] Extra readable option properties have unspecified behavior (spec gap) (criterion C-3999c476): readOptions accepts a copied object and returns only seed, nowIso, binding, and result, silently discarding any other readable own property; the scenarios do not define whether those properties must be refused or ignored.
-- [major, judge] task 3.5 is ticked as already satisfied, but its text is not done: not in this part: run-code.ts and wasm.ts, which task 3.5 requires for memory buckets and stack configuration, are in part 2.
-- [major, judge] task 3.6 is ticked as already satisfied, but its text is not done: not in this part: run-code.ts and test/support/sandbox-exit-worker.ts, which task 3.6 requires, are in part 2.
-- [major, judge] task 3.8 is ticked as already satisfied, but its text is not done: not in this part: src/sandbox/worker-entry.ts, which the built-worker task requires, is in part 2.
+- [minor, judge] task 3.5 is ticked as already satisfied, but its text is not done: not in this part: run-code.ts and wasm.ts, which task 3.5 requires for memory buckets and stack configuration, are in part 2. (waived by the delegate (claude-fable-5-1 via claude-code): The finding is waived. It rests on the judge not seeing run-code.ts and wasm.ts, which were in another part of the diff, not on anything missing from the code. Both files are in the unit head and do what task 3.5 names: wasm.ts caches one QuickJS module per memory bucket with a Wasm memory maximum of the base pages plus the bucket, run-code.ts picks the bucket with memoryBucket, calls setMemoryLimit with memory...
+- [minor, judge] task 3.6 is ticked as already satisfied, but its text is not done: not in this part: run-code.ts and test/support/sandbox-exit-worker.ts, which task 3.6 requires, are in part 2. (waived by the delegate (claude-fable-5-1 via claude-code): The finding is waived. It rests on the judge not seeing run-code.ts and test/support/sandbox-exit-worker.ts, which were in another part of the diff. Both are in the unit head and do what task 3.6 names: the exit worker exits the process with status 1 on its first message, exactly as test-plan.md describes; run-code.ts sets an interrupt handler that flags the deadline and reports a run that settled or is still pending after th...
+- [minor, judge] task 3.8 is ticked as already satisfied, but its text is not done: not in this part: src/sandbox/worker-entry.ts, which the built-worker task requires, is in part 2. (waived by the delegate (claude-fable-5-1 via claude-code): The finding is waived. It rests on the judge not seeing src/sandbox/worker-entry.ts, which was in another part of the diff. The file is in the unit head: it reads parentPort, answers each job message with the result of runCode and turns a thrown host error into a sandbox_crash reply. Task 3.8 only asks for the built-worker test, which exists, builds with tsconfig.build.json, resolves the built pool's worker entry to the existing worker-e...
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
