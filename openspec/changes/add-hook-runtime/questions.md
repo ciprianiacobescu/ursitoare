@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 1.1 | technical | src/interpreter/hooks/registry.test.ts:33-35 registers codeHookRunner a second time inside assert.doesNotThrow |
 | Q-002 | answered | 3.1 | technical | Grant write access for the red step |
 | Q-003 | accepted | 3.1 | technical | src/interpreter/hooks/visit-pre.test.ts:183: sandboxRuns counts the normalize node's sandbox run, giving 9, not 8 |
-| Q-004 | open | 3.3 | technical | Grant write access for the red step |
+| Q-004 | answered | 3.3 | technical | Grant write access for the red step |
 <!-- l4:index:end -->
 
 ---
@@ -87,7 +87,8 @@ Edit `src/interpreter/hooks/visit-pre.test.ts`: in the `run` wrapper inside `run
 
 ## Q-004: Grant write access for the red step
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.3
 - **Kind:** technical
 - **Asked:** 2026-11-07T23:47Z by claude-sonnet, run r-20261107T2301Z-fa9e, task 3.3
@@ -100,3 +101,4 @@ Edit and Write were denied in this session (don't ask mode). The red step has to
 
 ### Answer
 <!-- write below this line -->
+No permission grant is needed and none can be given here; the denial follows from the red step itself. A red step may not change a production file: `src/runs/intents/gate.ts` is production, and tasks.md 3.3 puts `IntentCall.generation?` and the key in the "then" part that green implements after the two tests are written. Leave `gate.ts` untouched at red. Write only the two new test files, with paths relative to the worktree root (`src/runs/intents/gate-generation.db.test.ts` and `src/interpreter/hooks/retry.test.ts`), as the 3.1 and 3.2 red steps did for `visit-pre.test.ts` and `visit-post.test.ts`. Make the gate test typecheck without the field by casting the call, for example `{ ...CALL, generation: 1 } as IntentCall`, the same pattern `runtimes.test.ts` uses with `as NodeServices` and `visit-pre.test.ts` with `as InterpreterDeps` for members green adds later. `createEffectIntents` then keys every call with `idemKey(tenant, lineage, node, effectSeq)` at generation 0, so the generation-1 `before` returns `K0` and the test fails by assertion (expected `K1`), and the invalid generations -1 and 1.5 fail by assertion too (wrap those in `await assert.rejects(p, { code: "INTENT_INVALID" })`); green adds `generation?: number` to `IntentCall`, `call.generation ?? 0` to `keyOf`, and the retry attempts to `pipeline.ts` and `visit.ts`.
