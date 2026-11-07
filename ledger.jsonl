@@ -35,3 +35,5 @@
 {"at":"2026-11-07T01:27:30Z","revision":"afeedbeeeca1c8f43bc3a85b86b0e7e7e38865a2","type":"unit.integrated","unit":"openspec:add-code-sandbox"}
 {"at":"2026-11-07T01:27:30Z","attempt":1,"cost_usd":8.152159,"runs":9,"type":"plan.charged","unit":"openspec:add-code-sandbox"}
 {"at":"2026-11-07T01:29:02Z","branch":"l4/archive/openspec/add-code-sandbox","head":"48395d040125048448dba651c85cf6573e010fb1","type":"unit.branch_deleted","unit":"openspec:add-code-sandbox"}
+{"at":"2026-11-07T01:29:03Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-code-node-runtime"}
+{"at":"2026-11-07T01:29:03Z","run":"r-20261107T0128Z-1781","type":"unit.dispatched","unit":"openspec:add-code-node-runtime"}
