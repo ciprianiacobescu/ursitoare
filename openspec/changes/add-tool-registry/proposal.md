@@ -15,7 +15,7 @@ Batch `m6-grants` (closing unit `add-web-dry-runs`, journey `e2e/test_m6_grants.
 ## Impact
 
 - **Scaffold:** Signature stubs for the interfaces given below are on the base branch (`docs/decisions/0002`); this change implements them. The `export type` lines of `src/tools/index.ts` for `ToolDirectory`, `ToolBinding`, `ToolServerRecord` and `ToolSurface` are scaffolded. Not scaffolded: the value export lines of `src/tools/index.ts` (task 3.1) and `src/api/index.ts`, the module-internal `checkSurface`, `toolBlock`, `toolHash` (`surface.ts`), `assertTenant` (`store.ts`), the migration, the fragment, the `main.ts` line, the document, the README row.
-- **Depends on:** `add-tenancy-foundation`, `add-audit-chain`, `add-pdp-cedar`, `add-policy-catalogue`, `add-api-pep`, `add-api-conventions`, `add-roles-and-memberships`, `add-flow-format-model`, `add-test-catalogue`, `add-block-registry`, `add-fake-tools` (U03, U08, U11, U11b, U13, U14, U17, U22, U24, U26, U45b).
+- **Depends on:** `add-tenancy-foundation`, `add-audit-chain`, `add-pdp-cedar`, `add-policy-catalogue`, `add-api-pep`, `add-api-conventions`, `add-roles-and-memberships`, `add-flow-format-model`, `add-test-catalogue`, `add-block-registry`, `add-fake-tools` (U03, U08, U11, U11b, U13, U14, U17, U22, U24, U26, U45b); all but `add-fake-tools` (in plan) are merged on main.
 - Shapes of the delivered names: `delivered-shapes.md` (main@cf34c628 and the M5 folders named).
 
 **Interfaces given** (the block of `design.md` § Interfaces)

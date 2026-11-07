@@ -139,7 +139,9 @@ profiles:
   # The same free model at low reasoning effort (2026-11-07, as the owner's delegate, under the owner's rule "use free
   # models in open go + kiro-cli for judges"): a readiness subject then fits the 32k cap. The custom provider has the
   # id `opencode` and Zen's own URL, so L4 keeps its Zen free-tier tool rule (`agents/opencode.py`, FREE_PREFIX).
-  # A Zen free judge runs only in CI (bwrap); locally L4 refuses it as not tool-less.
+  # A Zen free judge runs only in CI (bwrap); locally L4 refuses it as not tool-less. Out of roles.judges again since
+  # 2026-11-07 10:47Z: on plan m6 it also ended "last reason: length", while nemotron-judge at its default effort
+  # recorded a whole m6 review at 10:28Z, so the 32k stop is intermittent and the default effort stays.
   nemolow-judge:
     adapter: opencode
     auth: api_key
@@ -219,10 +221,6 @@ roles:
   # 2026-11-03: kiro first for unit verification. On add-dbos-runtime (a 3.6k-line diff) nemotron timed out 3 times
   # in 47 min and returned no usable verdict: a timeout splits the criteria across the same judge and never falls
   # through to the next one, so the unit sat on a verdict hold. Kiro answered 16 plan-review rounds of 30-66k chars.
-  # 2026-11-07: nemolow-judge first, for plan m6's readiness review only (Kiro is under L4's 10% credit floor until
-  # 2026-12-01, nemotron-judge stops at 32k, claude-judge passes L4's fixed 900 s per call). Removed again once the
-  # review is recorded, so unit verification keeps nemotron-judge at its default effort.
-  - nemolow-judge
   - kiro-judge
   - nemotron-judge
   - beam-judge
