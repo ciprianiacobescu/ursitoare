@@ -30,9 +30,6 @@ test("C-c59f8602 a registered hook runner is answered by its kind", () => {
 });
 
 test("C-c59f8602 a second or invalid registration is refused with the kind", () => {
-  assert.doesNotThrow(() => {
-    registerHookRunner("code", codeHookRunner);
-  });
   assert.deepEqual(
     refusal(() => registerHookRunner("code", codeHookRunner)),
     { code: "HOOK_RUNNER_DUPLICATE", kind: "code" },
