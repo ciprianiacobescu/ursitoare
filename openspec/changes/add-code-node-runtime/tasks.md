@@ -2,7 +2,7 @@ Every test file starts with `assert.equal(typeof <the function it tests>, "funct
 
 ## 1. The runtime
 
-- [ ] 1.1 Write `src/interpreter/runtimes/code.test.ts` first (scenarios "The call, the outcome and the schema checks" and "Seed strings, limits and repeatable output"), then add `sandbox?: WorkerSandbox` to `InterpreterDeps` and `NodeServices` in `src/interpreter/types.ts` and implement the success path of `codeRuntime`, `CODE_LIMITS` and `codeSeed` in `src/interpreter/runtimes/code.ts` (up to the schema check; task 1.2 adds the rest), implementing requirements "A code node returns the sandbox object after its schema check" and "The seed and the limits of a code node are fixed"
+- [x] 1.1 Write `src/interpreter/runtimes/code.test.ts` first (scenarios "The call, the outcome and the schema checks" and "Seed strings, limits and repeatable output"), then add `sandbox?: WorkerSandbox` to `InterpreterDeps` and `NodeServices` in `src/interpreter/types.ts` and implement the success path of `codeRuntime`, `CODE_LIMITS` and `codeSeed` in `src/interpreter/runtimes/code.ts` (up to the schema check; task 1.2 adds the rest), implementing requirements "A code node returns the sandbox object after its schema check" and "The seed and the limits of a code node are fixed"
 - [ ] 1.2 Write `src/interpreter/runtimes/code-faults.test.ts` first (scenario "Faults, a missing sandbox, unstorable output and no leak"), then add `ConformanceCase.sandbox?` to `test/support/node-conformance.ts` (its `services` get `sandbox` only when the case has one), the two codes to `src/interpreter/errors.ts`, and the missing-sandbox, fault, rejection and payload checks to `src/interpreter/runtimes/code.ts`, implementing requirement "A code node fault is terminal and typed"
 
 ## 2. The run

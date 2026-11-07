@@ -13,6 +13,7 @@ import type { Clock, IdSource } from "../core/index.ts";
 import type { DurableRuntime } from "../durable/index.ts";
 import type { VersionState } from "../registry/index.ts";
 import type { RunRecord, RunStore, TenantContext } from "../runs/index.ts";
+import type { WorkerSandbox } from "../sandbox/index.ts";
 
 export type EffectMode = "live" | "mock" | "stub";
 
@@ -84,6 +85,7 @@ export interface NodeServices {
   effects: EffectGate;
   resolve(value: unknown): JsonValue;
   block(ref: string): BlockDef | undefined;
+  sandbox?: WorkerSandbox;
 }
 
 export interface NodeRuntime {
@@ -113,6 +115,7 @@ export interface InterpreterDeps {
   effects: EffectGate;
   clock: Clock;
   ids: IdSource;
+  sandbox?: WorkerSandbox;
 }
 
 export interface StartRunRequest {
