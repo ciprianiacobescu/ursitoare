@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Finding F-44115141: Proxy getPrototypeOf traps escape option validation |
 | Q-006 | answered | none | verdict | Criterion C-ed57e3cd (sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory): accept as satisfied? |
 | Q-007 | answered | none | verdict | Finding F-81bb3a33: task 3.5 is ticked as already satisfied, but its text is not done |
-| Q-008 | open | none | verdict | Finding F-6f5b85ff: task 3.6 is ticked as already satisfied, but its text is not done |
+| Q-008 | answered | none | verdict | Finding F-6f5b85ff: task 3.6 is ticked as already satisfied, but its text is not done |
 | Q-009 | open | none | verdict | Finding F-74714d28: task 3.8 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
@@ -745,7 +745,8 @@ accept The finding is waived. It rests on the judge not seeing run-code.ts and w
 
 ## Q-008: Finding F-6f5b85ff: task 3.6 is ticked as already satisfied, but its text is not done
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
@@ -765,6 +766,7 @@ This finding cites no criterion: end the reason with one sentence WHEN <the situ
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived. It rests on the judge not seeing run-code.ts and test/support/sandbox-exit-worker.ts, which were in another part of the diff. Both are in the unit head and do what task 3.6 names: the exit worker exits the process with status 1 on its first message, exactly as test-plan.md describes; run-code.ts sets an interrupt handler that flags the deadline and reports a run that settled or is still pending after the deadline as a timeout; pool.ts arms a watchdog at timeoutMs plus graceMs on postMessage, terminates and replaces the worker and counts a respawn, replaces a worker that exits during a job at once and an idle one lazily, and turns a throwing factory into a spawn fault. The task's test files deadline.test.ts and crash.test.ts exist, and crash.test.ts references the exit worker, so the tick is earned.
 ---
 
 ## Q-009: Finding F-74714d28: task 3.8 is ticked as already satisfied, but its text is not done
