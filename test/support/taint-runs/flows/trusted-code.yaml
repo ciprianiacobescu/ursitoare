@@ -1,0 +1,34 @@
+ursitoare: "0.1"
+flow: trusted-code
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    vendor: { type: string }
+  required: [vendor]
+start: lookup
+nodes:
+  lookup:
+    kind: block
+    uses: erp.lookup_vendor@1
+    with:
+      vendor_name: "${{ inputs.vendor }}"
+    next: shape
+  shape:
+    kind: code
+    language: js
+    input:
+      vendor_id: "${{ nodes.lookup.output.vendor_id }}"
+    source: |
+      return { label: "vendor-" + input.vendor_id };
+    output_schema:
+      type: object
+      properties:
+        label: { type: string }
+      required: [label]
+    next: done
+  done:
+    kind: end
+    status: completed
+    output:
+      label: "${{ nodes.shape.output.label }}"

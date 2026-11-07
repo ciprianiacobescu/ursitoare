@@ -1,0 +1,41 @@
+ursitoare: "0.1"
+flow: untrusted-code
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    invoice_id: { type: string }
+  required: [invoice_id]
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: invoices.get@1
+    with:
+      invoice_id: "${{ inputs.invoice_id }}"
+    next: count
+  count:
+    kind: code
+    language: js
+    input:
+      text: "${{ nodes.fetch.output.raw_text }}"
+    source: |
+      return { size: input.text.length > 20 ? "big" : "small" };
+    output_schema:
+      type: object
+      properties:
+        size: { type: string, enum: [small, big] }
+      required: [size]
+    next: route
+  route:
+    kind: switch
+    on: "${{ nodes.count.output.size }}"
+    cases:
+      big: done_big
+    default: done
+  done:
+    kind: end
+    status: completed
+  done_big:
+    kind: end
+    status: completed
