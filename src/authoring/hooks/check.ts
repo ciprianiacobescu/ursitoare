@@ -1,7 +1,20 @@
-import type { Catalogue } from "../format/index.ts";
-import { NODE_KINDS, scanTemplate, walkStrings } from "../format/index.ts";
+import type { Catalogue, Flow, HookSelector } from "../format/index.ts";
+import {
+  hookValueFields,
+  NODE_KINDS,
+  scanTemplate,
+  valueFields,
+  walkStrings,
+} from "../format/index.ts";
 import type { Issue } from "../validate/index.ts";
-import { HOOKLESS_KINDS } from "./model.ts";
+import type { EffectClass, HookPlacement } from "./model.ts";
+import {
+  augmentedSuccessors,
+  HOOKLESS_KINDS,
+  hookPlacements,
+  nodeMeta,
+  selectorMatches,
+} from "./model.ts";
 
 type Rec = Record<string, unknown>;
 
@@ -309,16 +322,327 @@ function compare(a: string, b: string): number {
   return a < b ? -1 : a > b ? 1 : 0;
 }
 
+function sortIssues(list: Issue[]): Issue[] {
+  return list.sort(
+    (a, b) => compare(a.path, b.path) || compare(a.code, b.code) || compare(a.message, b.message),
+  );
+}
+
+function issue(code: string, node: string | null, path: string, message: string): Issue {
+  return { layer: "H", code, node, path, message };
+}
+
+/** A hook as placed on a wrapped node, with the pointer of its definition. */
+interface Placed {
+  node: string;
+  phase: "pre" | "post";
+  hook: Rec;
+  path: string;
+}
+
+function hookPath(root: Rec, nodeId: string, placement: HookPlacement): string {
+  if (placement.ruleId !== null) {
+    const rules = Array.isArray(root.hooks) ? root.hooks : [];
+    const k = rules.findIndex((r) => isObject(r) && r.id === placement.ruleId);
+    return pointer(pointer("/hooks", k), placement.phase);
+  }
+  const nodes = root.nodes as Rec;
+  const list = (nodes[nodeId] as Rec)[placement.phase];
+  const i = Array.isArray(list) ? list.indexOf(placement.hook) : -1;
+  return pointer(pointer(pointer("/nodes", nodeId), placement.phase), i);
+}
+
+function safeBlock(catalogue: Catalogue, uses: unknown): Rec | undefined {
+  if (typeof uses !== "string") return undefined;
+  try {
+    const def: unknown = catalogue.block(uses);
+    return isObject(def) ? def : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function checkBlockDefinition(out: Issue[], node: string | null, path: string, hook: Rec, catalogue: Catalogue): void {
+  if (hook.kind !== "block") return;
+  const def = safeBlock(catalogue, hook.uses);
+  if (def === undefined) {
+    out.push(issue("H_BLOCK", node, pointer(path, "uses"), `unknown block ${String(hook.uses)}`));
+    return;
+  }
+  const input = isObject(def.input) ? def.input : {};
+  const properties = isObject(input.properties) ? input.properties : {};
+  const withValue = isObject(hook.with) ? hook.with : {};
+  for (const key of Object.keys(withValue)) {
+    if (!Object.hasOwn(properties, key)) {
+      out.push(issue("H_BLOCK", node, pointer(pointer(path, "with"), key), `${String(hook.uses)} has no input ${key}`));
+    }
+  }
+  const required = Array.isArray(input.required) ? input.required : [];
+  for (const name of required) {
+    if (typeof name === "string" && !Object.hasOwn(withValue, name)) {
+      out.push(issue("H_BLOCK", node, pointer(path, "with"), `${String(hook.uses)} needs input ${name}`));
+    }
+  }
+}
+
+function dominators(
+  start: string,
+  succ: ReadonlyMap<string, readonly string[]>,
+): { idom: Map<string, string>; reachable: Set<string> } {
+  const order: string[] = [];
+  const seen = new Set<string>([start]);
+  const stack: { id: string; next: number }[] = [{ id: start, next: 0 }];
+  while (stack.length > 0) {
+    const top = stack[stack.length - 1] as { id: string; next: number };
+    const targets = succ.get(top.id) ?? [];
+    const target = targets[top.next];
+    top.next += 1;
+    if (target === undefined) {
+      order.push(top.id);
+      stack.pop();
+    } else if (!seen.has(target)) {
+      seen.add(target);
+      stack.push({ id: target, next: 0 });
+    }
+  }
+  const rpo = order.reverse();
+  const index = new Map(rpo.map((id, i) => [id, i]));
+  const preds = new Map<string, string[]>();
+  for (const id of rpo) {
+    for (const t of succ.get(id) ?? []) {
+      if (!index.has(t)) continue;
+      const list = preds.get(t) ?? [];
+      list.push(id);
+      preds.set(t, list);
+    }
+  }
+  const idom = new Map<string, string>([[start, start]]);
+  const intersect = (a: string, b: string): string => {
+    let x = a;
+    let y = b;
+    while (x !== y) {
+      while ((index.get(x) as number) > (index.get(y) as number)) x = idom.get(x) as string;
+      while ((index.get(y) as number) > (index.get(x) as number)) y = idom.get(y) as string;
+    }
+    return x;
+  };
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const id of rpo) {
+      if (id === start) continue;
+      let current: string | undefined;
+      for (const p of preds.get(id) ?? []) {
+        if (!idom.has(p)) continue;
+        current = current === undefined ? p : intersect(p, current);
+      }
+      if (current !== undefined && idom.get(id) !== current) {
+        idom.set(id, current);
+        changed = true;
+      }
+    }
+  }
+  return { idom, reachable: seen };
+}
+
+function findCycles(start: string, succ: ReadonlyMap<string, readonly string[]>): string[][] {
+  const cycles: string[][] = [];
+  const state = new Map<string, 1 | 2>([[start, 1]]);
+  const stack: { id: string; targets: string[]; next: number }[] = [
+    { id: start, targets: [...(succ.get(start) ?? [])].sort(compare), next: 0 },
+  ];
+  while (stack.length > 0) {
+    const top = stack[stack.length - 1] as { id: string; targets: string[]; next: number };
+    const target = top.targets[top.next];
+    top.next += 1;
+    if (target === undefined) {
+      state.set(top.id, 2);
+      stack.pop();
+    } else if (state.get(target) === 1) {
+      const ids = stack.map((f) => f.id);
+      const cycle = ids.slice(ids.indexOf(target));
+      const smallest = cycle.reduce((a, b) => (compare(b, a) < 0 ? b : a));
+      const at = cycle.indexOf(smallest);
+      cycles.push([...cycle.slice(at), ...cycle.slice(0, at)]);
+    } else if (!state.has(target)) {
+      state.set(target, 1);
+      stack.push({ id: target, targets: [...(succ.get(target) ?? [])].sort(compare), next: 0 });
+    }
+  }
+  return cycles;
+}
+
+function checkSemantics(root: Rec, catalogue: Catalogue): { errors: Issue[]; warnings: Issue[] } {
+  const flow = root as unknown as Flow;
+  const nodes = root.nodes as Rec;
+  const errors: Issue[] = [];
+  const warnings: Issue[] = [];
+  const ids = Object.keys(nodes).filter((id) => isObject(nodes[id]));
+  const rules = Array.isArray(root.hooks) ? root.hooks : [];
+
+  // H_BLOCK: once per definition
+  ids.forEach((id) => {
+    for (const phase of ["pre", "post"] as const) {
+      const list = (nodes[id] as Rec)[phase];
+      if (!Array.isArray(list)) continue;
+      list.forEach((hook, i) => {
+        if (isObject(hook)) {
+          checkBlockDefinition(errors, id, pointer(pointer(pointer("/nodes", id), phase), i), hook, catalogue);
+        }
+      });
+    }
+  });
+  rules.forEach((rule, k) => {
+    if (!isObject(rule)) return;
+    for (const phase of ["pre", "post"] as const) {
+      const hook = rule[phase];
+      if (isObject(hook)) {
+        checkBlockDefinition(errors, null, pointer(pointer("/hooks", k), phase), hook, catalogue);
+      }
+    }
+  });
+
+  const effectOf = (id: string): EffectClass | null => nodeMeta(flow, id, catalogue)?.effect ?? null;
+  const all: Placed[] = [];
+  const post: Placed[] = [];
+  for (const id of ids) {
+    if (!isObject(nodes[id])) continue;
+    const placements = hookPlacements(flow, id, catalogue);
+    for (const phase of ["pre", "post"] as const) {
+      for (const p of placements[phase]) {
+        const placed: Placed = {
+          node: id,
+          phase,
+          hook: p.hook as unknown as Rec,
+          path: hookPath(root, id, p),
+        };
+        all.push(placed);
+        if (phase === "post") post.push(placed);
+      }
+    }
+  }
+
+  for (const p of post) {
+    const kind = String((nodes[p.node] as Rec).kind);
+    const routes = Array.isArray(p.hook.routes) ? p.hook.routes : [];
+    routes.forEach((target, j) => {
+      if (typeof target !== "string") return;
+      const at = pointer(pointer(p.path, "routes"), j);
+      if (!Object.hasOwn(nodes, target) || target === p.node) {
+        errors.push(issue("H_ROUTE_TARGET", p.node, at, `route ${target} is not another node of the flow`));
+      } else {
+        const effect = effectOf(target);
+        if (effect === null || effect === "write" || effect === "send" || effect === "pay") {
+          errors.push(issue("H_ROUTE_EFFECT", p.node, at, `route ${target} leads into an effect node`));
+        }
+      }
+    });
+    if (kind.startsWith("human.") && routes.length > 0) {
+      errors.push(issue("H_ROUTE_HUMAN", p.node, pointer(p.path, "routes"), "a human node takes no hook routes"));
+    }
+    if (p.hook.max_retries === undefined) continue;
+    const maxAt = pointer(p.path, "max_retries");
+    if (kind.startsWith("human.") || ["delegate", "switch", "wait", "end"].includes(kind)) {
+      errors.push(issue("H_RETRY_SCOPE", p.node, maxAt, `a ${kind} node cannot be retried`));
+      continue;
+    }
+    const scope: (EffectClass | null)[] = [effectOf(p.node)];
+    for (const placement of hookPlacements(flow, p.node, catalogue).post) {
+      if ((placement.hook as unknown as Rec).kind === "block") {
+        const def = safeEffectOfBlock(placement.hook as unknown as Rec, catalogue);
+        scope.push(def);
+      }
+    }
+    const flagged = p.hook.allow_effect_retry === true;
+    const flagAt = p.hook.allow_effect_retry !== undefined ? pointer(p.path, "allow_effect_retry") : maxAt;
+    if (scope.includes("pay")) {
+      errors.push(issue("H_RETRY_SCOPE", p.node, flagAt, "a pay effect is never retried"));
+    } else if (!flagged && scope.some((e) => e === null || e === "write" || e === "send")) {
+      errors.push(issue("H_RETRY_SCOPE", p.node, maxAt, "retrying an effect needs allow_effect_retry: true"));
+    }
+  }
+
+  // H_CYCLE and H_DOMINANCE
+  const start = root.start;
+  if (typeof start === "string" && Object.hasOwn(nodes, start)) {
+    const succ = augmentedSuccessors(flow, catalogue);
+    for (const cycle of findCycles(start, succ)) {
+      errors.push(
+        issue("H_CYCLE", null, "/nodes", `the augmented graph has a cycle: ${[...cycle, cycle[0]].join(" -> ")}`),
+      );
+    }
+    let dom: ReturnType<typeof dominators> | undefined;
+    const reported = new Set<string>();
+    const consume = (consumer: string, base: string, value: unknown, selfOk: boolean): void => {
+      walkStrings(value, base, (text, at) => {
+        for (const seg of scanTemplate(text)) {
+          if (seg.type !== "ref" || seg.ref === undefined || seg.ref.root !== "node") continue;
+          dom ??= dominators(start, succ);
+          if (!dom.reachable.has(consumer)) continue;
+          const p = seg.ref.id;
+          let ok: boolean;
+          if (!Object.hasOwn(nodes, p)) ok = false;
+          else if (p === consumer) ok = selfOk;
+          else {
+            ok = false;
+            let x = consumer;
+            while (dom.idom.has(x)) {
+              const up = dom.idom.get(x) as string;
+              if (up === p) {
+                ok = true;
+                break;
+              }
+              if (up === x) break;
+              x = up;
+            }
+          }
+          const key = `${consumer} ${at} ${p}`;
+          if (ok || reported.has(key)) continue;
+          reported.add(key);
+          errors.push(issue("H_DOMINANCE", consumer, at, `${consumer} reads nodes.${p} which does not always run before it`));
+        }
+      });
+    };
+    for (const id of ids) {
+      for (const f of valueFields(nodes[id])) {
+        consume(id, pointer(pointer("/nodes", id), f.field), f.value, false);
+      }
+    }
+    for (const p of all) {
+      for (const f of hookValueFields(p.hook)) {
+        consume(p.node, pointer(p.path, f.field), f.value, p.phase === "post");
+      }
+    }
+  }
+
+  // W_NO_MATCH
+  rules.forEach((rule, k) => {
+    if (!isObject(rule)) return;
+    const matched = ids.some((id) => {
+      const meta = nodeMeta(flow, id, catalogue);
+      if (meta === null || (HOOKLESS_KINDS as readonly string[]).includes(meta.kind)) return false;
+      return selectorMatches(rule.match as HookSelector | undefined, meta);
+    });
+    if (!matched) warnings.push(issue("W_NO_MATCH", null, pointer("/hooks", k), "the rule matches no node"));
+  });
+
+  return { errors, warnings };
+}
+
+function safeEffectOfBlock(hook: Rec, catalogue: Catalogue): EffectClass | null {
+  const fake = { kind: "block", uses: hook.uses };
+  return nodeMeta({ nodes: { x: fake } } as unknown as Flow, "x", catalogue)?.effect ?? null;
+}
+
 export function checkHooks(
   doc: unknown,
-  _catalogue: Catalogue,
+  catalogue: Catalogue,
 ): { errors: Issue[]; warnings: Issue[] } {
   const root: Rec = isObject(doc) ? doc : {};
   const scan: Scan = { nodes: isObject(root.nodes) ? root.nodes : {}, issues: [] };
   checkRules(scan, root.hooks);
   checkNodes(scan);
-  const errors = scan.issues.sort(
-    (a, b) => compare(a.path, b.path) || compare(a.code, b.code) || compare(a.message, b.message),
-  );
-  return { errors, warnings: [] };
+  if (scan.issues.length > 0) return { errors: sortIssues(scan.issues), warnings: [] };
+  const found = checkSemantics({ ...root, nodes: scan.nodes }, catalogue);
+  return { errors: sortIssues(found.errors), warnings: sortIssues(found.warnings) };
 }
