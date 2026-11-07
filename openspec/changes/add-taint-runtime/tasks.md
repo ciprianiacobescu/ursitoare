@@ -11,4 +11,4 @@
 
 ## 3. The property
 
-- [ ] 3.1 Write `src/authoring/taint/inclusion.test.ts` first (scenario "Static taint includes runtime taint"), then implement `flowPaths` and `inclusionReport` in `test/support/taint-runs/inclusion.ts` (the rule logic lives there, not in the test file; `test-plan.md` § Inclusion helper), implementing requirement "Static taint includes runtime taint"
+- [x] 3.1 Write `src/authoring/taint/inclusion.test.ts` first (scenario "Static taint includes runtime taint"), then implement `flowPaths` and `inclusionReport` in `test/support/taint-runs/inclusion.ts` (the rule logic lives there, not in the test file; `test-plan.md` § Inclusion helper), implementing requirement "Static taint includes runtime taint"
