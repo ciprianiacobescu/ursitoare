@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Criterion C-ed57e3cd (sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory): accept as satisfied? |
 | Q-007 | answered | none | verdict | Finding F-81bb3a33: task 3.5 is ticked as already satisfied, but its text is not done |
 | Q-008 | answered | none | verdict | Finding F-6f5b85ff: task 3.6 is ticked as already satisfied, but its text is not done |
-| Q-009 | open | none | verdict | Finding F-74714d28: task 3.8 is ticked as already satisfied, but its text is not done |
+| Q-009 | answered | none | verdict | Finding F-74714d28: task 3.8 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
 ---
@@ -771,7 +771,8 @@ accept The finding is waived. It rests on the judge not seeing run-code.ts and t
 
 ## Q-009: Finding F-74714d28: task 3.8 is ticked as already satisfied, but its text is not done
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
@@ -791,3 +792,4 @@ This finding cites no criterion: end the reason with one sentence WHEN <the situ
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived. It rests on the judge not seeing src/sandbox/worker-entry.ts, which was in another part of the diff. The file is in the unit head: it reads parentPort, answers each job message with the result of runCode and turns a thrown host error into a sandbox_crash reply. Task 3.8 only asks for the built-worker test, which exists, builds with tsconfig.build.json, resolves the built pool's worker entry to the existing worker-entry.js and runs the normalize body on a pool with no factory, and it passed in the latest report. The tick is earned.
