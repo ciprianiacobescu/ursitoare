@@ -23,5 +23,7 @@ service in the stack tier (`docs/testing.md`).
 | `fake-mcp/` | `add-mcp-client` | An MCP server for the tool adapter tests |
 | `fake-llm/` | `add-fake-llm-provider` | Anthropic, OpenAI and Ollama shapes with cassettes |
 | `fake-n8n/` | `add-delegate-n8n` | n8n webhook in, signed callback out |
+| `sandbox-escape.ts` | `add-code-sandbox` | The 42 escape cases as shared data and their verdict helper |
+| `sandbox-exit-worker.ts` | `add-code-sandbox` | A worker that exits at its first message, for crash and respawn tests |
 
 Bootstrap placeholders exist for `global-setup.ts` and `e2e-stack/main.ts`; their owner changes replace them.

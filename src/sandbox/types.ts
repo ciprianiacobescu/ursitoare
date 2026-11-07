@@ -72,8 +72,10 @@ export class SandboxError extends Error {
   readonly code: SandboxErrorCode;
   readonly details: Readonly<Record<string, string>>;
 
-  constructor(_code: SandboxErrorCode, message: string, _details?: Record<string, string>) {
+  constructor(code: SandboxErrorCode, message: string, details?: Record<string, string>) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "SandboxError";
+    this.code = code;
+    this.details = Object.freeze({ ...details });
   }
 }
