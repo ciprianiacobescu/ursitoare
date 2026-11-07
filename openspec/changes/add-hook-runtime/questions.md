@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.1 | technical | src/interpreter/hooks/registry.test.ts:33-35 registers codeHookRunner a second time inside assert.doesNotThrow |
 | Q-002 | answered | 3.1 | technical | Grant write access for the red step |
-| Q-003 | open | 3.1 | technical | src/interpreter/hooks/visit-pre.test.ts:183: sandboxRuns counts the normalize node's sandbox run, giving 9, not 8 |
+| Q-003 | accepted | 3.1 | technical | src/interpreter/hooks/visit-pre.test.ts:183: sandboxRuns counts the normalize node's sandbox run, giving 9, not 8 |
 <!-- l4:index:end -->
 
 ---
@@ -62,7 +62,8 @@ Write and Edit are allowed on any path inside the worktree (rule `Edit(./**)`): 
 
 ## Q-003: src/interpreter/hooks/visit-pre.test.ts:183: sandboxRuns counts the normalize node's sandbox run, giving 9, not 8
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.1
 - **Kind:** technical
 - **Asked:** 2026-11-07T22:59Z by claude-sonnet, run r-20261107T2228Z-8bc6, task 3.1
