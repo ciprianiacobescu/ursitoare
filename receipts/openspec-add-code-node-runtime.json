@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-07T09:03:28Z",
+  "integrated_revision": "45fe3acf5018bbc346e7942df182c14b31598bdb",
+  "merge_commit": "45fe3acf5018bbc346e7942df182c14b31598bdb",
+  "plan_digest": "1de77c4471f9168f",
+  "plan_id": "m5",
+  "postcheck": "pass",
+  "pr": 87,
+  "receipt_id": "m5/openspec:add-code-node-runtime/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "07ebcbdfa7152a6d7c871ecf2a03f589d64c4d5e",
+  "spec_digest": "3eb9437aa9998b66",
+  "target": "main",
+  "unit_id": "openspec:add-code-node-runtime"
+}
