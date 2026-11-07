@@ -1,0 +1,13 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-code-sandbox",
+  "round": 2,
+  "findings": [
+    "F-44115141"
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": [],
+  "repairs": []
+}
