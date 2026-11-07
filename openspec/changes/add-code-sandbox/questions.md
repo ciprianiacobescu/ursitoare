@@ -16,6 +16,10 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | 3.8 | harness | Task 3.8: the pre-satisfied check could not decide |
 | Q-004 | answered | none | verdict | Criterion C-061daa6c (sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options): accept as satisfied? |
 | Q-005 | answered | none | verdict | Finding F-44115141: Proxy getPrototypeOf traps escape option validation |
+| Q-006 | open | none | verdict | Criterion C-ed57e3cd (sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory): accept as satisfied? |
+| Q-007 | open | none | verdict | Finding F-81bb3a33: task 3.5 is ticked as already satisfied, but its text is not done |
+| Q-008 | open | none | verdict | Finding F-6f5b85ff: task 3.6 is ticked as already satisfied, but its text is not done |
+| Q-009 | open | none | verdict | Finding F-74714d28: task 3.8 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
 ---
@@ -677,3 +681,107 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ### Answer
 <!-- write below this line -->
 reject The finding is correct and is not waived. The requirement says createWorkerSandbox throws SandboxError SANDBOX_INVALID with option opts for a getter or Proxy trap that throws. In pool.ts the plain-object check isPlainObject runs on the raw argument before either try/catch of readPoolOptions, and it calls Object.getPrototypeOf on the value, which invokes a Proxy's getPrototypeOf trap. A Proxy whose getPrototypeOf trap throws therefore leaks its raw error out of createWorkerSandbox instead of the typed SandboxError. The fix is in production code only: the prototype check must be inside the same protected path that already turns a throwing ownKeys trap or getter into the opts could not be read error. WHEN createWorkerSandbox receives an opts value that is a Proxy whose getPrototypeOf trap throws THEN it throws synchronously a SandboxError with code SANDBOX_INVALID, message opts could not be read and details option opts, and no other error escapes.
+
+---
+
+## Q-006: Criterion C-ed57e3cd (sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+- **Criteria:** C-ed57e3cd (sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory)
+
+### Context
+Criterion C-ed57e3cd (sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory) is needs human after round 4.
+
+Scenario:
+\- **WHEN** `BUILD` compiles the repo into `<dir>`, a fresh directory under `node_modules/.cache/`; the test imports `<dir>/sandbox/index.js`, creates `createWorkerSandbox({ size: 1 })`, runs `NORMALIZE` once, then closes the pool and removes `<dir>` in `finally`
+\- **THEN** tsc exits 0; the result is `ok: true` with `{ amount: 1234.57, currency: "EUR", is_large: true }`; `size` is 1; the built `workerEntryUrl` of `<dir>/sandbox/pool.js` is the `file:` URL of the existing `<dir>/sandbox/worker-entry.js`, and no other code can have answered; the test ends within 120000 ms
+
+Why: the judge answered insufficient_evidence; its evidence was split over parts 1 and 2 of the diff: follow-up call 1 judged its 3 files of those parts together and answered insufficient_evidence
+Judge: insufficient_evidence
+Tracing tests: src.sandbox.built.test.ts::C-ed57e3cd: the built worker answers a run without a factory (passed, pre_satisfied, accepted by the delegate (claude-fable-5-1 via claude-code) through Q-003: the check was inconclusive)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-007: Finding F-81bb3a33: task 3.5 is ticked as already satisfied, but its text is not done
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+
+### Context
+The judge raised a major finding in round 4, and no deterministic check confirms it.
+
+Title: task 3.5 is ticked as already satisfied, but its text is not done
+Detail: not in this part: run-code.ts and wasm.ts, which task 3.5 requires for memory buckets and stack configuration, are in part 2.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+This finding cites no criterion: end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals, or no fix can be made from the reject.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-008: Finding F-6f5b85ff: task 3.6 is ticked as already satisfied, but its text is not done
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+
+### Context
+The judge raised a major finding in round 4, and no deterministic check confirms it.
+
+Title: task 3.6 is ticked as already satisfied, but its text is not done
+Detail: not in this part: run-code.ts and test/support/sandbox-exit-worker.ts, which task 3.6 requires, are in part 2.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+This finding cites no criterion: end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals, or no fix can be made from the reject.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-009: Finding F-74714d28: task 3.8 is ticked as already satisfied, but its text is not done
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+
+### Context
+The judge raised a major finding in round 4, and no deterministic check confirms it.
+
+Title: task 3.8 is ticked as already satisfied, but its text is not done
+Detail: not in this part: src/sandbox/worker-entry.ts, which the built-worker task requires, is in part 2.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+This finding cites no criterion: end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals, or no fix can be made from the reject.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
