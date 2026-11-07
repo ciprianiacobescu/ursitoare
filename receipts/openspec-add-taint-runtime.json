@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-07T16:35:47Z",
+  "integrated_revision": "8798a0f134b47286b1cd57e66876605e5c68a5d1",
+  "merge_commit": "8798a0f134b47286b1cd57e66876605e5c68a5d1",
+  "plan_digest": "1de77c4471f9168f",
+  "plan_id": "m5",
+  "postcheck": "pass",
+  "pr": 89,
+  "receipt_id": "m5/openspec:add-taint-runtime/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "f1906bb1ae943f6f70b4f09a8ce94bf8171a9fd5",
+  "spec_digest": "af569defb3f20afd",
+  "target": "main",
+  "unit_id": "openspec:add-taint-runtime"
+}
