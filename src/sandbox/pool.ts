@@ -41,6 +41,18 @@ function isPlainObject(value: unknown): value is object {
   return prototype === Object.prototype || prototype === null;
 }
 
+function readPlainObject(opts: unknown): object {
+  try {
+    if (!isPlainObject(opts)) {
+      throw invalidOption("opts", "opts must be a plain object");
+    }
+    return opts;
+  } catch (error) {
+    if (error instanceof SandboxError) throw error;
+    throw invalidOption("opts", "opts could not be read");
+  }
+}
+
 function readNumeric(
   copy: Record<string, unknown>,
   name: string,
@@ -61,13 +73,11 @@ function readPoolOptions(opts: unknown): SandboxConfig {
   if (opts === undefined) {
     return { ...defaults };
   }
-  if (!isPlainObject(opts)) {
-    throw invalidOption("opts", "opts must be a plain object");
-  }
+  const objectOpts = readPlainObject(opts);
 
   let keys: (string | symbol)[];
   try {
-    keys = Reflect.ownKeys(opts);
+    keys = Reflect.ownKeys(objectOpts);
   } catch {
     throw invalidOption("opts", "opts could not be read");
   }
@@ -82,7 +92,7 @@ function readPoolOptions(opts: unknown): SandboxConfig {
   const copy: Record<string, unknown> = Object.create(null) as Record<string, unknown>;
   try {
     for (const key of keys) {
-      copy[String(key)] = Reflect.get(opts, key);
+      copy[String(key)] = Reflect.get(objectOpts, key);
     }
   } catch {
     throw invalidOption("opts", "opts could not be read");
