@@ -2,7 +2,7 @@ Specs: `specs/hooks-static`, `specs/flow-validation`; rules: `design.md`; fixtur
 
 ## 1. The hook model
 
-- [ ] 1.1 Write `src/authoring/hooks/model.test.ts` first (scenarios "Metas and selectors" and "when conditions", and the lists part of "Lists and links"), then implement the model types, `HOOKLESS_KINDS`, `nodeMeta`, `selectorMatches` and `whenMatches` in `src/authoring/hooks/model.ts` and the two lists in `src/authoring/hooks/codes.ts`, implementing requirements "Node metas and selectors" and "The hook codes have their own lists"
+- [x] 1.1 Write `src/authoring/hooks/model.test.ts` first (scenarios "Metas and selectors" and "when conditions", and the lists part of "Lists and links"), then implement the model types, `HOOKLESS_KINDS`, `nodeMeta`, `selectorMatches` and `whenMatches` in `src/authoring/hooks/model.ts` and the two lists in `src/authoring/hooks/codes.ts`, implementing requirements "Node metas and selectors" and "The hook codes have their own lists"
 - [ ] 1.2 Write `src/authoring/hooks/placements.test.ts` first (scenarios "Order, labels and exclusions" and "Routes, augmented successors and declaresHooks"), then implement `hookPlacements`, `hookRoutes`, `augmentedSuccessors` and `declaresHooks` in `src/authoring/hooks/model.ts`, implementing requirements "Hook placements follow the onion order" and "Hook routes extend the successor graph"
 
 ## 2. The checker
