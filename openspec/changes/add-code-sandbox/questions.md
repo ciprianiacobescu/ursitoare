@@ -14,6 +14,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | 3.5 | harness | Task 3.5: the pre-satisfied check could not decide |
 | Q-002 | answered | 3.6 | harness | Task 3.6: the pre-satisfied check could not decide |
 | Q-003 | answered | 3.8 | harness | Task 3.8: the pre-satisfied check could not decide |
+| Q-004 | open | none | verdict | Criterion C-061daa6c (sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options): accept as satisfied? |
+| Q-005 | open | none | verdict | Finding F-44115141: Proxy getPrototypeOf traps escape option validation |
 <!-- l4:index:end -->
 
 ---
@@ -614,3 +616,60 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: accept: The held evidence is enough. The new built-worker test is not vacuous: it asserts that tsc exits 0, that the built pool's workerEntryUrl resolves to the file URL of an existing worker-entry.js beside pool.js, that the built pool reports size 1, and that a real run of the normalize body returns ok true with the exact normalize value, with no workerFactory supplied. The behaviour it checks is in the unit head: tsconfig.build.json compiles src without the test files into the chosen outDir with relative .ts imports rewritten to .js, limits.ts maps a .js module URL to worker-entry.js, pool.ts spawns a real Worker at workerEntryUrl(import.meta.url) when no factory is given, and worker-entry.ts answers each job through runCode. The base run could only end in an error because the base branch carries the milestone scaffold stub of the sandbox, whose createWorkerSandbox throws before any assertion runs, so the inconclusive result reflects the scaffold, not the test. tasks.md states that this test is green on arrival by design and that a failure is a build defect to fix in src/sandbox, so a passing real run is the intended evidence. The replay still runs every gate, so a build defect would be caught there.
+
+---
+
+## Q-004: Criterion C-061daa6c (sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-061daa6c (sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options)
+
+### Context
+Criterion C-061daa6c (sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options) is needs human after round 2.
+
+Scenario:
+\- **WHEN** a pool with a recording `workerFactory` runs `NORMALIZE` five times in sequence; a pool of `size` 2 gets 12 concurrent runs of `NORMALIZE`; a pool of `size` 1 gets `BUSY` then five runs of `return { i: <n> };` (n = 1 to 5) together; and pools are created with `{ size: 3, stackSizeMb: 8, maxOldGenerationSizeMb: 256 }`, each of `BAD_OPTIONS`, `{ size: 0, graceMs: -1 }` and each of `GOOD_OPTIONS`
+\- **THEN** the first factory log is empty before the first run, then holds 1 call, with `url.href` equal to `new URL("./worker-entry.ts", import.meta.url).href` (in a test beside `pool.ts`) and `options` deep-equal `{ env: {}, resourceLimits: { stackSizeMb: 4, maxOldGenerationSizeMb: 512 } }`, with `size` 2 and `respawns` 0; the 12 results are `ok` with one distinct `value` JSON and the second log has 2 calls; the six runs finish in the order `BUSY`, 1, 2, 3, 4, 5; the `size` 3 pool spawns with `resourceLimits` `{ stackSizeMb: 8, maxOldGenerationSizeMb: 256 }`; each `BAD_OPTIONS` row throws synchronously a `SandboxError` of `code` `SANDBOX_INVALID`, `details` `{ option: "<name>" }` and `message` `<name> must be an integer from <min> to <max>` (`workerFactory must be a function`; the `opts`, unknown-key and unreadable rows: the messages listed there); the ordering rows' getters ran 0 times; `{ size: 0, graceMs: -1 }` reports `size`; each of `GOOD_OPTIONS` is accepted
+
+Why: uncovered: the tests that trace it are inadequate or did not pass
+Judge: fail
+Tracing tests: src.sandbox.pool.test.ts::C-061daa6c: the pool spawns lazily, runs up to size jobs, queues in order and validates options (passed, red_assertion, inadequate)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Finding F-44115141: Proxy getPrototypeOf traps escape option validation
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+The judge raised a major finding in round 2, and no deterministic check confirms it (criterion C-061daa6c).
+
+Title: Proxy getPrototypeOf traps escape option validation
+Detail: createWorkerSandbox calls isPlainObject before it enters the protected option-reading path. A Proxy whose getPrototypeOf trap throws therefore leaks that raw error instead of throwing SandboxError SANDBOX_INVALID with details { option: "opts" }.
+Suggested fix: Wrap the plain-object prototype check in the same option-read error handling that converts throwing Proxy traps into SANDBOX_INVALID for opts.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-061daa6c as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
