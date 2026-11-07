@@ -67,3 +67,5 @@
 {"at":"2026-11-07T15:01:21Z","by":"harness","reason":"the cause is gone: openspec:add-taint-runtime is waiting_capacity","type":"plan.resumed"}
 {"at":"2026-11-07T15:01:22Z","attempt":1,"cost_usd":3.705192,"runs":5,"type":"plan.charged","unit":"openspec:add-taint-runtime"}
 {"at":"2026-11-07T15:01:22Z","run":"r-20261107T1437Z-57b6","type":"unit.dispatched","unit":"openspec:add-taint-runtime"}
+{"at":"2026-11-07T15:57:53Z","attempt":1,"cost_usd":5.319217,"runs":6,"type":"plan.charged","unit":"openspec:add-taint-runtime"}
+{"at":"2026-11-07T15:57:53Z","run":"r-20261107T1532Z-bd31","type":"unit.dispatched","unit":"openspec:add-taint-runtime"}
