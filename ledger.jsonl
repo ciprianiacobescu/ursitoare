@@ -57,3 +57,5 @@
 {"at":"2026-11-07T09:13:41Z","branch":"l4/archive/openspec/add-code-node-runtime","head":"62b84e233a75a6b3b069f6b2c79aee01d3789dab","type":"unit.branch_deleted","unit":"openspec:add-code-node-runtime"}
 {"at":"2026-11-07T09:13:42Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-taint-runtime"}
 {"at":"2026-11-07T09:13:42Z","run":"r-20261107T0904Z-91c1","type":"unit.dispatched","unit":"openspec:add-taint-runtime"}
+{"at":"2026-11-07T10:47:15Z","attempt":1,"cost_usd":0.990761,"runs":2,"type":"plan.charged","unit":"openspec:add-taint-runtime"}
+{"at":"2026-11-07T10:47:15Z","run":"r-20261107T1029Z-c307","type":"unit.dispatched","unit":"openspec:add-taint-runtime"}
