@@ -1,4 +1,5 @@
 import type { BlockDef, Catalogue, Ref } from "../format/index.ts";
+import { scanTemplate, valueFields, walkStrings } from "../format/index.ts";
 import { describeTool } from "./tools.ts";
 import type { Taint } from "./labels.ts";
 import { NO_TAINT, joinTaint, relabelExtract } from "./labels.ts";
@@ -133,18 +134,61 @@ export function producedTaint(node: unknown, input: Taint, catalogue: Catalogue)
   }
 }
 
+function fieldTaint(produced: ProducedTaint, path: readonly string[]): Taint {
+  const first = path[0];
+  if (first !== undefined && Object.hasOwn(produced.fields, first)) {
+    return produced.fields[first] ?? UNTRUSTED;
+  }
+  return produced.output;
+}
+
 export function referenceTaint(
-  _ref: Ref | undefined,
-  _taintOf: TaintOf,
-  _hook?: HookTaintScope,
+  ref: Ref | undefined,
+  taintOf: TaintOf,
+  hook?: HookTaintScope,
 ): Taint {
-  throw new Error("not implemented");
+  if (ref === undefined) return UNTRUSTED;
+  switch (ref.root) {
+    case "inputs":
+      return NO_TAINT;
+    case "item":
+      return UNTRUSTED;
+    case "node": {
+      const produced = taintOf(ref.id);
+      if (produced === undefined) return UNTRUSTED;
+      if (ref.field === "outcome") return produced.outcome;
+      return fieldTaint(produced, ref.path);
+    }
+    case "hook": {
+      if (hook === undefined) return UNTRUSTED;
+      if (ref.scope === "input") return hook.input;
+      if (ref.scope === "output") {
+        if (hook.output === null) return UNTRUSTED;
+        return fieldTaint(hook.output, ref.path);
+      }
+      return NO_TAINT;
+    }
+  }
+  return UNTRUSTED;
 }
 
-export function valueTaint(_value: unknown, _taintOf: TaintOf, _hook?: HookTaintScope): Taint {
-  throw new Error("not implemented");
+export function valueTaint(value: unknown, taintOf: TaintOf, hook?: HookTaintScope): Taint {
+  let taint: Taint = NO_TAINT;
+  walkStrings(value, "", (text) => {
+    for (const seg of scanTemplate(text)) {
+      if (seg.type !== "ref") continue;
+      const ref = seg.ref;
+      taint = joinTaint(taint, ref === undefined ? UNTRUSTED : referenceTaint(ref, taintOf, hook));
+    }
+  });
+  return taint;
 }
 
-export function nodeInputTaint(_node: unknown, _taintOf: TaintOf): Taint {
-  throw new Error("not implemented");
+export function nodeInputTaint(node: unknown, taintOf: TaintOf): Taint {
+  const kind = kindOf(node);
+  let taint: Taint = contextTainted(node, kind) ? UNTRUSTED : NO_TAINT;
+  for (const field of valueFields(node)) {
+    taint = joinTaint(taint, valueTaint(field.value, taintOf));
+  }
+  return taint;
 }

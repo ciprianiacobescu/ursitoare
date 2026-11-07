@@ -12,7 +12,8 @@ import type { AppliedHooks } from "./hooks.ts";
 import { collectHooks } from "./hooks.ts";
 import type { Taint } from "./labels.ts";
 import { NO_TAINT, joinTaint } from "./labels.ts";
-import { contextTainted, producedTaint } from "./runtime.ts";
+import type { ProducedTaint, TaintOf } from "./runtime.ts";
+import { contextTainted, producedTaint, referenceTaint } from "./runtime.ts";
 
 export interface NodeTaint {
   input: Taint;
@@ -102,6 +103,15 @@ interface ResolvedReference {
 
 const UNRESOLVED: ResolvedReference = { taint: UNTRUSTED, resolved: false };
 
+function producedOf(id: string, state: State, node: unknown): ProducedTaint {
+  const kind = kindOf(node);
+  return {
+    output: state.output,
+    fields: Object.fromEntries(state.fields),
+    outcome: kind === "llm.decide" || kind === "human.approval" ? NO_TAINT : state.output,
+  };
+}
+
 function resolveReference(
   occurrence: Occurrence,
   states: Map<string, State>,
@@ -111,42 +121,26 @@ function resolveReference(
 ): ResolvedReference {
   const ref = occurrence.ref;
   if (ref === undefined) return UNRESOLVED;
-  if (ref.root === "inputs") return { taint: NO_TAINT, resolved: true };
   if (ref.root === "item") {
     if (occurrence.fromValue && occurrence.field === "with" && itemTaint !== undefined) {
       return { taint: itemTaint, resolved: true };
     }
     return UNRESOLVED;
   }
+  const taintOf: TaintOf = (id) => {
+    const state = states.get(id);
+    if (state === undefined) return undefined;
+    return producedOf(id, state, nodes.get(id));
+  };
   if (ref.root === "hook") {
     const state = states.get(wrapped);
     if (state === undefined) return UNRESOLVED;
-    if (ref.scope === "input") return { taint: state.input, resolved: true };
-    if (ref.scope === "output") {
-      const first = ref.path[0];
-      if (first !== undefined) {
-        const field = state.fields.get(first);
-        if (field !== undefined) return { taint: field, resolved: true };
-      }
-      return { taint: state.output, resolved: true };
-    }
-    return { taint: NO_TAINT, resolved: true };
+    const hook = { input: state.input, output: producedOf(wrapped, state, nodes.get(wrapped)) };
+    return { taint: referenceTaint(ref, taintOf, hook), resolved: true };
   }
-  const state = states.get(ref.id);
-  if (state === undefined) return UNRESOLVED;
-  if (ref.field === "outcome") {
-    const kind = kindOf(nodes.get(ref.id));
-    return {
-      taint: kind === "llm.decide" || kind === "human.approval" ? NO_TAINT : state.output,
-      resolved: true,
-    };
-  }
-  const first = ref.path[0];
-  if (first !== undefined) {
-    const field = state.fields.get(first);
-    if (field !== undefined) return { taint: field, resolved: true };
-  }
-  return { taint: state.output, resolved: true };
+  if (ref.root === "inputs") return { taint: referenceTaint(ref, taintOf), resolved: true };
+  if (!states.has(ref.id)) return UNRESOLVED;
+  return { taint: referenceTaint(ref, taintOf), resolved: true };
 }
 
 function itemTaintOf(

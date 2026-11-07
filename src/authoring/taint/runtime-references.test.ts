@@ -296,7 +296,7 @@ test("C-5d24d025 analyzeTaint and the shared rules agree on RF-1 inputs and edge
     edgeTotal += analysis.edges.length;
 
     for (const edge of analysis.edges) {
-      const seg = scanTemplate(edge.ref).find((candidate) => candidate.type === "ref");
+      const seg = scanTemplate("${{ " + edge.ref + " }}").find((candidate) => candidate.type === "ref");
       const ref = seg !== undefined && seg.type === "ref" ? seg.ref : undefined;
       let taint: Taint | undefined;
       assert.doesNotThrow(() => {
