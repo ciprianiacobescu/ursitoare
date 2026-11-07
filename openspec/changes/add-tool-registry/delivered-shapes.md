@@ -30,3 +30,11 @@ pagination.ts:17 PAGE_QUERY_SCHEMA   :52 readPage(query): { limit: number; curso
 // add-fake-tools (U45b), test/support/fake-tools/index.ts
 FAKE_TOOLS_ORIGIN: string   // "https://tools.fake.test"      fakeToolPath(ref: string): string   // `/blocks/${ref}`, e.g. "/blocks/erp.lookup_vendor@1"
 ```
+
+Read for the tests and routes (main@cf34c628):
+
+- `src/registry/block-store.ts:110-113`: `importCatalogue`'s first statement in its transaction is `tx.query("SELECT pg_advisory_xact_lock(hashtextextended('ursitoare:block_import:' || $1::text, 0))", [ctx.tenantId])`, so row `delta`'s hook matches the text `ursitoare:block_import:`.
+- `src/api/block-routes.ts:80` `bound: version.binding !== null`, `:27` `ANY_OBJECT = { type: "object", additionalProperties: true }`; `src/api/pagination.ts:6,20` limit default 50 (maximum 200), so 23 blocks fit one page. `src/registry/policy/blocks.cedar:1-2` permits `tenant_admin` the action `read_registry`.
+- `src/tenancy/routes.ts:140-147` (`resolveTenantBy`) reads `review_profile` from `ursitoare.tenant` on every call, so a change by owner SQL holds from the next request.
+- `src/api/flow-routes.ts:85-88` maps `principal.kind === "service" ? "service" : "user"`; `route.ts:396-397`: authentication is `onRequest` and the decision `preHandler`, so schema validation runs between them.
+- `src/api/errors.ts:56-72` `validationField` (rule in design § Routes); `:90-106` each Ajv issue is `{ field, message }` in a 400 `VALIDATION_FAILED`; `:108-113` an empty or malformed JSON body is `[{ field: "body", message: "malformed JSON" }]`.

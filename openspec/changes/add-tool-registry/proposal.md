@@ -1,10 +1,10 @@
 ## Why
 
-A real tool is not a block until an admin has said where it lives, what it accepts and returns and what effect it has, and a second admin has approved exactly that. U47 stores tool servers and surfaces per tenant, turns an approved surface into immutable block versions bound to `{ server, tool }`, disables a server whose surface changes, and gives U50 a directory from block ref to binding.
+A real tool is not a block until an admin has said where it lives, what it accepts and returns and what effect it has, and a second admin has approved exactly that. U47 stores tool servers and surfaces per tenant, binds approved tools to immutable block versions, drifts a server whose surface changes, and gives U50 a directory from block ref to binding.
 
-Observable result: carol (`tenant_admin`) posts `acme` (two tools) and gets 201 `pending`. In a team tenant she cannot approve it (422 `approver_is_submitter`) but dave can, and `GET /api/v1/blocks` lists its two refs with `bound` true. A `PUT` of a changed surface makes `acme` `drifted`; approving it writes `acme.lookup_vendor@2` and the old ref resolves to `null`. A solo tenant approves its own surface only with `selfApproval: true`.
+Observable result: carol (`tenant_admin`) posts `acme` (two tools) and gets 201 `pending`. In a team tenant she cannot approve it (422 `approver_is_submitter`) but dave can, and `GET /api/v1/blocks` lists its two refs with `bound` true. A `PUT` of a changed surface makes `acme` `drifted`; approving it writes `acme.lookup_vendor@2`. A solo tenant approves its own surface only with `selfApproval: true`.
 
-Batch `m6-grants` (closing unit `add-web-dry-runs`, journey `e2e/test_m6_grants.py`) delivers M6: admins register tool servers and grant tools per role and step. This unit's part: the tool-server registry, surface approval, the bound block versions and the directory the invoke path reads. After this unit merges, L4 runs acceptance profile `all` on the target; the batch itself has profile `none`, and the closing unit's journey proves the outcome.
+Batch `m6-grants` (closing unit `add-web-dry-runs`, journey `e2e/test_m6_grants.py`; batch profile `none`) delivers M6. This unit's part: the registry, surface approval, the bound block versions and the directory the invoke path reads; after it merges, L4 runs acceptance profile `all`.
 
 ## What Changes
 
@@ -14,15 +14,15 @@ Batch `m6-grants` (closing unit `add-web-dry-runs`, journey `e2e/test_m6_grants.
 
 ## Impact
 
-- **Scaffold:** Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); this change implements them. The `export type` lines of `src/tools/index.ts` for `ToolDirectory`, `ToolBinding`, `ToolServerRecord` and `ToolSurface` are scaffolded (U50's stubs import them). Not scaffolded: its value export lines (task 3.1) and those of `src/api/index.ts`, the module-internal `checkSurface`, `toolBlock`, `toolHash`, `assertTenant`, the migration, the fragment, the `main.ts` line, the document, the README row.
-- **Depends on:** `add-tenancy-foundation`, `add-audit-chain`, `add-pdp-cedar`, `add-policy-catalogue`, `add-api-pep`, `add-api-conventions`, `add-roles-and-memberships`, `add-flow-format-model`, `add-test-catalogue`, `add-block-registry`, `add-fake-tools` (U03, U08, U11, U11b, U13, U14, U17, U22, U24, U26, U45b). Beyond the card's edges, U03, U11, U11b, U17 and U24 are added for names the scenarios call.
-- Shapes of the delivered names above: `delivered-shapes.md` in this folder (merged code at main@cf34c628 and the M5 folders named, checked line by line).
+- **Scaffold:** Signature stubs for the interfaces given below are on the base branch (`docs/decisions/0002`); this change implements them. The `export type` lines of `src/tools/index.ts` for `ToolDirectory`, `ToolBinding`, `ToolServerRecord` and `ToolSurface` are scaffolded. Not scaffolded: the value export lines of `src/tools/index.ts` (task 3.1) and `src/api/index.ts`, the module-internal `checkSurface`, `toolBlock`, `toolHash` (`surface.ts`), `assertTenant` (`store.ts`), the migration, the fragment, the `main.ts` line, the document, the README row.
+- **Depends on:** `add-tenancy-foundation`, `add-audit-chain`, `add-pdp-cedar`, `add-policy-catalogue`, `add-api-pep`, `add-api-conventions`, `add-roles-and-memberships`, `add-flow-format-model`, `add-test-catalogue`, `add-block-registry`, `add-fake-tools` (U03, U08, U11, U11b, U13, U14, U17, U22, U24, U26, U45b); all but `add-fake-tools` (in plan) are merged on main.
+- Shapes of the delivered names: `delivered-shapes.md` (main@cf34c628 and the M5 folders named).
 
 **Interfaces given** (the block of `design.md` § Interfaces)
 
 ```ts
 // src/tools/types.ts (exported from src/tools/index.ts)
-type Effect = BlockImport["effect"];      // module-internal aliases: `tools` may not import `authoring`
+type Effect = BlockImport["effect"];
 type JsonSchema = BlockImport["input"];
 export type ToolAdapter = "fixture" | "mcp" | "http_openapi" | "code_block";
 export type ToolServerState = "pending" | "approved" | "drifted";
@@ -39,7 +39,7 @@ export interface ToolServerRecord {
   id: string;                      // ^[a-z][a-z0-9_]{0,31}$
   adapter: ToolAdapter; origin: string; local: boolean; state: ToolServerState;
   registeredBy: string; registeredAt: string;
-  approvedDigest: string | null; pendingDigest: string | null; pendingSubmittedBy: string | null;   // submitter of the newest unapproved surface, else null (addition, ruling U52-1)
+  approvedDigest: string | null; pendingDigest: string | null; pendingSubmittedBy: string | null;   // submitter of the newest unapproved surface, else null
   tools: { name: string; effect: Effect; ref: string | null }[];
 }
 export interface ToolBinding {
@@ -74,7 +74,6 @@ export interface ToolServerApiDeps { pool: TenantPool | null; clock: Clock; engi
 export function registerToolServerRoutes(server: FastifyInstance, deps: ToolServerApiDeps): void;
 // test/support/tool-surface.ts
 export function fixtureSurface(refs: readonly string[], opts?: { untrustedResult?: Readonly<Record<string, boolean>> }): ToolSurface;
-  // one tool per test-catalogue ref, named by the part between the first "." and "@"
 ```
 
 **Interfaces taken:**

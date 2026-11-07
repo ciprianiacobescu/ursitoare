@@ -1,11 +1,11 @@
 # Test plan for add-fake-tools
 
-Ran in a scratch implementation on Node 24.22.2 (design.md § Verification); hash-derived values recomputed in Python. Tests send with `node:http` (own `Host`), compile output schemas with their own `Ajv2020({ strict: false, validateFormats: false })`, and close every fake in `finally`.
+Ran in a scratch implementation (design.md § Verification), except the rows that section lists as derived, not run. Tests send with `node:http` (own `Host`), compile output schemas with their own `Ajv2020({ strict: false, validateFormats: false })`.
 
 ## Constants
 
 - `K = "kv-tools-4d1c"`, `T_A = "4b8a2c1e-0000-8000-8000-000000000001"`, `S1 = "0b2f7e1c-5d0a-4c4e-9a51-3f2b8d6c1e01"`, `S2` the same ending `02`.
-- `D_EMPTY = e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`, `D_OBJ` (body `{}`) `= 44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a`, `D_ACME` (body `{"vendor_name":"Acme GmbH"}`) `= ad89878ead763441ddc3bdb920c15ac97d953890d73464b6cdfc28e7a14d36ad`, `D_MAIL` (body `MAIL_A`) `= cc6042abee0ce7229757b5cb64b915bd2c47f3e71a76a67567cf2fc94b09a099`.
+- `D_EMPTY = e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`, `D_OBJ` (body `{}`) `= 44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a`, `D_ACME` (body `{"vendor_name":"Acme GmbH"}`) `= ad89878ead763441ddc3bdb920c15ac97d953890d73464b6cdfc28e7a14d36ad`, `D_MAIL` (body `MAIL_A`) `= cc6042abee0ce7229757b5cb64b915bd2c47f3e71a76a67567cf2fc94b09a099`, `D_WS` (body a space and a newline) `= e16f1596201850fd4a63680b27f603cb64e67176159be3d8ed78a4403fdb1700` (computed with `node:crypto`).
 - `MAIL_A = {"to":"a@x.test","subject":"s","body":"b"}`, `MAIL_B = {"to":"z@x.test","subject":"other","body":"c"}`. `m1(x)`, `m2`, `p1(q)`, `p2` are the messages and passages of design.md § Fixtures.
 
 ## Samples (scenario "All 20 outputs match their fixtures and fit their schemas")
@@ -35,7 +35,7 @@ Each row is sent once, in order, to one fake; a key is sent as `Idempotency-Key`
 | 19 | `docs.create@1` | `{"title":"t","content":"c"}` | `ik-10` | `{"doc_id":"doc-f54d321f","url":"https://docs.example/doc-f54d321f"}` |
 | 20 | `erp.flag_vendor@1` | `{"vendor_id":"V","reason":"r"}` | `ik-11` | `{"flag_id":"FLAG-2D5B04"}` |
 
-Edge rows (reads, no key; same fake after the samples). Each answer is 200 unless stated.
+Edge rows (reads, no key; same fake after the samples); each answer is 200 unless stated.
 
 | # | ref and input | output |
 |---|---|---|
@@ -50,7 +50,7 @@ After the samples `calls()` holds 20 records (the counts of the spec); E1 to E18
 
 ## Effect rows (scenario "Effects need a key and replay under it")
 
-One fake; `mail.send@1` unless stated; `dup` is the `x-fake-tools-duplicate` header; the record is (`status`, `idempotencyKey`, `duplicate`).
+Rows 1 to 10 run in order on one fake (`effects.test.ts`); `mail.send@1` unless stated; `dup` is the `x-fake-tools-duplicate` header; the record is (`status`, `idempotencyKey`, `duplicate`).
 
 | # | request | answer | record |
 |---|---|---|---|
@@ -62,7 +62,8 @@ One fake; `mail.send@1` unless stated; `dup` is the `x-fake-tools-duplicate` hea
 | 6 | `slack.post_message@1` `{"channel":"#ap","text":"hi"}`, `ik-03` | 200 `{"ts":"1760000000.062858"}`, dup `false` | 200, `ik-03`, false |
 | 7, 8 | `erp.lookup_vendor@1` `{"vendor_name":"Globex"}`, `ik-r`, twice | 200 `{"vendor_id":"V-GLOBEX","status":"active","payment_terms_days":45}`, dup `false` both | 200, `ik-r`, false (twice) |
 | 9, 10 | `erp.create_payment@1` `{"vendor_id":"V-ACME","amount":2450,"currency":"EUR","reference":"INV-1001"}`, then `{"vendor_id":"V-ACME","amount":1,"currency":"USD","reference":"x"}`, both `ik-01` | 200 `{"payment_id":"PAY-57819766","status":"created"}`, dup `false`, then the same body, dup `true` | 200, `ik-01`, false; 200, `ik-01`, true |
-| 11 | `{}`, key `ik-03` (known from rows 3 and 4; the input fails the schema) | 400 `{"error":"invalid_input","block":"mail.send@1","details":[{"path":"/","keyword":"required"}]}`, no `dup` (the input checks run before the lookup, so it is no replay) | 400, `ik-03`, false; `input` `{}`; appended as R20 is, so `calls()` holds 11 records (`seq` 1 to 11); the kept output of row 3 is unchanged |
+
+Row 11 (task 2.3, in `refusals.test.ts`, scenario "A replay with invalid input is refused and the kept output stays") runs on a fresh fake, because the object and schema check arrives in 2.3: rows 3 and 4, then `{}` with key `ik-03` (known; the input fails the schema) gives 400 `{"error":"invalid_input","block":"mail.send@1","details":[{"path":"/","keyword":"required"}]}`, no `dup` (the input checks run before the lookup, so it is no replay); record 400, `ik-03`, false, `input` `{}`, appended as R20 is; then `MAIL_A` with `ik-03` gives 200 `{"message_id":"msg-f58a35b6ca"}`, dup `true` (the kept output is unchanged). `calls()` holds 4 records (`seq` 1 to 4).
 
 ## Refusal rows (scenario "Refusals come first and only parseable calls to known blocks are recorded")
 
@@ -87,10 +88,11 @@ Fake with `strict` true; `L = /blocks/erp.lookup_vendor@1`; `J` = `content-type:
 | R21 | `POST L`, `pad(1048576)` | 200 `{"vendor_id":"V-AAAAAAAAAAAAAAAA","status":"active","payment_terms_days":30}` | 10 |
 | R22 | `POST L`, `pad(1048577)` | 413 `{"error":"body_too_large"}` | |
 | R23 | `POST /blocks/nope@1`, `pad(1048577)` | 404 `unknown_block` (the ref is checked before the size) | |
+| R24 | `POST L`, body a space and a newline (blank: `trim()` is empty, so `{}`, as the seed's `readJson`, `seed/shared/mocks/lib/common.mjs:48`) | 400 `invalid_input` `details` `[{"path":"/","keyword":"required"}]` | 11 |
 
-Every `invalid_input` body is `{"error":"invalid_input","block":<ref>,"details":<details>}`. After R1 to R23 `calls()` holds exactly the 10 records of the Rec column (`seq` 1 to 10, each row's ref and the status of its answer). Record 1 has `host` `tools.fake.test` and `input` `{"vendor_name":"Globex"}`; the others have `host` `127.0.0.1:<port>`; record 2 has `input` `{}` and `bodySha256` `D_EMPTY`, record 3 `[]`, record 4 `null`, record 5 `{"vendor_name":5}`; record 8 has `idempotencyKey` `null` and `input` `{}` with `bodySha256` `D_OBJ`, record 9 `k`; every record has `method` `POST` and `path` `/blocks/<ref>` as sent.
+Every `invalid_input` body is `{"error":"invalid_input","block":<ref>,"details":<details>}`. After R1 to R24 `calls()` holds exactly the 11 records of the Rec column (`seq` 1 to 11, each row's ref and the status of its answer). Record 1 has `host` `tools.fake.test` and `input` `{"vendor_name":"Globex"}`; the others have `host` `127.0.0.1:<port>`; record 2 has `input` `{}` and `bodySha256` `D_EMPTY`, record 3 `[]`, record 4 `null`, record 5 `{"vendor_name":5}`; records 8 and 11 have `input` `{}` (`bodySha256` `D_OBJ`, `D_WS`), record 8 `idempotencyKey` `null`, record 9 `k`; every record has `method` `POST` and `path` `/blocks/<ref>` as sent.
 
-Non-strict fake (`startFakeTools({ strict: false })`): N1 `POST L` `{}` gives 200 `{"vendor_id":"V-UNKNOWN","status":"active","payment_terms_days":30}`; N2 body `[]` gives 400 `invalid_input` `[{"path":"/","keyword":"type"}]`; N3 `{"vendor_name":5}` gives 200 `{"vendor_id":"V-5","status":"active","payment_terms_days":30}`.
+Non-strict fake (`startFakeTools({ strict: false })`; the hashes of N4 to N6 computed with `node:crypto`, the answers N4 to N8 derived from design.md § Fixtures, not run): N1 `POST L` `{}` gives 200 `{"vendor_id":"V-UNKNOWN","status":"active","payment_terms_days":30}`; N2 body `[]` gives 400 `invalid_input` `[{"path":"/","keyword":"type"}]`; N3 `{"vendor_name":5}` gives 200 `{"vendor_id":"V-5","status":"active","payment_terms_days":30}`; N4 `POST /blocks/crm.find_customer@1` `{}` gives 200 `{"customer_id":"C-EB045D","name":"undefined","tier":"silver"}`; N5 `{"email":5}` gives `{"customer_id":"C-EF2D12","name":"5","tier":"bronze"}`; N6 `{"email":"nobody"}` (no `@`) gives `{"customer_id":"C-6382B3","name":"nobody","tier":"gold"}`; N7 `POST /blocks/kb.search@1` `{"query":"q","top_k":"x"}` gives `{"passages":[p1("q"), p2]}`; N8 `POST L` `{"vendor_name":{"toString":5}}` gives `{"vendor_id":"V--TOSTRING-5-","status":"active","payment_terms_days":30}` (`String()` of that object throws, ran). Task 1.1's test also calls `fixtureFor` with the inputs of N1 and N3 to N8 (key `""`) and expects the same outputs.
 
 ## Knob rows (scenario "Failure and delay knobs apply per block and are checked")
 
@@ -113,7 +115,7 @@ Argument rows (`RangeError`, message): A1, A2 `setDelay("nope@1", 1)`, `setDelay
 | C3 | as C2 with `x-ursitoare-call: r_1:notify:2`, no `x-fake-tools-key` | 200 the same body, dup `true` |
 | C4 | `S2` (no credential), `erp.lookup_vendor@1`, `{"vendor_name":"Acme GmbH"}` | 502 `bad gateway: vault error\n` |
 
-`tools.calls()` holds three records with `method` `POST`, `path` `/blocks/<ref>`, `host` `tools.fake.test`, `keyHeaderSeen` true, `status` 200: seq 1 `erp.lookup_vendor@1` (`effect` `read`, `callHeader` `r_1:lookup:1`, `idempotencyKey` `null`, `bodySha256` `D_ACME`, `duplicate` false), seq 2 `mail.send@1` (`send`, `r_1:notify:1`, `ik-pro-1`, `D_MAIL`, false), seq 3 `mail.send@1` (`r_1:notify:2`, `ik-pro-1`, `D_MAIL`, true), each `input` the body sent. `egress.requests()` holds three `allowed` records for S1 with `host` `tools.fake.test` and `headers["x-fake-tools-key"]` `[credential]`, then the `rejected` one of C4.
+`tools.calls()` holds three records, each with `method` `POST`, `path` `/blocks/<ref>`, `host` `tools.fake.test`, `keyHeaderSeen` true, `status` 200 and `input` the body sent: seq 1 `erp.lookup_vendor@1` (`read`, `callHeader` `r_1:lookup:1`, `idempotencyKey` `null`, `D_ACME`, `duplicate` false), seq 2 `mail.send@1` (`send`, `r_1:notify:1`, `ik-pro-1`, `D_MAIL`, false), seq 3 the same ref (`r_1:notify:2`, `ik-pro-1`, `D_MAIL`, true). `egress.requests()` holds three `allowed` records for S1 with `host` `tools.fake.test` and `headers["x-fake-tools-key"]` `[credential]`, then the `rejected` one of C4.
 
 ## Contract rows (scenario "The contract suite passes on the fake and fails on broken targets")
 
@@ -123,8 +125,8 @@ Targets: the fake (all pass); M1, a forwarding server that appends `-<n>` to eve
 
 ## Part rows (scenario "The part registers its upstream, resets on beforeReset and closes in a crash cluster")
 
-P1: `toolsPart.start` with an empty `handles` map rejects with an `E2eStackError`. P2: after `egressPart.start` (handle stored as `egress`), `toolsPart.start` returns `env` `{}`; after the credential of § Egress rows, C1 gives `tools.calls()` one record with `seq` 1; `toolsPart.beforeReset(ctx)` makes it `[]`; C1 again gives one record with `seq` 1; `toolsApi(new Map())` throws `E2eStackError` `STACK_PART_MISSING` with `details` `{ part: "tools" }`; `close()` twice resolves and the origin refuses connections. P3: the file text, the discovered order and the file-name order of the spec (`45-egress.ts` < `50-tools.ts` only; U48 adds `52-tool-servers.ts` to the order when it creates that part). P4: `startCrashCluster` over the discovered parts named `database`, `egress`, `tools`, with `tools` wrapped to capture `handle.api.tools.origin` (the cluster exposes no handles): the origin answers `POST /blocks/erp.lookup_vendor@1` `{"vendor_name":"x"}` with 200 while started and refuses connections after `close()`.
+P1: `toolsPart.start` with an empty `handles` map rejects with an `E2eStackError`, and `T` (test-plan-failures.md § Catalogue rows) is equal before and after, so no listener was opened. P2: after `egressPart.start` (handle stored as `egress`), `toolsPart.start` returns `env` `{}`; after the credential of § Egress rows, C1 gives `tools.calls()` one record with `seq` 1; `toolsPart.beforeReset(ctx)` makes it `[]`; C1 again gives one record with `seq` 1; `toolsApi(new Map())` throws `E2eStackError` `STACK_PART_MISSING` with `details` `{ part: "tools" }`; `close()` twice resolves and the origin refuses connections. P3: the file text, the discovered order and the file-name order of the spec (`45-egress.ts` < `50-tools.ts` only; U48's PT6 asserts the longer order, P3 is not edited). P4: `startCrashCluster` over the discovered parts named `database`, `egress`, `tools`, with `tools` wrapped to capture `handle.api.tools.origin` (the cluster exposes no handles): the origin answers `POST /blocks/erp.lookup_vendor@1` `{"vendor_name":"x"}` with 200 while started and refuses connections after `close()`.
 
 ## README rows (scenario "The README names the fake accurately")
 
-New row 22: ``| `fake-tools/` | `add-fake-tools` | The 20 test-catalogue blocks as loopback tool handlers (recorded calls, idempotent effects, delay and failure knobs), reached through the fake proxy as `tools.fake.test`; e2e part `50-tools` |``. New sentence (line 27): ``The files `global-setup.ts` and `e2e-stack/main.ts` began as bootstrap placeholders; `add-db-foundation` and `add-e2e-stack` replaced them.``
+New row 22: ``| `fake-tools/` | `add-fake-tools` | The 20 test-catalogue blocks as loopback tool handlers (recorded calls, idempotent effects, delay and failure knobs), reached through the fake proxy as `tools.fake.test`; e2e part `50-tools` |``. New sentence (line 29): ``The files `global-setup.ts` and `e2e-stack/main.ts` began as bootstrap placeholders; `add-db-foundation` and `add-e2e-stack` replaced them.``

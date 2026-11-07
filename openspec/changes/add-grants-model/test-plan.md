@@ -1,14 +1,12 @@
 # Test plan for add-grants-model (part 1: fixtures, fingerprints, compiler, engine)
 
-Part 2 (store, chain, routes, fragment): `test-plan-store.md`. **Ran** in a scratch copy of the worktree (main@cf34c628 plus the unit; Node 24.22.2; embedded Postgres): every value here and in part 2 as assertions. **Derived:** `augmentedSuccessors` and `hookPlacements` (M5's `add-hook-checker`; plan m6 is activated only after plan m5 completes (one active plan per target), so they are implemented on main when this unit runs) are specified in delivered-shapes.md § What the fingerprint takes from add-hook-checker, and the hook vectors below depend on nothing else of that unit; they were computed by a scratch model implementing exactly those rules (on main's `canonicalizeFlow`, `valueFields`, `hookValueFields`, `successorFields`, `effectClass` and `canonicalize`), not by the M5 code. Each hook is hashed as written, its `when` included and never evaluated; layer `H` plays no part.
-
-Test-file conventions are in `tasks.md`.
+Part 2 (store, chain, routes, fragment): `test-plan-store.md`. **Ran** in a scratch copy of the worktree (main@cf34c628 plus the unit; embedded Postgres): the values of both plans as assertions, except what is marked derived (design.md § Verification). The hook vectors are **derived against M5**: `augmentedSuccessors` and `hookPlacements` are not on main (delivered-shapes.md § From plan m5), so a scratch model of `nodeFingerprint` on exactly those rules, on main's `canonicalizeFlow`, `valueFields`, `hookValueFields`, `successorFields`, `effectClass` and `canonicalize`, computed them (the same model gave every `F1`/`F2` value). Each hook is hashed as written, its `when` included and never evaluated.
 
 ## Constants
 
 - `T` = `tenant_a`. `CLOCK` = `fixedClock("2026-11-06T09:00:00.000Z")`; `AT` = `"2026-11-06T09:00:00.000000Z"`. `G(n)` = `"grant_00000000-0000-7000-8000-" + n.toString(16).padStart(12, "0")`: `sequentialIds()` answers `G(0)`, `G(1)`, … to successive `ids.next("grant")` calls (a rolled-back call still uses its number).
 - `ARGT` = `{ amount: "decimal", currency: "String", exact: "Bool", limit: "Long", tags: "Set<String>", vendor_id: "String", vendor_name: "String" }`.
-- `H1`, `H2`: the `hash` that `saveFlowVersion` returns for `F1` and `F2` below (`sha256:` and 64 hex digits).
+- `H1`, `H2`, `H3`: the `hash` that `saveFlowVersion` returns for `F1`, `F2`, `F3` below.
 
 ## ACME blocks (imported with `importCatalogue`, actor `{ kind: "user", id: "carol" }`)
 
@@ -16,10 +14,13 @@ Test-file conventions are in `tasks.md`.
 { "acme.lookup_vendor@1": { "effect": "read", "input": { "type": "object", "properties": { "vendor_name": { "type": "string" }, "limit": { "type": "integer" }, "exact": { "type": "boolean" }, "tags": { "type": "array", "items": { "type": "string" } } }, "required": ["vendor_name"] },
     "output": { "type": "object", "properties": { "vendor_id": { "type": "string" } }, "required": ["vendor_id"] } },
   "acme.create_payment@1": { "effect": "pay", "input": { "type": "object", "properties": { "vendor_id": { "type": "string" }, "amount": { "type": "number" }, "currency": { "type": "string" } }, "required": ["vendor_id", "amount", "currency"] },
-    "output": { "type": "object" } } }
+    "output": { "type": "object" } },
+  "acme.odd_args@1": { "effect": "read", "input": { "type": "object", "properties": { "Vendor-Id": { "type": "string" }, "vendor_ok": { "type": "string" } } }, "output": { "type": "object" } } }
 ```
 
-## Fixture flows (both pass `validateFlowText` with these blocks and the default roles: L1-L3 `ok`)
+`acme.odd_args@1` has a property outside the `arg` pattern.
+
+## Fixture flows (both pass `validateFlowText` L1-L3 with these blocks and the default roles)
 
 `pay-after-approval` (`F1`; registry flow id `pay-run`):
 
@@ -46,7 +47,7 @@ nodes:
   stop: { kind: end, status: failed }
 ```
 
-`pay-before-approval` (`F2`) is `F1` with `lookup.next: pay`, `pay.next: approval`, `approval.summary: "Confirm the payment of ${{ inputs.amount }}?"` and `approval.cases: { approved: done, rejected: stop, timeout: stop }`.
+`pay-before-approval` (`F2`) is `F1` with `lookup.next: pay`, `pay.next: approval`, `approval.summary: "Confirm the payment of ${{ inputs.amount }}?"` and `approval.cases: { approved: done, rejected: stop, timeout: stop }`. `F3` is `F1` without `pay` and with `approval.cases.approved: done`.
 
 ## Migration `0490_grants.sql` (verbatim)
 
@@ -92,14 +93,16 @@ GRANT UPDATE (fingerprints, state, revoked_by, revoked_at) ON TABLE ursitoare."g
 | done | `nf1_721060bafd2c1a979aba6975861ba5cbdf2c6a3e112c92e697f25bed9d593f3b` | `nf1_4bc9acaeb10b7d914c898456306ab822f26fc402a6311993040dabbc48b1eb2d` |
 | stop | `nf1_4bc9acaeb10b7d914c898456306ab822f26fc402a6311993040dabbc48b1eb2d` | same as `F1` |
 
-The payload of `F1.pay` is `{"approvals":[{"assignee_role":"approver","id":"approval"}],"hooks":[],"kind":"block","predecessors":["approval"],"uses":"acme.create_payment@1","v":1,"values":[["with",{"amount":"${{ inputs.amount }}","currency":"EUR","vendor_id":"${{ nodes.lookup.output.vendor_id }}"}]]}`. Variants of `F1` (unnamed nodes keep their `F1` value):
+The payload of `F1.pay` is `{"approvals":[{"assignee_role":"approver","id":"approval"}],"hooks":[],"kind":"block","predecessors":["approval"],"uses":"acme.create_payment@1","v":1,"values":[["with",{"amount":"${{ inputs.amount }}","currency":"EUR","vendor_id":"${{ nodes.lookup.output.vendor_id }}"}]]}`. Variants of `F1` (unnamed nodes keep their `F1` value; every variant passes `validateFlow` L1-L3, ran, except the cycle):
 
 - **Reversed keys:** `F1` as JSON text with every object's keys reversed: all five equal `F1`.
 - **Unrelated rename:** `stop` renamed `halt` (`approval.cases.rejected` and `.timeout` set to `halt`): the four others and `halt` equal `F1` (`halt` = `F1.stop`).
-- **Hook route:** `nodes.lookup.post = [{ id: "to_stop", kind: "code", source: "return {};", routes: ["stop"] }]` (L1-L3 accept it): `lookup` and `stop` (`predecessors` `["approval","lookup"]`) differ from `F1`.
+- **Hook route:** `nodes.lookup.post = [{ id: "to_stop", kind: "code", source: "return {};", routes: ["stop"] }]`: `lookup` is `nf1_98f17ac7f32bc59ab1f6f6c6cb1740e06049f358f434fd15eef13ee746fb5364` and `stop` (`predecessors` `["approval","lookup"]`) `nf1_b43a0d2a6eb1775c1023f1cc67e0701c659c6143ba863cfcbf85c5962c74be14`; the others equal `F1`.
 - **Changed value:** `pay.with.amount` = `5000`: `pay` differs from `F1.pay`.
-- **Pre-hook on `pay`:** `nodes.pay.pre = [{ id: "bump", kind: "code", source: "return { amount: 1 };" }]` (L1-L3 accept it): `pay` is `nf1_afe02f5e6199590af7aba0aa0c6ff1567c1a96d6d012e964e92e323eaa8ec383`, the hash of the `F1.pay` payload with `"hooks":[{"kind":"code","label":"bump","phase":"pre","source":"<sha256 of the source text>"}]`; the other four equal `F1`.
-- **Pre-hook with a `when`:** `nodes.pay.pre = [{ id: "bump", kind: "code", source: "return { amount: 1 };", when: { from: { nodes: ["lookup"] } } }]` (ran: `validateFlow` of main gives no error and no warning for this variant, as for the pre-hook variant above; the `when` is hashed as written and never evaluated, so that `lookup` is no predecessor of `pay` does not matter): `pay` is `nf1_bb5d8ea0e0e16c580bafed35001467496a515c08a06568603ab1dbd11d86cace`, the hash of the `F1.pay` payload with `"hooks":[{"kind":"code","label":"bump","phase":"pre","source":"3d9cf9f963ebfba508fb9664ff9004526a4708a06bc4e2bc13cb55ea9e41d71a","when":{"from":{"nodes":["lookup"]}}}]`; it differs from the same hook without `when` (`nf1_afe02f5e…`), so switching the condition changes the fingerprint and the grant needs a re-confirmation; the other four equal `F1`. Ran (the scratch model above): it gives this value, `F1.pay`, the `nf1_afe02f5e…` value of the pre-hook vector and every other value of this table and of the variants exactly, and none of the other vectors carries a `when`.
+- **Pre-hook on `pay`:** `nodes.pay.pre = [{ id: "bump", kind: "code", source: "return { amount: 1 };" }]`: `pay` is `nf1_afe02f5e6199590af7aba0aa0c6ff1567c1a96d6d012e964e92e323eaa8ec383`, the other four equal `F1`.
+- **Pre-hook with a `when`:** the pre-hook above with `when: { from: { nodes: ["lookup"] } }` (that `lookup` is no predecessor of `pay` does not matter): `pay` is `nf1_bb5d8ea0e0e16c580bafed35001467496a515c08a06568603ab1dbd11d86cace`, the hook object gaining `"when":{"from":{"nodes":["lookup"]}}`; it differs from the hook without `when`; the other four equal `F1`.
+- **Block hook:** `nodes.pay.pre = [A]`, `A` = `{ id: "note", kind: "block", uses: "acme.lookup_vendor@1", with: { vendor_name: "x" }, on_error: "continue" }`: `pay` is `nf1_f1e87a43b39a53abb6b6460c65f042c6b9748c16d4a65323a343592ad21e1f65`, the hash of the `F1.pay` payload with `"hooks":[{"kind":"block","label":"note","on_error":"continue","phase":"pre","uses":"acme.lookup_vendor@1","with":{"vendor_name":"x"}}]`. Each of these gives a value that differs from it and from the others: `with.vendor_name` `"y"`; `on_error` `"fail"`; `id` `note2`; `A` under `post`; `A` plus `input: { amount: "${{ inputs.amount }}" }`.
+- **Code hook with members:** `nodes.pay.pre = [C]`, `C` = `{ id: "cap", kind: "code", source: "return {};", input: { amount: "${{ inputs.amount }}" }, max_retries: 2, allow_effect_retry: true }`: `pay` is `nf1_1bc99e3357c157e2fa34d221000f11985e869d757ebce69d5c3605d68a8f72cb`. Each of these gives a value that differs from it and from the others: `input.amount` `"${{ inputs.vendor_name }}"`; `max_retries` 3; `allow_effect_retry` false; `source` `"return { a: 1 };"`.
 - **Weaker approver:** `approval.assignee_role` = `author`: `lookup`, `approval` equal `F1`; `pay` is `nf1_af0274ed2b9b0dee1f626b8195d3e418c2f3757c33f83c347d1dcd8a20d446ef`; `done`, `stop` differ.
 - **Flow rule:** `hooks = [{ id: "all_pay", match: { effect: ["pay"] }, pre: { id: "audit_note", kind: "code", source: "return {};" } }]`: `pay` is `nf1_bd9a7113cc9d4bf781bfb71495be6f1ff74940d35b719596d289dab70aa7cf5a` (label `rule.all_pay`), the others equal `F1`; the same rule with `match: { effect: ["read"], nodes: ["pay"] }` matches nothing.
 - **Unreachable node:** `orphan` = `{ kind: block, uses: acme.lookup_vendor@1, with: { vendor_name: x }, next: done }` added: `orphan` equals `"nf1_"` + sha256 of `{"approvals":[],"hooks":[],"kind":"block","predecessors":[],"uses":"acme.lookup_vendor@1","v":1,"values":[["with",{"vendor_name":"x"}]]}`; `done` differs (new predecessor `orphan`), the rest equal `F1`.
@@ -129,7 +132,8 @@ when { context.tool == Tool::"tenant_a/acme.create_payment@1" && ["nf1_f24d1bc26
 ```
 
 - `g4`: role `auditor`, `acme.lookup_vendor@1`, any step, args `limit gte -3` and `limit eq 5`, `state` `revoked`, `revokedBy` `carol`, `revokedAt` `AT`.
-- `g5` (types `{ limit: "Long", in: "String", exact: "Bool" }`): role `author`, `acme.lookup_vendor@1`, any step, args `limit gte -3`, `in eq "x y"`, `exact eq false`, `url eq "https://a.test/x"`: each constraint is `context.args has "<arg>" && context.args["<arg>"] <op> <value>` with `>= -3`, `== "x y"`, `== false`, `== "https://a.test/x"`. `in` is a Cedar keyword (ran: `true false if then else in is like has` fail bare and pass quoted).
+- `g5` (types `{ limit: "Long", in: "String", exact: "Bool" }`): role `author`, `acme.lookup_vendor@1`, any step, args `limit gte -3`, `in eq "x y"`, `exact eq false`, `url eq "https://a.test/x"`: each constraint is `context.args has "<arg>" && context.args["<arg>"] <op> <value>` with `>= -3`, `== "x y"`, `== false`, `== "https://a.test/x"`.
+- `g6`: as `g3` with id `grant_6`, no args and `fingerprints` `[FPA, FPB]`: the first line `@id("grant_6")`, the second as `g3`, the third `when { context.tool == Tool::"tenant_a/acme.create_payment@1" && ["<FPA>", "<FPB>"].contains(context.node_fingerprint) };` (each `<…>` the fingerprint string of the table above).
 - Results: ids `["grants/grant_1", "grants/grant_2", "grants/grant_3"]`, every `layer` `"tenant"`; `compileGrant(T, g4, ARGT)` `null`; `compileGrants(T, [], ARGT)` `[]`; `compileGrants("tenant_b", [g1], ARGT)` is the `g1` text with `tenant_b/acme.lookup_vendor@1` as tool id.
 
 ## Compile refusals (`GRANTS_INVALID`; base = a valid active `g1` with the change)
@@ -137,17 +141,18 @@ when { context.tool == Tool::"tenant_a/acme.create_payment@1" && ["nf1_f24d1bc26
 | change | `details` |
 |---|---|
 | tenant `tenant"a`; role `a"b`; user `a/b`; tool `x@1" \|\| true`; flow `Pay`; node `a-b`; fingerprint `nf1_aa`; id `grant_1") permit`; arg `A b` | `{ reason: "identifier", field }`, `field` `tenant`, `role`, `user`, `tool`, `flow`, `node`, `fingerprint`, `id`, `arg` |
+| boundaries (the first value throws with its `field`; the bracketed one compiles) | role 33 × `a` (32); user 65 × `a` (64); flow `a--b`, `a-`, 65 × `a` (`a-b1`); node `Ab`, `1a` (`a_1`); arg `Ab`, 65 × `a` (64); tenant 65 × `a` (64); tool `A@1`, `x@01`, `x@1234567890` (`x@0`, `x@123456789`) |
 | node scope, `fingerprints` `[]` | `{ reason: "no_fingerprint" }` |
 | `limit eq` each of `a"b`, `a\b`, 257 × `x`, `é`, `a` + tab (256 × `x` compiles) | `{ reason: "value_invalid" }` |
 | `limit lte "x"`; value `{}` | `{ reason: "arg_type" }` |
 | `amount lte 1e15`; `limit lte 2**53`; `limit lte NaN` | `{ reason: "number_range" }` |
 | `amount lte 1.00001` | `{ reason: "decimal_precision" }` |
 
-Texts that compile but are not typed as written are the validator's: `createPolicyEngine` with `toolArgs` = the types given fails `PDP_POLICY_INVALID`, `details` `{ stage: "validate", ids: ["grant_2"] }`, for `g2` compiled with `ARGT` minus `vendor_name`, with `vendor_name` typed `Set<String>`, and with `limit` typed `String`.
+Texts that compile but are not typed as written are the validator's: `createPolicyEngine` with `toolArgs` = the types given fails `PDP_POLICY_INVALID`, `details` `{ stage: "validate", ids: ["grant_2"] }`, for the `g2` variants `ARGT` minus `vendor_name`, `vendor_name` typed `Set<String>`, `limit` typed `String`.
 
 ## Engine decisions (scenario "Compiled grants decide like the grant says")
 
-`createPolicyEngine({ srcDir: <the repo's src>, tenantPolicies: <the three sources>, toolArgs: ARGT, clock: CLOCK, ids: sequentialIds(), logger })` loads; its `policies` hold `grant_1`..`grant_3` (layer `tenant`). `invoke(user, roles, node, tool, effect, fp, args, toolId = "tenant_a/" + tool)` builds the request: principal `User::"tenant_a/<user>"` (`tenant` T, `kind` `"human"`, `roles` and parents the `Role::"<r>"`s, no teams), action `invoke_tool`, resource `Block::"tenant_a/pay-run/<node>"` (`{ tenant: T, kind: "block", flow: entityRef("Flow", "tenant_a/pay-run") }`) with its `Flow`, `Team` and `Tool::<toolId>` entities, and context `{ tool: entityRef("Tool", toolId), args, taint: [], run_initiator: entityRef("User", "tenant_a/<user>"), sod_excluded: [], approvals: [], approvers_by_role: {}, node_fingerprint: fp }`. `L` = `acme.lookup_vendor@1` (`read`), `P` = `acme.create_payment@1` (`pay`).
+`createPolicyEngine({ srcDir: <the repo's src>, tenantPolicies: <the three sources>, toolArgs: ARGT, clock: CLOCK, ids: sequentialIds(), logger })` loads; its `policies` hold `grant_1`..`grant_3` (layer `tenant`). `invoke(user, roles, node, tool, effect, fp, args, toolId = "tenant_a/" + tool)` builds: principal `User::"tenant_a/<user>"` (`tenant` T, `kind` `"human"`, `roles` and parents the `Role::"<r>"`s, no teams), action `invoke_tool`, resource `Block::"tenant_a/pay-run/<node>"` (`{ tenant: T, kind: "block", flow: entityRef("Flow", "tenant_a/pay-run") }`) with its `Flow`, `Team` and `Tool::<toolId>` entities, and context `{ tool: entityRef("Tool", toolId), args, taint: [], run_initiator: entityRef("User", "tenant_a/<user>"), sod_excluded: [], approvals: [], approvers_by_role: {}, node_fingerprint: fp }`. `L` = `acme.lookup_vendor@1` (`read`), `P` = `acme.create_payment@1` (`pay`).
 
 | # | call | decision, reasons |
 |---|---|---|

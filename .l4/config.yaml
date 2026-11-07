@@ -128,12 +128,33 @@ profiles:
   # opencode-go/qwen3.8-max ($15 cap, counts heavily).
   # 2026-10-31: Zen dropped nemotron-3-ultra-free (no longer in https://opencode.ai/zen/v1/models; every hello since
   # failed with "opencode reported an error"), so its free successor judges: Nemotron 3.5 Super VL (120B-A12B,
-  # reasoning, 1M context, 131k output, so no 32k length stop like MiMo's).
+  # reasoning, 1M context, 131k output). 2026-11-07, verified: opencode still asks for min(output limit, 32000) tokens
+  # unless OPENCODE_EXPERIMENTAL_OUTPUT_TOKEN_MAX is set, and L4 passes no such variable to an agent, so every opencode
+  # judge stops at 32k (two M6 readiness runs ended "last reason: length").
   nemotron-judge:
     adapter: opencode
     auth: api_key
     model: opencode/nemotron-3.5-super-vl-free
     vendor: nvidia
+  # The same free model at low reasoning effort (2026-11-07, as the owner's delegate, under the owner's rule "use free
+  # models in open go + kiro-cli for judges"): a readiness subject then fits the 32k cap. The custom provider has the
+  # id `opencode` and Zen's own URL, so L4 keeps its Zen free-tier tool rule (`agents/opencode.py`, FREE_PREFIX).
+  # A Zen free judge runs only in CI (bwrap); locally L4 refuses it as not tool-less. Out of roles.judges again since
+  # 2026-11-07 10:47Z: on plan m6 it also ended "last reason: length", while nemotron-judge at its default effort
+  # recorded a whole m6 review at 10:28Z, so the 32k stop is intermittent and the default effort stays.
+  nemolow-judge:
+    adapter: opencode
+    auth: api_key
+    model: opencode/nemotron-3.5-super-vl-free
+    vendor: nvidia
+    options:
+      provider:
+        id: opencode
+        base_url: https://opencode.ai/inference/openai/v1
+        api_key_env: OPENCODE_API_KEY
+        models:
+          nemotron-3.5-super-vl-free: {context: 1048576, output: 131072}
+      reasoning: low
   mimo-judge:
     adapter: opencode
     auth: api_key

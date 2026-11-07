@@ -64,7 +64,9 @@ delegates; only `identity` talks to the OIDC provider; only `observability` expo
 - Only a new test traces a criterion: red fails with "no new test traces C-…" for each criterion the task implements
   that no new test id names. A task that changes a frozen test in place (its name stays) still writes, for each
   criterion of that test it implements, at least one new test named with the id that fails at red (for example
-  `registry.test.ts` gains `C-f3de9ac6 code is built in and runs codeRuntime` beside the edited old test).
+  `registry.test.ts` gains `C-f3de9ac6 code is built in and runs codeRuntime` beside the edited old test). A new test
+  carries this unit's own id only: one named with another unit's id (a frozen test's, say) fails red with "criteria
+  that are not one of this unit's".
 - A test never lets a driver or SQL error escape (L4 cannot read its kind): a test of a migration first asserts that its
   objects exist (`to_regclass`, `to_regprocedure`) or that the ledger holds the expected versions, and an expected
   failure is `await assert.rejects(p, { code })`. Every symbol a test imports is in its change's Interfaces, so the
