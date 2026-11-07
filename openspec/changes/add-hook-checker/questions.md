@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 3.1 | technical | layer.test.ts:32 and :38: rule hook ids differ from the rule id |
+| Q-001 | accepted | 3.1 | technical | layer.test.ts:32 and :38: rule hook ids differ from the rule id |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: layer.test.ts:32 and :38: rule hook ids differ from the rule id
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.1
 - **Kind:** technical
 - **Asked:** 2026-11-07T19:02Z by claude-sonnet, run r-20261107T1637Z-49fc, task 3.1
