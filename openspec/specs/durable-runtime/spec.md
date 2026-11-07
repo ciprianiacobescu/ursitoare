@@ -100,3 +100,10 @@ The behaviour pinned by the scenarios below SHALL hold.
 #### Scenario: An after-observer failure is retried instead of failing the step
 - **WHEN** runStep runs with retries 2 and fn resolves a valid DurableJson but the after observer throws
 - **THEN** fn has run exactly once, the step rejects with the observer's error unchanged and no second attempt of fn is made.
+
+### Requirement: runStep turns a replayed step error into dbos_failed — feedback FB-001
+The behaviour pinned by the scenarios below SHALL hold.
+
+#### Scenario: runStep turns a replayed step error into dbos_failed
+- **WHEN** a recovered or forked workflow replays a step whose fn had thrown, once a DurableError and once a plain Error carrying a code
+- **THEN** runStep rejects with an error of the same name, message, code and details as on the first run, the DurableError is again instanceof DurableError, fn is not called again, and neither rejection is DURABLE_UNAVAILABLE dbos_failed
