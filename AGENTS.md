@@ -71,6 +71,12 @@ delegates; only `identity` talks to the OIDC provider; only `observability` expo
   objects exist (`to_regclass`, `to_regprocedure`) or that the ledger holds the expected versions, and an expected
   failure is `await assert.rejects(p, { code })`. Every symbol a test imports is in its change's Interfaces, so the
   milestone scaffold provides it.
+- A red step changes no production file: L4 restores any it touches, so a member that a change adds to an existing
+  type (its proposal lists it as not scaffolded) does not exist until green. A red test that sets or reads such a
+  member reaches it through a cast and types its callback parameters, for example
+  `{ ...deps, hookObserver: (nodeId: string, entry: HookTraceEntry): void => {} } as InterpreterDeps`
+  (`src/interpreter/hooks/visit-pre.test.ts`), so it compiles and fails by assertion at red and needs no change after
+  green.
 - Helpers, fakes and e2e-stack parts under `test/` are ordinary code that green writes; their `*.test.ts` files are
   frozen like every test. `test/arch/modules.ts` and `test/arch/licence-policy.ts` change only in a red step or by a
   person. Never call a directory `fixtures`, `mocks`, `__mocks__`, `testdata` or `helpers`. Test-support code under
