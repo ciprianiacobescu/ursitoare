@@ -76,3 +76,5 @@
 {"at":"2026-11-07T16:35:47Z","revision":"8798a0f134b47286b1cd57e66876605e5c68a5d1","type":"unit.integrated","unit":"openspec:add-taint-runtime"}
 {"at":"2026-11-07T16:35:47Z","attempt":1,"cost_usd":5.319217,"runs":6,"type":"plan.charged","unit":"openspec:add-taint-runtime"}
 {"at":"2026-11-07T16:37:34Z","branch":"l4/archive/openspec/add-taint-runtime","head":"a2c53e0fc2a1b84d4ee0251129feb3acff4705fa","type":"unit.branch_deleted","unit":"openspec:add-taint-runtime"}
+{"at":"2026-11-07T16:37:36Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-hook-checker"}
+{"at":"2026-11-07T16:37:36Z","run":"r-20261107T1637Z-49fc","type":"unit.dispatched","unit":"openspec:add-hook-checker"}
