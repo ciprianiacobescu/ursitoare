@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.1 | technical | src/interpreter/hooks/registry.test.ts:33-35 registers codeHookRunner a second time inside assert.doesNotThrow |
-| Q-002 | open | 3.1 | technical | Grant write access for the red step |
+| Q-002 | answered | 3.1 | technical | Grant write access for the red step |
 <!-- l4:index:end -->
 
 ---
@@ -44,7 +44,7 @@ Edit `src/interpreter/hooks/registry.test.ts`: delete the `assert.doesNotThrow((
 
 ## Q-002: Grant write access for the red step
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The question asks for a change to the implementer session's tool permissions (Write/Edit denied on a new test file). Nothing in the repository settles that: the file src/interpreter/hooks/visit-pre.test.ts does not exist in the unit's head (the hooks directory holds only names, registry, actions, co
 - **Blocking tasks:** 3.1
 - **Kind:** technical
@@ -55,3 +55,4 @@ The Write tool was denied in this session, so src/interpreter/hooks/visit-pre.te
 
 ### Answer
 <!-- write below this line -->
+Write and Edit are allowed on any path inside the worktree (rule `Edit(./**)`): create `src/interpreter/hooks/visit-pre.test.ts` with that path relative to the worktree root, never under /tmp or outside the worktree; Bash runs only the gate command. Red may not change a production file: attempt 1's edit of `src/interpreter/types.ts` was restored by the red-scope guard, so `InterpreterDeps` has no `hookObserver` until green adds it (proposal.md: "Not scaffolded, because they change existing files"). Make the test typecheck without it, as `runtimes.test.ts` does for `NodeServices.hooks` (`{ ... } as NodeServices`): give the observer typed parameters, `(nodeId: string, entry: HookTraceEntry): void` with `HookTraceEntry` from `./types.ts`, and build the deps as `{ ...deps, hookObserver: observer } as InterpreterDeps`. The new tests then compile, fail by assertion at red, and need no change after green.
