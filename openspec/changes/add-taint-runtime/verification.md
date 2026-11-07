@@ -1,55 +1,63 @@
-# Verification: openspec:add-taint-runtime: FAIL (round 1)
+# Verification: openspec:add-taint-runtime: NEEDS_HUMAN (round 2)
 
-traceability: not checked (an earlier step failed)
+traceability: 11/11 criteria covered by a discriminating test
 
 - Base: `8194d01fc71f96c40351d8ebe86bbfb90cd8684f`
-- Head: `aeb46844b91a6c1bb53bcf5db7c55d6f50bb57c5`
+- Head: `4278abbd3b2abd8824fdd1c450a05c9eb979d4a1`
 - Implementer profiles: deepseek-free, claude-sonnet
-- Judge: nemolow-judge, 0 call(s), prompt sha256 `-`
+- Judge: beam-judge, 1 call(s), prompt sha256 `cb30d9ab89b5446af01c039cfde675b346aab88602d4c0134ed3a838ee16ed9c`
+- Judge replies of beam-judge (this unit, all rounds): valid 1, repaired 0, retried 0, discarded 0; this round: valid
+- independence: declared (unverified): beam-judge reflection (declared), deepseek-free deepseek (declared), claude-sonnet anthropic (tool)
+- Cost: $0.0000
 
 ## Ladder
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.4 | base merged: main@8194d01fc7 as aeb46844b9 (2 commits) |
-| 1 | integrity | ok | 218.2 | 11 sub-checks (+1 unfrozen by human answers); scope: 23 changed file(s) |
-| 2 | build | ok | 33.5 |  |
-| 3 | tests | failed | 307.6 | `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` failed: exit code 1; failing: test_l4_c_23a4ce1e::test_sign_in_search_parsing[chromium] |
-| 4 | traceability | not_run | 0.0 | an earlier step failed |
-| 4a | audit sampling | not_run | 0.0 | an earlier step failed |
-| 5 | ui test generation | not_run | 0.0 | an earlier step failed |
-| 6 | quality | not_run | 0.0 | an earlier step failed |
-| 8 | s1 judge | not_run | 0.0 | an earlier step failed |
-| 9 | judge | not_run | 0.0 | an earlier step failed |
-| 10 | aggregation | ok | 0.0 | FAIL |
+| 0 | preconditions | ok | 1.0 | base main@8194d01fc7 contained |
+| 1 | integrity | ok | 453.8 | 11 sub-checks (+1 unfrozen by human answers); scope: 34 changed file(s) |
+| 2 | build | ok | 35.6 |  |
+| 3 | tests | ok | 317.5 |  |
+| 4 | traceability | ok | 0.2 | 11/11 criteria covered |
+| 4a | audit sampling | ok | 629.7 | 1 invalid, 1 rejected, 2 skipped; support files at the base: 7 |
+| 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
+| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/authoring/taint/analyze.ts, src/authoring/taint/index.ts, src/authoring/taint/runtime.ts, src/interpreter/execute.ts, src/interpreter/index.ts and 4 more |
+| 8 | s1 judge | ok | 0.6 | 6/11 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
+| 9 | judge | ok | 144.0 | 1 call(s) |
+| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
 
 ## Gates
 
 | Gate | Status | Command | Log |
 |---|---|---|---|
-| setup | pass | `pnpm install --frozen-lockfile` | .l4-out/gates/r-20261107T1050Z-9cf7/093-setup.log |
-| setup | pass | `uv sync --project e2e --frozen` | .l4-out/gates/r-20261107T1050Z-9cf7/094-setup.log |
-| build | pass | `pnpm run build` | .l4-out/gates/r-20261107T1050Z-9cf7/095-build.log |
-| lint | pass | `pnpm run lint` | .l4-out/gates/r-20261107T1050Z-9cf7/096-lint.log |
-| typecheck | pass | `pnpm run typecheck` | .l4-out/gates/r-20261107T1050Z-9cf7/097-typecheck.log |
-| test | pass | `pnpm run test` | .l4-out/gates/r-20261107T1050Z-9cf7/098-test.log |
-| e2e | fail | `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` | .l4-out/gates/r-20261107T1050Z-9cf7/099-e2e.log |
+| setup | pass | `pnpm install --frozen-lockfile` | .l4-out/gates/r-20261107T1437Z-57b6/005-setup.log |
+| setup | pass | `uv sync --project e2e --frozen` | .l4-out/gates/r-20261107T1437Z-57b6/006-setup.log |
+| build | pass | `pnpm run build` | .l4-out/gates/r-20261107T1437Z-57b6/007-build.log |
+| lint | pass | `pnpm run lint` | .l4-out/gates/r-20261107T1437Z-57b6/008-lint.log |
+| typecheck | pass | `pnpm run typecheck` | .l4-out/gates/r-20261107T1437Z-57b6/009-typecheck.log |
+| test | pass | `pnpm run test` | .l4-out/gates/r-20261107T1437Z-57b6/010-test.log |
+| e2e | pass | `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` | .l4-out/gates/r-20261107T1437Z-57b6/011-e2e.log |
 
 ## Integrity
 
 | Check | Status | Note |
 |---|---|---|
 | protected paths | ok | no protected path differs from the base |
-| pre-existing tests | skipped | no test file changed |
+| pre-existing tests | ok | 1 test file(s) compared with the base (+1 by humans, listed) |
 | red-green freeze | ok | 6 task(s): red and green compared (+1 unfrozen by a delegate or an agent) |
-| test path freeze | ok | 6 harness step commit(s) checked |
+| test path freeze | ok | 7 harness step commit(s) checked |
 | content scan | ok | no result-manipulating construct in the changed support and runner files |
 | gate configuration | skipped | no gate or runner configuration file changed |
 | test awareness | ok | no production line reacts to the test run |
 | suppressions | skipped | not checked: python only; changed files outside it: src/authoring/taint/analyze.ts, src/authoring/taint/inclusion.test.ts, src/authoring/taint/index.ts, src/authoring/taint/runtime-references.test.ts, src/authoring/taint/runtime.test.ts (+10 more) |
 | tdd history | ok | 6 task(s); red tests passing at head: step 3 |
-| python encoding | skipped | no Python file added or changed |
-| pre-existing tests still pass | ok | 1725 of 1725 base tests pass on the unit's code with its 5 test and support files at the base (base: not needed) |
+| python encoding | ok | 1 Python file(s) added or changed, each read, none declares another encoding |
+| pre-existing tests still pass | ok | 1725 of 1725 base tests pass on the unit's code with its 5 test and support files at the base (base: evidence) |
+
+## Test changes made by humans (allowed, L4-SEC-004)
+
+- e2e/test_l4_c_23a4ce1e.py::test_sign_in_search_parsing changed by f342c41cf4
+- e2e/test_l4_c_23a4ce1e.py kept at head for the run (only people's commits changed it (f342c41cf4))
 
 ## Pre-existing tests changed with an allowance (L4-VER-031)
 
@@ -59,21 +67,48 @@ traceability: not checked (an earlier step failed)
 
 - src/authoring/taint/runtime-references.test.ts (task 1.2, unfrozen by Q-001 (delegate_override, claude-fable-5-1))
 
+## Traceability
+
+| Id | Criterion | State | Tests (status, proof) | Not evidence | S1 p |
+|---|---|---|---|---|---|
+| C-94aebf73 | taint › Produced taint follows one per-kind rule for the validator and the runtime › Produced taint per node kind | covered | src.authoring.taint.runtime.test.ts::C-94aebf73 Produced taint per node kind (passed, red_assertion) | - | - |
+| C-5d24d025 | taint › Produced taint follows one per-kind rule for the validator and the runtime › analyzeTaint and the shared rules agree on RF-1 | covered | src.authoring.taint.runtime-references.test.ts::C-5d24d025 analyzeTaint and the shared rules agree on RF-1 inputs and edges (passed, red_assertion); src.authoring.taint.runtime.test.ts::C-5d24d025 analyzeTaint and the shared rules agree on the RF-1 nodes (passed, red_assertion) | - | 0.93 |
+| C-88707743 | taint › Produced taint follows one per-kind rule for the validator and the runtime › Static results equal the shared rule over the corpus | covered | src.authoring.taint.runtime.test.ts::C-88707743 Static results equal the shared rule over the corpus (passed, red_assertion) | - | - |
+| C-9dec3a38 | taint › Produced taint follows one per-kind rule for the validator and the runtime › The frozen taint tests stay green unchanged | covered | src.authoring.taint.runtime.test.ts::C-9dec3a38 the frozen taint tests are present and unchanged (passed, red_assertion, inadequate) | - | 0.69 |
+| C-d826722f | taint › References and values are tainted by their producers › referenceTaint and valueTaint | covered | src.authoring.taint.runtime-references.test.ts::C-d826722f referenceTaint and valueTaint (passed, red_assertion) | - | - |
+| C-39ab4de6 | taint › References and values are tainted by their producers › nodeInputTaint | covered | src.authoring.taint.runtime-references.test.ts::C-39ab4de6 nodeInputTaint (passed, red_assertion) | - | 0.93 |
+| C-53a36cae | taint › A run records the produced taint of each node it visits › blocksCatalogue and createRunTaints | covered | src.interpreter.taint.test.ts::C-53a36cae blocksCatalogue and createRunTaints (passed, red_assertion) | - | - |
+| C-bb09f0c8 | taint › Step rows carry the effective input taint › Rows of untrusted-code and trusted-code | covered | src.interpreter.taint-rows.test.ts::C-bb09f0c8 rows of untrusted-code and trusted-code carry the effective input taint (passed, red_assertion); test.support.taint-runs.taint-runs.test.ts::C-bb09f0c8 Untrusted code and trusted code fixtures validate cleanly (passed, red_assertion) | - | - |
+| C-2b621663 | taint › Step rows carry the effective input taint › A failed node keeps its input taint | covered | src.interpreter.taint-rows.test.ts::C-2b621663 a failed node keeps its input taint (passed, red_assertion) | - | 0.80 |
+| C-5cd5bf46 | taint › Step rows carry the effective input taint › A replay recomputes the taint of recorded nodes | covered | src.interpreter.taint-rows.test.ts::C-5cd5bf46 a replay recomputes the taint of recorded nodes (passed, red_assertion) | - | 0.92 |
+| C-43a9daa4 | taint › Static taint includes runtime taint › Static taint includes runtime taint | covered | src.authoring.taint.inclusion.test.ts::C-43a9daa4 a stub producer that is all untrusted is reported as a violation (passed, red_assertion); src.authoring.taint.inclusion.test.ts::C-43a9daa4 checked lists every node id of the RF-1 flows (passed, red_assertion); src.authoring.taint.inclusion.test.ts::... | - | 0.90 |
+
 ## Evidence
 
 ### Needs attention
 
-- tests are not all green (a failed or errored test, or a new test that did not pass)
+Nothing needs attention.
 
 ### Files
 
 | Path | Module | Label | Why |
 |---|---|---|---|
+| `e2e/test_l4_c_23a4ce1e.py` |  | none | changed by human commit f342c41cf4 |
+| `openspec/changes/add-taint-runtime-fix-1/.l4/fix.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-taint-runtime-fix-1/.openspec.yaml` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-taint-runtime-fix-1/proposal.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-taint-runtime-fix-1/questions.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-taint-runtime-fix-1/tasks.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-taint-runtime/.l4/evidence/round-1/evidence.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-taint-runtime/.l4/evidence/round-1/verdict.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-taint-runtime/.l4/evidence/round-1/verification.md` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-taint-runtime/.l4/ledger/r-20261107T0904Z-91c1.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-taint-runtime/.l4/ledger/r-20261107T1029Z-c307.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-taint-runtime/.l4/ledger/r-20261107T1050Z-9cf7.jsonl` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-taint-runtime/.l4/ledger/r-20261107T1326Z-f477.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-taint-runtime/questions.md` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-taint-runtime/tasks.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-taint-runtime/verification.md` |  | none | exempt: harness, spec or documentation path |
 | `src/authoring/taint/analyze.ts` | authoring | relevant | named in the spec |
 | `src/authoring/taint/inclusion.test.ts` |  | relevant | new test file |
 | `src/authoring/taint/index.ts` | authoring | relevant | named in the spec |
@@ -99,21 +134,63 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ### Tests
 
-1795 of 1796 passed, 1 failed, 0 errored, 0 skipped.
+1796 of 1796 passed, 0 failed, 0 errored, 0 skipped.
 16 of 16 new tests passed.
+
+## S1 (recorded for calibration, never decides)
+
+| Criterion | Status | p | Model | Engine | Note |
+|---|---|---|---|---|---|
+| C-94aebf73 | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
+| C-5d24d025 | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-88707743 | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
+| C-9dec3a38 | ok | 0.690 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-d826722f | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
+| C-39ab4de6 | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-53a36cae | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
+| C-bb09f0c8 | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
+| C-2b621663 | ok | 0.800 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-5cd5bf46 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
+| C-43a9daa4 | ok | 0.900 | jev-1.13.0 | jev | evidence cut to fit the budget |
+
+## Audit
+
+| Criterion | Status | Test | Support | Reason |
+|---|---|---|---|---|
+| C-9dec3a38 | skipped | - | - | cap |
+| C-d826722f | skipped | - | - | cap |
+| C-bb09f0c8 | invalid | - | - | `inspect` is not allowed: import the public names you test; never locate code by reflection |
+| C-88707743 | rejected | e2e/test_l4_audit_c_88707743_r2.py | base | the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_88707743_r2.py |
+
+## Rejected audit tests
+
+- C-88707743: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_88707743_r2.py
 
 ## Criteria
 
-None judged.
+| Id | Criterion | Judge | Result | Reason |
+|---|---|---|---|---|
+| C-94aebf73 | taint › Produced taint follows one per-kind rule for the validator and the runtime › Produced taint per node kind | pass | pass | the judge passed it and a discriminating test passes |
+| C-5d24d025 | taint › Produced taint follows one per-kind rule for the validator and the runtime › analyzeTaint and the shared rules agree on RF-1 | pass | pass | the judge passed it and a discriminating test passes |
+| C-88707743 | taint › Produced taint follows one per-kind rule for the validator and the runtime › Static results equal the shared rule over the corpus | pass | pass | the judge passed it and a discriminating test passes |
+| C-9dec3a38 | taint › Produced taint follows one per-kind rule for the validator and the runtime › The frozen taint tests stay green unchanged | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-d826722f | taint › References and values are tainted by their producers › referenceTaint and valueTaint | pass | pass | the judge passed it and a discriminating test passes |
+| C-39ab4de6 | taint › References and values are tainted by their producers › nodeInputTaint | pass | pass | the judge passed it and a discriminating test passes |
+| C-53a36cae | taint › A run records the produced taint of each node it visits › blocksCatalogue and createRunTaints | pass | pass | the judge passed it and a discriminating test passes |
+| C-bb09f0c8 | taint › Step rows carry the effective input taint › Rows of untrusted-code and trusted-code | pass | pass | the judge passed it and a discriminating test passes |
+| C-2b621663 | taint › Step rows carry the effective input taint › A failed node keeps its input taint | pass | pass | the judge passed it and a discriminating test passes |
+| C-5cd5bf46 | taint › Step rows carry the effective input taint › A replay recomputes the taint of recorded nodes | pass | pass | the judge passed it and a discriminating test passes |
+| C-43a9daa4 | taint › Static taint includes runtime taint › Static taint includes runtime taint | pass | pass | the judge passed it and a discriminating test passes |
 
 ## Findings
 
-- [blocker, deterministic] e2e gate failed: `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` failed: exit code 1; failing: test_l4_c_23a4ce1e::test_sign_in_search_parsing[chromium] Log: `.l4-out/gates/r-20261107T1050Z-9cf7/099-e2e.log`.
-
-## Fix unit
-
-Fix unit 1 is created for these tasks:
-- F-22a9abae e2e gate failed
+- [minor, deterministic] a pre-existing test is flaky on the unit's code: test.support.e2e-stack.tenant-b-part.test.ts::C-c1ed19d8 seed users come from the fake
+- [minor, deterministic] an audit test could not be written (criterion C-bb09f0c8): invalid: `inspect` is not allowed: import the public names you test; never locate code by reflection
+- [minor, deterministic] an audit test was rejected (criterion C-88707743): the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_88707743_r2.py
+- [minor, judge] producedTaint behaviour is unspecified for string or boolean nodes (spec gap) (criterion C-94aebf73): The scenario pins number, null, array and object nodes, but not string or boolean nodes; runtime.ts's default branch returns (U, {}, U) for them.
+- [minor, judge] referenceTaint behaviour is unspecified for unknown reference roots (spec gap) (criterion C-d826722f): No scenario exercises a Ref whose root is neither inputs, item, node nor hook; runtime.ts returns untrusted for such a root.
+- [minor, judge] nodeInputTaint behaviour is unspecified for string or boolean nodes (spec gap) (criterion C-39ab4de6): The scenario covers number and null nodes, but not string or boolean nodes; runtime.ts returns no taint for them.
+- [minor, judge] the judge called a test inadequate (criterion C-9dec3a38): src.authoring.taint.runtime.test.ts::C-9dec3a38 the frozen taint tests are present and unchanged
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
@@ -133,3 +210,7 @@ Fix unit 1 is created for these tasks:
 - `src.interpreter.taint.test.ts::C-53a36cae blocksCatalogue and createRunTaints` (task 2.1): passed
 - `test.support.taint-runs.taint-runs.test.ts::C-bb09f0c8 Untrusted code and trusted code fixtures validate cleanly` (task 2.2): passed
 - `test.support.taint-runs.taint-runs.test.ts::Taint run fixtures are listed loaded and described` (task 2.2): passed
+
+## Guard events
+
+- guard.test_tamper: e2e/test_l4_c_23a4ce1e.py

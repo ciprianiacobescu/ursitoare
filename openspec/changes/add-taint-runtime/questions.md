@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.2 | technical | src/authoring/taint/runtime-references.test.ts:299 parses an unwrapped edge ref with scanTemplate |
+| Q-002 | open | none | verdict | Criterion C-9dec3a38 (taint › Produced taint follows one per-kind rule for the validator and the runtime › The frozen taint tests stay green unchanged): accept as satisfied? |
 <!-- l4:index:end -->
 
 ---
@@ -35,6 +36,38 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/authoring/taint/runtime-references.test.ts`: change line 299 from `const seg = scanTemplate(edge.ref).find((candidate) => candidate.type === "ref");` to `const seg = scanTemplate("${{ " + edge.ref + " }}").find((candidate) => candidate.type === "ref");`
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: Criterion C-9dec3a38 (taint › Produced taint follows one per-kind rule for the validator and the runtime › The frozen taint tests stay green unchanged): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-9dec3a38 (taint › Produced taint follows one per-kind rule for the validator and the runtime › The frozen taint tests stay green unchanged)
+
+### Context
+Criterion C-9dec3a38 (taint › Produced taint follows one per-kind rule for the validator and the runtime › The frozen taint tests stay green unchanged) is needs human after round 2.
+
+Scenario:
+\- **WHEN** the 16 tests listed in `test-plan.md` § Frozen taint tests (the seven files `src/authoring/taint/{analyze,capabilities,closed,hooks,labels,sources,surface}.test.ts`) run on the implemented change
+\- **THEN** all 16 pass, and none of the seven files is edited by this change
+
+Why: uncovered: the tests that trace it are inadequate or did not pass
+Judge: pass
+Tracing tests: src.authoring.taint.runtime.test.ts::C-9dec3a38 the frozen taint tests are present and unchanged (passed, red_assertion, inadequate)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
 
 ### Answer
 <!-- write below this line -->
