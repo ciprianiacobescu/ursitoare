@@ -9,7 +9,9 @@ BASE_URL = os.environ["L4_E2E_BASE_URL"]
 
 @pytest.mark.l4("C-23a4ce1e")
 def test_sign_in_search_parsing(page: Page) -> None:
-    page.route("**/auth/oidc/login*", lambda route: route.abort())
+    # A 204 ends the login navigation with no page; an aborted one commits Chromium's error page later, which can
+    # interrupt the next check's page.goto.
+    page.route("**/auth/oidc/login*", lambda route: route.fulfill(status=204))
 
     def check(
         search: str,
