@@ -186,3 +186,8 @@
 {"ts": "2026-11-07T08:48:42.348993Z", "run_id": "r-20261107T0715Z-d197", "unit": "openspec:add-code-node-runtime", "seq": 186, "type": "step.timed", "phase": "verify", "round": 1, "seconds": 999.1}
 {"ts": "2026-11-07T08:48:42.349617Z", "run_id": "r-20261107T0715Z-d197", "unit": "openspec:add-code-node-runtime", "seq": 187, "type": "phase.changed", "from": "verifying", "to": "verified", "trigger": "verify_pass", "exit_code": null}
 {"ts": "2026-11-07T08:48:45.331808Z", "run_id": "r-20261107T0715Z-d197", "unit": "openspec:add-code-node-runtime", "seq": 188, "type": "pr.labels", "number": 87, "labels": ["l4:verified"]}
+{"ts": "2026-11-07T08:48:52.427517Z", "run_id": "r-20261107T0715Z-d197", "unit": "openspec:add-code-node-runtime", "seq": 189, "type": "pr.ready", "url": "<forge>/ciprianiacobescu/ursitoare/pull/87", "number": 87, "head": "07ebcbdfa7152a6d7c871ecf2a03f589d64c4d5e"}
+{"ts": "2026-11-07T08:48:52.428740Z", "run_id": "r-20261107T0715Z-d197", "unit": "openspec:add-code-node-runtime", "seq": 190, "type": "phase.changed", "from": "verified", "to": "in_review", "trigger": "hand_off_pushed", "exit_code": 0}
+{"ts": "2026-11-07T08:48:55.059343Z", "run_id": "r-20261107T0715Z-d197", "unit": "openspec:add-code-node-runtime", "seq": 191, "type": "pr.labels", "number": 87, "labels": ["l4:in_review"]}
+{"ts": "2026-11-07T08:48:57.320204Z", "run_id": "r-20261107T0715Z-d197", "unit": "openspec:add-code-node-runtime", "seq": 192, "type": "lock.released"}
+{"ts": "2026-11-07T08:48:57.321378Z", "run_id": "r-20261107T0715Z-d197", "unit": "openspec:add-code-node-runtime", "seq": 193, "type": "run.finished", "exit_code": 0}
