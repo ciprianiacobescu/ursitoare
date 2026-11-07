@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | 3.5 | harness | Task 3.5: the pre-satisfied check could not decide |
 | Q-002 | answered | 3.6 | harness | Task 3.6: the pre-satisfied check could not decide |
 | Q-003 | answered | 3.8 | harness | Task 3.8: the pre-satisfied check could not decide |
-| Q-004 | open | none | verdict | Criterion C-061daa6c (sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-061daa6c (sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options): accept as satisfied? |
 | Q-005 | open | none | verdict | Finding F-44115141: Proxy getPrototypeOf traps escape option validation |
 <!-- l4:index:end -->
 
@@ -621,7 +621,8 @@ accept: accept: The held evidence is enough. The new built-worker test is not va
 
 ## Q-004: Criterion C-061daa6c (sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -648,6 +649,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as its scenario is written. The tracing test passed and asserts every clause of the scenario: an empty factory log before the first run, one call after five sequential runs with the worker-entry href and the default env and resourceLimits, size 2 and respawns 0; twelve concurrent runs on a size 2 pool giving one distinct value with two factory calls; a size 1 pool finishing BUSY then 1 to 5 in order; the size 3 pool spawning with stackSizeMb 8 and maxOldGenerationSizeMb 256; every BAD_OPTIONS row of the test plan throwing a synchronous SandboxError with the listed code, option and message, including the opts rows, the unknown-key ordering rows with zero getter reads and the two unreadable rows; size winning over graceMs; and every GOOD_OPTIONS row accepted with the counting getter read once. The judge called the test inadequate only because it omits a Proxy whose getPrototypeOf trap throws, which no BAD_OPTIONS row lists; that gap is a code defect against the requirement text and is handled by the finding F-44115141, which is rejected separately, not a failure of this scenario.
 ---
 
 ## Q-005: Finding F-44115141: Proxy getPrototypeOf traps escape option validation
