@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: Who fixes the failing sign-in e2e test?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The failing test e2e/test_l4_c_23a4ce1e.py is a frozen, harness-generated browser test tagged for another unit's criterion (C-23a4ce1e, add-web-sign-in). I read the test, web/src/auth/return-to.ts, sign-in-page.ts, SignInPage.tsx, messages.ts and kit/ErrorPanel.tsx: the source matches every assertio
 - **Blocking tasks:** 1.1
 - **Kind:** technical
 - **Asked:** 2026-11-07T13:13Z by claude-sonnet, run r-20261107T1050Z-9cf7, task 1.1
