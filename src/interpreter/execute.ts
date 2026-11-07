@@ -247,6 +247,7 @@ export async function executeRun(
 
   let current = flow.start;
   let seq = 0;
+  let from: string | null = null;
   const visited = new Set<string>();
   let completed: { output: JsonValue | null; terminalNode: string } | null = null;
   let failure: InterpreterError | null = null;
@@ -298,6 +299,9 @@ export async function executeRun(
         runtime,
         taints,
         now: deps.clock.now(),
+        flow,
+        catalogue,
+        from,
       });
     } catch (error) {
       const interpreted = toInterpreterError(error);
@@ -309,6 +313,7 @@ export async function executeRun(
     }
 
     seq += 1;
+    from = nodeId;
     (scope.nodes as Map<string, { output: JsonValue | null; outcome: string | null }>).set(
       nodeId,
       { output: outcome.output, outcome: outcome.outcome },

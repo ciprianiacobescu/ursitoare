@@ -72,7 +72,7 @@ async function runFlow(version: LoadedVersion, options: Options = {}): Promise<S
   const sandbox: WorkerSandbox = {
     ...pool,
     run: (code, input, limits, opts) => {
-      sandboxRuns += 1;
+      if (opts.binding === "ctx") sandboxRuns += 1;
       return pool.run(code, input, limits, opts);
     },
   } as WorkerSandbox;

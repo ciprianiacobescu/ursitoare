@@ -1,5 +1,7 @@
-import type { BlockDef, FlowNode, JsonValue, Taint } from "../authoring/index.ts";
+import type { BlockDef, Catalogue, Flow, FlowNode, JsonValue, Taint } from "../authoring/index.ts";
 import { nodeInputTaint } from "../authoring/index.ts";
+import { createHookPipeline } from "./hooks/pipeline.ts";
+import type { FusedStored } from "./hooks/pipeline.ts";
 import type { RunError, RunRecord, StepWrite, TenantContext } from "../runs/index.ts";
 import { isDurableCancellation } from "../durable/index.ts";
 import { resolveValue } from "./refs.ts";
@@ -41,6 +43,21 @@ export interface VisitRequest {
   readonly runtime: NodeRuntime;
   readonly taints: RunTaints;
   readonly now: Date;
+  readonly flow: Flow;
+  readonly catalogue: Catalogue;
+  readonly from: string | null;
+}
+
+function hookInputFor(
+  node: FlowNode,
+  resolve: (value: unknown) => JsonValue,
+): JsonValue | null | undefined {
+  try {
+    if (node.kind === "end") return node.output === undefined ? null : resolve(node.output);
+    return inputFor(node, resolve);
+  } catch {
+    return undefined;
+  }
 }
 
 function inputFor(node: FlowNode, resolve: (value: unknown) => JsonValue): JsonValue | null {
@@ -101,6 +118,23 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
     now,
   };
 
+  const pipeline = createHookPipeline({
+    flow: request.flow,
+    catalogue: request.catalogue,
+    nodeId,
+    node,
+    from: request.from,
+    def,
+    ctx,
+    deps,
+    invoker,
+    ops,
+    scope,
+    resolve,
+    block: (ref) => blocks[ref],
+    baseInput: hookInputFor(node, resolve),
+  });
+
   const started: StepWrite = {
     runId: run.runId,
     nodeId,
@@ -123,12 +157,16 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
   };
 
   const writeFinal = async (
-    state: "completed" | "failed",
+    finalState: "completed" | "failed",
     output: JsonValue | null,
     outcome: string | null,
     error: RunError | null,
     idemKey: string | null,
   ): Promise<void> => {
+    const hookState = pipeline?.state;
+    const skipped = hookState !== undefined && hookState.skipped !== null;
+    const state = finalState === "completed" && skipped ? "skipped" : finalState;
+    const rowInput = hookState?.changed === true ? hookState.input : input;
     const step: StepWrite = {
       runId: run.runId,
       nodeId,
@@ -139,7 +177,7 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
       seq,
       kind: node.kind,
       state,
-      input: input as StepWrite["input"],
+      input: rowInput as StepWrite["input"],
       output: output as StepWrite["output"],
       outcome,
       error,
@@ -165,18 +203,29 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
       return ops.workflowId;
     },
     async runStep<T extends JsonValue>(name: string, fn: () => Promise<T>): Promise<T> {
-      return ops.runStep<T>(name, async () => {
-        if (!wrote) {
-          wrote = true;
-          try {
-            await deps.store.recordStep(tenant, started);
-          } catch (error) {
-            storeWriteError = error;
-            throw error;
-          }
+      const writeStarted = async (): Promise<void> => {
+        if (wrote) return;
+        wrote = true;
+        try {
+          await deps.store.recordStep(tenant, started);
+        } catch (error) {
+          storeWriteError = error;
+          throw error;
         }
-        return fn();
+      };
+      if (pipeline === null || !pipeline.fuses) {
+        return ops.runStep<T>(name, async () => {
+          await writeStarted();
+          return fn();
+        });
+      }
+      let ran = false;
+      const stored = await ops.runStep<JsonValue>(name, async () => {
+        ran = true;
+        await writeStarted();
+        return (await pipeline.fusedStep(fn)) as unknown as JsonValue;
       });
+      return pipeline.unwrap(stored as unknown as FusedStored, ran) as T;
     },
     sleep(ms: number): Promise<void> {
       return ops.sleep(ms);
@@ -202,7 +251,10 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
     resolve,
     block: (ref) => blocks[ref],
     ...(deps.sandbox === undefined ? {} : { sandbox: deps.sandbox }),
+    ...(pipeline === null ? {} : { hooks: pipeline.hooks }),
   };
+
+  await pipeline?.runOwnPre();
 
   let outcome: NodeOutcome;
   try {
@@ -239,6 +291,23 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
     const error = invalidOutcome(nodeId);
     if (wrote) await writeFinal("failed", null, null, runErrorOf(error, nodeId), idemKey);
     throw error;
+  }
+
+  if (pipeline !== null) {
+    try {
+      outcome = await pipeline.runOwnPost(outcome);
+    } catch (error) {
+      if (isDurableCancellation(error)) throw error;
+      const mapped =
+        toInterpreterError(error) ??
+        new InterpreterError("HOOK_ERROR", "hook failed", nodeId, { fault: "unknown" });
+      if (wrote) {
+        await writeFinal("failed", outcome.output, outcome.outcome, runErrorOf(mapped, nodeId), idemKey);
+      }
+      throw new InterpreterError(mapped.code, mapped.message, mapped.node ?? nodeId, {
+        ...mapped.details,
+      });
+    }
   }
 
   if (wrote) await writeFinal("completed", outcome.output, outcome.outcome, null, idemKey);
