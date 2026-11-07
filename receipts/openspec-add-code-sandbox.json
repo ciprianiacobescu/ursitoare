@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-07T01:27:30Z",
+  "integrated_revision": "afeedbeeeca1c8f43bc3a85b86b0e7e7e38865a2",
+  "merge_commit": "afeedbeeeca1c8f43bc3a85b86b0e7e7e38865a2",
+  "plan_digest": "1de77c4471f9168f",
+  "plan_id": "m5",
+  "postcheck": "pass",
+  "pr": 85,
+  "receipt_id": "m5/openspec:add-code-sandbox/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "b37a5f79dba5f1351e3b2cbf4003b126aaefe1f7",
+  "spec_digest": "399696de3e22c7fd",
+  "target": "main",
+  "unit_id": "openspec:add-code-sandbox"
+}
