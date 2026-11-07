@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.1 | technical | src/interpreter/hooks/registry.test.ts:33-35 registers codeHookRunner a second time inside assert.doesNotThrow |
+| Q-002 | open | 3.1 | technical | Grant write access for the red step |
 <!-- l4:index:end -->
 
 ---
@@ -35,6 +36,21 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/interpreter/hooks/registry.test.ts`: delete the `assert.doesNotThrow(() => { registerHookRunner("code", codeHookRunner); });` block at lines 33-35 of the second test, because the first test already registered the runner.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: Grant write access for the red step
+
+- **Status:** open
+- **Blocking tasks:** 3.1
+- **Kind:** technical
+- **Asked:** 2026-11-07T22:24Z by claude-sonnet, run r-20261107T2044Z-0cf0, task 3.1
+
+### Context
+The Write tool was denied in this session, so src/interpreter/hooks/visit-pre.test.ts cannot be created. Please allow Write/Edit on test files, or tell me how to proceed.
 
 ### Answer
 <!-- write below this line -->
