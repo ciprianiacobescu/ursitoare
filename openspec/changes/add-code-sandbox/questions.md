@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-061daa6c (sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options): accept as satisfied? |
 | Q-005 | answered | none | verdict | Finding F-44115141: Proxy getPrototypeOf traps escape option validation |
 | Q-006 | answered | none | verdict | Criterion C-ed57e3cd (sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory): accept as satisfied? |
-| Q-007 | open | none | verdict | Finding F-81bb3a33: task 3.5 is ticked as already satisfied, but its text is not done |
+| Q-007 | answered | none | verdict | Finding F-81bb3a33: task 3.5 is ticked as already satisfied, but its text is not done |
 | Q-008 | open | none | verdict | Finding F-6f5b85ff: task 3.6 is ticked as already satisfied, but its text is not done |
 | Q-009 | open | none | verdict | Finding F-74714d28: task 3.8 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
@@ -719,7 +719,8 @@ accept The criterion is satisfied. The tracing test passed in the latest report 
 
 ## Q-007: Finding F-81bb3a33: task 3.5 is ticked as already satisfied, but its text is not done
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
@@ -739,6 +740,7 @@ This finding cites no criterion: end the reason with one sentence WHEN <the situ
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived. It rests on the judge not seeing run-code.ts and wasm.ts, which were in another part of the diff, not on anything missing from the code. Both files are in the unit head and do what task 3.5 names: wasm.ts caches one QuickJS module per memory bucket with a Wasm memory maximum of the base pages plus the bucket, run-code.ts picks the bucket with memoryBucket, calls setMemoryLimit with memoryBytes and setMaxStackSize with clampStack of maxStackBytes and the pool's stackCapBytes, and counts the UTF-8 bytes of the output against maxOutputBytes; the prelude's walker refuses nesting deeper than 64, a __proto__ key, a toJSON member and an output over the character limit. The task's test file limits-run.test.ts exists with tests for both scenarios, so the tick is earned.
 ---
 
 ## Q-008: Finding F-6f5b85ff: task 3.6 is ticked as already satisfied, but its text is not done
