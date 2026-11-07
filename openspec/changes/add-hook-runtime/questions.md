@@ -13,6 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.1 | technical | src/interpreter/hooks/registry.test.ts:33-35 registers codeHookRunner a second time inside assert.doesNotThrow |
 | Q-002 | answered | 3.1 | technical | Grant write access for the red step |
+| Q-003 | open | 3.1 | technical | src/interpreter/hooks/visit-pre.test.ts:183: sandboxRuns counts the normalize node's sandbox run, giving 9, not 8 |
 <!-- l4:index:end -->
 
 ---
@@ -56,3 +57,26 @@ The Write tool was denied in this session, so src/interpreter/hooks/visit-pre.te
 ### Answer
 <!-- write below this line -->
 Write and Edit are allowed on any path inside the worktree (rule `Edit(./**)`): create `src/interpreter/hooks/visit-pre.test.ts` with that path relative to the worktree root, never under /tmp or outside the worktree; Bash runs only the gate command. Red may not change a production file: attempt 1's edit of `src/interpreter/types.ts` was restored by the red-scope guard, so `InterpreterDeps` has no `hookObserver` until green adds it (proposal.md: "Not scaffolded, because they change existing files"). Make the test typecheck without it, as `runtimes.test.ts` does for `NodeServices.hooks` (`{ ... } as NodeServices`): give the observer typed parameters, `(nodeId: string, entry: HookTraceEntry): void` with `HookTraceEntry` from `./types.ts`, and build the deps as `{ ...deps, hookObserver: observer } as InterpreterDeps`. The new tests then compile, fail by assertion at red, and need no change after green.
+
+---
+
+## Q-003: src/interpreter/hooks/visit-pre.test.ts:183: sandboxRuns counts the normalize node's sandbox run, giving 9, not 8
+
+- **Status:** open
+- **Blocking tasks:** 3.1
+- **Kind:** technical
+- **Asked:** 2026-11-07T22:59Z by claude-sonnet, run r-20261107T2228Z-8bc6, task 3.1
+
+### Context
+The test wraps `sandbox.run` in `runFlow` and counts every call. In `onion`, the 8 hook runs use binding `ctx`, and the `normalize` code node also runs in the sandbox with binding `input`. That makes 9 calls. The spec (C-e9060697) says '8 sandbox calls with binding `ctx`', so the test should count only hook runs. The implementation is correct, so the assertion at line 183 cannot pass.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/interpreter/hooks/visit-pre.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-hook-runtime`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/interpreter/hooks/visit-pre.test.ts`: in the `run` wrapper inside `runFlow`, increment `sandboxRuns` only when `opts.binding === "ctx"`, so the count is the hook calls and `assert.equal(scene.sandboxRuns, 8)` holds.
+
+### Clarifier suggestion
+Edit `src/interpreter/hooks/visit-pre.test.ts`: in the `run` wrapper inside `runFlow`, increment `sandboxRuns` only when `opts.binding === "ctx"`, so the count is the hook calls and `assert.equal(scene.sandboxRuns, 8)` holds.
+
+### Answer
+<!-- write below this line -->
