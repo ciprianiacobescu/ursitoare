@@ -39,3 +39,5 @@
 {"at":"2026-11-07T01:29:03Z","run":"r-20261107T0128Z-1781","type":"unit.dispatched","unit":"openspec:add-code-node-runtime"}
 {"at":"2026-11-07T04:03:57Z","attempt":1,"cost_usd":0.981626,"runs":2,"type":"plan.charged","unit":"openspec:add-code-node-runtime"}
 {"at":"2026-11-07T04:03:57Z","run":"r-20261107T0354Z-61b5","type":"unit.dispatched","unit":"openspec:add-code-node-runtime"}
+{"at":"2026-11-07T05:37:45Z","attempt":1,"cost_usd":3.73387,"runs":2,"type":"plan.charged","unit":"openspec:add-code-node-runtime"}
+{"at":"2026-11-07T05:37:45Z","detail":"task 2.1: max_task_attempts (3) reached in red on deepseek-free (2), glm (2), claude-sonnet (3); last failure: no new test traces C-7d9b0050, C-f3de9ac6: put the id in the name of each test that checks a criterion, for example it(\"C-xxxxxxxx: \u2026\")","reason":"unit_halted","type":"plan.stopped","unit":"openspec:add-code-node-runtime"}
