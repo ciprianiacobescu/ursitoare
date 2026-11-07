@@ -14,6 +14,7 @@ service in the stack tier (`docs/testing.md`).
 | `fake-oidc/` | `add-fake-oidc` | Keycloak-shaped OIDC provider, two organisations, journey users, a bad-token minting helper |
 | `catalogue/` | `add-test-catalogue` | The 20 mock blocks, RF-1, `rf-1-core`, `rf-1-core-approval` |
 | `hook-flows/` | `add-test-catalogue` | Synthetic hook flows on the M5 node kinds |
+| `hook-cases/` | `add-hook-checker` | The 12 hook case files (`invalid/`, `valid/`, `warnings/`) and `hookCases` |
 | `taint-runs/` | `add-taint-runtime` | The `untrusted-code` and `trusted-code` fixtures for run taint labels |
 | `crash/` | `add-crash-harness`; `add-effect-intents` (`pay-once.ts`, `flows/pay-once.yaml`, `intents-scenario.ts`) | Spawn, kill and restart the engine; dedicated clusters |
 | `node-conformance.ts` | `add-interpreter-core` | The kit every node runtime passes |

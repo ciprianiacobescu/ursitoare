@@ -16,7 +16,7 @@ Specs: `specs/hooks-static`, `specs/flow-validation`; rules: `design.md`; fixtur
 
 ## 4. Case files
 
-- [ ] 4.1 Write `src/authoring/hooks/cases.test.ts` first (scenario "Each case file yields its codes", group sizes 9, 2 and 1), then create `test/support/hook-cases/index.ts` (`HookCaseGroup`, `HookCase`, `hookCases`), the 12 files under `test/support/hook-cases/invalid/`, `valid/` and `warnings/` built from the base flow of `test-plan.md`, and a `hook-cases/` row (owner `add-hook-checker`) in `test/support/README.md`, implementing requirement "Hook case files pin each code"
+- [x] 4.1 Write `src/authoring/hooks/cases.test.ts` first (scenario "Each case file yields its codes", group sizes 9, 2 and 1), then create `test/support/hook-cases/index.ts` (`HookCaseGroup`, `HookCase`, `hookCases`), the 12 files under `test/support/hook-cases/invalid/`, `valid/` and `warnings/` built from the base flow of `test-plan.md`, and a `hook-cases/` row (owner `add-hook-checker`) in `test/support/README.md`, implementing requirement "Hook case files pin each code"
 
 ## 5. Diagnostics
 

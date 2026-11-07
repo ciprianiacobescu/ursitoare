@@ -1,0 +1,12 @@
+# expect: H_BLOCK
+ursitoare: "0.1"
+flow: hook-case
+version: 1.0.0
+inputs: { type: object, properties: { vendor: { type: string }, amount: { type: number } }, required: [vendor, amount] }
+start: lookup
+nodes:
+  lookup: { kind: block, uses: erp.lookup_vendor@1, with: { vendor_name: "${{ inputs.vendor }}" }, next: gate }
+  gate: { kind: switch, on: "${{ nodes.lookup.output.status }}", cases: { active: pay }, default: rejected }
+  pay: { kind: block, uses: erp.create_payment@1, with: { vendor_id: "${{ nodes.lookup.output.vendor_id }}", amount: "${{ inputs.amount }}", currency: EUR, reference: inv-1 }, next: done, post: [{ id: tell, kind: block, uses: mail.send@1, with: { to: ap@example.com, subject: paid } }] }
+  done: { kind: end, status: completed, output: { payment_id: "${{ nodes.pay.output.payment_id }}" } }
+  rejected: { kind: end, status: failed }
