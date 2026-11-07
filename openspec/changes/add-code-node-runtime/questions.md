@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 2.1 | harness | Task 2.1: the pre-satisfied check could not decide |
+| Q-001 | answered | 2.1 | harness | Task 2.1: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 2.1: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 2.1
 - **Kind:** harness
 - **Asked:** 2026-11-07T07:00Z by deepseek-free, run r-20261107T0555Z-d757, task 2.1
@@ -299,3 +300,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: The held test pins the scenario "Who may test which flow", which this unit does not change: its WHEN and THEN are word for word the ones already on the base branch, and the base branch already has a passing test of that criterion in the routes test file. Nothing in task 2.1 touches authorisation, cookies, CSRF or the unknown-flow and unknown-hash answers, so no test of that scenario can fail at red; the test passing against the base code is the expected result, not a sign that the task is pre-satisfied. The part of the flow-testing requirement that this unit does change, the kind_unsupported list dropping "code", is covered by the in-place change to the C-7d9b0050 test, which fails on base because the base registry still lacks the code kind and the base test still expects "code" in that list. Running the check again cannot help, because the zero-value variation applies only to Python files and the base run would give the same result. Count the test on the evidence of the real run.
