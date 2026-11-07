@@ -10,14 +10,14 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | submitted | behaviour | src/durable/steps.ts:126 | runStep turns a replayed step error into dbos_failed |
+| FB-001 | addressed | behaviour | src/durable/steps.ts:126 | runStep turns a replayed step error into dbos_failed |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: runStep turns a replayed step error into dbos_failed
 
-- **Status:** submitted
+- **Status:** addressed
 - **Kind:** behaviour
 - **Where:** `src/durable/steps.ts:126-136`
 - **Lesson:** no
@@ -53,3 +53,4 @@ Suggested shape: inside the callback, mark fn's own error before DBOS records it
 
 ### Outcome
 <!-- written by the harness -->
+Addressed in round 2 at 255101cc39: src/durable/steps.ts:57-110 and src/durable/steps.ts:179-199 mark callback errors with an enumerable marker and revive marked DurableErrors; src.durable.steps.test.ts::C-607153ef passed.

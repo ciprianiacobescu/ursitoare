@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
+import { DBOS } from "@dbos-inc/dbos-sdk";
 import type pg from "pg";
 
 import { createLogger } from "../observability/index.ts";
@@ -407,6 +408,128 @@ test("C-706487fb C-0601de63 an after observer failure fails the step without ret
     assert.equal(boomStepError, afterObserverError, "the step rejected with the observer error unchanged");
     assert.equal(boomBeforeCalls, 1, "the before observer ran once");
     assert.equal(boomAfterCalls, 1, "the after observer ran once and its failure was not retried");
+  } finally {
+    await runtime?.shutdown().catch(() => undefined);
+    await db.close();
+  }
+});
+
+interface CodedError {
+  name: string;
+  message: string;
+  code: unknown;
+  details: unknown;
+}
+
+function codedFields(error: unknown): CodedError {
+  assert.ok(error instanceof Error, `expected an Error, got ${String(error)}`);
+  const coded = error as Error & { code?: unknown; details?: unknown };
+  return { name: coded.name, message: coded.message, code: coded.code, details: coded.details };
+}
+
+const replayDurableError = new DurableError("DURABLE_INVALID", "the durable step failed", {
+  reason: "bad_option",
+  detail: "durable",
+});
+
+function replayCodedError(): Error & { code: string; details: Record<string, string> } {
+  const error = new Error("the coded step failed") as Error & {
+    code: string;
+    details: Record<string, string>;
+  };
+  error.name = "InterpreterError";
+  error.code = "NODE_FAILED";
+  error.details = { reason: "node_failed", node: "n1" };
+  return error;
+}
+
+let replayErrors: unknown[] = [];
+let durableStepRuns = 0;
+let codedStepRuns = 0;
+
+async function replayWorkflow(_input: DurableJson): Promise<DurableJson> {
+  try {
+    await runStep("durable", async () => {
+      durableStepRuns += 1;
+      throw replayDurableError;
+    });
+  } catch (error) {
+    replayErrors.push(error);
+  }
+  try {
+    await runStep("coded", async () => {
+      codedStepRuns += 1;
+      throw replayCodedError();
+    });
+  } catch (error) {
+    replayErrors.push(error);
+  }
+  return 0;
+}
+
+test("C-607153ef runStep replays recorded step errors without dbos_failed", async () => {
+  replayErrors = [];
+  durableStepRuns = 0;
+  codedStepRuns = 0;
+
+  const db = await withTestDatabase();
+  const logger = createLogger({ level: "silent", destination: silent });
+  let runtime: DurableRuntime | undefined;
+  try {
+    assert.doesNotThrow(() => {
+      registerWorkflow("t.replay", replayWorkflow);
+    });
+
+    const rt = await launchDurable({
+      endpoint: db.appEndpoint,
+      logger,
+      pollingIntervalMs: 20,
+    });
+    runtime = rt;
+
+    await rt.enqueue("t.replay", "replay-first", null);
+    const firstInfo = await waitForState(rt, "replay-first", TERMINAL);
+    assert.equal(firstInfo.state, "SUCCESS", "the first run caught both step errors");
+    assert.equal(durableStepRuns, 1, "the durable step fn ran once");
+    assert.equal(codedStepRuns, 1, "the coded step fn ran once");
+    assert.equal(replayErrors.length, 2, "the first run caught both step errors");
+    const firstDurable = codedFields(replayErrors[0]);
+    const firstCoded = codedFields(replayErrors[1]);
+    assert.equal(replayErrors[0] instanceof DurableError, true, "the first durable error is a DurableError");
+
+    // Fork from after both recorded steps: DBOS replays the recorded errors without running fn.
+    replayErrors = [];
+    await DBOS.forkWorkflow("replay-first", 2, {
+      newWorkflowID: "replay-fork",
+      queueName: "runs",
+    });
+    const forkInfo = await waitForState(rt, "replay-fork", TERMINAL);
+    assert.equal(forkInfo.state, "SUCCESS", "the forked workflow completed");
+    assert.equal(durableStepRuns, 1, "the replayed durable step did not run fn again");
+    assert.equal(codedStepRuns, 1, "the replayed coded step did not run fn again");
+    assert.equal(replayErrors.length, 2, "the fork replayed both recorded errors");
+
+    const replayedDurable = replayErrors[0];
+    assert.equal(
+      replayedDurable instanceof DurableError,
+      true,
+      "the replayed DurableError is again a DurableError",
+    );
+    assert.deepEqual(codedFields(replayedDurable), firstDurable, "the replayed durable error keeps every field");
+
+    const replayedCoded = replayErrors[1];
+    assert.deepEqual(codedFields(replayedCoded), firstCoded, "the replayed coded error keeps every field");
+
+    const dbosFailed = (error: unknown): boolean => {
+      const fields = codedFields(error);
+      const details = fields.details;
+      const reason =
+        typeof details === "object" && details !== null
+          ? (details as { reason?: unknown }).reason
+          : undefined;
+      return fields.code === "DURABLE_UNAVAILABLE" && reason === "dbos_failed";
+    };
+    assert.equal(replayErrors.some(dbosFailed), false, "neither replay is DURABLE_UNAVAILABLE dbos_failed");
   } finally {
     await runtime?.shutdown().catch(() => undefined);
     await db.close();
