@@ -1,4 +1,4 @@
-# Verification: openspec:add-code-sandbox: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-code-sandbox: FAIL (round 3)
 
 traceability: 16/16 criteria covered by a discriminating test
 
@@ -17,17 +17,17 @@ traceability: 16/16 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.7 | base main@199dc45009 contained |
-| 1 | integrity | ok | 190.6 | 11 sub-checks; scope: 45 changed file(s) |
-| 2 | build | ok | 37.4 |  |
-| 3 | tests | ok | 291.5 |  |
-| 4 | traceability | ok | 0.2 | 16/16 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/sandbox/classify.ts, src/sandbox/limits.ts, src/sandbox/pool.ts, src/sandbox/prelude.ts, src/sandbox/run-code.ts and 7 more |
-| 8 | s1 judge | ok | 1.2 | 12/16 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 281.1 | 3 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -198,6 +198,11 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-7d1dc855 | ok | 0.940 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-ed57e3cd | ok | 0.880 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-004 accept C-061daa6c by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as its scenario is written. The tracing test passed and asserts every clause of the scenario: an empty factory log before the first run, one call after five sequential runs with the worker-entry href and the default env and resourceLimits, size 2 and respawns 0; twelve con...
+- Q-005 reject F-44115141 by the delegate (claude-fable-5-1 via claude-code): The finding is correct and is not waived. The requirement says createWorkerSandbox throws SandboxError SANDBOX_INVALID with option opts for a getter or Proxy trap that throws. In pool.ts the plain-object check isPlainObject runs on the raw argument before either try/catch of readPoolOptions, and it ...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -208,7 +213,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-d45afadb | sandbox › A body runs in a fresh context and every failure is a typed fault › Bindings, result modes and accepted boundaries | pass | pass | the judge passed it and a discriminating test passes |
 | C-096cfc59 | sandbox › A body runs in a fresh context and every failure is a typed fault › Faults of the body and no retry | pass | pass | the judge passed it and a discriminating test passes |
 | C-9712a346 | sandbox › A body runs in a fresh context and every failure is a typed fault › Every classification row on synthetic facts | pass | pass | the judge passed it and a discriminating test passes |
-| C-061daa6c | sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options | fail | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-061daa6c | sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options | fail | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as its scenario is written. The tracing test passed and asserts every clause of the scenario: an empty factory log before the first run, one call after five sequential runs with the worker-entry href and the defa... |
 | C-e1cc2727 | sandbox › Runs are deterministic › Same arguments, same output | pass | pass | the judge passed it and a discriminating test passes |
 | C-8bb9cb9b | sandbox › A run past its deadline is a timeout, and a stuck worker is killed › Interrupt, late finish and watchdog | pass | pass | the judge passed it and a discriminating test passes |
 | C-a85c03b7 | sandbox › Guest memory is capped per memory bucket › Bombs are contained and buckets are isolated | pass | pass | the judge passed it and a discriminating test passes |
@@ -222,10 +227,15 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 ## Findings
 
-- [major, judge] Proxy getPrototypeOf traps escape option validation (criterion C-061daa6c): createWorkerSandbox calls isPlainObject before it enters the protected option-reading path. A Proxy whose getPrototypeOf trap throws therefore leaks that raw error instead of throwing SandboxError SANDBOX_INVALID with details { option: "opts" }.
+- [major, human] Proxy getPrototypeOf traps escape option validation (criterion C-061daa6c): createWorkerSandbox calls isPlainObject before it enters the protected option-reading path. A Proxy whose getPrototypeOf trap throws therefore leaks that raw error instead of throwing SandboxError SANDBOX_INVALID with details { option: "opts" }. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding is correct and is not waived. The requirement says createWorkerSandbox throws SandboxError SANDBOX_INVALID with option opts for a getter or Proxy trap that throws. In pool.ts the plain-object check isPlainObject runs on the raw argument before either try/catch of readPoolOptions,...
 - [minor, judge] spec gap: extra options properties are ignored (spec gap) (criterion C-3999c476): The requirements define validation of option members but do not state whether an otherwise valid options object with an additional own property must be accepted or rejected. The implementation copies all own keys but validates and returns only seed, nowIso, binding, and result.
 - [minor, judge] spec gap: extra limits properties are ignored (spec gap) (criterion C-3999c476): The requirements define validation of limit members but do not state whether an otherwise valid limits object with an additional own property must be accepted or rejected. The implementation copies all keys then returns only the four recognized limits.
 - [minor, judge] the judge called a test inadequate (criterion C-061daa6c): src.sandbox.pool.test.ts::C-061daa6c: the pool spawns lazily, runs up to size jobs, queues in order and validates options
+
+## Fix unit
+
+Fix unit 2 is created for these tasks:
+- F-44115141 Proxy getPrototypeOf traps escape option validation
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
