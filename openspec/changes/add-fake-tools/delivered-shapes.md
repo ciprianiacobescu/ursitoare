@@ -46,5 +46,5 @@ export function egressApi(handles: ReadonlyMap<string, PartHandle>): { fake: Fak
 ## Facts from the merged code
 
 - No frozen test pins the part count or the last part (`web-part.test.ts:43-66` pins the first two names). `oidc-part.ts:102-113` and `database-part.ts:61-69` are the accessor pattern `toolsApi` follows.
-- `test/support/README.md:22` is the `fake-tools/` row; `:27` says "Bootstrap placeholders exist for `global-setup.ts` and `e2e-stack/main.ts`; their owner changes replace them.", stale: both files are real.
+- `test/support/README.md:22` is the `fake-tools/` row; `:29` is the stale sentence "Bootstrap placeholders exist for `global-setup.ts` and `e2e-stack/main.ts`; ..." (both files are real).
 - `package.json` lists `ajv` 8.20.0; `tsconfig.json` has `erasableSyntaxOnly`, `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`; `test/arch/sources.ts` reads only `src/`, so `test/` may use `node:http`.

@@ -2,12 +2,12 @@
 
 Part 2: `test-plan-runtime.md`. **Ran** on 2026-11-06 in a scratch copy (design.md § Verification) as assertions, with a hand port of U49's compiler. **Derived, not run:** the real compiler's texts (no literal version contains a grant).
 
-Each test file declares its helpers (a shared one under `src/grants/` may not import `observability`).
+Each test file declares its helpers.
 
 ## Constants
 
 - `T` = `tenant_a`, `U` = `tenant_b`, `W` = `tenant_c` (inserted by the owner pool). `CLOCK` = `fixedClock("2026-11-06T09:00:00.000Z")`, `LATER` and `LATER2` = the same day at `10:00` and `11:00`; `AT`, `AT2`, `AT3` = those instants as `"2026-11-06T09:00:00.000000Z"` etc. `G(n)` = `"grant_00000000-0000-7000-8000-" + n.toString(16).padStart(12, "0")`. `FP1` = `"nf1_" + "a1".repeat(32)`, `FP2` = `"nf1_" + "b2".repeat(32)`. `CAROL` = `{ kind: "user", id: "carol" }`.
-- `SRCDIR`: a new empty temporary directory, so the platform layer alone is the base; `VBASE` = `599ac6e140250949aa9104d2e02c0da35508a8ec6227aa6cd452187caf2efdd8` is the `policySetVersion` of `createPolicyEngine({ srcDir: SRCDIR })`. Route and `main` tests use `defaultSrcDir()` and pin no version. `runtime(pool)` = `createPolicyRuntime({ pool, srcDir: SRCDIR, clock: CLOCK, ids: sequentialIds(1000), logger })`.
+- `SRCDIR`: a new empty temporary directory, so the platform layer alone is the base; `VBASE` = `599ac6e140250949aa9104d2e02c0da35508a8ec6227aa6cd452187caf2efdd8` is the `policySetVersion` of `createPolicyEngine({ srcDir: SRCDIR })`. `runtime(pool)` = `createPolicyRuntime({ pool, srcDir: SRCDIR, clock: CLOCK, ids: sequentialIds(1000), logger })`.
 - `ACME`, imported with `importCatalogue` (actor `CAROL`) into T and U (`OTHER` also into U):
 
 ```json
@@ -16,7 +16,7 @@ Each test file declares its helpers (a shared one under `src/grants/` may not im
 ```
 
 `OTHER` = `acme.other@1`, `read`, `input` `{ type: "object", properties: { limit: { type: "number" } } }`. `ARGT` = `{ amount: "decimal", currency: "String", exact: "Bool", limit: "Long", tags: "Set<String>", vendor_id: "String", vendor_name: "String" }`.
-- `seedGrant(ctx, g)`: an `INSERT INTO ursitoare."grant"` (columns: delivered-shapes.md) in `withTenantTx(db.appPool, ctx, …)` with `created_by` `carol`, `created_at` `2026-11-06T09:00:00Z` (a revoked row: `revoked_by` `carol`, `revoked_at` `…09:30:00Z`); `revoke(ctx, id)` is the matching `UPDATE`. `seedSet(ctx, version, src, toolArgs)`: an `INSERT INTO ursitoare.policy_set` with `source` `src`, `tenant_sources` `[{ id: "tenant/source", text: src }]`, `tool_args`, `current` true, `deploy_seq` 1 (the tenant's previous maximum plus 1), `deployed_at` `2026-11-06T09:00:00Z`.
+- `seedGrant(ctx, g)`: an `INSERT INTO ursitoare."grant"` (columns: delivered-shapes.md) in `withTenantTx(db.appPool, ctx, …)` with `created_by` `carol`, `created_at` `2026-11-06T09:00:00Z` (a revoked row: `revoked_by` `carol`, `revoked_at` `…09:30:00Z`); `revoke(ctx, id)` is the matching `UPDATE`. `seedSet(ctx, version, src, toolArgs)`: `UPDATE ursitoare.policy_set SET current = false WHERE current`, then an `INSERT` with `source` `src`, `tenant_sources` `[{ id: "tenant/source", text: src }]`, `tool_args`, `current` true, `deploy_seq` the tenant's maximum plus 1 (1 for none), `deployed_at` `2026-11-06T09:00:00Z`. `runtime(pool)` uses a capturing logger.
 - `invoke(tenant, user, roles, node, tool, effect, fp, args, opts?)` builds an `invoke_tool` `PolicyRequest`: principal `userEntity({ tenantId: tenant, userId: user, kind: "human", roles, teams: [] })`; resource `Block::"<bt>/pay-run/<node>"` (`bt` = `opts.blockTenant` or `tenant`) with `Flow`, `Team` and `Tool::<toolId>` entities (`toolId` = `opts.toolId` or `<tenant>/<tool>`); the `InvokeToolContext` with empty `taint`, `sod_excluded`, `approvals`, `approvers_by_role` and `node_fingerprint: fp`. `L` = `invoke(T, "alice", ["author"], "lookup", "acme.lookup_vendor@1", "read", "", {})`; `P(amount, fp, approved?)` = `invoke(T, "alice", ["author"], "pay", "acme.create_payment@1", "pay", fp, { amount: toDecimal(amount) })`, with `approvers_by_role` `{ approver: [entityRef("User", "tenant_a/bob")] }` when `approved`. `dec(d)` = `[d.decision, d.reasons, d.errors, d.policySetVersion]`.
 - Sources (one trailing newline): `SRC_R` = `@id("t-a-read-all")⏎permit (principal, action == Action::"invoke_tool", resource is Block)⏎when { context.tool.effect == "read" };`; `SRC_S` = the same with id `t-b-send` and `"send"`; `SRC_A1` = `SRC_R`, a blank line, then `@id("t-pay-needs-approval")⏎forbid (principal, action == Action::"invoke_tool", resource)⏎when { context.tool == Tool::"tenant_a/acme.create_payment@1" && context.args has "amount" && context.args["amount"].greaterThan(decimal("1000.0000")) && !(context.approvers_by_role has "approver" && !context.approvers_by_role.approver.isEmpty()) };`.
 
@@ -92,7 +92,19 @@ Seeds: T has `ACME` and `G(0)` (role `author`, `acme.lookup_vendor@1`, any step)
 | 5 | T | `@id("t-kind")⏎permit (principal, action == Action::"read_self", resource) when { principal.kind == "human" };`, then with `"приvet"` | `VH`; `[{ stage: "validate", ids: ["t-kind"], message: ``for policy `t-kind`, string `"???vet"` contains mixed scripts`` }] |
 | 6 | T | `"a\u0000b"`; `"// \ud800"`; `"x".repeat(65537)` | `[{ stage: "parse", ids: ["tenant/source"], message: "the source holds U+0000 or a lone surrogate" }]` × 2; `[{ stage: "limit", ids: ["tenant/source"], message: "" }]` |
 | 7 | U (`ACME`, `OTHER`), `G(10)` (author, lookup, `limit lte 5`) | `""` | `[{ stage: "validate", ids: ["G(10)"], message: ``for policy `G(10)`, policy is impossible: the policy expression evaluates to false for all valid requests`` }] (`limit` is `Long` and `decimal` in the two blocks, so it is dropped; `G(10)` in the message is the id text) |
-| 8 | U, then `G(11)` (`vendor_name eq 'a"b'`) and `G(12)` (`vendor_name eq "a\\b"`) | `""` | `[{ stage: "compile", ids: ["G(11)", "G(12)"], message: "" }]` |
+| 8 | U, then `G(11)` (`vendor_name eq 'a"b'`) and `G(12)` (`vendor_name eq "a\\b"`) | `""` | `[{ stage: "compile", ids: ["G(11)", "G(12)"], message: "" }]` (only `compile`: `G(10)` still fails `validate`, but the engine is not loaded) |
 | 9 | W (`ACME`), `G(100)` to `G(599)` active (author, lookup, any step); then `G(600)` | `""`; `""` | `VH`; `[{ stage: "limit", ids: ["grants"], message: "" }]` |
 
-Afterwards `policy_set` has 0 rows in T, U and W and `listAuditEvents` for `policy.deployed` is empty. `validatePolicySet({ engine, toolArgs, reload }, …)` over an object literal rejects `TypeError` with message `not a policy runtime made by createPolicyRuntime`.
+Afterwards `policy_set` has 0 rows in T, U and W and `listAuditEvents` for `policy.deployed` is empty. No record of the capturing logger holds `mixed scripts` or `приvet`. `validatePolicySet({ engine, toolArgs, reload }, …)` over an object literal rejects `TypeError` with message `not a policy runtime made by createPolicyRuntime`.
+
+## Load diagnostic (scenario "A load failure carries the diagnostic outside details"; `src/pdp/load-diagnostic.test.ts`, no database, **derived, not run**)
+
+`load(text)` = `loadPolicySet({ schema: buildSchema(), policies: [{ id: "t/s", layer: "tenant", text }] })`, the `PdpError` caught.
+
+| # | call | `code`, `details`, `diagnostic` |
+|---|---|---|
+| 1 | `load("permit (principal")` | `PDP_POLICY_INVALID`, deep-equal `{ stage: "parse", ids: ["t/s"] }`, `"unexpected end of input"` |
+| 2 | `load` of row 5's source above with `"приvet"` | `PDP_POLICY_INVALID`, deep-equal `{ stage: "validate", ids: ["t-kind"] }`, ``for policy `t-kind`, string `"приvet"` contains mixed scripts`` (unreduced) |
+| 3 | `load` of the `template`, `id` and duplicate-id sources of rows 2 and 3 above; `new PdpError("PDP_OPTIONS_INVALID", "m")` | `undefined` for all four |
+
+For rows 1 and 2 `message` holds neither diagnostic, `JSON.stringify(error)` holds neither text, `Object.keys(error)` lacks `diagnostic` and the property is non-enumerable; `new PdpError("PDP_POLICY_INVALID", "m", { stage: "parse", ids: [] }, "d").diagnostic` is `"d"`.
