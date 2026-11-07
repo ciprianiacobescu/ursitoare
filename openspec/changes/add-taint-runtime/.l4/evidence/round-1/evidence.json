@@ -1,0 +1,255 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/authoring/taint/runtime.ts",
+      "taint/index.ts",
+      "src/authoring/taint",
+      "valid/foreach-bare-item-primitive-array",
+      "valid/foreach-subflow",
+      "src/sandbox/index.ts",
+      "src/interpreter/taint.ts",
+      "src/authoring",
+      "test/arch/repo.test.ts",
+      "src/interpreter/execute.test.ts",
+      "docs/decisions/0002",
+      "src/authoring/taint/index.ts",
+      "src/interpreter/index.ts",
+      "src/interpreter/visit.ts",
+      "test/support/README.md",
+      "src/authoring/taint/runtime.test.ts",
+      "src/authoring/taint/analyze.ts",
+      "src/authoring/taint/runtime-references.test.ts",
+      "src/interpreter/taint.test.ts",
+      "test/support/taint-runs/taint-runs.test.ts",
+      "test/support/taint-runs/index.ts",
+      "test/support/taint-runs/flows/untrusted-code.yaml",
+      "test/support/taint-runs/flows/trusted-code.yaml",
+      "taint-runs",
+      "src/interpreter/taint-rows.test.ts",
+      "src/interpreter/execute.ts",
+      "src/authoring/taint/inclusion.test.ts",
+      "test/support/taint-runs/inclusion.ts",
+      "**/analyze.ts",
+      "**/visit.ts",
+      "**/runtime.ts",
+      "**/hooks.ts",
+      "**/[]",
+      "**/[\"untrusted\"]",
+      "**/path[0]",
+      "**/execute.ts",
+      "**/rules.test.ts",
+      "**/[\"L1\",\"L2\",\"L3\"]",
+      "**/index.ts",
+      "**/llm.*",
+      "**/InterpreterDeps.sandbox?",
+      "module authoring",
+      "module docs",
+      "module interpreter",
+      "module sandbox",
+      "module taint",
+      "module test",
+      "module valid"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-taint-runtime/.l4/ledger/r-20261107T0904Z-91c1.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-taint-runtime/.l4/ledger/r-20261107T1029Z-c307.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-taint-runtime/.l4/ledger/r-20261107T1050Z-9cf7.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-taint-runtime/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-taint-runtime/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/authoring/taint/analyze.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/taint/inclusion.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/taint/index.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/taint/runtime-references.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/taint/runtime.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/taint/runtime.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/execute.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/index.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/taint-rows.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/taint.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/taint.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/visit.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/README.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/taint-runs/flows/trusted-code.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/taint-runs/flows/untrusted-code.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/taint-runs/inclusion.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/taint-runs/index.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/taint-runs/taint-runs.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/authoring/taint/analyze.ts, src/authoring/taint/index.ts, src/authoring/taint/runtime.ts, src/interpreter/execute.ts, src/interpreter/index.ts and 4 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/authoring/taint/analyze.ts",
+      "src/authoring/taint/index.ts",
+      "src/authoring/taint/runtime.ts",
+      "src/interpreter/execute.ts",
+      "src/interpreter/index.ts",
+      "src/interpreter/taint.ts",
+      "src/interpreter/visit.ts",
+      "test/support/taint-runs/inclusion.ts",
+      "test/support/taint-runs/index.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 1796,
+      "passed": 1795,
+      "failed": 1,
+      "errored": 0,
+      "skipped": 0,
+      "new": 16,
+      "new_passed": 16,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
