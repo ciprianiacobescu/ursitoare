@@ -8,7 +8,7 @@ Batch `m6-grants` (U40b, U45, U46, U45b, U47, U48, U49, U49b, U50, U51, U52, U52
 
 ## What Changes
 
-- New in `web/src/runs/`: `dry-run.ts`, `decisions.ts`, `DryRunPanel.tsx` and their tests; also `test/journeys/m6-grants.test.ts` and `e2e/test_m6_grants.py`.
+- New in `web/src/runs/`: `dry-run.ts`, `decisions.ts`, `DryRunPanel.tsx` and their tests; also `test/journeys/m6-grants.test.ts`, `e2e/test_m6_grants.py` and `e2e/test_m6_run_decisions.py` (the "Try again" test, test-plan-browser.md).
 - Edited, each in a named task (U52b alone edits them in M6): `web/src/runs/timeline.ts` (`stepDetailRows`, C14), `web/src/runs/RunPage.tsx` (the "Policy decisions" region), `web/src/features/80-runs.tsx` (registers `DRY_RUN_PANEL`).
 - Capability `web-runs`: ADDED requirements only; no MODIFIED requirement (design decision 2), no frozen test change. No feature file, CSS, API, error code, migration, part, dependency or `src/` change.
 

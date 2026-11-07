@@ -16,7 +16,7 @@ Each test file declares its helpers (a shared one under `src/grants/` may not im
 ```
 
 `OTHER` = `acme.other@1`, `read`, `input` `{ type: "object", properties: { limit: { type: "number" } } }`. `ARGT` = `{ amount: "decimal", currency: "String", exact: "Bool", limit: "Long", tags: "Set<String>", vendor_id: "String", vendor_name: "String" }`.
-- `seedGrant(ctx, g)`: an `INSERT INTO ursitoare."grant"` (columns: delivered-shapes.md) in `withTenantTx(db.appPool, ctx, …)` with `created_by` `carol`, `created_at` `2026-11-06T09:00:00Z` (a revoked row: `revoked_by` `carol`, `revoked_at` `…09:30:00Z`); `revoke(ctx, id)` is the matching `UPDATE`. `seedSet(ctx, version, src, toolArgs)`: an `INSERT INTO ursitoare.policy_set` with `source` `src`, `tenant_sources` `[{ id: "tenant/source", text: src }]`, `tool_args`, `current` true, `deployed_at` `2026-11-06T09:00:00Z`.
+- `seedGrant(ctx, g)`: an `INSERT INTO ursitoare."grant"` (columns: delivered-shapes.md) in `withTenantTx(db.appPool, ctx, …)` with `created_by` `carol`, `created_at` `2026-11-06T09:00:00Z` (a revoked row: `revoked_by` `carol`, `revoked_at` `…09:30:00Z`); `revoke(ctx, id)` is the matching `UPDATE`. `seedSet(ctx, version, src, toolArgs)`: an `INSERT INTO ursitoare.policy_set` with `source` `src`, `tenant_sources` `[{ id: "tenant/source", text: src }]`, `tool_args`, `current` true, `deploy_seq` 1 (the tenant's previous maximum plus 1), `deployed_at` `2026-11-06T09:00:00Z`.
 - `invoke(tenant, user, roles, node, tool, effect, fp, args, opts?)` builds an `invoke_tool` `PolicyRequest`: principal `userEntity({ tenantId: tenant, userId: user, kind: "human", roles, teams: [] })`; resource `Block::"<bt>/pay-run/<node>"` (`bt` = `opts.blockTenant` or `tenant`) with `Flow`, `Team` and `Tool::<toolId>` entities (`toolId` = `opts.toolId` or `<tenant>/<tool>`); the `InvokeToolContext` with empty `taint`, `sod_excluded`, `approvals`, `approvers_by_role` and `node_fingerprint: fp`. `L` = `invoke(T, "alice", ["author"], "lookup", "acme.lookup_vendor@1", "read", "", {})`; `P(amount, fp, approved?)` = `invoke(T, "alice", ["author"], "pay", "acme.create_payment@1", "pay", fp, { amount: toDecimal(amount) })`, with `approvers_by_role` `{ approver: [entityRef("User", "tenant_a/bob")] }` when `approved`. `dec(d)` = `[d.decision, d.reasons, d.errors, d.policySetVersion]`.
 - Sources (one trailing newline): `SRC_R` = `@id("t-a-read-all")⏎permit (principal, action == Action::"invoke_tool", resource is Block)⏎when { context.tool.effect == "read" };`; `SRC_S` = the same with id `t-b-send` and `"send"`; `SRC_A1` = `SRC_R`, a blank line, then `@id("t-pay-needs-approval")⏎forbid (principal, action == Action::"invoke_tool", resource)⏎when { context.tool == Tool::"tenant_a/acme.create_payment@1" && context.args has "amount" && context.args["amount"].greaterThan(decimal("1000.0000")) && !(context.approvers_by_role has "approver" && !context.approvers_by_role.approver.isEmpty()) };`.
 
@@ -25,6 +25,7 @@ Each test file declares its helpers (a shared one under `src/grants/` may not im
 ```sql
 CREATE TABLE ursitoare.policy_set (
   tenant_id text NOT NULL REFERENCES ursitoare.tenant (tenant_id),
+  deploy_seq bigint NOT NULL CHECK (deploy_seq >= 1),
   version text NOT NULL CHECK (version ~ '^[0-9a-f]{64}$'),
   source text NOT NULL CHECK (char_length(source) <= 65536),
   grant_ids text[] NOT NULL DEFAULT '{}' CHECK (cardinality(grant_ids) <= 500),
@@ -33,7 +34,7 @@ CREATE TABLE ursitoare.policy_set (
   current boolean NOT NULL,
   deployed_by text NOT NULL,
   deployed_at timestamptz NOT NULL,
-  PRIMARY KEY (tenant_id, version, deployed_at));
+  PRIMARY KEY (tenant_id, deploy_seq));
 CREATE UNIQUE INDEX policy_set_current_idx ON ursitoare.policy_set (tenant_id) WHERE current;
 ALTER TABLE ursitoare.policy_set ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ursitoare.policy_set FORCE ROW LEVEL SECURITY;
@@ -43,11 +44,11 @@ GRANT UPDATE (current) ON TABLE ursitoare.policy_set TO ursitoare_app;
 ```
 
 Ledger row `{ version: 495, name: "policy_sets" }`; `checkTenancyCatalog(db.ownerPool)` `[]`; `has_table_privilege` for `ursitoare_app`: SELECT and INSERT `true`, UPDATE and DELETE `false`; `has_column_privilege` UPDATE: `current` `true`, `source` `false`. With `V1`, `V2` = 64 × `a`, `b`, the app role runs in `withTenantTx` (other columns: `source` `''`, `grant_ids` `{}`, `tenant_sources` `[]`, `tool_args` `{}`, `deployed_by` `carol`), in order:
-1. T `V1` current at `2026-11-06T09:00:00Z`: ok. T `V2` current at `…T10:00:00Z`: `23505` (second current row).
-2. T `V2` not current at `…T10:00:00Z`: ok; again: `23505` (primary key). T `V2` not current at `…T11:00:00Z`: ok (same version, other instant). U `V1` current: ok.
-3. Rows that violate a check, each `23514`: version `"xyz"`; 501 grant ids; `tenant_sources` `{}`; `tool_args` `[]`; a 65,537-character source.
+1. T `deploy_seq` 1 `V1` current at `2026-11-06T09:00:00Z`: ok. T `deploy_seq` 2 `V2` current at `…T10:00:00Z`: `23505` (second current row).
+2. T `deploy_seq` 2 `V2` not current at `…T10:00:00Z`: ok; again: `23505` (primary key `(tenant_id, deploy_seq)`). T `deploy_seq` 3 `V2` not current at the same `…T10:00:00Z`: ok (version and instant are plain columns). T `deploy_seq` 4 `V1` not current at `…T10:00:00Z`: ok. U `deploy_seq` 1 `V1` current: ok.
+3. Rows that violate a check, each `23514`: `deploy_seq` 0; version `"xyz"`; 501 grant ids; `tenant_sources` `{}`; `tool_args` `[]`; a 65,537-character source.
 4. A `tenant_b` row in T's transaction: `42501`. `UPDATE … SET source = 'x'` and `DELETE FROM ursitoare.policy_set`: `42501`.
-5. `UPDATE … SET current = false WHERE current`, then T `V1` current at `…T12:00:00Z`: ok, ok. `SELECT tenant_id, version` in U's transaction: one row, `tenant_b`, `V1`.
+5. `UPDATE … SET current = false WHERE current`, then T `deploy_seq` 5 `V1` current at `…T12:00:00Z`: ok, ok. `SELECT tenant_id, version` in U's transaction: one row, `tenant_b`, `V1`.
 
 ## toolArgTypes vectors
 

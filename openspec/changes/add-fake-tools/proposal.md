@@ -68,4 +68,4 @@ export function fixtureFor(ref: string, input: Record<string, unknown>, key: str
 
 ## Out of scope
 
-The gateway, the tool registry and the credential store (U46 to U48); real tool servers, MCP and HTTP/OpenAPI adapters (M7); TLS; HTTP control routes and files (replaced by the JS API); running the contract suite against the real stack (no real tool server exists there); the e2e part `52-tool-servers` (U48) and `45-egress` (U46).
+The gateway, the tool registry and the credential store (U46 to U48); real tool servers, MCP and HTTP/OpenAPI adapters (M7); TLS; HTTP control routes and files (replaced by the JS API); running the contract suite against the real stack (no real tool server exists there); the e2e part `52-tool-servers` (U48, which also extends the part-order assertion P3 when it adds that file) and `45-egress` (U46).

@@ -1,16 +1,21 @@
 # Failure rows for add-fake-tools
 
-The catalogue rows (L1 to L3) and the abort row (K6) of scenarios in `spec.md`; the other rows are in `test-plan.md`, whose constants and conventions apply (tests send with `node:http` unless a row says `fetch`, and close every fake in `finally`).
+The catalogue rows (L1 to L8) and the abort row (K6) of scenarios in `spec.md`; the other rows are in `test-plan.md`, whose constants and conventions apply (tests send with `node:http` unless a row says `fetch`, and close every fake in `finally`).
 
 ## Catalogue rows (scenario "A catalogue that cannot be read rejects the start and opens no listener")
 
-`T` is `process.getActiveResourcesInfo().filter((r) => r === "TCPServerWrap").length`, read immediately before the call and immediately after it settles, with no wait (ran: a closed `http.Server` still counts right after `close()`, not 20 ms later). `dir` is a `mkdtemp` directory under `os.tmpdir()`, removed in `finally`; `bad.json` holds `{`; `missing.json` is never written. The errors ran on the repo's `readCatalogueDocument` (Node 24.22.2); the class is `CatalogueDataError` of `test/support/catalogue/errors.ts` and has no `details`.
+`T` is `process.getActiveResourcesInfo().filter((r) => r === "TCPServerWrap").length`, read immediately before the call and immediately after it settles, with no wait (ran: a closed `http.Server` still counts right after `close()`, not 20 ms later). `dir` is a `mkdtemp` directory under `os.tmpdir()`, removed in `finally`; `bad.json` holds `{`; `missing.json` is never written; the copies of L4, L5 and L7 are written with `fs.writeFileSync`. The errors ran on the repo's `readCatalogueDocument` (Node 24.22.2); the class is `CatalogueDataError` of `test/support/catalogue/errors.ts` and has no `details`.
 
 | # | call | result |
 |---|---|---|
 | L1 | `startFakeTools({ catalogue: dir/bad.json })` | rejects, `code` `CATALOGUE_INVALID`, `message` starts `invalid JSON: ` (ran: `invalid JSON: Expected property name or '}' in JSON at position 1 (line 1 column 2)`; V8's wording is not asserted); `T` equal before and after |
 | L2 | `startFakeTools({ catalogue: dir/missing.json })` | rejects, `code` `CATALOGUE_READ`, `message` `cannot read <p>: ENOENT: no such file or directory, open '<p>'` with `<p>` the path given; `T` equal before and after |
 | L3 | `startFakeTools({ catalogue: TEST_CATALOGUE_PATH })` | resolves; `T` after is `T` before plus 1 (the control: the count sees a listening fake); closed in `finally` |
+| L4 | `startFakeTools({ catalogue: dir/nomail.json })`, the file being `JSON.stringify` of the parsed `TEST_CATALOGUE_PATH` with `blocks["mail.send@1"]` deleted | rejects, `code` `CATALOGUE_INVALID`, `message` `mail.send@1: missing`, no `details` (ran: the loader accepts the copy, only the 20-ref check refuses it); `T` equal before and after |
+| L5 | `startFakeTools({ catalogue: dir/badschema.json })`, the same copy with `blocks["erp.lookup_vendor@1"].input` set to `{"type":5}` | rejects, `code` `CATALOGUE_INVALID`, `message` `erp.lookup_vendor@1: schema does not compile`, no `details` (ran: the loader accepts the copy; Ajv 8 with the fake's options refuses `{"type":5}` with `schema is invalid: data/type must be equal to one of the allowed values, ...`, wording not asserted); `T` equal before and after |
+| L6 | `startFakeTools()` | resolves; `T` after is `T` before plus 1 (the default catalogue is accepted: ran, all 20 refs have the three members and 40 schemas that compile); closed in `finally` |
+| L7 | `startFakeTools({ catalogue: dir/extra.json })`, the copy with a block `extra.thing@1` (`effect` `read`, `input` and `output` `{"type":"object"}`) added | resolves; `T` plus 1; `POST /blocks/extra.thing@1` with `{}` and `Host: tools.fake.test` answers 404 `{"error":"unknown_block","block":"extra.thing@1"}` (derived from the lookup over the 20 refs; the scratch run showed only the resolve); closed in `finally` |
+| L8 | `startFakeTools({ catalogue: dir/nooutput.json })`, the copy with `blocks["mail.send@1"].output` deleted | rejects with the loader's own error, unchanged: `code` `CATALOGUE_INVALID`, `message` `/blocks/mail.send@1/output: expected an object schema` (ran: the loader refuses the copy before the 20-ref check runs); `T` equal before and after |
 
 ## Abort row (scenario "A client that aborts during a delay leaves its record and the next call is answered")
 

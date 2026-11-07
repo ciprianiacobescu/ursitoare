@@ -20,17 +20,18 @@ Tenant T as in § Validation vectors, `rt = runtime(db.appPool)`, tenant U witho
 
 ## Deploy refusals and revocation (scenarios "Refused, repeated and failing deploys" and "A revoked grant is denied at the next check after a deploy"; same database, `R1` stored)
 
-`rows()` = `SELECT version, current, deployed_at FROM ursitoare.policy_set ORDER BY deployed_at` in T; `events()` = the `policy.deployed` count.
+`rows()` = `SELECT deploy_seq, version, current, deployed_at FROM ursitoare.policy_set ORDER BY deploy_seq` in T; `events()` = the `policy.deployed` count.
 
 1. `deployPolicySet(rt, pool, T, SRC_A1, CAROL, { clock: fixedClock(LATER) })` deep-equals `R1` (`deployedAt` `AT`); `rows()` 1, `events()` 1.
 2. The sources `@id("platform-read-self")⏎permit (principal, action == Action::"read_self", resource);` and `permit (principal` reject `PolicyDeployError`, `code` `POLICY_INVALID`, `problems` `[{ stage: "policy", ids: ["platform-read-self"], message: "" }]` and `[{ stage: "parse", ids: ["tenant/source"], message: "unexpected end of input" }]`; `rows()` 1, `events()` 1, `rt.engine.check(L)` still version `V1`.
 3. `deployPolicySet(rt, failingPool, T, "", CAROL)` (`failingPool.connect` throws `store down`) rejects `store down`; the actor `{ kind: "user", id: "car\u0001ol" }` rejects `AuditError` `AUDIT_EVENT_INVALID`, `details` `{ reason: "bad_actor" }`, after the insert; `rows()` 1, `events()` 1, `currentPolicySet(T).version` `V1` after both.
-4. `""` at `LATER` returns `R2`: `source` `""`, a 64-hex `version` `V2` other than `V1`, `deployedAt` `AT2`, `grantIds` as `R1`; `rows()` is `V1` not current, `V2` current; `events()` 2; `dec(await rt.engine.check(L))` is `["allow", [G(0)], [], V2]`.
-5. `SRC_A1` at `LATER2` returns `R3` with `version` `V1`, `deployedAt` `AT3`; `rows()` three (`V1` false, `V2` false, `V1` true); `events()` 3; `L` is allowed by `[G(0), "t-a-read-all"]` with `V1`.
-6. `Promise.all` of `@id("c-1")⏎permit (principal, action == Action::"read_self", resource);` at `2026-11-06T12:00:00.000Z` and the same with id `c-2` at `…12:00:01.000Z` resolves; `rows()` five, one current, `currentPolicySet(T).version` is one of the two results and equals `rt.engine.check(L).policySetVersion`.
+4. `""` at `LATER` returns `R2`: `source` `""`, a 64-hex `version` `V2` other than `V1`, `deployedAt` `AT2`, `grantIds` as `R1`; `rows()` is `deploy_seq` 1 `V1` not current, 2 `V2` current; `events()` 2; `dec(await rt.engine.check(L))` is `["allow", [G(0)], [], V2]`.
+5. `SRC_A1` at `LATER2` returns `R3` with `version` `V1`, `deployedAt` `AT3`; `rows()` three (1 `V1` false, 2 `V2` false, 3 `V1` true); `events()` 3; `L` is allowed by `[G(0), "t-a-read-all"]` with `V1`.
+6. `Promise.all` of `@id("c-1")⏎permit (principal, action == Action::"read_self", resource);` at `2026-11-06T12:00:00.000Z` and the same with id `c-2` at `…12:00:01.000Z` resolves; `rows()` five (`deploy_seq` 1 to 5), one current, the one with `deploy_seq` 5, and `currentPolicySet(T).version` is one of the two results and equals `rt.engine.check(L).policySetVersion`.
 7. `revoke(T, G(0))` (no deploy): `L` is still `["allow", [G(0)], [], Vc]`, `Vc` being `currentPolicySet(T).version` (the set of step 6 holds no `t-a-read-all`).
 8. `deployPolicySet(rt, pool, T, "", CAROL, { clock: fixedClock("2026-11-06T13:00:00.000Z") })` has `grantIds` `[G(1), G(2)]` and a `version` other than `Vc`: `L` is `["deny", [], [], <that version>]` and `P(1000, FP1)` is allow `[G(2)]` with it.
 9. In a fresh database, T with `ACME` and `G(0)`, `rf` = a runtime whose pool throws `store down` (switched on after creation): `deployPolicySet(rf, db.appPool, T, "", CAROL)` rejects `store down`; `currentPolicySet(T).grantIds` is `[G(0)]` and one event exists; with the store healthy again `rf.engine.check(L)` allows by `[G(0)]`.
+10. In a fresh database, T with no grant and `rt = runtime(db.appPool)`, every call with `fixedClock(LATER)`: A = `""`, B = `SRC_R`, `VA` and `VB` their `validatePolicySet` versions. `deployPolicySet` of A, B, A returns `deployedAt` `AT2` three times, the third with version `VA` and no error; `rows()` is three rows, all `deployed_at` `…10:00:00Z`: 1 `VA` false, 2 `VB` false, 3 `VA` true; `events()` 3; `currentPolicySet(T).version` is `VA`; a fourth A writes nothing.
 
 ## Instance ids (scenario "An instance id replaces the preparsed set")
 
