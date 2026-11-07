@@ -91,3 +91,5 @@
 {"at":"2026-11-07T20:28:35Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-hook-runtime"}
 {"at":"2026-11-07T20:28:35Z","run":"r-20261107T2028Z-9089","type":"unit.dispatched","unit":"openspec:add-hook-runtime"}
 {"at":"2026-11-07T20:44:13Z","branch":"l4/archive/openspec/add-hook-checker","head":"c88492f0ff8e6956d44f2725586ab820cf7326ba","type":"unit.branch_deleted","unit":"openspec:add-hook-checker"}
+{"at":"2026-11-07T20:44:14Z","attempt":1,"cost_usd":1.902281,"runs":2,"type":"plan.charged","unit":"openspec:add-hook-runtime"}
+{"at":"2026-11-07T20:44:14Z","run":"r-20261107T2044Z-0cf0","type":"unit.dispatched","unit":"openspec:add-hook-runtime"}
