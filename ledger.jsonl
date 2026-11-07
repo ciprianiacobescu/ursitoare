@@ -70,3 +70,4 @@
 {"at":"2026-11-07T15:57:53Z","attempt":1,"cost_usd":5.319217,"runs":6,"type":"plan.charged","unit":"openspec:add-taint-runtime"}
 {"at":"2026-11-07T15:57:53Z","run":"r-20261107T1532Z-bd31","type":"unit.dispatched","unit":"openspec:add-taint-runtime"}
 {"at":"2026-11-07T16:31:24Z","head":"f1906bb1ae943f6f70b4f09a8ce94bf8171a9fd5","pr":89,"target_before":"8194d01fc71f96c40351d8ebe86bbfb90cd8684f","type":"unit.merge_requested","unit":"openspec:add-taint-runtime"}
+{"at":"2026-11-07T16:31:29Z","ci":"not_run","head":"f1906bb1ae943f6f70b4f09a8ce94bf8171a9fd5","merge_commit":"8798a0f134b47286b1cd57e66876605e5c68a5d1","method":"squash","pr":89,"raced":false,"type":"unit.merged","unit":"openspec:add-taint-runtime"}
