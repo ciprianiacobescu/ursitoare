@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.2 | technical | src/authoring/taint/runtime-references.test.ts:299 parses an unwrapped edge ref with scanTemplate |
-| Q-002 | open | none | verdict | Criterion C-9dec3a38 (taint › Produced taint follows one per-kind rule for the validator and the runtime › The frozen taint tests stay green unchanged): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-9dec3a38 (taint › Produced taint follows one per-kind rule for the validator and the runtime › The frozen taint tests stay green unchanged): accept as satisfied? |
 <!-- l4:index:end -->
 
 ---
@@ -44,7 +44,8 @@ Edit `src/authoring/taint/runtime-references.test.ts`: change line 299 from `con
 
 ## Q-002: Criterion C-9dec3a38 (taint › Produced taint follows one per-kind rule for the validator and the runtime › The frozen taint tests stay green unchanged): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -71,3 +72,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The seven frozen files under src/authoring/taint/ hold exactly the 16 tests that test-plan.md lists, each at its original title, and all 16 are recorded as passed in the latest test report of the unit. The frozen files import only analyzeTaint, the labels, capabilities and the authoring surface from the existing index modules and never mention runtime.ts, producedTaint, referenceTaint, valueTaint or nodeInputTaint, which is consistent with them being unedited, and the unit's own tracing test checks that every one of the 16 titles is still present. The judge's complaint is only that the tracing test cannot itself prove the pass status of its sibling files; that proof is the test run, and the run shows the 16 green.
