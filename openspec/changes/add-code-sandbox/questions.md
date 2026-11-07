@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | 3.8 | harness | Task 3.8: the pre-satisfied check could not decide |
 | Q-004 | answered | none | verdict | Criterion C-061daa6c (sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options): accept as satisfied? |
 | Q-005 | answered | none | verdict | Finding F-44115141: Proxy getPrototypeOf traps escape option validation |
-| Q-006 | open | none | verdict | Criterion C-ed57e3cd (sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory): accept as satisfied? |
+| Q-006 | answered | none | verdict | Criterion C-ed57e3cd (sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory): accept as satisfied? |
 | Q-007 | open | none | verdict | Finding F-81bb3a33: task 3.5 is ticked as already satisfied, but its text is not done |
 | Q-008 | open | none | verdict | Finding F-6f5b85ff: task 3.6 is ticked as already satisfied, but its text is not done |
 | Q-009 | open | none | verdict | Finding F-74714d28: task 3.8 is ticked as already satisfied, but its text is not done |
@@ -686,7 +686,8 @@ reject The finding is correct and is not waived. The requirement says createWork
 
 ## Q-006: Criterion C-ed57e3cd (sandbox-build › The built worker entry answers a run without a factory › The built worker answers without a factory): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
@@ -713,6 +714,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The tracing test passed in the latest report and asserts every clause of the scenario: tsc exits 0 on tsconfig.build.json into a fresh mkdtemp directory under node_modules/.cache holding a type module package.json, the built index.js is imported, the built workerEntryUrl of pool.js is a file URL equal to the URL of worker-entry.js beside it and that file exists, the pool created with size 1 reports size 1, a run of the normalize body gives ok true with the exact normalize value, and the pool is closed and the directory removed in finally. No other code can have answered: the built pool spawns a real Worker at workerEntryUrl(import.meta.url) when no factory is given, the test passes none, tsconfig.build.json excludes test files from the build, and worker-entry.ts answers each job through runCode. The 120000 ms bound is enforced by the test script's --test-timeout=120000. The judge's insufficient_evidence came from the split of the evidence over parts of the diff, not from a gap in the code or the test.
 ---
 
 ## Q-007: Finding F-81bb3a33: task 3.5 is ticked as already satisfied, but its text is not done
