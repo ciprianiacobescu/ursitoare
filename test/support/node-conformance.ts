@@ -10,6 +10,7 @@ import type {
   StepContext,
   ToolInvoker,
 } from "../../src/interpreter/index.ts";
+import type { WorkerSandbox } from "../../src/sandbox/index.ts";
 import { NO_EFFECT_GATE, memoryWorkflowOps, resolveValue } from "../../src/interpreter/index.ts";
 import { loadTestCatalogue } from "./catalogue/loader.ts";
 
@@ -19,6 +20,7 @@ export interface ConformanceCase {
   scope: RunScope;
   mode: EffectMode;
   invoker?: ToolInvoker;
+  sandbox?: WorkerSandbox;
   expect: { outcome: NodeOutcome } | { error: InterpreterErrorCode };
 }
 
@@ -82,6 +84,7 @@ export async function runConformance(
       block(ref: string) {
         return catalogue.block(ref);
       },
+      ...(entry.sandbox === undefined ? {} : { sandbox: entry.sandbox }),
     };
 
     try {
