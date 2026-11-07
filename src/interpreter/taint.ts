@@ -1,10 +1,33 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
+import type {
+  BlockDef,
+  Catalogue,
+  DelegateTargetDef,
+  FlowSignature,
+  ModelProfileDef,
+  ProducedTaint,
+  RoleDef,
+  TaintOf,
+} from "../authoring/index.ts";
 
-import type { BlockDef, Catalogue, ProducedTaint, TaintOf } from "../authoring/index.ts";
-
-
-export function blocksCatalogue(_blocks: Readonly<Record<string, BlockDef>>): Catalogue {
-  throw new Error("not implemented");
+export function blocksCatalogue(blocks: Readonly<Record<string, BlockDef>>): Catalogue {
+  return Object.freeze({
+    block(ref: string): BlockDef | undefined {
+      if (typeof ref !== "string" || !Object.hasOwn(blocks, ref)) return undefined;
+      return blocks[ref];
+    },
+    modelProfile(_ref: string): ModelProfileDef | undefined {
+      return undefined;
+    },
+    role(_name: string): RoleDef | undefined {
+      return undefined;
+    },
+    delegateTarget(_target: string, _workflow: string): DelegateTargetDef | undefined {
+      return undefined;
+    },
+    flow(_ref: string, _major: number): FlowSignature | undefined {
+      return undefined;
+    },
+  });
 }
 
 export interface RunTaints {
@@ -13,5 +36,13 @@ export interface RunTaints {
 }
 
 export function createRunTaints(): RunTaints {
-  throw new Error("not implemented");
+  const taints = new Map<string, ProducedTaint>();
+  return {
+    taintOf(nodeId: string): ProducedTaint | undefined {
+      return taints.get(nodeId);
+    },
+    record(nodeId: string, produced: ProducedTaint): void {
+      taints.set(nodeId, produced);
+    },
+  };
 }

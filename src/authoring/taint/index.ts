@@ -11,6 +11,8 @@ export {
 } from "./labels.ts";
 export type { NodeTaint, TaintEdge, TaintAnalysis } from "./analyze.ts";
 export { analyzeTaint } from "./analyze.ts";
+export type { ProducedTaint, TaintOf, HookTaintScope } from "./runtime.ts";
+export { producedTaint, referenceTaint, valueTaint, nodeInputTaint } from "./runtime.ts";
 export type { TaintErrorCode } from "./errors.ts";
 export { TAINT_LIMITS, TaintError } from "./errors.ts";
 export type { FlowCapabilities, CapabilitySite, CapabilityEvidence } from "./capabilities.ts";

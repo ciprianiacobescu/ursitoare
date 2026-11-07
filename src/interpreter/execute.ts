@@ -1,4 +1,5 @@
 import type { BlockDef, JsonValue } from "../authoring/index.ts";
+import { nodeInputTaint, producedTaint } from "../authoring/index.ts";
 import type {
   RunError,
   RunRecord,
@@ -17,6 +18,7 @@ import type {
   WorkflowOps,
 } from "./types.ts";
 import { visitNode } from "./visit.ts";
+import { blocksCatalogue, createRunTaints } from "./taint.ts";
 
 interface LoadValue {
   run: RunRecord;
@@ -235,6 +237,9 @@ export async function executeRun(
     invoker = UNUSED_INVOKER;
   }
 
+  const taints = createRunTaints();
+  const catalogue = blocksCatalogue(loaded.blocks);
+
   const scope: RunScope = {
     inputs: loaded.input as JsonValue,
     nodes: new Map<string, { output: JsonValue | null; outcome: string | null }>(),
@@ -291,6 +296,7 @@ export async function executeRun(
         ops,
         invoker,
         runtime,
+        taints,
         now: deps.clock.now(),
       });
     } catch (error) {
@@ -307,6 +313,7 @@ export async function executeRun(
       nodeId,
       { output: outcome.output, outcome: outcome.outcome },
     );
+    taints.record(nodeId, producedTaint(node, nodeInputTaint(node, taints.taintOf), catalogue));
 
     if (outcome.end !== null) {
       completed = { output: outcome.output, terminalNode: nodeId };

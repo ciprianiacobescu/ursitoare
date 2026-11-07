@@ -1,8 +1,10 @@
-import type { BlockDef, FlowNode, JsonValue } from "../authoring/index.ts";
+import type { BlockDef, FlowNode, JsonValue, Taint } from "../authoring/index.ts";
+import { nodeInputTaint } from "../authoring/index.ts";
 import type { RunError, RunRecord, StepWrite, TenantContext } from "../runs/index.ts";
 import { isDurableCancellation } from "../durable/index.ts";
 import { resolveValue } from "./refs.ts";
 import { InterpreterError, toInterpreterError } from "./errors.ts";
+import type { RunTaints } from "./taint.ts";
 import type {
   EffectGate,
   InterpreterDeps,
@@ -37,6 +39,7 @@ export interface VisitRequest {
   readonly ops: WorkflowOps;
   readonly invoker: ToolInvoker;
   readonly runtime: NodeRuntime;
+  readonly taints: RunTaints;
   readonly now: Date;
 }
 
@@ -66,10 +69,12 @@ function invalidOutcome(nodeId: string): InterpreterError {
 }
 
 export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
-  const { run, nodeId, node, seq, blocks, scope, deps, tenant, ops, invoker, runtime, now } =
+  const { run, nodeId, node, seq, blocks, scope, deps, tenant, ops, invoker, runtime, taints, now } =
     request;
 
   const resolve = (value: unknown): JsonValue => resolveValue(value, scope);
+
+  const rowTaint: Taint = nodeInputTaint(node, taints.taintOf);
 
   let input: JsonValue | null = null;
   try {
@@ -110,7 +115,7 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
     output: null,
     outcome: null,
     error: null,
-    taint: [],
+    taint: rowTaint,
     policyDecisionId: null,
     idemKey: null,
     startedAt: now,
@@ -138,7 +143,7 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
       output: output as StepWrite["output"],
       outcome,
       error,
-      taint: [],
+      taint: rowTaint,
       policyDecisionId: null,
       idemKey,
       startedAt: now,

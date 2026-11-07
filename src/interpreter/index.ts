@@ -40,6 +40,8 @@ export { codeRuntime, CODE_LIMITS, codeSeed } from "./runtimes/code.ts";
 export { RUN_WORKFLOW, registerRunWorkflow, bindInterpreter, dbosWorkflowOps } from "./workflow.ts";
 export { startRun, workflowIdOf } from "./start.ts";
 export { executeRun } from "./execute.ts";
+export type { RunTaints } from "./taint.ts";
+export { blocksCatalogue, createRunTaints } from "./taint.ts";
 export { resolveValue, durationMs } from "./refs.ts";
 export type { MockEntry, TestMocks, MockProblem } from "./mocks.ts";
 export { checkMocks, createMockInvoker, testRunInvokers } from "./mocks.ts";
