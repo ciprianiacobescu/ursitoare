@@ -270,3 +270,7 @@
 {"ts": "2026-11-07T19:02:57.741880Z", "run_id": "r-20261107T1637Z-49fc", "unit": "openspec:add-hook-checker", "seq": 270, "type": "pr.labels", "number": 91, "labels": ["l4:implementing", "l4:needs-answers"]}
 {"ts": "2026-11-07T19:02:57.772192Z", "run_id": "r-20261107T1637Z-49fc", "unit": "openspec:add-hook-checker", "seq": 271, "type": "phase.changed", "from": "implementing", "to": "awaiting_human", "trigger": "questions_blocking", "exit_code": 11, "questions": ["Q-001"], "task": "3.1"}
 {"ts": "2026-11-07T19:03:00.668710Z", "run_id": "r-20261107T1637Z-49fc", "unit": "openspec:add-hook-checker", "seq": 272, "type": "pr.labels", "number": 91, "labels": ["l4:awaiting_human", "l4:needs-answers"]}
+{"ts": "2026-11-07T19:03:03.358222Z", "run_id": "r-20261107T1637Z-49fc", "unit": "openspec:add-hook-checker", "seq": 273, "type": "delegate.result", "question": "Q-001", "id": "Q-001", "status": "deferred", "reason": "soft_deadline", "called": false, "tasks": ["3.1"], "target": null, "kind": "technical", "retry_after": "2026-11-07T19:03:03Z"}
+{"ts": "2026-11-07T19:03:03.359342Z", "run_id": "r-20261107T1637Z-49fc", "unit": "openspec:add-hook-checker", "seq": 274, "type": "delegate.pass", "bound": "deadline", "delegate_only": false, "calls": 0}
+{"ts": "2026-11-07T19:03:03.369816Z", "run_id": "r-20261107T1637Z-49fc", "unit": "openspec:add-hook-checker", "seq": 275, "type": "lock.released"}
+{"ts": "2026-11-07T19:03:03.370260Z", "run_id": "r-20261107T1637Z-49fc", "unit": "openspec:add-hook-checker", "seq": 276, "type": "run.finished", "exit_code": 11}
