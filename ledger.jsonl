@@ -63,3 +63,4 @@
 {"at":"2026-11-07T10:58:27Z","run":"r-20261107T1050Z-9cf7","type":"unit.dispatched","unit":"openspec:add-taint-runtime"}
 {"at":"2026-11-07T13:37:07Z","attempt":1,"cost_usd":3.705192,"runs":4,"type":"plan.charged","unit":"openspec:add-taint-runtime"}
 {"at":"2026-11-07T13:37:07Z","run":"r-20261107T1326Z-f477","type":"unit.dispatched","unit":"openspec:add-taint-runtime"}
+{"at":"2026-11-07T14:27:26Z","detail":"waiting_capacity until 2026-11-07T14:35:14Z","reason":"unit_waiting_capacity","type":"plan.waiting","unit":"openspec:add-taint-runtime"}
