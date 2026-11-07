@@ -1,8 +1,14 @@
 import { DBOS, Error as DBOSErrors } from "@dbos-inc/dbos-sdk";
 
 import { DurableError } from "./errors.ts";
+import type { DurableErrorCode } from "./errors.ts";
 import { isDurableJson } from "./json.ts";
 import type { DurableJson, StepObserver } from "./launch.ts";
+
+// Written to the errors a step's fn throws so that, after DBOS serializes and revives them on
+// replay, runStep can still recognize them as the step's own outcome rather than a DBOS failure.
+// serialize-error copies enumerable own properties, so this marker survives the round trip.
+const STEP_ERROR_MARK = "__durableStepError";
 
 export interface StepOptions {
   retries?: number;
@@ -49,6 +55,60 @@ function dbosFailed(): DurableError {
   return new DurableError("DURABLE_UNAVAILABLE", "the durable call failed", {
     reason: "dbos_failed",
   });
+}
+
+function markStepError(error: unknown): void {
+  if (typeof error !== "object" || error === null) {
+    return;
+  }
+  try {
+    Object.defineProperty(error, STEP_ERROR_MARK, {
+      value: true,
+      enumerable: true,
+      configurable: true,
+      writable: true,
+    });
+  } catch {
+    // A non-extensible error cannot carry the marker; DBOS will revive it without one.
+  }
+}
+
+function isMarkedStepError(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    (error as Record<string, unknown>)[STEP_ERROR_MARK] === true
+  );
+}
+
+function revivedDetails(value: unknown): Record<string, string> {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    return {};
+  }
+  const details: Record<string, string> = {};
+  for (const [key, entry] of Object.entries(value)) {
+    if (typeof entry === "string") {
+      details[key] = entry;
+    }
+  }
+  return details;
+}
+
+// DBOS revives a recorded step error as a plain Error. Turn a marked one back into the error fn
+// threw, so a replay rejects with the same name, message, code and details as the first run.
+function reviveStepError(error: unknown): unknown {
+  if (!isMarkedStepError(error)) {
+    return undefined;
+  }
+  const record = error as { name?: unknown; message?: unknown; code?: unknown; details?: unknown };
+  if (record.name === "DurableError" && typeof record.code === "string") {
+    return new DurableError(
+      record.code as DurableErrorCode,
+      typeof record.message === "string" ? record.message : "",
+      revivedDetails(record.details),
+    );
+  }
+  return error;
 }
 
 function readRetries(opts: StepOptions | undefined): number {
@@ -119,6 +179,7 @@ export async function runStep<T extends DurableJson>(
     } catch (error) {
       callbackFailed = true;
       callbackError = error;
+      markStepError(error);
       throw error;
     }
   };
@@ -131,6 +192,10 @@ export async function runStep<T extends DurableJson>(
     }
     if (callbackFailed && error === callbackError) {
       throw error;
+    }
+    const revived = reviveStepError(error);
+    if (revived !== undefined) {
+      throw revived;
     }
     throw dbosFailed();
   }

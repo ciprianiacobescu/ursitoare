@@ -1,0 +1,13 @@
+{
+  "schema": "l4/followup@1",
+  "parent": "openspec:add-dbos-runtime",
+  "items": [
+    {
+      "id": "FB-001",
+      "sha256": "199dc49b42bc34bbc0c8789500bd2367b39337a6f6cf48aa94cacb1611d7d4b5"
+    }
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": []
+}
