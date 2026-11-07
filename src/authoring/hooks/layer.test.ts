@@ -29,13 +29,13 @@ function hookCode(id: string, extra: Doc = {}): Doc {
 
 function withGuard(): Doc {
   const doc = rf1();
-  doc["hooks"] = [{ id: "pay_guard", match: { effect: ["pay"] }, pre: hookCode("guard") }];
+  doc["hooks"] = [{ id: "pay_guard", match: { effect: ["pay"] }, pre: hookCode("pay_guard") }];
   return doc;
 }
 
 function withGhost(): Doc {
   const doc = rf1();
-  doc["hooks"] = [{ id: "ghost", match: { tags: ["nonexistent"] }, pre: hookCode("g") }];
+  doc["hooks"] = [{ id: "ghost", match: { tags: ["nonexistent"] }, pre: hookCode("ghost") }];
   return doc;
 }
 

@@ -12,7 +12,7 @@ Specs: `specs/hooks-static`, `specs/flow-validation`; rules: `design.md`; fixtur
 
 ## 3. The H layer
 
-- [ ] 3.1 Write `src/authoring/hooks/layer.test.ts` first (scenario "Gating and ordering"; B, C and D fail by assertion at red, because `layers_run` lacks `"H"`), then add the gated `guarded("H", …)` block (design.md Decision 5) to `validateFlow` in `src/authoring/validate/validate.ts`, and `export * from "./hooks/index.ts";` to `src/authoring/index.ts`, implementing requirement "The H layer follows L3 for flows that declare a hook" and the modified requirement "validateFlow runs three gated layers"
+- [x] 3.1 Write `src/authoring/hooks/layer.test.ts` first (scenario "Gating and ordering"; B, C and D fail by assertion at red, because `layers_run` lacks `"H"`), then add the gated `guarded("H", …)` block (design.md Decision 5) to `validateFlow` in `src/authoring/validate/validate.ts`, and `export * from "./hooks/index.ts";` to `src/authoring/index.ts`, implementing requirement "The H layer follows L3 for flows that declare a hook" and the modified requirement "validateFlow runs three gated layers"
 
 ## 4. Case files
 
