@@ -14,6 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 1.1 | technical | src/interpreter/hooks/registry.test.ts:33-35 registers codeHookRunner a second time inside assert.doesNotThrow |
 | Q-002 | answered | 3.1 | technical | Grant write access for the red step |
 | Q-003 | accepted | 3.1 | technical | src/interpreter/hooks/visit-pre.test.ts:183: sandboxRuns counts the normalize node's sandbox run, giving 9, not 8 |
+| Q-004 | open | 3.3 | technical | Grant write access for the red step |
 <!-- l4:index:end -->
 
 ---
@@ -78,6 +79,24 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/interpreter/hooks/visit-pre.test.ts`: in the `run` wrapper inside `runFlow`, increment `sandboxRuns` only when `opts.binding === "ctx"`, so the count is the hook calls and `assert.equal(scene.sandboxRuns, 8)` holds.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-004: Grant write access for the red step
+
+- **Status:** open
+- **Blocking tasks:** 3.3
+- **Kind:** technical
+- **Asked:** 2026-11-07T23:47Z by claude-sonnet, run r-20261107T2301Z-fa9e, task 3.3
+
+### Context
+Edit and Write were denied in this session (don't ask mode). The red step has to add `generation?: number` to `IntentCall` in `src/runs/intents/gate.ts`, create `src/runs/intents/gate-generation.db.test.ts` and create `src/interpreter/hooks/retry.test.ts`. Please grant file-write permission for these paths and re-run.
+
+### Options
+1. Grant Edit/Write for src/runs/intents/gate.ts, src/runs/intents/gate-generation.db.test.ts and src/interpreter/hooks/retry.test.ts and re-run the step
 
 ### Answer
 <!-- write below this line -->
