@@ -5,6 +5,7 @@
 
 import { parseFlowText } from "../format/index.ts";
 import type { Catalogue, FlowFormat } from "../format/index.ts";
+import { checkHooks, declaresHooks } from "../hooks/index.ts";
 import { TaintError } from "../taint/index.ts";
 import { checkL1 } from "./l1.ts";
 import { checkL2 } from "./l2.ts";
@@ -59,6 +60,14 @@ export function validateFlow(doc: unknown, catalogue: Catalogue): ValidationResu
   if (sink.errors.length === 0) {
     layers.push("L3");
     guarded("L3", sink, () => checkL3(doc, catalogue, sink));
+  }
+  if (sink.errors.length === 0 && declaresHooks(doc)) {
+    layers.push("H");
+    guarded("H", sink, () => {
+      const found = checkHooks(doc, catalogue);
+      sink.errors.push(...found.errors);
+      sink.warnings.push(...found.warnings);
+    });
   }
   const errors = sortIssues(sink.errors);
   return {

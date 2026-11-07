@@ -87,7 +87,7 @@ export type HookDef = CodeHook | BlockHook;
 
 export interface HookRule {
   id: string;
-  match: HookSelector;
+  match?: HookSelector;
   pre?: HookDef;
   post?: HookDef;
 }

@@ -1,6 +1,6 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
-export type Layer = "L1" | "L2" | "L3";
+export type Layer = "L1" | "L2" | "L3" | "H";
 
 export interface Issue {
   layer: Layer;

@@ -427,3 +427,75 @@ reserved error
 The validator crashed or a taint analysis limit was exceeded.
 
 Fix: Report this as a validator bug; simplify the flow if a limit was exceeded.
+
+### H_SCHEMA
+
+H error
+
+A hook, hook rule, selector or hook reference is malformed.
+
+Fix: Correct the member at the reported path; keep ids to 64 characters, at most 16 hooks per phase and at most 16 rules.
+
+### H_BLOCK
+
+H error
+
+A block hook names an unknown block or passes wrong inputs.
+
+Fix: Use a catalogue block and give its with exactly the declared inputs, including the required ones.
+
+### H_ROUTE_TARGET
+
+H error
+
+A hook route names no node or the node it wraps.
+
+Fix: Route to another existing node.
+
+### H_ROUTE_HUMAN
+
+H error
+
+A post hook of a human node declares routes.
+
+Fix: Remove routes from the hook of the human node.
+
+### H_ROUTE_EFFECT
+
+H error
+
+A hook route leads into a node with a write, send, pay or unknown effect.
+
+Fix: Route to a node before the effect node, or use cases on a switch or llm.decide node.
+
+### H_RETRY_SCOPE
+
+H error
+
+A hook retry would repeat an effect.
+
+Fix: Drop max_retries when a pay node or a pay post block hook is in the retry scope, or add allow_effect_retry: true for write or send after review.
+
+### H_CYCLE
+
+H error
+
+The graph with the hook routes added has a cycle.
+
+Fix: Remove a hook route that leads back to an earlier node.
+
+### H_DOMINANCE
+
+H error
+
+A reference reads a node that is not guaranteed to have run, with hook routes added.
+
+Fix: Reference only a node that runs on every path, hook routes included, to the reader.
+
+### W_NO_MATCH
+
+H warning
+
+A hook rule matches no node.
+
+Fix: Correct the match selector or remove the rule.

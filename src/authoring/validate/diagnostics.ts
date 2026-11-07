@@ -1,5 +1,6 @@
 import type { Layer } from "./types.ts";
 import { FLOW_ERROR_CODES, FLOW_RESERVED_CODES, FLOW_WARNING_CODES } from "./codes.ts";
+import { HOOK_ERROR_CODES, HOOK_WARNING_CODES } from "../hooks/codes.ts";
 
 export const DIAGNOSTICS_DOC_PATH: string = "docs/authoring/diagnostics.md";
 
@@ -26,7 +27,9 @@ function isKnownCode(code: string): boolean {
   return (
     FLOW_ERROR_CODES.includes(code) ||
     FLOW_WARNING_CODES.includes(code) ||
-    FLOW_RESERVED_CODES.includes(code)
+    FLOW_RESERVED_CODES.includes(code) ||
+    HOOK_ERROR_CODES.includes(code) ||
+    HOOK_WARNING_CODES.includes(code)
   );
 }
 
@@ -409,6 +412,69 @@ const ENTRIES: readonly Entry[] = [
     severity: "error",
     summary: "The validator crashed or a taint analysis limit was exceeded.",
     fix: "Report this as a validator bug; simplify the flow if a limit was exceeded.",
+  },
+  {
+    code: "H_SCHEMA",
+    layer: "H",
+    severity: "error",
+    summary: "A hook, hook rule, selector or hook reference is malformed.",
+    fix: "Correct the member at the reported path; keep ids to 64 characters, at most 16 hooks per phase and at most 16 rules.",
+  },
+  {
+    code: "H_BLOCK",
+    layer: "H",
+    severity: "error",
+    summary: "A block hook names an unknown block or passes wrong inputs.",
+    fix: "Use a catalogue block and give its with exactly the declared inputs, including the required ones.",
+  },
+  {
+    code: "H_ROUTE_TARGET",
+    layer: "H",
+    severity: "error",
+    summary: "A hook route names no node or the node it wraps.",
+    fix: "Route to another existing node.",
+  },
+  {
+    code: "H_ROUTE_HUMAN",
+    layer: "H",
+    severity: "error",
+    summary: "A post hook of a human node declares routes.",
+    fix: "Remove routes from the hook of the human node.",
+  },
+  {
+    code: "H_ROUTE_EFFECT",
+    layer: "H",
+    severity: "error",
+    summary: "A hook route leads into a node with a write, send, pay or unknown effect.",
+    fix: "Route to a node before the effect node, or use cases on a switch or llm.decide node.",
+  },
+  {
+    code: "H_RETRY_SCOPE",
+    layer: "H",
+    severity: "error",
+    summary: "A hook retry would repeat an effect.",
+    fix: "Drop max_retries when a pay node or a pay post block hook is in the retry scope, or add allow_effect_retry: true for write or send after review.",
+  },
+  {
+    code: "H_CYCLE",
+    layer: "H",
+    severity: "error",
+    summary: "The graph with the hook routes added has a cycle.",
+    fix: "Remove a hook route that leads back to an earlier node.",
+  },
+  {
+    code: "H_DOMINANCE",
+    layer: "H",
+    severity: "error",
+    summary: "A reference reads a node that is not guaranteed to have run, with hook routes added.",
+    fix: "Reference only a node that runs on every path, hook routes included, to the reader.",
+  },
+  {
+    code: "W_NO_MATCH",
+    layer: "H",
+    severity: "warning",
+    summary: "A hook rule matches no node.",
+    fix: "Correct the match selector or remove the rule.",
   },
 ];
 

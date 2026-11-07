@@ -1,0 +1,369 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "…/uses",
+      "…/with/<key>",
+      "…/with",
+      "…/routes/<j>",
+      "…/routes",
+      "…/max_retries",
+      "…/allow_effect_retry",
+      "format/types.ts:52-93",
+      "…/<member>/<i>",
+      "hooks/codes.ts",
+      "format/types.ts:88-93",
+      "taint/capabilities.ts",
+      "taint/hooks.ts",
+      "seed/node-hooks/tests/check-static.mjs",
+      "docs/decisions/0002",
+      "src/authoring/hooks/index.ts",
+      "src/authoring/format/types.ts",
+      "validate/types.ts",
+      "src/authoring/index.ts",
+      "src/authoring/validate/diagnostics.test.ts",
+      "src/authoring/taint/hooks.ts",
+      "specs/hooks-static",
+      "specs/flow-validation",
+      "node:assert/strict",
+      "src/authoring/hooks/model.test.ts",
+      "src/authoring/hooks/model.ts",
+      "src/authoring/hooks/codes.ts",
+      "src/authoring/hooks/placements.test.ts",
+      "src/authoring/hooks/check-schema.test.ts",
+      "src/authoring/validate/types.ts",
+      "src/authoring/format/types.ts:88-93",
+      "src/authoring/hooks/check.ts",
+      "src/authoring/hooks/check.test.ts",
+      "src/authoring/hooks/layer.test.ts",
+      "src/authoring/validate/validate.ts",
+      "src/authoring/hooks/cases.test.ts",
+      "test/support/hook-cases/index.ts",
+      "test/support/hook-cases/invalid",
+      "valid",
+      "warnings",
+      "hook-cases",
+      "test/support/README.md",
+      "src/authoring/hooks/diagnostics-hooks.test.ts",
+      "src/authoring/validate/diagnostics.ts",
+      "docs/authoring/diagnostics.md",
+      "**/hooks.ts",
+      "**/check.ts",
+      "**/model.ts",
+      "**/[]",
+      "**/human.*",
+      "**/^[a-z][a-z0-9_]{0,63}$",
+      "**/hook.*",
+      "**/item.*",
+      "**/FLOW_*",
+      "test/support/hook-cases/{invalid,valid,warnings}/*.yaml",
+      "**/index.ts",
+      "**/inputs.*",
+      "**/codes.ts",
+      "**/validate.ts",
+      "**/[",
+      "module authoring",
+      "module docs",
+      "module format",
+      "module hooks",
+      "module node:assert",
+      "module seed",
+      "module specs",
+      "module taint",
+      "module test",
+      "module validate",
+      "module …"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/authoring/diagnostics.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-checker/.l4/ledger/r-20261107T1637Z-49fc.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-checker/.l4/ledger/r-20261107T1904Z-fd28.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-checker/.l4/ledger/r-20261107T1907Z-8274.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-checker/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-checker/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/authoring/format/types.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/hooks/cases.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/hooks/check-schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/hooks/check.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/hooks/check.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/hooks/codes.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/hooks/diagnostics-hooks.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/hooks/layer.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/hooks/model.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/hooks/model.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/hooks/placements.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/index.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/validate/diagnostics.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/validate/diagnostics.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/validate/types.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/validate/validate.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/README.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/hook-cases/index.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-cases/invalid/h-block-missing-input.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-cases/invalid/h-cycle.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-cases/invalid/h-dominance.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-cases/invalid/h-retry-scope-pay.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-cases/invalid/h-route-effect-x3.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-cases/invalid/h-route-human.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-cases/invalid/h-route-target-missing.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-cases/invalid/h-schema-post-on-end.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-cases/invalid/h-schema-unknown-field.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-cases/valid/hooks-onion.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `test` is named in the spec"
+      },
+      {
+        "path": "test/support/hook-cases/valid/hooks-retry-read.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `test` is named in the spec"
+      },
+      {
+        "path": "test/support/hook-cases/warnings/hooks-no-match.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `test` is named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/authoring/format/types.ts, src/authoring/hooks/check.ts, src/authoring/hooks/codes.ts, src/authoring/hooks/model.ts, src/authoring/index.ts and 4 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/authoring/format/types.ts",
+      "src/authoring/hooks/check.ts",
+      "src/authoring/hooks/codes.ts",
+      "src/authoring/hooks/model.ts",
+      "src/authoring/index.ts",
+      "src/authoring/validate/diagnostics.ts",
+      "src/authoring/validate/types.ts",
+      "src/authoring/validate/validate.ts",
+      "test/support/hook-cases/index.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1863,
+      "passed": 1863,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 66,
+      "new_passed": 66,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
