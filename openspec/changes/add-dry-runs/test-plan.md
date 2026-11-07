@@ -50,6 +50,7 @@ The live proof, its harness and `main`: `test-plan-runs.md`. Rows marked (derive
 - **D2** `("live", r_1)` and `("mock", r_1)`: `fallback` once each with `(mode, run)`; the first rejects `INTERPRETER_NO_INVOKER`, the second resolves; `liveInvoker` and `getPayload` never.
 - **D3** `("stub", r_2)` then a `pay` and a `read` call; and a run whose payload is `[]`: every call rejects `dry run fakes_unavailable`, node `null`, `{ reason: "fakes_unavailable" }`.
 - **D4** the invoker of `("stub", r_1)`: `authorize(c, x)` calls `LIVE.authorize` once with `c`, `x` and answers `AUTH` (`===`).
+- **D5** a store whose `getPayload` rejects once with an `Error` of message `db password=hunter2` and `code` `ECONNRESET`, then answers `FKT`; `("stub", r_1)`, then a `read` call (`lookup`) and a `pay` call (attempt 1): the read rejects `INTERPRETER_TOOL_FAILED`, `dry run fakes_unavailable`, node `null`, `{ reason: "fakes_unavailable" }`, and the JSON of the error holds neither `hunter2` nor `ECONNRESET`; `LIVE.invoke` is never called; the `pay` call then answers `{ payment_id: "P1" }` (the failed load is not kept; `getPayload` twice). Ran on a scratch `dryRunInvokers`.
 
 ## Route harness and refusals
 

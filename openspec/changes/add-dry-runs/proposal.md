@@ -12,7 +12,7 @@ New: `src/interpreter/fakes.ts`, `src/interpreter/policy/dry-runs.cedar`, `src/r
 
 ## Impact
 
-- **Scaffold:** Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); the `stubInvoker` stub imports `DryRunFakes` through the `export type` line of `src/interpreter/index.ts`, which is scaffolded; this change implements them. Not scaffolded: the value export `checkFakes` of `src/interpreter/index.ts`, the export lines of `src/runtimes/index.ts` and `src/api/index.ts`, `dry-runs.cedar`, the `export` of `mapStartRunError`, the description, the `src/main.ts` edit and the document. No dependency.
+- **Scaffold:** Signature stubs for the interfaces given below are on the base branch (scaffold, `docs/decisions/0002`); the `stubInvoker` stub imports `DryRunFakes` through the `export type` line of `src/interpreter/index.ts`, which is scaffolded; this change implements them. Not scaffolded: the value export `checkFakes` of `src/interpreter/index.ts`, the export lines of `src/runtimes/index.ts` and `src/api/index.ts`, `dry-runs.cedar`, the `export` keyword on `mapStartRunError` (the function and its signature are on main; the dry-run route reuses it unchanged), the description, the `src/main.ts` edit and the document. No dependency.
 - **Depends on:** U13 `add-api-pep`, U27 `add-flow-registry`, U33 `add-interpreter-core`, U35 `add-mock-test-runs`, U36 `add-runs-api`, U43 `add-block-hooks`, U45 `add-fake-egress-proxy`, U45b `add-fake-tools`, U46 `add-gateway-client`, U47 `add-tool-registry`, U48 `add-credentials`, U49b `add-policy-deploy`, U50 `add-tool-invocation`. Added, each for names it gives: U11, U11b, U14, U17, U31, U34, U41 `add-hook-checker`, U42b `add-hook-trace` (the description's target), U49 `add-grants-model` (the grants of the proof).
 - **Changed:** no M0-M4 test is edited. These hold: `src/interpreter/flow-testing-policy.test.ts::C-4a0822e8` (the new ids start `dry-run-`), `src/main.mockruns.test.ts::C-28603f65` (no `egress`: `invokerFor("stub")` still rejects), `src/api/run-views.test.ts::C-8e399d8e` (key lists only), `test/arch/egress-sites.test.ts` (`main.ts` is inventoried by U46; `stub.ts` imports no gateway value); `src/main.conventions.test.ts::C-d150bfa4` guards the regenerated document. add-hook-trace's `src/api/run-views-hooks.test.ts` (it deep-equals `inputOriginalRef`) is not edited: the description is on the steps response (ruling U51-1).
 
@@ -29,6 +29,8 @@ export function stubInvoker(live: ToolInvoker, fakes: DryRunFakes): ToolInvoker;
   // call.nodeId, or of `${nodeId}:${phase}:${hookId}` for a hook call; no token, no send
 export function dryRunInvokers(path: InvokePath, store: RunStore, fallback: InterpreterDeps["invokerFor"]): InterpreterDeps["invokerFor"];
   // mode "stub": stubInvoker(await path.liveInvoker(run), fakes read from run.mocksRef); any other mode: fallback(mode, run)
+// src/api/test-run-routes.ts:64 (module-private on main; task 4.1 adds the keyword `export`; the complete mapping is in delivered-shapes.md)
+export function mapStartRunError(error: unknown): never;   // throws the ApiError an InterpreterError or RunDataError from startRun maps to; rethrows any other error
 // src/api/dry-run-routes.ts
 export interface DryRunApiDeps { pool: TenantPool | null; clock: Clock; ids: IdSource; interpreter: InterpreterDeps | null; enabled: boolean }
 export function registerDryRunRoutes(server: FastifyInstance, deps: DryRunApiDeps): void;

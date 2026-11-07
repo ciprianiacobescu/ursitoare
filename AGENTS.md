@@ -61,6 +61,10 @@ delegates; only `identity` talks to the OIDC provider; only `observability` expo
   its task (option checks in the task that only spawns one worker, say) makes that red fail with "new tests passed
   before implementation". When earlier code already makes some rows of a scenario true, fold those rows into a test
   that also asserts what this task adds: every new test function needs one assertion that only this task makes true.
+- Only a new test traces a criterion: red fails with "no new test traces C-…" for each criterion the task implements
+  that no new test id names. A task that changes a frozen test in place (its name stays) still writes, for each
+  criterion of that test it implements, at least one new test named with the id that fails at red (for example
+  `registry.test.ts` gains `C-f3de9ac6 code is built in and runs codeRuntime` beside the edited old test).
 - A test never lets a driver or SQL error escape (L4 cannot read its kind): a test of a migration first asserts that its
   objects exist (`to_regclass`, `to_regprocedure`) or that the ledger holds the expected versions, and an expected
   failure is `await assert.rejects(p, { code })`. Every symbol a test imports is in its change's Interfaces, so the

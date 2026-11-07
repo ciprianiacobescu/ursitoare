@@ -26,7 +26,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 7. main
 
-- [ ] 7.1 Write `src/main.dryruns.test.ts` first (scenario "Egress wires the stub invoker and the route; its absence leaves both off"; it also reads `docs/api/openapi.json` for the two paths), then edit the shared `src/main.ts` as design decision 8 says (after U46 to U49b) and run `node test/support/openapi-docs.ts`, implementing requirement "main wires the stub invoker and enables the route only when egress is configured"
+- [ ] 7.1 Write `src/main.dryruns.test.ts` first (scenario "Egress wires the stub invoker and the route; its absence leaves both off", rows M1 to M3; it also reads `docs/api/openapi.json` for the two paths), then edit the shared `src/main.ts` as design decision 8 says (after U46 to U49b) and run `node test/support/openapi-docs.ts`, implementing requirement "main wires the stub invoker and enables the route only when egress is configured"
 
 ## 8. The OpenAPI description
 

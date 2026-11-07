@@ -14,7 +14,7 @@ mocks.ts:288-317 testRunInvokers(store): InterpreterDeps["invokerFor"]  // refus
 start.ts:33-129  startRun(deps, ctx, req): Promise<RunRecord>  // refuses a draft (:45); draws deps.ids.next("run") without req.runId (:80); stores mode: req.mode, trigger "test", mocks (:97-102)
 runtimes/wait.ts:16 a wait sleeps unless ctx.mode is "mock"   runs/intents/gate.ts:74 a stored intent of another mode is "unknown"
 // src/api
-test-run-routes.ts:64-109,111,139-260  mapStartRunError (module-private on main), registryVersionLoader(pool), registerTestRunRoutes (:152-170 resource loader, :233-255 idempotency)
+test-run-routes.ts:64-109,111,139-260  mapStartRunError (module-private on main; the mapping below), registryVersionLoader(pool), registerTestRunRoutes (:152-170 resource loader, :233-255 idempotency)
 run-routes.ts:41-47,104-126  RunApiDeps { pool; clock; ids; engineKey: KeyMaterial | null; durable }, context(), loadRun   run-views.ts:119-137,177  RUN_VIEW_SCHEMA, STEP_VIEW_SCHEMA, toRunView, runResource(tenantId, run): ResourceRef
 pagination.ts:17-91 PAGE_QUERY_SCHEMA, readPage, startAfter, paginate   cursor.ts:101 deriveCursorKey   flow-common.ts:54-82 pageSchema, engineKeyRequired (503), cursorInvalid (400), notFound (404)
 // src/pdp, src/identity, src/runs
@@ -25,6 +25,21 @@ runs/store/run-store.ts:15-26 RunStore { createRun; getRun; recordStep; listStep
 // src/main.ts before the M6 edits: :216-225 engine and installPep; :277-286 `base: InterpreterDeps` with invokerFor: testRunInvokers(store); :304 registerRunRoutes; :312 registerTestRunRoutes
 // test/support/crash/pay-once.ts:19-47 PAY_ONCE_INPUT, PAY_ONCE_PAID_OUTPUT, payOnceVersion(), payOnceCatalogue()
 ```
+
+## `mapStartRunError`, complete (src/api/test-run-routes.ts:64-109, main@cf34c628)
+
+`function mapStartRunError(error: unknown): never` throws and never returns. The dry-run route calls it unchanged (task 4.1 only adds `export`), on the errors of `startRun` (`src/interpreter/start.ts`, which throws exactly the five `InterpreterError` codes below, at :41, :47, :56, :74, :115) and of the run store. `ApiError(status, code, message, details?)`; `notFound()` is `flow-common.ts:82` and `runsUnavailable()` is `test-run-routes.ts:51`.
+
+| error | status, code, message | `details` | line |
+|---|---|---|---|
+| `INTERPRETER_VERSION_NOT_FOUND` | 404 `NOT_FOUND` `Resource not found` | none | :67-68 |
+| `INTERPRETER_VERSION_NOT_RUNNABLE` (a draft: `details.reason` `draft`) | 422 `OPERATION_REFUSED` `Operation is refused` | `{ reason: "version_not_runnable", cause: <error.details.reason when a string, else "not_runnable"> }` plus `blocks` when `error.details.blocks` is an array | :69-79 |
+| `INTERPRETER_KIND_UNSUPPORTED` | 422 `OPERATION_REFUSED` `Operation is refused` | `{ reason: "kind_unsupported", kinds: error.details.kinds }` | :80-84 |
+| `INTERPRETER_INPUT_INVALID` | 400 `VALIDATION_FAILED` `Request validation failed` | `{ fields: [{ field: "body/input", message: "must satisfy the flow inputs (<path> <keyword>)" }] }`, `path` from `error.details.path` (default `/`), `keyword` from `error.details.keyword` (default `schema`) | :85-96 |
+| `INTERPRETER_UNBOUND` (the run could not be queued) | 503 `RUNS_UNAVAILABLE` `Runs are unavailable` | none | :97-98 |
+| any other `InterpreterError` | rethrown | | :99-100 |
+| `RunDataError` (mocks or input not plain JSON of at most 1 MiB) | 400 `VALIDATION_FAILED` `Request validation failed` | `{ fields: [{ field: "body", message: "must be plain JSON of at most 1 MiB" }] }` | :103-107 |
+| anything else | rethrown | | :108 |
 
 ## M5 and M6 names (folders)
 
