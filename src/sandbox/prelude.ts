@@ -25,10 +25,33 @@ const defProp = Object.defineProperty, getProto = Object.getPrototypeOf;
 const getDesc = Object.getOwnPropertyDescriptor, keysOf = Object.keys;
 const isArray = Array.isArray, isFinite_ = Number.isFinite;
 const hasOwn = Object.hasOwn, ReflectConstruct = Reflect.construct;
-const NativeError = Error, NativeSet = Set;
+const NativeError = Error, NativeSet = Set, NativeWeakMap = WeakMap;
+const MAX_JSON_DEPTH = 1024;
 
 const hidden = (o, k, v) => defProp(o, k, { value: v, writable: true, configurable: true, enumerable: false });
 const fixed = (o, k, v) => defProp(o, k, { value: v, writable: false, configurable: false, enumerable: false });
+
+{
+  const stringify = function stringify(value, replacer, space) {
+    if (isArray(replacer)) return jstringify(value, replacer, space);
+    const depths = new NativeWeakMap();
+    const guard = function (key, current) {
+      const parent = depths.get(this);
+      const depth = (parent === undefined ? -1 : parent) + 1;
+      if (current !== null && typeof current === 'object') {
+        depths.set(current, depth);
+        if (depth > MAX_JSON_DEPTH) {
+          const e = new NativeError('stack overflow');
+          e.name = 'InternalError';
+          throw e;
+        }
+      }
+      return typeof replacer === 'function' ? replacer.call(this, key, current) : current;
+    };
+    return jstringify(value, guard, space);
+  };
+  hidden(JSON, 'stringify', stringify);
+}
 
 // ---- remove observability / threading primitives
 delete g.SharedArrayBuffer;
