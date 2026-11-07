@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { test } from "node:test";
 
+import { HOOK_ERROR_CODES, HOOK_WARNING_CODES } from "../hooks/index.ts";
 import { FLOW_ERROR_CODES, FLOW_RESERVED_CODES, FLOW_WARNING_CODES } from "./codes.ts";
 import {
   DIAGNOSTICS,
@@ -13,7 +14,13 @@ import {
 const DOC = "docs/authoring/diagnostics.md";
 
 function allCodes(): string[] {
-  return [...FLOW_ERROR_CODES, ...FLOW_WARNING_CODES, ...FLOW_RESERVED_CODES];
+  return [
+    ...FLOW_ERROR_CODES,
+    ...FLOW_WARNING_CODES,
+    ...FLOW_RESERVED_CODES,
+    ...HOOK_ERROR_CODES,
+    ...HOOK_WARNING_CODES,
+  ];
 }
 
 test("C-73b013e5: the committed document equals renderDiagnosticsDoc and ends with one newline", () => {
@@ -29,7 +36,7 @@ test("C-73b013e5: the committed document equals renderDiagnosticsDoc and ends wi
 });
 
 test("C-73b013e5: DIAGNOSTICS has one entry per code in list order with single-line text", () => {
-  assert.equal(DIAGNOSTICS.length, 53);
+  assert.equal(DIAGNOSTICS.length, 62);
   assert.deepEqual(
     DIAGNOSTICS.map((d) => d.code),
     allCodes(),
