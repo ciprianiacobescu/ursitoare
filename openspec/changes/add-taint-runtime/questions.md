@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.2 | technical | src/authoring/taint/runtime-references.test.ts:299 parses an unwrapped edge ref with scanTemplate |
+| Q-001 | accepted | 1.2 | technical | src/authoring/taint/runtime-references.test.ts:299 parses an unwrapped edge ref with scanTemplate |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/authoring/taint/runtime-references.test.ts:299 parses an unwrapped edge ref with scanTemplate
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 1.2
 - **Kind:** technical
 - **Asked:** 2026-11-07T10:02Z by deepseek-free, run r-20261107T0904Z-91c1, task 1.2
