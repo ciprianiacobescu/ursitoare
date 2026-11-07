@@ -98,6 +98,35 @@ function payOnceFlow(lookupUses = "erp.lookup_vendor@1"): Flow {
   };
 }
 
+function payCodeFlow(): Flow {
+  return {
+    ursitoare: "0.1",
+    flow: "pay-code",
+    version: "1.0.0",
+    inputs: {
+      type: "object",
+      properties: { vendor: { type: "string" } },
+      required: ["vendor"],
+    },
+    start: "normalize",
+    nodes: {
+      normalize: {
+        kind: "code",
+        language: "js",
+        source: "return { n: 1 };",
+        input: {},
+        output_schema: { type: "object" },
+        next: "done",
+      },
+      done: {
+        kind: "end",
+        status: "completed",
+        output: { n: "${{ nodes.normalize.output.n }}" },
+      },
+    },
+  };
+}
+
 const VERSIONS: ReadonlyMap<string, LoadedVersion> = new Map([
   [
     "pay-once",
@@ -137,6 +166,16 @@ const VERSIONS: ReadonlyMap<string, LoadedVersion> = new Map([
       state: "validated",
       ownerTeam: "finance",
       flow: loadTestFlow("rf-1-core"),
+    },
+  ],
+  [
+    "pay-code",
+    {
+      flowId: "pay-code",
+      hash: HASH,
+      state: "validated",
+      ownerTeam: "finance",
+      flow: payCodeFlow(),
     },
   ],
 ]);
@@ -289,13 +328,30 @@ test("C-d807f118 startRun refuses missing draft unsupported and unknown block ve
   });
   await expectRefusal("rf-1-core", {}, {
     code: "INTERPRETER_KIND_UNSUPPORTED",
-    kinds: ["code", "llm.decide", "llm.extract"],
+    kinds: ["llm.decide", "llm.extract"],
   });
   await expectRefusal("pay-missing", {}, {
     code: "INTERPRETER_VERSION_NOT_RUNNABLE",
     reason: "block_missing",
     blocks: ["erp.unknown@1"],
   });
+});
+
+test("C-d807f118 startRun admits a validated flow with code nodes", async () => {
+  const rig = makeRig();
+  const captured = await startOn(rig, T_A, "pay-code", { runId: "r_code" });
+  const run = valueOf(captured, "code start");
+  assert.equal(run.runId, "r_code");
+  assert.equal(run.state, "queued");
+  assert.equal(run.flowId, "pay-code");
+  assert.deepEqual(rig.calls, [
+    {
+      workflow: "ursitoare.run",
+      workflowId: "tenant_a:r_code",
+      input: { tenantId: "tenant_a", reviewProfile: "solo", runId: "r_code" },
+    },
+  ]);
+  assert.deepEqual(await rig.store.getRun(T_A, "r_code"), run);
 });
 
 test("C-d807f118 startRun refuses ill-typed input and an invalid run id", async () => {

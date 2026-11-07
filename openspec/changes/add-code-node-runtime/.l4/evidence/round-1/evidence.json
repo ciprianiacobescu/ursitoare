@@ -1,0 +1,291 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/interpreter/index.ts",
+      "src/sandbox",
+      "src/api/shutdown.ts:51-52",
+      "test/support/code-pay.ts",
+      "test/support/code-pay-seed.ts",
+      "src/sandbox/index.ts",
+      "docs/decisions/0002",
+      "src/main.durable.test.ts",
+      "src/main.mockruns.test.ts",
+      "node:assert/strict",
+      "src/interpreter/runtimes/code.ts",
+      "src/interpreter/runtimes/code.test.ts",
+      "src/interpreter/types.ts",
+      "src/interpreter/runtimes/code-faults.test.ts",
+      "test/support/node-conformance.ts",
+      "src/interpreter/errors.ts",
+      "src/interpreter/code-run.test.ts",
+      "src/interpreter/code-run.db.test.ts",
+      "src/interpreter/registry.test.ts",
+      "src/interpreter/start.test.ts",
+      "src/api/test-run-refusals.test.ts",
+      "src/interpreter/registry.ts",
+      "src/interpreter/visit.ts",
+      "src/main.sandbox.test.ts",
+      "src/main.ts",
+      "src/main.codeRuns.test.ts",
+      "**/InterpreterDeps.sandbox?",
+      "**/NodeServices.sandbox?",
+      "**/tsconfig.json",
+      "**/visit.ts",
+      "**/start.test.ts",
+      "**/[",
+      "**/ConformanceCase.sandbox?",
+      "**/createSandbox?",
+      "module api",
+      "module docs",
+      "module durable",
+      "module interpreter",
+      "module main",
+      "module main.codeRuns.test",
+      "module main.durable.test",
+      "module main.mockruns.test",
+      "module main.sandbox.test",
+      "module node:assert",
+      "module registry",
+      "module sandbox",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-code-node-runtime/.l4/ledger/r-20261107T0128Z-1781.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-node-runtime/.l4/ledger/r-20261107T0354Z-61b5.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-node-runtime/.l4/ledger/r-20261107T0533Z-d555.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-node-runtime/.l4/ledger/r-20261107T0555Z-d757.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-node-runtime/.l4/ledger/r-20261107T0704Z-32c3.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-node-runtime/.l4/ledger/r-20261107T0715Z-d197.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-node-runtime/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-node-runtime/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/test-run-refusals.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/code-run.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/code-run.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/errors.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/execute.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `interpreter` is named in the spec"
+      },
+      {
+        "path": "src/interpreter/index.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/registry.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/registry.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/runtimes/code-faults.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/runtimes/code.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/runtimes/code.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/start.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/types.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/visit.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.codeRuns.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.sandbox.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/code-pay-seed.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/code-pay.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/node-conformance.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/interpreter/errors.ts, src/interpreter/execute.ts, src/interpreter/index.ts, src/interpreter/registry.ts, src/interpreter/runtimes/code.ts and 6 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/interpreter/errors.ts",
+      "src/interpreter/execute.ts",
+      "src/interpreter/index.ts",
+      "src/interpreter/registry.ts",
+      "src/interpreter/runtimes/code.ts",
+      "src/interpreter/types.ts",
+      "src/interpreter/visit.ts",
+      "src/main.ts",
+      "test/support/code-pay-seed.ts",
+      "test/support/code-pay.ts",
+      "test/support/node-conformance.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1780,
+      "passed": 1780,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 30,
+      "new_passed": 30,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

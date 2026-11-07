@@ -3,7 +3,7 @@ import type { NodeKind } from "../authoring/index.ts";
 import { InterpreterError } from "./errors.ts";
 import type { NodeRuntime } from "./types.ts";
 
-export const SUPPORTED_KINDS: readonly NodeKind[] = ["block", "end", "switch", "wait"];
+export const SUPPORTED_KINDS: readonly NodeKind[] = ["block", "code", "end", "switch", "wait"];
 
 const runtimes = new Map<NodeKind, NodeRuntime>();
 

@@ -1,3 +1,4 @@
+import { availableParallelism } from "node:os";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -45,6 +46,8 @@ import { createLogger, noopTracer } from "./observability/index.ts";
 import { createPolicyEngine, defaultSrcDir } from "./pdp/index.ts";
 import { loadRegistryCatalogue } from "./registry/index.ts";
 import { createEffectIntents, createRunStore } from "./runs/index.ts";
+import { createWorkerSandbox, poolSize } from "./sandbox/index.ts";
+import type { WorkerSandbox } from "./sandbox/index.ts";
 
 export const VERSION = "0.0.0";
 
@@ -87,6 +90,15 @@ function fatalMessage(error: unknown): string {
   return "startup failed";
 }
 
+async function closePool(sandbox: WorkerSandbox | null, logger: Logger): Promise<void> {
+  if (sandbox === null) return;
+  try {
+    await sandbox.close();
+  } catch {
+    logger.warn("sandbox.close failed");
+  }
+}
+
 export function startServer(port: number, host = "127.0.0.1"): Promise<RunningServer> {
   return (async () => {
     const logger = createLogger({ level: "silent" });
@@ -122,6 +134,7 @@ export interface MainDeps {
   launchDurable?: typeof launchDurable;
   registerRunWorkflow?: typeof registerRunWorkflow;
   bindInterpreter?: typeof bindInterpreter;
+  createSandbox?: typeof createWorkerSandbox;
   configureServer?: (server: FastifyInstance) => void | Promise<void>;
   inspectServers?: (s: {
     public: FastifyInstance;
@@ -266,6 +279,7 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
 
   let durable: DurableRuntime | null = null;
   let interpreter: InterpreterDeps | null = null;
+  let sandbox: WorkerSandbox | null = null;
   const appEndpoint = config.database.app;
   if (
     database !== null &&
@@ -285,6 +299,10 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
         ids: systemIds,
       };
       (deps.registerRunWorkflow ?? registerRunWorkflow)();
+      sandbox = (deps.createSandbox ?? createWorkerSandbox)({
+        size: poolSize(availableParallelism()),
+      });
+      base.sandbox = sandbox;
       (deps.bindInterpreter ?? bindInterpreter)(base);
       durable = await (deps.launchDurable ?? launchDurable)({
         endpoint: appEndpoint,
@@ -294,6 +312,8 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     } catch (error) {
       await internal?.close().catch(() => undefined);
       await server.close().catch(() => undefined);
+      await durable?.shutdown().catch(() => undefined);
+      await closePool(sandbox, logger);
       await database.close().catch(() => undefined);
       bootstrap.fatal(fatalFields(error), fatalMessage(error));
       exit(1);
@@ -301,25 +321,37 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     }
   }
 
-  registerRunRoutes(server, {
-    pool: database?.appPool ?? null,
-    clock: systemClock,
-    ids: systemIds,
-    engineKey: config.engineKey,
-    durable,
-  });
+  try {
+    registerRunRoutes(server, {
+      pool: database?.appPool ?? null,
+      clock: systemClock,
+      ids: systemIds,
+      engineKey: config.engineKey,
+      durable,
+    });
 
-  registerTestRunRoutes(server, {
-    pool: database?.appPool ?? null,
-    clock: systemClock,
-    ids: systemIds,
-    interpreter,
-  });
+    registerTestRunRoutes(server, {
+      pool: database?.appPool ?? null,
+      clock: systemClock,
+      ids: systemIds,
+      interpreter,
+    });
+  } catch (error) {
+    await internal?.close().catch(() => undefined);
+    await server.close().catch(() => undefined);
+    await durable?.shutdown().catch(() => undefined);
+    await closePool(sandbox, logger);
+    await database?.close().catch(() => undefined);
+    bootstrap.fatal(fatalFields(error), fatalMessage(error));
+    exit(1);
+    return null;
+  }
 
   const closeAll = async (): Promise<void> => {
     await server.close().catch(() => undefined);
     await internal?.close().catch(() => undefined);
     await durable?.shutdown().catch(() => undefined);
+    await closePool(sandbox, logger);
     await database?.close().catch(() => undefined);
   };
 

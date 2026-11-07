@@ -10,6 +10,7 @@ import {
   SUPPORTED_KINDS,
 } from "./index.ts";
 import type { NodeOutcome, NodeRuntime } from "./index.ts";
+import { codeRuntime } from "./runtimes/code.ts";
 
 const OUTCOME: NodeOutcome = { output: null, outcome: null, next: null, end: null };
 const RT: NodeRuntime = { execute: async () => OUTCOME };
@@ -25,7 +26,7 @@ function codeAndKind(run: () => void): { code: string; kind: unknown } {
 }
 
 test("C-f3de9ac6 built-in kinds are registered and the rest are not", () => {
-  assert.deepEqual(SUPPORTED_KINDS, ["block", "end", "switch", "wait"]);
+  assert.deepEqual(SUPPORTED_KINDS, ["block", "code", "end", "switch", "wait"]);
   assert.equal(NODE_KINDS.length, 14);
   for (const kind of NODE_KINDS) {
     const runtime = nodeRuntimeFor(kind);
@@ -36,6 +37,11 @@ test("C-f3de9ac6 built-in kinds are registered and the rest are not", () => {
     }
   }
   assert.equal(nodeRuntimeFor("constructor" as NodeKind), undefined);
+});
+
+test("C-f3de9ac6 code is built in and runs codeRuntime", () => {
+  assert.ok(SUPPORTED_KINDS.includes("code"), "code is a supported kind");
+  assert.equal(nodeRuntimeFor("code"), codeRuntime);
 });
 
 test("C-f3de9ac6 registration refuses duplicates and invalid runtimes", () => {

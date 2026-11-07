@@ -70,7 +70,7 @@ interface Harness {
 
 async function createHarness(): Promise<Harness> {
   const db = await withTestDatabase();
-  const { a } = await seedTwoTenants(db);
+  const { a, b } = await seedTwoTenants(db);
   const clock = fixedClock(NOW);
   await seedFlowActors(
     db,
@@ -83,12 +83,19 @@ async function createHarness(): Promise<Harness> {
     ],
     clock,
   );
+  await seedFlowActors(
+    db,
+    b,
+    [{ subject: "mallory", roles: ["author"], teams: ["finance"] }],
+    clock,
+  );
   const seed = await seedMockRunFlows(db, a, clock);
 
   const sessions: Record<string, Session> = {};
   for (const name of ["alice", "bob", "dave", "carol"]) {
     sessions[name] = await createTestSession(db, a, name, clock);
   }
+  sessions["mallory"] = await createTestSession(db, b, "mallory", clock);
 
   const engine = await createPolicyEngine({
     srcDir: defaultSrcDir(),
@@ -154,15 +161,16 @@ function post(
   flowId: string,
   hash: string,
   body: unknown,
+  opts: { cookie?: boolean; csrf?: boolean } = {},
 ) {
   const session = h.sessions[who] as Session;
+  const headers: Record<string, string> = {};
+  if (opts.cookie !== false) headers["cookie"] = session.cookie;
+  if (opts.csrf !== false) headers["x-csrf-token"] = session.csrfToken;
   return server.inject({
     method: "POST",
     url: `/api/v1/flows/${flowId}/versions/${hash}/test`,
-    headers: {
-      cookie: session.cookie,
-      "x-csrf-token": session.csrfToken,
-    },
+    headers,
     payload: body as object,
   });
 }
@@ -199,7 +207,7 @@ test("C-7d9b0050 versions, bodies and mocks are refused before a run exists", as
     assert.equal(llmError.error.code, "OPERATION_REFUSED");
     assert.deepEqual(llmError.error.details, {
       reason: "kind_unsupported",
-      kinds: ["code", "llm.decide", "llm.extract"],
+      kinds: ["llm.decide", "llm.extract"],
     });
 
     const badInput = await post(h, server, "alice", "pay-once", h.seed.validated, {
@@ -276,6 +284,85 @@ test("C-7d9b0050 versions, bodies and mocks are refused before a run exists", as
         { nodeId: "lookup", index: 0, reason: "schema", detail: "/ required" },
       ],
     });
+
+    assert.equal(await runCount(h), 0);
+    assert.equal(h.enqueue.calls.length, 0);
+  } finally {
+    await server.close();
+    await h.db.close();
+  }
+});
+
+test("C-7d9b0050 kind_unsupported no longer lists code", async () => {
+  const h = await createHarness();
+  const server = await makeServer(h, h.deps);
+  try {
+    const res = await post(h, server, "alice", "rf-1-core", h.seed.llm, {
+      input: { invoice_id: "inv-1" },
+      mocks: LLM_MOCKS,
+    });
+    assert.equal(res.statusCode, 422);
+    const body = res.json() as ErrorBody;
+    assert.equal(body.error.code, "OPERATION_REFUSED");
+    assert.deepEqual(body.error.details, {
+      reason: "kind_unsupported",
+      kinds: ["llm.decide", "llm.extract"],
+    });
+    assert.equal(await runCount(h), 0);
+    assert.equal(h.enqueue.calls.length, 0);
+  } finally {
+    await server.close();
+    await h.db.close();
+  }
+});
+
+test("C-de412456 who may test which flow and what is refused before a run", async () => {
+  const h = await createHarness();
+  const server = await makeServer(h, h.deps);
+  const body = { input: PAY_ONCE_INPUT, mocks: MOCKS };
+  try {
+    for (const who of ["bob", "dave", "carol"]) {
+      const res = await post(h, server, who, "pay-once", h.seed.validated, body);
+      assert.equal(res.statusCode, 403, `${who} is forbidden`);
+      const error = res.json() as ErrorBody;
+      assert.equal(error.error.code, "FORBIDDEN");
+      assert.equal(typeof error.error.details?.["decisionId"], "string");
+    }
+
+    const mallory = await post(h, server, "mallory", "pay-once", h.seed.validated, body);
+    assert.equal(mallory.statusCode, 404);
+    assert.equal((mallory.json() as ErrorBody).error.code, "NOT_FOUND");
+
+    const noCookie = await post(h, server, "alice", "pay-once", h.seed.validated, body, {
+      cookie: false,
+    });
+    assert.equal(noCookie.statusCode, 401);
+    assert.equal((noCookie.json() as ErrorBody).error.code, "UNAUTHENTICATED");
+
+    const noCsrf = await post(h, server, "alice", "pay-once", h.seed.validated, body, {
+      csrf: false,
+    });
+    assert.equal(noCsrf.statusCode, 403);
+    assert.equal((noCsrf.json() as ErrorBody).error.code, "CSRF_INVALID");
+
+    const noFlow = await post(h, server, "alice", "nope", h.seed.validated, body);
+    assert.equal(noFlow.statusCode, 404);
+    assert.equal((noFlow.json() as ErrorBody).error.code, "NOT_FOUND");
+
+    const unknownHash = await post(
+      h,
+      server,
+      "alice",
+      "pay-once",
+      "sha256:" + "0".repeat(64),
+      body,
+    );
+    assert.equal(unknownHash.statusCode, 404);
+    assert.equal((unknownHash.json() as ErrorBody).error.code, "NOT_FOUND");
+
+    const badHash = await post(h, server, "alice", "pay-once", "sha256:xyz", body);
+    assert.equal(badHash.statusCode, 400);
+    assert.equal((badHash.json() as ErrorBody).error.code, "VALIDATION_FAILED");
 
     assert.equal(await runCount(h), 0);
     assert.equal(h.enqueue.calls.length, 0);

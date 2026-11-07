@@ -13,6 +13,7 @@ import type {
   LoadedVersion,
   NodeOutcome,
   RunScope,
+  ToolInvoker,
   WorkflowOps,
 } from "./types.ts";
 import { visitNode } from "./visit.ts";
@@ -26,6 +27,12 @@ interface LoadValue {
 }
 
 const TERMINAL: readonly RunState[] = ["completed", "failed", "cancelled"];
+
+const UNUSED_INVOKER: ToolInvoker = {
+  async invoke() {
+    throw new InterpreterError("INTERPRETER_NO_INVOKER", "no tool invoker is available");
+  },
+};
 
 function asJson<T>(value: T): JsonValue {
   return value as unknown as JsonValue;
@@ -211,18 +218,23 @@ export async function executeRun(
     return current;
   }
 
-  let invoker;
-  try {
-    invoker = await deps.invokerFor(loaded.run.mode, loaded.run);
-  } catch {
-    return finishFailed(ops, deps, ctx, runId, {
-      code: "INTERPRETER_NO_INVOKER",
-      message: `no tool invoker is available for run "${runId}"`,
-      node: null,
-    });
+  const flow = version.flow;
+  const usesInvoker = Object.values(flow.nodes).some((node) => node.kind === "block");
+  let invoker: ToolInvoker;
+  if (usesInvoker) {
+    try {
+      invoker = await deps.invokerFor(loaded.run.mode, loaded.run);
+    } catch {
+      return finishFailed(ops, deps, ctx, runId, {
+        code: "INTERPRETER_NO_INVOKER",
+        message: `no tool invoker is available for run "${runId}"`,
+        node: null,
+      });
+    }
+  } else {
+    invoker = UNUSED_INVOKER;
   }
 
-  const flow = version.flow;
   const scope: RunScope = {
     inputs: loaded.input as JsonValue,
     nodes: new Map<string, { output: JsonValue | null; outcome: string | null }>(),
