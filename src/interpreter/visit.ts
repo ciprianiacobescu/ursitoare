@@ -44,6 +44,8 @@ function inputFor(node: FlowNode, resolve: (value: unknown) => JsonValue): JsonV
   switch (node.kind) {
     case "block":
       return resolve(node.with);
+    case "code":
+      return resolve(node.input);
     case "switch":
       return { on: resolve(node.on) };
     case "wait":
@@ -194,6 +196,7 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
     effects: wrappedEffects,
     resolve,
     block: (ref) => blocks[ref],
+    ...(deps.sandbox === undefined ? {} : { sandbox: deps.sandbox }),
   };
 
   let outcome: NodeOutcome;

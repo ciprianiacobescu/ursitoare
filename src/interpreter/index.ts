@@ -2,11 +2,13 @@
 
 import { registerNodeRuntime } from "./registry.ts";
 import { blockRuntime } from "./runtimes/block.ts";
+import { codeRuntime } from "./runtimes/code.ts";
 import { endRuntime } from "./runtimes/end.ts";
 import { switchRuntime } from "./runtimes/switch.ts";
 import { waitRuntime } from "./runtimes/wait.ts";
 
 registerNodeRuntime("block", blockRuntime);
+registerNodeRuntime("code", codeRuntime);
 registerNodeRuntime("switch", switchRuntime);
 registerNodeRuntime("end", endRuntime);
 registerNodeRuntime("wait", waitRuntime);
@@ -34,6 +36,7 @@ export { NO_EFFECT_GATE } from "./gate.ts";
 export type { MemoryWorkflowOps } from "./ops.ts";
 export { memoryWorkflowOps } from "./ops.ts";
 export { registerNodeRuntime, nodeRuntimeFor, SUPPORTED_KINDS } from "./registry.ts";
+export { codeRuntime, CODE_LIMITS, codeSeed } from "./runtimes/code.ts";
 export { RUN_WORKFLOW, registerRunWorkflow, bindInterpreter, dbosWorkflowOps } from "./workflow.ts";
 export { startRun, workflowIdOf } from "./start.ts";
 export { executeRun } from "./execute.ts";
