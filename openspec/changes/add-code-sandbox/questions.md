@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | 3.6 | harness | Task 3.6: the pre-satisfied check could not decide |
 | Q-003 | answered | 3.8 | harness | Task 3.8: the pre-satisfied check could not decide |
 | Q-004 | answered | none | verdict | Criterion C-061daa6c (sandbox › The pool spawns workers lazily, one job each, and refuses bad options › Spawn record, concurrency and options): accept as satisfied? |
-| Q-005 | open | none | verdict | Finding F-44115141: Proxy getPrototypeOf traps escape option validation |
+| Q-005 | answered | none | verdict | Finding F-44115141: Proxy getPrototypeOf traps escape option validation |
 <!-- l4:index:end -->
 
 ---
@@ -654,7 +654,8 @@ accept The criterion is satisfied as its scenario is written. The tracing test p
 
 ## Q-005: Finding F-44115141: Proxy getPrototypeOf traps escape option validation
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -675,3 +676,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct and is not waived. The requirement says createWorkerSandbox throws SandboxError SANDBOX_INVALID with option opts for a getter or Proxy trap that throws. In pool.ts the plain-object check isPlainObject runs on the raw argument before either try/catch of readPoolOptions, and it calls Object.getPrototypeOf on the value, which invokes a Proxy's getPrototypeOf trap. A Proxy whose getPrototypeOf trap throws therefore leaks its raw error out of createWorkerSandbox instead of the typed SandboxError. The fix is in production code only: the prototype check must be inside the same protected path that already turns a throwing ownKeys trap or getter into the opts could not be read error. WHEN createWorkerSandbox receives an opts value that is a Proxy whose getPrototypeOf trap throws THEN it throws synchronously a SandboxError with code SANDBOX_INVALID, message opts could not be read and details option opts, and no other error escapes.
