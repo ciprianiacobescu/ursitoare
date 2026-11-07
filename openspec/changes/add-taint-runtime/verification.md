@@ -1,4 +1,4 @@
-# Verification: openspec:add-taint-runtime: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-taint-runtime: PASS (round 3)
 
 traceability: 11/11 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 11/11 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 1.0 | base main@8194d01fc7 contained |
-| 1 | integrity | ok | 453.8 | 11 sub-checks (+1 unfrozen by human answers); scope: 34 changed file(s) |
-| 2 | build | ok | 35.6 |  |
-| 3 | tests | ok | 317.5 |  |
-| 4 | traceability | ok | 0.2 | 11/11 criteria covered |
-| 4a | audit sampling | ok | 629.7 | 1 invalid, 1 rejected, 2 skipped; support files at the base: 7 |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
+| 4a | audit sampling | reused | 0.0 | reused (round 2) |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/authoring/taint/analyze.ts, src/authoring/taint/index.ts, src/authoring/taint/runtime.ts, src/interpreter/execute.ts, src/interpreter/index.ts and 4 more |
-| 8 | s1 judge | ok | 0.6 | 6/11 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 144.0 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -166,6 +166,10 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 - C-88707743: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_88707743_r2.py
 
+## Answers to verdict questions
+
+- Q-002 accept C-9dec3a38 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The seven frozen files under src/authoring/taint/ hold exactly the 16 tests that test-plan.md lists, each at its original title, and all 16 are recorded as passed in the latest test report of the unit. The frozen files import only analyzeTaint, the labels, ca...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -173,7 +177,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-94aebf73 | taint › Produced taint follows one per-kind rule for the validator and the runtime › Produced taint per node kind | pass | pass | the judge passed it and a discriminating test passes |
 | C-5d24d025 | taint › Produced taint follows one per-kind rule for the validator and the runtime › analyzeTaint and the shared rules agree on RF-1 | pass | pass | the judge passed it and a discriminating test passes |
 | C-88707743 | taint › Produced taint follows one per-kind rule for the validator and the runtime › Static results equal the shared rule over the corpus | pass | pass | the judge passed it and a discriminating test passes |
-| C-9dec3a38 | taint › Produced taint follows one per-kind rule for the validator and the runtime › The frozen taint tests stay green unchanged | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-9dec3a38 | taint › Produced taint follows one per-kind rule for the validator and the runtime › The frozen taint tests stay green unchanged | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The seven frozen files under src/authoring/taint/ hold exactly the 16 tests that test-plan.md lists, each at its original title, and all 16 are recorded as passed in the latest test report of the un... |
 | C-d826722f | taint › References and values are tainted by their producers › referenceTaint and valueTaint | pass | pass | the judge passed it and a discriminating test passes |
 | C-39ab4de6 | taint › References and values are tainted by their producers › nodeInputTaint | pass | pass | the judge passed it and a discriminating test passes |
 | C-53a36cae | taint › A run records the produced taint of each node it visits › blocksCatalogue and createRunTaints | pass | pass | the judge passed it and a discriminating test passes |
