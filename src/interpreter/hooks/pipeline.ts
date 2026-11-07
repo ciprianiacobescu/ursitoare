@@ -183,6 +183,7 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
       nodes.set(nodeId, { output: view.output, outcome: view.outcome });
       hookScope = { inputs: scope.inputs, nodes };
     }
+    const resolveArgs = post ? (value: unknown) => resolveValue(value, hookScope) : request.resolve;
     const hctx: HookContext = {
       phase: placement.phase,
       node: nodeMetaOfThis,
@@ -194,7 +195,7 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
       outcome: view.outcome,
       attempt: ctx.attempt,
       feedback: null,
-      args: {},
+      args: resolveArgs(placement.hook.input ?? {}),
     };
     const services: HookServices = {
       ops: request.ops,
@@ -230,6 +231,18 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
         { hook: label, action: run.outcome.action },
       );
     }
+    if (run.outcome.action === "redirect") {
+      const to = run.outcome.to;
+      const target = candidates.find((meta) => meta.id === to) ?? metaOf(to);
+      const effect = target?.effect ?? null;
+      if (effect === null || effect === "write" || effect === "send" || effect === "pay") {
+        const what = "redirect into an effect node";
+        throw new InterpreterError("HOOK_ACTION_FORBIDDEN", `hook "${label}" may not ${what}`, nodeId, {
+          hook: label,
+          action: what,
+        });
+      }
+    }
     return run;
   };
 
@@ -257,6 +270,13 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
         checkOutput(outcome.output, label);
         view.output = outcome.output;
       }
+    } else if (outcome.action === "redirect") {
+      view.next = outcome.to;
+    } else if (outcome.action === "fail") {
+      throw new InterpreterError("HOOK_FAILED", `hook "${label}" failed the node`, nodeId, {
+        hook: label,
+        reason: outcome.reason,
+      });
     } else {
       throw unsupported(label, outcome.action);
     }
@@ -342,7 +362,7 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
         next: outcome.next,
       };
       await postChain(ownPost, false, view);
-      return { ...outcome, output: view.output };
+      return { ...outcome, output: view.output, next: view.next };
     },
     async fusedStep(run) {
       const own: FusedRecord[] = [];
