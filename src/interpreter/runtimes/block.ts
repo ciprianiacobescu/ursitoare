@@ -28,11 +28,11 @@ export const blockRuntime: NodeRuntime = {
         { reason: "block_missing", blocks: [node.uses] },
       );
     }
+    const hooks = services.hooks;
 
-    const prepare = (): ToolCall => {
-      let args: JsonValue;
+    const resolveArgs = (): JsonValue => {
       try {
-        args = services.resolve(node.with);
+        return services.resolve(node.with);
       } catch (error) {
         const copied = toInterpreterError(error);
         if (copied !== null && copied.node === null) {
@@ -40,6 +40,9 @@ export const blockRuntime: NodeRuntime = {
         }
         throw error;
       }
+    };
+
+    const build = (args: JsonValue): ToolCall => {
       const checked = checkSchema(def.input, args);
       if (!checked.ok) {
         throw new InterpreterError(
@@ -49,8 +52,12 @@ export const blockRuntime: NodeRuntime = {
           { path: checked.path, keyword: checked.keyword },
         );
       }
-      return { tool: node.uses, args, nodeId, effectSeq: 0 };
+      const call: ToolCall = { tool: node.uses, args, nodeId, effectSeq: 0 };
+      if (ctx.attempt > 1) call.generation = ctx.attempt - 1;
+      return call;
     };
+
+    const prepare = (): ToolCall => build(resolveArgs());
 
     const checkOutput = (output: JsonValue): void => {
       const checked = checkSchema(def.output, output);
@@ -71,23 +78,52 @@ export const blockRuntime: NodeRuntime = {
       end: null,
     });
 
+    const readCall = async (call: ToolCall): Promise<JsonValue> => {
+      let result;
+      try {
+        result = await services.invoker.invoke(call, ctx);
+      } catch (error) {
+        throw mapFailure(error, nodeId, "invoke");
+      }
+      return result.output;
+    };
+
     if (def.effect === "read") {
       const output = await services.ops.runStep<JsonValue>(nodeId, async () => {
-        const call = prepare();
-        let result;
-        try {
-          result = await services.invoker.invoke(call, ctx);
-        } catch (error) {
-          throw mapFailure(error, nodeId, "invoke");
+        let produced: JsonValue;
+        if (hooks === undefined) {
+          produced = await readCall(prepare());
+        } else {
+          const pre = await hooks.pre(resolveArgs());
+          produced = pre.action === "skip" ? pre.output : await readCall(build(pre.input as JsonValue));
         }
-        checkOutput(result.output);
-        return result.output;
+        checkOutput(produced);
+        if (hooks === undefined) return produced;
+        const posted = (await hooks.post({ output: produced, outcome: null, next: node.next ?? null }))
+          .output as JsonValue;
+        checkOutput(posted);
+        return posted;
       });
       return outcomeOf(output);
     }
 
     const first = await services.ops.runStep<JsonValue>(nodeId, async () => {
-      const call = prepare();
+      let call: ToolCall;
+      if (hooks === undefined) {
+        call = prepare();
+      } else {
+        const pre = await hooks.pre(resolveArgs());
+        if (pre.action === "skip") {
+          throw new InterpreterError(
+            "HOOK_ACTION_FORBIDDEN",
+            `a pre-hook may not skip the effect node "${nodeId}"`,
+            nodeId,
+            { action: "skip" },
+          );
+        }
+        call = build(pre.input as JsonValue);
+      }
+      const hookArgs = hooks === undefined ? {} : { args: call.args };
       let decision;
       try {
         decision = await services.effects.before(call, ctx);
@@ -103,28 +139,35 @@ export const blockRuntime: NodeRuntime = {
         );
       }
       if (decision.action === "reuse") {
-        return { output: decision.result.output, idemKey: decision.idemKey };
+        return { output: decision.result.output, idemKey: decision.idemKey, ...hookArgs };
       }
       const withKey: StepContext = { ...ctx, idemKey: decision.idemKey };
       try {
         const result = await services.invoker.invoke(call, withKey);
-        return { output: result.output, idemKey: decision.idemKey };
+        return { output: result.output, idemKey: decision.idemKey, ...hookArgs };
       } catch (error) {
         throw mapFailure(error, nodeId, "invoke");
       }
     });
-    const { output, idemKey } = first as { output: JsonValue; idemKey: string | null };
+    const { output, idemKey, args } = first as {
+      output: JsonValue;
+      idemKey: string | null;
+      args?: JsonValue;
+    };
 
-    await services.ops.runStep(`${nodeId}#done`, async () => {
-      const call = prepare();
+    const final = await services.ops.runStep<JsonValue>(`${nodeId}#done`, async () => {
+      const call = args === undefined ? prepare() : build(args);
       try {
         await services.effects.after(call, { ...ctx, idemKey }, { output });
       } catch (error) {
         throw mapFailure(error, nodeId, "after");
       }
       checkOutput(output);
-      return null;
+      if (hooks === undefined) return null;
+      const posted = (await hooks.post({ output, outcome: null, next: node.next ?? null })).output as JsonValue;
+      checkOutput(posted);
+      return posted;
     });
-    return outcomeOf(output);
+    return outcomeOf(hooks === undefined ? output : final);
   },
 };

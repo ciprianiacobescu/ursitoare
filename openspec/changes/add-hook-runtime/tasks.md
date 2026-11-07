@@ -8,7 +8,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. The runtimes
 
-- [ ] 2.1 Write `src/interpreter/hooks/runtimes.test.ts` first (scenario "The protocol of each runtime"), then add `NodeServices.hooks?` and `ToolCall.generation?` to `src/interpreter/types.ts` and the hook calls to `src/interpreter/runtimes/{block,code,switch,end,wait}.ts`, implementing requirement "Built-in runtimes hand their input and output to the hooks"
+- [x] 2.1 Write `src/interpreter/hooks/runtimes.test.ts` first (scenario "The protocol of each runtime"), then add `NodeServices.hooks?` and `ToolCall.generation?` to `src/interpreter/types.ts` and the hook calls to `src/interpreter/runtimes/{block,code,switch,end,wait}.ts`, implementing requirement "Built-in runtimes hand their input and output to the hooks"
 
 ## 3. The visit
 

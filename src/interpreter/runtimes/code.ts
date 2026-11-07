@@ -55,31 +55,47 @@ export const codeRuntime: NodeRuntime = {
         throw error;
       }
 
-      let result: SandboxResult;
-      try {
-        result = await sandbox.run(node.source, input, CODE_LIMITS, {
-          seed: codeSeed(ctx),
-          nowIso: ctx.now.toISOString(),
-          binding: "input",
-          result: "object",
-        });
-      } catch {
-        throw failed(nodeId, "sandbox_unavailable");
+      const hooks = services.hooks;
+      let skipped: JsonValue | null = null;
+      if (hooks !== undefined) {
+        const pre = await hooks.pre(input);
+        if (pre.action === "skip") skipped = pre.output;
+        else input = pre.input as JsonValue;
       }
-      if (!result.ok) {
-        throw failed(nodeId, result.fault.code);
+      let value: JsonValue;
+      if (skipped !== null) {
+        value = skipped;
+      } else {
+        let result: SandboxResult;
+        try {
+          result = await sandbox.run(node.source, input, CODE_LIMITS, {
+            seed: codeSeed(ctx),
+            nowIso: ctx.now.toISOString(),
+            binding: "input",
+            result: "object",
+          });
+        } catch {
+          throw failed(nodeId, "sandbox_unavailable");
+        }
+        if (!result.ok) {
+          throw failed(nodeId, result.fault.code);
+        }
+        if (result.value === null) {
+          throw failed(nodeId, "output_invalid");
+        }
+        value = result.value;
       }
-      if (result.value === null) {
-        throw failed(nodeId, "output_invalid");
+      if (hooks !== undefined) {
+        value = (await hooks.post({ output: value, outcome: null, next: node.next ?? null })).output as JsonValue;
       }
 
-      const checked = checkSchema(node.output_schema, result.value);
+      const checked = checkSchema(node.output_schema, value);
       // An unstorable value is reported as such, unless the schema miss sits at a key that
       // cannot be named in a path: that miss is reported at the root instead.
       const pathUsable = checked.ok || safePath(checked.path) === checked.path;
       let storable = true;
       try {
-        payloadDigest(result.value);
+        payloadDigest(value);
       } catch {
         storable = false;
       }
@@ -99,7 +115,7 @@ export const codeRuntime: NodeRuntime = {
           { path: safePath(checked.path), keyword: checked.keyword },
         );
       }
-      return result.value;
+      return value;
     });
 
     return {
