@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Hold H-feaadce1: UI criterion C-d630941c has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-a457f21b: UI criterion C-1f095289 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-c3ceafa2: UI criterion C-25335f88 has no end-to-end test; see the generated UI tests table |
-| Q-014 | open | none | verdict | Hold H-e3e2b1c3: UI criterion C-6d33a627 has no end-to-end test; see the generated UI tests table |
+| Q-014 | answered | none | verdict | Hold H-e3e2b1c3: UI criterion C-6d33a627 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -515,7 +515,8 @@ accept The hold can be waived. Criterion C-25335f88 is the browser scenario of t
 
 ## Q-014: Hold H-e3e2b1c3: UI criterion C-6d33a627 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -534,3 +535,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-6d33a627 is the browser scenario of the demo-x3 journey, and the unit's own browser test in e2e/test_m5_code_hooks.py follows it assertion by assertion: the Not valid status with layer H, the one Issues item containing H_ROUTE_EFFECT and its where text with the guide link whose href ends in the h_route_effect anchor, the Test run region's text with no Start test run button, the Hook routes and Flow rules lists with their one item each, the flow rules paragraph, and exactly one path.hook-route in the svg with the expected d and a computed stroke-dasharray that is not none, with assert_accessible at the end. The production code delivers each piece: diagnostics.ts accepts layer H and links H_ codes, test-run.ts holds the no-version text, FlowGraphView renders the Hook routes and Flow rules lists, the rules paragraph and the hook-route paths, and hook-overlay.css dashes them; the Node overlay tests fix the route text, rule text and path geometry for this document. The verifier could not write a self-contained test because it lacked the suite's login, seeded users, assert_accessible and the DEMO_X3 fixture, all of which exist in conftest.py and in the unit's test; that gap is in the generator's view, not in the unit. The engine side is proved by the Node journey accepted in Q-002, and this criterion was already accepted as satisfied in Q-004.
