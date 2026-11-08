@@ -79,3 +79,5 @@ export interface FakeEgress {
 export async function startFakeEgress(_opts?: FakeEgressOptions): Promise<FakeEgress> {
   throw new Error("not implemented");
 }
+
+export * from "./echo.ts";
