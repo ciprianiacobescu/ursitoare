@@ -2,7 +2,7 @@ Spec: `specs/*/spec.md`; fixtures: `test-plan.md`; decisions: `design.md`. No fr
 
 ## 1. Layer H in the editor's diagnostics
 
-- [ ] 1.1 Write `web/src/flows/diagnostics-hooks.test.ts` (scenario "Layer H is parsed, shown and linked") and `test/web-flow-editor/hook-link-parity.test.ts` (scenario "Every hook code has a guide link"; it imports `HOOK_ERROR_CODES`, `HOOK_WARNING_CODES` and `diagnosticLink` from `src/authoring/index.ts`, and `REPO_DOCS_BASE` and `diagnosticHref` from `web/src/flows/diagnostics.ts`) first, then edit `web/src/flows/diagnostics.ts`: `IssueView.layer` and `ValidationView.layers_run` accept `"H"`, `LAYERS` gains `"H"`, `HREF_PATTERN` becomes `/^(L[123]_|H_|W_)[A-Z0-9_]+$/`, the helper types follow (`isLayer`, `parseLayers`), implementing requirement "Diagnostics accept layer H and link hook codes"
+- [x] 1.1 Write `web/src/flows/diagnostics-hooks.test.ts` (scenario "Layer H is parsed, shown and linked") and `test/web-flow-editor/hook-link-parity.test.ts` (scenario "Every hook code has a guide link"; it imports `HOOK_ERROR_CODES`, `HOOK_WARNING_CODES` and `diagnosticLink` from `src/authoring/index.ts`, and `REPO_DOCS_BASE` and `diagnosticHref` from `web/src/flows/diagnostics.ts`) first, then edit `web/src/flows/diagnostics.ts`: `IssueView.layer` and `ValidationView.layers_run` accept `"H"`, `LAYERS` gains `"H"`, `HREF_PATTERN` becomes `/^(L[123]_|H_|W_)[A-Z0-9_]+$/`, the helper types follow (`isLayer`, `parseLayers`), implementing requirement "Diagnostics accept layer H and link hook codes"
 
 ## 2. The hook trace on the run page
 

@@ -1,8 +1,10 @@
 import { ApiRequestError } from "../api/client.ts";
 import { clip } from "../admin/shared.ts";
 
+export type DiagnosticLayer = "L1" | "L2" | "L3" | "H";
+
 export interface IssueView {
-  layer: "L1" | "L2" | "L3";
+  layer: DiagnosticLayer;
   code: string;
   node: string | null;
   path: string;
@@ -13,7 +15,7 @@ export interface ValidationView {
   ok: boolean;
   errors: IssueView[];
   warnings: IssueView[];
-  layers_run: ("L1" | "L2" | "L3")[];
+  layers_run: DiagnosticLayer[];
 }
 
 export interface DiagnosticRow {
@@ -32,8 +34,8 @@ export const REPO_DOCS_BASE: string = "https://github.com/ciprianiacobescu/ursit
 
 const DIAGNOSTICS_DOC_PATH = "docs/authoring/diagnostics.md";
 const CODE_PATTERN = /^[A-Z][A-Z0-9_]{1,63}$/;
-const HREF_PATTERN = /^(L[123]_|W_)[A-Z0-9_]+$/;
-const LAYERS: readonly string[] = ["L1", "L2", "L3"];
+const HREF_PATTERN = /^(L[123]_|H_|W_)[A-Z0-9_]+$/;
+const LAYERS: readonly DiagnosticLayer[] = ["L1", "L2", "L3", "H"];
 const MAX_MESSAGE_LENGTH = 300;
 
 const NOT_OBJECT_MESSAGE =
@@ -44,8 +46,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function isLayer(value: unknown): value is "L1" | "L2" | "L3" {
-  return typeof value === "string" && LAYERS.includes(value);
+function isLayer(value: unknown): value is DiagnosticLayer {
+  return typeof value === "string" && LAYERS.includes(value as DiagnosticLayer);
 }
 
 function parseIssue(raw: unknown): IssueView | null {
@@ -74,9 +76,9 @@ function parseIssues(raw: unknown): IssueView[] | null {
   return issues;
 }
 
-function parseLayers(raw: unknown): ("L1" | "L2" | "L3")[] | null {
+function parseLayers(raw: unknown): DiagnosticLayer[] | null {
   if (!Array.isArray(raw)) return null;
-  const layers: ("L1" | "L2" | "L3")[] = [];
+  const layers: DiagnosticLayer[] = [];
   for (const item of raw) {
     if (!isLayer(item)) return null;
     layers.push(item);
