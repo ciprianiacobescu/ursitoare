@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 5.1 | ambiguous | Block hook entry action contradicts the demo-hooks journey expectation |
 | Q-002 | answered | 5.1 | harness | Task 5.1: the pre-satisfied check could not decide |
-| Q-003 | open | none | verdict | Criterion C-25335f88 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice validates, test-runs and reads demo-hooks): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-25335f88 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice validates, test-runs and reads demo-hooks): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-6d33a627 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3): accept as satisfied? |
 | Q-005 | open | none | verdict | Hold H-ad2767b0: UI criterion C-822061e0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-b3c4f418: UI criterion C-8a9b0cea has no end-to-end test; see the generated UI tests table |
@@ -226,7 +226,8 @@ accept: The check's evidence is enough as it stands. Task 5.1 itself says the No
 
 ## Q-003: Criterion C-25335f88 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice validates, test-runs and reads demo-hooks): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -253,6 +254,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The browser journey in e2e/test_m5_code_hooks.py follows the scenario assertion by assertion: the diagnostics status with layer H, the graph message and its one Hooks item with no Hook routes or Flow rules list, the completed run with the five step buttons in order, the code step's details, input and output with no Hooks region, the two hook rows of pay, and then the page.route rewrite that sets hooks to null on normalize, the reload, the note paragraph without an alert and without a list, and the unchanged pay rows, with assert_accessible on every page. The production code renders exactly that: parseStepView keeps a malformed trace as hooks null, hookTraceNote returns the note for it, RunPage renders the Hooks section only when there are rows or a note and prints the note as a plain paragraph, and FlowGraphView renders the Hooks list from hookSectionView. The engine side is proved by the Node journey against the real e2e stack (layers_run with H, a completed run, the pay hook rows), accepted in Q-002. The only gap the verifier names is the lack of a red record for the browser test, which the project's rules make impossible: a red step runs only the Node gate and browser-only criteria are left to the verifier. The generated test could not replace it because its own file failed to import a helper module at collection, which says nothing about the unit. The round 2 e2e gate ran this test and passed.
 ---
 
 ## Q-004: Criterion C-6d33a627 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3): accept as satisfied?
