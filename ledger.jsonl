@@ -140,3 +140,5 @@
 {"at":"2026-11-08T10:14:57Z","run":"r-20261108T1014Z-5062","type":"unit.dispatched","unit":"openspec:add-web-hooks-view"}
 {"at":"2026-11-08T11:45:07Z","detail":"awaiting_human: no new answers (open: Q-001) (escalated to a person: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-hooks-view"}
 {"at":"2026-11-08T12:00:17Z","by":"harness","reason":"the cause is gone: openspec:add-web-hooks-view is awaiting_human","type":"plan.resumed"}
+{"at":"2026-11-08T12:00:19Z","attempt":1,"cost_usd":1.934101,"runs":2,"type":"plan.charged","unit":"openspec:add-web-hooks-view"}
+{"at":"2026-11-08T12:00:19Z","run":"r-20261108T1146Z-9221","type":"unit.dispatched","unit":"openspec:add-web-hooks-view"}
