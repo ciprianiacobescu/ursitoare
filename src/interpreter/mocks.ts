@@ -1,10 +1,11 @@
 import { Ajv2020 } from "ajv/dist/2020.js";
 
 import type { Catalogue, Flow, FlowNode, JsonSchema, JsonValue } from "../authoring/index.ts";
-import { successorFields } from "../authoring/index.ts";
+import { augmentedSuccessors, hookPlacements } from "../authoring/index.ts";
 import type { RunStore, TenantContext } from "../runs/index.ts";
 import type { InterpreterDeps, ToolInvoker } from "./types.ts";
 import { InterpreterError } from "./errors.ts";
+import { hookStepName } from "./hooks/names.ts";
 
 export type MockEntry = { output: JsonValue } | { error: { code: string; message: string } };
 
@@ -143,22 +144,18 @@ function checkEntry(entry: unknown, schema: JsonSchema | undefined): EntryProble
   return { reason: "shape", detail: SHAPE_DETAIL };
 }
 
-function reachableNodeIds(flow: Flow): Set<string> {
+function reachableNodeIds(flow: Flow, catalogue: Catalogue): Set<string> {
   const seen = new Set<string>();
   if (!Object.hasOwn(flow.nodes, flow.start)) {
     return seen;
   }
+  const successors = augmentedSuccessors(flow, catalogue);
   const queue: string[] = [flow.start];
   seen.add(flow.start);
   while (queue.length > 0) {
     const id = queue.shift() as string;
-    const node: FlowNode | undefined = flow.nodes[id];
-    if (node === undefined) {
-      continue;
-    }
-    for (const successor of successorFields(node)) {
-      const next = successor.id;
-      if (typeof next !== "string" || !Object.hasOwn(flow.nodes, next) || seen.has(next)) {
+    for (const next of successors.get(id) ?? []) {
+      if (seen.has(next)) {
         continue;
       }
       seen.add(next);
@@ -166,6 +163,25 @@ function reachableNodeIds(flow: Flow): Set<string> {
     }
   }
   return seen;
+}
+
+interface HookMock {
+  nodeId: string;
+  uses: string;
+}
+
+function hookMockMap(flow: Flow, catalogue: Catalogue): Map<string, HookMock> {
+  const map = new Map<string, HookMock>();
+  for (const nodeId of Object.keys(flow.nodes)) {
+    const placed = hookPlacements(flow, nodeId, catalogue);
+    for (const placement of [...placed.pre, ...placed.post]) {
+      const hook = placement.hook as unknown as Record<string, unknown>;
+      if (hook["kind"] === "block" && typeof hook["uses"] === "string") {
+        map.set(hookStepName(nodeId, placement), { nodeId, uses: hook["uses"] });
+      }
+    }
+  }
+  return map;
 }
 
 function compareProblems(a: MockProblem, b: MockProblem): number {
@@ -199,8 +215,25 @@ export function checkMocks(
   }
 
   const problems: MockProblem[] = [];
+  const hookKeys = hookMockMap(flow, catalogue);
 
   for (const nodeId of Object.keys(mocks)) {
+    const hookMock = Object.hasOwn(flow.nodes, nodeId) ? undefined : hookKeys.get(nodeId);
+    if (hookMock !== undefined) {
+      const hookList = mocks[nodeId];
+      if (!Array.isArray(hookList)) {
+        problems.push({ nodeId, index: null, reason: "shape", detail: "entries must be an array" });
+        continue;
+      }
+      const hookSchema = catalogue.block(hookMock.uses)?.output;
+      for (let index = 0; index < hookList.length; index += 1) {
+        const check = checkEntry(hookList[index], hookSchema);
+        if (check !== null) {
+          problems.push({ nodeId, index, reason: check.reason, detail: check.detail });
+        }
+      }
+      continue;
+    }
     const node: FlowNode | undefined = Object.hasOwn(flow.nodes, nodeId)
       ? flow.nodes[nodeId]
       : undefined;
@@ -231,18 +264,22 @@ export function checkMocks(
     }
   }
 
-  for (const nodeId of reachableNodeIds(flow)) {
+  const needed: string[] = [];
+  for (const nodeId of reachableNodeIds(flow, catalogue)) {
     const node: FlowNode | undefined = flow.nodes[nodeId];
-    if (node === undefined || node.kind !== "block") {
-      continue;
+    if (node !== undefined && node.kind === "block") {
+      needed.push(nodeId);
     }
-    if (!Object.hasOwn(mocks, nodeId)) {
-      problems.push({ nodeId, index: null, reason: "missing", detail: "no mock entry" });
-      continue;
+    for (const [key, hookMock] of hookKeys) {
+      if (hookMock.nodeId === nodeId) {
+        needed.push(key);
+      }
     }
-    const list = mocks[nodeId];
-    if (Array.isArray(list) && list.length === 0) {
-      problems.push({ nodeId, index: null, reason: "missing", detail: "no mock entry" });
+  }
+  for (const key of needed) {
+    const list = Object.hasOwn(mocks, key) ? mocks[key] : undefined;
+    if (list === undefined || (Array.isArray(list) && list.length === 0)) {
+      problems.push({ nodeId: key, index: null, reason: "missing", detail: "no mock entry" });
     }
   }
 
@@ -268,17 +305,23 @@ function toolFailure(
 export function createMockInvoker(mocks: TestMocks): ToolInvoker {
   return {
     async invoke(call, ctx) {
-      if (!Object.hasOwn(mocks, call.nodeId)) {
-        throw toolFailure("mock_missing", call.nodeId);
+      const hookKey =
+        call.phase !== undefined && call.hookId !== undefined
+          ? `${call.nodeId}:${call.phase}:${call.hookId}`
+          : null;
+      const key = hookKey ?? call.nodeId;
+      const extra: Record<string, string> = hookKey === null ? {} : { hook: hookKey };
+      if (!Object.hasOwn(mocks, key)) {
+        throw toolFailure("mock_missing", call.nodeId, extra);
       }
-      const list = mocks[call.nodeId] as MockEntry[];
+      const list = mocks[key] as MockEntry[];
       const entry = list[ctx.attempt - 1];
       if (entry === undefined) {
-        throw toolFailure("mock_exhausted", call.nodeId);
+        throw toolFailure("mock_exhausted", call.nodeId, extra);
       }
       if (Object.hasOwn(entry, "error")) {
         const error = (entry as { error: { code: string; message: string } }).error;
-        throw toolFailure("mock_error", call.nodeId, { mockCode: error.code });
+        throw toolFailure("mock_error", call.nodeId, { ...extra, mockCode: error.code });
       }
       return { output: structuredClone((entry as { output: JsonValue }).output) };
     },

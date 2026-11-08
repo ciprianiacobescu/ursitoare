@@ -7,7 +7,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. Hook mocks
 
-- [ ] 2.1 Write `src/interpreter/mocks-hooks.test.ts` first (the new scenarios "Block hooks need mocks under their hook key" and "A hook call is answered under its hook key", on `HOOKED` and its variants), then change `src/interpreter/mocks.ts` in place (design 5: the hook-key map, `reachableNodeIds` over `augmentedSuccessors`, the hook key in `createMockInvoker`) and run the frozen tests above unchanged, implementing the two MODIFIED requirements of `flow-testing`
+- [x] 2.1 Write `src/interpreter/mocks-hooks.test.ts` first (the new scenarios "Block hooks need mocks under their hook key" and "A hook call is answered under its hook key", on `HOOKED` and its variants), then change `src/interpreter/mocks.ts` in place (design 5: the hook-key map, `reachableNodeIds` over `augmentedSuccessors`, the hook key in `createMockInvoker`) and run the frozen tests above unchanged, implementing the two MODIFIED requirements of `flow-testing`
 
 ## 3. A hooked mock run
 
