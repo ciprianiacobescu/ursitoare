@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-6d33a627 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3): accept as satisfied? |
 | Q-005 | answered | none | verdict | Hold H-ad2767b0: UI criterion C-822061e0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-b3c4f418: UI criterion C-8a9b0cea has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-52301bd3: UI criterion C-740bc49b has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-52301bd3: UI criterion C-740bc49b has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-8bb22c50: UI criterion C-67dea741 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-480e66a5: UI criterion C-c595362a has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-5b0fc692: UI criterion C-ff5e87af has no end-to-end test; see the generated UI tests table |
@@ -342,7 +342,8 @@ accept The hold can be waived. Criterion C-8a9b0cea names its own Node test, tes
 
 ## Q-007: Hold H-52301bd3: UI criterion C-740bc49b has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -361,6 +362,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-740bc49b lists return values of hookOverlay, hookBadgeText, hookRouteText, flowRuleText, hookRoutePaths and hookSectionView on the HOOKED, X3 and RULES fixtures. Two Node tests named with its id assert each of those values, including the path geometry and the section view texts. The page side belongs to the sibling requirement text about FlowGraphView, which renders the section view mechanically, and the M5 browser journey checks it: the Hooks item for demo-hooks, the Hook routes and Flow rules items for demo-x3, and the one dashed hook-route path. An end-to-end test for the pure functions would add nothing the Node tests do not already discriminate.
 ---
 
 ## Q-008: Hold H-8bb22c50: UI criterion C-67dea741 has no end-to-end test; see the generated UI tests table
