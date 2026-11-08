@@ -1,3 +1,6 @@
+import { parseStepHooks } from "./hook-rows.ts";
+import type { StepHooksView } from "./hook-rows.ts";
+
 const FLOW_ID_PATTERN = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
 const FLOW_ID_MAX_LENGTH = 64;
 const RUN_ID_PATTERN = /^[A-Za-z0-9_-]{1,128}$/;
@@ -73,6 +76,7 @@ export interface StepView {
   taint: string[];
   startedAt: string;
   endedAt: string | null;
+  hooks?: StepHooksView | null;
 }
 
 export interface PayloadView {
@@ -267,7 +271,7 @@ export function parseStepView(raw: unknown): StepView | null {
   const parsedEndedAt = parseNullableTimestamp(endedAt);
   if (parsedEndedAt === undefined) return null;
 
-  return {
+  const view: StepView = {
     seq: parsedSeq,
     nodeId,
     kind,
@@ -284,6 +288,9 @@ export function parseStepView(raw: unknown): StepView | null {
     startedAt,
     endedAt: parsedEndedAt,
   };
+  const hooks = parseStepHooks(raw["hooks"]);
+  if (hooks !== undefined) view.hooks = hooks;
+  return view;
 }
 
 export function parsePayloadView(raw: unknown): PayloadView | null {

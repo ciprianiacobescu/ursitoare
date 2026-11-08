@@ -6,6 +6,7 @@ import { browserSession } from "../auth/browser-session.ts";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { runPageView } from "./failures.ts";
+import { hookRows, hookTraceNote } from "./hook-rows.ts";
 import { runTitle } from "./pages.ts";
 import { followRun } from "./polling.ts";
 import type { RunSnapshot } from "./polling.ts";
@@ -19,6 +20,7 @@ import {
 } from "./timeline.ts";
 import type { PayloadLoad } from "./timeline.ts";
 import "./runs.css";
+import "./hooks.css";
 
 function isAbortError(error: unknown): boolean {
   return (
@@ -39,6 +41,7 @@ export function RunPage(): ReactNode {
   const params = useParams();
   const runId = params["runId"] ?? "";
   const detailsId = useId();
+  const hooksId = useId();
   const [snapshot, setSnapshot] = useState<RunSnapshot | null>(null);
   const [error, setError] = useState<unknown>(undefined);
   const [attempt, setAttempt] = useState(0);
@@ -124,6 +127,8 @@ export function RunPage(): ReactNode {
   }, [selectedStep, runId]);
 
   const detailRows = selectedStep === null ? [] : stepDetailRows(selectedStep, snapshot?.run.state ?? "queued");
+  const rows = selectedStep === null ? [] : hookRows(selectedStep);
+  const note = selectedStep === null ? null : hookTraceNote(selectedStep);
   const runError = snapshot === null ? null : runErrorText(snapshot.run.error);
 
   return (
@@ -203,6 +208,30 @@ export function RunPage(): ReactNode {
                     </div>
                   ))}
                 </dl>
+                {rows.length === 0 && note === null ? null : (
+                  <section className="runs-hooks" aria-labelledby={hooksId}>
+                    <h3 id={hooksId}>Hooks</h3>
+                    {rows.length === 0 ? (
+                      <p>{note}</p>
+                    ) : (
+                      <ul className="runs-hook-list" aria-label="Hooks">
+                        {rows.map((row, index) => (
+                          <li key={`${row.label}-${String(index)}`}>
+                            {row.text}
+                            <dl className="runs-hook-details">
+                              {row.details.map((detail) => (
+                                <div className="runs-detail-row" key={detail.term}>
+                                  <dt>{detail.term}</dt>
+                                  <dd>{detail.value}</dd>
+                                </div>
+                              ))}
+                            </dl>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+                )}
                 <section className="runs-payload" aria-labelledby={`${detailsId}-input`}>
                   <h3 id={`${detailsId}-input`}>Input</h3>
                   <pre>{payloadShown(selectedStep.inputRef, loads.get(selectedStep.inputRef ?? ""))}</pre>
