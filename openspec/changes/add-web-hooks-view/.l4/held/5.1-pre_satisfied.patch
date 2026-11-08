@@ -1,0 +1,652 @@
+diff --git a/e2e/test_m5_code_hooks.py b/e2e/test_m5_code_hooks.py
+new file mode 100644
+index 0000000..3989662
+--- /dev/null
++++ b/e2e/test_m5_code_hooks.py
+@@ -0,0 +1,289 @@
++"""The M5 closing journey: a code node with hooks, and the X3 hook route into an effect node."""
++
++import json
++import re
++
++import pytest
++from playwright.sync_api import Page, expect
++
++from conftest import assert_accessible, login
++
++DEMO_HOOKS = "\n".join(
++    [
++        'ursitoare: "0.1"',
++        "flow: demo-hooks",
++        "version: 1.0.0",
++        "inputs:",
++        "  type: object",
++        "  properties: { vendor_name: { type: string }, amount: { type: number } }",
++        "  required: [vendor_name, amount]",
++        "start: lookup",
++        "nodes:",
++        '  lookup: { kind: block, uses: erp.lookup_vendor@1, with: { vendor_name: "${{ inputs.vendor_name }}" }, next: normalize }',
++        "  normalize:",
++        "    kind: code",
++        "    language: js",
++        '    input: { amount: "${{ inputs.amount }}", status: "${{ nodes.lookup.output.status }}" }',
++        '    source: "return { amount: Math.round(input.amount * 100) / 100, route: input.status === \'active\' ? \'pay\' : \'blocked\' };"',
++        "    output_schema:",
++        "      type: object",
++        "      properties: { amount: { type: number }, route: { type: string, enum: [pay, blocked] } }",
++        "      required: [amount, route]",
++        "    next: route",
++        '  route: { kind: switch, on: "${{ nodes.normalize.output.route }}", cases: { pay: pay }, default: blocked }',
++        "  pay:",
++        "    kind: block",
++        "    uses: erp.create_payment@1",
++        '    with: { vendor_id: "${{ nodes.lookup.output.vendor_id }}", amount: "${{ nodes.normalize.output.amount }}", currency: EUR, reference: demo }',
++        "    pre:",
++        '      - { id: guard, kind: code, source: "if (ctx.input.amount > 10000) return { action: \'fail\', reason: \'over limit\' };" }',
++        "    post:",
++        '      - { id: notify, kind: block, uses: slack.post_message@1, with: { channel: ap, text: "paid ${{ hook.output.payment_id }}" }, on_error: continue }',
++        "    next: done",
++        '  done: { kind: end, status: completed, output: { payment_id: "${{ nodes.pay.output.payment_id }}" } }',
++        "  blocked: { kind: end, status: failed }",
++        "",
++    ]
++)
++DEMO_X3 = "\n".join(
++    [
++        'ursitoare: "0.1"',
++        "flow: demo-x3",
++        "version: 1.0.0",
++        "inputs:",
++        "  type: object",
++        "  properties: { vendor_name: { type: string }, amount: { type: number } }",
++        "  required: [vendor_name, amount]",
++        "start: lookup",
++        "hooks:",
++        '  - { id: audit, match: { kind: [code] }, post: { kind: code, source: "return;" } }',
++        "nodes:",
++        '  lookup: { kind: block, uses: erp.lookup_vendor@1, with: { vendor_name: "${{ inputs.vendor_name }}" }, next: classify }',
++        "  classify:",
++        "    kind: code",
++        "    language: js",
++        '    input: { amount: "${{ inputs.amount }}" }',
++        '    source: "return { amount: input.amount };"',
++        "    output_schema:",
++        "      type: object",
++        "      properties: { amount: { type: number } }",
++        "      required: [amount]",
++        "    post:",
++        '      - { id: rush, kind: code, routes: [pay], source: "return { action: \'redirect\', to: \'pay\' };" }',
++        "    next: review",
++        "  review:",
++        "    kind: code",
++        "    language: js",
++        '    input: { amount: "${{ nodes.classify.output.amount }}" }',
++        '    source: "return { approved: input.amount < 10000 };"',
++        "    output_schema:",
++        "      type: object",
++        "      properties: { approved: { type: boolean } }",
++        "      required: [approved]",
++        "    next: pay",
++        "  pay:",
++        "    kind: block",
++        "    uses: erp.create_payment@1",
++        '    with: { vendor_id: "${{ nodes.lookup.output.vendor_id }}", amount: "${{ nodes.classify.output.amount }}", currency: EUR, reference: demo }',
++        "    next: done",
++        '  done: { kind: end, status: completed, output: { payment_id: "${{ nodes.pay.output.payment_id }}" } }',
++        "",
++    ]
++)
++INPUT = {"vendor_name": "ACME", "amount": 12.5}
++MOCKS_HOOKS = {
++    "lookup": [{"output": {"vendor_id": "V-1", "status": "active"}}],
++    "pay": [{"output": {"payment_id": "P-1", "status": "created"}}],
++    "pay:post:notify": [{"output": {"ts": "1"}}],
++}
++INPUT_TEXT = json.dumps(INPUT, separators=(",", ":"))
++MOCKS_TEXT = json.dumps(MOCKS_HOOKS, separators=(",", ":"))
++STEP_NAMES = ["lookup", "normalize", "route", "pay", "done"]
++LINK_NAME = re.compile(r"^Open run [A-Za-z0-9_-]+$")
++NOTE = "This step's hook trace could not be read."
++RULES_NOTE = "Flow rules are listed, not drawn: the graph cannot tell which nodes they match."
++
++
++def _create_flow(page: Page, name: str) -> None:
++    page.get_by_role("link", name="Flows", exact=True).click()
++    page.get_by_label("Flow name", exact=True).fill(name)
++    page.get_by_label("Owner team", exact=True).fill("finance")
++    page.get_by_role("button", name="Create flow", exact=True).click()
++    expect(page).to_have_title(f"Flow {name} · Ursitoare")
++
++
++def _save_and_validate(page: Page, text: str) -> None:
++    page.get_by_role("textbox", name="Flow text", exact=True).fill(text)
++    page.get_by_role("button", name="Save version", exact=True).click()
++    page.get_by_role("button", name="Validate", exact=True).click()
++
++
++def _run_id(link) -> str:
++    name = link.get_attribute("aria-label") or link.inner_text()
++    assert LINK_NAME.match(name), name
++    return name.removeprefix("Open run ")
++
++
++def _select_step(page: Page, name: str) -> None:
++    page.get_by_role("list", name="Steps", exact=True).get_by_role(
++        "button", name=name, exact=True
++    ).click()
++
++
++@pytest.mark.milestone("M5")
++@pytest.mark.l4("C-25335f88")
++def test_c_25335f88_alice_validates_test_runs_and_reads_demo_hooks(
++    page: Page, fresh_state: None, users: dict[str, dict[str, str]]
++) -> None:
++    login(page, users["alice"])
++    assert_accessible(page)
++    page.get_by_role("link", name="Flows", exact=True).click()
++    assert_accessible(page)
++    _create_flow(page, "demo-hooks")
++    _save_and_validate(page, DEMO_HOOKS)
++
++    diagnostics = page.get_by_role("region", name="Diagnostics", exact=True)
++    expect(diagnostics.get_by_role("status")).to_contain_text(
++        "Valid. 0 errors, 0 warnings. Layers run: L1, L2, L3, H."
++    )
++
++    graph = page.get_by_role("region", name="Graph", exact=True)
++    expect(graph).to_contain_text("Flow graph: 6 nodes, 5 edges, 5 layers.")
++    hooks = graph.get_by_role("list", name="Hooks", exact=True)
++    expect(hooks.get_by_role("listitem")).to_have_count(1)
++    expect(hooks).to_contain_text("pay: pre guard; post notify")
++    expect(graph.get_by_role("list", name="Hook routes", exact=True)).to_have_count(0)
++    expect(graph.get_by_role("list", name="Flow rules", exact=True)).to_have_count(0)
++    assert_accessible(page)
++
++    panel = page.get_by_role("region", name="Test run", exact=True)
++    panel.get_by_role("textbox", name="Input (JSON)", exact=True).fill(INPUT_TEXT)
++    panel.get_by_role("textbox", name="Mocks (JSON)", exact=True).fill(MOCKS_TEXT)
++    panel.get_by_role("button", name="Start test run", exact=True).click()
++    link = panel.get_by_role("link")
++    expect(link).to_have_count(1)
++    run_id = _run_id(link)
++    link.click()
++
++    expect(page).to_have_url(re.compile(rf"/runs/{re.escape(run_id)}$"))
++    expect(page.get_by_role("status", name="Run state", exact=True)).to_have_text(
++        "State: completed", timeout=20000
++    )
++    steps = page.get_by_role("list", name="Steps", exact=True)
++    expect(steps.get_by_role("button")).to_have_text(STEP_NAMES)
++    assert_accessible(page)
++
++    _select_step(page, "normalize")
++    details = page.get_by_role("region", name="Step details", exact=True)
++    expect(details).to_contain_text("code")
++    expect(details).to_contain_text("completed")
++    expect(details).to_contain_text("Attempt")
++    payload_in = page.get_by_role("region", name="Input", exact=True)
++    expect(payload_in).to_contain_text('"amount": 12.5')
++    expect(payload_in).to_contain_text('"status": "active"')
++    expect(page.get_by_role("region", name="Output", exact=True)).to_contain_text(
++        '"route": "pay"'
++    )
++    expect(page.get_by_role("region", name="Hooks", exact=True)).to_have_count(0)
++
++    _select_step(page, "pay")
++    pay_hooks = page.get_by_role("region", name="Hooks", exact=True)
++    pay_list = pay_hooks.get_by_role("list", name="Hooks", exact=True)
++    expect(pay_list.get_by_role("listitem")).to_have_count(2)
++    expect(pay_list.get_by_role("listitem").nth(0)).to_contain_text(
++        "pre:guard · code (fused) · completed · continue"
++    )
++    expect(pay_list.get_by_role("listitem").nth(1)).to_contain_text(
++        "post:notify · block · completed"
++    )
++    assert_accessible(page)
++
++    def rewrite_steps(route) -> None:
++        response = route.fetch()
++        body = response.json()
++        for item in body["items"]:
++            if item.get("nodeId") == "normalize":
++                item["hooks"] = None
++        route.fulfill(response=response, json=body)
++
++    page.route(
++        re.compile(rf"/api/v1/runs/{re.escape(run_id)}/steps(\?|$)"), rewrite_steps
++    )
++    page.goto(f"/runs/{run_id}")
++    expect(page.get_by_role("list", name="Steps", exact=True)).to_be_visible()
++    expect(page.get_by_role("list", name="Steps", exact=True).get_by_role("button")).to_have_text(
++        STEP_NAMES
++    )
++
++    _select_step(page, "normalize")
++    hooks = page.get_by_role("region", name="Hooks", exact=True)
++    expect(hooks).to_contain_text(NOTE)
++    expect(page.get_by_role("alert")).to_have_count(0)
++    expect(hooks.get_by_role("list", name="Hooks", exact=True)).to_have_count(0)
++    expect(page.get_by_role("region", name="Step details", exact=True)).to_contain_text("code")
++    expect(page.get_by_role("region", name="Step details", exact=True)).to_contain_text(
++        "completed"
++    )
++    assert_accessible(page)
++
++    _select_step(page, "pay")
++    hooks = page.get_by_role("region", name="Hooks", exact=True)
++    pay_list = hooks.get_by_role("list", name="Hooks", exact=True)
++    expect(pay_list.get_by_role("listitem")).to_have_count(2)
++    expect(pay_list.get_by_role("listitem").nth(0)).to_contain_text(
++        "pre:guard · code (fused) · completed · continue"
++    )
++    expect(pay_list.get_by_role("listitem").nth(1)).to_contain_text(
++        "post:notify · block · completed"
++    )
++    expect(hooks.get_by_text(NOTE, exact=True)).to_have_count(0)
++    assert_accessible(page)
++
++
++@pytest.mark.milestone("M5")
++@pytest.mark.l4("C-6d33a627")
++def test_c_6d33a627_alice_meets_the_x3_rejection(
++    page: Page, fresh_state: None, users: dict[str, dict[str, str]]
++) -> None:
++    login(page, users["alice"])
++    assert_accessible(page)
++    page.get_by_role("link", name="Flows", exact=True).click()
++    assert_accessible(page)
++    _create_flow(page, "demo-x3")
++    _save_and_validate(page, DEMO_X3)
++
++    diagnostics = page.get_by_role("region", name="Diagnostics", exact=True)
++    expect(diagnostics.get_by_role("status")).to_contain_text(
++        "Not valid. 1 error, 0 warnings. Layers run: L1, L2, L3, H."
++    )
++    issues = diagnostics.get_by_role("list", name="Issues", exact=True)
++    expect(issues.get_by_role("listitem")).to_have_count(1)
++    issue = issues.get_by_role("listitem").first
++    expect(issue).to_contain_text("H_ROUTE_EFFECT")
++    expect(issue).to_contain_text("Node classify · /nodes/classify/post/0/routes/0")
++    guide = issue.get_by_role(
++        "link", name="Guide for H_ROUTE_EFFECT (opens in a new tab)", exact=True
++    )
++    expect(guide).to_have_attribute(
++        "href", re.compile(r"docs/authoring/diagnostics\.md#h_route_effect$")
++    )
++
++    panel = page.get_by_role("region", name="Test run", exact=True)
++    expect(panel).to_contain_text("Save and validate a version to test-run it.")
++    expect(panel.get_by_role("button", name="Start test run", exact=True)).to_have_count(0)
++
++    graph = page.get_by_role("region", name="Graph", exact=True)
++    routes = graph.get_by_role("list", name="Hook routes", exact=True)
++    expect(routes.get_by_role("listitem")).to_have_count(1)
++    expect(routes).to_contain_text("hook rush: classify may route to pay")
++    rules = graph.get_by_role("list", name="Flow rules", exact=True)
++    expect(rules.get_by_role("listitem")).to_have_count(1)
++    expect(rules).to_contain_text("audit: match kind code; pre none; post rule.audit")
++    expect(graph.get_by_text(RULES_NOTE, exact=True)).to_be_visible()
++
++    paths = graph.locator("svg.flow-graph-svg path.hook-route")
++    expect(paths).to_have_count(1)
++    expect(paths).to_have_attribute("d", "M 112 168 L 112 328")
++    dash = paths.evaluate("(element) => getComputedStyle(element).strokeDasharray")
++    assert dash != "none", dash
++    assert_accessible(page)
+diff --git a/test/journeys/m5-code-hooks.test.ts b/test/journeys/m5-code-hooks.test.ts
+new file mode 100644
+index 0000000..bbbef42
+--- /dev/null
++++ b/test/journeys/m5-code-hooks.test.ts
+@@ -0,0 +1,351 @@
++import assert from "node:assert/strict";
++import { after, before, test } from "node:test";
++
++import { ApiRequestError } from "../../web/src/api/client.ts";
++import type { ApiClient } from "../../web/src/api/client.ts";
++import { postFlow } from "../../web/src/flows/flows.ts";
++import { diagnosticRows } from "../../web/src/flows/diagnostics.ts";
++import { loadVersion, saveVersion, validateVersion } from "../../web/src/flows/versions.ts";
++import { graphView } from "../../web/src/flow-graph/graph-model.ts";
++import { hookOverlay } from "../../web/src/flow-graph/hook-overlay.ts";
++import { layoutFlow } from "../../web/src/flow-graph/layout.ts";
++import { hookRows, hookTraceNote } from "../../web/src/runs/hook-rows.ts";
++import { registerRunMessages } from "../../web/src/runs/messages.ts";
++import { followRun } from "../../web/src/runs/polling.ts";
++import type { RunSnapshot } from "../../web/src/runs/polling.ts";
++import { loadPayload, loadSteps } from "../../web/src/runs/runs-source.ts";
++import { startTestRun, testRunFormErrors } from "../../web/src/runs/test-run.ts";
++import type { StepView } from "../../web/src/runs/types.ts";
++import type { E2eStack } from "../support/e2e-stack/stack.ts";
++import { startE2eStack } from "../support/e2e-stack/stack.ts";
++import { sessionClient, signInAs } from "./session.ts";
++import type { TestSession } from "./session.ts";
++
++const DEMO_HOOKS = `ursitoare: "0.1"
++flow: demo-hooks
++version: 1.0.0
++inputs:
++  type: object
++  properties: { vendor_name: { type: string }, amount: { type: number } }
++  required: [vendor_name, amount]
++start: lookup
++nodes:
++  lookup: { kind: block, uses: erp.lookup_vendor@1, with: { vendor_name: "\${{ inputs.vendor_name }}" }, next: normalize }
++  normalize:
++    kind: code
++    language: js
++    input: { amount: "\${{ inputs.amount }}", status: "\${{ nodes.lookup.output.status }}" }
++    source: "return { amount: Math.round(input.amount * 100) / 100, route: input.status === 'active' ? 'pay' : 'blocked' };"
++    output_schema:
++      type: object
++      properties: { amount: { type: number }, route: { type: string, enum: [pay, blocked] } }
++      required: [amount, route]
++    next: route
++  route: { kind: switch, on: "\${{ nodes.normalize.output.route }}", cases: { pay: pay }, default: blocked }
++  pay:
++    kind: block
++    uses: erp.create_payment@1
++    with: { vendor_id: "\${{ nodes.lookup.output.vendor_id }}", amount: "\${{ nodes.normalize.output.amount }}", currency: EUR, reference: demo }
++    pre:
++      - { id: guard, kind: code, source: "if (ctx.input.amount > 10000) return { action: 'fail', reason: 'over limit' };" }
++    post:
++      - { id: notify, kind: block, uses: slack.post_message@1, with: { channel: ap, text: "paid \${{ hook.output.payment_id }}" }, on_error: continue }
++    next: done
++  done: { kind: end, status: completed, output: { payment_id: "\${{ nodes.pay.output.payment_id }}" } }
++  blocked: { kind: end, status: failed }
++`;
++
++const DEMO_X3 = `ursitoare: "0.1"
++flow: demo-x3
++version: 1.0.0
++inputs:
++  type: object
++  properties: { vendor_name: { type: string }, amount: { type: number } }
++  required: [vendor_name, amount]
++start: lookup
++hooks:
++  - { id: audit, match: { kind: [code] }, post: { kind: code, source: "return;" } }
++nodes:
++  lookup: { kind: block, uses: erp.lookup_vendor@1, with: { vendor_name: "\${{ inputs.vendor_name }}" }, next: classify }
++  classify:
++    kind: code
++    language: js
++    input: { amount: "\${{ inputs.amount }}" }
++    source: "return { amount: input.amount };"
++    output_schema:
++      type: object
++      properties: { amount: { type: number } }
++      required: [amount]
++    post:
++      - { id: rush, kind: code, routes: [pay], source: "return { action: 'redirect', to: 'pay' };" }
++    next: review
++  review:
++    kind: code
++    language: js
++    input: { amount: "\${{ nodes.classify.output.amount }}" }
++    source: "return { approved: input.amount < 10000 };"
++    output_schema:
++      type: object
++      properties: { approved: { type: boolean } }
++      required: [approved]
++    next: pay
++  pay:
++    kind: block
++    uses: erp.create_payment@1
++    with: { vendor_id: "\${{ nodes.lookup.output.vendor_id }}", amount: "\${{ nodes.classify.output.amount }}", currency: EUR, reference: demo }
++    next: done
++  done: { kind: end, status: completed, output: { payment_id: "\${{ nodes.pay.output.payment_id }}" } }
++`;
++
++const INPUT = { vendor_name: "ACME", amount: 12.5 };
++const MOCKS_HOOKS: Record<string, unknown> = {
++  lookup: [{ output: { vendor_id: "V-1", status: "active" } }],
++  pay: [{ output: { payment_id: "P-1", status: "created" } }],
++  "pay:post:notify": [{ output: { ts: "1" } }],
++};
++const MISSING = "A block node has no mock. Add a list of mocks for every block node.";
++const IDEM_KEY = /^ik1_[0-9a-f]{64}$/;
++
++const G = {
++  label: "pre:guard",
++  kind: "code",
++  fused: true,
++  attempt: 1,
++  state: "completed",
++  action: "continue",
++  mutated: null,
++  to: null,
++  error: null,
++  tool: null,
++  idemKey: null,
++} as const;
++
++const N = {
++  label: "post:notify",
++  kind: "block",
++  fused: false,
++  attempt: 1,
++  state: "completed",
++  action: null,
++  mutated: null,
++  to: null,
++  error: null,
++  tool: "slack.post_message@1",
++  idemKey: null,
++} as const;
++
++let stack: E2eStack | undefined;
++
++before(async () => {
++  stack = await startE2eStack({ port: 0, controlPort: 0 });
++  assert.ok(stack.handles.has("durable"));
++});
++
++after(async () => {
++  await stack?.close();
++});
++
++function running(): E2eStack {
++  assert.ok(stack !== undefined);
++  return stack;
++}
++
++async function signedIn(username: string): Promise<{ client: ApiClient; session: TestSession }> {
++  const current = running();
++  let session: TestSession | undefined;
++  await assert.doesNotReject(async () => {
++    session = await signInAs(current, username);
++  });
++  assert.ok(session !== undefined);
++  return { client: sessionClient(current, session), session };
++}
++
++async function rejection(promise: Promise<unknown>): Promise<ApiRequestError> {
++  const error = await promise.then(
++    () => null,
++    (e: unknown) => e,
++  );
++  assert.ok(error instanceof ApiRequestError);
++  return error;
++}
++
++function mocksWithoutHook(): Record<string, unknown> {
++  const mocks: Record<string, unknown> = structuredClone(MOCKS_HOOKS);
++  delete mocks["pay:post:notify"];
++  return mocks;
++}
++
++function stepOf(steps: readonly StepView[], nodeId: string): StepView {
++  const step = steps.find((candidate) => candidate.nodeId === nodeId);
++  assert.ok(step !== undefined, `there is a ${nodeId} step`);
++  return step;
++}
++
++test("C-1f095289 alice and bob run demo-hooks and alice meets the X3 rule", async () => {
++  const alice = await signedIn("alice");
++  const bob = await signedIn("bob");
++
++  await postFlow(alice.client, { name: "demo-hooks", ownerTeam: "finance" }, "k-hooks-flow");
++  await postFlow(alice.client, { name: "demo-x3", ownerTeam: "finance" }, "k-x3-flow");
++
++  const hooksSaved = await saveVersion(
++    alice.client,
++    { flowId: "demo-hooks", text: DEMO_HOOKS },
++    "k-hooks-save",
++  );
++  const hooksHash = hooksSaved.version.hash;
++  const hooksValidation = await validateVersion(alice.client, "demo-hooks", hooksHash);
++  assert.equal(hooksValidation.result.ok, true);
++  assert.deepEqual(hooksValidation.result.errors, []);
++  assert.deepEqual(hooksValidation.result.warnings, []);
++  assert.deepEqual(hooksValidation.result.layers_run, ["L1", "L2", "L3", "H"]);
++  assert.equal(hooksValidation.version.state, "validated");
++
++  const x3Saved = await saveVersion(
++    alice.client,
++    { flowId: "demo-x3", text: DEMO_X3 },
++    "k-x3-save",
++  );
++  const x3Hash = x3Saved.version.hash;
++  const x3Validation = await validateVersion(alice.client, "demo-x3", x3Hash);
++  assert.equal(x3Validation.result.ok, false);
++  assert.equal(x3Validation.version.state, "draft");
++  assert.equal(x3Validation.result.errors.length, 1);
++  const x3Error = x3Validation.result.errors[0];
++  assert.ok(x3Error !== undefined);
++  assert.equal(x3Error.layer, "H");
++  assert.equal(x3Error.code, "H_ROUTE_EFFECT");
++  assert.equal(x3Error.node, "classify");
++  assert.equal(x3Error.path, "/nodes/classify/post/0/routes/0");
++  assert.deepEqual(x3Validation.result.warnings, []);
++  assert.deepEqual(x3Validation.result.layers_run, ["L1", "L2", "L3", "H"]);
++  const x3Rows = diagnosticRows(x3Validation.result);
++  assert.equal(
++    x3Rows[0]?.where,
++    "Node classify · /nodes/classify/post/0/routes/0",
++  );
++
++  const missing = await rejection(
++    startTestRun(
++      alice.client,
++      {
++        flowId: "demo-hooks",
++        hash: hooksHash,
++        input: INPUT,
++        mocks: mocksWithoutHook(),
++      },
++      "k-hooks-start-missing",
++    ),
++  );
++  assert.equal(missing.status, 422);
++  assert.equal(missing.code, "TEST_MOCK_MISSING");
++  registerRunMessages();
++  assert.deepEqual(testRunFormErrors(missing), {
++    mocks: `${MISSING} Missing: pay:post:notify.`,
++  });
++
++  const started = await startTestRun(
++    alice.client,
++    {
++      flowId: "demo-hooks",
++      hash: hooksHash,
++      input: INPUT,
++      mocks: MOCKS_HOOKS,
++    },
++    "k-hooks-start",
++  );
++
++  let followed: RunSnapshot | undefined;
++  await assert.doesNotReject(async () => {
++    followed = await followRun(alice.client, started.id);
++  });
++  assert.ok(followed !== undefined);
++  assert.equal(followed.run.state, "completed");
++  assert.equal(followed.run.terminalNode, "done");
++  const steps = followed.steps;
++  assert.deepEqual(
++    steps.map((step) => step.nodeId),
++    ["lookup", "normalize", "route", "pay", "done"],
++  );
++  assert.deepEqual(
++    steps.map((step) => step.kind),
++    ["block", "code", "switch", "block", "end"],
++  );
++  assert.ok(steps.every((step) => step.state === "completed"));
++  const route = stepOf(steps, "route");
++  assert.equal(route.outcome, "pay");
++  const pay = stepOf(steps, "pay");
++
++  const normalize = stepOf(steps, "normalize");
++  assert.ok(normalize.inputRef !== null);
++  assert.ok(normalize.outputRef !== null);
++  const normalizeInput = await loadPayload(alice.client, started.id, normalize.inputRef);
++  const normalizeOutput = await loadPayload(alice.client, started.id, normalize.outputRef);
++  assert.deepEqual(normalizeInput.data, { amount: 12.5, status: "active" });
++  assert.deepEqual(normalizeOutput.data, { amount: 12.5, route: "pay" });
++  assert.ok(pay.outputRef !== null);
++  const payOutput = await loadPayload(alice.client, started.id, pay.outputRef);
++  assert.deepEqual(payOutput.data, { payment_id: "P-1", status: "created" });
++
++  assert.ok(pay.hooks !== undefined && pay.hooks !== null);
++  assert.equal(pay.hooks.inputOriginalRef, null);
++  assert.equal(pay.hooks.entries.length, 2);
++  const guard = pay.hooks.entries[0];
++  assert.ok(guard !== undefined);
++  assert.deepEqual(guard, G);
++  const notify = pay.hooks.entries[1];
++  assert.ok(notify !== undefined);
++  assert.deepEqual(notify, { ...N, action: "continue", idemKey: notify.idemKey });
++  assert.equal(notify.tool, "slack.post_message@1");
++  assert.ok(notify.idemKey !== null && IDEM_KEY.test(notify.idemKey));
++
++  const payRows = hookRows(pay);
++  assert.deepEqual(
++    payRows.map((row) => row.text),
++    [
++      "pre:guard · code (fused) · completed · continue",
++      "post:notify · block · completed · continue",
++    ],
++  );
++  for (const step of steps) {
++    assert.equal(hookTraceNote(step), null, `${step.nodeId} has no unreadable trace`);
++  }
++  for (const step of steps) {
++    if (step.nodeId === "pay") continue;
++    assert.equal("hooks" in step, false, `${step.nodeId} carries no hooks key`);
++  }
++
++  const bobSteps = await loadSteps(bob.client, started.id);
++  assert.deepEqual(bobSteps.steps, steps);
++
++  const x3Start = await rejection(
++    startTestRun(
++      alice.client,
++      {
++        flowId: "demo-x3",
++        hash: x3Hash,
++        input: INPUT,
++        mocks: mocksWithoutHook(),
++      },
++      "k-x3-start",
++    ),
++  );
++  assert.equal(x3Start.status, 422);
++  assert.equal(x3Start.code, "OPERATION_REFUSED");
++  assert.deepEqual(x3Start.details, {
++    reason: "version_not_runnable",
++    cause: "draft",
++  });
++
++  const x3Version = await loadVersion(alice.client, "demo-x3", x3Hash);
++  const layout = layoutFlow(x3Version.canonical);
++  assert.equal(layout.status, "ok");
++  const overlay = hookOverlay(x3Version.canonical, layout.layout);
++  assert.deepEqual(overlay.routes, [{ from: "classify", to: "pay", hook: "rush" }]);
++  assert.deepEqual(overlay.rules, [
++    { id: "audit", match: "kind code", pre: null, post: "rule.audit" },
++  ]);
++  assert.deepEqual(overlay.missing, []);
++
++  assert.equal(graphView(x3Version.canonical, true).message, "Flow graph: 5 nodes, 4 edges, 5 layers.");
++});
