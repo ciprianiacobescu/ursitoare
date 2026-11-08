@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | 5.1 | ambiguous | Block hook entry action contradicts the demo-hooks journey expectation |
 | Q-002 | answered | 5.1 | harness | Task 5.1: the pre-satisfied check could not decide |
 | Q-003 | answered | none | verdict | Criterion C-25335f88 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice validates, test-runs and reads demo-hooks): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-6d33a627 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-6d33a627 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3): accept as satisfied? |
 | Q-005 | open | none | verdict | Hold H-ad2767b0: UI criterion C-822061e0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-b3c4f418: UI criterion C-8a9b0cea has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-52301bd3: UI criterion C-740bc49b has no end-to-end test; see the generated UI tests table |
@@ -259,7 +259,8 @@ accept The criterion is satisfied. The browser journey in e2e/test_m5_code_hooks
 
 ## Q-004: Criterion C-6d33a627 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -286,6 +287,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The browser test follows the scenario: it saves and validates DEMO_X3, asserts the Not valid status with layer H, the one Issues item with H_ROUTE_EFFECT, its where text and the guide link whose href ends in the h_route_effect anchor, the Test run region's text with no Start test run button, the Hook routes and Flow rules lists with their one item each, the flow rules paragraph, and exactly one path.hook-route in the svg with d M 112 168 L 112 328 and a computed stroke-dasharray that is not none, with assert_accessible at the end. The production code delivers each piece: diagnostics.ts accepts layer H and links H_ codes, test-run.ts holds the no-version text, GraphPanel renders the saved document's graph, FlowGraphView renders the Hook routes and Flow rules lists, the rules paragraph and the hook-route paths, and hook-overlay.css dashes them. The Node tests fix the path geometry and the overlay texts for this exact document, and the Node journey proves against the real engine that demo-x3 validates with exactly one H_ROUTE_EFFECT error and stays a draft. The missing red record is structural, since a red step runs only the Node gate, and the verifier's generated test was not written because it lacked the suite's helpers. The round 2 e2e gate ran this test and passed.
 ---
 
 ## Q-005: Hold H-ad2767b0: UI criterion C-822061e0 has no end-to-end test; see the generated UI tests table
