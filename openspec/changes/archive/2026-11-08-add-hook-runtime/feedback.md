@@ -10,14 +10,14 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | taken | tests |  | Replay of a fused pre hook that changes the input is untested. |
+| FB-001 | addressed | tests |  | Replay of a fused pre hook that changes the input is untested. |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: Replay of a fused pre hook that changes the input is untested.
 
-- **Status:** taken
+- **Status:** addressed
 - **Kind:** tests
 - **Lesson:** no
 - **By:** CiprianSpot, 2026-11-08T02:25:09Z
@@ -29,4 +29,4 @@ Requirement "A replay runs no recorded hook and reaches the same rows" says a re
 
 ### Outcome
 <!-- written by the harness -->
-Taken into add-hook-runtime-followup-1
+Addressed in round 1 at 090d021fdd: src/interpreter/hooks/replay-fused-pre.test.ts adds the requested replay test: run the mutate variant once, replay over the prefix ending after lookup's fused step, assert the own post hook sees the trimmed ctx.input, that obs and listSteps equal the first run, and that lookup is not reinvoked; t...
