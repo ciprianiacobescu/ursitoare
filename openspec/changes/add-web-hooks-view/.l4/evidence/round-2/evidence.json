@@ -1,0 +1,290 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "web/src/flow-graph/hook-overlay.ts",
+      "web/src/runs/hook-rows.ts",
+      "web/src/flows/diagnostics.ts",
+      "web/src/runs/types.ts",
+      "web/src/flow-graph/FlowGraphView.tsx",
+      "src",
+      "src/runs/store/validate.ts",
+      "test/journeys/m5-code-hooks.test.ts",
+      "e2e/test_m5_code_hooks.py",
+      "e2e/test_m4_runs.py",
+      "test/arch/{web-routes,imports,hygiene,modules,sources,repo}.test.ts",
+      "docs/decisions/0002",
+      "node:assert/strict",
+      "web/src/flows/diagnostics-hooks.test.ts",
+      "test/web-flow-editor/hook-link-parity.test.ts",
+      "src/authoring/index.ts",
+      "web/src/runs/hook-rows.test.ts",
+      "web/src/runs/RunPage.tsx",
+      "web/src/runs/hooks.css",
+      "web/src/runs/code-renderer.test.ts",
+      "web/src/runs/code-renderer.ts",
+      "web/src/flow-graph/hook-overlay.test.ts",
+      "e2e",
+      "web/src/flow-graph/hook-overlay.css",
+      "**/hooks.css",
+      "**/RunPage.tsx",
+      "**/^[a-z][a-z0-9_]{0,127}$",
+      "**/[]",
+      "**/FlowGraphView.tsx",
+      "**/types.ts",
+      "**/diagnostics.ts",
+      "**/mocks.ts",
+      "**/client.ts",
+      "**/StepView.hooks?",
+      "specs/*/spec.md",
+      "**/[",
+      "module authoring",
+      "module docs",
+      "module e2e",
+      "module node:assert",
+      "module runs",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m5_code_hooks.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view-fix-1/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view-fix-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view-fix-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view-fix-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view/.l4/ledger/r-20261108T1014Z-5062.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view/.l4/ledger/r-20261108T1146Z-9221.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view/.l4/ledger/r-20261108T1225Z-968b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-hooks-view/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/journeys/m5-code-hooks.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/web-flow-editor/hook-link-parity.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flow-graph/FlowGraphView.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/hook-overlay.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/hook-overlay.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flow-graph/hook-overlay.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/diagnostics-hooks.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/diagnostics.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/RunPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/code-renderer.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/code-renderer.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/hook-rows.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/hook-rows.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/hooks.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/types.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/flow-graph/FlowGraphView.tsx, web/src/flow-graph/hook-overlay.ts, web/src/flows/diagnostics.ts, web/src/runs/RunPage.tsx, web/src/runs/code-renderer.ts and 2 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/flow-graph/FlowGraphView.tsx",
+      "web/src/flow-graph/hook-overlay.ts",
+      "web/src/flows/diagnostics.ts",
+      "web/src/runs/RunPage.tsx",
+      "web/src/runs/code-renderer.ts",
+      "web/src/runs/hook-rows.ts",
+      "web/src/runs/types.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2017,
+      "passed": 2017,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 18,
+      "new_passed": 18,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

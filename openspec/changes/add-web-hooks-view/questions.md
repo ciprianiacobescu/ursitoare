@@ -13,6 +13,18 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 5.1 | ambiguous | Block hook entry action contradicts the demo-hooks journey expectation |
 | Q-002 | answered | 5.1 | harness | Task 5.1: the pre-satisfied check could not decide |
+| Q-003 | open | none | verdict | Criterion C-25335f88 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice validates, test-runs and reads demo-hooks): accept as satisfied? |
+| Q-004 | open | none | verdict | Criterion C-6d33a627 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3): accept as satisfied? |
+| Q-005 | open | none | verdict | Hold H-ad2767b0: UI criterion C-822061e0 has no end-to-end test; see the generated UI tests table |
+| Q-006 | open | none | verdict | Hold H-b3c4f418: UI criterion C-8a9b0cea has no end-to-end test; see the generated UI tests table |
+| Q-007 | open | none | verdict | Hold H-52301bd3: UI criterion C-740bc49b has no end-to-end test; see the generated UI tests table |
+| Q-008 | open | none | verdict | Hold H-8bb22c50: UI criterion C-67dea741 has no end-to-end test; see the generated UI tests table |
+| Q-009 | open | none | verdict | Hold H-480e66a5: UI criterion C-c595362a has no end-to-end test; see the generated UI tests table |
+| Q-010 | open | none | verdict | Hold H-5b0fc692: UI criterion C-ff5e87af has no end-to-end test; see the generated UI tests table |
+| Q-011 | open | none | verdict | Hold H-feaadce1: UI criterion C-d630941c has no end-to-end test; see the generated UI tests table |
+| Q-012 | open | none | verdict | Hold H-a457f21b: UI criterion C-1f095289 has no end-to-end test; see the generated UI tests table |
+| Q-013 | open | none | verdict | Hold H-c3ceafa2: UI criterion C-25335f88 has no end-to-end test; see the generated UI tests table |
+| Q-014 | open | none | verdict | Hold H-e3e2b1c3: UI criterion C-6d33a627 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -209,3 +221,296 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: The check's evidence is enough as it stands. Task 5.1 itself says the Node journey is green on arrival and that the e2e stack is its proof, so a pre-satisfied test is what the unit's own documents expect here, not an accident. The base run failing by an error rather than an assertion is also what the design predicts: against the unit base, parseValidation does not know layer H, so validateVersion throws INVALID_RESPONSE before the journey reaches any assertion, and the zero-value run cannot vary a TypeScript file at all, so a retry would reproduce the same inconclusive result. The held test's assertions follow the scenario Alice and bob run demo-hooks and alice meets the X3 rule step by step (validation layers and state, the TEST_MOCK_MISSING form error, the five steps and kinds, the normalize and pay payloads, the pay hook entries and hookRows texts, hookTraceNote null, no hooks key elsewhere, bob's steps, the X3 error and OPERATION_REFUSED refusal, and the overlay route and rule), and its only departure from the spec text, the block entry's action being continue, matches the merged block hook runner and the answer to Q-001. Since the accept only takes effect through a replay that runs every gate against the real stack, a journey that does not actually pass is still stopped.
+
+---
+
+## Q-003: Criterion C-25335f88 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice validates, test-runs and reads demo-hooks): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-25335f88 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice validates, test-runs and reads demo-hooks)
+
+### Context
+Criterion C-25335f88 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice validates, test-runs and reads demo-hooks) is needs human after round 2.
+
+Scenario:
+\- **WHEN** alice signs in with `login(page, users["alice"])`, opens "Flows", creates `demo-hooks` for `finance`, fills "Flow text" with `DEMO_HOOKS`, presses "Save version" and "Validate", reads the region "Graph", fills "Input (JSON)" and "Mocks (JSON)" of the region "Test run" with `INPUT` and `MOCKS_HOOKS`, presses "Start test run", follows its one link, presses `normalize` then `pay` in the list "Steps"; then, last, installs `page.route` on the steps request of that run (URL regex `/api/v1/runs/<run id>/steps(\?|$)`, the run id read from the link's name as in `e2e/test_m4_runs.py`), whose handler calls `route.fetch()`, sets `hooks` to `null` on the item of `normalize`, passes every other item and member through unchanged and fulfils with that JSON, reloads the run page with `page.goto`, and presses `normalize` then `pay`
+\- **THEN** the status in the region "Diagnostics" contains "Valid. 0 errors, 0 warnings. Layers run: L1, L2, L3, H."; the region "Graph" contains "Flow graph: 6 nodes, 5 edges, 5 layers.", its list "Hooks" has one item containing `pay: pre guard; post notify`, and it has no list named "Hook routes" or "Flow rules"; the run page shows within 20 seconds the status "Run state" "State: completed" and the buttons `lookup`, `normalize`, `route`, `pay`, `done` in order; after `normalize` the region "Step details" shows `code`, `completed`, `Attempt`, the region "Input" shows `"amount": 12.5` and `"status": "active"`, the region "Output" shows `"route": "pay"`, and there is no region named "Hooks"; after `pay` the region "Hooks" holds a list named "Hooks" of two items, the first containing `pre:guard · code (fused) · completed · continue` and the second `post:notify · block · completed`; with the answer rewritten: the buttons are still `lookup`, `normalize`, `route`, `pay`, `done` in order, after `normalize` the region "Hooks" contains the paragraph "This step's hook trace could not be read." (and no element with role `alert`), there is no list named "Hooks", and the region "Step details" still shows `code` and `completed`; after `pay` the list "Hooks" still has the same two items and the paragraph is gone; `assert_accessible(page)` passes on each page
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m5_code_hooks::test_c_25335f88_alice_validates_test_runs_and_reads_demo_hooks[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Criterion C-6d33a627 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-6d33a627 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3)
+
+### Context
+Criterion C-6d33a627 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3) is needs human after round 2.
+
+Scenario:
+\- **WHEN** alice signs in with `login(page, users["alice"])`, opens "Flows", creates `demo-x3` for `finance`, fills "Flow text" with `DEMO_X3`, presses "Save version" and "Validate", and reads the regions "Diagnostics", "Test run" and "Graph"
+\- **THEN** the status in "Diagnostics" contains "Not valid. 1 error, 0 warnings. Layers run: L1, L2, L3, H."; the list "Issues" has one item that contains `H_ROUTE_EFFECT` and `Node classify · /nodes/classify/post/0/routes/0` and holds the link "Guide for H_ROUTE_EFFECT (opens in a new tab)", whose `href` ends in `docs/authoring/diagnostics.md#h_route_effect`; the region "Test run" contains "Save and validate a version to test-run it." and no button "Start test run"; the region "Graph" has a list named "Hook routes" of one item containing `hook rush: classify may route to pay`, a list named "Flow rules" of one item containing `audit: match kind code; pre none; post rule.audit` followed by the paragraph "Flow rules are listed, not drawn: the graph cannot tell which nodes they match.", and in its `svg` exactly one `path.hook-route` whose `d` is `M 112 168 L 112 328` and whose computed `stroke-dasharray` is not `none`; `assert_accessible(page)` passes
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m5_code_hooks::test_c_6d33a627_alice_meets_the_x3_rejection[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Hold H-ad2767b0: UI criterion C-822061e0 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-822061e0 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-822061e0: not_testable after 1 attempt(s); Criterion specifies pure functions (parseValidation, diagnosticRows, diagnosticHref) with fixture inputs; the page snapshot is an empty SPA shell with no UI route to feed them, so it is a unit-level check, not an e2e one..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-006: Hold H-b3c4f418: UI criterion C-8a9b0cea has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-8a9b0cea has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-8a9b0cea: not_testable after 1 attempt(s); Criterion is about a Node unit test (hook-link-parity.test.ts) comparing library constants and functions; no browser-observable behavior or UI to drive with Playwright..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-007: Hold H-52301bd3: UI criterion C-740bc49b has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-740bc49b has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-740bc49b: not_testable after 1 attempt(s); Criterion specifies return values of pure functions on test-plan fixtures; no known browser route/flow to reach the graph from the empty SPA shell..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-008: Hold H-8bb22c50: UI criterion C-67dea741 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-67dea741 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-67dea741: not_testable after 1 attempt(s); The criterion is about pure module functions (hookOverlay, layoutFlow, hookSectionView with a counting Proxy). A browser user can't observe those, and the page snapshot shows no route or fixture for loading such documents..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-009: Hold H-480e66a5: UI criterion C-c595362a has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-c595362a has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-c595362a: not_testable after 1 attempt(s); Criterion is about pure functions parseStepHooks/parseStepView; the browser UI (empty SPA shell) exposes no way to call them or their fixtures, so no end-to-end check exists..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-010: Hold H-5b0fc692: UI criterion C-ff5e87af has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-ff5e87af has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-ff5e87af: not_testable after 1 attempt(s); Criterion specifies pure functions (hookRows, hookTraceNote) on in-memory fixtures; the snapshot shows only an empty SPA shell with no known route or data to drive a run page with these hook traces..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-011: Hold H-feaadce1: UI criterion C-d630941c has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-d630941c has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-d630941c: not_testable after 1 attempt(s); Criterion concerns in-process module APIs (stepRenderers, registerCodeRenderer, timelineItems) in a fresh process; not observable through the browser UI..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-012: Hold H-a457f21b: UI criterion C-1f095289 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-1f095289 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-1f095289: not_testable after 1 attempt(s); Criterion is a Node-level test (m5-code-hooks.test.ts) that calls web helper functions (followRun, loadPayload, hookOverlay, testRunFormErrors) against a real engine stack. The page snapshot shows only an empty SPA shell, with no known UI selectors, login flow or seed data, so a browser test can'....
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-013: Hold H-c3ceafa2: UI criterion C-25335f88 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-25335f88 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-25335f88: uncollectable after 1 attempt(s); no test of the new file ran at the merge base (collection error or no test).
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-014: Hold H-e3e2b1c3: UI criterion C-6d33a627 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-6d33a627 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-6d33a627: not_testable after 2 attempt(s); Needs the suite's login(), seeded users and assert_accessible() helpers plus the DEMO_X3 fixture. None of these are visible here, so a self-contained test would only guess the sign-in UI and fail..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
