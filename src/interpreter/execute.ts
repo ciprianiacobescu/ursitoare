@@ -1,5 +1,4 @@
-import type { BlockDef, JsonValue } from "../authoring/index.ts";
-import { nodeInputTaint, producedTaint } from "../authoring/index.ts";
+import type { BlockDef, JsonValue, ProducedTaint } from "../authoring/index.ts";
 import type {
   RunError,
   RunRecord,
@@ -247,6 +246,7 @@ export async function executeRun(
 
   let current = flow.start;
   let seq = 0;
+  let from: string | null = null;
   const visited = new Set<string>();
   let completed: { output: JsonValue | null; terminalNode: string } | null = null;
   let failure: InterpreterError | null = null;
@@ -283,8 +283,10 @@ export async function executeRun(
 
     const nodeId = current;
     let outcome: NodeOutcome;
+    let attempts: number;
+    let produced: ProducedTaint;
     try {
-      outcome = await visitNode({
+      ({ outcome, attempts, produced } = await visitNode({
         run: loaded.run,
         nodeId,
         node,
@@ -298,7 +300,10 @@ export async function executeRun(
         runtime,
         taints,
         now: deps.clock.now(),
-      });
+        flow,
+        catalogue,
+        from,
+      }));
     } catch (error) {
       const interpreted = toInterpreterError(error);
       if (interpreted !== null) {
@@ -308,12 +313,13 @@ export async function executeRun(
       throw error;
     }
 
-    seq += 1;
+    seq += attempts;
+    from = nodeId;
     (scope.nodes as Map<string, { output: JsonValue | null; outcome: string | null }>).set(
       nodeId,
       { output: outcome.output, outcome: outcome.outcome },
     );
-    taints.record(nodeId, producedTaint(node, nodeInputTaint(node, taints.taintOf), catalogue));
+    taints.record(nodeId, produced);
 
     if (outcome.end !== null) {
       completed = { output: outcome.output, terminalNode: nodeId };

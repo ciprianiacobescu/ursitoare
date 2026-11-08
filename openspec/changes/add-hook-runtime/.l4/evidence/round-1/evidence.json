@@ -1,0 +1,448 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/interpreter/types.ts:107-116",
+      "docs/decisions/0002",
+      "src/interpreter/index.ts",
+      "src/interpreter/hooks/names.test.ts",
+      "src/interpreter/hooks",
+      "src/interpreter/errors.ts",
+      "test/support/hook-runs/hook-runs.test.ts",
+      "test/support/hook-runs/index.ts",
+      "test/support/hook-runs/flows",
+      "hook-runs",
+      "test/support/README.md",
+      "hook-flows",
+      "src/interpreter/hooks/code-runner.test.ts",
+      "src/interpreter/hooks/code-runner.ts",
+      "src/interpreter/hooks/runtimes.test.ts",
+      "src/interpreter/types.ts",
+      "src/interpreter/runtimes/{block,code,switch,end,wait}.ts",
+      "src/interpreter/hooks/visit-pre.test.ts",
+      "src/interpreter/hooks/pipeline.ts",
+      "src/interpreter/hooks/visit-post.test.ts",
+      "src/interpreter/hooks/retry.test.ts",
+      "src/runs/intents/gate-generation.db.test.ts",
+      "src/runs/intents/gate.ts",
+      "src/interpreter/hooks/taint.test.ts",
+      "src/interpreter/hooks/replay.test.ts",
+      "**/gate.ts",
+      "**/visit.ts",
+      "**/execute.ts",
+      "flows/*.yaml",
+      "**/check.ts",
+      "**/InterpreterDeps.hookObserver?:",
+      "**/HOOK_*",
+      "**/index.ts",
+      "**/sandbox?",
+      "**/[",
+      "**/actions.test.ts",
+      "**/types.ts",
+      "**/names.ts",
+      "**/actions.ts",
+      "**/NodeServices.hooks?",
+      "**/ToolCall.generation?",
+      "**/InterpreterDeps.hookObserver?",
+      "**/pipeline.ts",
+      "**/IntentCall.generation?",
+      "**/faults.test.ts",
+      "module docs",
+      "module interpreter",
+      "module registry",
+      "module runs",
+      "module sandbox",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-hook-runtime/.l4/ledger/r-20261107T2028Z-9089.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-runtime/.l4/ledger/r-20261107T2044Z-0cf0.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-runtime/.l4/ledger/r-20261107T2228Z-8bc6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-runtime/.l4/ledger/r-20261107T2301Z-fa9e.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-runtime/.l4/ledger/r-20261107T2350Z-4917.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-runtime/.l4/ledger/r-20261108T0033Z-999a.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-runtime/.l4/ledger/r-20261108T0123Z-e2fd.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-runtime/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-runtime/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/interpreter/errors.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/execute.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/hooks/actions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/actions.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/hooks/code-runner.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/code-runner.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/hooks/faults.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/names.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/names.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/hooks/pipeline.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/hooks/registry.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/registry.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/hooks/replay.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/retry.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/runtimes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/taint.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/visit-post.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/visit-pre.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/index.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/runtimes/block.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `interpreter` is named in the spec"
+      },
+      {
+        "path": "src/interpreter/runtimes/code.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `interpreter` is named in the spec"
+      },
+      {
+        "path": "src/interpreter/runtimes/end.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `interpreter` is named in the spec"
+      },
+      {
+        "path": "src/interpreter/runtimes/switch.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `interpreter` is named in the spec"
+      },
+      {
+        "path": "src/interpreter/runtimes/wait.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `interpreter` is named in the spec"
+      },
+      {
+        "path": "src/interpreter/types.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/visit.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/intents/gate-generation.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/intents/gate.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/README.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/hook-runs/flows/end-pre.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-runs/flows/fail.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-runs/flows/mutate.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-runs/flows/onion.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-runs/flows/redirect.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-runs/flows/skip-pay.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-runs/flows/skip-read.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-runs/flows/taint-hook.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-runs/flows/undeclared.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-runs/hook-runs.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/hook-runs/index.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/interpreter/errors.ts, src/interpreter/execute.ts, src/interpreter/hooks/actions.ts, src/interpreter/hooks/code-runner.ts, src/interpreter/hooks/names.ts and 12 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/interpreter/errors.ts",
+      "src/interpreter/execute.ts",
+      "src/interpreter/hooks/actions.ts",
+      "src/interpreter/hooks/code-runner.ts",
+      "src/interpreter/hooks/names.ts",
+      "src/interpreter/hooks/pipeline.ts",
+      "src/interpreter/hooks/registry.ts",
+      "src/interpreter/index.ts",
+      "src/interpreter/runtimes/block.ts",
+      "src/interpreter/runtimes/code.ts",
+      "src/interpreter/runtimes/end.ts",
+      "src/interpreter/runtimes/switch.ts",
+      "src/interpreter/runtimes/wait.ts",
+      "src/interpreter/types.ts",
+      "src/interpreter/visit.ts",
+      "src/runs/intents/gate.ts",
+      "test/support/hook-runs/index.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1946,
+      "passed": 1946,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 83,
+      "new_passed": 83,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

@@ -14,6 +14,7 @@ import type { DurableRuntime } from "../durable/index.ts";
 import type { VersionState } from "../registry/index.ts";
 import type { RunRecord, RunStore, TenantContext } from "../runs/index.ts";
 import type { WorkerSandbox } from "../sandbox/index.ts";
+import type { HookTraceEntry, NodeHooks } from "./hooks/types.ts";
 
 export type EffectMode = "live" | "mock" | "stub";
 
@@ -24,6 +25,7 @@ export interface ToolCall {
   effectSeq: number;
   phase?: "pre" | "post";
   hookId?: string;
+  generation?: number;
 }
 
 export interface ToolResult {
@@ -86,6 +88,7 @@ export interface NodeServices {
   resolve(value: unknown): JsonValue;
   block(ref: string): BlockDef | undefined;
   sandbox?: WorkerSandbox;
+  hooks?: NodeHooks;
 }
 
 export interface NodeRuntime {
@@ -116,6 +119,7 @@ export interface InterpreterDeps {
   clock: Clock;
   ids: IdSource;
   sandbox?: WorkerSandbox;
+  hookObserver?: (nodeId: string, entry: HookTraceEntry) => void;
 }
 
 export interface StartRunRequest {

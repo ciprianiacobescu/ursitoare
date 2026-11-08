@@ -1,27 +1,33 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 import type { HookPlacement } from "../../authoring/index.ts";
+import { InterpreterError } from "../errors.ts";
 
-export function hookStepName(_nodeId: string, _placement: HookPlacement): string {
-  throw new Error("not implemented");
+export function hookStepName(nodeId: string, placement: HookPlacement): string {
+  return `${nodeId}:${placement.phase}:${placement.label}`;
 }
 
-export function attemptStepName(_name: string, _attempt: number): string {
-  throw new Error("not implemented");
+export function attemptStepName(name: string, attempt: number): string {
+  return attempt <= 1 ? name : `${name}:r${attempt}`;
 }
 
 export function hookSlot(
-  _p: { pre: readonly HookPlacement[]; post: readonly HookPlacement[] },
-  _placement: HookPlacement,
+  p: { pre: readonly HookPlacement[]; post: readonly HookPlacement[] },
+  placement: HookPlacement,
 ): number {
-  throw new Error("not implemented");
+  const index = [...p.pre, ...p.post].indexOf(placement);
+  if (index < 0) {
+    throw new InterpreterError("HOOK_ERROR", "hook placement has no slot", null, {
+      reason: "slot_missing",
+    });
+  }
+  return index + 1;
 }
 
-export function isFusable(_placement: HookPlacement): boolean {
-  throw new Error("not implemented");
+export function isFusable(placement: HookPlacement): boolean {
+  const hook = placement.hook;
+  return hook.kind === "code" && hook.routes === undefined && hook.max_retries === undefined;
 }
 
-export function splitFused(_p: {
+export function splitFused(p: {
   pre: readonly HookPlacement[];
   post: readonly HookPlacement[];
 }): {
@@ -30,5 +36,14 @@ export function splitFused(_p: {
   fusedPost: HookPlacement[];
   ownPost: HookPlacement[];
 } {
-  throw new Error("not implemented");
+  let preCut = p.pre.length;
+  while (preCut > 0 && isFusable(p.pre[preCut - 1] as HookPlacement)) preCut -= 1;
+  let postCut = 0;
+  while (postCut < p.post.length && isFusable(p.post[postCut] as HookPlacement)) postCut += 1;
+  return {
+    ownPre: p.pre.slice(0, preCut),
+    fusedPre: p.pre.slice(preCut),
+    fusedPost: p.post.slice(0, postCut),
+    ownPost: p.post.slice(postCut),
+  };
 }

@@ -1,0 +1,11 @@
+ursitoare: "0.1"
+flow: undeclared
+version: 1.0.0
+inputs: {type: object, properties: {vendor: {type: string}, amount: {type: number}, mode: {type: string}}, required: [vendor, amount, mode]}
+start: gate
+nodes:
+  gate: {kind: switch, on: "${{ inputs.mode }}", cases: {manual: review}, default: classify, post: [{id: saw_default, kind: code, when: {outcome: [default]}, source: "return;"}]}
+  classify: {kind: code, language: js, input: {amount: "${{ inputs.amount }}"}, source: "return { risk: input.amount > 1000 ? 'high' : 'low' };", output_schema: {type: object, properties: {risk: {type: string}}, required: [risk]}, next: pay, pre: [{id: pre_look, kind: code, when: {from: {kind: [switch]}}, input: {v: "${{ inputs.vendor }}"}, source: "return;"}], post: [{id: to_review, kind: code, routes: [review], input: {limit: 1000}, source: "return { action: 'redirect', to: 'pay' };"}, {id: after_redirect, kind: code, when: {next: {nodes: [review]}}, source: "return;"}]}
+  pay: {kind: block, uses: erp.create_payment@1, with: {vendor_id: "${{ inputs.vendor }}", amount: "${{ inputs.amount }}", currency: EUR, reference: inv-1}, next: done}
+  review: {kind: code, language: js, input: {amount: "${{ inputs.amount }}"}, source: "return { queued: true };", output_schema: {type: object, properties: {queued: {type: boolean}}, required: [queued]}, next: done}
+  done: {kind: end, status: completed, output: {finished: true}}

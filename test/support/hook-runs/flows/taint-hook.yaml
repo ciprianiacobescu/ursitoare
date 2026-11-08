@@ -1,0 +1,9 @@
+ursitoare: "0.1"
+flow: taint-hook
+version: 1.0.0
+inputs: {type: object, properties: {invoice: {type: string}}, required: [invoice]}
+start: fetch
+nodes:
+  fetch: {kind: block, uses: invoices.get@1, with: {invoice_id: "${{ inputs.invoice }}"}, next: use_id, post: [{id: sanitise, kind: code, input: {note: "${{ nodes.fetch.output.raw_text }}"}, source: "return { action: 'continue', output: { invoice_id: ctx.output.invoice_id, raw_text: 'clean' } };"}]}
+  use_id: {kind: code, language: js, input: {id: "${{ nodes.fetch.output.invoice_id }}"}, source: "return { id: input.id };", output_schema: {type: object, properties: {id: {type: string}}, required: [id]}, next: done}
+  done: {kind: end, status: completed, pre: [{id: tag, kind: code, input: {note: "${{ nodes.fetch.output.raw_text }}"}, source: "return { action: 'continue', input: { note: ctx.args.note } };"}]}
