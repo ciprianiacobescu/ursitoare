@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 5.1 | ambiguous | Block hook entry action contradicts the demo-hooks journey expectation |
-| Q-002 | open | 5.1 | harness | Task 5.1: the pre-satisfied check could not decide |
+| Q-002 | answered | 5.1 | harness | Task 5.1: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -50,7 +50,8 @@ The spec text (design decision 5, the journey's expected hookRows text, test-pla
 
 ## Q-002: Task 5.1: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.1
 - **Kind:** harness
 - **Asked:** 2026-11-08T12:21Z by deepseek-free, run r-20261108T1146Z-9221, task 5.1
@@ -207,3 +208,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: The check's evidence is enough as it stands. Task 5.1 itself says the Node journey is green on arrival and that the e2e stack is its proof, so a pre-satisfied test is what the unit's own documents expect here, not an accident. The base run failing by an error rather than an assertion is also what the design predicts: against the unit base, parseValidation does not know layer H, so validateVersion throws INVALID_RESPONSE before the journey reaches any assertion, and the zero-value run cannot vary a TypeScript file at all, so a retry would reproduce the same inconclusive result. The held test's assertions follow the scenario Alice and bob run demo-hooks and alice meets the X3 rule step by step (validation layers and state, the TEST_MOCK_MISSING form error, the five steps and kinds, the normalize and pay payloads, the pay hook entries and hookRows texts, hookTraceNote null, no hooks key elsewhere, bob's steps, the X3 error and OPERATION_REFUSED refusal, and the overlay route and rule), and its only departure from the spec text, the block entry's action being continue, matches the merged block hook runner and the answer to Q-001. Since the accept only takes effect through a replay that runs every gate against the real stack, a journey that does not actually pass is still stopped.
