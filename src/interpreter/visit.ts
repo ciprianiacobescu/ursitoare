@@ -1,5 +1,13 @@
-import type { BlockDef, Catalogue, Flow, FlowNode, JsonValue, Taint } from "../authoring/index.ts";
-import { nodeInputTaint } from "../authoring/index.ts";
+import type {
+  BlockDef,
+  Catalogue,
+  Flow,
+  FlowNode,
+  JsonValue,
+  ProducedTaint,
+  Taint,
+} from "../authoring/index.ts";
+import { nodeInputTaint, producedTaint } from "../authoring/index.ts";
 import { attemptStepName } from "./hooks/names.ts";
 import { createHookPipeline } from "./hooks/pipeline.ts";
 import type { FusedStored, HookRetry } from "./hooks/pipeline.ts";
@@ -88,12 +96,14 @@ function invalidOutcome(nodeId: string): InterpreterError {
 
 export async function visitNode(
   request: VisitRequest,
-): Promise<{ outcome: NodeOutcome; attempts: number }> {
+): Promise<{ outcome: NodeOutcome; attempts: number; produced: ProducedTaint }> {
   let attempt = 1;
   let retry: HookRetry | undefined;
   for (;;) {
     const result = await visitAttempt(request, attempt, retry);
-    if (result.retry === null) return { outcome: result.outcome, attempts: attempt };
+    if (result.retry === null) {
+      return { outcome: result.outcome, attempts: attempt, produced: result.produced };
+    }
     retry = result.retry;
     attempt += 1;
   }
@@ -103,7 +113,7 @@ async function visitAttempt(
   request: VisitRequest,
   attempt: number,
   retry: HookRetry | undefined,
-): Promise<{ outcome: NodeOutcome; retry: HookRetry | null }> {
+): Promise<{ outcome: NodeOutcome; retry: HookRetry | null; produced: ProducedTaint }> {
   const { run, nodeId, node, blocks, scope, deps, tenant, ops, invoker, runtime, taints, now } =
     request;
   const seq = request.seq + attempt - 1;
@@ -152,6 +162,8 @@ async function visitAttempt(
     resolve,
     block: (ref) => blocks[ref],
     baseInput: hookInputFor(node, resolve),
+    baseTaint: rowTaint,
+    taintOf: taints.taintOf,
     ...(retry === undefined ? {} : { retry }),
   });
 
@@ -201,7 +213,7 @@ async function visitAttempt(
       output: output as StepWrite["output"],
       outcome,
       error,
-      taint: rowTaint,
+      taint: hookState?.taint ?? rowTaint,
       policyDecisionId: null,
       idemKey,
       startedAt: now,
@@ -335,5 +347,7 @@ async function visitAttempt(
   }
 
   if (wrote) await writeFinal("completed", outcome.output, outcome.outcome, null, idemKey);
-  return { outcome, retry: next };
+  const produced =
+    pipeline?.produced() ?? producedTaint(node, rowTaint, request.catalogue);
+  return { outcome, retry: next, produced };
 }

@@ -7,8 +7,19 @@ import type {
   HookPlacement,
   JsonValue,
   NodeMeta,
+  ProducedTaint,
+  Taint,
+  TaintOf,
 } from "../../authoring/index.ts";
-import { augmentedSuccessors, hookPlacements, nodeMeta, whenMatches } from "../../authoring/index.ts";
+import {
+  augmentedSuccessors,
+  hookPlacements,
+  joinTaint,
+  nodeMeta,
+  producedTaint,
+  valueTaint,
+  whenMatches,
+} from "../../authoring/index.ts";
 import { InterpreterError } from "../errors.ts";
 import { resolveValue } from "../refs.ts";
 import { checkSchema } from "../schema.ts";
@@ -47,11 +58,13 @@ export interface HookState {
   input: JsonValue | null;
   changed: boolean;
   skipped: JsonValue | null;
+  taint: Taint;
 }
 
 export interface HookRetry {
   input: JsonValue | null;
   feedback: JsonValue | null;
+  taint: Taint;
 }
 
 export interface HookPipelineRequest {
@@ -70,12 +83,15 @@ export interface HookPipelineRequest {
   resolve: (value: unknown) => JsonValue;
   block: (ref: string) => BlockDef | undefined;
   baseInput: JsonValue | null | undefined;
+  baseTaint: Taint;
+  taintOf: TaintOf;
 }
 
 export interface HookPipeline {
   readonly fuses: boolean;
   readonly state: HookState;
   readonly hooks: NodeHooks;
+  produced(): ProducedTaint;
   runOwnPre(): Promise<void>;
   runOwnPost(outcome: NodeOutcome): Promise<{ outcome: NodeOutcome; retry: HookRetry | null }>;
   fusedStep(run: () => Promise<JsonValue>): Promise<FusedStored>;
@@ -146,8 +162,27 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
 
   const state: HookState =
     request.retry === undefined
-      ? { input: request.baseInput ?? null, changed: false, skipped: null }
-      : { input: request.retry.input, changed: true, skipped: null };
+      ? { input: request.baseInput ?? null, changed: false, skipped: null, taint: request.baseTaint }
+      : {
+          input: request.retry.input,
+          changed: true,
+          skipped: null,
+          taint: joinTaint(request.baseTaint, request.retry.taint),
+        };
+  let changedOutput: ProducedTaint | null = null;
+  const currentProduced = (): ProducedTaint =>
+    changedOutput ?? producedTaint(node, state.taint, catalogue);
+  const postTaintOf: TaintOf = (id) =>
+    id === nodeId ? currentProduced() : request.taintOf(id);
+  const labelsOf = (produced: ProducedTaint): Taint =>
+    Object.values(produced.fields).reduce((all, label) => joinTaint(all, label), produced.output);
+  const postTaint = (placement: HookPlacement): Taint =>
+    joinTaint(
+      joinTaint(state.taint, valueTaint(placement.hook.input ?? {}, postTaintOf)),
+      labelsOf(currentProduced()),
+    );
+  const hookInputTaint = (placement: HookPlacement): Taint =>
+    valueTaint(placement.hook.input ?? {}, request.taintOf);
   let records: FusedRecord[] | null = null;
 
   const outputSchema = (): unknown =>
@@ -258,13 +293,28 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
       if (outcome.input !== undefined) {
         state.input = outcome.input;
         state.changed = true;
+        state.taint = joinTaint(state.taint, hookInputTaint(placement));
       }
     } else if (outcome.action === "skip") {
       checkOutput(outcome.output, label);
       state.skipped = outcome.output;
+      state.taint = joinTaint(state.taint, hookInputTaint(placement));
     } else {
       throw unsupported(label, outcome.action);
     }
+  };
+
+  const applyPostTaint = (placement: HookPlacement, run: HookRun): void => {
+    if (run.outcome.action !== "continue" || run.outcome.output === undefined) return;
+    const cur = currentProduced();
+    const h = postTaint(placement);
+    changedOutput = {
+      output: joinTaint(cur.output, h),
+      fields: Object.fromEntries(
+        Object.entries(cur.fields).map(([key, value]) => [key, joinTaint(value, h)]),
+      ),
+      outcome: cur.outcome,
+    };
   };
 
   const applyPost = (placement: HookPlacement, run: HookRun, view: View): void => {
@@ -274,6 +324,7 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
       if (outcome.output !== undefined) {
         checkOutput(outcome.output, label);
         view.output = outcome.output;
+        applyPostTaint(placement, run);
       }
     } else if (outcome.action === "redirect") {
       view.next = outcome.to;
@@ -309,6 +360,7 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
         return {
           input: run.outcome.input === undefined ? view.input : run.outcome.input,
           feedback: run.outcome.feedback === undefined ? null : run.outcome.feedback,
+          taint: postTaint(placement),
         };
       }
       applyPost(placement, run, view);
@@ -363,6 +415,16 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
     fuses: fusedPre.length + fusedPost.length > 0,
     state,
     hooks,
+    produced() {
+      const cur = currentProduced();
+      if (state.skipped === null) return cur;
+      const join = (label: Taint): Taint => joinTaint(label, state.taint);
+      return {
+        output: join(cur.output),
+        fields: Object.fromEntries(Object.entries(cur.fields).map(([key, value]) => [key, join(value)])),
+        outcome: join(cur.outcome),
+      };
+    },
     async runOwnPre() {
       if (request.baseInput === undefined || ctx.attempt > 1) return;
       for (const placement of ownPre) {
@@ -402,6 +464,7 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
         for (const record of stored.__fused) {
           observe(deps, nodeId, record.run.entry);
           if (record.phase === "pre") applyPre(placementOf(record), record.run);
+          else applyPostTaint(placementOf(record), record.run);
         }
       }
       return stored.value;

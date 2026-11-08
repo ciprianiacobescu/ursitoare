@@ -1,5 +1,4 @@
-import type { BlockDef, JsonValue } from "../authoring/index.ts";
-import { nodeInputTaint, producedTaint } from "../authoring/index.ts";
+import type { BlockDef, JsonValue, ProducedTaint } from "../authoring/index.ts";
 import type {
   RunError,
   RunRecord,
@@ -285,8 +284,9 @@ export async function executeRun(
     const nodeId = current;
     let outcome: NodeOutcome;
     let attempts: number;
+    let produced: ProducedTaint;
     try {
-      ({ outcome, attempts } = await visitNode({
+      ({ outcome, attempts, produced } = await visitNode({
         run: loaded.run,
         nodeId,
         node,
@@ -319,7 +319,7 @@ export async function executeRun(
       nodeId,
       { output: outcome.output, outcome: outcome.outcome },
     );
-    taints.record(nodeId, producedTaint(node, nodeInputTaint(node, taints.taintOf), catalogue));
+    taints.record(nodeId, produced);
 
     if (outcome.end !== null) {
       completed = { output: outcome.output, terminalNode: nodeId };
