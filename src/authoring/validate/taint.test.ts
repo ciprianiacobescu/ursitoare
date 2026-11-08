@@ -147,6 +147,17 @@ test("C-f97887e5 hook edges are not checked", () => {
   assert.doesNotThrow(() => {
     r = validateFlow(doc, caseCatalogue());
   });
-  assert.deepEqual(r?.errors, []);
+  assert.equal(r?.ok, false);
+  assert.deepEqual(r?.errors, [
+    {
+      layer: "L3",
+      code: "L3_TAINT_TO_CONSEQUENTIAL",
+      node: "extract",
+      path: "/nodes/extract/pre/0/with/body",
+      message:
+        "untrusted data from fetch reaches hook h on extract through nodes.fetch.output.content, a block with side effects; pass it through an llm.extract node first",
+    },
+  ]);
   assert.deepEqual(r?.warnings, []);
+  assert.deepEqual(r?.layers_run, ["L1", "L2", "L3"]);
 });
