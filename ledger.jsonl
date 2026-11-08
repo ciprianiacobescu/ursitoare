@@ -19,3 +19,4 @@
 {"at":"2026-11-08T19:09:01Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"54f24ed324779c398344f63f5724de5e005b096e","status":"pass","type":"unit.postcheck","unit":"openspec:add-hook-taint-check"}
 {"at":"2026-11-08T19:09:01Z","revision":"54f24ed324779c398344f63f5724de5e005b096e","type":"unit.integrated","unit":"openspec:add-hook-taint-check"}
 {"at":"2026-11-08T19:09:01Z","attempt":1,"cost_usd":4.262325,"runs":3,"type":"plan.charged","unit":"openspec:add-hook-taint-check"}
+{"at":"2026-11-08T19:10:30Z","branch":"l4/archive/openspec/add-hook-taint-check","head":"283ccadc21e8265eae6c5220c0178ae0472ab0d3","type":"unit.branch_deleted","unit":"openspec:add-hook-taint-check"}
