@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 2.1 | harness | Task 2.1: the pre-satisfied check could not decide |
+| Q-001 | answered | 2.1 | harness | Task 2.1: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 2.1: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 2.1
 - **Kind:** harness
 - **Asked:** 2026-11-08T17:33Z by claude-sonnet, run r-20261108T1636Z-0d2a, task 2.1
@@ -157,3 +158,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: The held test traces the scenario "Hook edges that stay allowed", which the unit designs as a guard that passes at red: tasks.md task 2.1 says N1 to N5 "pass at red as guards", and the test plan reports the same values for them. Its passing against the base code is therefore the planned behaviour of a negative scenario, not a sign of a pre-satisfied criterion. The base validator already skips every hook edge (taint-checks.ts line 33) and already runs layer H after a clean L3 when hooks are declared (validate.ts lines 64 to 66), so L3ERR empty, layers_run with H and N4's H_BLOCK error are base behaviour, exactly as the spec scenario states. The positive tests P1 to P4 of the same file are not held, so they fail at base and carry the discriminating assertions of task 2.1. A retry would not help: the zero-value run varies Python files only, which is a fixed limitation for a TypeScript test. The evidence of the real base run is enough; replay the saved change.
