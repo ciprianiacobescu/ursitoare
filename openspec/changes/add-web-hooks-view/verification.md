@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-hooks-view: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-web-hooks-view: PASS (round 3)
 
 traceability: 8/10 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 8/10 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base main@3dda495266 contained |
-| 1 | integrity | ok | 170.9 | 11 sub-checks; scope: 29 changed file(s) |
-| 2 | build | ok | 23.3 |  |
-| 3 | tests | ok | 251.0 |  |
-| 4 | traceability | ok | 0.1 | 8/10 criteria covered |
-| 4a | audit sampling | ok | 9.6 | 2 not_testable, 1 skipped; support files at the base: 7 |
-| 5 | ui test generation | ok | 164.0 | 9 not_testable, 1 uncollectable |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/flow-graph/FlowGraphView.tsx, web/src/flow-graph/hook-overlay.ts, web/src/flows/diagnostics.ts, web/src/runs/RunPage.tsx, web/src/runs/code-renderer.ts and 2 more |
-| 8 | s1 judge | ok | 0.6 | 4/10 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 271.7 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
+| 4a | audit sampling | reused | 0.0 | reused (round 2) |
+| 5 | ui test generation | reused | 0.0 | reused (round 2) |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -156,6 +156,21 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-1f095289 | not_testable | - | - | Criterion is a TypeScript web journey (vitest against a real engine stack, browser-side modules); no Python module or public interface exists to exercise from pytest. |
 | C-8a9b0cea | not_testable | - | - | The criterion is a TypeScript test (test/web-flow-editor/hook-link-parity.test.ts) over TS modules; no Python public interface is shown to test with pytest. |
 
+## Answers to verdict questions
+
+- Q-003 accept C-25335f88 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. The browser journey in e2e/test_m5_code_hooks.py follows the scenario assertion by assertion: the diagnostics status with layer H, the graph message and its one Hooks item with no Hook routes or Flow rules list, the completed run with the five step buttons in order, the c...
+- Q-004 accept C-6d33a627 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. The browser test follows the scenario: it saves and validates DEMO_X3, asserts the Not valid status with layer H, the one Issues item with H_ROUTE_EFFECT, its where text and the guide link whose href ends in the h_route_effect anchor, the Test run region's text with no St...
+- Q-005 accept H-ad2767b0 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-822061e0 is written as a function-level scenario over parseValidation, diagnosticRows, diagnosticsSummary and diagnosticHref with fixture inputs, and three Node tests named with its id check every value it lists: the parsed result, the three refusals, the two rows...
+- Q-006 accept H-b3c4f418 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-8a9b0cea names its own Node test, test/web-flow-editor/hook-link-parity.test.ts, and describes a comparison of library constants and functions: the two hook code lists from src/authoring and diagnosticHref against REPO_DOCS_BASE plus diagnosticLink. That test exis...
+- Q-007 accept H-52301bd3 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-740bc49b lists return values of hookOverlay, hookBadgeText, hookRouteText, flowRuleText, hookRoutePaths and hookSectionView on the HOOKED, X3 and RULES fixtures. Two Node tests named with its id assert each of those values, including the path geometry and the sect...
+- Q-008 accept H-8bb22c50 by agent (CLAUDECODE): The hold can be waived. C-67dea741 is a function-level scenario over hookOverlay, layoutFlow and hookSectionView (odd documents, limits, a counting Proxy for no mutation, an unchanged drawing). Three Node tests in web/src/flow-graph/hook-overlay.test.ts carry its id and pass in round 2, and the judg...
+- Q-009 accept H-480e66a5 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-c595362a describes the return values of parseStepHooks and parseStepView on in-memory fixtures: undefined for absent, a deep copy for valid traces, null for nineteen malformed values, and the key order and null marker of the step view. Two Node tests named with it...
+- Q-010 accept H-5b0fc692 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-ff5e87af lists the rows and notes hookRows and hookTraceNote give for four steps: the two rows of guard and notify with their texts and details, the three rows of rush, trim and tell including the redirect arrow, Attempt 2, Mutated input and the Error row, and emp...
+- Q-011 accept H-feaadce1 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-d630941c describes in-process module state: the four built-in renderer kinds before registration, the default renderer and the unknown-kind text, then after two calls to registerCodeRenderer the five kinds, CODE_STEP_RENDERER as the code renderer, the text code · ...
+- Q-012 accept H-a457f21b by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-1f095289 is by its own text the Node journey m5-code-hooks.test.ts, which runs the web helpers against the real e2e stack engine. That test exists, is named with the criterion id, and asserts the scenario step by step: the demo-hooks validation with layers L1, L2,...
+- Q-013 accept H-c3ceafa2 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-25335f88 is the browser scenario of the demo-hooks journey, and the unit's own browser test in e2e/test_m5_code_hooks.py follows it assertion by assertion: the Diagnostics status with layer H, the graph message with its one Hooks item and no Hook routes or Flow ru...
+- Q-014 accept H-e3e2b1c3 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-6d33a627 is the browser scenario of the demo-x3 journey, and the unit's own browser test in e2e/test_m5_code_hooks.py follows it assertion by assertion: the Not valid status with layer H, the one Issues item containing H_ROUTE_EFFECT and its where text with the gu...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -168,8 +183,8 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-ff5e87af | web-runs › Hook rows read like the trace › Texts and details of the trace | pass | pass | the judge passed it and a discriminating test passes |
 | C-d630941c | web-runs › Code steps have a renderer that the run page registers once › Registering and rendering a code step | pass | pass | the judge passed it and a discriminating test passes |
 | C-1f095289 | web-runs › The hooks view works against the real engine › Alice and bob run demo-hooks and alice meets the X3 rule | pass | pass | the judge passed it and a discriminating test passes |
-| C-25335f88 | web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice validates, test-runs and reads demo-hooks | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-6d33a627 | web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3 | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-25335f88 | web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice validates, test-runs and reads demo-hooks | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. The browser journey in e2e/test_m5_code_hooks.py follows the scenario assertion by assertion: the diagnostics status with layer H, the graph message and its one Hooks item with no Hook routes or Flow rules list,... |
+| C-6d33a627 | web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3 | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. The browser test follows the scenario: it saves and validates DEMO_X3, asserts the Not valid status with layer H, the one Issues item with H_ROUTE_EFFECT, its where text and the guide link whose href ends in the... |
 
 ## Findings
 
@@ -185,19 +200,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-1f095289): No end-to-end test traces criterion C-1f095289 (web-runs › The hooks view works against the real engine › Alice and bob run demo-hooks and alice meets the X3 rule); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-25335f88): The end-to-end test test_m5_code_hooks::test_c_25335f88_alice_validates_test_runs_and_reads_demo_hooks[chromium] traces criterion C-25335f88 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice validates, test-runs and reads demo-hooks), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-6d33a627): The end-to-end test test_m5_code_hooks::test_c_6d33a627_alice_meets_the_x3_rejection[chromium] traces criterion C-6d33a627 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
-
-## Needs a human
-
-- UI criterion C-822061e0 has no end-to-end test; see the generated UI tests table
-- UI criterion C-8a9b0cea has no end-to-end test; see the generated UI tests table
-- UI criterion C-740bc49b has no end-to-end test; see the generated UI tests table
-- UI criterion C-67dea741 has no end-to-end test; see the generated UI tests table
-- UI criterion C-c595362a has no end-to-end test; see the generated UI tests table
-- UI criterion C-ff5e87af has no end-to-end test; see the generated UI tests table
-- UI criterion C-d630941c has no end-to-end test; see the generated UI tests table
-- UI criterion C-1f095289 has no end-to-end test; see the generated UI tests table
-- UI criterion C-25335f88 has no end-to-end test; see the generated UI tests table
-- UI criterion C-6d33a627 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
