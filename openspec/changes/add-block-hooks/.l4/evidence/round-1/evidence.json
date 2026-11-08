@@ -1,0 +1,240 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "runtimes/block.ts:89-127",
+      "test/support/hook-runs/index.ts",
+      "flows",
+      "docs/decisions/0002",
+      "src/interpreter/types.ts",
+      "src/interpreter/index.ts",
+      "src/interpreter/mocks.test.ts",
+      "src/interpreter/mock-invoker.test.ts",
+      "src/main.mockruns.test.ts",
+      "test/support/README.md",
+      "src/interpreter/hooks/block-values.test.ts",
+      "src/interpreter/hooks/block-runner.ts",
+      "src/interpreter/hooks/block-runner.test.ts",
+      "src/interpreter/mocks-hooks.test.ts",
+      "src/interpreter/mocks.ts",
+      "test/support/hook-runs/notify-pay.test.ts",
+      "test/support/hook-runs/notify-pay.yaml",
+      "test/support/mock-run-seed.ts",
+      "hook-runs/notify-pay",
+      "src/interpreter/hooks/hooked-run.db.test.ts",
+      "src/api/test-run-refusals.test.ts",
+      "src/interpreter/execute.ts",
+      "src/interpreter/hooks/crash.test.ts",
+      "test/support/crash/hooks-scenario.ts",
+      "crash/hooks-scenario",
+      "src/authoring/format/running-code-section.test.ts",
+      "docs/authoring/format.md",
+      "**/mocks.ts",
+      "**/execute.ts",
+      "**/ToolCall.generation?",
+      "**/IntentCall.generation?",
+      "**/StepContext.hook?",
+      "**/types.ts",
+      "**/StepRecord.hooks?",
+      "**/[",
+      "src/api/test-run-*.test.ts",
+      "src/cli/flow/*.test.ts",
+      "**/index.ts",
+      "module api",
+      "module authoring",
+      "module cli",
+      "module crash",
+      "module docs",
+      "module hook-runs",
+      "module interpreter",
+      "module main.mockruns.test",
+      "module runtimes",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/authoring/format.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-block-hooks/.l4/ledger/r-20261108T0627Z-49e1.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-block-hooks/.l4/ledger/r-20261108T0900Z-b2ed.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-block-hooks/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/authoring/format/running-code-section.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/execute.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/hooks/block-runner.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/block-runner.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/hooks/block-values.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/crash.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/hooked-run.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/index.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/mocks-hooks.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/mocks.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/types.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/visit.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `interpreter` is named in the spec"
+      },
+      {
+        "path": "test/support/README.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/crash/hooks-scenario.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/hook-runs/notify-pay.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/hook-runs/notify-pay.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `test` is named in the spec"
+      },
+      {
+        "path": "test/support/hook-runs/notify-pay.yaml",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/interpreter/execute.ts, src/interpreter/hooks/block-runner.ts, src/interpreter/index.ts, src/interpreter/mocks.ts, src/interpreter/types.ts and 3 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/interpreter/execute.ts",
+      "src/interpreter/hooks/block-runner.ts",
+      "src/interpreter/index.ts",
+      "src/interpreter/mocks.ts",
+      "src/interpreter/types.ts",
+      "src/interpreter/visit.ts",
+      "test/support/crash/hooks-scenario.ts",
+      "test/support/hook-runs/notify-pay.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 1999,
+      "passed": 1999,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 37,
+      "new_passed": 37,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
