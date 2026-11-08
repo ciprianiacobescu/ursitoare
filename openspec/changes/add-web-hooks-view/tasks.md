@@ -14,7 +14,7 @@ Spec: `specs/*/spec.md`; fixtures: `test-plan.md`; decisions: `design.md`. No fr
 
 ## 4. The hook overlay
 
-- [ ] 4.1 Write `web/src/flow-graph/hook-overlay.test.ts` (scenarios "Badges, routes, rules and missing targets" and "Odd documents, limits, no mutation and an unchanged drawing"; documents built with `canonicalizeFlow` from the two texts, so the layout is the real one) first, then create `web/src/flow-graph/hook-overlay.ts` (`HookBadge`, `HookRouteEdge`, `FlowRuleRow`, `HookOverlay`, `hookOverlay`, `hookRouteText`, `hookBadgeText`, `flowRuleText`, `hookRoutePaths`, `HookSectionView`, `hookSectionView`), implementing the functions of requirement "The graph lists hooks, hook routes and flow rules beside the drawing"
+- [x] 4.1 Write `web/src/flow-graph/hook-overlay.test.ts` (scenarios "Badges, routes, rules and missing targets" and "Odd documents, limits, no mutation and an unchanged drawing"; documents built with `canonicalizeFlow` from the two texts, so the layout is the real one) first, then create `web/src/flow-graph/hook-overlay.ts` (`HookBadge`, `HookRouteEdge`, `FlowRuleRow`, `HookOverlay`, `hookOverlay`, `hookRouteText`, `hookBadgeText`, `flowRuleText`, `hookRoutePaths`, `HookSectionView`, `hookSectionView`), implementing the functions of requirement "The graph lists hooks, hook routes and flow rules beside the drawing"
 
 ## 5. The graph lists and the milestone journeys
 
