@@ -203,3 +203,55 @@ test("C-4f58ed6e hook edges that stay allowed give no taint error", () => {
   const bad = validateWith((d) => p1(d));
   assert.deepEqual(bad.errors.map((e) => e.code), ["L3_TAINT_TO_CONSEQUENTIAL"]);
 });
+
+const rule = (hook: Record<string, unknown>, nodes: string[]): Record<string, unknown> => ({
+  id: "audit",
+  match: { nodes },
+  pre: hook,
+});
+
+const ping = (extra: Record<string, unknown>): Record<string, unknown> => ({
+  ...extra,
+  kind: "block",
+  uses: "slack.post_message@1",
+  with: { channel: "#ap", text: "${{ nodes.fetch.output.content }}" },
+});
+
+test("C-6ea5e31b a rule hook gives one error per wrapped node", () => {
+  const r = validateWith((d) => {
+    (d as unknown as Record<string, unknown>).hooks = [rule(ping({ id: "ping" }), ["send", "done"])];
+  });
+  assert.equal(r.ok, false);
+  assert.deepEqual(l3(r), [
+    {
+      layer: "L3",
+      code: "L3_TAINT_TO_CONSEQUENTIAL",
+      node: "done",
+      path: "/hooks/0/pre/with/text",
+      message: msg("ping", "done", "nodes.fetch.output.content", "fetch"),
+    },
+    {
+      layer: "L3",
+      code: "L3_TAINT_TO_CONSEQUENTIAL",
+      node: "send",
+      path: "/hooks/0/pre/with/text",
+      message: msg("ping", "send", "nodes.fetch.output.content", "fetch"),
+    },
+  ]);
+});
+
+test("C-6ea5e31b a rule hook without an id reads rule dot id", () => {
+  const r = validateWith((d) => {
+    (d as unknown as Record<string, unknown>).hooks = [rule(ping({}), ["send"])];
+  });
+  assert.equal(r.ok, false);
+  assert.deepEqual(l3(r), [
+    {
+      layer: "L3",
+      code: "L3_TAINT_TO_CONSEQUENTIAL",
+      node: "send",
+      path: "/hooks/0/pre/with/text",
+      message: msg("rule.audit", "send", "nodes.fetch.output.content", "fetch"),
+    },
+  ]);
+});
