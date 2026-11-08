@@ -225,7 +225,8 @@ test("C-c56d71ac C-9272817b a fused no-op hook leaves the pay-once steps and row
   const hooked = await pass(setup, store, null);
   assert.equal(hooked.result.state, "completed");
   assert.deepEqual(hooked.executed, plain.executed);
-  assert.deepEqual(hooked.steps, plain.steps);
+  assert.deepEqual(hooked.steps.map((step) => ({ ...step, hooks: undefined })), plain.steps.map((step) => ({ ...step, hooks: undefined })));
+  assert.deepEqual(hooked.steps.find((step) => step.nodeId === "lookup")?.hooks, { inputOriginalRef: null, entries: [{ label: "post:noop", kind: "code", fused: true, attempt: 1, state: "completed", action: "continue", mutated: null, to: null, error: null, tool: null, idemKey: null }] });
   assert.deepEqual(hooked.obs, ["lookup/post:noop*"]);
   assert.equal(hooked.sandboxRuns, 1);
 
