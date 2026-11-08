@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Hold H-5b0fc692: UI criterion C-ff5e87af has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-feaadce1: UI criterion C-d630941c has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-a457f21b: UI criterion C-1f095289 has no end-to-end test; see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-c3ceafa2: UI criterion C-25335f88 has no end-to-end test; see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-c3ceafa2: UI criterion C-25335f88 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-e3e2b1c3: UI criterion C-6d33a627 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -490,7 +490,8 @@ accept The hold can be waived. Criterion C-1f095289 is by its own text the Node 
 
 ## Q-013: Hold H-c3ceafa2: UI criterion C-25335f88 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -509,6 +510,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-25335f88 is the browser scenario of the demo-hooks journey, and the unit's own browser test in e2e/test_m5_code_hooks.py follows it assertion by assertion: the Diagnostics status with layer H, the graph message with its one Hooks item and no Hook routes or Flow rules list, the completed run with the five step buttons in order, the code step's Step details, Input and Output with no Hooks region, the two hook rows of pay, and then the page.route rewrite that sets hooks to null on normalize, the reload, the note paragraph with no alert and no list, the unchanged Step details and the unchanged pay rows, with assert_accessible on each page. The production code renders exactly that: parseStepView keeps a malformed trace as hooks null, hookTraceNote gives the note for it, RunPage renders the Hooks section only for rows or a note and prints the note as a plain paragraph, FlowGraphView renders the Hooks list from hookSectionView, and diagnostics.ts accepts layer H. The verifier's generated test could not stand in for it because its own file imports a helper module that does not exist in the suite, which says nothing about the unit; the project's conventions already assign browser-only criteria to the verifier and name the suite's helpers in conftest.py, which the unit's test uses. The engine side of the same flow is proved by the Node journey accepted in Q-002, and this criterion was already accepted as satisfied in Q-003.
 ---
 
 ## Q-014: Hold H-e3e2b1c3: UI criterion C-6d33a627 has no end-to-end test; see the generated UI tests table
