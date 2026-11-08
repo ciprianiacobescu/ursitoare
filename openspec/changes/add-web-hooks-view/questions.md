@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: Block hook entry action contradicts the demo-hooks journey expectation
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: the reason has 1028 characters: the limit is 1000
 - **Blocking tasks:** 5.1
 - **Kind:** ambiguous
 - **Asked:** 2026-11-08T11:36Z by deepseek-free, run r-20261108T1014Z-5062, task 5.1
