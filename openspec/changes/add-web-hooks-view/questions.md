@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-ad2767b0: UI criterion C-822061e0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-b3c4f418: UI criterion C-8a9b0cea has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-52301bd3: UI criterion C-740bc49b has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-8bb22c50: UI criterion C-67dea741 has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-8bb22c50: UI criterion C-67dea741 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-480e66a5: UI criterion C-c595362a has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-5b0fc692: UI criterion C-ff5e87af has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-feaadce1: UI criterion C-d630941c has no end-to-end test; see the generated UI tests table |
@@ -367,7 +367,7 @@ accept The hold can be waived. Criterion C-740bc49b lists return values of hookO
 
 ## Q-008: Hold H-8bb22c50: UI criterion C-67dea741 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -386,6 +386,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. C-67dea741 is a function-level scenario over hookOverlay, layoutFlow and hookSectionView (odd documents, limits, a counting Proxy for no mutation, an unchanged drawing). Three Node tests in web/src/flow-graph/hook-overlay.test.ts carry its id and pass in round 2, and the judge passed the criterion. A browser cannot observe a Proxy count or an unmutated input. The page side is checked by the M5 browser journey (the Hooks, Hook routes and Flow rules lists and the one hook-route path).
 ---
 
 ## Q-009: Hold H-480e66a5: UI criterion C-c595362a has no end-to-end test; see the generated UI tests table
