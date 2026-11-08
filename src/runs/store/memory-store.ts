@@ -4,7 +4,9 @@ import type { RunStore } from "./run-store.ts";
 import type {
   PayloadValue,
   RunRecord,
+  StepHooks,
   StepRecord,
+  StepWrite,
   StoredPayload,
 } from "./types.ts";
 import {
@@ -67,6 +69,16 @@ export function createMemoryRunStore(): RunStore {
       });
     }
     return sha256;
+  }
+
+  // A refused trace throws before anything is stored (put checks the size first).
+  function hooksOfWrite(data: TenantData, step: StepWrite): StepHooks | undefined {
+    if (step.hooks === undefined || step.hooks === null) {
+      return undefined;
+    }
+    const inputOriginalRef =
+      step.hooks.inputOriginal === null ? null : put(data, step.hooks.inputOriginal);
+    return { inputOriginalRef, entries: step.hooks.entries.map((entry) => copy(entry)) };
   }
 
   return {
@@ -166,6 +178,7 @@ export function createMemoryRunStore(): RunStore {
           }
         }
       }
+      const hooks = hooksOfWrite(data, step);
       if (step.input !== null) {
         checkSize(step.input);
       }
@@ -194,6 +207,9 @@ export function createMemoryRunStore(): RunStore {
         startedAt: previous === undefined ? formatTimestamp(step.startedAt) : previous.startedAt,
         endedAt: step.endedAt === null ? null : formatTimestamp(step.endedAt),
       };
+      if (hooks !== undefined) {
+        record.hooks = hooks;
+      }
       steps.set(key, record);
       data.steps.set(step.runId, steps);
       return copy(record);

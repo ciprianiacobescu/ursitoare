@@ -1,12 +1,12 @@
 import { envelopeStore } from "./envelope-store.ts";
 import { assertTenantMatches, isSqlState } from "./tenant.ts";
 import { assertIntInRange, assertRunId, assertStepWrite, formatTimestamp, invalid } from "./validate.ts";
-import type { RunError, StepRecord, StepRepository, StepState, StepWrite } from "./types.ts";
+import type { RunError, StepHooks, StepRecord, StepRepository, StepState, StepWrite } from "./types.ts";
 
 const MAX_LIST_LIMIT = 1000;
 
 const STEP_COLUMNS = `run_id, node_id, effect_seq, turn, attempt, generation, seq, kind, state,
-  input_ref, output_ref, outcome, error, taint, policy_decision_id, idem_key, started_at, ended_at`;
+  input_ref, output_ref, outcome, error, taint, policy_decision_id, idem_key, started_at, ended_at, hooks`;
 
 interface StepRow {
   run_id: string;
@@ -27,10 +27,11 @@ interface StepRow {
   idem_key: string | null;
   started_at: Date;
   ended_at: Date | null;
+  hooks: unknown;
 }
 
 function toStepRecord(row: StepRow): StepRecord {
-  return {
+  const record: StepRecord = {
     runId: row.run_id,
     nodeId: row.node_id,
     effectSeq: row.effect_seq,
@@ -50,6 +51,10 @@ function toStepRecord(row: StepRow): StepRecord {
     startedAt: formatTimestamp(row.started_at),
     endedAt: row.ended_at === null ? null : formatTimestamp(row.ended_at),
   };
+  if (row.hooks !== undefined && row.hooks !== null) {
+    record.hooks = structuredClone(row.hooks) as StepHooks;
+  }
+  return record;
 }
 
 function assertListQuery(query: { limit: number; afterSeq?: number }): void {
@@ -67,15 +72,26 @@ export const stepRepository: StepRepository = {
 
     const input = step.input === null ? null : await envelopeStore.put(tx, ctx, step.input);
     const output = step.output === null ? null : await envelopeStore.put(tx, ctx, step.output);
+    let hooksJson: string | null = null;
+    if (step.hooks !== undefined && step.hooks !== null) {
+      const inputOriginalRef =
+        step.hooks.inputOriginal === null
+          ? null
+          : (await envelopeStore.put(tx, ctx, step.hooks.inputOriginal)).sha256;
+      hooksJson = JSON.stringify({
+        inputOriginalRef,
+        entries: [...step.hooks.entries],
+      });
+    }
 
     let rows: StepRow[];
     try {
       const result = await tx.query<StepRow>(
         `INSERT INTO ursitoare.step_execution
            (tenant_id, run_day, run_id, node_id, effect_seq, turn, attempt, generation, seq, kind, state,
-            input_ref, output_ref, outcome, error, taint, policy_decision_id, idem_key, started_at, ended_at)
+            input_ref, output_ref, outcome, error, taint, policy_decision_id, idem_key, started_at, ended_at, hooks)
          SELECT r.tenant_id, r.run_day, r.run_id, $3, $4, $5, $6, $7, $8, $9, $10,
-                $11, $12, $13, $14::jsonb, $15::text[], $16, $17, $18, $19
+                $11, $12, $13, $14::jsonb, $15::text[], $16, $17, $18, $19, $20::jsonb
            FROM ursitoare.run r
           WHERE r.tenant_id = $1 AND r.run_id = $2
          ON CONFLICT (tenant_id, run_day, run_id, node_id, effect_seq, turn, attempt, generation)
@@ -88,8 +104,9 @@ export const stepRepository: StepRepository = {
                        taint = EXCLUDED.taint,
                        policy_decision_id = EXCLUDED.policy_decision_id,
                        idem_key = EXCLUDED.idem_key,
-                       ended_at = EXCLUDED.ended_at
-         RETURNING ${STEP_COLUMNS}`,
+                       ended_at = EXCLUDED.ended_at,
+                       hooks = EXCLUDED.hooks
+          RETURNING ${STEP_COLUMNS}`,
         [
           ctx.tenantId,
           step.runId,
@@ -110,6 +127,7 @@ export const stepRepository: StepRepository = {
           step.idemKey,
           step.startedAt,
           step.endedAt,
+          hooksJson,
         ],
       );
       rows = result.rows;

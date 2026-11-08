@@ -7,6 +7,7 @@ import type {
   RunPrincipalRecord,
   RunState,
   RunTransition,
+  StepHooksWrite,
   StepState,
   StepWrite,
 } from "./types.ts";
@@ -253,6 +254,129 @@ export function assertStepWrite(step: StepWrite): void {
   assertDate(step.startedAt);
   if (step.endedAt !== null) {
     assertDate(step.endedAt);
+  }
+  if (step.hooks !== undefined && step.hooks !== null) {
+    assertStepHooks(step.hooks);
+  }
+}
+
+const HOOK_LABEL_PATTERN = /^(pre|post):(rule\.)?[a-z][a-z0-9_]{0,127}$/;
+const HOOK_TOOL_PATTERN = /^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+@[0-9]+$/;
+const HOOK_IDEM_KEY_PATTERN = /^ik1_[0-9a-f]{64}$/;
+const HOOK_ACTIONS: readonly string[] = ["continue", "skip", "redirect", "retry", "fail"];
+const HOOK_ENTRY_MEMBERS: readonly string[] = [
+  "label",
+  "kind",
+  "fused",
+  "attempt",
+  "state",
+  "action",
+  "mutated",
+  "to",
+  "error",
+  "tool",
+  "idemKey",
+];
+const MAX_HOOK_ENTRIES = 64;
+const MAX_HOOK_ERROR_MESSAGE = 500;
+const MAX_HOOK_TOOL = 256;
+
+// A trace object is a plain object with exactly two own members.
+function assertHooksEnvelope(value: unknown): asserts value is StepHooksWrite {
+  const record = assertPlainHooksObject(value);
+  if (
+    Object.keys(record).length !== 2 ||
+    !Object.hasOwn(record, "inputOriginal") ||
+    !Object.hasOwn(record, "entries")
+  ) {
+    invalid();
+  }
+  if (!Array.isArray(record.entries) || record.entries.length > MAX_HOOK_ENTRIES) {
+    invalid();
+  }
+  if (record.inputOriginal !== null) {
+    assertPayloadValue(record.inputOriginal);
+  }
+}
+
+function assertPlainHooksObject(value: unknown): Record<string, unknown> {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    invalid();
+  }
+  const proto = Object.getPrototypeOf(value) as object | null;
+  if (proto !== Object.prototype && proto !== null) {
+    invalid();
+  }
+  return value as Record<string, unknown>;
+}
+
+function assertStepHookEntry(entry: unknown): void {
+  const record = assertPlainHooksObject(entry);
+  if (Object.keys(record).length !== HOOK_ENTRY_MEMBERS.length) {
+    invalid();
+  }
+  for (const member of HOOK_ENTRY_MEMBERS) {
+    if (!Object.hasOwn(record, member)) {
+      invalid();
+    }
+  }
+  assertMatching(record.label, HOOK_LABEL_PATTERN);
+  if (record.kind !== "code" && record.kind !== "block") {
+    invalid();
+  }
+  if (typeof record.fused !== "boolean") {
+    invalid();
+  }
+  assertIntInRange(record.attempt, 1, INT_MAX);
+  if (record.state !== "completed" && record.state !== "failed") {
+    invalid();
+  }
+  if (record.action !== null) {
+    if (typeof record.action !== "string" || !HOOK_ACTIONS.includes(record.action)) {
+      invalid();
+    }
+  }
+  if (record.mutated !== null && record.mutated !== "input" && record.mutated !== "output") {
+    invalid();
+  }
+  if (record.to !== null) {
+    assertNodeId(record.to);
+  }
+  if (record.error !== null) {
+    const error = assertPlainHooksObject(record.error);
+    if (
+      Object.keys(error).length !== 2 ||
+      !Object.hasOwn(error, "code") ||
+      !Object.hasOwn(error, "message")
+    ) {
+      invalid();
+    }
+    assertMatching(error.code, ERROR_CODE_PATTERN);
+    if (typeof error.message !== "string" || error.message.length > MAX_HOOK_ERROR_MESSAGE) {
+      invalid();
+    }
+    assertText(error.message);
+  }
+  if (record.tool !== null) {
+    if (
+      typeof record.tool !== "string" ||
+      record.tool.length > MAX_HOOK_TOOL ||
+      !HOOK_TOOL_PATTERN.test(record.tool)
+    ) {
+      invalid();
+    }
+  }
+  if (record.idemKey !== null) {
+    if (typeof record.idemKey !== "string" || !HOOK_IDEM_KEY_PATTERN.test(record.idemKey)) {
+      invalid();
+    }
+  }
+}
+
+function assertStepHooks(hooks: StepHooksWrite): void {
+  assertHooksEnvelope(hooks);
+  for (const entry of hooks.entries) {
+    assertStepHookEntry(entry);
   }
 }
 
