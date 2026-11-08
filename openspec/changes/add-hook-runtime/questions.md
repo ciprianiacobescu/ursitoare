@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | 3.1 | technical | Grant write access for the red step |
 | Q-003 | accepted | 3.1 | technical | src/interpreter/hooks/visit-pre.test.ts:183: sandboxRuns counts the normalize node's sandbox run, giving 9, not 8 |
 | Q-004 | answered | 3.3 | technical | Grant write access for the red step |
-| Q-005 | open | 3.4 | harness | Task 3.4: the pre-satisfied check could not decide |
+| Q-005 | answered | 3.4 | harness | Task 3.4: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -108,7 +108,8 @@ No permission grant is needed and none can be given here; the denial follows fro
 
 ## Q-005: Task 3.4: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.4
 - **Kind:** harness
 - **Asked:** 2026-11-08T00:27Z by claude-sonnet, run r-20261107T2350Z-4917, task 3.4
@@ -329,3 +330,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: Count the fault tests on the evidence of the real run. The unit head already implements every clause of the Faults scenario in this unit's own new files: the pipeline refuses a kind without runner and a code hook without sandbox before the first step, the code runner maps a rejecting sandbox to HOOK_ERROR sandbox_unavailable and a sandbox fault to HOOK_ERROR with its code, normalizeHookReturn gives HOOK_ACTION_INVALID with keyword payload, and the output check gives INTERPRETER_OUTPUT_INVALID with details.hook. Task 3.4 therefore has nothing left to add for that criterion, so its new tests can only pin behaviour built by tasks 3.1 to 3.3 and cannot fail by assertion against the head. Against the unit base they fail because the base has no hook runtime at all and the scaffold stubs throw, which is an error and not an assertion, so the base run cannot show discrimination although the criterion is plainly not satisfied by the base. The assertions of the nineteen tests check exactly the values of the Faults scenario and of the test plan's Variants and Sandbox faults tables, including the fixed messages, the failed row, the step position and the absence of the secret text. The taint tests of the same step fail by assertion, since the rows still carry only nodeInputTaint. The lint error in the excerpt names a baseInput assignment that is not in the head's visit.ts, so the replay of the two test files alone is not affected by it.
