@@ -1,4 +1,4 @@
-# Verification: openspec:add-hook-taint-check: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-hook-taint-check: PASS (round 2)
 
 traceability: 8/9 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 8/9 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.2 | base main@ec8ff2b397 contained |
-| 1 | integrity | ok | 535.1 | 11 sub-checks; scope: 10 changed file(s) |
-| 2 | build | ok | 25.8 |  |
-| 3 | tests | ok | 270.5 |  |
-| 4 | traceability | ok | 0.1 | 8/9 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/authoring/taint/analyze.ts, src/authoring/validate/taint-checks.ts |
-| 8 | s1 judge | ok | 0.8 | 8/9 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 187.3 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -116,6 +116,10 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-9c696999 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-8f0d2253 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-002 accept C-be8bdbfa by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The requirement is restated whole with this scenario's values unchanged, and its only tracing test is the frozen U23 test in src/authoring/taint/hooks.test.ts, which the unit's test plan names as the scenario's sample and which the unit does not edit. That te...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -126,7 +130,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-6ea5e31b | flow-validation › Taint uses the shared algebra › A rule hook gives one error per wrapped node | pass | pass | the judge passed it and a discriminating test passes |
 | C-4f58ed6e | flow-validation › Taint uses the shared algebra › Hook edges that stay allowed | pass | pass | the judge passed it and a discriminating test passes |
 | C-4ea2ebb2 | flow-validation › Taint uses the shared algebra › The widening reaches the validator | pass | pass | the judge passed it and a discriminating test passes |
-| C-be8bdbfa | taint › Hooks add taint and never remove it › Hook references, widening and flow rules | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-be8bdbfa | taint › Hooks add taint and never remove it › Hook references, widening and flow rules | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The requirement is restated whole with this scenario's values unchanged, and its only tracing test is the frozen U23 test in src/authoring/taint/hooks.test.ts, which the unit's test plan names as th... |
 | C-9c696999 | taint › Hooks add taint and never remove it › A code hook widens a block node with every produced label | pass | pass | the judge passed it and a discriminating test passes |
 | C-8f0d2253 | taint › Static taint includes runtime taint on hooked flows › Hooked runs stay inside the static input | pass | pass | the judge passed it and a discriminating test passes |
 
