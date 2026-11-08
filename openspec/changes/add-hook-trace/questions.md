@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.1 | technical | src/api/run-hooks.test.ts:383 expects the served OpenAPI properties in declaration order |
-| Q-002 | open | 3.2 | technical | src/interpreter/hooks/replay.test.ts:228 asserts no hooks on a row that must now carry its hook trace |
+| Q-002 | accepted | 3.2 | technical | src/interpreter/hooks/replay.test.ts:228 asserts no hooks on a row that must now carry its hook trace |
 <!-- l4:index:end -->
 
 ---
@@ -43,7 +43,8 @@ Edit `src/api/run-hooks.test.ts`: at lines 383-387, compare `[...Object.keys(ste
 
 ## Q-002: src/interpreter/hooks/replay.test.ts:228 asserts no hooks on a row that must now carry its hook trace
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.2
 - **Kind:** technical
 - **Asked:** 2026-11-08T05:31Z by deepseek-free, run r-20261108T0414Z-dff2, task 3.2
