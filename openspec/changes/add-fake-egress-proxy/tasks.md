@@ -2,7 +2,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 1. Pure pieces
 
-- [ ] 1.1 Write `test/support/fake-egress/wire.test.ts` first (the wire half of scenario "The vault stores a credential and counts key versions": `encodePutRequest` equals `REQ1` and `REQ2` of test-plan.md § Wire vectors byte for byte and `decodePutRequest` returns the inputs; `unframe` throws `WireError` for V22 to V24 and `decodePutRequest` for V25 and V26; `encodePutResponse` and `decodePutResponse` round-trip 1, 2 and 300), then implement `test/support/fake-egress/wire.ts`, implementing requirement "The vault stores a credential and counts key versions"
+- [x] 1.1 Write `test/support/fake-egress/wire.test.ts` first (the wire half of scenario "The vault stores a credential and counts key versions": `encodePutRequest` equals `REQ1` and `REQ2` of test-plan.md § Wire vectors byte for byte and `decodePutRequest` returns the inputs; `unframe` throws `WireError` for V22 to V24 and `decodePutRequest` for V25 and V26; `encodePutResponse` and `decodePutResponse` round-trip 1, 2 and 300), then implement `test/support/fake-egress/wire.ts`, implementing requirement "The vault stores a credential and counts key versions"
 - [ ] 1.2 Write `test/support/fake-egress/echo.test.ts` first (scenario "The echo upstream shows what it received"), then implement `startEchoUpstream` in `test/support/fake-egress/echo.ts` and add `export * from "./echo.ts"` to `test/support/fake-egress/index.ts`, implementing requirement "The echo upstream shows what it received"
 
 ## 2. The broker
