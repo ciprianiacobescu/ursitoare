@@ -15,6 +15,7 @@ service in the stack tier (`docs/testing.md`).
 | `catalogue/` | `add-test-catalogue` | The 20 mock blocks, RF-1, `rf-1-core`, `rf-1-core-approval` |
 | `hook-flows/` | `add-test-catalogue` | Synthetic hook flows on the M5 node kinds; in M5 only `f-eff`, `f-ret` and `f-ret-exhausted` run |
 | `hook-runs/` | `add-hook-runtime` | The nine runnable hook flows (`onion`, `mutate`, `redirect`, ...), their loader and `hookRunVersion` |
+| `hook-runs/notify-pay` | `add-block-hooks` | `pay-once` with a post block hook `notify` (`slack.post_message@1`): `notifyPayVersion` (`strict`, `soft`) and `seedNotifyPay` |
 | `hook-cases/` | `add-hook-checker` | The 12 hook case files (`invalid/`, `valid/`, `warnings/`) and `hookCases` |
 | `taint-runs/` | `add-taint-runtime` | The `untrusted-code` and `trusted-code` fixtures for run taint labels |
 | `crash/` | `add-crash-harness`; `add-effect-intents` (`pay-once.ts`, `flows/pay-once.yaml`, `intents-scenario.ts`) | Spawn, kill and restart the engine; dedicated clusters |
