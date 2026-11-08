@@ -21,6 +21,7 @@ export interface IntentCall {
   args: PayloadValue;
   nodeId: string;
   effectSeq: number;
+  generation?: number;
 }
 
 export interface IntentContext {
@@ -48,7 +49,7 @@ function assertCall(call: IntentCall): void {
 }
 
 function keyOf(call: IntentCall, ctx: IntentContext): string {
-  return idemKey(ctx.tenant.tenantId, ctx.lineageId, call.nodeId, call.effectSeq);
+  return idemKey(ctx.tenant.tenantId, ctx.lineageId, call.nodeId, call.effectSeq, call.generation ?? 0);
 }
 
 async function decide(

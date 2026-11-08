@@ -1,7 +1,8 @@
 import type { BlockDef, Catalogue, Flow, FlowNode, JsonValue, Taint } from "../authoring/index.ts";
 import { nodeInputTaint } from "../authoring/index.ts";
+import { attemptStepName } from "./hooks/names.ts";
 import { createHookPipeline } from "./hooks/pipeline.ts";
-import type { FusedStored } from "./hooks/pipeline.ts";
+import type { FusedStored, HookRetry } from "./hooks/pipeline.ts";
 import type { RunError, RunRecord, StepWrite, TenantContext } from "../runs/index.ts";
 import { isDurableCancellation } from "../durable/index.ts";
 import { resolveValue } from "./refs.ts";
@@ -85,9 +86,27 @@ function invalidOutcome(nodeId: string): InterpreterError {
   );
 }
 
-export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
-  const { run, nodeId, node, seq, blocks, scope, deps, tenant, ops, invoker, runtime, taints, now } =
+export async function visitNode(
+  request: VisitRequest,
+): Promise<{ outcome: NodeOutcome; attempts: number }> {
+  let attempt = 1;
+  let retry: HookRetry | undefined;
+  for (;;) {
+    const result = await visitAttempt(request, attempt, retry);
+    if (result.retry === null) return { outcome: result.outcome, attempts: attempt };
+    retry = result.retry;
+    attempt += 1;
+  }
+}
+
+async function visitAttempt(
+  request: VisitRequest,
+  attempt: number,
+  retry: HookRetry | undefined,
+): Promise<{ outcome: NodeOutcome; retry: HookRetry | null }> {
+  const { run, nodeId, node, blocks, scope, deps, tenant, ops, invoker, runtime, taints, now } =
     request;
+  const seq = request.seq + attempt - 1;
 
   const resolve = (value: unknown): JsonValue => resolveValue(value, scope);
 
@@ -110,7 +129,7 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
     nodeId,
     kind: node.kind,
     mode: run.mode,
-    attempt: 1,
+    attempt,
     effect: def?.effect ?? null,
     unsafeToRetry: def?.unsafe_to_retry === true,
     idemKey: null,
@@ -133,6 +152,7 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
     resolve,
     block: (ref) => blocks[ref],
     baseInput: hookInputFor(node, resolve),
+    ...(retry === undefined ? {} : { retry }),
   });
 
   const started: StepWrite = {
@@ -140,7 +160,7 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
     nodeId,
     effectSeq: 0,
     turn: 0,
-    attempt: 1,
+    attempt,
     generation: 0,
     seq,
     kind: node.kind,
@@ -172,7 +192,7 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
       nodeId,
       effectSeq: 0,
       turn: 0,
-      attempt: 1,
+      attempt,
       generation: 0,
       seq,
       kind: node.kind,
@@ -202,7 +222,8 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
     get workflowId(): string {
       return ops.workflowId;
     },
-    async runStep<T extends JsonValue>(name: string, fn: () => Promise<T>): Promise<T> {
+    async runStep<T extends JsonValue>(stepName: string, fn: () => Promise<T>): Promise<T> {
+      const name = attemptStepName(stepName, attempt);
       const writeStarted = async (): Promise<void> => {
         if (wrote) return;
         wrote = true;
@@ -293,9 +314,12 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
     throw error;
   }
 
+  let next: HookRetry | null = null;
   if (pipeline !== null) {
     try {
-      outcome = await pipeline.runOwnPost(outcome);
+      const posted = await pipeline.runOwnPost(outcome);
+      outcome = posted.outcome;
+      next = posted.retry;
     } catch (error) {
       if (isDurableCancellation(error)) throw error;
       const mapped =
@@ -311,5 +335,5 @@ export async function visitNode(request: VisitRequest): Promise<NodeOutcome> {
   }
 
   if (wrote) await writeFinal("completed", outcome.output, outcome.outcome, null, idemKey);
-  return outcome;
+  return { outcome, retry: next };
 }

@@ -49,7 +49,13 @@ export interface HookState {
   skipped: JsonValue | null;
 }
 
+export interface HookRetry {
+  input: JsonValue | null;
+  feedback: JsonValue | null;
+}
+
 export interface HookPipelineRequest {
+  retry?: HookRetry;
   flow: Flow;
   catalogue: Catalogue;
   nodeId: string;
@@ -71,7 +77,7 @@ export interface HookPipeline {
   readonly state: HookState;
   readonly hooks: NodeHooks;
   runOwnPre(): Promise<void>;
-  runOwnPost(outcome: NodeOutcome): Promise<NodeOutcome>;
+  runOwnPost(outcome: NodeOutcome): Promise<{ outcome: NodeOutcome; retry: HookRetry | null }>;
   fusedStep(run: () => Promise<JsonValue>): Promise<FusedStored>;
   unwrap(stored: FusedStored, ran: boolean): JsonValue;
 }
@@ -138,11 +144,10 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
       ? (node.next ?? null)
       : null;
 
-  const state: HookState = {
-    input: request.baseInput ?? null,
-    changed: false,
-    skipped: null,
-  };
+  const state: HookState =
+    request.retry === undefined
+      ? { input: request.baseInput ?? null, changed: false, skipped: null }
+      : { input: request.retry.input, changed: true, skipped: null };
   let records: FusedRecord[] | null = null;
 
   const outputSchema = (): unknown =>
@@ -194,7 +199,7 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
       output: view.output,
       outcome: view.outcome,
       attempt: ctx.attempt,
-      feedback: null,
+      feedback: request.retry?.feedback ?? null,
       args: resolveArgs(placement.hook.input ?? {}),
     };
     const services: HookServices = {
@@ -286,12 +291,29 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
     chain: HookPlacement[],
     fused: boolean,
     view: View,
-  ): Promise<void> => {
+  ): Promise<HookRetry | null> => {
     for (const placement of chain) {
       if (!whenMatches(placement.hook.when, fromMeta, metaOf(view.next), view.outcome)) continue;
       const run = await exec(placement, fused, view);
+      if (!fused && run.outcome.action === "retry") {
+        const label = hookStepName(nodeId, placement);
+        const limit = placement.hook.kind === "code" ? (placement.hook.max_retries ?? 0) : 0;
+        if (ctx.attempt - 1 >= limit) {
+          throw new InterpreterError(
+            "HOOK_RETRY_EXHAUSTED",
+            `hook "${label}" used its ${ctx.attempt} attempts`,
+            nodeId,
+            { hook: label, attempts: String(ctx.attempt) },
+          );
+        }
+        return {
+          input: run.outcome.input === undefined ? view.input : run.outcome.input,
+          feedback: run.outcome.feedback === undefined ? null : run.outcome.feedback,
+        };
+      }
       applyPost(placement, run, view);
     }
+    return null;
   };
 
   const placementOf = (record: FusedRecord): HookPlacement => {
@@ -311,6 +333,7 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
     async pre(arg) {
       if (state.skipped !== null) return { action: "skip", output: state.skipped };
       if (!state.changed) state.input = arg;
+      if (ctx.attempt > 1) return { action: "run", input: state.input };
       for (const placement of fusedPre) {
         if (!whenMatches(placement.hook.when, fromMeta, null, null)) continue;
         const run = await exec(placement, true, {
@@ -341,7 +364,7 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
     state,
     hooks,
     async runOwnPre() {
-      if (request.baseInput === undefined) return;
+      if (request.baseInput === undefined || ctx.attempt > 1) return;
       for (const placement of ownPre) {
         if (!whenMatches(placement.hook.when, fromMeta, null, null)) continue;
         const run = await exec(placement, false, {
@@ -361,8 +384,8 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
         outcome: outcome.outcome,
         next: outcome.next,
       };
-      await postChain(ownPost, false, view);
-      return { ...outcome, output: view.output, next: view.next };
+      const retry = await postChain(ownPost, false, view);
+      return { outcome: { ...outcome, output: view.output, next: view.next }, retry };
     },
     async fusedStep(run) {
       const own: FusedRecord[] = [];

@@ -284,8 +284,9 @@ export async function executeRun(
 
     const nodeId = current;
     let outcome: NodeOutcome;
+    let attempts: number;
     try {
-      outcome = await visitNode({
+      ({ outcome, attempts } = await visitNode({
         run: loaded.run,
         nodeId,
         node,
@@ -302,7 +303,7 @@ export async function executeRun(
         flow,
         catalogue,
         from,
-      });
+      }));
     } catch (error) {
       const interpreted = toInterpreterError(error);
       if (interpreted !== null) {
@@ -312,7 +313,7 @@ export async function executeRun(
       throw error;
     }
 
-    seq += 1;
+    seq += attempts;
     from = nodeId;
     (scope.nodes as Map<string, { output: JsonValue | null; outcome: string | null }>).set(
       nodeId,
