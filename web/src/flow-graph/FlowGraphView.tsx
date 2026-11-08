@@ -4,7 +4,9 @@ import type { ReactNode } from "react";
 import { drawEdges, drawNodes, viewBox } from "./drawing.ts";
 import { chooseNode, nodeDetailRows } from "./graph-model.ts";
 import type { GraphView } from "./graph-model.ts";
+import { hookOverlay, hookRoutePaths, hookSectionView } from "./hook-overlay.ts";
 import "./flow-graph.css";
+import "./hook-overlay.css";
 
 export interface FlowGraphViewProps {
   view: GraphView;
@@ -13,6 +15,8 @@ export interface FlowGraphViewProps {
 }
 
 const DETAILS_HINT = "Select a node in the list or in the drawing to see its fields.";
+const FLOW_RULES_NOTE =
+  "Flow rules are listed, not drawn: the graph cannot tell which nodes they match.";
 
 export function FlowGraphView(props: FlowGraphViewProps): ReactNode {
   const { view, canonical, note } = props;
@@ -20,6 +24,9 @@ export function FlowGraphView(props: FlowGraphViewProps): ReactNode {
   const detailsId = useId();
   const detailsHeadingId = useId();
   const layout = view.state === "ready" ? view.layout : null;
+  const section = hookSectionView(canonical, layout);
+  const hookPaths =
+    layout === null ? [] : hookRoutePaths(hookOverlay(canonical, layout).routes, layout);
 
   const choose = (id: string): void => {
     if (layout === null) return;
@@ -71,6 +78,9 @@ export function FlowGraphView(props: FlowGraphViewProps): ReactNode {
                     </text>
                   )}
                 </g>
+              ))}
+              {hookPaths.map((path) => (
+                <path key={path.key} className={path.className} d={path.d} />
               ))}
               {drawNodes(layout, selected).map((node) => (
                 <g
@@ -126,6 +136,42 @@ export function FlowGraphView(props: FlowGraphViewProps): ReactNode {
               </li>
             ))}
           </ul>
+          {section === null ? null : (
+            <>
+              {section.hooks.length === 0 ? null : (
+                <>
+                  <h3>Hooks</h3>
+                  <ul className="flow-graph-list" aria-label="Hooks">
+                    {section.hooks.map((text) => (
+                      <li key={text}>{text}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              {section.routes.length === 0 ? null : (
+                <>
+                  <h3>Hook routes</h3>
+                  <ul className="flow-graph-list" aria-label="Hook routes">
+                    {section.routes.map((text) => (
+                      <li key={text}>{text}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              {section.missing === null ? null : <p>{section.missing}</p>}
+              {section.rules.length === 0 ? null : (
+                <>
+                  <h3>Flow rules</h3>
+                  <ul className="flow-graph-list" aria-label="Flow rules">
+                    {section.rules.map((text) => (
+                      <li key={text}>{text}</li>
+                    ))}
+                  </ul>
+                  <p>{FLOW_RULES_NOTE}</p>
+                </>
+              )}
+            </>
+          )}
           <section className="flow-graph-details" id={detailsId} aria-labelledby={detailsHeadingId}>
             <h3 id={detailsHeadingId}>Node details</h3>
             {selectedNode === undefined ? (
