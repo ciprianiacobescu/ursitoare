@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-08T06:25:47Z",
+  "integrated_revision": "0b3f14065632b32a1ffd611c02a0af6f05596829",
+  "merge_commit": "0b3f14065632b32a1ffd611c02a0af6f05596829",
+  "plan_digest": "1de77c4471f9168f",
+  "plan_id": "m5",
+  "postcheck": "pass",
+  "pr": 96,
+  "receipt_id": "m5/openspec:add-hook-trace/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "dee3753939d8a984cf9ed4da0a84596813d4c099",
+  "spec_digest": "d845bf45e9635093",
+  "target": "main",
+  "unit_id": "openspec:add-hook-trace"
+}
