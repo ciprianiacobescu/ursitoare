@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | open | none | verdict | Hold H-8bb22c50: UI criterion C-67dea741 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-480e66a5: UI criterion C-c595362a has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-5b0fc692: UI criterion C-ff5e87af has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-feaadce1: UI criterion C-d630941c has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-feaadce1: UI criterion C-d630941c has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-a457f21b: UI criterion C-1f095289 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-c3ceafa2: UI criterion C-25335f88 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-e3e2b1c3: UI criterion C-6d33a627 has no end-to-end test; see the generated UI tests table |
@@ -440,7 +440,8 @@ accept The hold can be waived. Criterion C-ff5e87af lists the rows and notes hoo
 
 ## Q-011: Hold H-feaadce1: UI criterion C-d630941c has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -459,6 +460,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-d630941c describes in-process module state: the four built-in renderer kinds before registration, the default renderer and the unknown-kind text, then after two calls to registerCodeRenderer the five kinds, CODE_STEP_RENDERER as the code renderer, the text code · completed, the Attempt and Taint detail rows without an Idempotency key, and the label code: ok. One Node test named with its id asserts every one of those values in a fresh process and wraps each call so nothing throws. The run page module calls registerCodeRenderer at module scope, and the M5 browser journey checks the visible consequence: the code step normalize shows code, completed and Attempt in Step details. Registry state is not observable from a browser beyond that, so an end-to-end test adds nothing.
 ---
 
 ## Q-012: Hold H-a457f21b: UI criterion C-1f095289 has no end-to-end test; see the generated UI tests table
