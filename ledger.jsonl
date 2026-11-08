@@ -156,3 +156,4 @@
 {"at":"2026-11-08T14:18:35Z","attempt":1,"cost_usd":11.672538,"runs":5,"type":"plan.charged","unit":"openspec:add-web-hooks-view"}
 {"at":"2026-11-08T14:46:21Z","branch":"l4/archive/openspec/add-web-hooks-view","head":"48e5d4116030a8c62725b2115196736583b8e954","type":"unit.branch_deleted","unit":"openspec:add-web-hooks-view"}
 {"at":"2026-11-08T14:46:23Z","batch":"m5-code-hooks","profile":"none","revision":"48e5d4116030a8c62725b2115196736583b8e954","type":"batch.accepted"}
+{"at":"2026-11-08T14:58:35Z","revision":"2ed7fe02f7a2f9bc348e590376ca91faf8b271c1","type":"plan.completed"}
