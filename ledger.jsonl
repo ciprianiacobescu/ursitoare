@@ -22,3 +22,5 @@
 {"at":"2026-11-08T19:10:30Z","branch":"l4/archive/openspec/add-hook-taint-check","head":"283ccadc21e8265eae6c5220c0178ae0472ab0d3","type":"unit.branch_deleted","unit":"openspec:add-hook-taint-check"}
 {"at":"2026-11-08T19:10:31Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-fake-egress-proxy"}
 {"at":"2026-11-08T19:10:31Z","run":"r-20261108T1910Z-4c91","type":"unit.dispatched","unit":"openspec:add-fake-egress-proxy"}
+{"at":"2026-11-08T21:50:50Z","attempt":1,"cost_usd":5.402376,"runs":2,"type":"plan.charged","unit":"openspec:add-fake-egress-proxy"}
+{"at":"2026-11-08T21:50:50Z","run":"r-20261108T2150Z-9e5e","type":"unit.dispatched","unit":"openspec:add-fake-egress-proxy"}
