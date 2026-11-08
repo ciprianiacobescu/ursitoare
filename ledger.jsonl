@@ -138,3 +138,4 @@
 {"at":"2026-11-08T10:14:55Z","branch":"l4/archive/openspec/add-block-hooks","head":"1b4112df8990c8d80285bd69ff5e032826a8def3","type":"unit.branch_deleted","unit":"openspec:add-block-hooks"}
 {"at":"2026-11-08T10:14:57Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-web-hooks-view"}
 {"at":"2026-11-08T10:14:57Z","run":"r-20261108T1014Z-5062","type":"unit.dispatched","unit":"openspec:add-web-hooks-view"}
+{"at":"2026-11-08T11:45:07Z","detail":"awaiting_human: no new answers (open: Q-001) (escalated to a person: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-hooks-view"}
