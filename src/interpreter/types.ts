@@ -6,11 +6,13 @@ import type {
   Effect,
   Flow,
   FlowNode,
+  HookPhase,
   JsonValue,
   NodeKind,
 } from "../authoring/index.ts";
 import type { Clock, IdSource } from "../core/index.ts";
 import type { DurableRuntime } from "../durable/index.ts";
+import type { Permit } from "../pdp/index.ts";
 import type { VersionState } from "../registry/index.ts";
 import type { RunRecord, RunStore, TenantContext } from "../runs/index.ts";
 import type { WorkerSandbox } from "../sandbox/index.ts";
@@ -52,6 +54,12 @@ export interface StepContext {
   readonly idemKey: string | null;
   readonly principal: RunPrincipal;
   readonly now: Date;
+  readonly hook?: { phase: HookPhase; label: string };
+}
+
+export interface CallAuthorization {
+  readonly decisionId: string;
+  readonly permit: Permit;
 }
 
 export interface ToolInvoker {

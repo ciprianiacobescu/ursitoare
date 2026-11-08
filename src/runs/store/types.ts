@@ -119,6 +119,7 @@ export interface StepWrite {
   taint: readonly string[];
   policyDecisionId: string | null;
   idemKey: string | null;
+  hooks?: StepHooksWrite | null;
   startedAt: Date;
   endedAt: Date | null;
 }
@@ -140,6 +141,7 @@ export interface StepRecord {
   taint: string[];
   policyDecisionId: string | null;
   idemKey: string | null;
+  hooks?: StepHooks;
   startedAt: string;
   endedAt: string | null;
 }

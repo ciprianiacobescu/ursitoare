@@ -186,7 +186,11 @@ test("C-8e399d8e the view schemas list exactly the view fields", () => {
 
   assert.equal(STEP_VIEW_SCHEMA.additionalProperties, false, "the step schema closes its fields");
   const stepProperties = (STEP_VIEW_SCHEMA.properties ?? {}) as Record<string, unknown>;
-  assert.deepEqual(Object.keys(stepProperties), STEP_VIEW_KEYS, "the step schema holds the view fields");
+  assert.deepEqual(
+    Object.keys(stepProperties),
+    [...STEP_VIEW_KEYS, "hooks"],
+    "the step schema holds the view fields and hooks",
+  );
   assert.deepEqual(STEP_VIEW_SCHEMA.required, STEP_VIEW_KEYS, "every step view field is required");
 });
 

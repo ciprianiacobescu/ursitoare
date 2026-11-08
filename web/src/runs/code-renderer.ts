@@ -1,17 +1,21 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
+import { registerStepRenderer, stepRendererFor } from "./step-renderers.ts";
 import type { StepRenderer } from "./step-renderers.ts";
+import type { StepView } from "./types.ts";
+
+function codeLabel(step: StepView): string {
+  return step.outcome === null ? step.kind : `${step.kind}: ${step.outcome}`;
+}
 
 export const CODE_STEP_RENDERER: StepRenderer = {
-  kind: "",
-  label(_step) {
-    throw new Error("not implemented");
-  },
-  details(_step) {
-    throw new Error("not implemented");
-  },
+  kind: "code",
+  label: codeLabel,
+  details: (step) => [
+    { term: "Attempt", value: String(step.attempt) },
+    { term: "Taint", value: step.taint.length > 0 ? step.taint.join(", ") : "none" },
+  ],
 };
 
 export function registerCodeRenderer(): void {
-  throw new Error("not implemented");
+  if (stepRendererFor("code").kind === "code") return;
+  registerStepRenderer(CODE_STEP_RENDERER);
 }

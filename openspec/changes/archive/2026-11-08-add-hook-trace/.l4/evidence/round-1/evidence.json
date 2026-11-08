@@ -1,0 +1,279 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "test/arch/modules.ts",
+      "node",
+      "pay/pre:rule.rule_a",
+      "test/support/hook-flows",
+      "docs/api/openapi.json",
+      "src/main.conventions.test.ts",
+      "src/runs/index.ts",
+      "src/api/run-views.ts",
+      "src/interpreter/visit.ts",
+      "src/interpreter/index.ts",
+      "src/interpreter/hooks/approvals.ts",
+      "docs/decisions/0002",
+      "src/runs",
+      "node:assert/strict",
+      "src/runs/store/store-contract.test.ts",
+      "src/runs/store/hooks-schema.test.ts",
+      "src/db/migrations/0425_step_hooks.sql",
+      "src/runs/store/step-hooks-refusals.test.ts",
+      "src/runs/store/types.ts",
+      "src/runs/store/validate.ts",
+      "src/runs/store/step-hooks-contract.test.ts",
+      "src/runs/store/step-repository.ts",
+      "src/runs/store/memory-store.ts",
+      "src/api/run-views.test.ts",
+      "src/api/run-views-hooks.test.ts",
+      "src/api/run-hooks.test.ts",
+      "src/interpreter/hooks/approvals.test.ts",
+      "src/interpreter/hooks/trace.test.ts",
+      "src/interpreter/hooks/trace-replay.test.ts",
+      "**/visit.ts",
+      "**/HookTraceEntry[]",
+      "**/^[a-z][a-z0-9_]{0,63}$",
+      "**/schema.ts",
+      "**/StepWrite.hooks?",
+      "**/StepRecord.hooks?",
+      "**/StepView.hooks?",
+      "src/runs/store/*",
+      "**/[]",
+      "**/approvals.ts",
+      "**/validate.ts",
+      "**/[",
+      "**/hooks?",
+      "module api",
+      "module db",
+      "module docs",
+      "module interpreter",
+      "module main.conventions.test",
+      "module node:assert",
+      "module pay",
+      "module runs",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-trace/.l4/ledger/r-20261108T0223Z-25d1.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-trace/.l4/ledger/r-20261108T0414Z-dff2.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-trace/.l4/ledger/r-20261108T0534Z-aead.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-trace/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-trace/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/run-hooks.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/run-views-hooks.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/run-views.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/run-views.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0425_step_hooks.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/hooks/approvals.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/approvals.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/hooks/replay.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "imports no module of the repository"
+      },
+      {
+        "path": "src/interpreter/hooks/trace-replay.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/hooks/trace.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/index.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/visit.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/index.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/hooks-schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/memory-store.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/step-hooks-contract.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/step-hooks-refusals.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runs/store/step-repository.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/types.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runs/store/validate.ts",
+        "module": "runs",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/run-views.ts, src/interpreter/hooks/approvals.ts, src/interpreter/index.ts, src/interpreter/visit.ts, src/runs/index.ts and 4 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/run-views.ts",
+      "src/interpreter/hooks/approvals.ts",
+      "src/interpreter/index.ts",
+      "src/interpreter/visit.ts",
+      "src/runs/index.ts",
+      "src/runs/store/memory-store.ts",
+      "src/runs/store/step-repository.ts",
+      "src/runs/store/types.ts",
+      "src/runs/store/validate.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 1962,
+      "passed": 1961,
+      "failed": 1,
+      "errored": 0,
+      "skipped": 0,
+      "new": 16,
+      "new_passed": 16,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

@@ -1,0 +1,41 @@
+.runs-hooks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+}
+
+.runs-hooks h3 {
+  margin: 0;
+  font-size: var(--ui-font-size);
+  color: var(--ui-color-text);
+}
+
+.runs-hook-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.runs-hook-list > li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-1);
+  padding: var(--ui-space-2);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-color-surface);
+}
+
+.runs-hook-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-1);
+  margin: 0;
+}
+
+.runs-hook-details dt {
+  color: var(--ui-color-text-muted);
+}

@@ -1,0 +1,6 @@
+.flow-graph-svg path.hook-route {
+  fill: none;
+  stroke: var(--ui-color-accent);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+}

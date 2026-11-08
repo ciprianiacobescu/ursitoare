@@ -7,6 +7,7 @@ import type {
   TenantContext,
 } from "../runs/index.ts";
 import { InterpreterError, toInterpreterError } from "./errors.ts";
+import { hookBlockRefs } from "./hooks/block-runner.ts";
 import { nodeRuntimeFor } from "./registry.ts";
 import type {
   InterpreterDeps,
@@ -152,6 +153,10 @@ async function loadValue(
         if (node.kind !== "block") continue;
         const def = catalogue.block(node.uses);
         if (def !== undefined) blocks[node.uses] = def;
+      }
+      for (const ref of hookBlockRefs(version.flow)) {
+        const def = catalogue.block(ref);
+        if (def !== undefined) blocks[ref] = def;
       }
     } catch {
       error = notFound(run.flowId, run.flowHash, "catalogue_failed");

@@ -9,11 +9,13 @@ export type PdpErrorCode =
 export class PdpError extends Error {
   readonly code: PdpErrorCode;
   readonly details: Readonly<Record<string, string | readonly string[]>>;
+  declare readonly diagnostic: string | undefined;
 
   constructor(
     code: PdpErrorCode,
     message: string,
     details: Record<string, string | readonly string[]> = {},
+    _diagnostic?: string,
   ) {
     super(message);
     this.name = "PdpError";

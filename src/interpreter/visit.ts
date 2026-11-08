@@ -11,6 +11,7 @@ import { nodeInputTaint, producedTaint } from "../authoring/index.ts";
 import { attemptStepName } from "./hooks/names.ts";
 import { createHookPipeline } from "./hooks/pipeline.ts";
 import type { FusedStored, HookRetry } from "./hooks/pipeline.ts";
+import type { HookTraceEntry } from "./hooks/types.ts";
 import type { RunError, RunRecord, StepWrite, TenantContext } from "../runs/index.ts";
 import { isDurableCancellation } from "../durable/index.ts";
 import { resolveValue } from "./refs.ts";
@@ -147,6 +148,15 @@ async function visitAttempt(
     now,
   };
 
+  const entries: HookTraceEntry[] = [];
+  const hookDeps: InterpreterDeps = {
+    ...deps,
+    hookObserver: (observedNodeId, entry) => {
+      entries.push(entry);
+      return deps.hookObserver?.(observedNodeId, entry);
+    },
+  };
+
   const pipeline = createHookPipeline({
     flow: request.flow,
     catalogue: request.catalogue,
@@ -155,7 +165,7 @@ async function visitAttempt(
     from: request.from,
     def,
     ctx,
-    deps,
+    deps: hookDeps,
     invoker,
     ops,
     scope,
@@ -219,6 +229,14 @@ async function visitAttempt(
       startedAt: now,
       endedAt: deps.clock.now(),
     };
+    if (entries.length > 0) {
+      step.hooks = {
+        inputOriginal: entries.some((entry) => entry.mutated === "input")
+          ? (input as StepWrite["input"])
+          : null,
+        entries,
+      };
+    }
     try {
       await deps.store.recordStep(tenant, step);
     } catch (writeError) {
@@ -229,6 +247,14 @@ async function visitAttempt(
   let wrote = false;
   let storeWriteError: unknown = null;
   let idemKey: string | null = null;
+
+  const rememberKey = (value: unknown): void => {
+    if (typeof value !== "object" || value === null || Array.isArray(value)) return;
+    const candidate = (value as { idemKey?: unknown }).idemKey;
+    if (typeof candidate === "string") idemKey = candidate;
+  };
+
+  const shouldFinalize = (): boolean => wrote || entries.length > 0;
 
   const wrappedOps: WorkflowOps = {
     get workflowId(): string {
@@ -247,10 +273,12 @@ async function visitAttempt(
         }
       };
       if (pipeline === null || !pipeline.fuses) {
-        return ops.runStep<T>(name, async () => {
+        const value = await ops.runStep<T>(name, async () => {
           await writeStarted();
           return fn();
         });
+        rememberKey(value);
+        return value;
       }
       let ran = false;
       const stored = await ops.runStep<JsonValue>(name, async () => {
@@ -258,7 +286,9 @@ async function visitAttempt(
         await writeStarted();
         return (await pipeline.fusedStep(fn)) as unknown as JsonValue;
       });
-      return pipeline.unwrap(stored as unknown as FusedStored, ran) as T;
+      const unwrapped = pipeline.unwrap(stored as unknown as FusedStored, ran) as T;
+      rememberKey(unwrapped);
+      return unwrapped;
     },
     sleep(ms: number): Promise<void> {
       return ops.sleep(ms);
@@ -299,7 +329,7 @@ async function visitAttempt(
       toInterpreterError(error) ??
       new InterpreterError("INTERPRETER_TOOL_FAILED", "node execution failed", nodeId);
     const rowError = runErrorOf(mapped, nodeId);
-    if (wrote) await writeFinal("failed", null, null, rowError, idemKey);
+    if (shouldFinalize()) await writeFinal("failed", null, null, rowError, idemKey);
     throw new InterpreterError(mapped.code, mapped.message, mapped.node ?? nodeId, {
       ...mapped.details,
     });
@@ -308,7 +338,7 @@ async function visitAttempt(
   if (outcome.end !== null) {
     if (outcome.next !== null) {
       const error = invalidOutcome(nodeId);
-      if (wrote) await writeFinal("failed", null, null, runErrorOf(error, nodeId), idemKey);
+      if (shouldFinalize()) await writeFinal("failed", null, null, runErrorOf(error, nodeId), idemKey);
       throw error;
     }
     if (outcome.end.status === "failed") {
@@ -317,12 +347,12 @@ async function visitAttempt(
         `flow ended failed at node "${nodeId}"`,
         nodeId,
       );
-      if (wrote) await writeFinal("failed", null, null, runErrorOf(error, nodeId), idemKey);
+      if (shouldFinalize()) await writeFinal("failed", null, null, runErrorOf(error, nodeId), idemKey);
       throw error;
     }
   } else if (outcome.next === null) {
     const error = invalidOutcome(nodeId);
-    if (wrote) await writeFinal("failed", null, null, runErrorOf(error, nodeId), idemKey);
+    if (shouldFinalize()) await writeFinal("failed", null, null, runErrorOf(error, nodeId), idemKey);
     throw error;
   }
 
@@ -337,7 +367,7 @@ async function visitAttempt(
       const mapped =
         toInterpreterError(error) ??
         new InterpreterError("HOOK_ERROR", "hook failed", nodeId, { fault: "unknown" });
-      if (wrote) {
+      if (shouldFinalize()) {
         await writeFinal("failed", outcome.output, outcome.outcome, runErrorOf(mapped, nodeId), idemKey);
       }
       throw new InterpreterError(mapped.code, mapped.message, mapped.node ?? nodeId, {
@@ -346,7 +376,7 @@ async function visitAttempt(
     }
   }
 
-  if (wrote) await writeFinal("completed", outcome.output, outcome.outcome, null, idemKey);
+  if (shouldFinalize()) await writeFinal("completed", outcome.output, outcome.outcome, null, idemKey);
   const produced =
     pipeline?.produced() ?? producedTaint(node, rowTaint, request.catalogue);
   return { outcome, retry: next, produced };
