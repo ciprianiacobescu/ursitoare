@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-08T02:21:51Z",
+  "integrated_revision": "61c753de57a0ab6de139702da4f28b7ffdcaeb6e",
+  "merge_commit": "61c753de57a0ab6de139702da4f28b7ffdcaeb6e",
+  "plan_digest": "1de77c4471f9168f",
+  "plan_id": "m5",
+  "postcheck": "pass",
+  "pr": 93,
+  "receipt_id": "m5/openspec:add-hook-runtime/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "ee87138ab71203f13699654202c39b6a54c832c9",
+  "spec_digest": "23fec7ab1d39785a",
+  "target": "main",
+  "unit_id": "openspec:add-hook-runtime"
+}
