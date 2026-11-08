@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 2.1 | harness | Task 2.1: the pre-satisfied check could not decide |
-| Q-002 | open | none | verdict | Criterion C-be8bdbfa (taint › Hooks add taint and never remove it › Hook references, widening and flow rules): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-be8bdbfa (taint › Hooks add taint and never remove it › Hook references, widening and flow rules): accept as satisfied? |
 <!-- l4:index:end -->
 
 ---
@@ -165,7 +165,8 @@ accept: The held test traces the scenario "Hook edges that stay allowed", which 
 
 ## Q-002: Criterion C-be8bdbfa (taint › Hooks add taint and never remove it › Hook references, widening and flow rules): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -193,3 +194,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The requirement is restated whole with this scenario's values unchanged, and its only tracing test is the frozen U23 test in src/authoring/taint/hooks.test.ts, which the unit's test plan names as the scenario's sample and which the unit does not edit. That test asserts every row of the scenario: ex is input untrusted and output extracted plus untrusted, ex2 is untrusted and extracted, pay is untrusted and untrusted, fetch, lk and done have empty input and output, edges has 12 entries, the seven hook edges appear in the scenario's order with the scenario's to, path, ref, from, taint and hook values, and every hook edge is resolved. The implementation yields those values: the widening in evaluate applies only when hasCodeHook or malformed is true and the kind is in WIDEN_KINDS, so ex (post code hook tidy) joins extracted with its untrusted input, while ex2 and fetch, which carry block hooks only, keep their produced output. No red record exists because the test predates the unit and the scenario is a guard that the widening must leave unchanged, which is the design's own statement; a lack of a red record for a frozen guard is not a defect of the criterion. The latest failing gate is a typecheck error in a different new test file and does not bear on this criterion.
