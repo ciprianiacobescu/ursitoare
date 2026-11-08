@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
+| Q-001 | answered | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 4.2: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 4.2
 - **Kind:** harness
 - **Asked:** 2026-11-08T22:25Z by claude-sonnet, run r-20261108T2150Z-9e5e, task 4.2
@@ -177,3 +178,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: The already-satisfied claim of task 4.2 holds in the repository. The four held tests exist in the test file that task 4.1 committed, named with C-4347a436 and C-6f87d878, and their assertions follow the Pass-through, credential-less and Registration rows of test-plan.md: the 302 with its location, both set-cookie lines and x-up, the 500, the two 502 answers with the exact body, the loopback target answering with its own host and port, the gated stream read before any record, the credential-less route without a credential header and the stored credential winning afterwards, and the four TypeError registrations followed by the 502 vault error. The production code already implements what task 4.2 names: the proxy resolves the target from the stored credential or the credential-less map, connects to a loopback target host when no upstream is mapped, and answers 502 bad gateway upstream unreachable for an unmapped non-loopback host or a connection error, while addCredentialless validates lowercase UUIDs and an http or https origin. None of these assertions can pass without that code, so the passing real run is genuine evidence rather than a trivially satisfied test. The typecheck excerpt about RequestRedirect belongs to the first red attempt of task 4.1; the committed file no longer contains that name. Replaying the empty patch with every gate is the right next step; a retry would meet the same Python-only limitation of the zero-value run.
