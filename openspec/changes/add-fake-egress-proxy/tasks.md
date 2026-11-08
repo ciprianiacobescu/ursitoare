@@ -7,7 +7,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. The broker
 
-- [ ] 2.1 Write `test/support/fake-egress/broker.test.ts` first (scenarios "Issue succeeds and is recorded" and "Issue refuses bad requests and bounds the TTL"; the signature is verified in the test with `crypto.verify` and `createPublicKey`), then implement `startFakeEgress` in `test/support/fake-egress/index.ts` (three loopback servers, copies of the records, plain `addUpstream`, `addCredentialless` and `clearRecords`, a basic `close()`) and create `test/support/fake-egress/state.ts` (an `emit` that records), `test/support/fake-egress/jwt.ts`, `test/support/fake-egress/broker.ts` and minimal `test/support/fake-egress/proxy.ts` and `test/support/fake-egress/vault.ts` that answer 404 and `grpc-status` 12 to everything, implementing requirement "The broker issues a bounded EdDSA token and records it"
+- [x] 2.1 Write `test/support/fake-egress/broker.test.ts` first (scenarios "Issue succeeds and is recorded" and "Issue refuses bad requests and bounds the TTL"; the signature is verified in the test with `crypto.verify` and `createPublicKey`), then implement `startFakeEgress` in `test/support/fake-egress/index.ts` (three loopback servers, copies of the records, plain `addUpstream`, `addCredentialless` and `clearRecords`, a basic `close()`) and create `test/support/fake-egress/state.ts` (an `emit` that records), `test/support/fake-egress/jwt.ts`, `test/support/fake-egress/broker.ts` and minimal `test/support/fake-egress/proxy.ts` and `test/support/fake-egress/vault.ts` that answer 404 and `grpc-status` 12 to everything, implementing requirement "The broker issues a bounded EdDSA token and records it"
 
 ## 3. The vault
 
