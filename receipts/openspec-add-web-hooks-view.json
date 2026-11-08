@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-08T14:18:35Z",
+  "integrated_revision": "fe57dc950968f58f31ac66f781ff59026161a20a",
+  "merge_commit": "fe57dc950968f58f31ac66f781ff59026161a20a",
+  "plan_digest": "1de77c4471f9168f",
+  "plan_id": "m5",
+  "postcheck": "pass",
+  "pr": 100,
+  "receipt_id": "m5/openspec:add-web-hooks-view/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "b76d539417df6d2b976dacdd4c0b3f60bff9daff",
+  "spec_digest": "7b54943e6003f9f8",
+  "target": "main",
+  "unit_id": "openspec:add-web-hooks-view"
+}
