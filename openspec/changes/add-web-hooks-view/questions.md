@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Hold H-480e66a5: UI criterion C-c595362a has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-5b0fc692: UI criterion C-ff5e87af has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-feaadce1: UI criterion C-d630941c has no end-to-end test; see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-a457f21b: UI criterion C-1f095289 has no end-to-end test; see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-a457f21b: UI criterion C-1f095289 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-c3ceafa2: UI criterion C-25335f88 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-e3e2b1c3: UI criterion C-6d33a627 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -465,7 +465,8 @@ accept The hold can be waived. Criterion C-d630941c describes in-process module 
 
 ## Q-012: Hold H-a457f21b: UI criterion C-1f095289 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -484,6 +485,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-1f095289 is by its own text the Node journey m5-code-hooks.test.ts, which runs the web helpers against the real e2e stack engine. That test exists, is named with the criterion id, and asserts the scenario step by step: the demo-hooks validation with layers L1, L2, L3 and H and state validated, the TEST_MOCK_MISSING rejection and its form error, the completed run ending at done with the five steps and kinds, the normalize and pay payloads, the pay hook entries and hookRows texts, hookTraceNote null for every step, no hooks key on the other steps, bob's steps equal to alice's, the demo-x3 validation with its single H_ROUTE_EFFECT error and draft state, the OPERATION_REFUSED refusal with its details, and the overlay's one route and one rule. The companion browser journey proves the same flows in a browser. A second browser test for a criterion that is itself the Node journey would not add coverage.
 ---
 
 ## Q-013: Hold H-c3ceafa2: UI criterion C-25335f88 has no end-to-end test; see the generated UI tests table
