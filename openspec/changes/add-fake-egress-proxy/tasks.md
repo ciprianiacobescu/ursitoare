@@ -16,7 +16,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 ## 4. The proxy
 
 - [x] 4.1 Write `test/support/fake-egress/proxy-forward.test.ts` (scenario "The proxy forwards through the echo upstream" and the call that injects `kv-secret-8e2b`) and `test/support/fake-egress/proxy-refusals.test.ts` (scenario "The proxy refuses on the injected clock") first, then replace `test/support/fake-egress/proxy.ts` with the handler of design decisions 3 and 4 and the `addUpstream` hit of decision 5, implementing requirements "The proxy forwards with the stored credential injected" and "The proxy refuses before it calls an upstream"
-- [ ] 4.2 Write `test/support/fake-egress/proxy-pass-through.test.ts` first (scenarios "Streaming, redirects and upstream errors pass through" and "The credential-less route is fake-only"; the stream, the 302 and the 500 hold after 4.1, the 502 rows, the loopback target and the credential-less route fail at red), then extend `test/support/fake-egress/proxy.ts` with the loopback-target and 502 paths of design decision 5 and the credential-less lookup, implementing requirement "The proxy forwards with the stored credential injected"
+- [x] 4.2 Write `test/support/fake-egress/proxy-pass-through.test.ts` first (scenarios "Streaming, redirects and upstream errors pass through" and "The credential-less route is fake-only"; the stream, the 302 and the 500 hold after 4.1, the 502 rows, the loopback target and the credential-less route fail at red), then extend `test/support/fake-egress/proxy.ts` with the loopback-target and 502 paths of design decision 5 and the credential-less lookup, implementing requirement "The proxy forwards with the stored credential injected"
 
 ## 5. Audit, secrets and lifecycle
 
