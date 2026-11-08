@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 2.1 | harness | Task 2.1: the pre-satisfied check could not decide |
+| Q-002 | open | none | verdict | Criterion C-be8bdbfa (taint › Hooks add taint and never remove it › Hook references, widening and flow rules): accept as satisfied? |
 <!-- l4:index:end -->
 
 ---
@@ -159,3 +160,36 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: The held test traces the scenario "Hook edges that stay allowed", which the unit designs as a guard that passes at red: tasks.md task 2.1 says N1 to N5 "pass at red as guards", and the test plan reports the same values for them. Its passing against the base code is therefore the planned behaviour of a negative scenario, not a sign of a pre-satisfied criterion. The base validator already skips every hook edge (taint-checks.ts line 33) and already runs layer H after a clean L3 when hooks are declared (validate.ts lines 64 to 66), so L3ERR empty, layers_run with H and N4's H_BLOCK error are base behaviour, exactly as the spec scenario states. The positive tests P1 to P4 of the same file are not held, so they fail at base and carry the discriminating assertions of task 2.1. A retry would not help: the zero-value run varies Python files only, which is a fixed limitation for a TypeScript test. The evidence of the real base run is enough; replay the saved change.
+
+---
+
+## Q-002: Criterion C-be8bdbfa (taint › Hooks add taint and never remove it › Hook references, widening and flow rules): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-be8bdbfa (taint › Hooks add taint and never remove it › Hook references, widening and flow rules)
+
+### Context
+Criterion C-be8bdbfa (taint › Hooks add taint and never remove it › Hook references, widening and flow rules) is needs human after round 1.
+
+Scenario:
+\- **WHEN** the test analyzes the hook sample with catalogue C (test-plan.md § Hook sample: nodes `fetch`, `ex`, `ex2`, `lk`, `pay`, `done` and the rules `guard`, `audit`, `idle`)
+\- **THEN** `ex` (post code hook) has `input` `["untrusted"]` and `output` `["extracted", "untrusted"]`; `ex2` (pre block hook only) has `["untrusted"]` and `["extracted"]`; `pay` has `["untrusted"]` and `["untrusted"]`; `fetch`, `lk` and `done` have `[]` and `[]`, so `idle` changed nothing and `guard` did not reach `lk`
+\- **THEN** `edges` has 12 entries; the seven with a non-null `hook` are, in order, as `to` `path` (`ref`, `from`, `taint`, `hook`): `done` `/hooks/1/pre/with/v` (`nodes.fetch.output.raw_text`, `fetch`, `["untrusted"]`, `a`); `done` `/hooks/1/pre/with/s` (`hook.input.x`, `null`, `[]`, `a`); `ex2` `/nodes/ex2/pre/0/with/z` (`hook.input.t`, `null`, `["untrusted"]`, `note`); `fetch` `/nodes/fetch/post/0/with/text` (`hook.output.raw_text`, `fetch`, `["untrusted"]`, `tell`), `.../with/id` (`hook.output.id`, `fetch`, `[]`, `tell`) and `.../with/who` (`hook.node.id`, `null`, `[]`, `tell`); `pay` `/hooks/0/pre/input/raw` (`nodes.fetch.output.raw_text`, `fetch`, `["untrusted"]`, `g`); all have `resolved` `true`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: src.authoring.taint.hooks.test.ts::C-be8bdbfa Hook references widening and flow rules (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
