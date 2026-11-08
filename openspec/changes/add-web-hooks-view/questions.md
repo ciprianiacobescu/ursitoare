@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-52301bd3: UI criterion C-740bc49b has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-8bb22c50: UI criterion C-67dea741 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-480e66a5: UI criterion C-c595362a has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-5b0fc692: UI criterion C-ff5e87af has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-5b0fc692: UI criterion C-ff5e87af has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-feaadce1: UI criterion C-d630941c has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-a457f21b: UI criterion C-1f095289 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-c3ceafa2: UI criterion C-25335f88 has no end-to-end test; see the generated UI tests table |
@@ -415,7 +415,8 @@ accept The hold can be waived. Criterion C-c595362a describes the return values 
 
 ## Q-010: Hold H-5b0fc692: UI criterion C-ff5e87af has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -434,6 +435,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-ff5e87af lists the rows and notes hookRows and hookTraceNote give for four steps: the two rows of guard and notify with their texts and details, the three rows of rush, trim and tell including the redirect arrow, Attempt 2, Mutated input and the Error row, and empty rows with the note for a null trace and without a note for a step without hooks. Three Node tests named with its id assert each of those texts, detail lists and notes. The run page renders those rows and the note mechanically, and the M5 browser journey checks the visible result: the two hook rows of pay, the absence of a Hooks region for normalize, and after the steps answer is rewritten the note paragraph with no list. An end-to-end test of the pure functions would add nothing the Node tests do not already discriminate.
 ---
 
 ## Q-011: Hold H-feaadce1: UI criterion C-d630941c has no end-to-end test; see the generated UI tests table
