@@ -18,7 +18,8 @@ service in the stack tier (`docs/testing.md`).
 | `hook-runs/notify-pay` | `add-block-hooks` | `pay-once` with a post block hook `notify` (`slack.post_message@1`): `notifyPayVersion` (`strict`, `soft`) and `seedNotifyPay` |
 | `hook-cases/` | `add-hook-checker` | The 12 hook case files (`invalid/`, `valid/`, `warnings/`) and `hookCases` |
 | `taint-runs/` | `add-taint-runtime` | The `untrusted-code` and `trusted-code` fixtures for run taint labels |
-| `crash/` | `add-crash-harness`; `add-effect-intents` (`pay-once.ts`, `flows/pay-once.yaml`, `intents-scenario.ts`) | Spawn, kill and restart the engine; dedicated clusters |
+| `crash/` | `add-crash-harness`; `add-effect-intents` (`pay-once.ts`, `flows/pay-once.yaml`, `intents-scenario.ts`); `add-block-hooks` (`hooks-scenario.ts`) | Spawn, kill and restart the engine; dedicated clusters |
+| `crash/hooks-scenario` | `add-block-hooks` | The `hooks-scenario` engine start for the `onion`, `notify-pay` and `f-eff` SIGKILL proofs (C1, C2, C6) |
 | `node-conformance.ts` | `add-interpreter-core` | The kit every node runtime passes |
 | `mock-run-seed.ts` | `add-mock-test-runs` | Blocks and the `pay-once` and `rf-1-core` flows the mock test-run tests use |
 | `run-wait.ts` | `add-interpreter-core` | `waitForRun`: polls a run until it reaches one of the given states or a deadline |

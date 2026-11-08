@@ -16,7 +16,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 4. The SIGKILL proofs
 
-- [ ] 4.1 Write `src/interpreter/hooks/crash.test.ts` first (scenarios C1, C2 and C6: `startCrashCluster(await discoverParts())` at module level, closed in an `after` hook, one test each, `spawnEngine({ cluster, scenario, faultPoints, args })` as in `test-plan.md` § Crash cases, `engine.deaths`, `restart()`, `waitForRun` bounded at 20 s, `countEffects` and the intent and step rows), then create `test/support/crash/hooks-scenario.ts` (`export const start: ScenarioStart`, design § Interfaces), and add a `crash/hooks-scenario` row to `test/support/README.md` (the file stays inside the 120 s timeout), implementing requirement "A kill at a hook step leaves one effect per key"
+- [x] 4.1 Write `src/interpreter/hooks/crash.test.ts` first (scenarios C1, C2 and C6: `startCrashCluster(await discoverParts())` at module level, closed in an `after` hook, one test each, `spawnEngine({ cluster, scenario, faultPoints, args })` as in `test-plan.md` § Crash cases, `engine.deaths`, `restart()`, `waitForRun` bounded at 20 s, `countEffects` and the intent and step rows), then create `test/support/crash/hooks-scenario.ts` (`export const start: ScenarioStart`, design § Interfaces), and add a `crash/hooks-scenario` row to `test/support/README.md` (the file stays inside the 120 s timeout), implementing requirement "A kill at a hook step leaves one effect per key"
 
 ## 5. The format document
 
