@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | accepted | 3.1 | technical | src/interpreter/hooks/visit-pre.test.ts:183: sandboxRuns counts the normalize node's sandbox run, giving 9, not 8 |
 | Q-004 | answered | 3.3 | technical | Grant write access for the red step |
 | Q-005 | answered | 3.4 | harness | Task 3.4: the pre-satisfied check could not decide |
-| Q-006 | open | 3.5 | harness | Task 3.5: the pre-satisfied check could not decide |
+| Q-006 | answered | 3.5 | harness | Task 3.5: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -337,7 +337,8 @@ accept: Count the fault tests on the evidence of the real run. The unit head alr
 
 ## Q-006: Task 3.5: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.5
 - **Kind:** harness
 - **Asked:** 2026-11-08T01:18Z by claude-sonnet, run r-20261108T0033Z-999a, task 3.5
@@ -433,3 +434,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: accept: Count the onion-own replay test on the evidence of the real run. The unit head already implements what the scenario "Replay of onion-own" asks, so a test written for task 3.5 can only pin behaviour that tasks 3.1 to 3.4 built, and it cannot fail by assertion against the head; against the unit base it fails by an error because the base has no hook runtime, so the base run cannot show discrimination although the base plainly does not satisfy the criterion. In pipeline.ts the fused step records each hook run with its phase and name, and unwrap re-applies the records of a replayed step without running a hook: it observes each recorded entry in order, re-applies pre records to the input and taint state, and re-applies post records to the produced taint. The code runner runs an own-step hook through ops.runStep, so a replayed own step returns its recorded HookRun and runs no sandbox code, and memoryWorkflowOps answers a recorded value without calling the step function or listing it in executed. In visit.ts the started row is written only inside a fresh step, and every final-row write is guarded by that flag, so a visit whose steps were all replayed rewrites no row and the pay row keeps its idemKey, while a fresh pay step takes its idemKey from the gate decision and writes the same row as the first run under the fixed clock. The test's assertions check exactly the scenario's rows: executed lists for k 4, 6 and 9, sandbox runs 6, 1 and 0, invoker calls 1, 0 and 0 with the first run's args, observer entries and listSteps equal to the first run's, and the pay row's idemKey ik_pay_1; its onion-own variant is the test plan's (rule_a.post gets routes: [done]), the same replacement visit-pre.test.ts uses. The lint error in the excerpt names a baseInput assignment at visit.ts line 114 that is not in the head, where baseInput appears only as a property of the pipeline request, so the replay of the test file alone is not affected by it.
