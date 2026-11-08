@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-08T10:13:17Z",
+  "integrated_revision": "e349f9c0185a32d1a00777d0db1c731217d260ac",
+  "merge_commit": "e349f9c0185a32d1a00777d0db1c731217d260ac",
+  "plan_digest": "1de77c4471f9168f",
+  "plan_id": "m5",
+  "postcheck": "pass",
+  "pr": 98,
+  "receipt_id": "m5/openspec:add-block-hooks/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "91d76769288477c546cf51e4995e4237d60cca2d",
+  "spec_digest": "66651cd2f8b525d2",
+  "target": "main",
+  "unit_id": "openspec:add-block-hooks"
+}

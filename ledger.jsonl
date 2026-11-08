@@ -132,3 +132,6 @@
 {"at":"2026-11-08T10:09:19Z","head":"91d76769288477c546cf51e4995e4237d60cca2d","pr":98,"target_before":"c2a2344d87ff8f9eedaec0aff1a2564dd7e6a842","type":"unit.merge_requested","unit":"openspec:add-block-hooks"}
 {"at":"2026-11-08T10:09:24Z","ci":"not_run","head":"91d76769288477c546cf51e4995e4237d60cca2d","merge_commit":"e349f9c0185a32d1a00777d0db1c731217d260ac","method":"squash","pr":98,"raced":false,"type":"unit.merged","unit":"openspec:add-block-hooks"}
 {"at":"2026-11-08T10:09:29Z","branch":"l4/openspec/add-block-hooks","head":"91d76769288477c546cf51e4995e4237d60cca2d","type":"unit.branch_deleted","unit":"openspec:add-block-hooks"}
+{"at":"2026-11-08T10:13:17Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"e349f9c0185a32d1a00777d0db1c731217d260ac","status":"pass","type":"unit.postcheck","unit":"openspec:add-block-hooks"}
+{"at":"2026-11-08T10:13:17Z","revision":"e349f9c0185a32d1a00777d0db1c731217d260ac","type":"unit.integrated","unit":"openspec:add-block-hooks"}
+{"at":"2026-11-08T10:13:17Z","attempt":1,"cost_usd":3.812988,"runs":2,"type":"plan.charged","unit":"openspec:add-block-hooks"}
