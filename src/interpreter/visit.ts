@@ -11,6 +11,7 @@ import { nodeInputTaint, producedTaint } from "../authoring/index.ts";
 import { attemptStepName } from "./hooks/names.ts";
 import { createHookPipeline } from "./hooks/pipeline.ts";
 import type { FusedStored, HookRetry } from "./hooks/pipeline.ts";
+import type { HookTraceEntry } from "./hooks/types.ts";
 import type { RunError, RunRecord, StepWrite, TenantContext } from "../runs/index.ts";
 import { isDurableCancellation } from "../durable/index.ts";
 import { resolveValue } from "./refs.ts";
@@ -147,6 +148,15 @@ async function visitAttempt(
     now,
   };
 
+  const entries: HookTraceEntry[] = [];
+  const hookDeps: InterpreterDeps = {
+    ...deps,
+    hookObserver: (observedNodeId, entry) => {
+      entries.push(entry);
+      return deps.hookObserver?.(observedNodeId, entry);
+    },
+  };
+
   const pipeline = createHookPipeline({
     flow: request.flow,
     catalogue: request.catalogue,
@@ -155,7 +165,7 @@ async function visitAttempt(
     from: request.from,
     def,
     ctx,
-    deps,
+    deps: hookDeps,
     invoker,
     ops,
     scope,
@@ -219,6 +229,14 @@ async function visitAttempt(
       startedAt: now,
       endedAt: deps.clock.now(),
     };
+    if (entries.length > 0) {
+      step.hooks = {
+        inputOriginal: entries.some((entry) => entry.mutated === "input")
+          ? (input as StepWrite["input"])
+          : null,
+        entries,
+      };
+    }
     try {
       await deps.store.recordStep(tenant, step);
     } catch (writeError) {

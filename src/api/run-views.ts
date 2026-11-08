@@ -7,6 +7,7 @@ import type {
   RunMode,
   RunRecord,
   RunState,
+  StepHooks,
   StepRecord,
   StepState,
 } from "../runs/index.ts";
@@ -47,6 +48,7 @@ export interface StepView {
   taint: string[];
   startedAt: string;
   endedAt: string | null;
+  hooks?: StepHooks;
 }
 
 export interface PayloadView {
@@ -98,7 +100,69 @@ const RUN_VIEW_PROPERTIES = {
   endedAt: { type: ["string", "null"] },
 };
 
-const STEP_VIEW_PROPERTIES = {
+const STEP_HOOK_ERROR_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["code", "message"],
+  properties: {
+    code: { type: "string" },
+    message: { type: "string" },
+  },
+};
+
+const NULLABLE_STEP_HOOK_ERROR_SCHEMA = {
+  anyOf: [{ type: "null" }, STEP_HOOK_ERROR_SCHEMA],
+};
+
+const STEP_HOOK_ENTRY_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: [
+    "label",
+    "kind",
+    "fused",
+    "attempt",
+    "state",
+    "action",
+    "mutated",
+    "to",
+    "error",
+    "tool",
+    "idemKey",
+  ],
+  properties: {
+    label: { type: "string" },
+    kind: { type: "string", enum: ["code", "block"] },
+    fused: { type: "boolean" },
+    attempt: { type: "integer" },
+    state: { type: "string", enum: ["completed", "failed"] },
+    action: {
+      anyOf: [
+        { type: "null" },
+        { type: "string", enum: ["continue", "skip", "redirect", "retry", "fail"] },
+      ],
+    },
+    mutated: {
+      anyOf: [{ type: "null" }, { type: "string", enum: ["input", "output"] }],
+    },
+    to: { type: ["string", "null"] },
+    error: NULLABLE_STEP_HOOK_ERROR_SCHEMA,
+    tool: { type: ["string", "null"] },
+    idemKey: { type: ["string", "null"] },
+  },
+};
+
+const STEP_HOOKS_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["inputOriginalRef", "entries"],
+  properties: {
+    inputOriginalRef: { type: ["string", "null"], pattern: "^[0-9a-f]{64}$" },
+    entries: { type: "array", items: STEP_HOOK_ENTRY_SCHEMA },
+  },
+};
+
+const STEP_VIEW_FIELDS = {
   seq: { type: "integer" },
   nodeId: { type: "string" },
   kind: { type: "string" },
@@ -116,6 +180,11 @@ const STEP_VIEW_PROPERTIES = {
   endedAt: { type: ["string", "null"] },
 };
 
+const STEP_VIEW_PROPERTIES = {
+  ...STEP_VIEW_FIELDS,
+  hooks: STEP_HOOKS_SCHEMA,
+};
+
 export const RUN_VIEW_SCHEMA: Readonly<Record<string, unknown>> = {
   type: "object",
   additionalProperties: false,
@@ -126,7 +195,7 @@ export const RUN_VIEW_SCHEMA: Readonly<Record<string, unknown>> = {
 export const STEP_VIEW_SCHEMA: Readonly<Record<string, unknown>> = {
   type: "object",
   additionalProperties: false,
-  required: Object.keys(STEP_VIEW_PROPERTIES),
+  required: Object.keys(STEP_VIEW_FIELDS),
   properties: STEP_VIEW_PROPERTIES,
 };
 
@@ -155,7 +224,7 @@ export function toRunView(run: RunRecord): RunView {
 }
 
 export function toStepView(step: StepRecord): StepView {
-  return {
+  const view: StepView = {
     seq: step.seq,
     nodeId: step.nodeId,
     kind: step.kind,
@@ -172,6 +241,10 @@ export function toStepView(step: StepRecord): StepView {
     startedAt: step.startedAt,
     endedAt: step.endedAt,
   };
+  if (step.hooks !== undefined) {
+    view.hooks = structuredClone(step.hooks);
+  }
+  return view;
 }
 
 export function runResource(tenantId: string, run: RunRecord): ResourceRef {

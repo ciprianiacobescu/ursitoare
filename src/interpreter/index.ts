@@ -70,5 +70,7 @@ export {
   splitFused,
 } from "./hooks/names.ts";
 export { checkHookAction, normalizeHookReturn } from "./hooks/actions.ts";
+export { approvalsOnPath } from "./hooks/approvals.ts";
+export type { Approval, PathStep } from "./hooks/approvals.ts";
 export type { InterpreterErrorCode } from "./errors.ts";
 export { InterpreterError } from "./errors.ts";
