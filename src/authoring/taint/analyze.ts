@@ -188,11 +188,11 @@ function evaluate(
   const fields = new Map(Object.entries(result.fields));
   const widens = (hooks.hasCodeHook || hooks.malformed) && kind !== undefined && WIDEN_KINDS.has(kind);
   if (!widens) return { input, output: result.output, fields };
+  let joined = joinTaint(result.output, input);
+  for (const value of fields.values()) joined = joinTaint(joined, value);
   const widened = new Map<string, Taint>();
-  for (const [key, value] of fields) {
-    widened.set(key, joinTaint(value, input));
-  }
-  return { input, output: joinTaint(result.output, input), fields: widened };
+  for (const key of fields.keys()) widened.set(key, joined);
+  return { input, output: joined, fields: widened };
 }
 
 function sameTaint(a: Taint, b: Taint): boolean {
