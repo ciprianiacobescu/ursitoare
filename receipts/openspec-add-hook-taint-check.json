@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-08T19:09:01Z",
+  "integrated_revision": "54f24ed324779c398344f63f5724de5e005b096e",
+  "merge_commit": "54f24ed324779c398344f63f5724de5e005b096e",
+  "plan_digest": "deccf2afb3391e9c",
+  "plan_id": "m6",
+  "postcheck": "pass",
+  "pr": 104,
+  "receipt_id": "m6/openspec:add-hook-taint-check/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "94ea1d9788082497fb04b29a69f973e194634161",
+  "spec_digest": "3c16134bd7942f54",
+  "target": "main",
+  "unit_id": "openspec:add-hook-taint-check"
+}
