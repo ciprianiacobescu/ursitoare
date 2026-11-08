@@ -114,3 +114,5 @@
 {"at":"2026-11-08T02:23:08Z","branch":"l4/archive/openspec/add-hook-runtime","head":"3d61cf109bd2212af95d448606a2f593d2815fcc","type":"unit.branch_deleted","unit":"openspec:add-hook-runtime"}
 {"at":"2026-11-08T02:23:09Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-hook-trace"}
 {"at":"2026-11-08T02:23:09Z","run":"r-20261108T0223Z-25d1","type":"unit.dispatched","unit":"openspec:add-hook-trace"}
+{"at":"2026-11-08T04:14:28Z","attempt":1,"cost_usd":1.452498,"runs":2,"type":"plan.charged","unit":"openspec:add-hook-trace"}
+{"at":"2026-11-08T04:14:28Z","run":"r-20261108T0414Z-dff2","type":"unit.dispatched","unit":"openspec:add-hook-trace"}
