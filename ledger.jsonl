@@ -135,3 +135,4 @@
 {"at":"2026-11-08T10:13:17Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"e349f9c0185a32d1a00777d0db1c731217d260ac","status":"pass","type":"unit.postcheck","unit":"openspec:add-block-hooks"}
 {"at":"2026-11-08T10:13:17Z","revision":"e349f9c0185a32d1a00777d0db1c731217d260ac","type":"unit.integrated","unit":"openspec:add-block-hooks"}
 {"at":"2026-11-08T10:13:17Z","attempt":1,"cost_usd":3.812988,"runs":2,"type":"plan.charged","unit":"openspec:add-block-hooks"}
+{"at":"2026-11-08T10:14:55Z","branch":"l4/archive/openspec/add-block-hooks","head":"1b4112df8990c8d80285bd69ff5e032826a8def3","type":"unit.branch_deleted","unit":"openspec:add-block-hooks"}
