@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | 5.1 | harness | Task 5.1: the pre-satisfied check could not decide |
 | Q-003 | answered | none | verdict | Criterion C-25335f88 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice validates, test-runs and reads demo-hooks): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-6d33a627 (web-runs › The M5 journey proves code nodes, hooks and the X3 rejection in a browser › Alice meets the X3 rejection on demo-x3): accept as satisfied? |
-| Q-005 | open | none | verdict | Hold H-ad2767b0: UI criterion C-822061e0 has no end-to-end test; see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-ad2767b0: UI criterion C-822061e0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-b3c4f418: UI criterion C-8a9b0cea has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-52301bd3: UI criterion C-740bc49b has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-8bb22c50: UI criterion C-67dea741 has no end-to-end test; see the generated UI tests table |
@@ -292,7 +292,8 @@ accept The criterion is satisfied. The browser test follows the scenario: it sav
 
 ## Q-005: Hold H-ad2767b0: UI criterion C-822061e0 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -311,6 +312,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-822061e0 is written as a function-level scenario over parseValidation, diagnosticRows, diagnosticsSummary and diagnosticHref with fixture inputs, and three Node tests named with its id check every value it lists: the parsed result, the three refusals, the two rows, the summary text and the seven hrefs. The project's rules make Node tests the red step and leave browser checks to the verifier, so an end-to-end test is not what traces such a criterion. Its visible effect in the browser is nevertheless covered by the M5 journey, which asserts the layer H status text in the Diagnostics region and the H_ROUTE_EFFECT guide link with its anchor.
 ---
 
 ## Q-006: Hold H-b3c4f418: UI criterion C-8a9b0cea has no end-to-end test; see the generated UI tests table
