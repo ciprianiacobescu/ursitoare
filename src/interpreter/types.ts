@@ -6,6 +6,7 @@ import type {
   Effect,
   Flow,
   FlowNode,
+  HookPhase,
   JsonValue,
   NodeKind,
 } from "../authoring/index.ts";
@@ -52,6 +53,7 @@ export interface StepContext {
   readonly idemKey: string | null;
   readonly principal: RunPrincipal;
   readonly now: Date;
+  readonly hook?: { phase: HookPhase; label: string };
 }
 
 export interface ToolInvoker {

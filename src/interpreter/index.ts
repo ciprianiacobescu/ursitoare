@@ -1,5 +1,6 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
+import { blockHookRunner } from "./hooks/block-runner.ts";
 import { codeHookRunner } from "./hooks/code-runner.ts";
 import { registerHookRunner } from "./hooks/registry.ts";
 import { registerNodeRuntime } from "./registry.ts";
@@ -10,6 +11,7 @@ import { switchRuntime } from "./runtimes/switch.ts";
 import { waitRuntime } from "./runtimes/wait.ts";
 
 registerHookRunner("code", codeHookRunner);
+registerHookRunner("block", blockHookRunner);
 registerNodeRuntime("block", blockRuntime);
 registerNodeRuntime("code", codeRuntime);
 registerNodeRuntime("switch", switchRuntime);
@@ -60,6 +62,13 @@ export type {
   NodeHooks,
   PreHookResult,
 } from "./hooks/types.ts";
+export {
+  blockHookRunner,
+  hookBlockRefs,
+  hookMockKey,
+  resolveHookValue,
+} from "./hooks/block-runner.ts";
+export type { HookValues } from "./hooks/block-runner.ts";
 export { HOOK_LIMITS, codeHookRunner, runCodeHook } from "./hooks/code-runner.ts";
 export { hookRunnerFor, registerHookRunner } from "./hooks/registry.ts";
 export {
