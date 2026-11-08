@@ -1,0 +1,141 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "docs/authoring/diagnostics.md",
+      "src/interpreter/hook-taint-inclusion.test.ts",
+      "src/authoring/validate/taint.test.ts",
+      "src/authoring/taint",
+      "src/authoring/taint/hook-widening.test.ts",
+      "src/authoring/validate/hook-taint.test.ts",
+      "src/authoring/validate",
+      "flows",
+      "src/interpreter",
+      "src/authoring",
+      "test/support/hook-runs",
+      "src/authoring/taint/analyze.ts",
+      "src/authoring/validate/taint-checks.ts",
+      "node:assert/strict",
+      "**/[]",
+      "**/analyze.ts",
+      "**/[\"untrusted\"]",
+      "**/nodes.*",
+      "**/hook.output.*",
+      "**/hook.input.*",
+      "**/^[a-z][a-z0-9_]{0,63}$",
+      "**/hooks.test.ts",
+      "**/taint.test.ts",
+      "flows/*.yaml",
+      "**/[",
+      "**/validate.ts",
+      "**/flow.hooks[r]",
+      "module authoring",
+      "module docs",
+      "module interpreter",
+      "module node:assert",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-hook-taint-check/.l4/ledger/r-20261108T1636Z-0d2a.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-taint-check/.l4/ledger/r-20261108T1736Z-164d.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-taint-check/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-hook-taint-check/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/authoring/taint/analyze.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/taint/hook-widening.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/validate/hook-taint.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/validate/taint-checks.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/validate/taint.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/hook-taint-inclusion.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/authoring/taint/analyze.ts, src/authoring/validate/taint-checks.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/authoring/taint/analyze.ts",
+      "src/authoring/validate/taint-checks.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2029,
+      "passed": 2029,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 11,
+      "new_passed": 11,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
