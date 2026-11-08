@@ -22,6 +22,43 @@ function consequential(catalogue: Catalogue, ref: unknown): boolean {
   return block !== undefined && block.effect !== "read";
 }
 
+const HOOK_NAME = /^(rule\.)?[a-z][a-z0-9_]{0,63}$/;
+
+function unescapePointer(segment: string): string {
+  return segment.replaceAll("~1", "/").replaceAll("~0", "~");
+}
+
+/** The block hook that a `with` path points at, with the name to show for it; undefined when none. */
+function blockHookAt(flow: Flow, path: string): { uses: unknown; name: string } | undefined {
+  const segments = path.split("/").slice(1).map(unescapePointer);
+  let hook: unknown;
+  let rawName: unknown;
+  let wi: number;
+  if (segments[0] === "nodes" && (segments[2] === "pre" || segments[2] === "post")) {
+    const nodes: unknown = flow.nodes;
+    const node = isObj(nodes) ? nodes[segments[1] ?? ""] : undefined;
+    const list = isObj(node) ? node[segments[2]] : undefined;
+    if (!Array.isArray(list) || !/^(0|[1-9][0-9]*)$/.test(segments[3] ?? "")) return undefined;
+    hook = list[Number(segments[3])];
+    wi = 4;
+    rawName = isObj(hook) ? hook.id : undefined;
+  } else if (segments[0] === "hooks" && (segments[2] === "pre" || segments[2] === "post")) {
+    const rules: unknown = flow.hooks;
+    if (!Array.isArray(rules) || !/^(0|[1-9][0-9]*)$/.test(segments[1] ?? "")) return undefined;
+    const rule: unknown = rules[Number(segments[1])];
+    if (!isObj(rule)) return undefined;
+    hook = rule[segments[2]];
+    wi = 3;
+    const ruleId = rule.id;
+    rawName = isObj(hook) && hook.id !== undefined ? hook.id : typeof ruleId === "string" ? `rule.${ruleId}` : undefined;
+  } else {
+    return undefined;
+  }
+  if (segments[wi] !== "with" || !isObj(hook) || hook.kind !== "block") return undefined;
+  const name = typeof rawName === "string" && HOOK_NAME.test(rawName) ? rawName : "(unnamed)";
+  return { uses: hook.uses, name };
+}
+
 /**
  * Run the taint checks. `refErrorPaths` holds the paths that already carry an `L3_REF_*` or
  * `L3_ITEM_OUTSIDE_FOREACH` error.
@@ -30,8 +67,21 @@ export function checkTaint(flow: Flow, catalogue: Catalogue, refErrorPaths: Read
   const analysis = analyzeTaint(flow, catalogue);
   const nodes: unknown = flow.nodes;
   for (const edge of analysis.edges) {
-    if (edge.hook !== null || !edge.resolved || !edge.taint.includes("untrusted")) continue;
+    if (!edge.resolved || !edge.taint.includes("untrusted")) continue;
     if (refErrorPaths.has(edge.path)) continue;
+    if (edge.hook !== null) {
+      const found = blockHookAt(flow, edge.path);
+      if (found !== undefined && consequential(catalogue, found.uses)) {
+        s.err(
+          "L3",
+          "L3_TAINT_TO_CONSEQUENTIAL",
+          edge.to,
+          edge.path,
+          `untrusted data from ${edge.from ?? edge.to} reaches hook ${found.name} on ${edge.to} through ${edge.ref}, a block with side effects; ${FIX}`,
+        );
+      }
+      continue;
+    }
     const node = isObj(nodes) ? nodes[edge.to] : undefined;
     if (!isObj(node)) continue;
     const from = edge.from ?? "foreach items";
