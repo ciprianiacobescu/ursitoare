@@ -1,0 +1,17 @@
+{
+  "schema": "l4/followup@1",
+  "parent": "openspec:add-hook-runtime",
+  "items": [
+    {
+      "id": "FB-001",
+      "sha256": "973e36541a7f608422aaa52a12b2cdc76eb7fb8163ff91544032b670621678aa"
+    }
+  ],
+  "chores": [
+    "F-1f1aad49"
+  ],
+  "test_chores": [
+    "F-1f1aad49"
+  ],
+  "refactors": []
+}
