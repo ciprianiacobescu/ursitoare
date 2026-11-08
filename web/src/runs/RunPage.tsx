@@ -5,6 +5,7 @@ import { ApiRequestError } from "../api/client.ts";
 import { browserSession } from "../auth/browser-session.ts";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
+import { registerCodeRenderer } from "./code-renderer.ts";
 import { runPageView } from "./failures.ts";
 import { hookRows, hookTraceNote } from "./hook-rows.ts";
 import { runTitle } from "./pages.ts";
@@ -21,6 +22,8 @@ import {
 import type { PayloadLoad } from "./timeline.ts";
 import "./runs.css";
 import "./hooks.css";
+
+registerCodeRenderer();
 
 function isAbortError(error: unknown): boolean {
   return (

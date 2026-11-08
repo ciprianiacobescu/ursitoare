@@ -10,7 +10,7 @@ Spec: `specs/*/spec.md`; fixtures: `test-plan.md`; decisions: `design.md`. No fr
 
 ## 3. Code steps
 
-- [ ] 3.1 Write `web/src/runs/code-renderer.test.ts` (scenario "Registering and rendering a code step"; it reads `stepRenderers.list()` before it registers) first, then create `web/src/runs/code-renderer.ts` (`CODE_STEP_RENDERER`, `registerCodeRenderer`) and make `web/src/runs/RunPage.tsx` call `registerCodeRenderer()` at module scope, implementing requirement "Code steps have a renderer that the run page registers once"
+- [x] 3.1 Write `web/src/runs/code-renderer.test.ts` (scenario "Registering and rendering a code step"; it reads `stepRenderers.list()` before it registers) first, then create `web/src/runs/code-renderer.ts` (`CODE_STEP_RENDERER`, `registerCodeRenderer`) and make `web/src/runs/RunPage.tsx` call `registerCodeRenderer()` at module scope, implementing requirement "Code steps have a renderer that the run page registers once"
 
 ## 4. The hook overlay
 
