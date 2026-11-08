@@ -11,3 +11,5 @@
 {"at":"2026-11-08T16:36:40Z","run":"r-20261108T1636Z-0d2a","type":"unit.dispatched","unit":"openspec:add-hook-taint-check"}
 {"at":"2026-11-08T17:36:45Z","attempt":1,"cost_usd":1.893812,"runs":2,"type":"plan.charged","unit":"openspec:add-hook-taint-check"}
 {"at":"2026-11-08T17:36:45Z","run":"r-20261108T1736Z-164d","type":"unit.dispatched","unit":"openspec:add-hook-taint-check"}
+{"at":"2026-11-08T18:53:24Z","attempt":1,"cost_usd":4.262325,"runs":3,"type":"plan.charged","unit":"openspec:add-hook-taint-check"}
+{"at":"2026-11-08T18:53:24Z","run":"r-20261108T1853Z-b364","type":"unit.dispatched","unit":"openspec:add-hook-taint-check"}
