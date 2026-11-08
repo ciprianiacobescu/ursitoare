@@ -2,3 +2,4 @@
 {"ts": "2026-11-08T10:14:32.434135Z", "run_id": "r-20261108T1014Z-e54c", "unit": "openspec:add-block-hooks", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 98, "merge_commit": "e349f9c0185a32d1a00777d0db1c731217d260ac"}
 {"ts": "2026-11-08T10:14:39.541005Z", "run_id": "r-20261108T1014Z-e54c", "unit": "openspec:add-block-hooks", "seq": 3, "type": "archive.opened", "number": 99, "url": "<forge>/ciprianiacobescu/ursitoare/pull/99", "branch": "l4/archive/openspec/add-block-hooks", "head": "1b4112df8990c8d80285bd69ff5e032826a8def3"}
 {"ts": "2026-11-08T10:14:41.644459Z", "run_id": "r-20261108T1014Z-e54c", "unit": "openspec:add-block-hooks", "seq": 4, "type": "archive.merged", "head": "1b4112df8990c8d80285bd69ff5e032826a8def3", "number": 99}
+{"ts": "2026-11-08T10:14:43.613878Z", "run_id": "r-20261108T1014Z-e54c", "unit": "openspec:add-block-hooks", "seq": 5, "type": "run.finished", "exit_code": 0}
