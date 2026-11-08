@@ -136,6 +136,7 @@ export async function startFakeEgress(opts: FakeEgressOptions = {}): Promise<Fak
     privateKey,
     publicJwk,
     kid: randomId("kid_"),
+    vaultIdentities: [vaultAdmin, vaultProxy, vaultDenied],
     credentials: new Map(),
     credentialless: new Map(),
     upstreams: new Map(),

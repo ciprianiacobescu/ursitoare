@@ -1,7 +1,13 @@
 import { randomBytes } from "node:crypto";
 import type { KeyObject } from "node:crypto";
 
-import type { FakeAuditEvent, ForwardedRequest, IssuedToken, StoredCredential } from "./index.ts";
+import type {
+  FakeAuditEvent,
+  FakeVaultIdentity,
+  ForwardedRequest,
+  IssuedToken,
+  StoredCredential,
+} from "./index.ts";
 
 export interface StoredEntry {
   meta: StoredCredential;
@@ -15,6 +21,7 @@ export interface FakeState {
   privateKey: KeyObject;
   publicJwk: { kty: string; crv: string; x: string };
   kid: string;
+  vaultIdentities: FakeVaultIdentity[];
   credentials: Map<string, StoredEntry>;
   credentialless: Map<string, string>;
   upstreams: Map<string, string>;

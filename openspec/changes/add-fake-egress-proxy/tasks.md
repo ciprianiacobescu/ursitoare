@@ -11,7 +11,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 3. The vault
 
-- [ ] 3.1 Write `test/support/fake-egress/vault.test.ts` first (scenarios "The vault stores a credential and counts key versions", without its final proxy call, and "The vault refuses bad callers and bad messages", driven by raw bytes built from the hex and by `node:http2`), then implement `callVault` and `putCredential` in `test/support/fake-egress/vault-client.ts` and replace `test/support/fake-egress/vault.ts` with the h2c server (design decision 6), implementing requirements "The vault stores a credential and counts key versions"
+- [x] 3.1 Write `test/support/fake-egress/vault.test.ts` first (scenarios "The vault stores a credential and counts key versions", without its final proxy call, and "The vault refuses bad callers and bad messages", driven by raw bytes built from the hex and by `node:http2`), then implement `callVault` and `putCredential` in `test/support/fake-egress/vault-client.ts` and replace `test/support/fake-egress/vault.ts` with the h2c server (design decision 6), implementing requirements "The vault stores a credential and counts key versions"
 
 ## 4. The proxy
 
