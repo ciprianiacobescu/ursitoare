@@ -1,0 +1,282 @@
+diff --git a/src/authoring/validate/hook-taint.test.ts b/src/authoring/validate/hook-taint.test.ts
+new file mode 100644
+index 0000000..003b971
+--- /dev/null
++++ b/src/authoring/validate/hook-taint.test.ts
+@@ -0,0 +1,253 @@
++import assert from "node:assert/strict";
++import { test } from "node:test";
++
++import { parseFlowText } from "../format/index.ts";
++import { loadTestCatalogue } from "../../../test/support/catalogue/loader.ts";
++import { caseCatalogue, flowCases } from "../../../test/support/flow-cases/index.ts";
++import type { Issue, ValidationResult } from "./types.ts";
++import { validateFlow } from "./validate.ts";
++
++assert.equal(typeof validateFlow, "function");
++
++const HB = `
++ursitoare: "0.1"
++flow: hook-taint
++version: 1.0.0
++inputs: { type: object, properties: { url: { type: string } }, required: [url] }
++start: fetch
++nodes:
++  fetch: { kind: block, uses: docs.fetch@1, with: { url: "\${{ inputs.url }}" }, next: extract }
++  extract:
++    kind: llm.extract
++    input: { text: "\${{ nodes.fetch.output.content }}" }
++    instructions: Extract the summary.
++    output_schema: { type: object, properties: { summary: { type: string } }, required: [summary] }
++    next: send
++  send: { kind: block, uses: mail.send@1, with: { to: ops@example.com, subject: Digest, body: "\${{ nodes.extract.output.summary }}" }, next: done }
++  done: { kind: end, status: completed }
++`;
++
++type Doc = { nodes: Record<string, Record<string, unknown>>; hooks?: unknown[] };
++
++function base(): Doc {
++  const parsed = parseFlowText(HB, "yaml");
++  assert.equal(parsed.ok, true);
++  if (!parsed.ok) throw new Error("HB does not parse");
++  return structuredClone(parsed.doc) as unknown as Doc;
++}
++
++function check(edit: (doc: Doc) => void): ValidationResult {
++  const doc = base();
++  edit(doc);
++  let result: ValidationResult | undefined;
++  assert.doesNotThrow(() => {
++    result = validateFlow(doc, loadTestCatalogue());
++  });
++  assert.ok(result);
++  return result;
++}
++
++const l3 = (r: ValidationResult): Issue[] => r.errors.filter((e) => e.layer === "L3");
++
++const msg = (h: string, n: string, ref: string, from: string): string =>
++  `untrusted data from ${from} reaches hook ${h} on ${n} through ${ref}, a block with side effects; pass it through an llm.extract node first`;
++
++const mail = (body: string): Record<string, string> => ({ to: "ops@example.com", subject: "s", body });
++
++function node(doc: Doc, id: string): Record<string, unknown> {
++  const n = doc.nodes[id];
++  assert.ok(n, id);
++  return n;
++}
++
++test("C-aa58516e HB itself has no error", () => {
++  const r = check(() => {});
++  assert.deepEqual(r.errors, []);
++});
++
++test("C-aa58516e a pre block hook over untrusted data is an error", () => {
++  const r = check((d) => {
++    node(d, "extract").pre = [
++      { id: "h", kind: "block", uses: "mail.send@1", with: mail("${{ nodes.fetch.output.content }}") },
++    ];
++  });
++  assert.equal(r.ok, false);
++  assert.deepEqual(l3(r), [
++    {
++      layer: "L3",
++      code: "L3_TAINT_TO_CONSEQUENTIAL",
++      node: "extract",
++      path: "/nodes/extract/pre/0/with/body",
++      message: msg("h", "extract", "nodes.fetch.output.content", "fetch"),
++    },
++  ]);
++  assert.deepEqual(r.layers_run, ["L1", "L2", "L3"]);
++});
++
++test("C-aa58516e a post block hook over hook output is an error", () => {
++  const r = check((d) => {
++    node(d, "fetch").post = [
++      {
++        id: "tell",
++        kind: "block",
++        uses: "slack.post_message@1",
++        with: { channel: "#ap", text: "${{ hook.output.content }}" },
++      },
++    ];
++  });
++  assert.equal(r.ok, false);
++  assert.deepEqual(l3(r), [
++    {
++      layer: "L3",
++      code: "L3_TAINT_TO_CONSEQUENTIAL",
++      node: "fetch",
++      path: "/nodes/fetch/post/0/with/text",
++      message: msg("tell", "fetch", "hook.output.content", "fetch"),
++    },
++  ]);
++});
++
++test("C-aa58516e a hook over hook input names the hooked node as source", () => {
++  const r = check((d) => {
++    node(d, "extract").pre = [
++      {
++        id: "note",
++        kind: "block",
++        uses: "slack.post_message@1",
++        with: { channel: "#ap", text: "${{ hook.input.text }}" },
++      },
++    ];
++  });
++  assert.equal(r.ok, false);
++  assert.deepEqual(l3(r), [
++    {
++      layer: "L3",
++      code: "L3_TAINT_TO_CONSEQUENTIAL",
++      node: "extract",
++      path: "/nodes/extract/pre/0/with/text",
++      message: msg("note", "extract", "hook.input.text", "extract"),
++    },
++  ]);
++});
++
++test("C-aa58516e an invalid hook id reads unnamed and leaves no NUL", () => {
++  const r = check((d) => {
++    node(d, "extract").pre = [
++      { id: "a\u0000b", kind: "block", uses: "mail.send@1", with: mail("${{ nodes.fetch.output.content }}") },
++    ];
++  });
++  assert.equal(r.ok, false);
++  assert.deepEqual(l3(r), [
++    {
++      layer: "L3",
++      code: "L3_TAINT_TO_CONSEQUENTIAL",
++      node: "extract",
++      path: "/nodes/extract/pre/0/with/body",
++      message: msg("(unnamed)", "extract", "nodes.fetch.output.content", "fetch"),
++    },
++  ]);
++  assert.equal(JSON.stringify(r).includes("\\u0000"), false);
++});
++
++const ruleHook = (nodes: string[], id: string | null): unknown => ({
++  id: "audit",
++  match: { nodes },
++  pre: {
++    ...(id === null ? {} : { id }),
++    kind: "block",
++    uses: "slack.post_message@1",
++    with: { channel: "#ap", text: "${{ nodes.fetch.output.content }}" },
++  },
++});
++
++test("C-6ea5e31b a rule hook gives one error per wrapped node", () => {
++  const r = check((d) => {
++    d.hooks = [ruleHook(["send", "done"], "ping")];
++  });
++  assert.deepEqual(
++    l3(r).map((e) => [e.node, e.path, e.message]),
++    [
++      ["done", "/hooks/0/pre/with/text", msg("ping", "done", "nodes.fetch.output.content", "fetch")],
++      ["send", "/hooks/0/pre/with/text", msg("ping", "send", "nodes.fetch.output.content", "fetch")],
++    ],
++  );
++});
++
++test("C-6ea5e31b a rule hook without an id is named after its rule", () => {
++  const r = check((d) => {
++    d.hooks = [ruleHook(["send"], null)];
++  });
++  assert.deepEqual(
++    l3(r).map((e) => [e.node, e.path, e.message]),
++    [["send", "/hooks/0/pre/with/text", msg("rule.audit", "send", "nodes.fetch.output.content", "fetch")]],
++  );
++});
++
++test("C-f97887e5 a mail hook over untrusted data fails the frozen case flow", () => {
++  const c = flowCases("valid", "taint-via-extract-passes").find((x) => x.name === "taint-via-extract-passes");
++  assert.ok(c);
++  const parsed = parseFlowText(c.text, "yaml");
++  assert.equal(parsed.ok, true);
++  if (!parsed.ok) return;
++  const doc = structuredClone(parsed.doc) as unknown as Doc;
++  node(doc, "extract").pre = [
++    { id: "h", kind: "block", uses: "mail.send@1", with: mail("${{ nodes.fetch.output.content }}") },
++  ];
++  const r = validateFlow(doc, caseCatalogue());
++  assert.equal(r.ok, false);
++  assert.deepEqual(
++    r.errors.map((e) => [e.layer, e.code, e.node, e.path]),
++    [["L3", "L3_TAINT_TO_CONSEQUENTIAL", "extract", "/nodes/extract/pre/0/with/body"]],
++  );
++  assert.deepEqual(r.layers_run, ["L1", "L2", "L3"]);
++});
++
++test("C-4f58ed6e hook edges that stay allowed give no taint error", () => {
++  const edits: Array<(d: Doc) => void> = [
++    (d) => {
++      node(d, "send").pre = [
++        { id: "peek", kind: "code", source: "return;", input: { raw: "${{ nodes.fetch.output.content }}" } },
++      ];
++    },
++    (d) => {
++      node(d, "extract").pre = [
++        { id: "look", kind: "block", uses: "kb.search@1", with: { query: "${{ nodes.fetch.output.content }}" } },
++      ];
++    },
++    (d) => {
++      node(d, "send").pre = [
++        { id: "note", kind: "block", uses: "mail.send@1", with: mail("${{ nodes.extract.output.summary }}") },
++      ];
++    },
++    (d) => {
++      node(d, "extract").pre = [
++        { id: "ghost", kind: "block", uses: "nope.tool@1", with: { x: "${{ nodes.fetch.output.content }}" } },
++      ];
++    },
++    (d) => {
++      node(d, "fetch").post = [
++        {
++          id: "tell",
++          kind: "block",
++          uses: "slack.post_message@1",
++          with: { channel: "#ap", text: "${{ hook.node.id }}" },
++        },
++      ];
++    },
++  ];
++  const results = edits.map((e) => check(e));
++  for (const r of results) {
++    assert.deepEqual(l3(r), []);
++    assert.deepEqual(r.layers_run, ["L1", "L2", "L3", "H"]);
++  }
++  for (const i of [0, 1, 2, 4]) {
++    assert.equal(results[i]?.ok, true, `N${i + 1}`);
++    assert.deepEqual(results[i]?.warnings, [], `N${i + 1}`);
++  }
++  const n4 = results[3];
++  assert.equal(n4?.ok, false);
++  assert.deepEqual(
++    n4?.errors.map((e) => [e.layer, e.code, e.node, e.path]),
++    [["H", "H_BLOCK", "extract", "/nodes/extract/pre/0/uses"]],
++  );
++});
+diff --git a/src/authoring/validate/taint.test.ts b/src/authoring/validate/taint.test.ts
+index e1329da..0ce4461 100644
+--- a/src/authoring/validate/taint.test.ts
++++ b/src/authoring/validate/taint.test.ts
+@@ -147,6 +147,17 @@ test("C-f97887e5 hook edges are not checked", () => {
+   assert.doesNotThrow(() => {
+     r = validateFlow(doc, caseCatalogue());
+   });
+-  assert.deepEqual(r?.errors, []);
++  assert.equal(r?.ok, false);
++  assert.deepEqual(r?.errors, [
++    {
++      layer: "L3",
++      code: "L3_TAINT_TO_CONSEQUENTIAL",
++      node: "extract",
++      path: "/nodes/extract/pre/0/with/body",
++      message:
++        "untrusted data from fetch reaches hook h on extract through nodes.fetch.output.content, a block with side effects; pass it through an llm.extract node first",
++    },
++  ]);
+   assert.deepEqual(r?.warnings, []);
++  assert.deepEqual(r?.layers_run, ["L1", "L2", "L3"]);
+ });
