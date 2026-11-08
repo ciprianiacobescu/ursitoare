@@ -1,0 +1,245 @@
+import assert from "node:assert/strict";
+import { test } from "node:test";
+
+import type { JsonValue } from "../../authoring/index.ts";
+import { fixedClock, sequentialIds } from "../../core/index.ts";
+import { createMemoryRunStore } from "../../runs/index.ts";
+import type { RunRecord, RunStore, StepRecord, TenantContext } from "../../runs/index.ts";
+import { createWorkerSandbox } from "../../sandbox/index.ts";
+import type { WorkerSandbox } from "../../sandbox/index.ts";
+import { loadTestCatalogue } from "../../../test/support/catalogue/loader.ts";
+import { parseCatalogueFlow } from "../../../test/support/catalogue/flows.ts";
+import { hookRunVersion, readHookRunText } from "../../../test/support/hook-runs/index.ts";
+import { executeRun, memoryWorkflowOps, startRun } from "../index.ts";
+import type {
+  EffectGate,
+  InterpreterDeps,
+  LoadedVersion,
+  ToolCall,
+  ToolInvoker,
+} from "../index.ts";
+import type { HookTraceEntry } from "./types.ts";
+
+const T_A: TenantContext = { tenantId: "tenant_a", reviewProfile: "solo" };
+const ALICE = { userId: "u_alice", kind: "human" } as const;
+const INPUT: JsonValue = { vendor: "  Acme ", amount: 120, currency: "eur" };
+const PAY_INPUT: JsonValue = { vendor: "Acme", invoice: "inv-1", amount: 120 };
+const LOOKUP_OK = { vendor_id: "v1", status: "active" };
+const PAID = { payment_id: "pay-1", status: "paid" };
+const CATALOGUE = loadTestCatalogue();
+
+const PAY_ONCE = `ursitoare: "0.1"
+flow: pay-once
+version: 1.0.0
+inputs: {type: object, properties: {vendor: {type: string}, invoice: {type: string}, amount: {type: number}}, required: [vendor, invoice, amount]}
+start: lookup
+nodes:
+  lookup: {kind: block, uses: erp.lookup_vendor@1, with: {vendor_name: "\${{ inputs.vendor }}"}, next: route}
+  route: {kind: switch, on: "\${{ nodes.lookup.output.status }}", cases: {active: pay}, default: rejected}
+  pay: {kind: block, uses: erp.create_payment@1, with: {vendor_id: "\${{ nodes.lookup.output.vendor_id }}", amount: "\${{ inputs.amount }}", currency: EUR, reference: "\${{ inputs.invoice }}"}, next: done}
+  done: {kind: end, status: completed, output: {payment_id: "\${{ nodes.pay.output.payment_id }}"}}
+  rejected: {kind: end, status: failed}
+`;
+
+function payOnce(withHook: boolean): LoadedVersion {
+  const text = withHook
+    ? PAY_ONCE.replace(
+        "next: route}",
+        'next: route, post: [{id: noop, kind: code, source: "return;"}]}',
+      )
+    : PAY_ONCE;
+  return {
+    flowId: "pay-once",
+    hash: `sha256:${"a".repeat(64)}`,
+    state: "validated",
+    ownerTeam: "finance",
+    flow: parseCatalogueFlow(text, "pay-once"),
+  };
+}
+
+function onionOwn(): LoadedVersion {
+  const text = readHookRunText("onion");
+  const from = 'post: {kind: code, source: "return;"}}\n  - {id: rule_b';
+  assert.ok(text.includes(from), "the replacement text is in the fixture");
+  return {
+    ...hookRunVersion("onion"),
+    flow: parseCatalogueFlow(
+      text.replace(from, 'post: {kind: code, source: "return;", routes: [done]}}\n  - {id: rule_b'),
+      "onion-own",
+    ),
+  };
+}
+
+interface Pass {
+  result: RunRecord;
+  executed: readonly string[];
+  values: JsonValue[];
+  steps: StepRecord[];
+  obs: string[];
+  payCalls: ToolCall[];
+  lookupCalls: number;
+  sandboxRuns: number;
+}
+
+interface Setup {
+  version: LoadedVersion;
+  input: JsonValue;
+  fakeSandbox: boolean;
+}
+
+async function pass(
+  setup: Setup,
+  store: RunStore,
+  recorded: readonly JsonValue[] | null,
+): Promise<Pass> {
+  const pool = createWorkerSandbox({ size: 1 });
+  let sandboxRuns = 0;
+  const sandbox: WorkerSandbox = {
+    ...pool,
+    run: (code, hctx, limits, opts) => {
+      if (opts.binding === "ctx") sandboxRuns += 1;
+      if (setup.fakeSandbox) {
+        return Promise.resolve({ ok: true, value: null, stats: { ms: 0, memBytes: 0 } });
+      }
+      return pool.run(code, hctx, limits, opts);
+    },
+  } as WorkerSandbox;
+  const payCalls: ToolCall[] = [];
+  let lookupCalls = 0;
+  const obs: string[] = [];
+  const invoker: ToolInvoker = {
+    async invoke(call) {
+      if (call.tool === "erp.lookup_vendor@1") {
+        lookupCalls += 1;
+        return { output: LOOKUP_OK };
+      }
+      if (call.tool === "erp.create_payment@1") {
+        payCalls.push(call);
+        return { output: PAID };
+      }
+      throw new Error(`unexpected tool ${call.tool}`);
+    },
+  };
+  const gate: EffectGate = {
+    async before() {
+      return { action: "invoke", idemKey: "ik_pay_1" };
+    },
+    async after() {},
+  };
+  const deps = {
+    store,
+    durable: null,
+    loadVersion: async () => setup.version,
+    catalogueFor: async () => CATALOGUE,
+    invokerFor: async () => invoker,
+    effects: gate,
+    clock: fixedClock("2026-11-02T10:00:00Z"),
+    ids: sequentialIds(0),
+    sandbox,
+    hookObserver: (nodeId: string, entry: HookTraceEntry): void => {
+      obs.push(`${nodeId}/${entry.label}${entry.fused ? "*" : ""}`);
+    },
+  } as InterpreterDeps;
+  try {
+    if (recorded === null) {
+      await startRun(deps, T_A, {
+        flowId: setup.version.flowId,
+        hash: setup.version.hash,
+        mode: "mock",
+        input: setup.input,
+        mocks: null,
+        principal: ALICE,
+        actorChain: [ALICE.userId],
+        runId: "r_1",
+      });
+    }
+    const values: JsonValue[] = [];
+    const base = memoryWorkflowOps("r_1", recorded ?? []);
+    const ops = {
+      get workflowId(): string {
+        return base.workflowId;
+      },
+      async runStep<T extends JsonValue>(name: string, fn: () => Promise<T>): Promise<T> {
+        const value = await base.runStep(name, fn);
+        values.push(value);
+        return value;
+      },
+      sleep: (ms: number) => base.sleep(ms),
+      get executed(): readonly string[] {
+        return base.executed;
+      },
+      get slept(): readonly number[] {
+        return base.slept;
+      },
+    };
+    const result = await executeRun(ops, deps, T_A, "r_1");
+    const listed = await store.listSteps(T_A, "r_1", { limit: 100 });
+    return {
+      result,
+      executed: base.executed,
+      values,
+      steps: listed.steps,
+      obs,
+      payCalls,
+      lookupCalls,
+      sandboxRuns,
+    };
+  } finally {
+    await pool.close();
+  }
+}
+
+test("C-14990344 a replay of onion-own runs only the later steps and keeps the rows", async () => {
+  const setup: Setup = { version: onionOwn(), input: INPUT, fakeSandbox: false };
+  const store = createMemoryRunStore();
+  const first = await pass(setup, store, null);
+  assert.equal(first.result.state, "completed");
+  assert.equal(first.values.length, 9);
+  assert.equal(first.payCalls.length, 1);
+  assert.equal(first.obs.length, 8);
+  const cases: [number, string[], number, number][] = [
+    [4, ["pay", "pay#done", "pay:post:rule.rule_a", "done", "run:finish"], 6, 1],
+    [6, ["pay:post:rule.rule_a", "done", "run:finish"], 1, 0],
+    [9, [], 0, 0],
+  ];
+  for (const [k, executed, sandboxRuns, payCalls] of cases) {
+    const again = await pass(setup, store, first.values.slice(0, k));
+    assert.deepEqual(again.executed, executed, `executed for ${k}`);
+    assert.equal(again.sandboxRuns, sandboxRuns, `sandbox runs for ${k}`);
+    assert.equal(again.payCalls.length, payCalls, `invoker calls for ${k}`);
+    if (payCalls === 1) assert.deepEqual(again.payCalls[0]?.args, first.payCalls[0]?.args);
+    assert.deepEqual(again.obs, first.obs, `observer for ${k}`);
+    assert.deepEqual(again.steps, first.steps, `rows for ${k}`);
+    assert.equal(again.steps.find((s) => s.nodeId === "pay")?.idemKey, "ik_pay_1");
+  }
+});
+
+test("C-c56d71ac C-9272817b a fused no-op hook leaves the pay-once steps and rows as in M4", async () => {
+  const plain = await pass(
+    { version: payOnce(false), input: PAY_INPUT, fakeSandbox: true },
+    createMemoryRunStore(),
+    null,
+  );
+  const store = createMemoryRunStore();
+  const setup: Setup = { version: payOnce(true), input: PAY_INPUT, fakeSandbox: true };
+  const hooked = await pass(setup, store, null);
+  assert.equal(hooked.result.state, "completed");
+  assert.deepEqual(hooked.executed, plain.executed);
+  assert.deepEqual(hooked.steps, plain.steps);
+  assert.deepEqual(hooked.obs, ["lookup/post:noop*"]);
+  assert.equal(hooked.sandboxRuns, 1);
+
+  const replay = await pass(setup, store, hooked.values.slice(0, 4));
+  assert.deepEqual(replay.executed, ["pay", "pay#done", "done", "run:finish"]);
+  assert.equal(replay.payCalls.length, 1);
+  assert.equal(replay.lookupCalls, 0);
+  assert.equal(replay.sandboxRuns, 0);
+  assert.deepEqual(replay.steps, hooked.steps);
+  assert.deepEqual(replay.obs, ["lookup/post:noop*"]);
+
+  const full = await pass(setup, store, hooked.values);
+  assert.deepEqual(full.executed, []);
+  assert.equal(full.payCalls.length, 0);
+  assert.deepEqual(full.steps, hooked.steps);
+  assert.equal(full.result.state, "completed");
+});
