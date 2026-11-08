@@ -16,6 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | accepted | 3.1 | technical | src/interpreter/hooks/visit-pre.test.ts:183: sandboxRuns counts the normalize node's sandbox run, giving 9, not 8 |
 | Q-004 | answered | 3.3 | technical | Grant write access for the red step |
 | Q-005 | answered | 3.4 | harness | Task 3.4: the pre-satisfied check could not decide |
+| Q-006 | open | 3.5 | harness | Task 3.5: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -331,3 +332,104 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: Count the fault tests on the evidence of the real run. The unit head already implements every clause of the Faults scenario in this unit's own new files: the pipeline refuses a kind without runner and a code hook without sandbox before the first step, the code runner maps a rejecting sandbox to HOOK_ERROR sandbox_unavailable and a sandbox fault to HOOK_ERROR with its code, normalizeHookReturn gives HOOK_ACTION_INVALID with keyword payload, and the output check gives INTERPRETER_OUTPUT_INVALID with details.hook. Task 3.4 therefore has nothing left to add for that criterion, so its new tests can only pin behaviour built by tasks 3.1 to 3.3 and cannot fail by assertion against the head. Against the unit base they fail because the base has no hook runtime at all and the scaffold stubs throw, which is an error and not an assertion, so the base run cannot show discrimination although the criterion is plainly not satisfied by the base. The assertions of the nineteen tests check exactly the values of the Faults scenario and of the test plan's Variants and Sandbox faults tables, including the fixed messages, the failed row, the step position and the absence of the secret text. The taint tests of the same step fail by assertion, since the rows still carry only nodeInputTaint. The lint error in the excerpt names a baseInput assignment that is not in the head's visit.ts, so the replay of the two test files alone is not affected by it.
+
+---
+
+## Q-006: Task 3.5: the pre-satisfied check could not decide
+
+- **Status:** open
+- **Blocking tasks:** 3.5
+- **Kind:** harness
+- **Asked:** 2026-11-08T01:18Z by claude-sonnet, run r-20261108T0033Z-999a, task 3.5
+- **Criteria:** C-14990344 (hooks-runtime › A replay runs no recorded hook and reaches the same rows › Replay of onion-own)
+
+### Context
+L4 could not run the pre-satisfied check of task 3.5, so it does not count the failure against the agent: no attempt was used and no profile was escalated.
+Why: the zero-value run varies Python files only, and src/interpreter/hooks/replay.test.ts is not a Python file; the base run: its new tests fail against the unit base code only by an error, not by assertion
+Runs: test-base-run
+Kept real: nothing
+Tests: src.interpreter.hooks.replay.test.ts::C-14990344 a replay of onion-own runs only the later steps and keeps the rows
+
+Changes the replay applies (1 files):
+    added src/interpreter/hooks/replay.test.ts
+
+Source of the tests (redacted; at most 40 lines each):
+src.interpreter.hooks.replay.test.ts::C-14990344 a replay of onion-own runs only the later steps and keeps the rows:
+    test("C-14990344 a replay of onion-own runs only the later steps and keeps the rows", async () => {
+      const setup: Setup = { version: onionOwn(), input: INPUT, fakeSandbox: false };
+      const store = createMemoryRunStore();
+      const first = await pass(setup, store, null);
+      assert.equal(first.result.state, "completed");
+      assert.equal(first.values.length, 9);
+      assert.equal(first.payCalls.length, 1);
+      assert.equal(first.obs.length, 8);
+      const cases: [number, string[], number, number][] = [
+        [4, ["pay", "pay#done", "pay:post:rule.rule_a", "done", "run:finish"], 6, 1],
+        [6, ["pay:post:rule.rule_a", "done", "run:finish"], 1, 0],
+        [9, [], 0, 0],
+      ];
+      for (const [k, executed, sandboxRuns, payCalls] of cases) {
+        const again = await pass(setup, store, first.values.slice(0, k));
+        assert.deepEqual(again.executed, executed, `executed for ${k}`);
+        assert.equal(again.sandboxRuns, sandboxRuns, `sandbox runs for ${k}`);
+        assert.equal(again.payCalls.length, payCalls, `invoker calls for ${k}`);
+        if (payCalls === 1) assert.deepEqual(again.payCalls[0]?.args, first.payCalls[0]?.args);
+        assert.deepEqual(again.obs, first.obs, `observer for ${k}`);
+        assert.deepEqual(again.steps, first.steps, `rows for ${k}`);
+        assert.equal(again.steps.find((s) => s.nodeId === "pay")?.idemKey, "ik_pay_1");
+      }
+    });
+
+Diff of src/interpreter/hooks/replay.test.ts (redacted; at most 40 lines of at most 400 characters shown; a cut says so):
+    diff --git a/src/interpreter/hooks/replay.test.ts b/src/interpreter/hooks/replay.test.ts
+    new file mode 100644
+    index 0000000..c69ff01
+    --- /dev/null
+    +++ b/src/interpreter/hooks/replay.test.ts
+    @@ -0,0 +1,245 @@
+    +import assert from "node:assert/strict";
+    +import { test } from "node:test";
+    +
+    +import type { JsonValue } from "../../authoring/index.ts";
+    +import { fixedClock, sequentialIds } from "../../core/index.ts";
+    +import { createMemoryRunStore } from "../../runs/index.ts";
+    +import type { RunRecord, RunStore, StepRecord, TenantContext } from "../../runs/index.ts";
+    +import { createWorkerSandbox } from "../../sandbox/index.ts";
+    +import type { WorkerSandbox } from "../../sandbox/index.ts";
+    +import { loadTestCatalogue } from "../../../test/support/catalogue/loader.ts";
+    +import { parseCatalogueFlow } from "../../../test/support/catalogue/flows.ts";
+    +import { hookRunVersion, readHookRunText } from "../../../test/support/hook-runs/index.ts";
+    +import { executeRun, memoryWorkflowOps, startRun } from "../index.ts";
+    +import type {
+    +  EffectGate,
+    +  InterpreterDeps,
+    +  LoadedVersion,
+    +  ToolCall,
+    +  ToolInvoker,
+    +} from "../index.ts";
+    +import type { HookTraceEntry } from "./types.ts";
+    +
+    +const T_A: TenantContext = { tenantId: "tenant_a", reviewProfile: "solo" };
+    +const ALICE = { userId: "u_alice", kind: "human" } as const;
+    +const INPUT: JsonValue = { vendor: "  Acme ", amount: 120, currency: "eur" };
+    +const PAY_INPUT: JsonValue = { vendor: "Acme", invoice: "inv-1", amount: 120 };
+    +const LOOKUP_OK = { vendor_id: "v1", status: "active" };
+    +const PAID = { payment_id: "pay-1", status: "paid" };
+    +const CATALOGUE = loadTestCatalogue();
+    +
+    +const PAY_ONCE = `ursitoare: "0.1"
+    +flow: pay-once
+    +version: 1.0.0
+    +inputs: {type: object, properties: {vendor: {type: string}, invoice: {type: string}, amount: {type: number}}, required: [vendor, invoice, amount]}
+    [cut: 211 more lines; the cut lines are replayed too: the whole change is in `openspec/changes/add-hook-runtime/.l4/held/3.5-pre_satisfied.patch` on the unit branch]
+
+`accept: <why>` replays exactly the saved change of 1 files (the whole patch is in `openspec/changes/add-hook-runtime/.l4/held/3.5-pre_satisfied.patch` on the unit branch): the next run applies it, with every guard and gate an agent's changes get, instead of starting an agent. The accept takes effect only through that replay: if the replay fails a gate or the check refutes a criterion, the accept is used up, and a later step that meets the same inconclusive check is held again with a new question. When the check cannot decide again during the replay, the claim is taken (the verifier and the judge see that it was accepted). A criterion that the check shows not to discriminate still fails the attempt.
+`retry: <note>` runs the check again, for example after an L4 upgrade; the note reaches the agent.
+A person answers; an agent only where `clarifier.answer_by_agents` is true on the base branch.
+
+### Options
+1. accept: count these on the evidence of the real run
+2. retry: run the check again (after an L4 upgrade or a fix)
+
+### Answer
+<!-- write below this line -->
