@@ -131,3 +131,4 @@
 {"at":"2026-11-08T09:00:57Z","run":"r-20261108T0900Z-b2ed","type":"unit.dispatched","unit":"openspec:add-block-hooks"}
 {"at":"2026-11-08T10:09:19Z","head":"91d76769288477c546cf51e4995e4237d60cca2d","pr":98,"target_before":"c2a2344d87ff8f9eedaec0aff1a2564dd7e6a842","type":"unit.merge_requested","unit":"openspec:add-block-hooks"}
 {"at":"2026-11-08T10:09:24Z","ci":"not_run","head":"91d76769288477c546cf51e4995e4237d60cca2d","merge_commit":"e349f9c0185a32d1a00777d0db1c731217d260ac","method":"squash","pr":98,"raced":false,"type":"unit.merged","unit":"openspec:add-block-hooks"}
+{"at":"2026-11-08T10:09:29Z","branch":"l4/openspec/add-block-hooks","head":"91d76769288477c546cf51e4995e4237d60cca2d","type":"unit.branch_deleted","unit":"openspec:add-block-hooks"}
