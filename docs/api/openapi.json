@@ -4184,6 +4184,140 @@
                               }
                             ]
                           },
+                          "hooks": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "entries": {
+                                "items": {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "action": {
+                                      "anyOf": [
+                                        {
+                                          "type": "null"
+                                        },
+                                        {
+                                          "enum": [
+                                            "continue",
+                                            "skip",
+                                            "redirect",
+                                            "retry",
+                                            "fail"
+                                          ],
+                                          "type": "string"
+                                        }
+                                      ]
+                                    },
+                                    "attempt": {
+                                      "type": "integer"
+                                    },
+                                    "error": {
+                                      "anyOf": [
+                                        {
+                                          "type": "null"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "code": {
+                                              "type": "string"
+                                            },
+                                            "message": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "code",
+                                            "message"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      ]
+                                    },
+                                    "fused": {
+                                      "type": "boolean"
+                                    },
+                                    "idemKey": {
+                                      "type": [
+                                        "null",
+                                        "string"
+                                      ]
+                                    },
+                                    "kind": {
+                                      "enum": [
+                                        "code",
+                                        "block"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    },
+                                    "mutated": {
+                                      "anyOf": [
+                                        {
+                                          "type": "null"
+                                        },
+                                        {
+                                          "enum": [
+                                            "input",
+                                            "output"
+                                          ],
+                                          "type": "string"
+                                        }
+                                      ]
+                                    },
+                                    "state": {
+                                      "enum": [
+                                        "completed",
+                                        "failed"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "to": {
+                                      "type": [
+                                        "null",
+                                        "string"
+                                      ]
+                                    },
+                                    "tool": {
+                                      "type": [
+                                        "null",
+                                        "string"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "label",
+                                    "kind",
+                                    "fused",
+                                    "attempt",
+                                    "state",
+                                    "action",
+                                    "mutated",
+                                    "to",
+                                    "error",
+                                    "tool",
+                                    "idemKey"
+                                  ],
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "inputOriginalRef": {
+                                "pattern": "^[0-9a-f]{64}$",
+                                "type": [
+                                  "null",
+                                  "string"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "inputOriginalRef",
+                              "entries"
+                            ],
+                            "type": "object"
+                          },
                           "idemKey": {
                             "type": [
                               "null",

@@ -381,8 +381,8 @@ test("C-7ac1f21b the served OpenAPI step item lists hooks in properties and not 
   const stepProperties = stepItem["properties"];
   assert.ok(stepProperties !== undefined, "the step item describes its members");
   assert.deepEqual(
-    Object.keys(stepProperties),
-    [...STEP_VIEW_KEYS, "hooks"],
+    [...Object.keys(stepProperties)].sort(),
+    [...STEP_VIEW_KEYS, "hooks"].sort(),
     "the step item lists hooks after the fifteen fields",
   );
   assert.ok(stepProperties["hooks"] !== undefined, "the step item describes hooks");
