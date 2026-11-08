@@ -15,6 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | 3.1 | technical | Grant write access for the red step |
 | Q-003 | accepted | 3.1 | technical | src/interpreter/hooks/visit-pre.test.ts:183: sandboxRuns counts the normalize node's sandbox run, giving 9, not 8 |
 | Q-004 | answered | 3.3 | technical | Grant write access for the red step |
+| Q-005 | open | 3.4 | harness | Task 3.4: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -102,3 +103,229 @@ Edit and Write were denied in this session (don't ask mode). The red step has to
 ### Answer
 <!-- write below this line -->
 No permission grant is needed and none can be given here; the denial follows from the red step itself. A red step may not change a production file: `src/runs/intents/gate.ts` is production, and tasks.md 3.3 puts `IntentCall.generation?` and the key in the "then" part that green implements after the two tests are written. Leave `gate.ts` untouched at red. Write only the two new test files, with paths relative to the worktree root (`src/runs/intents/gate-generation.db.test.ts` and `src/interpreter/hooks/retry.test.ts`), as the 3.1 and 3.2 red steps did for `visit-pre.test.ts` and `visit-post.test.ts`. Make the gate test typecheck without the field by casting the call, for example `{ ...CALL, generation: 1 } as IntentCall`, the same pattern `runtimes.test.ts` uses with `as NodeServices` and `visit-pre.test.ts` with `as InterpreterDeps` for members green adds later. `createEffectIntents` then keys every call with `idemKey(tenant, lineage, node, effectSeq)` at generation 0, so the generation-1 `before` returns `K0` and the test fails by assertion (expected `K1`), and the invalid generations -1 and 1.5 fail by assertion too (wrap those in `await assert.rejects(p, { code: "INTENT_INVALID" })`); green adds `generation?: number` to `IntentCall`, `call.generation ?? 0` to `keyOf`, and the retry attempts to `pipeline.ts` and `visit.ts`.
+
+---
+
+## Q-005: Task 3.4: the pre-satisfied check could not decide
+
+- **Status:** open
+- **Blocking tasks:** 3.4
+- **Kind:** harness
+- **Asked:** 2026-11-08T00:27Z by claude-sonnet, run r-20261107T2350Z-4917, task 3.4
+- **Criteria:** C-8243f499 (hooks-runtime › A hook fault fails the node and never leaves a run running › Faults)
+
+### Context
+L4 could not run the pre-satisfied check of task 3.4, so it does not count the failure against the agent: no attempt was used and no profile was escalated.
+Why: the zero-value run varies Python files only, and src/interpreter/hooks/faults.test.ts is not a Python file; the base run: its new tests fail against the unit base code only by an error, not by assertion
+Runs: test-base-run
+Kept real: nothing
+Tests: src.interpreter.hooks.faults.test.ts::C-8243f499 a code hook with no sandbox fails before the first step, src.interpreter.hooks.faults.test.ts::C-8243f499 a hook of a kind with no runner fails HOOK_UNSUPPORTED with no row, src.interpreter.hooks.faults.test.ts::C-8243f499 a mutated post output that is not a payload fails inside its own step, src.interpreter.hooks.faults.test.ts::C-8243f499 a rejecting sandbox run fails the node sandbox_unavailable, src.interpreter.hooks.faults.test.ts::C-8243f499 a return outside the grammar fails the node, src.interpreter.hooks.faults.test.ts::C-8243f499 a skip output outside the schema fails INTERPRETER_OUTPUT_INVALID, src.interpreter.hooks.faults.test.ts::C-8243f499 a throwing hook fails HOOK_ERROR with runtime_error and leaks nothing, src.interpreter.hooks.faults.test.ts::C-8243f499 an input that is not a storable payload fails HOOK_ACTION_INVALID, src.interpreter.hooks.faults.test.ts::C-8243f499 an unresolved input reference fails before any hook runs, src.interpreter.hooks.faults.test.ts::C-8243f499 sandbox fault input_invalid fails the node HOOK_ERROR (+9 more)
+
+Changes the replay applies (2 files):
+    added src/interpreter/hooks/faults.test.ts
+    added src/interpreter/hooks/taint.test.ts
+
+Source of the tests (redacted; at most 40 lines each):
+src.interpreter.hooks.faults.test.ts::C-8243f499 a code hook with no sandbox fails before the first step:
+    test("C-8243f499 a code hook with no sandbox fails before the first step", async () => {
+      const scene = await runFlow(hookRunVersion("skip-read"), "none");
+      assert.equal(scene.result.state, "failed");
+      assert.equal(scene.result.error?.code, "INTERPRETER_NO_SANDBOX");
+      assert.equal(scene.result.error?.node, "lookup");
+      assert.deepEqual(scene.result.error?.details, { hook: "lookup:pre:cache_hit" });
+      assert.deepEqual(scene.executed, [...LEAD, "run:finish"]);
+      assert.deepEqual(scene.steps, []);
+    });
+src.interpreter.hooks.faults.test.ts::C-8243f499 a hook of a kind with no runner fails HOOK_UNSUPPORTED with no row:
+    test("C-8243f499 a hook of a kind with no runner fails HOOK_UNSUPPORTED with no row", async () => {
+      const version = variant("skip-read", "F7", "kind: code, source", "kind: mystery, source");
+      const scene = await runFlow(version);
+      assert.equal(scene.result.state, "failed");
+      assert.equal(scene.result.error?.code, "HOOK_UNSUPPORTED");
+      assert.deepEqual(scene.result.error?.details, { hook: "lookup:pre:cache_hit", kind: "mystery" });
+      assert.deepEqual(scene.executed, [...LEAD, "run:finish"]);
+      assert.deepEqual(scene.steps, []);
+    });
+src.interpreter.hooks.faults.test.ts::C-8243f499 a mutated post output that is not a payload fails inside its own step:
+    test("C-8243f499 a mutated post output that is not a payload fails inside its own step", async () => {
+      const version = variant(
+        "redirect",
+        "F6",
+        "if (ctx.output.risk === 'high' && ctx.next.id === 'pay') return { action: 'redirect', to: 'review' };",
+        "return { action: 'continue', output: { risk: 'a\\\\u0000b' } };",
+      );
+      const scene = await runFlow(version, "pool", { vendor: "Acme", amount: 2000, mode: "auto" });
+      assert.equal(scene.result.state, "failed");
+      assert.equal(scene.result.error?.code, "HOOK_ACTION_INVALID");
+      assert.equal(scene.result.error?.details?.["keyword"], "payload");
+      assert.equal(scene.executed[scene.executed.length - 2], "classify:post:to_review");
+      assert.equal(scene.steps.find((step) => step.nodeId === "classify")?.state, "failed");
+    });
+src.interpreter.hooks.faults.test.ts::C-8243f499 a rejecting sandbox run fails the node sandbox_unavailable:
+    test("C-8243f499 a rejecting sandbox run fails the node sandbox_unavailable", async () => {
+      const scene = await runFlow(
+        hookRunVersion("skip-read"),
+        (pool) =>
+          rejecting(pool, async () => {
+            throw new Error(`${SECRET} closed`);
+          }),
+      );
+      assert.equal(scene.result.state, "failed");
+      assert.equal(scene.result.error?.code, "HOOK_ERROR");
+      assert.deepEqual(scene.result.error?.details, {
+        hook: "lookup:pre:cache_hit",
+        fault: "sandbox_unavailable",
+      });
+      assert.equal(scene.executed[scene.executed.length - 2], "lookup");
+      assert.equal(scene.steps[0]?.state, "failed");
+      noSecret(scene);
+    });
+src.interpreter.hooks.faults.test.ts::C-8243f499 a return outside the grammar fails the node:
+    test("C-8243f499 a return outside the grammar fails the node", async () => {
+      const scene = await runFlow(skipReadWith("return 5;", "F4"));
+      assert.equal(scene.result.state, "failed");
+      assert.equal(scene.result.error?.code, "HOOK_ERROR");
+      assert.equal(scene.result.error?.details?.["fault"], "output_invalid");
+      assert.equal(scene.steps[0]?.state, "failed");
+    });
+src.interpreter.hooks.faults.test.ts::C-8243f499 a skip output outside the schema fails INTERPRETER_OUTPUT_INVALID:
+    test("C-8243f499 a skip output outside the schema fails INTERPRETER_OUTPUT_INVALID", async () => {
+      const scene = await runFlow(
+        skipReadWith('return { action: "skip", output: { vendor_id: 5, status: "active" } };', "F3"),
+      );
+      assert.equal(scene.result.state, "failed");
+      assert.equal(scene.result.error?.code, "INTERPRETER_OUTPUT_INVALID");
+      assert.deepEqual(scene.result.error?.details, {
+        path: "/vendor_id",
+        keyword: "type",
+        hook: "lookup:pre:cache_hit",
+      });
+    });
+src.interpreter.hooks.faults.test.ts::C-8243f499 a throwing hook fails HOOK_ERROR with runtime_error and leaks nothing:
+    test("C-8243f499 a throwing hook fails HOOK_ERROR with runtime_error and leaks nothing", async () => {
+      const scene = await runFlow(skipReadWith(`throw new Error("${SECRET}");`, "F1"));
+      assert.equal(scene.result.state, "failed");
+      assert.equal(scene.result.error?.code, "HOOK_ERROR");
+      assert.deepEqual(scene.result.error?.details, { hook: "lookup:pre:cache_hit", fault: "runtime_error" });
+      assert.equal(scene.steps[0]?.state, "failed");
+      assert.equal(scene.calls.length, 0);
+      noSecret(scene);
+    });
+src.interpreter.hooks.faults.test.ts::C-8243f499 an input that is not a storable payload fails HOOK_ACTION_INVALID:
+    test("C-8243f499 an input that is not a storable payload fails HOOK_ACTION_INVALID", async () => {
+      const scene = await runFlow(
+        skipReadWith('return { action: "continue", input: { vendor_name: "a\\u0000b" } };', "F2"),
+      );
+      assert.equal(scene.result.state, "failed");
+      assert.equal(scene.result.error?.code, "HOOK_ACTION_INVALID");
+      assert.equal(scene.result.error?.details?.["keyword"], "payload");
+      assert.equal(scene.steps[0]?.state, "failed");
+      assert.equal(scene.calls.length, 0);
+    });
+src.interpreter.hooks.faults.test.ts::C-8243f499 an unresolved input reference fails before any hook runs:
+    test("C-8243f499 an unresolved input reference fails before any hook runs", async () => {
+      const version = variant("skip-read", "F5", "${{ inputs.vendor }}", "${{ inputs.missing }}");
+      const scene = await runFlow(version);
+      assert.equal(scene.result.state, "failed");
+      assert.equal(scene.result.error?.code, "INTERPRETER_REF_UNRESOLVED");
+      assert.equal(scene.hookCalls, 0);
+    });
+src.interpreter.hooks.faults.test.ts::C-8243f499 sandbox fault input_invalid fails the node HOOK_ERROR:
+    (the source of this test was not found)
+
+Diff of src/interpreter/hooks/faults.test.ts (redacted; at most 40 lines of at most 400 characters shown; a cut says so):
+    diff --git a/src/interpreter/hooks/faults.test.ts b/src/interpreter/hooks/faults.test.ts
+    new file mode 100644
+    index 0000000..e1e6d3a
+    --- /dev/null
+    +++ b/src/interpreter/hooks/faults.test.ts
+    @@ -0,0 +1,261 @@
+    +import assert from "node:assert/strict";
+    +import { test } from "node:test";
+    +
+    +import type { JsonValue } from "../../authoring/index.ts";
+    +import { fixedClock, sequentialIds } from "../../core/index.ts";
+    +import { createMemoryRunStore } from "../../runs/index.ts";
+    +import type { RunRecord, RunStore, StepRecord, TenantContext } from "../../runs/index.ts";
+    +import { createWorkerSandbox } from "../../sandbox/index.ts";
+    +import type { SandboxResult, WorkerSandbox } from "../../sandbox/index.ts";
+    +import { loadTestCatalogue } from "../../../test/support/catalogue/loader.ts";
+    +import { parseCatalogueFlow } from "../../../test/support/catalogue/flows.ts";
+    +import { hookRunVersion, readHookRunText } from "../../../test/support/hook-runs/index.ts";
+    +import { executeRun, memoryWorkflowOps, startRun } from "../index.ts";
+    +import type {
+    +  EffectGate,
+    +  InterpreterDeps,
+    +  LoadedVersion,
+    +  ToolCall,
+    +  ToolInvoker,
+    +} from "../index.ts";
+    +import type { HookTraceEntry } from "./types.ts";
+    +
+    +const T_A: TenantContext = { tenantId: "tenant_a", reviewProfile: "solo" };
+    +const ALICE = { userId: "u_alice", kind: "human" } as const;
+    +const INPUT: JsonValue = { vendor: "  Acme ", amount: 120, currency: "eur" };
+    +const CATALOGUE = loadTestCatalogue();
+    +const LEAD = ["run:load", "run:start"];
+    +const SECRET = "secret-" + "token";
+    +
+    +type SandboxKind = "none" | "pool" | ((pool: WorkerSandbox) => WorkerSandbox);
+    +
+    +interface Scene {
+    +  result: RunRecord;
+    +  executed: readonly string[];
+    [cut: 227 more lines; the cut lines are replayed too: the whole change is in `openspec/changes/add-hook-runtime/.l4/held/3.4-pre_satisfied.patch` on the unit branch]
+
+Diff of src/interpreter/hooks/taint.test.ts (redacted; at most 40 lines of at most 400 characters shown; a cut says so):
+    diff --git a/src/interpreter/hooks/taint.test.ts b/src/interpreter/hooks/taint.test.ts
+    new file mode 100644
+    index 0000000..6d66356
+    --- /dev/null
+    +++ b/src/interpreter/hooks/taint.test.ts
+    @@ -0,0 +1,115 @@
+    +import assert from "node:assert/strict";
+    +import { test } from "node:test";
+    +
+    +import type { JsonValue } from "../../authoring/index.ts";
+    +import { fixedClock, sequentialIds } from "../../core/index.ts";
+    +import { createMemoryRunStore } from "../../runs/index.ts";
+    +import type { RunRecord, RunStore, StepRecord, StepWrite, TenantContext } from "../../runs/index.ts";
+    +import { createWorkerSandbox } from "../../sandbox/index.ts";
+    +import { loadTestCatalogue } from "../../../test/support/catalogue/loader.ts";
+    +import { parseCatalogueFlow } from "../../../test/support/catalogue/flows.ts";
+    +import { hookRunVersion, readHookRunText } from "../../../test/support/hook-runs/index.ts";
+    +import { executeRun, memoryWorkflowOps, NO_EFFECT_GATE, startRun } from "../index.ts";
+    +import type { InterpreterDeps, LoadedVersion, ToolInvoker } from "../index.ts";
+    +
+    +const T_A: TenantContext = { tenantId: "tenant_a", reviewProfile: "solo" };
+    +const ALICE = { userId: "u_alice", kind: "human" } as const;
+    +const CATALOGUE = loadTestCatalogue();
+    +
+    +interface Scene {
+    +  result: RunRecord;
+    +  writes: StepWrite[];
+    +  rows: StepRecord[];
+    +}
+    +
+    +async function runFlow(version: LoadedVersion): Promise<Scene> {
+    +  const inner: RunStore = createMemoryRunStore();
+    +  const writes: StepWrite[] = [];
+    +  const store: RunStore = {
+    +    createRun: (ctx, run, at) => inner.createRun(ctx, run, at),
+    +    getRun: (ctx, runId) => inner.getRun(ctx, runId),
+    +    transition: (ctx, runId, change) => inner.transition(ctx, runId, change),
+    +    async recordStep(ctx, step) {
+    +      writes.push(step);
+    +      return inner.recordStep(ctx, step);
+    [cut: 81 more lines; the cut lines are replayed too: the whole change is in `openspec/changes/add-hook-runtime/.l4/held/3.4-pre_satisfied.patch` on the unit branch]
+
+`accept: <why>` replays exactly the saved change of 2 files (the whole patch is in `openspec/changes/add-hook-runtime/.l4/held/3.4-pre_satisfied.patch` on the unit branch): the next run applies it, with every guard and gate an agent's changes get, instead of starting an agent. The accept takes effect only through that replay: if the replay fails a gate or the check refutes a criterion, the accept is used up, and a later step that meets the same inconclusive check is held again with a new question. When the check cannot decide again during the replay, the claim is taken (the verifier and the judge see that it was accepted). A criterion that the check shows not to discriminate still fails the attempt.
+`retry: <note>` runs the check again, for example after an L4 upgrade; the note reaches the agent.
+A person answers; an agent only where `clarifier.answer_by_agents` is true on the base branch.
+
+### Options
+1. accept: count these on the evidence of the real run
+2. retry: run the check again (after an L4 upgrade or a fix)
+
+### Answer
+<!-- write below this line -->
