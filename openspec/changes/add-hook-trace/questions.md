@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.1 | technical | src/api/run-hooks.test.ts:383 expects the served OpenAPI properties in declaration order |
+| Q-002 | open | 3.2 | technical | src/interpreter/hooks/replay.test.ts:228 asserts no hooks on a row that must now carry its hook trace |
 <!-- l4:index:end -->
 
 ---
@@ -34,6 +35,29 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/api/run-hooks.test.ts`: at lines 383-387, compare `[...Object.keys(stepProperties)].sort()` with `[...STEP_VIEW_KEYS, "hooks"].sort()`, since the served document sorts keys alphabetically.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: src/interpreter/hooks/replay.test.ts:228 asserts no hooks on a row that must now carry its hook trace
+
+- **Status:** open
+- **Blocking tasks:** 3.2
+- **Kind:** technical
+- **Asked:** 2026-11-08T05:31Z by deepseek-free, run r-20261108T0414Z-dff2, task 3.2
+
+### Context
+The frozen test 'C-c56d71ac C-9272817b a fused no-op hook leaves the pay-once steps and rows as in M4' runs pay-once with a fused post:noop hook and asserts at line 228 `assert.deepEqual(hooked.steps, plain.steps)`. The requirement 'The final row of a node attempt carries that attempt's hook trace' (C-1335c3ed) and design decision 6 require the lookup row to carry `hooks: { inputOriginalRef: null, entries: [the post:noop entry] }` because that attempt produced one HookRun.entry; the new trace tests pass on that behaviour, so the old assertion is superseded. Task 3.2 names only the two trace tests as changed, and green may not edit test-glob files (L4 resets them to base), so this needs the file unfrozen for this task.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/interpreter/hooks/replay.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-hook-trace`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/interpreter/hooks/replay.test.ts`: replace line 228 `assert.deepEqual(hooked.steps, plain.steps);` with `assert.deepEqual(hooked.steps.map((step) => ({ ...step, hooks: undefined })), plain.steps.map((step) => ({ ...step, hooks: undefined })));` and add after it `assert.deepEqual(hooked.steps.find((step) => step.nodeId === "lookup")?.hooks, { inputOriginalRef: null, entries: [{ label: "post:noop", kind: "code", fused: true, attempt: 1, state: "completed", action: "continue", mutated: null, to: null, error: null, tool: null, idemKey: null }] });` so the test still proves the rest of the row is unchanged and now asserts the trace.
+
+### Clarifier suggestion
+Edit `src/interpreter/hooks/replay.test.ts`: replace line 228 `assert.deepEqual(hooked.steps, plain.steps);` with `assert.deepEqual(hooked.steps.map((step) => ({ ...step, hooks: undefined })), plain.steps.map((step) => ({ ...step, hooks: undefined })));` and add after it `assert.deepEqual(hooked.steps.find((step) => step.nodeId === "lookup")?.hooks, { inputOriginalRef: null, entries: [{ label: "post:noop", kind: "code", fused: true, attempt: 1, state: "completed", action: "continue", mutated: null, to: null, error: null, tool: null, idemKey: null }] });` so the test still proves the rest of the row is unchanged and now asserts the trace.
 
 ### Answer
 <!-- write below this line -->
