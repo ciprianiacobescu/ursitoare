@@ -2,3 +2,4 @@
 {"ts": "2026-11-08T06:26:58.961215Z", "run_id": "r-20261108T0626Z-2a9d", "unit": "openspec:add-hook-trace", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 96, "merge_commit": "0b3f14065632b32a1ffd611c02a0af6f05596829"}
 {"ts": "2026-11-08T06:27:04.841765Z", "run_id": "r-20261108T0626Z-2a9d", "unit": "openspec:add-hook-trace", "seq": 3, "type": "archive.opened", "number": 97, "url": "<forge>/ciprianiacobescu/ursitoare/pull/97", "branch": "l4/archive/openspec/add-hook-trace", "head": "c2a2344d87ff8f9eedaec0aff1a2564dd7e6a842"}
 {"ts": "2026-11-08T06:27:06.505793Z", "run_id": "r-20261108T0626Z-2a9d", "unit": "openspec:add-hook-trace", "seq": 4, "type": "archive.merged", "head": "c2a2344d87ff8f9eedaec0aff1a2564dd7e6a842", "number": 97}
+{"ts": "2026-11-08T06:27:08.217776Z", "run_id": "r-20261108T0626Z-2a9d", "unit": "openspec:add-hook-trace", "seq": 5, "type": "run.finished", "exit_code": 0}
