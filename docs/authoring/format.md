@@ -74,6 +74,30 @@ lower-case letter. Canonical JSON re-prints each reference in a value field as
 `${{ <reference> }}`, but leaves text around references, `source`,
 `instructions`, `goal` and `description` unchanged.
 
+## Running code and hooks
+
+`code` nodes and `code` hooks run pure JavaScript with no I/O. A node has at most 16 pre-hooks and 16 post-hooks (16 hooks in all), a flow at most 16 rules, and a hook or rule id at most 64 characters.
+
+- A code node body reads its input as `input`.
+- A code node body must return an object.
+- A code node body is pure: it does no I/O.
+- A code node body sees a clock frozen to the run's step time.
+- A code node body sees a seeded `Math.random`.
+- A code node body runs under `CODE_LIMITS` (1000 ms, 32 MiB).
+- A code hook body reads `ctx` and returns nothing or an object with an `action`.
+- A code hook body runs under `HOOK_LIMITS`, the same 1000 ms and 32 MiB.
+- `continue` lets the node go on; a pre-hook may replace its input and a post-hook its output.
+- `skip` lets a pre-hook answer with the node's `output`, so the node does no work.
+- `redirect` lets a post-hook send the run to a node of its `routes` instead of the node's successor.
+- `retry` lets a post-hook run the node and its post-hooks again as the next attempt, without its pre-hooks, up to `max_retries`.
+- `fail` lets a pre-hook or a post-hook fail the node and the run with its `reason`.
+- A pre-hook may return: continue (with input), skip (read block or code node only), fail.
+- A post-hook may return: continue (with output on a code or block node), redirect (from a code, switch, wait or block node, to a node in routes, never an effect node), retry (with max_retries; an effect node needs allow_effect_retry; never on pay), fail.
+- A node has at most 16 pre-hooks and 16 post-hooks, a flow at most 16 rules, and a hook or rule id at most 64 characters.
+- `max_retries` is an integer from 1 to 5, set only on a post code hook.
+- A retry never re-pays: `max_retries` is refused (`H_RETRY_SCOPE`) on a `pay` node and when the node's post-hooks hold a `pay` block hook, and a `send`, `write` or unknown-effect node or post block hook needs `allow_effect_retry: true`.
+- A hook route into a node of effect `write`, `send`, `pay` or unknown (an agent, a subflow) is refused (`H_ROUTE_EFFECT`).
+
 ## Errors
 
 Parsing returns either a document or one error whose code is a stable string:
