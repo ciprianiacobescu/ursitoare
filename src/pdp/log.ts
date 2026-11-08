@@ -1,5 +1,5 @@
 import { TENANT_ID_PATTERN } from "../tenancy/index.ts";
-import type { TenantContext, TenantTx } from "../tenancy/index.ts";
+import type { TenantContext, TenantPool, TenantTx } from "../tenancy/index.ts";
 import { requestDigest, sha256Hex } from "./digest.ts";
 import { PdpError } from "./errors.ts";
 import type { Decision, PolicyRequest } from "./types.ts";
@@ -139,4 +139,14 @@ export async function recordDecision(
       sqlstate,
     });
   }
+}
+
+export async function recordDecisionOwnTx(
+  _pool: TenantPool,
+  _ctx: TenantContext,
+  _decision: Decision,
+  _req: PolicyRequest,
+  _extra?: { runId?: string; nodeId?: string },
+): Promise<boolean> {
+  throw new Error("not implemented");
 }

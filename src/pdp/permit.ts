@@ -50,3 +50,7 @@ export function buildPermit(egress: Egress): Permit {
     ttlSeconds: egress.ttlSeconds,
   });
 }
+
+export function isIssuedPermit(_value: unknown): boolean {
+  throw new Error("not implemented");
+}
