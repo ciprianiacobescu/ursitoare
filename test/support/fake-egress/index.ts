@@ -143,9 +143,25 @@ export async function startFakeEgress(opts: FakeEgressOptions = {}): Promise<Fak
     issued: [],
     requests: [],
     events: [],
-    emit(event: FakeAuditEvent): Promise<void> {
+    async emit(event: FakeAuditEvent): Promise<void> {
       state.events.push(event);
-      return Promise.resolve();
+      const sink = opts.auditSink ?? null;
+      if (sink === null) return;
+      const { emitter, ...body } = event;
+      try {
+        const res = await fetch(`${sink}/v1/internal/audit/emit`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "x-mintkey-service-token": emitter === "broker" ? brokerServiceToken : proxyServiceToken,
+          },
+          body: JSON.stringify(body),
+          signal: AbortSignal.timeout(2000),
+        });
+        await res.arrayBuffer();
+      } catch {
+        // a failing sink is ignored
+      }
     },
   };
 

@@ -270,7 +270,18 @@ async function handle(state: FakeState, req: http.IncomingMessage, res: http.Ser
       raw.push(name, upRes.rawHeaders[i + 1] ?? "");
     }
     res.writeHead(status, upRes.statusMessage, raw);
+    // With a content-length the caller is complete at the last byte, so that chunk waits for the record.
+    const declared = Number(upRes.headers["content-length"]);
+    let remaining = Number.isInteger(declared) && declared >= 0 ? declared : -1;
+    let held: Buffer | null = null;
     upRes.on("data", (c: Buffer) => {
+      if (remaining >= 0) {
+        remaining -= c.length;
+        if (remaining <= 0) {
+          held = c;
+          return;
+        }
+      }
       if (!res.write(c)) {
         upRes.pause();
         res.once("drain", () => {
@@ -280,7 +291,7 @@ async function handle(state: FakeState, req: http.IncomingMessage, res: http.Ser
     });
     upRes.on("end", () => {
       finish(status).then(
-        () => res.end(),
+        () => res.end(held ?? undefined),
         () => res.destroy(),
       );
     });
