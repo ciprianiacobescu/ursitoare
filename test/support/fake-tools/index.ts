@@ -11,6 +11,8 @@ import { readCatalogueDocument } from "../catalogue/document.ts";
 import { CatalogueDataError } from "../catalogue/errors.ts";
 import { FIXTURE_REFS, fixtureFor } from "./fixtures.ts";
 
+export * from "./contract.ts";
+
 export const FAKE_TOOLS_HOST: string = "tools.fake.test";
 
 export const FAKE_TOOLS_ORIGIN: string = "https://tools.fake.test";

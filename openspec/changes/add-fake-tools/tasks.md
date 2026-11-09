@@ -17,7 +17,7 @@ Every test file (`readme.test.ts` has no function under test) starts with `asser
 
 ## 4. The contract suite
 
-- [ ] 4.1 Write `test/support/fake-tools/contract.test.ts` first (scenario "The contract suite passes on the fake and fails on broken targets": the names array, one `test(check.name, check.run)` per check on the fake, mutants M1 and M2 as `node:http` forwarding servers closed in `finally`, the closed port), then implement `fakeToolsContract` in `test/support/fake-tools/contract.ts` (it imports `type ContractCheck` from `../fake-oidc/index.ts`) and add `export * from "./contract.ts"` to `test/support/fake-tools/index.ts`, implementing requirement "The contract suite runs against a base URL"
+- [x] 4.1 Write `test/support/fake-tools/contract.test.ts` first (scenario "The contract suite passes on the fake and fails on broken targets": the names array, one `test(check.name, check.run)` per check on the fake, mutants M1 and M2 as `node:http` forwarding servers closed in `finally`, the closed port), then implement `fakeToolsContract` in `test/support/fake-tools/contract.ts` (it imports `type ContractCheck` from `../fake-oidc/index.ts`) and add `export * from "./contract.ts"` to `test/support/fake-tools/index.ts`, implementing requirement "The contract suite runs against a base URL"
 
 ## 5. The part and the README
 
