@@ -127,18 +127,22 @@ test("C-d0c13cf0: registerToolServer stores a pending server with its first surf
     );
     assert.deepEqual(await listToolServers(db.appPool, b, { limit: 10, after: null }), []);
 
-    const stored = await db.ownerPool.query<{ origin: string }>(
-      "SELECT origin FROM ursitoare.tool_server WHERE tool_server_id = 'beta'",
+    const stored = await withTenantTx(db.ownerPool, a, (tx) =>
+      tx.query<{ origin: string }>(
+        "SELECT origin FROM ursitoare.tool_server WHERE tool_server_id = 'beta'",
+      ),
     );
     assert.equal(stored.rows[0]?.origin, ORIGIN);
-    const servers = await db.ownerPool.query<{ n: number }>(
-      "SELECT count(*)::int AS n FROM ursitoare.tool_server",
+    const servers = await withTenantTx(db.ownerPool, a, (tx) =>
+      tx.query<{ n: number }>("SELECT count(*)::int AS n FROM ursitoare.tool_server"),
     );
-    const surfaces = await db.ownerPool.query<{ n: number }>(
-      "SELECT count(*)::int AS n FROM ursitoare.tool_surface",
+    const surfaces = await withTenantTx(db.ownerPool, a, (tx) =>
+      tx.query<{ n: number }>("SELECT count(*)::int AS n FROM ursitoare.tool_surface"),
     );
-    const events = await db.ownerPool.query<{ n: number }>(
-      "SELECT count(*)::int AS n FROM ursitoare.audit_event WHERE event_type = 'tools.server_registered'",
+    const events = await withTenantTx(db.ownerPool, a, (tx) =>
+      tx.query<{ n: number }>(
+        "SELECT count(*)::int AS n FROM ursitoare.audit_event WHERE event_type = 'tools.server_registered'",
+      ),
     );
     assert.equal(servers.rows[0]?.n, 3);
     assert.equal(surfaces.rows[0]?.n, 3);
@@ -209,8 +213,8 @@ test("C-d0c13cf0: registerToolServer refuses invalid inputs and surfaces with th
     for (const [over, expected] of inputs) {
       assert.deepEqual(await attempt(db.appPool, a, over), expected);
     }
-    const servers = await db.ownerPool.query<{ n: number }>(
-      "SELECT count(*)::int AS n FROM ursitoare.tool_server",
+    const servers = await withTenantTx(db.ownerPool, a, (tx) =>
+      tx.query<{ n: number }>("SELECT count(*)::int AS n FROM ursitoare.tool_server"),
     );
     assert.equal(servers.rows[0]?.n, 0);
     // a valid registration still succeeds, so the refusals above are not a blanket failure
@@ -240,8 +244,8 @@ test("C-d0c13cf0: registerToolServerTx refuses a transaction of another tenant a
       caught = error as { code?: unknown };
     }
     assert.equal(caught.code, "TOOLS_TENANT_MISMATCH");
-    const rows = await db.ownerPool.query<{ tool_server_id: string }>(
-      "SELECT tool_server_id FROM ursitoare.tool_server",
+    const rows = await withTenantTx(db.ownerPool, a, (tx) =>
+      tx.query<{ tool_server_id: string }>("SELECT tool_server_id FROM ursitoare.tool_server"),
     );
     assert.deepEqual(
       rows.rows.map((r) => r.tool_server_id),

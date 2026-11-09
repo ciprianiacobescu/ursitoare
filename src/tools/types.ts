@@ -2,8 +2,8 @@
 
 import type { BlockImport } from "../registry/index.ts";
 
-type Effect = BlockImport["effect"];
-type JsonSchema = BlockImport["input"];
+export type Effect = BlockImport["effect"];
+export type JsonSchema = BlockImport["input"];
 
 export type ToolAdapter = "fixture" | "mcp" | "http_openapi" | "code_block";
 
@@ -81,8 +81,10 @@ export class ToolsError extends Error {
   readonly code: ToolsErrorCode;
   readonly details: Readonly<Record<string, string>>;
 
-  constructor(_code: ToolsErrorCode, message: string, _details?: Record<string, string>) {
+  constructor(code: ToolsErrorCode, message: string, details?: Record<string, string>) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "ToolsError";
+    this.code = code;
+    this.details = details ?? {};
   }
 }
