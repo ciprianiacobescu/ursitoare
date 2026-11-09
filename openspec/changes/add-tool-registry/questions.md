@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-f1acd012 (tool-registry › validateOrigin accepts public https origins and refuses unsafe ones › Each of 55 inputs is accepted or refused with its reason): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-9e03eeea (tool-registry › The surface digest is canonical, fixtureSurface builds fixture surfaces, and block refs are chosen by content › The digest ignores order and fills defaults, fixtu |
 | Q-005 | answered | none | verdict | Criterion C-d0c13cf0 (tool-registry › Registering a server stores it pending with its first surface › Register stores a pending server and refuses what is invalid, taken or foreign): accept as satisfi |
-| Q-006 | open | none | verdict | Criterion C-59cbd279 (tool-registry › Approval needs another admin in a team and an explicit, audited self-approval when solo › A team refuses the submitter, a solo tenant needs the flag, and every re |
+| Q-006 | answered | none | verdict | Criterion C-59cbd279 (tool-registry › Approval needs another admin in a team and an explicit, audited self-approval when solo › A team refuses the submitter, a solo tenant needs the flag, and every re |
 | Q-007 | open | none | verdict | Criterion C-6d84e4c8 (tool-registry › Approval writes immutable bound block versions and a failure between its two steps leaves them inert › Approval imports bound blocks, and a repeat completes after |
 | Q-008 | open | none | verdict | Criterion C-0955b490 (tool-registry › A changed surface disables the server until its new digest is approved › A submitted surface drifts an approved server and re-approval restores it): accept as sat |
 | Q-009 | open | none | verdict | Criterion C-c3474bfc (tool-registry › The directory resolves a ref only to the approved definition of a bound tool › The directory answers an approved tool, a drifted one with its state, and null for  |
@@ -188,7 +188,8 @@ accept The store tests register acme as ALICE and deep-equal REC_PENDING, repeat
 
 ## Q-006: Criterion C-59cbd279 (tool-registry › Approval needs another admin in a team and an explicit, audited self-approval when solo › A team refuses the submitter, a solo tenant needs the flag, and every re
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -215,6 +216,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The approval test registers acme and beta as ALICE and runs the seven approval calls of the test plan in order: approver_is_submitter, digest_mismatch, self_approval_required and TOOLS_NOT_FOUND with id nope, then asserts no acme or beta block rows and no tools.surface_ audit event; ALICE's flagged solo approval yields beta approved with self_approved true and one tools.surface_self_approved event with payload digest and refs; DAVE's team approval returns REC_APPROVED_A with the two sorted refs, self_approved false and one tools.surface_approved event; the repeat throws nothing_pending. The code decides the refusals in the specified order in a read-only transaction before the import.
 ---
 
 ## Q-007: Criterion C-6d84e4c8 (tool-registry › Approval writes immutable bound block versions and a failure between its two steps leaves them inert › Approval imports bound blocks, and a repeat completes after
