@@ -2,7 +2,7 @@ Every test file (`readme.test.ts` has no function under test) starts with `asser
 
 ## 1. The fixtures
 
-- [ ] 1.1 Write `test/support/fake-tools/fixtures.test.ts` first (scenario "All 20 outputs match their fixtures and fit their schemas", the pure half: `fixtureFor` for the 20 samples and E1 to E18 by value, each output valid against its block's `output` schema with the test's own Ajv, `digestHex("ik-01", 8)` equal to `57819766`, `fixtureFor("__proto__", {}, "")` throwing `RangeError`, the sorted `FIXTURE_REFS` equal to the sorted `loadTestCatalogue().blockRefs()`, and N1 and N3 to N8 of `test-plan.md` § Refusal rows as `fixtureFor` calls), then implement `test/support/fake-tools/fixtures.ts` (design.md § Fixtures), implementing the fixtures of requirement "The fake serves the 20 catalogue blocks with fixed outputs and records each call"
+- [x] 1.1 Write `test/support/fake-tools/fixtures.test.ts` first (scenario "All 20 outputs match their fixtures and fit their schemas", the pure half: `fixtureFor` for the 20 samples and E1 to E18 by value, each output valid against its block's `output` schema with the test's own Ajv, `digestHex("ik-01", 8)` equal to `57819766`, `fixtureFor("__proto__", {}, "")` throwing `RangeError`, the sorted `FIXTURE_REFS` equal to the sorted `loadTestCatalogue().blockRefs()`, and N1 and N3 to N8 of `test-plan.md` § Refusal rows as `fixtureFor` calls), then implement `test/support/fake-tools/fixtures.ts` (design.md § Fixtures), implementing the fixtures of requirement "The fake serves the 20 catalogue blocks with fixed outputs and records each call"
 
 ## 2. The server
 
