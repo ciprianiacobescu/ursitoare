@@ -14,7 +14,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 4. The token
 
-- [ ] 4.1 Write `src/gateway/token.test.ts` first (scenario "requestToken posts one issue request and holds the token privately"), then implement `recordingFetch` in `test/support/gateway-kit.ts` and `createGateway` and `requestToken` in `src/gateway/client.ts` (design decisions 4 and 6, the timer and size cap being task 5.3's), implementing requirement "requestToken issues a one-use token for an issued permit"
+- [x] 4.1 Write `src/gateway/token.test.ts` first (scenario "requestToken posts one issue request and holds the token privately"), then implement `recordingFetch` in `test/support/gateway-kit.ts` and `createGateway` and `requestToken` in `src/gateway/client.ts` (design decisions 4 and 6, the timer and size cap being task 5.3's), implementing requirement "requestToken issues a one-use token for an issued permit"
 
 ## 5. Send
 

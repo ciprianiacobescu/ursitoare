@@ -56,11 +56,23 @@ export async function issuedPermit(over?: Partial<Egress>): Promise<Permit> {
 
 // Signature stubs (milestone scaffold, docs/decisions/0002): the change that owns this file implements them.
 
-export function recordingFetch(_answers: (Response | Error)[]): {
+export function recordingFetch(answers: (Response | Error)[]): {
   fetch: typeof fetch;
   calls: { url: string; init: RequestInit }[];
 } {
-  throw new Error("not implemented");
+  const calls: { url: string; init: RequestInit }[] = [];
+  const queue = [...answers];
+
+  const fetchFn = async (input: string | URL | Request, init?: RequestInit): Promise<Response> => {
+    const url = typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
+    calls.push({ url, init: init ?? {} });
+    const answer = queue.shift();
+    if (answer === undefined) throw new Error("recordingFetch: no answer queued");
+    if (answer instanceof Error) throw answer;
+    return answer;
+  };
+
+  return { fetch: fetchFn as typeof fetch, calls };
 }
 
 export function captureLogger(): { logger: Logger; lines(): Record<string, unknown>[] } {
