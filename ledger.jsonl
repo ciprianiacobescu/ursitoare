@@ -54,3 +54,5 @@
 {"at":"2026-11-09T09:58:26Z","revision":"26fd28310a1a62cefe3a67bb97ebb968900485f9","type":"unit.integrated","unit":"openspec:add-gateway-client"}
 {"at":"2026-11-09T09:58:26Z","attempt":1,"cost_usd":2.071573,"runs":4,"type":"plan.charged","unit":"openspec:add-gateway-client"}
 {"at":"2026-11-09T10:00:26Z","branch":"l4/archive/openspec/add-gateway-client","head":"c6eb88a0cf84f8dbcccaf67476e6c093a19ff1a4","type":"unit.branch_deleted","unit":"openspec:add-gateway-client"}
+{"at":"2026-11-09T10:00:27Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-fake-tools"}
+{"at":"2026-11-09T10:00:27Z","run":"r-20261109T1000Z-7bad","type":"unit.dispatched","unit":"openspec:add-fake-tools"}
