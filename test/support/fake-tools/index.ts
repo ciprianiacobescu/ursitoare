@@ -1,13 +1,25 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
+import { createHash } from "node:crypto";
+import http from "node:http";
+import type { IncomingMessage, ServerResponse } from "node:http";
+import type { Socket } from "node:net";
 
-export const FAKE_TOOLS_HOST: string = "";
+import { Ajv2020 } from "ajv/dist/2020.js";
 
-export const FAKE_TOOLS_ORIGIN: string = "";
+import type { Effect } from "../../../src/authoring/index.ts";
+import { readCatalogueDocument } from "../catalogue/document.ts";
+import { CatalogueDataError } from "../catalogue/errors.ts";
+import { FIXTURE_REFS, fixtureFor } from "./fixtures.ts";
 
-export const FAKE_TOOLS_KEY_HEADER: string = "";
+export const FAKE_TOOLS_HOST: string = "tools.fake.test";
 
-export function fakeToolPath(_ref: string): string {
-  throw new Error("not implemented");
+export const FAKE_TOOLS_ORIGIN: string = "https://tools.fake.test";
+
+export const FAKE_TOOLS_KEY_HEADER: string = "x-fake-tools-key";
+
+const BLOCKS_PREFIX = "/blocks/";
+
+export function fakeToolPath(ref: string): string {
+  return `${BLOCKS_PREFIX}${ref}`;
 }
 
 export interface FakeToolCall {
@@ -40,6 +52,215 @@ export interface FakeTools {
   close(): Promise<void>;
 }
 
-export async function startFakeTools(_opts?: FakeToolsOptions): Promise<FakeTools> {
-  throw new Error("not implemented");
+function loadBlocks(cataloguePath?: string): Map<string, Effect> {
+  const document = readCatalogueDocument(cataloguePath);
+  const ajv = new Ajv2020({ allErrors: false, strict: false, validateFormats: false });
+  const blocks = new Map<string, Effect>();
+  for (const ref of FIXTURE_REFS) {
+    const block = document.blocks[ref];
+    if (!Object.hasOwn(document.blocks, ref) || block === undefined) {
+      throw new CatalogueDataError("CATALOGUE_INVALID", `${ref}: missing`);
+    }
+    try {
+      ajv.compile(block.input);
+      ajv.compile(block.output);
+    } catch {
+      throw new CatalogueDataError("CATALOGUE_INVALID", `${ref}: schema does not compile`);
+    }
+    blocks.set(ref, block.effect);
+  }
+  return blocks;
+}
+
+function rawHeader(req: IncomingMessage, name: string): string | null {
+  const value = req.headers[name];
+  if (value === undefined) {
+    return null;
+  }
+  return Array.isArray(value) ? (value[0] ?? null) : value;
+}
+
+function pathOf(url: string): string {
+  const query = url.indexOf("?");
+  return query === -1 ? url : url.slice(0, query);
+}
+
+function decodeRef(raw: string): string {
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
+function respond(res: ServerResponse, status: number, body: unknown, headers: Record<string, string> = {}): void {
+  const text = JSON.stringify(body);
+  res.writeHead(status, {
+    "content-type": "application/json; charset=utf-8",
+    "content-length": String(Buffer.byteLength(text)),
+    ...headers,
+  });
+  res.end(text);
+}
+
+function readBody(req: IncomingMessage): Promise<Buffer | null> {
+  return new Promise((resolve) => {
+    const chunks: Buffer[] = [];
+    let settled = false;
+    const finish = (body: Buffer | null): void => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      resolve(body);
+    };
+    req.on("data", (chunk: Buffer) => {
+      chunks.push(chunk);
+    });
+    req.on("end", () => finish(Buffer.concat(chunks)));
+    req.on("aborted", () => finish(null));
+    req.on("error", () => finish(null));
+    req.on("close", () => {
+      if (!req.complete) {
+        finish(null);
+      }
+    });
+  });
+}
+
+export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeTools> {
+  const blocks = loadBlocks(opts.catalogue);
+
+  const records: FakeToolCall[] = [];
+  let seq = 0;
+  let port = 0;
+  const sockets = new Set<Socket>();
+
+  async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> {
+    const host = (rawHeader(req, "host") ?? "").toLowerCase();
+    if (host !== FAKE_TOOLS_HOST && host !== `127.0.0.1:${port}`) {
+      req.resume();
+      respond(res, 421, { error: "misdirected_request" });
+      return;
+    }
+
+    const path = pathOf(req.url ?? "/");
+    if (!path.startsWith(BLOCKS_PREFIX)) {
+      req.resume();
+      respond(res, 404, { error: "not_found" });
+      return;
+    }
+
+    if (req.method !== "POST") {
+      req.resume();
+      respond(res, 405, { error: "method_not_allowed" }, { allow: "POST" });
+      return;
+    }
+
+    const rawRef = path.slice(BLOCKS_PREFIX.length);
+    const ref = decodeRef(rawRef);
+    const effect = blocks.get(ref);
+    if (effect === undefined) {
+      req.resume();
+      respond(res, 404, { error: "unknown_block", block: ref });
+      return;
+    }
+
+    const body = await readBody(req);
+    if (body === null) {
+      return;
+    }
+
+    const text = body.toString("utf8");
+    let input: unknown;
+    if (text.trim() === "") {
+      input = {};
+    } else {
+      try {
+        input = JSON.parse(text);
+      } catch {
+        input = {};
+      }
+    }
+
+    const idempotencyKey = rawHeader(req, "idempotency-key");
+    const keyHeader = rawHeader(req, FAKE_TOOLS_KEY_HEADER);
+    const fixtureKey = effect === "read" ? "" : (idempotencyKey ?? "");
+    const result = fixtureFor(ref, input as Record<string, unknown>, fixtureKey);
+
+    seq += 1;
+    const record: FakeToolCall = {
+      seq,
+      ref,
+      effect,
+      method: req.method ?? "",
+      path,
+      host,
+      callHeader: rawHeader(req, "x-ursitoare-call"),
+      idempotencyKey,
+      keyHeaderSeen: keyHeader !== null && keyHeader !== "",
+      input,
+      bodySha256: createHash("sha256").update(body).digest("hex"),
+      status: result.status,
+      duplicate: false,
+    };
+    records.push(record);
+
+    if (result.status === 200) {
+      respond(res, 200, result.output, { "x-fake-tools-duplicate": "false" });
+    } else {
+      respond(res, result.status, result.body);
+    }
+  }
+
+  const server = http.createServer((req, res) => {
+    handle(req, res).catch(() => {
+      if (!res.headersSent) {
+        respond(res, 500, { error: "internal" });
+      } else {
+        res.destroy();
+      }
+    });
+  });
+  server.on("connection", (socket: Socket) => {
+    sockets.add(socket);
+    socket.on("close", () => sockets.delete(socket));
+  });
+
+  await new Promise<void>((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", () => resolve());
+  });
+  const address = server.address();
+  if (address === null || typeof address === "string") {
+    server.close();
+    throw new Error("fake tools listener has no port");
+  }
+  port = address.port;
+
+  let closing: Promise<void> | undefined;
+  return {
+    origin: `http://127.0.0.1:${port}`,
+    calls(filter: { ref?: string; callHeader?: string } = {}): FakeToolCall[] {
+      return structuredClone(
+        records.filter(
+          (record) =>
+            (filter.ref === undefined || record.ref === filter.ref) &&
+            (filter.callHeader === undefined || record.callHeader === filter.callHeader),
+        ),
+      );
+    },
+    setDelay(_ref: string, _ms: number): void {},
+    failNext(_ref: string, _status: number, _times?: number): void {},
+    reset(): void {},
+    close(): Promise<void> {
+      closing ??= new Promise<void>((resolve) => {
+        server.close(() => resolve());
+        for (const socket of sockets) {
+          socket.destroy();
+        }
+      });
+      return closing;
+    },
+  };
 }
