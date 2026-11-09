@@ -8,7 +8,7 @@ import type { FakeTools } from "../fake-tools/index.ts";
 import { discoverParts } from "./discover.ts";
 import type { E2eStackPart, PartContext, PartHandle } from "./part.ts";
 
-const LOOKUP_OUTPUT = { vendor_id: "V-ACME", status: "active", payment_terms_days: 30 };
+const LOOKUP_OUTPUT = { vendor_id: "V-X", status: "active", payment_terms_days: 30 };
 
 function connectionRefused(port: number): Promise<boolean> {
   return new Promise<boolean>((resolve) => {
