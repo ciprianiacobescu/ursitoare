@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | 5.2 | harness | Task 5.2: the pre-satisfied check could not decide |
 | Q-003 | answered | 5.2 | harness | Task 5.2: the pre-satisfied check could not decide |
 | Q-004 | answered | none | verdict | Finding F-39583b05: Unreachable request body hash is computed before the body is drained |
-| Q-005 | open | none | verdict | Finding F-e6c2caec: task 4.2 is ticked as already satisfied, but its text is not done |
+| Q-005 | answered | none | verdict | Finding F-e6c2caec: task 4.2 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
 ---
@@ -498,7 +498,8 @@ reject The finding describes the code accurately and the behaviour it names is a
 
 ## Q-005: Finding F-e6c2caec: task 4.2 is ticked as already satisfied, but its text is not done
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -518,3 +519,4 @@ This finding cites no criterion: end the reason with one sentence WHEN <the situ
 
 ### Answer
 <!-- write below this line -->
+accept The fact of the finding is right: no file named proxy-pass-through.test.ts exists under the fake's directory, and the tests for the scenarios Streaming, redirects and upstream errors pass through and The credential-less route is fake-only live in the test file that task 4.1 wrote. That is a deviation in file layout only. Both scenarios are tested with their criterion ids: the gated stream read before any record, the 302 with location, both set-cookie lines and x-up, the 500, the two 502 answers with the exact body, the loopback target, the credential-less route without a credential header and the stored credential winning afterwards, and the four TypeError registrations followed by the 502 vault error. Those tests failed at red under task 4.1 against the minimal proxy, and the production code of task 4.2 is in place, so the task's substance is done and the already-satisfied tick is honest about it. The proposal and design name the modules and ask only that each has tests; neither names the test file. A fix would have to move tests out of a frozen test file, which the project forbids and which only a person could commit, and would change no behaviour. The finding is waived.
