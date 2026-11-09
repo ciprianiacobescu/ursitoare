@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-09T09:58:26Z",
+  "integrated_revision": "26fd28310a1a62cefe3a67bb97ebb968900485f9",
+  "merge_commit": "26fd28310a1a62cefe3a67bb97ebb968900485f9",
+  "plan_digest": "deccf2afb3391e9c",
+  "plan_id": "m6",
+  "postcheck": "pass",
+  "pr": 108,
+  "receipt_id": "m6/openspec:add-gateway-client/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "c1ff1b1810313362ba617db17df06945f746a193",
+  "spec_digest": "10c71e999748f784",
+  "target": "main",
+  "unit_id": "openspec:add-gateway-client"
+}
