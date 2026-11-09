@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Criterion C-29de3844 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Approval over HTTP follows the tenant's profile and the approved blocks show as bound |
 | Q-013 | answered | none | verdict | Criterion C-4114528c (tool-registry › The routes register, list, read, submit and approve for tenant admins only › A null pool or engine key answers as the block routes do): accept as satisfied? |
 | Q-014 | answered | none | verdict | Criterion C-0bfb5dc5 (tool-registry › The committed OpenAPI document lists the tool-server routes › The committed document holds the five operations with their actions): accept as satisfied? |
-| Q-015 | open | none | verdict | Hold H-332bbcee: the judge's reply was discarded (part 2 of 2, timeout: no answer within 600s) |
+| Q-015 | answered | none | verdict | Hold H-332bbcee: the judge's reply was discarded (part 2 of 2, timeout: no answer within 600s) |
 <!-- l4:index:end -->
 
 ---
@@ -485,7 +485,8 @@ accept The committed docs/api/openapi.json holds the four tool-server paths and 
 
 ## Q-015: Hold H-332bbcee: the judge's reply was discarded (part 2 of 2, timeout: no answer within 600s)
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -501,3 +502,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold comes from a judge timeout on the second part of the diff, not from a finding. I read the files of that part myself: the tool-server route module, its tests, the OpenAPI test, the committed OpenAPI document and the main.ts registration line. The route module follows design.md § Routes (schemas, error mapping, actor, null-pool and null-key behaviour), the tests walk the route, malformed, approval and null-dependency rows of the route test plan, the document holds the five operations, and the lint error the last gate reported, an unused ANY_OBJECT constant, is no longer present because the constant is used by the detail response schema.
