@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-9e03eeea (tool-registry › The surface digest is canonical, fixtureSurface builds fixture surfaces, and block refs are chosen by content › The digest ignores order and fills defaults, fixtu |
 | Q-005 | answered | none | verdict | Criterion C-d0c13cf0 (tool-registry › Registering a server stores it pending with its first surface › Register stores a pending server and refuses what is invalid, taken or foreign): accept as satisfi |
 | Q-006 | answered | none | verdict | Criterion C-59cbd279 (tool-registry › Approval needs another admin in a team and an explicit, audited self-approval when solo › A team refuses the submitter, a solo tenant needs the flag, and every re |
-| Q-007 | open | none | verdict | Criterion C-6d84e4c8 (tool-registry › Approval writes immutable bound block versions and a failure between its two steps leaves them inert › Approval imports bound blocks, and a repeat completes after |
+| Q-007 | answered | none | verdict | Criterion C-6d84e4c8 (tool-registry › Approval writes immutable bound block versions and a failure between its two steps leaves them inert › Approval imports bound blocks, and a repeat completes after |
 | Q-008 | open | none | verdict | Criterion C-0955b490 (tool-registry › A changed surface disables the server until its new digest is approved › A submitted surface drifts an approved server and re-approval restores it): accept as sat |
 | Q-009 | open | none | verdict | Criterion C-c3474bfc (tool-registry › The directory resolves a ref only to the approved definition of a bound tool › The directory answers an approved tool, a drifted one with its state, and null for  |
 | Q-010 | open | none | verdict | Criterion C-95f2b798 (tool-registry › Tenant admins may register tool servers and approve surfaces › Only tenant admins of the tenant hold the two actions): accept as satisfied? |
@@ -221,7 +221,8 @@ accept The approval test registers acme and beta as ALICE and runs the seven app
 
 ## Q-007: Criterion C-6d84e4c8 (tool-registry › Approval writes immutable bound block versions and a failure between its two steps leaves them inert › Approval imports bound blocks, and a repeat completes after
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -248,6 +249,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test imports the 20 catalogue blocks unbound, has DAVE approve acme in a team and asserts 22 block rows with the two bound acme refs (binding, hash H_LV_F and H_PAY, imported_by u_dave) and the 20 originals unchanged row for row. It then approves gamma through a pool whose client rejects the UPDATE of tool_surface, asserts the injected rejection, gamma pending on D_ONE with its bound block stored (23 rows), repeats through the real pool and asserts the server approved with exactly one registry.block_imported event for the ref. The delta race inserts a rival definition before the block_import advisory lock and asserts TOOLS_REFUSED ref_conflict with delta pending (24 rows); the zeta race inserts SURF_ONE_T before the FOR UPDATE lock and asserts digest_mismatch, zeta pending on D_ONE_T with both surfaces unapproved, no approval event and the inert bound block (25 rows). The implementation decides in a lock-free first transaction, imports through importCatalogue as the approving user, then locks the server row FOR UPDATE as the first statement of the second transaction and rechecks the newest surface before writing, and importCatalogue answers unchanged for a same-hash ref and REGISTRY_CONFLICT for another hash, which approveSurface maps to ref_conflict. The resolve results of gamma and zeta are asserted in the directory test.
 ---
 
 ## Q-008: Criterion C-0955b490 (tool-registry › A changed surface disables the server until its new digest is approved › A submitted surface drifts an approved server and re-approval restores it): accept as sat
