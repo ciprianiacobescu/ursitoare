@@ -32,3 +32,4 @@
 {"at":"2026-11-09T01:13:14Z","run":"r-20261109T0113Z-8a17","type":"unit.dispatched","unit":"openspec:add-fake-egress-proxy"}
 {"at":"2026-11-09T02:42:34Z","attempt":1,"cost_usd":16.027915,"runs":6,"type":"plan.charged","unit":"openspec:add-fake-egress-proxy"}
 {"at":"2026-11-09T02:42:34Z","run":"r-20261109T0242Z-c584","type":"unit.dispatched","unit":"openspec:add-fake-egress-proxy"}
+{"at":"2026-11-09T03:37:57Z","head":"71fc5026733dc89730b2694c1c6d5dad4c2b1135","pr":106,"target_before":"283ccadc21e8265eae6c5220c0178ae0472ab0d3","type":"unit.merge_requested","unit":"openspec:add-fake-egress-proxy"}
