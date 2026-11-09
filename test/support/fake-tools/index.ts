@@ -371,7 +371,13 @@ export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeT
       }
       failures.set(ref, { status, remaining: times });
     },
-    reset(): void {},
+    reset(): void {
+      records.length = 0;
+      effects.clear();
+      delays.clear();
+      failures.clear();
+      seq = 0;
+    },
     close(): Promise<void> {
       closing ??= new Promise<void>((resolve) => {
         for (const [timer, wake] of delayWaiters) {
