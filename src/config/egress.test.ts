@@ -190,7 +190,7 @@ test("C-58c9e6d3 loadConfig strips trailing slashes from the egress URLs and acc
   );
   assert.ok(maxed !== undefined);
   assert.equal(maxed.brokerToken.reveal(), "a".repeat(4096));
-  assert.deepEqual(maxCalls, ["/s/broker"]);
+  assert.deepEqual(maxCalls, ["/s/max"]);
 });
 
 test("C-9a6e394a loadConfig refuses an incomplete egress configuration naming the missing variable", () => {

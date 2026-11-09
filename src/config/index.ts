@@ -6,6 +6,7 @@ export { loadConfig } from "./config.ts";
 export { parseInternalPort } from "./internal.ts";
 export type { OidcConfig } from "./oidc.ts";
 export type { EgressConfig } from "./egress.ts";
+export { loadEgressConfig } from "./egress.ts";
 export type { SecretReader } from "./secret.ts";
 export { Secret } from "./secret.ts";
 export type { ConfigErrorCode } from "./errors.ts";

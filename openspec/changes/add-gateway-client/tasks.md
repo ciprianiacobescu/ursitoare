@@ -6,7 +6,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. The configuration
 
-- [ ] 2.1 Write `src/config/egress.test.ts` first (both config scenarios, through `loadConfig` and a map-backed `SecretReader`), then implement `loadEgressConfig` in `src/config/egress.ts`, add `egress?` to `AppConfig` and the call (after `loadOidcConfig`, the key added only when defined) to `loadConfig` in `src/config/config.ts`, and the export lines to `src/config/index.ts`, implementing requirement "The egress configuration is optional and read from URSITOARE_EGRESS_ variables"
+- [x] 2.1 Write `src/config/egress.test.ts` first (both config scenarios, through `loadConfig` and a map-backed `SecretReader`), then implement `loadEgressConfig` in `src/config/egress.ts`, add `egress?` to `AppConfig` and the call (after `loadOidcConfig`, the key added only when defined) to `loadConfig` in `src/config/config.ts`, and the export lines to `src/config/index.ts`, implementing requirement "The egress configuration is optional and read from URSITOARE_EGRESS_ variables"
 
 ## 3. The pure helpers
 
