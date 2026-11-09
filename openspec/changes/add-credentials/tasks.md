@@ -6,7 +6,7 @@ Tests follow `proposal.md` § Out of scope; fixtures are in `test-plan.md` and `
 
 ## 2. The vault
 
-- [ ] 2.1 Write `src/gateway/vault-codec.test.ts` first (scenario "The codec matches hand-written byte vectors and never sends field 7"), then implement `encodePutCredentialRequest` and `decodePutCredentialResponse` in `src/gateway/vault.ts` and add its value export lines to `src/gateway/index.ts`
+- [x] 2.1 Write `src/gateway/vault-codec.test.ts` first (scenario "The codec matches hand-written byte vectors and never sends field 7"), then implement `encodePutCredentialRequest` and `decodePutCredentialResponse` in `src/gateway/vault.ts` and add its value export lines to `src/gateway/index.ts`
 - [ ] 2.2 Write `src/gateway/vault.test.ts` first (scenario "The writer stores through the fake vault, counts key versions and maps every refusal"), then implement `createVaultWriter` in `src/gateway/vault.ts`
 
 ## 3. Provision

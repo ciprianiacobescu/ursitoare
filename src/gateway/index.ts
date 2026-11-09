@@ -14,4 +14,5 @@ export { createGateway, callHeader } from "./client.ts";
 export { bodyDigest, permitMatches } from "./digest.ts";
 export { mintkeyTenantId } from "./tenant.ts";
 export { checkEgress } from "./self-check.ts";
+export { encodePutCredentialRequest, decodePutCredentialResponse } from "./vault.ts";
 export type { VaultAuthScheme, PutCredentialInput, VaultWriter } from "./vault.ts";
