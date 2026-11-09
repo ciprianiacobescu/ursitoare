@@ -30,5 +30,6 @@ service in the stack tier (`docs/testing.md`).
 | `fake-n8n/` | `add-delegate-n8n` | n8n webhook in, signed callback out |
 | `sandbox-escape.ts` | `add-code-sandbox` | The 42 escape cases as shared data and their verdict helper |
 | `sandbox-exit-worker.ts` | `add-code-sandbox` | A worker that exits at its first message, for crash and respawn tests |
+| `tool-surface.ts` | `add-tool-registry` | `fixtureSurface`: a tool surface built from test-catalogue blocks |
 
 The files `global-setup.ts` and `e2e-stack/main.ts` began as bootstrap placeholders; `add-db-foundation` and `add-e2e-stack` replaced them.
