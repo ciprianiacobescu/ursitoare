@@ -39,3 +39,5 @@
 {"at":"2026-11-09T03:41:49Z","revision":"55ea8cc65d987e3042e105c86c51b2fedb12b9ce","type":"unit.integrated","unit":"openspec:add-fake-egress-proxy"}
 {"at":"2026-11-09T03:41:49Z","attempt":1,"cost_usd":16.027915,"runs":6,"type":"plan.charged","unit":"openspec:add-fake-egress-proxy"}
 {"at":"2026-11-09T03:43:12Z","branch":"l4/archive/openspec/add-fake-egress-proxy","head":"3c30dc1b4fbfd994f50dd3188f728200c042a623","type":"unit.branch_deleted","unit":"openspec:add-fake-egress-proxy"}
+{"at":"2026-11-09T03:43:14Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-gateway-client"}
+{"at":"2026-11-09T03:43:14Z","run":"r-20261109T0343Z-db5e","type":"unit.dispatched","unit":"openspec:add-gateway-client"}
