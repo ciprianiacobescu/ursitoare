@@ -7,6 +7,6 @@ export function createGateway(_config: EgressConfig, _deps: GatewayDeps): Gatewa
   throw new Error("not implemented");
 }
 
-export function callHeader(_tag: CallTag): string {
-  throw new Error("not implemented");
+export function callHeader(tag: CallTag): string {
+  return `${tag.runId}:${tag.nodeId}:${tag.attempt}`;
 }

@@ -1,12 +1,26 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
+import { createHash } from "node:crypto";
 
 import type { Permit } from "../pdp/index.ts";
 import type { OutboundRequest } from "./types.ts";
 
-export function bodyDigest(_body: Uint8Array | null): string {
-  throw new Error("not implemented");
+export function bodyDigest(body: Uint8Array | null): string {
+  const bytes = body ?? new Uint8Array(0);
+  return createHash("sha256").update(bytes).digest("hex");
 }
 
-export function permitMatches(_permit: Permit, _request: OutboundRequest): boolean {
-  throw new Error("not implemented");
+function hostOf(origin: string): string | undefined {
+  try {
+    return new URL(origin).host;
+  } catch {
+    return undefined;
+  }
+}
+
+export function permitMatches(permit: Permit, request: OutboundRequest): boolean {
+  return (
+    permit.method === request.method &&
+    permit.path === request.path &&
+    hostOf(request.origin) === permit.host &&
+    permit.bodyDigest === bodyDigest(request.body)
+  );
 }

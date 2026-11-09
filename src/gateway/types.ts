@@ -43,9 +43,11 @@ export class GatewayError extends Error {
   readonly code: GatewayErrorCode;
   readonly details: Readonly<Record<string, string>>;
 
-  constructor(_code: GatewayErrorCode, message: string, _details?: Record<string, string>) {
+  constructor(code: GatewayErrorCode, message: string, details: Record<string, string> = {}) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "GatewayError";
+    this.code = code;
+    this.details = details;
   }
 }
 
@@ -70,7 +72,7 @@ export const GATEWAY_LIMITS: Readonly<{
   timeoutMs: number;
   selfCheckTimeoutMs: number;
 }> = {
-  maxResponseBytes: 0,
-  timeoutMs: 0,
-  selfCheckTimeoutMs: 0,
+  maxResponseBytes: 1048576,
+  timeoutMs: 30000,
+  selfCheckTimeoutMs: 5000,
 };

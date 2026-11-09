@@ -10,7 +10,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 3. The pure helpers
 
-- [ ] 3.1 Write `src/gateway/helpers.test.ts` first (scenario "Vectors, call header and permit matching"), then implement `GatewayError` and the value of `GATEWAY_LIMITS` in `src/gateway/types.ts`, `bodyDigest` and `permitMatches` in `src/gateway/digest.ts`, `mintkeyTenantId` in `src/gateway/tenant.ts` and `callHeader` in `src/gateway/client.ts`, implementing requirement "Digests, tenant ids, call headers and permit matches are fixed"
+- [x] 3.1 Write `src/gateway/helpers.test.ts` first (scenario "Vectors, call header and permit matching"), then implement `GatewayError` and the value of `GATEWAY_LIMITS` in `src/gateway/types.ts`, `bodyDigest` and `permitMatches` in `src/gateway/digest.ts`, `mintkeyTenantId` in `src/gateway/tenant.ts` and `callHeader` in `src/gateway/client.ts`, implementing requirement "Digests, tenant ids, call headers and permit matches are fixed"
 
 ## 4. The token
 
