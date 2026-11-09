@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 5.1 | technical | test/support/e2e-stack/tools-part.cluster.test.ts:68 P4 expects V-ACME for vendor_name "x" |
+| Q-001 | accepted | 5.1 | technical | test/support/e2e-stack/tools-part.cluster.test.ts:68 P4 expects V-ACME for vendor_name "x" |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: test/support/e2e-stack/tools-part.cluster.test.ts:68 P4 expects V-ACME for vendor_name "x"
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.1
 - **Kind:** technical
 - **Asked:** 2026-11-09T13:58Z by deepseek-free, run r-20261109T1231Z-c5e4, task 5.1
