@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Criterion C-d0c13cf0 (tool-registry › Registering a server stores it pending with its first surface › Register stores a pending server and refuses what is invalid, taken or foreign): accept as satisfi |
 | Q-006 | answered | none | verdict | Criterion C-59cbd279 (tool-registry › Approval needs another admin in a team and an explicit, audited self-approval when solo › A team refuses the submitter, a solo tenant needs the flag, and every re |
 | Q-007 | answered | none | verdict | Criterion C-6d84e4c8 (tool-registry › Approval writes immutable bound block versions and a failure between its two steps leaves them inert › Approval imports bound blocks, and a repeat completes after |
-| Q-008 | open | none | verdict | Criterion C-0955b490 (tool-registry › A changed surface disables the server until its new digest is approved › A submitted surface drifts an approved server and re-approval restores it): accept as sat |
+| Q-008 | answered | none | verdict | Criterion C-0955b490 (tool-registry › A changed surface disables the server until its new digest is approved › A submitted surface drifts an approved server and re-approval restores it): accept as sat |
 | Q-009 | open | none | verdict | Criterion C-c3474bfc (tool-registry › The directory resolves a ref only to the approved definition of a bound tool › The directory answers an approved tool, a drifted one with its state, and null for  |
 | Q-010 | open | none | verdict | Criterion C-95f2b798 (tool-registry › Tenant admins may register tool servers and approve surfaces › Only tenant admins of the tenant hold the two actions): accept as satisfied? |
 | Q-011 | open | none | verdict | Criterion C-0ab1d0b5 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Carol registers and reads, alice is refused and tenant_b sees nothing): accept as sat |
@@ -254,7 +254,8 @@ accept The tracing test imports the 20 catalogue blocks unbound, has DAVE approv
 
 ## Q-008: Criterion C-0955b490 (tool-registry › A changed surface disables the server until its new digest is approved › A submitted surface drifts an approved server and re-approval restores it): accept as sat
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -281,6 +282,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test approves acme on SURF_A and beta on SURF_ONE as ALICE solo flagged, registers gamma, and has DAVE submit the six plan surfaces for acme with the clock advanced one second before each: SURF_A gives REC_APPROVED_A, SURF_B twice and SURF_A once give REC_DRIFTED, the DELETE surface throws TOOLS_INVALID method_without_body and nope throws TOOLS_NOT_FOUND with id nope. It submits SURF_ONE_T for beta and gamma and deep-equals the records to a drifted beta and a pending gamma on D_ONE_T with gamma's approvedDigest null, has CAROL approve D_B in a team for REC_APPROVED_B with blocks create_payment@1 and lookup_vendor@2, asserts that SURF_A submitted again throws surface_known, and checks the three tools.surface_submitted payloads in order. submitSurface locks the server row, returns the record unchanged for the approved or newest unapproved digest, refuses any other stored digest as surface_known, and otherwise inserts the surface, sets an approved server to drifted and appends the event with the drift flag.
 ---
 
 ## Q-009: Criterion C-c3474bfc (tool-registry › The directory resolves a ref only to the approved definition of a bound tool › The directory answers an approved tool, a drifted one with its state, and null for 
