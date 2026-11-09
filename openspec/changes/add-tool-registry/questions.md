@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-c3dcd848 (tool-registry › Tool servers and surfaces are stored per tenant, and only `approveSurface` sets the approval columns › Migration 0470 stores servers and surfaces with narrow upda |
 | Q-003 | answered | none | verdict | Criterion C-f1acd012 (tool-registry › validateOrigin accepts public https origins and refuses unsafe ones › Each of 55 inputs is accepted or refused with its reason): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-9e03eeea (tool-registry › The surface digest is canonical, fixtureSurface builds fixture surfaces, and block refs are chosen by content › The digest ignores order and fills defaults, fixtu |
-| Q-005 | open | none | verdict | Criterion C-d0c13cf0 (tool-registry › Registering a server stores it pending with its first surface › Register stores a pending server and refuses what is invalid, taken or foreign): accept as satisfi |
+| Q-005 | answered | none | verdict | Criterion C-d0c13cf0 (tool-registry › Registering a server stores it pending with its first surface › Register stores a pending server and refuses what is invalid, taken or foreign): accept as satisfi |
 | Q-006 | open | none | verdict | Criterion C-59cbd279 (tool-registry › Approval needs another admin in a team and an explicit, audited self-approval when solo › A team refuses the submitter, a solo tenant needs the flag, and every re |
 | Q-007 | open | none | verdict | Criterion C-6d84e4c8 (tool-registry › Approval writes immutable bound block versions and a failure between its two steps leaves them inert › Approval imports bound blocks, and a repeat completes after |
 | Q-008 | open | none | verdict | Criterion C-0955b490 (tool-registry › A changed surface disables the server until its new digest is approved › A submitted surface drifts an approved server and re-approval restores it): accept as sat |
@@ -155,7 +155,8 @@ accept The surface tests assert the SMALL digest, that its reordered and explici
 
 ## Q-005: Criterion C-d0c13cf0 (tool-registry › Registering a server stores it pending with its first surface › Register stores a pending server and refuses what is invalid, taken or foreign): accept as satisfi
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -182,6 +183,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The store tests register acme as ALICE and deep-equal REC_PENDING, repeat it for TOOLS_EXISTS with id acme, run the 6 inputs and 16 surfaces of § Register rows with their field and reason, register loc and beta and check beta's origin is normalised both in the record and in the stored row, run registerToolServerTx in a tenant_b transaction with the tenant_a context for TOOLS_TENANT_MISMATCH with nothing written, read nope and the foreign tenant as null, list [acme, beta, loc] and [], and count 3 servers, 3 surfaces and 3 tools.server_registered events. The code checks the tenant, then id, adapter, origin and surface in that order and stores the validated origin.
 ---
 
 ## Q-006: Criterion C-59cbd279 (tool-registry › Approval needs another admin in a team and an explicit, audited self-approval when solo › A team refuses the submitter, a solo tenant needs the flag, and every re
