@@ -3,7 +3,7 @@ import { isIssuedPermit } from "../pdp/index.ts";
 import type { Permit } from "../pdp/index.ts";
 import { bodyDigest } from "./digest.ts";
 import { mintkeyTenantId } from "./tenant.ts";
-import { GatewayError } from "./types.ts";
+import { GATEWAY_LIMITS, GatewayError } from "./types.ts";
 import type {
   BrokerToken,
   CallTag,
@@ -49,6 +49,53 @@ function invalid(reason: string): GatewayError {
 
 function unavailableToken(): GatewayError {
   return new GatewayError("GATEWAY_UNAVAILABLE", "gateway token request failed", { stage: "token" });
+}
+
+function unavailableSend(): GatewayError {
+  return new GatewayError("GATEWAY_UNAVAILABLE", "gateway send failed", { stage: "send" });
+}
+
+function responseTooLarge(): GatewayError {
+  return new GatewayError("GATEWAY_RESPONSE_TOO_LARGE", "gateway response is too large", {
+    limit: String(GATEWAY_LIMITS.maxResponseBytes),
+  });
+}
+
+async function readBounded(
+  response: Response,
+  limit: number,
+  tooLarge: () => GatewayError,
+): Promise<Uint8Array> {
+  const declared = response.headers.get("content-length");
+  if (declared !== null && /^[0-9]+$/.test(declared) && Number(declared) > limit) {
+    await response.body?.cancel().catch(() => undefined);
+    throw tooLarge();
+  }
+
+  if (response.body === null) return new Uint8Array(0);
+
+  const reader = response.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > limit) {
+      await reader.cancel().catch(() => undefined);
+      throw tooLarge();
+    }
+    chunks.push(value);
+  }
+
+  const body = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    body.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return body;
 }
 
 function validTag(tag: CallTag): boolean {
@@ -132,48 +179,60 @@ export function createGateway(config: EgressConfig, deps: GatewayDeps): Gateway 
     });
 
     const controller = new AbortController();
+    const timer = setTimeout(() => {
+      controller.abort();
+    }, GATEWAY_LIMITS.timeoutMs);
     const fetchImpl = deps.fetch ?? fetch;
 
-    let response: Response;
     try {
-      response = await fetchImpl(`${config.brokerUrl}/v1/issue`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "x-mintkey-service-token": config.brokerToken.reveal(),
-        },
-        body,
-        redirect: "manual",
-        signal: controller.signal,
-      });
-    } catch {
+      let response: Response;
+      try {
+        response = await fetchImpl(`${config.brokerUrl}/v1/issue`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "x-mintkey-service-token": config.brokerToken.reveal(),
+          },
+          body,
+          redirect: "manual",
+          signal: controller.signal,
+        });
+      } catch {
+        throw unavailableToken();
+      }
+
+      if (response.status === 401 || response.status === 403) {
+        throw new GatewayError("GATEWAY_TOKEN_REFUSED", "broker refused the service token", {
+          status: String(response.status),
+        });
+      }
+      if (response.status !== 200) throw unavailableToken();
+
+      const bytes = await readBounded(response, GATEWAY_LIMITS.maxResponseBytes, unavailableToken);
+
+      let parsed: unknown;
+      try {
+        parsed = JSON.parse(new TextDecoder().decode(bytes));
+      } catch {
+        throw unavailableToken();
+      }
+      if (!isRecord(parsed)) throw unavailableToken();
+
+      const jwt = parsed["token"];
+      const expiresAt = parsed["expires_at"];
+      if (typeof jwt !== "string" || !TOKEN_VALUE_PATTERN.test(jwt)) throw unavailableToken();
+      if (typeof expiresAt !== "number" || !Number.isSafeInteger(expiresAt)) throw unavailableToken();
+      if (expiresAt > nowSeconds + permit.ttlSeconds + TOKEN_TTL_SLACK_SECONDS) throw unavailableToken();
+
+      const token = Object.freeze({ serviceId: permit.serviceId, expiresAt });
+      tokenStates.set(token, { jwt, used: false });
+      return token;
+    } catch (error) {
+      if (error instanceof GatewayError) throw error;
       throw unavailableToken();
+    } finally {
+      clearTimeout(timer);
     }
-
-    if (response.status === 401 || response.status === 403) {
-      throw new GatewayError("GATEWAY_TOKEN_REFUSED", "broker refused the service token", {
-        status: String(response.status),
-      });
-    }
-    if (response.status !== 200) throw unavailableToken();
-
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(await response.text());
-    } catch {
-      throw unavailableToken();
-    }
-    if (!isRecord(parsed)) throw unavailableToken();
-
-    const jwt = parsed["token"];
-    const expiresAt = parsed["expires_at"];
-    if (typeof jwt !== "string" || !TOKEN_VALUE_PATTERN.test(jwt)) throw unavailableToken();
-    if (typeof expiresAt !== "number" || !Number.isSafeInteger(expiresAt)) throw unavailableToken();
-    if (expiresAt > nowSeconds + permit.ttlSeconds + TOKEN_TTL_SLACK_SECONDS) throw unavailableToken();
-
-    const token = Object.freeze({ serviceId: permit.serviceId, expiresAt });
-    tokenStates.set(token, { jwt, used: false });
-    return token;
   }
 
   async function send(
@@ -204,26 +263,41 @@ export function createGateway(config: EgressConfig, deps: GatewayDeps): Gateway 
     state.used = true;
 
     const controller = new AbortController();
+    const timer = setTimeout(() => {
+      controller.abort();
+    }, GATEWAY_LIMITS.timeoutMs);
     const fetchImpl = deps.fetch ?? fetch;
 
-    const response = await fetchImpl(`${config.proxyUrl}/${permit.serviceId}${request.path}`, {
-      method: request.method,
-      headers: {
-        ...request.headers,
-        authorization: `Bearer ${state.jwt}`,
-        "x-ursitoare-call": callHeader(tag),
-      },
-      body: request.body,
-      redirect: "manual",
-      signal: controller.signal,
-    });
+    try {
+      let response: Response;
+      try {
+        response = await fetchImpl(`${config.proxyUrl}/${permit.serviceId}${request.path}`, {
+          method: request.method,
+          headers: {
+            ...request.headers,
+            authorization: `Bearer ${state.jwt}`,
+            "x-ursitoare-call": callHeader(tag),
+          },
+          body: request.body,
+          redirect: "manual",
+          signal: controller.signal,
+        });
+      } catch {
+        throw unavailableSend();
+      }
 
-    const headers: Record<string, string> = {};
-    response.headers.forEach((value: string, name: string): void => {
-      headers[name] = value;
-    });
-    const body = new Uint8Array(await response.arrayBuffer());
-    return { status: response.status, headers, body };
+      const headers: Record<string, string> = {};
+      response.headers.forEach((value: string, name: string): void => {
+        headers[name] = value;
+      });
+      const body = await readBounded(response, GATEWAY_LIMITS.maxResponseBytes, responseTooLarge);
+      return { status: response.status, headers, body };
+    } catch (error) {
+      if (error instanceof GatewayError) throw error;
+      throw unavailableSend();
+    } finally {
+      clearTimeout(timer);
+    }
   }
 
   return { requestToken, send };
