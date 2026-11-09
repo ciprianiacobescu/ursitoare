@@ -34,3 +34,4 @@
 {"at":"2026-11-09T02:42:34Z","run":"r-20261109T0242Z-c584","type":"unit.dispatched","unit":"openspec:add-fake-egress-proxy"}
 {"at":"2026-11-09T03:37:57Z","head":"71fc5026733dc89730b2694c1c6d5dad4c2b1135","pr":106,"target_before":"283ccadc21e8265eae6c5220c0178ae0472ab0d3","type":"unit.merge_requested","unit":"openspec:add-fake-egress-proxy"}
 {"at":"2026-11-09T03:38:02Z","ci":"not_run","head":"71fc5026733dc89730b2694c1c6d5dad4c2b1135","merge_commit":"55ea8cc65d987e3042e105c86c51b2fedb12b9ce","method":"squash","pr":106,"raced":false,"type":"unit.merged","unit":"openspec:add-fake-egress-proxy"}
+{"at":"2026-11-09T03:38:08Z","branch":"l4/openspec/add-fake-egress-proxy","head":"71fc5026733dc89730b2694c1c6d5dad4c2b1135","type":"unit.branch_deleted","unit":"openspec:add-fake-egress-proxy"}
