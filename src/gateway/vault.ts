@@ -1,5 +1,7 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
+import http2 from "node:http2";
+
 import { GatewayError } from "./types.ts";
 import type { EgressConfig } from "../config/index.ts";
 import type { Logger } from "../observability/index.ts";
@@ -20,11 +22,113 @@ export interface VaultWriter {
   putCredential(input: PutCredentialInput): Promise<{ keyVersion: number }>;
 }
 
+const PUT_PATH = "/mintkey.vault.v1.VaultAdapter/PutCredential";
+const MAX_FRAME = 65536;
+
+function unavailable(): GatewayError {
+  return new GatewayError("GATEWAY_UNAVAILABLE", "Vault is unavailable", { stage: "vault" });
+}
+
+function frame(message: Uint8Array): Buffer {
+  const out = Buffer.alloc(5 + message.length);
+  out.writeUInt32BE(message.length, 1);
+  out.set(message, 5);
+  return out;
+}
+
+function exchange(
+  vault: NonNullable<EgressConfig["vault"]>,
+  body: Buffer,
+  timeoutMs: number,
+): Promise<{ status: string | undefined; httpStatus: unknown; data: Buffer }> {
+  return new Promise((resolve, reject) => {
+    let done = false;
+    let session: http2.ClientHttp2Session | undefined;
+    const finish = (error: unknown, value?: { status: string | undefined; httpStatus: unknown; data: Buffer }): void => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      session?.destroy();
+      if (value === undefined) reject(error);
+      else resolve(value);
+    };
+    const timer = setTimeout(() => finish(unavailable()), timeoutMs);
+    try {
+      session = http2.connect(vault.url);
+      session.on("error", () => finish(unavailable()));
+      const stream = session.request({
+        ":method": "POST",
+        ":path": PUT_PATH,
+        "content-type": "application/grpc",
+        te: "trailers",
+        "x-mintkey-service-token": vault.token.reveal(),
+        "x-mintkey-service-identity": vault.identity,
+        "x-mintkey-token": vault.token.reveal(),
+        "x-mintkey-identity": vault.identity,
+      });
+      let httpStatus: unknown;
+      let status: string | undefined;
+      const chunks: Buffer[] = [];
+      let size = 0;
+      const readStatus = (headers: http2.IncomingHttpHeaders): void => {
+        const value = headers["grpc-status"];
+        if (typeof value === "string") status = value;
+      };
+      stream.on("response", (headers) => {
+        httpStatus = headers[":status"];
+        readStatus(headers);
+      });
+      stream.on("trailers", readStatus);
+      stream.on("data", (chunk: Buffer) => {
+        size += chunk.length;
+        if (size > MAX_FRAME + 5) finish(unavailable());
+        else chunks.push(chunk);
+      });
+      stream.on("error", () => finish(unavailable()));
+      stream.on("close", () => finish(null, { status, httpStatus, data: Buffer.concat(chunks) }));
+      stream.end(body);
+    } catch {
+      finish(unavailable());
+    }
+  });
+}
+
+function parseFrame(data: Buffer): Uint8Array {
+  if (data.length < 5 || data[0] !== 0) throw unavailable();
+  const length = data.readUInt32BE(1);
+  if (length > MAX_FRAME || data.length !== 5 + length) throw unavailable();
+  return data.subarray(5);
+}
+
 export function createVaultWriter(
-  _vault: NonNullable<EgressConfig["vault"]>,
-  _deps: { logger: Logger; timeoutMs?: number },
+  vault: NonNullable<EgressConfig["vault"]>,
+  deps: { logger: Logger; timeoutMs?: number },
 ): VaultWriter {
-  throw new Error("not implemented");
+  const timeoutMs = deps.timeoutMs ?? 10000;
+  return {
+    async putCredential(input) {
+      try {
+        const reply = await exchange(vault, frame(encodePutCredentialRequest(input)), timeoutMs);
+        let keyVersion: number;
+        if (reply.status === "0") {
+          if (reply.httpStatus !== 200) throw unavailable();
+          keyVersion = decodePutCredentialResponse(parseFrame(reply.data)).keyVersion;
+        } else if (reply.status === "16" || reply.status === "7") {
+          throw new GatewayError("GATEWAY_TOKEN_REFUSED", "Vault refused the service token", { status: reply.status });
+        } else if (reply.status === "3") {
+          throw new GatewayError("GATEWAY_INVALID", "Vault refused the credential", { reason: "vault_refused" });
+        } else {
+          throw unavailable();
+        }
+        deps.logger.info({ serviceId: input.serviceId, keyVersion }, "vault put");
+        return { keyVersion };
+      } catch (error) {
+        const failure = error instanceof GatewayError ? error : unavailable();
+        deps.logger.warn({ serviceId: input.serviceId, code: failure.code }, "vault put failed");
+        throw failure;
+      }
+    },
+  };
 }
 
 function varint(value: number): number[] {
