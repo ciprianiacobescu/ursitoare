@@ -88,3 +88,5 @@
 {"at":"2026-11-09T21:47:34Z","branch":"l4/archive/openspec/add-tool-registry","head":"228247a081d064aea6211e716c66893a60688b02","type":"unit.branch_deleted","unit":"openspec:add-tool-registry"}
 {"at":"2026-11-09T21:47:35Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-credentials"}
 {"at":"2026-11-09T21:47:35Z","run":"r-20261109T2147Z-0cd4","type":"unit.dispatched","unit":"openspec:add-credentials"}
+{"at":"2026-11-09T22:09:42Z","attempt":1,"cost_usd":1.884097,"runs":2,"type":"plan.charged","unit":"openspec:add-credentials"}
+{"at":"2026-11-09T22:09:42Z","run":"r-20261109T2209Z-2dc7","type":"unit.dispatched","unit":"openspec:add-credentials"}
