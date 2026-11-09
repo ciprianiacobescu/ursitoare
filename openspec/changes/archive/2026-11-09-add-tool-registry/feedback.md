@@ -10,15 +10,15 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | submitted | behaviour | src/tools/store.ts:131 | A new surface submitted in the same millisecond is shadowed by an older one |
-| FB-002 | submitted | tests | src/api/tool-server-routes.ts:128 | Route and tenant rows of the test plan that no test sends |
+| FB-001 | taken | behaviour | src/tools/store.ts:131 | A new surface submitted in the same millisecond is shadowed by an older one |
+| FB-002 | taken | tests | src/api/tool-server-routes.ts:128 | Route and tenant rows of the test plan that no test sends |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: A new surface submitted in the same millisecond is shadowed by an older one
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** behaviour
 - **Where:** `src/tools/store.ts:131-143`
 - **Lesson:** no
@@ -50,12 +50,13 @@ The requirement on submitSurface says a new digest SHALL be stored as the newest
 
 ### Outcome
 <!-- written by the harness -->
+Taken into add-tool-registry-followup-1
 
 ---
 
 ## FB-002: Route and tenant rows of the test plan that no test sends
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** tests
 - **Where:** `src/api/tool-server-routes.ts:128-140`
 - **Lesson:** no
@@ -83,3 +84,4 @@ Add new tests (existing tests unchanged) for the rows of test-plan-routes.md tha
 
 ### Outcome
 <!-- written by the harness -->
+Taken into add-tool-registry-followup-1

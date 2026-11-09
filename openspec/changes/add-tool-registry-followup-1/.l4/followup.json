@@ -1,0 +1,21 @@
+{
+  "schema": "l4/followup@1",
+  "parent": "openspec:add-tool-registry",
+  "items": [
+    {
+      "id": "FB-001",
+      "sha256": "975c6130a28f47a2556f27f8352914c7b8720c4ed822eeb1861e04d13246e1d8"
+    },
+    {
+      "id": "FB-002",
+      "sha256": "8e1b529669d81d975dc66874b6768583a1310edee01374d87385e212c5374be7"
+    }
+  ],
+  "chores": [
+    "F-5e11a405"
+  ],
+  "test_chores": [
+    "F-5e11a405"
+  ],
+  "refactors": []
+}
