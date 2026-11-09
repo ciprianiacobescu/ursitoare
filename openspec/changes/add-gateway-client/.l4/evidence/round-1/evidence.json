@@ -1,0 +1,358 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/gateway",
+      "test/arch/modules.ts",
+      "src/pdp/index.ts",
+      "<proxyUrl>/<serviceId><path>",
+      "src/main.ts",
+      "src/gateway/index.ts",
+      "test/arch/egress-sites.test.ts",
+      "test/support/gateway-kit.ts",
+      "src/config/config.test.ts",
+      "src/main.test.ts",
+      "src/main.db.test.ts",
+      "src/main.mockruns.test.ts",
+      "test/arch/fault-points.test.ts",
+      "src/pdp/permit.test.ts",
+      "src/config",
+      "src/pdp",
+      "test/arch",
+      "test/support/e2e-stack",
+      "test/support/crash/cluster.test.ts",
+      "e2e",
+      "web",
+      "docs/decisions/0002",
+      "src/config/index.ts",
+      "parts/45-egress.ts",
+      "node:assert/strict",
+      "src/pdp/issued-permit.test.ts",
+      "src/pdp/permit.ts",
+      "src/config/egress.test.ts",
+      "src/config/egress.ts",
+      "src/config/config.ts",
+      "src/gateway/helpers.test.ts",
+      "src/gateway/types.ts",
+      "src/gateway/digest.ts",
+      "src/gateway/tenant.ts",
+      "src/gateway/client.ts",
+      "src/gateway/token.test.ts",
+      "src/gateway/send-refusals.test.ts",
+      "src/gateway/send-forward.test.ts",
+      "src/gateway/send-limits.test.ts",
+      "src/gateway/logs.test.ts",
+      "src/gateway/self-check.test.ts",
+      "src/gateway/self-check.ts",
+      "src/main.egress.test.ts",
+      "gateway/index.ts",
+      "test/arch/egress-sites.ts",
+      "test/support/e2e-stack/egress-part.test.ts",
+      "test/support/e2e-stack/egress-part.ts",
+      "test/support/e2e-stack/parts/45-egress.ts",
+      "**/URSITOARE_EGRESS_*",
+      "**/permit.ts",
+      "**/check.ts",
+      "**/[A-Za-z0-9._-]",
+      "**/^[A-Za-z0-9._:-]{1,256}$",
+      "**/?",
+      "**/fetchGateway.ts",
+      "**/^[a-z0-9!#$%&'*+.^_\\",
+      "[\"src/main.ts\"]",
+      "src/main*.test.ts",
+      "src/gateway/*.ts",
+      "**/[",
+      "**/index.ts",
+      "**/egress?",
+      "module <proxyUrl>",
+      "module config",
+      "module docs",
+      "module gateway",
+      "module main",
+      "module main.db.test",
+      "module main.egress.test",
+      "module main.mockruns.test",
+      "module main.test",
+      "module node:assert",
+      "module parts",
+      "module pdp",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-gateway-client/.l4/ledger/r-20261109T0343Z-db5e.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-gateway-client/.l4/ledger/r-20261109T0430Z-f3a6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-gateway-client/.l4/ledger/r-20261109T0705Z-0de6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-gateway-client/.l4/ledger/r-20261109T0906Z-2c9c.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-gateway-client/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-gateway-client/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/config/config.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/egress.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/config/egress.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/index.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/gateway/client.ts",
+        "module": "gateway",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/gateway/digest.ts",
+        "module": "gateway",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/gateway/helpers.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/gateway/logs.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/gateway/self-check.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/gateway/self-check.ts",
+        "module": "gateway",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/gateway/send-forward.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/gateway/send-limits.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/gateway/send-refusals.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/gateway/tenant.ts",
+        "module": "gateway",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/gateway/token.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/gateway/types.ts",
+        "module": "gateway",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.egress.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/index.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/issued-permit.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/permit.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/arch/egress-sites.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/arch/egress-sites.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/egress-part.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/egress-part.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/parts/45-egress.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/gateway-kit.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/config/config.ts, src/config/egress.ts, src/config/index.ts, src/gateway/client.ts, src/gateway/digest.ts and 10 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/config/config.ts",
+      "src/config/egress.ts",
+      "src/config/index.ts",
+      "src/gateway/client.ts",
+      "src/gateway/digest.ts",
+      "src/gateway/self-check.ts",
+      "src/gateway/tenant.ts",
+      "src/gateway/types.ts",
+      "src/main.ts",
+      "src/pdp/index.ts",
+      "src/pdp/permit.ts",
+      "test/arch/egress-sites.ts",
+      "test/support/e2e-stack/egress-part.ts",
+      "test/support/e2e-stack/parts/45-egress.ts",
+      "test/support/gateway-kit.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2132,
+      "passed": 2132,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 56,
+      "new_passed": 56,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
