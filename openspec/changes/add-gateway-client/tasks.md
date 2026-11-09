@@ -34,4 +34,4 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 8. The part
 
-- [ ] 8.1 Write `test/support/e2e-stack/egress-part.test.ts` first (scenario "The egress part starts in a crash cluster and closes completely"), then implement `egressPart` and `egressApi` in `test/support/e2e-stack/egress-part.ts` and create `test/support/e2e-stack/parts/45-egress.ts` (`export { egressPart as part } from "../egress-part.ts";`), implementing requirement "The egress part starts in the e2e stack and the crash cluster"
+- [x] 8.1 Write `test/support/e2e-stack/egress-part.test.ts` first (scenario "The egress part starts in a crash cluster and closes completely"), then implement `egressPart` and `egressApi` in `test/support/e2e-stack/egress-part.ts` and create `test/support/e2e-stack/parts/45-egress.ts` (`export { egressPart as part } from "../egress-part.ts";`), implementing requirement "The egress part starts in the e2e stack and the crash cluster"

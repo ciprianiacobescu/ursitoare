@@ -144,7 +144,7 @@ test("C-e09b6c9e the egress part starts with its six variables and closes comple
       [...EGRESS_KEYS].sort(),
       "the env holds exactly the six URSITOARE_EGRESS_ variables",
     );
-    for (const key of [EGRESS_KEYS[0], EGRESS_KEYS[1], EGRESS_KEYS[5]]) {
+      for (const key of [EGRESS_KEYS[1], EGRESS_KEYS[2], EGRESS_KEYS[5]]) {
       assert.match(envValue(handle, key ?? ""), LOOPBACK_URL);
     }
     assert.equal(
@@ -224,7 +224,7 @@ test("C-e09b6c9e the crash cluster runs the egress part and its broker turns unr
         .filter((key) => key.startsWith("URSITOARE_EGRESS_"))
         .sort();
       assert.deepEqual(keys, [...EGRESS_KEYS].sort(), "the cluster env holds the six egress keys");
-      for (const key of [EGRESS_KEYS[0], EGRESS_KEYS[1], EGRESS_KEYS[5]]) {
+    for (const key of [EGRESS_KEYS[1], EGRESS_KEYS[2], EGRESS_KEYS[5]]) {
         assert.match(cluster.env[key ?? ""] ?? "", LOOPBACK_URL);
       }
       assert.equal(
