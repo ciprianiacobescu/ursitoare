@@ -24,6 +24,7 @@ import {
   registerOpenApiRoute,
   registerRunRoutes,
   registerTestRunRoutes,
+  registerToolServerRoutes,
   registerWebApp,
   registryVersionLoader,
 } from "./api/index.ts";
@@ -270,6 +271,7 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
       engineKey: config.engineKey,
     });
     registerBlockRoutes(server, { pool: pep.pool, engineKey: config.engineKey });
+    registerToolServerRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
   registerFlowRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
   registerOpenApiRoute(server, { version: VERSION });
     await definePublicRoutes(server, "oidc", (scoped) =>
