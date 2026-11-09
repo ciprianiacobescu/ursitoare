@@ -240,3 +240,4 @@ export async function startFakeEgress(opts: FakeEgressOptions = {}): Promise<Fak
 }
 
 export * from "./echo.ts";
+export * from "./contract.ts";
