@@ -2,7 +2,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 1. The tables
 
-- [ ] 1.1 Write `src/tools/schema.test.ts` first (scenario "Migration 0470 stores servers and surfaces with narrow update rights"), then create `src/db/migrations/0470_tool_registry.sql`, implementing its requirement
+- [x] 1.1 Write `src/tools/schema.test.ts` first (scenario "Migration 0470 stores servers and surfaces with narrow update rights"), then create `src/db/migrations/0470_tool_registry.sql`, implementing its requirement
 
 ## 2. The pure pieces
 
