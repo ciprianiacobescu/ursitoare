@@ -25,7 +25,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 6. The start-up check
 
-- [ ] 6.1 Write `src/gateway/self-check.test.ts` first (scenario "checkEgress closes on refusal and refuses an open issuer"), then implement `checkEgress` in `src/gateway/self-check.ts`, implementing requirement "The start-up self-check refuses an open issuer"
+- [x] 6.1 Write `src/gateway/self-check.test.ts` first (scenario "checkEgress closes on refusal and refuses an open issuer"), then implement `checkEgress` in `src/gateway/self-check.ts`, implementing requirement "The start-up self-check refuses an open issuer"
 
 ## 7. The composition root and the rule
 
