@@ -1,4 +1,4 @@
-# Verification: openspec:add-fake-egress-proxy: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-fake-egress-proxy: FAIL (round 2)
 
 traceability: 13/13 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 13/13 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.2 | base main@283ccadc21 contained |
-| 1 | integrity | ok | 172.8 | 11 sub-checks; scope: 27 changed file(s) |
-| 2 | build | ok | 23.3 |  |
-| 3 | tests | ok | 270.8 |  |
-| 4 | traceability | ok | 0.2 | 13/13 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: test/support/fake-egress/broker.ts, test/support/fake-egress/contract.ts, test/support/fake-egress/echo.ts, test/support/fake-egress/index.ts, test/support/fake-egress/jwt.ts and 5 more |
-| 8 | s1 judge | ok | 1.2 | 12/13 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 799.8 | 5 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -163,6 +163,11 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-eb168123 | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-37594c69 | ok | 0.960 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-004 reject F-39583b05 by the delegate (claude-fable-5-1 via claude-code): The finding describes the code accurately and the behaviour it names is a defect of the record, not a harmless detail. In the proxy module the unreachable path calls req.resume() and then finish(502) at once, and finish takes the digest from hash.copy(), so for a connection error the recorded bodySh...
+- Q-005 accept F-e6c2caec by the delegate (claude-fable-5-1 via claude-code): The fact of the finding is right: no file named proxy-pass-through.test.ts exists under the fake's directory, and the tests for the scenarios Streaming, redirects and upstream errors pass through and The credential-less route is fake-only live in the test file that task 4.1 wrote. That is a deviatio...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -192,13 +197,18 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] a test is ignored as evidence (criterion C-37594c69): test.support.fake-egress.contract.test.ts.C-37594c69 the nine checks pass on the fake::proxy refuses a token for another service: no proof that it discriminates (no red, audit or generated record)
 - [minor, deterministic] a test is ignored as evidence (criterion C-37594c69): test.support.fake-egress.contract.test.ts.C-37594c69 the nine checks pass on the fake::vault put with a denied identity is refused: no proof that it discriminates (no red, audit or generated record)
 - [minor, deterministic] a test is ignored as evidence (criterion C-37594c69): test.support.fake-egress.contract.test.ts.C-37594c69 the nine checks pass on the fake::vault put with the admin identity returns a key version: no proof that it discriminates (no red, audit or generated record)
-- [major, judge] Unreachable request body hash is computed before the body is drained (spec gap) (criterion C-4347a436): For an upstream connection error, unreachable() calls req.resume() and then finish(502) immediately, so ForwardedRequest.bodySha256 is hashed only from bytes already received before the error.
+- [major, human] Unreachable request body hash is computed before the body is drained (spec gap) (criterion C-4347a436): For an upstream connection error, unreachable() calls req.resume() and then finish(502) immediately, so ForwardedRequest.bodySha256 is hashed only from bytes already received before the error. [rejected by the delegate (claude-fable-5-1 via claude-code) (The finding describes the code accurately and the behaviour it names is a defect of the record, not a harmless detail. In the proxy module the unreachable path calls req.resume() and then finish(502) at once, and finish takes the digest from hash.copy(), so for a connection error the recorded bodySha256 covers only the request bytes that had a...
 - [minor, judge] IPv6 loopback target host is not recognized as loopback (spec gap) (criterion C-4347a436): The loopback check compares targetUrl.hostname to "[::1]", but URL.hostname for an IPv6 URL is "::1" without brackets, so such a target is treated as unrouted.
 - [minor, judge] task 4.2: proxy pass-through tests are consolidated, not in the named file (criterion C-6f87d878): The task names test/support/fake-egress/proxy-pass-through.test.ts, but the diff parts list no such file; the pass-through and credential-less tests appear under proxy-forward.test.ts.
 - [minor, judge] Vault accepts an empty caller_actor_id (spec gap) (criterion C-0bc1717c): validate() does not reject an empty caller_actor_id, so the credential is stored with an empty actor id.
 - [minor, judge] Vault ignores header_name for bearer-token credentials (spec gap) (criterion C-0bc1717c): For auth_scheme 3, the stored credential always has headerName null, even if a non-empty header_name is supplied.
 - [minor, judge] the judge called a test inadequate (criterion C-e831e54f): test.support.fake-egress.vault.test.ts::C-e831e54f the vault stores the edge cases that are valid
-- [major, judge] task 4.2 is ticked as already satisfied, but its text is not done: No proxy-pass-through.test.ts appears in the diff parts; pass-through and credential-less tests are in proxy-forward.test.ts.
+- [minor, judge] task 4.2 is ticked as already satisfied, but its text is not done: No proxy-pass-through.test.ts appears in the diff parts; pass-through and credential-less tests are in proxy-forward.test.ts. (waived by the delegate (claude-fable-5-1 via claude-code): The fact of the finding is right: no file named proxy-pass-through.test.ts exists under the fake's directory, and the tests for the scenarios Streaming, redirects and upstream errors pass through and The credential-less route is fake-only live in the test file that task 4.1 wrote. That is a deviation in file layout only. Both scenarios are tested with their criterion ids: the gated stream read before any record...
+
+## Fix unit
+
+Fix unit 1 is created for these tasks:
+- F-39583b05 Unreachable request body hash is computed before the body is drained
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
