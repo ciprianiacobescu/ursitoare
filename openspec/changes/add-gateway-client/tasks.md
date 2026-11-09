@@ -21,7 +21,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 - [x] 5.1 Write `src/gateway/send-refusals.test.ts` first (scenario "send refuses before any network call"), then implement the checks of design decision 5 in `send` in `src/gateway/client.ts`, implementing requirement "send refuses everything the permit does not cover before the network"
 - [x] 5.2 Write `src/gateway/send-forward.test.ts` first (scenario "send forwards through the proxy and passes redirects through"; recording rows, then the real fake and an echo), then implement the call, the answer mapping and the spending of the token in `send`, implementing requirement "send forwards through the proxy and returns the answer unchanged"
 - [x] 5.3 Write `src/gateway/send-limits.test.ts` first (scenario "Size and time are bounded and a failed send is final"; a test-local `node:http` upstream behind the fake, `mock.timers`), then add the timer, the bounded read and the failure mapping to `src/gateway/client.ts`, implementing requirement "Size and time are bounded"
-- [ ] 5.4 Write `src/gateway/logs.test.ts` first (scenario "Logs and errors carry no secret", asserting the lines of test-plan-edges.md § Logs), then implement `captureLogger` in `test/support/gateway-kit.ts` and add the `info` and `warn` log calls to `src/gateway/client.ts`, implementing requirement "Logs and errors carry no secret"
+- [x] 5.4 Write `src/gateway/logs.test.ts` first (scenario "Logs and errors carry no secret", asserting the lines of test-plan-edges.md § Logs), then implement `captureLogger` in `test/support/gateway-kit.ts` and add the `info` and `warn` log calls to `src/gateway/client.ts`, implementing requirement "Logs and errors carry no secret"
 
 ## 6. The start-up check
 

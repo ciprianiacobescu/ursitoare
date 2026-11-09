@@ -112,6 +112,16 @@ function validTag(tag: CallTag): boolean {
   );
 }
 
+function tagFields(tag: CallTag): { runId?: string; nodeId?: string } {
+  if (!validTag(tag)) return {};
+  return { runId: tag.runId, nodeId: tag.nodeId };
+}
+
+function pathWithoutQuery(path: string): string {
+  const queryAt = path.indexOf("?");
+  return queryAt === -1 ? path : path.slice(0, queryAt);
+}
+
 function mismatchField(permit: Permit, request: OutboundRequest): string | undefined {
   if (permit.method !== request.method) return "method";
 
@@ -163,75 +173,100 @@ function unsafeHeaders(headers: Readonly<Record<string, string>>): boolean {
 
 export function createGateway(config: EgressConfig, deps: GatewayDeps): Gateway {
   async function requestToken(permit: Permit, tag: CallTag): Promise<BrokerToken> {
-    if (!isIssuedPermit(permit)) {
-      throw new GatewayError("GATEWAY_PERMIT_FOREIGN", "permit was not issued by this engine");
-    }
-    if (!validTag(tag)) throw invalid("tag");
-    if (!SERVICE_ID_PATTERN.test(permit.serviceId)) throw invalid("service");
-
-    const nowSeconds = Math.floor(deps.clock.now().getTime() / 1000);
-    const body = JSON.stringify({
-      agent_id: config.agentId,
-      service_id: permit.serviceId,
-      tenant_id: mintkeyTenantId(tag.tenantId),
-      scope: "call",
-      ttl_seconds: permit.ttlSeconds,
-    });
-
-    const controller = new AbortController();
-    const timer = setTimeout(() => {
-      controller.abort();
-    }, GATEWAY_LIMITS.timeoutMs);
-    const fetchImpl = deps.fetch ?? fetch;
-
+    const startedAt = deps.clock.now();
     try {
-      let response: Response;
+      if (!isIssuedPermit(permit)) {
+        throw new GatewayError("GATEWAY_PERMIT_FOREIGN", "permit was not issued by this engine");
+      }
+      if (!validTag(tag)) throw invalid("tag");
+      if (!SERVICE_ID_PATTERN.test(permit.serviceId)) throw invalid("service");
+
+      const nowSeconds = Math.floor(deps.clock.now().getTime() / 1000);
+      const body = JSON.stringify({
+        agent_id: config.agentId,
+        service_id: permit.serviceId,
+        tenant_id: mintkeyTenantId(tag.tenantId),
+        scope: "call",
+        ttl_seconds: permit.ttlSeconds,
+      });
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => {
+        controller.abort();
+      }, GATEWAY_LIMITS.timeoutMs);
+      const fetchImpl = deps.fetch ?? fetch;
+
       try {
-        response = await fetchImpl(`${config.brokerUrl}/v1/issue`, {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            "x-mintkey-service-token": config.brokerToken.reveal(),
+        let response: Response;
+        try {
+          response = await fetchImpl(`${config.brokerUrl}/v1/issue`, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              "x-mintkey-service-token": config.brokerToken.reveal(),
+            },
+            body,
+            redirect: "manual",
+            signal: controller.signal,
+          });
+        } catch {
+          throw unavailableToken();
+        }
+
+        deps.logger.info(
+          {
+            stage: "token",
+            serviceId: permit.serviceId,
+            status: response.status,
+            ms: deps.clock.now().getTime() - startedAt.getTime(),
+            ...tagFields(tag),
           },
-          body,
-          redirect: "manual",
-          signal: controller.signal,
-        });
-      } catch {
-        throw unavailableToken();
+          "gateway token request",
+        );
+
+        if (response.status === 401 || response.status === 403) {
+          throw new GatewayError("GATEWAY_TOKEN_REFUSED", "broker refused the service token", {
+            status: String(response.status),
+          });
+        }
+        if (response.status !== 200) throw unavailableToken();
+
+        const bytes = await readBounded(response, GATEWAY_LIMITS.maxResponseBytes, unavailableToken);
+
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(new TextDecoder().decode(bytes));
+        } catch {
+          throw unavailableToken();
+        }
+        if (!isRecord(parsed)) throw unavailableToken();
+
+        const jwt = parsed["token"];
+        const expiresAt = parsed["expires_at"];
+        if (typeof jwt !== "string" || !TOKEN_VALUE_PATTERN.test(jwt)) throw unavailableToken();
+        if (typeof expiresAt !== "number" || !Number.isSafeInteger(expiresAt)) throw unavailableToken();
+        if (expiresAt > nowSeconds + permit.ttlSeconds + TOKEN_TTL_SLACK_SECONDS) {
+          throw unavailableToken();
+        }
+
+        const token = Object.freeze({ serviceId: permit.serviceId, expiresAt });
+        tokenStates.set(token, { jwt, used: false });
+        return token;
+      } finally {
+        clearTimeout(timer);
       }
-
-      if (response.status === 401 || response.status === 403) {
-        throw new GatewayError("GATEWAY_TOKEN_REFUSED", "broker refused the service token", {
-          status: String(response.status),
-        });
-      }
-      if (response.status !== 200) throw unavailableToken();
-
-      const bytes = await readBounded(response, GATEWAY_LIMITS.maxResponseBytes, unavailableToken);
-
-      let parsed: unknown;
-      try {
-        parsed = JSON.parse(new TextDecoder().decode(bytes));
-      } catch {
-        throw unavailableToken();
-      }
-      if (!isRecord(parsed)) throw unavailableToken();
-
-      const jwt = parsed["token"];
-      const expiresAt = parsed["expires_at"];
-      if (typeof jwt !== "string" || !TOKEN_VALUE_PATTERN.test(jwt)) throw unavailableToken();
-      if (typeof expiresAt !== "number" || !Number.isSafeInteger(expiresAt)) throw unavailableToken();
-      if (expiresAt > nowSeconds + permit.ttlSeconds + TOKEN_TTL_SLACK_SECONDS) throw unavailableToken();
-
-      const token = Object.freeze({ serviceId: permit.serviceId, expiresAt });
-      tokenStates.set(token, { jwt, used: false });
-      return token;
     } catch (error) {
-      if (error instanceof GatewayError) throw error;
-      throw unavailableToken();
-    } finally {
-      clearTimeout(timer);
+      const gatewayError = error instanceof GatewayError ? error : unavailableToken();
+      deps.logger.warn(
+        {
+          stage: "token",
+          code: gatewayError.code,
+          details: gatewayError.details,
+          ...tagFields(tag),
+        },
+        "gateway call failed",
+      );
+      throw gatewayError;
     }
   }
 
@@ -241,62 +276,87 @@ export function createGateway(config: EgressConfig, deps: GatewayDeps): Gateway 
     token: BrokerToken,
     tag: CallTag,
   ): Promise<GatewayResponse> {
-    if (!isIssuedPermit(permit)) {
-      throw new GatewayError("GATEWAY_PERMIT_FOREIGN", "permit was not issued by this engine");
-    }
-
-    const field = mismatchField(permit, request);
-    if (field !== undefined) {
-      throw new GatewayError("GATEWAY_PERMIT_MISMATCH", "request does not match the permit", { field });
-    }
-
-    if (!validTag(tag)) throw invalid("tag");
-    if (!SERVICE_ID_PATTERN.test(permit.serviceId)) throw invalid("service");
-    if (unsafePath(request.path)) throw invalid("path");
-    if (unsafeHeaders(request.headers)) throw invalid("header");
-
-    if (token.serviceId !== permit.serviceId) throw invalid("token_service");
-    const state = tokenStates.get(token);
-    if (state === undefined || state.used) throw invalid("token_used");
-    if (token.expiresAt <= Math.floor(deps.clock.now().getTime() / 1000)) throw invalid("token_expired");
-
-    state.used = true;
-
-    const controller = new AbortController();
-    const timer = setTimeout(() => {
-      controller.abort();
-    }, GATEWAY_LIMITS.timeoutMs);
-    const fetchImpl = deps.fetch ?? fetch;
-
+    const startedAt = deps.clock.now();
     try {
-      let response: Response;
-      try {
-        response = await fetchImpl(`${config.proxyUrl}/${permit.serviceId}${request.path}`, {
-          method: request.method,
-          headers: {
-            ...request.headers,
-            authorization: `Bearer ${state.jwt}`,
-            "x-ursitoare-call": callHeader(tag),
-          },
-          body: request.body,
-          redirect: "manual",
-          signal: controller.signal,
-        });
-      } catch {
-        throw unavailableSend();
+      if (!isIssuedPermit(permit)) {
+        throw new GatewayError("GATEWAY_PERMIT_FOREIGN", "permit was not issued by this engine");
       }
 
-      const headers: Record<string, string> = {};
-      response.headers.forEach((value: string, name: string): void => {
-        headers[name] = value;
-      });
-      const body = await readBounded(response, GATEWAY_LIMITS.maxResponseBytes, responseTooLarge);
-      return { status: response.status, headers, body };
+      const field = mismatchField(permit, request);
+      if (field !== undefined) {
+        throw new GatewayError("GATEWAY_PERMIT_MISMATCH", "request does not match the permit", { field });
+      }
+
+      if (!validTag(tag)) throw invalid("tag");
+      if (!SERVICE_ID_PATTERN.test(permit.serviceId)) throw invalid("service");
+      if (unsafePath(request.path)) throw invalid("path");
+      if (unsafeHeaders(request.headers)) throw invalid("header");
+
+      if (token.serviceId !== permit.serviceId) throw invalid("token_service");
+      const state = tokenStates.get(token);
+      if (state === undefined || state.used) throw invalid("token_used");
+      if (token.expiresAt <= Math.floor(deps.clock.now().getTime() / 1000)) throw invalid("token_expired");
+
+      state.used = true;
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => {
+        controller.abort();
+      }, GATEWAY_LIMITS.timeoutMs);
+      const fetchImpl = deps.fetch ?? fetch;
+
+      try {
+        let response: Response;
+        try {
+          response = await fetchImpl(`${config.proxyUrl}/${permit.serviceId}${request.path}`, {
+            method: request.method,
+            headers: {
+              ...request.headers,
+              authorization: `Bearer ${state.jwt}`,
+              "x-ursitoare-call": callHeader(tag),
+            },
+            body: request.body,
+            redirect: "manual",
+            signal: controller.signal,
+          });
+        } catch {
+          throw unavailableSend();
+        }
+
+        deps.logger.info(
+          {
+            stage: "send",
+            method: request.method,
+            host: permit.host,
+            path: pathWithoutQuery(request.path),
+            status: response.status,
+            ms: deps.clock.now().getTime() - startedAt.getTime(),
+            ...tagFields(tag),
+          },
+          "gateway send",
+        );
+
+        const headers: Record<string, string> = {};
+        response.headers.forEach((value: string, name: string): void => {
+          headers[name] = value;
+        });
+        const body = await readBounded(response, GATEWAY_LIMITS.maxResponseBytes, responseTooLarge);
+        return { status: response.status, headers, body };
+      } finally {
+        clearTimeout(timer);
+      }
     } catch (error) {
-      if (error instanceof GatewayError) throw error;
-      throw unavailableSend();
-    } finally {
-      clearTimeout(timer);
+      const gatewayError = error instanceof GatewayError ? error : unavailableSend();
+      deps.logger.warn(
+        {
+          stage: "send",
+          code: gatewayError.code,
+          details: gatewayError.details,
+          ...tagFields(tag),
+        },
+        "gateway call failed",
+      );
+      throw gatewayError;
     }
   }
 

@@ -76,5 +76,16 @@ export function recordingFetch(answers: (Response | Error)[]): {
 }
 
 export function captureLogger(): { logger: Logger; lines(): Record<string, unknown>[] } {
-  throw new Error("not implemented");
+  const captured: Record<string, unknown>[] = [];
+  const logger = createLogger({
+    level: "trace",
+    destination: {
+      write(line: string): void {
+        const trimmed = line.trim();
+        if (trimmed.length === 0) return;
+        captured.push(JSON.parse(trimmed) as Record<string, unknown>);
+      },
+    },
+  });
+  return { logger, lines: () => captured };
 }
