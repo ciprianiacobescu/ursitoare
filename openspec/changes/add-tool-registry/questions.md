@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 3.1 | technical | src/tools/store.test.ts:130-146 and :243-248 read forced-RLS tables through a bare ownerPool |
 | Q-002 | answered | none | verdict | Criterion C-c3dcd848 (tool-registry › Tool servers and surfaces are stored per tenant, and only `approveSurface` sets the approval columns › Migration 0470 stores servers and surfaces with narrow upda |
 | Q-003 | answered | none | verdict | Criterion C-f1acd012 (tool-registry › validateOrigin accepts public https origins and refuses unsafe ones › Each of 55 inputs is accepted or refused with its reason): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-9e03eeea (tool-registry › The surface digest is canonical, fixtureSurface builds fixture surfaces, and block refs are chosen by content › The digest ignores order and fills defaults, fixtu |
+| Q-004 | answered | none | verdict | Criterion C-9e03eeea (tool-registry › The surface digest is canonical, fixtureSurface builds fixture surfaces, and block refs are chosen by content › The digest ignores order and fills defaults, fixtu |
 | Q-005 | open | none | verdict | Criterion C-d0c13cf0 (tool-registry › Registering a server stores it pending with its first surface › Register stores a pending server and refuses what is invalid, taken or foreign): accept as satisfi |
 | Q-006 | open | none | verdict | Criterion C-59cbd279 (tool-registry › Approval needs another admin in a team and an explicit, audited self-approval when solo › A team refuses the submitter, a solo tenant needs the flag, and every re |
 | Q-007 | open | none | verdict | Criterion C-6d84e4c8 (tool-registry › Approval writes immutable bound block versions and a failure between its two steps leaves them inert › Approval imports bound blocks, and a repeat completes after |
@@ -122,7 +122,8 @@ accept The origin test holds exactly the 55 rows of test-plan.md § Origins with
 
 ## Q-004: Criterion C-9e03eeea (tool-registry › The surface digest is canonical, fixtureSurface builds fixture surfaces, and block refs are chosen by content › The digest ignores order and fills defaults, fixtu
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -149,6 +150,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The surface tests assert the SMALL digest, that its reordered and explicit-defaults forms give the same digest, and that the eleven one-field variants and the one-tool form give twelve digests distinct from it and each other. The support tests assert fixtureSurface yields D_A and D_A_DEFAULT, the four-ref names, effects and paths, the two error messages, and that the README holds the tool-surface row exactly once. The refs tests cover all 11 rows of § Refs. The implementation matches design.md: canonicalize over name-sorted tools with defaults filled, lowest major whose ref is free or held with the same content hash, and no database read.
 ---
 
 ## Q-005: Criterion C-d0c13cf0 (tool-registry › Registering a server stores it pending with its first surface › Register stores a pending server and refuses what is invalid, taken or foreign): accept as satisfi
