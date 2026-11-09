@@ -21,7 +21,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 ## 5. Audit, secrets and lifecycle
 
 - [x] 5.1 Write `test/support/fake-egress/audit.test.ts` (scenario "Events reach the sink with the emitter's token") and `test/support/fake-egress/secrets.test.ts` (scenario "No secret is recorded and nothing is printed", exactly 6 sink posts) first, then extend `emit` in `test/support/fake-egress/state.ts` to post each event (design decision 7), implementing requirements "Audit events reach the sink with the emitter's token" and "No secret is recorded and nothing is printed"
-- [ ] 5.2 Write `test/support/fake-egress/lifecycle.test.ts` first (scenario "Start, register, clear and close"), then add the argument checks of `addUpstream` and `addCredentialless` and the complete `close()` (design decision 11) in `test/support/fake-egress/index.ts`, implementing requirement "The fake starts on loopback, clears its records and closes completely"
+- [x] 5.2 Write `test/support/fake-egress/lifecycle.test.ts` first (scenario "Start, register, clear and close"), then add the argument checks of `addUpstream` and `addCredentialless` and the complete `close()` (design decision 11) in `test/support/fake-egress/index.ts`, implementing requirement "The fake starts on loopback, clears its records and closes completely"
 
 ## 6. The contract suite
 
