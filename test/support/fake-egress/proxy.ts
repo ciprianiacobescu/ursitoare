@@ -87,6 +87,15 @@ function readAll(req: http.IncomingMessage): Promise<string> {
   });
 }
 
+function bodyDone(req: http.IncomingMessage): Promise<void> {
+  if (req.readableEnded) return Promise.resolve();
+  return new Promise((resolve) => {
+    req.once("end", resolve);
+    req.once("close", resolve);
+    req.resume();
+  });
+}
+
 function actorEvent(claims: Claims, type: string, payload: Record<string, unknown>, targetId: string): FakeAuditEvent {
   return {
     emitter: "proxy",
@@ -192,6 +201,7 @@ async function handle(state: FakeState, req: http.IncomingMessage, res: http.Ser
   }
 
   const hash = createHash("sha256");
+  req.on("data", (c: Buffer) => hash.update(c));
   const started = performance.now();
   const finish = async (status: number): Promise<void> => {
     const outcome = status < 400 ? "allowed" : "error";
@@ -223,12 +233,12 @@ async function handle(state: FakeState, req: http.IncomingMessage, res: http.Ser
   };
   const unreachable = async (): Promise<void> => {
     req.resume();
+    await bodyDone(req);
     await finish(502);
     text(res, 502, "bad gateway: upstream unreachable");
   };
 
   if (connectTo === null) {
-    await readAll(req).then((d) => hash.update(d));
     await unreachable();
     return;
   }
@@ -297,7 +307,6 @@ async function handle(state: FakeState, req: http.IncomingMessage, res: http.Ser
     });
     upRes.on("error", () => res.destroy());
   });
-  req.on("data", (c: Buffer) => hash.update(c));
   req.on("error", () => upReq.destroy());
   req.pipe(upReq);
 }
