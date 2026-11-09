@@ -62,3 +62,4 @@
 {"at":"2026-11-09T14:01:26Z","run":"r-20261109T1401Z-50af","type":"unit.dispatched","unit":"openspec:add-fake-tools"}
 {"at":"2026-11-09T14:45:27Z","head":"3e6dd84b9c10720b3ef3eeb6f544794582ed334c","pr":110,"target_before":"c6eb88a0cf84f8dbcccaf67476e6c093a19ff1a4","type":"unit.merge_requested","unit":"openspec:add-fake-tools"}
 {"at":"2026-11-09T14:45:32Z","ci":"not_run","head":"3e6dd84b9c10720b3ef3eeb6f544794582ed334c","merge_commit":"c53d3613161b1d872e9d06ebb9f1ee73ae0595e2","method":"squash","pr":110,"raced":false,"type":"unit.merged","unit":"openspec:add-fake-tools"}
+{"at":"2026-11-09T14:45:38Z","branch":"l4/openspec/add-fake-tools","head":"3e6dd84b9c10720b3ef3eeb6f544794582ed334c","type":"unit.branch_deleted","unit":"openspec:add-fake-tools"}
