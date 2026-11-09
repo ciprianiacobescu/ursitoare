@@ -41,6 +41,7 @@ import {
   testRunInvokers,
 } from "./interpreter/index.ts";
 import type { InterpreterDeps } from "./interpreter/index.ts";
+import { checkEgress } from "./gateway/index.ts";
 import type { LogDestination, Logger } from "./observability/index.ts";
 import { createLogger, noopTracer } from "./observability/index.ts";
 import { createPolicyEngine, defaultSrcDir } from "./pdp/index.ts";
@@ -135,6 +136,7 @@ export interface MainDeps {
   registerRunWorkflow?: typeof registerRunWorkflow;
   bindInterpreter?: typeof bindInterpreter;
   createSandbox?: typeof createWorkerSandbox;
+  checkEgress?: typeof checkEgress;
   configureServer?: (server: FastifyInstance) => void | Promise<void>;
   inspectServers?: (s: {
     public: FastifyInstance;
@@ -160,6 +162,25 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
 
   const logger = createLogger({ level: config.logLevel, destination });
   const health: HealthRegistry = createHealthRegistry();
+
+  if (config.egress !== undefined) {
+    try {
+      const selfCheck = await (deps.checkEgress ?? checkEgress)(config.egress, {
+        clock: systemClock,
+        logger,
+      });
+      if (selfCheck.broker === "unreachable") {
+        logger.warn(
+          { code: "EGRESS_BROKER_UNREACHABLE", brokerUrl: config.egress.brokerUrl },
+          "egress broker unreachable; tool calls fail until it answers",
+        );
+      }
+    } catch (error) {
+      bootstrap.fatal(fatalFields(error), fatalMessage(error));
+      exit(1);
+      return null;
+    }
+  }
 
   let database: Database | null;
   try {

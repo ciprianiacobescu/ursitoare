@@ -40,8 +40,10 @@ export function validateEgress(value: unknown): value is Egress {
   );
 }
 
+const issuedPermits = new WeakSet<object>();
+
 export function buildPermit(egress: Egress): Permit {
-  return Object.freeze({
+  const permit = Object.freeze({
     method: egress.method,
     host: egress.host,
     path: egress.path,
@@ -49,8 +51,10 @@ export function buildPermit(egress: Egress): Permit {
     serviceId: egress.serviceId,
     ttlSeconds: egress.ttlSeconds,
   });
+  issuedPermits.add(permit);
+  return permit;
 }
 
-export function isIssuedPermit(_value: unknown): boolean {
-  throw new Error("not implemented");
+export function isIssuedPermit(value: unknown): boolean {
+  return typeof value === "object" && value !== null && issuedPermits.has(value);
 }
