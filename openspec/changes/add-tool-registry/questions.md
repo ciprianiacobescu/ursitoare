@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Criterion C-c3474bfc (tool-registry › The directory resolves a ref only to the approved definition of a bound tool › The directory answers an approved tool, a drifted one with its state, and null for |
 | Q-010 | answered | none | verdict | Criterion C-95f2b798 (tool-registry › Tenant admins may register tool servers and approve surfaces › Only tenant admins of the tenant hold the two actions): accept as satisfied? |
 | Q-011 | answered | none | verdict | Criterion C-0ab1d0b5 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Carol registers and reads, alice is refused and tenant_b sees nothing): accept as sat |
-| Q-012 | open | none | verdict | Criterion C-29de3844 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Approval over HTTP follows the tenant's profile and the approved blocks show as bound |
+| Q-012 | answered | none | verdict | Criterion C-29de3844 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Approval over HTTP follows the tenant's profile and the approved blocks show as bound |
 | Q-013 | open | none | verdict | Criterion C-4114528c (tool-registry › The routes register, list, read, submit and approve for tenant admins only › A null pool or engine key answers as the block routes do): accept as satisfied? |
 | Q-014 | open | none | verdict | Criterion C-0bfb5dc5 (tool-registry › The committed OpenAPI document lists the tool-server routes › The committed document holds the five operations with their actions): accept as satisfied? |
 | Q-015 | open | none | verdict | Hold H-332bbcee: the judge's reply was discarded (part 2 of 2, timeout: no answer within 600s) |
@@ -386,7 +386,8 @@ accept The three tracing tests run the register and read rows over real fragment
 
 ## Q-012: Criterion C-29de3844 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Approval over HTTP follows the tenant's profile and the approved blocks show as bound
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -413,6 +414,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The tracing test runs the approve, PUT and blocks rows of the route plan over HTTP: the 20 test blocks imported unbound, acme and beta registered by carol, the tenant set to team by owner SQL, carol 422 approver_is_submitter, alice 403, dave 422 digest_mismatch on ZERO then 200 with state approved, approvedDigest D_A and the two sorted acme refs; back to solo, carol 422 self_approval_required, flagged 200 with beta.lookup_vendor@1, repeat 422 nothing_pending, nope 404; dave's PUT of SURF_A 200 approved, SURF_B 200 drifted on D_B with dave's session user id as pendingSubmittedBy, the GET method surface 400 body/tools/0/http/method method_without_body, nope 404; and the blocks list of 23 items whose bound refs are exactly the three tool refs, so the 20 test refs are bound false. The route module maps TOOLS_REFUSED to 422 OPERATION_REFUSED with details.reason, TOOLS_NOT_FOUND to 404, TOOLS_INVALID on PUT to body/<field>, passes selfApproval ?? false and approves as { userId, kind: user }, and the blocks route derives bound from a non-null binding.
 ---
 
 ## Q-013: Criterion C-4114528c (tool-registry › The routes register, list, read, submit and approve for tenant admins only › A null pool or engine key answers as the block routes do): accept as satisfied?
