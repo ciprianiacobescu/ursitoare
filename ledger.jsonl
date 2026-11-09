@@ -56,3 +56,5 @@
 {"at":"2026-11-09T10:00:26Z","branch":"l4/archive/openspec/add-gateway-client","head":"c6eb88a0cf84f8dbcccaf67476e6c093a19ff1a4","type":"unit.branch_deleted","unit":"openspec:add-gateway-client"}
 {"at":"2026-11-09T10:00:27Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-fake-tools"}
 {"at":"2026-11-09T10:00:27Z","run":"r-20261109T1000Z-7bad","type":"unit.dispatched","unit":"openspec:add-fake-tools"}
+{"at":"2026-11-09T12:31:13Z","attempt":1,"cost_usd":0.353372,"runs":2,"type":"plan.charged","unit":"openspec:add-fake-tools"}
+{"at":"2026-11-09T12:31:13Z","run":"r-20261109T1231Z-c5e4","type":"unit.dispatched","unit":"openspec:add-fake-tools"}
