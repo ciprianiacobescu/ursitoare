@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Criterion C-0955b490 (tool-registry › A changed surface disables the server until its new digest is approved › A submitted surface drifts an approved server and re-approval restores it): accept as sat |
 | Q-009 | answered | none | verdict | Criterion C-c3474bfc (tool-registry › The directory resolves a ref only to the approved definition of a bound tool › The directory answers an approved tool, a drifted one with its state, and null for |
 | Q-010 | answered | none | verdict | Criterion C-95f2b798 (tool-registry › Tenant admins may register tool servers and approve surfaces › Only tenant admins of the tenant hold the two actions): accept as satisfied? |
-| Q-011 | open | none | verdict | Criterion C-0ab1d0b5 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Carol registers and reads, alice is refused and tenant_b sees nothing): accept as sat |
+| Q-011 | answered | none | verdict | Criterion C-0ab1d0b5 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Carol registers and reads, alice is refused and tenant_b sees nothing): accept as sat |
 | Q-012 | open | none | verdict | Criterion C-29de3844 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Approval over HTTP follows the tenant's profile and the approved blocks show as bound |
 | Q-013 | open | none | verdict | Criterion C-4114528c (tool-registry › The routes register, list, read, submit and approve for tenant admins only › A null pool or engine key answers as the block routes do): accept as satisfied? |
 | Q-014 | open | none | verdict | Criterion C-0bfb5dc5 (tool-registry › The committed OpenAPI document lists the tool-server routes › The committed document holds the five operations with their actions): accept as satisfied? |
@@ -353,7 +353,8 @@ accept The fragment holds exactly the permits tools-register-admin and tools-app
 
 ## Q-011: Criterion C-0ab1d0b5 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Carol registers and reads, alice is refused and tenant_b sees nothing): accept as sat
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -380,6 +381,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The three tracing tests run the register and read rows over real fragments: carol's POST gives 201 with the pending record, the same key replays 201 with Idempotent-Replayed true, a new key gives 409 ALREADY_EXISTS, beta registers, alice's POST and list are 403 FORBIDDEN, the list pages acme then beta by cursor, the detail holds approvedSurface null and pendingSurface SURF_A, nope is 404, and mallory sees an empty list and 404. The local test registers loc with local true (201, pendingDigest D_PING, the ping tool), gets 400 body/origin scheme without the flag and 400 body/local must be boolean for a string, 403 for alice, and asserts three tools.server_registered events with actor kind user and carol's user id. The malformed test asserts the Ajv and ToolsError fields for the empty body, an extra property, a bad id, a surface without tools, a root member, a bad adapter, a loopback origin, a bad path id, an empty PUT body, an empty approve body and a non-boolean flag, plus 422 adapter_unavailable for mcp and that nothing was written. The plan rows the tests do not send (the POST surface refusals for unknown_field, schema_invalid, method_without_body and duplicate, the PUT array and root-member bodies, the PUT bad id, the non-string digest and the unknown digest on a pending server) follow from code the tests do exercise: checkSurface produces those fields and reasons (asserted in the store tests), the route maps a TOOLS_INVALID field starting with tools to body/surface/… on register and surface to body on PUT, the id params schema is shared by the PUT and GET routes, Ajv's type messages reach the same field rule, and decideApproval refuses a non-matching digest as digest_mismatch, which the approval route test shows over HTTP.
 ---
 
 ## Q-012: Criterion C-29de3844 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Approval over HTTP follows the tenant's profile and the approved blocks show as bound
