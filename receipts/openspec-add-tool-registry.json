@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-09T21:45:46Z",
+  "integrated_revision": "d3856a964605d31e6b0738f7496c443bcb2aacd5",
+  "merge_commit": "d3856a964605d31e6b0738f7496c443bcb2aacd5",
+  "plan_digest": "deccf2afb3391e9c",
+  "plan_id": "m6",
+  "postcheck": "pass",
+  "pr": 112,
+  "receipt_id": "m6/openspec:add-tool-registry/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "d500d9ee3be5fd524327c47c45f4c313a2fd0b3b",
+  "spec_digest": "55a8feb07f5ae9b8",
+  "target": "main",
+  "unit_id": "openspec:add-tool-registry"
+}
