@@ -1,9 +1,30 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
+import { createHash } from "node:crypto";
 
-import type { ToolSurface } from "./types.ts";
+import { canonicalize } from "../audit/index.ts";
 
-export function surfaceDigest(_surface: ToolSurface): string {
-  throw new Error("not implemented");
+import type { SurfaceTool, ToolSurface } from "./types.ts";
+
+function normalizeTool(tool: SurfaceTool): unknown {
+  return {
+    name: tool.name,
+    description: tool.description ?? null,
+    effect: tool.effect,
+    input: tool.input,
+    output: tool.output,
+    untrusted_fields: [...(tool.untrusted_fields ?? [])].sort(),
+    untrusted_result: tool.untrusted_result ?? true,
+    unsafe_to_retry: tool.unsafe_to_retry ?? false,
+    data_class: tool.data_class ?? null,
+    http: { method: tool.http.method, path: tool.http.path },
+  };
+}
+
+export function surfaceDigest(surface: ToolSurface): string {
+  const tools = [...surface.tools].sort((left, right) =>
+    left.name < right.name ? -1 : left.name > right.name ? 1 : 0,
+  );
+  const canonical = canonicalize(tools.map(normalizeTool));
+  return `sha256:${createHash("sha256").update(canonical).digest("hex")}`;
 }
 
 export function surfaceRefs(
