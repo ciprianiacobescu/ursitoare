@@ -13,6 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
 | Q-002 | answered | 5.2 | harness | Task 5.2: the pre-satisfied check could not decide |
+| Q-003 | open | 5.2 | harness | Task 5.2: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -342,3 +343,121 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: accept: The already-satisfied claim of task 5.2 holds in the repository, and the two held tests are genuine evidence rather than trivially satisfied assertions. The lifecycle test asserts everything the scenario Start, register, clear and close demands: six distinct loopback URLs over two fakes, seven distinct 32-character base64url secrets, the three vault identities with their scopes, the eleven TypeError registrations with the exact messages of test-plan.md Registration rows, clearRecords emptying issued, requests and events while credentials stay, a second forward leaving one record, and a double close that resolves both calls, closes a keep-alive proxy socket and an h2 vault session, rejects a held forward, closes its upstream socket and leaves ECONNREFUSED on all three ports. The production code already does this: index.ts validates addUpstream against a lowercase host ending in .fake.test with a label before it and a loopback http origin, validates addCredentialless ids as lowercase UUIDs and the target as an http or https origin, and its memoised close() closes the three servers and destroys every tracked socket and HTTP/2 session, while proxy.ts destroys the outgoing upstream request when the caller's response closes unfinished, which is design decision 11. The random secrets are 24 random bytes in base64url, so 32 characters of the asserted alphabet. Nothing in the trace can hang: the test uses no sleep beyond 100 ms, the per-test timeout is 120 s, and the 1800 s the base run hit is the configured 30 minute gate timeout for the whole suite, so the timeout is not evidence against the test. The typecheck excerpt about RequestRedirect is stale: the name no longer occurs anywhere under test/support/fake-egress. Replaying the one-file patch with every gate is the right next step; a retry would meet the same Python-only limitation of the zero-value run, and if the replay's test gate times out again the accept is used up and a person sees it.
+
+---
+
+## Q-003: Task 5.2: the pre-satisfied check could not decide
+
+- **Status:** open
+- **Blocking tasks:** 5.2
+- **Kind:** harness
+- **Asked:** 2026-11-09T01:07Z by claude-sonnet, run r-20261108T2346Z-e004, task 5.2
+- **Criteria:** C-eb168123 (test-fake-egress › The fake starts on loopback, clears its records and closes completely › Start, register, clear and close)
+
+### Context
+L4 could not run the pre-satisfied check of task 5.2, so it does not count the failure against the agent: no attempt was used and no profile was escalated.
+Why: the zero-value run varies Python files only, and test/support/fake-egress/lifecycle.test.ts is not a Python file; the test-base-run run wrote no readable report (timed out after 1800s)
+Runs: test-base-run
+Kept real: nothing
+Tests: test.support.fake-egress.lifecycle.test.ts::C-eb168123: start, register, clear and close
+
+Changes the replay applies (1 files):
+    added test/support/fake-egress/lifecycle.test.ts
+
+Source of the tests (redacted; at most 40 lines each):
+test.support.fake-egress.lifecycle.test.ts::C-eb168123: start, register, clear and close:
+    test("C-eb168123: start, register, clear and close", async () => {
+      const up = await startUpstream();
+      const a = await startFakeEgress();
+      const b = await startFakeEgress();
+      try {
+        const urls = [a, b].flatMap((f) => [f.brokerUrl, f.proxyUrl, f.vaultUrl]);
+        for (const u of urls) assert.match(u, /^http:\/\/127\.0\.0\.1:\d+$/);
+        assert.equal(new Set(urls.map(port)).size, 6);
+    
+        const secrets = [a, b].flatMap((f) => [f.brokerServiceToken, f.proxyServiceToken]);
+        secrets.push(a.vaultAdmin.token, a.vaultProxy.token, a.vaultDenied.token);
+        for (const s of secrets) assert.match(s, /^[A-Za-z0-9_-]{32}$/);
+        assert.equal(new Set(secrets).size, secrets.length);
+        assert.deepEqual(
+          [a.vaultAdmin, a.vaultProxy, a.vaultDenied].map(({ identity, scopes }) => ({ identity, scopes })),
+          [
+            { identity: "svcid_ursitoare_admin", scopes: ["vault.put", "vault.read"] },
+            { identity: "svcid_proxy", scopes: ["vault.read", "vault.put"] },
+            { identity: "svcid_email_proxy", scopes: [] },
+          ],
+        );
+    
+        const O = up.origin;
+        const H = 'addUpstream: host must end with ".fake.test"';
+        const OR = "addUpstream: origin must be an http origin on a loopback host";
+        const IDS = "addCredentialless: ids must be lowercase UUIDs";
+        const TU = "addCredentialless: targetUrl must be an http or https origin";
+        const got = [
+          badCall(() => a.addUpstream("example.com", O)),
+          badCall(() => a.addUpstream("fake.test", O)),
+          badCall(() => a.addUpstream("a.fake.test:8080", O)),
+          badCall(() => a.addUpstream("a.fake.test", "https://127.0.0.1:9")),
+          badCall(() => a.addUpstream("a.fake.test", "http://example.com")),
+          badCall(() => a.addUpstream("a.fake.test", "http://127.0.0.1:9/path")),
+          badCall(() => a.addUpstream("a.fake.test", "http://u:p@127.0.0.1:9")),
+          badCall(() => a.addCredentialless("svc_1", T_A, "http://tools.fake.test")),
+          badCall(() => a.addCredentialless(S3, T_A.toUpperCase(), "http://tools.fake.test")),
+          badCall(() => a.addCredentialless(S3, T_A, "http://tools.fake.test/x")),
+          badCall(() => a.addCredentialless(S3, T_A, "ftp://tools.fake.test")),
+        ];
+    [cut: 60 more lines]
+
+Diff of test/support/fake-egress/lifecycle.test.ts (redacted; at most 40 lines of at most 400 characters shown; a cut says so):
+    diff --git a/test/support/fake-egress/lifecycle.test.ts b/test/support/fake-egress/lifecycle.test.ts
+    new file mode 100644
+    index 0000000..56577fa
+    --- /dev/null
+    +++ b/test/support/fake-egress/lifecycle.test.ts
+    @@ -0,0 +1,188 @@
+    +import assert from "node:assert/strict";
+    +import http from "node:http";
+    +import http2 from "node:http2";
+    +import net from "node:net";
+    +import type { AddressInfo } from "node:net";
+    +import { test } from "node:test";
+    +
+    +import { startFakeEgress } from "./index.ts";
+    +import type { FakeEgress } from "./index.ts";
+    +import { putCredential } from "./vault-client.ts";
+    +
+    +const T_A = "4b8a2c1e-0000-8000-8000-000000000001";
+    +const S1 = "0b2f7e1c-5d0a-4c4e-9a51-3f2b8d6c1e01";
+    +const S3 = "0b2f7e1c-5d0a-4c4e-9a51-3f2b8d6c1e03";
+    +
+    +interface Upstream {
+    +  origin: string;
+    +  sockets: Set<net.Socket>;
+    +  close(): Promise<void>;
+    +}
+    +
+    +async function startUpstream(): Promise<Upstream> {
+    +  const sockets = new Set<net.Socket>();
+    +  const server = http.createServer((req, res) => {
+    +    req.resume();
+    +    if (req.url === "/hold") {
+    +      res.writeHead(200);
+    +      res.write("x");
+    +      return;
+    +    }
+    +    res.end("ok");
+    +  });
+    +  server.on("connection", (s: net.Socket) => {
+    +    sockets.add(s);
+    [cut: 154 more lines; the cut lines are replayed too: the whole change is in `openspec/changes/add-fake-egress-proxy/.l4/held/5.2-pre_satisfied.patch` on the unit branch]
+
+`accept: <why>` replays exactly the saved change of 1 files (the whole patch is in `openspec/changes/add-fake-egress-proxy/.l4/held/5.2-pre_satisfied.patch` on the unit branch): the next run applies it, with every guard and gate an agent's changes get, instead of starting an agent. The accept takes effect only through that replay: if the replay fails a gate or the check refutes a criterion, the accept is used up, and a later step that meets the same inconclusive check is held again with a new question. When the check cannot decide again during the replay, the claim is taken (the verifier and the judge see that it was accepted). A criterion that the check shows not to discriminate still fails the attempt.
+`retry: <note>` runs the check again, for example after an L4 upgrade; the note reaches the agent.
+A person answers; an agent only where `clarifier.answer_by_agents` is true on the base branch.
+
+### Options
+1. accept: count these on the evidence of the real run
+2. retry: run the check again (after an L4 upgrade or a fix)
+
+### Answer
+<!-- write below this line -->
