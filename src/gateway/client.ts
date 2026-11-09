@@ -201,7 +201,29 @@ export function createGateway(config: EgressConfig, deps: GatewayDeps): Gateway 
     if (state === undefined || state.used) throw invalid("token_used");
     if (token.expiresAt <= Math.floor(deps.clock.now().getTime() / 1000)) throw invalid("token_expired");
 
-    throw new Error("not implemented");
+    state.used = true;
+
+    const controller = new AbortController();
+    const fetchImpl = deps.fetch ?? fetch;
+
+    const response = await fetchImpl(`${config.proxyUrl}/${permit.serviceId}${request.path}`, {
+      method: request.method,
+      headers: {
+        ...request.headers,
+        authorization: `Bearer ${state.jwt}`,
+        "x-ursitoare-call": callHeader(tag),
+      },
+      body: request.body,
+      redirect: "manual",
+      signal: controller.signal,
+    });
+
+    const headers: Record<string, string> = {};
+    response.headers.forEach((value: string, name: string): void => {
+      headers[name] = value;
+    });
+    const body = new Uint8Array(await response.arrayBuffer());
+    return { status: response.status, headers, body };
   }
 
   return { requestToken, send };
