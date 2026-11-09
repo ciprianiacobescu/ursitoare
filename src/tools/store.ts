@@ -2,11 +2,12 @@ import { appendAudit, formatAt } from "../audit/index.ts";
 import type { AuditEventInput } from "../audit/index.ts";
 import { systemClock } from "../core/index.ts";
 import type { Clock } from "../core/index.ts";
-import { listBlockVersions } from "../registry/index.ts";
+import { RegistryError, importCatalogue, listBlockVersions } from "../registry/index.ts";
+import type { BlockImport } from "../registry/index.ts";
 import { withTenantTx } from "../tenancy/index.ts";
 import type { TenantContext, TenantPool, TenantTx } from "../tenancy/index.ts";
 import { validateOrigin } from "./origin.ts";
-import { checkSurface, surfaceDigest, surfaceRefs } from "./surface.ts";
+import { checkSurface, surfaceDigest, surfaceRefs, toolBlock } from "./surface.ts";
 import { ToolsError } from "./types.ts";
 import type {
   SurfaceTool,
@@ -314,15 +315,133 @@ export async function submitSurface(
   throw new Error("not implemented");
 }
 
+function refused(reason: string): ToolsError {
+  return new ToolsError("TOOLS_REFUSED", "tool server request refused", { reason });
+}
+
+interface ApprovalDecision {
+  refs: string[];
+  blocks: Record<string, BlockImport>;
+  selfApproved: boolean;
+}
+
+async function decideApproval(
+  pool: TenantPool,
+  ctx: TenantContext,
+  serverId: string,
+  input: { digest: string; selfApproval: boolean },
+  actor: { userId: string; kind: "user" },
+): Promise<ApprovalDecision> {
+  return withTenantTx(pool, ctx, async (tx) => {
+    const row = await loadServer(tx, ctx, serverId);
+    if (row === null) {
+      throw new ToolsError("TOOLS_NOT_FOUND", "tool server not found", { id: serverId });
+    }
+    const newest = await newestSurface(tx, ctx, serverId);
+    if (newest === null || newest.approved_by !== null) {
+      throw refused("nothing_pending");
+    }
+    if (newest.surface_digest !== input.digest) {
+      throw refused("digest_mismatch");
+    }
+    const submitter = newest.submitted_by === actor.userId;
+    if (ctx.reviewProfile === "team" && submitter) {
+      throw refused("approver_is_submitter");
+    }
+    if (ctx.reviewProfile === "solo" && submitter && input.selfApproval !== true) {
+      throw refused("self_approval_required");
+    }
+
+    const taken = await readTaken(tx, ctx, serverId);
+    const byName = surfaceRefs(serverId, newest.surface, taken);
+    const blocks: Record<string, BlockImport> = {};
+    const refs: string[] = [];
+    for (const tool of newest.surface.tools) {
+      const ref = byName[tool.name];
+      if (ref === undefined) continue;
+      blocks[ref] = toolBlock(serverId, tool);
+      refs.push(ref);
+    }
+    refs.sort((left, right) => (left < right ? -1 : left > right ? 1 : 0));
+    return { refs, blocks, selfApproved: submitter };
+  });
+}
+
 export async function approveSurface(
-  _pool: TenantPool,
-  _ctx: TenantContext,
-  _serverId: string,
-  _input: { digest: string; selfApproval: boolean },
-  _actor: { userId: string; kind: "user" },
-  _opts?: { clock?: Clock },
+  pool: TenantPool,
+  ctx: TenantContext,
+  serverId: string,
+  input: { digest: string; selfApproval: boolean },
+  actor: { userId: string; kind: "user" },
+  opts?: { clock?: Clock },
 ): Promise<{ server: ToolServerRecord; blocks: string[] }> {
-  throw new Error("not implemented");
+  const decision = await decideApproval(pool, ctx, serverId, input, actor);
+
+  try {
+    await importCatalogue(
+      pool,
+      ctx,
+      decision.blocks,
+      { kind: "user", id: actor.userId },
+      opts,
+    );
+  } catch (error) {
+    if (error instanceof RegistryError && error.code === "REGISTRY_CONFLICT") {
+      throw refused("ref_conflict");
+    }
+    throw error;
+  }
+
+  const clock = opts?.clock ?? systemClock;
+  const now = clock.now();
+
+  return withTenantTx(pool, ctx, async (tx) => {
+    const locked = await tx.query<ServerRow>(
+      `SELECT ${SERVER_COLUMNS} FROM ursitoare.tool_server
+       WHERE tenant_id = $1 AND tool_server_id = $2 FOR UPDATE`,
+      [ctx.tenantId, serverId],
+    );
+    const row = locked.rows[0];
+    if (row === undefined) {
+      throw new ToolsError("TOOLS_NOT_FOUND", "tool server not found", { id: serverId });
+    }
+    const newest = await newestSurface(tx, ctx, serverId);
+    if (newest === null || newest.approved_by !== null || newest.surface_digest !== input.digest) {
+      throw refused("digest_mismatch");
+    }
+
+    await tx.query(
+      `UPDATE ursitoare.tool_surface
+          SET approved_by = $1, approved_at = $2, self_approved = $3
+        WHERE tenant_id = $4 AND tool_server_id = $5 AND surface_digest = $6`,
+      [actor.userId, now, decision.selfApproved, ctx.tenantId, serverId, input.digest],
+    );
+    await tx.query(
+      `UPDATE ursitoare.tool_server
+          SET state = 'approved', approved_digest = $1
+        WHERE tenant_id = $2 AND tool_server_id = $3`,
+      [input.digest, ctx.tenantId, serverId],
+    );
+    await appendAudit(
+      tx,
+      ctx,
+      {
+        eventType: decision.selfApproved
+          ? "tools.surface_self_approved"
+          : "tools.surface_approved",
+        actor: { kind: "user", id: actor.userId },
+        target: { kind: "tool_server", id: serverId },
+        payload: { digest: input.digest, refs: decision.refs },
+      },
+      opts,
+    );
+
+    const updated = await loadServer(tx, ctx, serverId);
+    if (updated === null) {
+      throw new ToolsError("TOOLS_NOT_FOUND", "tool server not found", { id: serverId });
+    }
+    return { server: await toRecord(tx, ctx, updated), blocks: decision.refs };
+  });
 }
 
 export async function getToolServer(
