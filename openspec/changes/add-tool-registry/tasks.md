@@ -19,7 +19,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 4. The directory and the fragment
 
-- [ ] 4.1 Write `src/tools/directory.test.ts` first (scenario "The directory answers an approved tool, a drifted one with its state, and null for everything else", including its rows `gamma` and `zeta` that hold the `resolve` assertions of the approval scenario), then implement `createToolDirectory` in `src/tools/directory.ts`, implementing its requirement
+- [x] 4.1 Write `src/tools/directory.test.ts` first (scenario "The directory answers an approved tool, a drifted one with its state, and null for everything else", including its rows `gamma` and `zeta` that hold the `resolve` assertions of the approval scenario), then implement `createToolDirectory` in `src/tools/directory.ts`, implementing its requirement
 - [ ] 4.2 Write `src/tools/policy.test.ts` first (scenario "Only tenant admins of the tenant hold the two actions", in the shape of `src/registry/policy.test.ts`), then create `src/tools/policy/tools.cedar`, implementing its requirement
 
 ## 5. The routes
