@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-09T03:41:49Z",
+  "integrated_revision": "55ea8cc65d987e3042e105c86c51b2fedb12b9ce",
+  "merge_commit": "55ea8cc65d987e3042e105c86c51b2fedb12b9ce",
+  "plan_digest": "deccf2afb3391e9c",
+  "plan_id": "m6",
+  "postcheck": "pass",
+  "pr": 106,
+  "receipt_id": "m6/openspec:add-fake-egress-proxy/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "71fc5026733dc89730b2694c1c6d5dad4c2b1135",
+  "spec_digest": "9755f6c289888f6c",
+  "target": "main",
+  "unit_id": "openspec:add-fake-egress-proxy"
+}
