@@ -12,6 +12,7 @@ export type {
   Pdp,
 } from "./types.ts";
 export { createPdp } from "./engine.ts";
+export { isIssuedPermit } from "./permit.ts";
 export type { PdpErrorCode } from "./errors.ts";
 export { PdpError } from "./errors.ts";
 export {

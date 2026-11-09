@@ -2,7 +2,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 1. The permit
 
-- [ ] 1.1 Write `src/pdp/issued-permit.test.ts` first (scenario "Only a permit issued by this process is accepted"), then implement `BASE_EGRESS` and `issuedPermit` in `test/support/gateway-kit.ts` and `isIssuedPermit` in `src/pdp/permit.ts` and add its export line to `src/pdp/index.ts`, implementing requirement "isIssuedPermit is true only for a permit this process's PDP returned"
+- [x] 1.1 Write `src/pdp/issued-permit.test.ts` first (scenario "Only a permit issued by this process is accepted"), then implement `BASE_EGRESS` and `issuedPermit` in `test/support/gateway-kit.ts` and `isIssuedPermit` in `src/pdp/permit.ts` and add its export line to `src/pdp/index.ts`, implementing requirement "isIssuedPermit is true only for a permit this process's PDP returned"
 
 ## 2. The configuration
 
