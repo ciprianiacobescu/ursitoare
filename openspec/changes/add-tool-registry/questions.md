@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 3.1 | technical | src/tools/store.test.ts:130-146 and :243-248 read forced-RLS tables through a bare ownerPool |
-| Q-002 | open | none | verdict | Criterion C-c3dcd848 (tool-registry › Tool servers and surfaces are stored per tenant, and only `approveSurface` sets the approval columns › Migration 0470 stores servers and surfaces with narrow upda |
+| Q-002 | answered | none | verdict | Criterion C-c3dcd848 (tool-registry › Tool servers and surfaces are stored per tenant, and only `approveSurface` sets the approval columns › Migration 0470 stores servers and surfaces with narrow upda |
 | Q-003 | open | none | verdict | Criterion C-f1acd012 (tool-registry › validateOrigin accepts public https origins and refuses unsafe ones › Each of 55 inputs is accepted or refused with its reason): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-9e03eeea (tool-registry › The surface digest is canonical, fixtureSurface builds fixture surfaces, and block refs are chosen by content › The digest ignores order and fills defaults, fixtu |
 | Q-005 | open | none | verdict | Criterion C-d0c13cf0 (tool-registry › Registering a server stores it pending with its first surface › Register stores a pending server and refuses what is invalid, taken or foreign): accept as satisfi |
@@ -56,7 +56,8 @@ Edit `src/tools/store.test.ts`: wrap each ownerPool read of ursitoare.tool_serve
 
 ## Q-002: Criterion C-c3dcd848 (tool-registry › Tool servers and surfaces are stored per tenant, and only `approveSurface` sets the approval columns › Migration 0470 stores servers and surfaces with narrow upda
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -83,6 +84,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The schema test walks all 25 migration rows of the test plan in order with the listed outcomes (23505, 42501, 23514, 23503), asserts version 470 named tool_registry, an empty checkTenancyCatalog, and tenant_b seeing 0 rows where tenant_a sees 2 servers and 1 surface. Migration 0470 has the primary keys, the state and approval-column CHECKs, forced row level security and the narrow column-level UPDATE grants with no DELETE grant.
 ---
 
 ## Q-003: Criterion C-f1acd012 (tool-registry › validateOrigin accepts public https origins and refuses unsafe ones › Each of 55 inputs is accepted or refused with its reason): accept as satisfied?
