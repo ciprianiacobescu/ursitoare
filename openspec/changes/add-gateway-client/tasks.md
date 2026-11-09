@@ -29,7 +29,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 7. The composition root and the rule
 
-- [ ] 7.1 Write `src/main.egress.test.ts` first (scenario "main refuses an open issuer and starts otherwise"), then edit the shared `src/main.ts`: import `checkEgress` from `./gateway/index.ts`, add `checkEgress?: typeof checkEgress` to `MainDeps` and call it as design decision 9 says, implementing requirement "main refuses an open issuer and starts otherwise"
+- [x] 7.1 Write `src/main.egress.test.ts` first (scenario "main refuses an open issuer and starts otherwise"), then edit the shared `src/main.ts`: import `checkEgress` from `./gateway/index.ts`, add `checkEgress?: typeof checkEgress` to `MainDeps` and call it as design decision 9 says, implementing requirement "main refuses an open issuer and starts otherwise"
 - [ ] 7.2 Write `test/arch/egress-sites.test.ts` first (scenario "Only inventoried files import the gateway"; the frozen test is named `C-76ead8ea the engine's egress sites are exactly the inventory`), then implement `checkEgressSites` in `test/arch/egress-sites.ts` (the literal is exactly `["src/main.ts"]`; a type-only import is no site, design decision 10), implementing requirement "Only inventoried files import the gateway"
 
 ## 8. The part
