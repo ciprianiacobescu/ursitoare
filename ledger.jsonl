@@ -49,3 +49,4 @@
 {"at":"2026-11-09T09:06:59Z","run":"r-20261109T0906Z-2c9c","type":"unit.dispatched","unit":"openspec:add-gateway-client"}
 {"at":"2026-11-09T09:53:29Z","head":"c1ff1b1810313362ba617db17df06945f746a193","pr":108,"target_before":"3c30dc1b4fbfd994f50dd3188f728200c042a623","type":"unit.merge_requested","unit":"openspec:add-gateway-client"}
 {"at":"2026-11-09T09:53:34Z","ci":"not_run","head":"c1ff1b1810313362ba617db17df06945f746a193","merge_commit":"26fd28310a1a62cefe3a67bb97ebb968900485f9","method":"squash","pr":108,"raced":false,"type":"unit.merged","unit":"openspec:add-gateway-client"}
+{"at":"2026-11-09T09:53:39Z","branch":"l4/openspec/add-gateway-client","head":"c1ff1b1810313362ba617db17df06945f746a193","type":"unit.branch_deleted","unit":"openspec:add-gateway-client"}
