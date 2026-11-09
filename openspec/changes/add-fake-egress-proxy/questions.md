@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
 | Q-002 | answered | 5.2 | harness | Task 5.2: the pre-satisfied check could not decide |
-| Q-003 | open | 5.2 | harness | Task 5.2: the pre-satisfied check could not decide |
+| Q-003 | answered | 5.2 | harness | Task 5.2: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -348,7 +348,8 @@ accept: accept: The already-satisfied claim of task 5.2 holds in the repository,
 
 ## Q-003: Task 5.2: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.2
 - **Kind:** harness
 - **Asked:** 2026-11-09T01:07Z by claude-sonnet, run r-20261108T2346Z-e004, task 5.2
@@ -461,3 +462,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: accept: The already-satisfied claim of task 5.2 holds in the repository, and the single held test is genuine evidence rather than a trivially satisfied assertion. The new lifecycle test asserts the whole scenario Start, register, clear and close: six distinct loopback URLs over two fakes, seven distinct 32-character base64url secrets, the three vault identities with their scopes, the eleven TypeError registrations with the exact messages of test-plan.md Registration rows followed by the 502 vault error for the unrouted service, clearRecords emptying issued, requests and events while the credential stays, a second forward leaving one record, and a double close that resolves both calls, closes a keep-alive proxy socket and an h2 vault session, rejects a held forward, closes its upstream socket and leaves ECONNREFUSED on all three ports. The production code already does this: index.ts validates addUpstream against a lower-cased host ending in .fake.test with a label before it and a loopback http origin, validates addCredentialless ids as lowercase UUIDs and the target as an http or https origin, and its memoised close closes the three servers and destroys every tracked socket and HTTP/2 session, while proxy.ts destroys the outgoing upstream request when the caller's response closes unfinished, which is design decision 11; randomSecret gives 24 random bytes in base64url, so 32 characters of the asserted alphabet. None of these assertions passes without that code, so the test discriminates. The lint failure of the first replay came from an invalid void type annotation; the saved file uses no such annotation, and its arrow shorthand patterns are the same ones the lint-passing test files of this module already use. Nothing in the test can hang the gate: its only sleeps are 100 ms and up to fifty 20 ms polls, every awaited promise resolves on an event the close path produces, and the per-test timeout is 120 s; the 1800 s is the base run's own gate timeout, not evidence about the file. Replaying the one-file patch with every gate is the right next step; a retry would meet the same Python-only limitation of the zero-value run.
