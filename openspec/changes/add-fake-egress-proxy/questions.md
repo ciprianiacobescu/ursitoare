@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
 | Q-002 | answered | 5.2 | harness | Task 5.2: the pre-satisfied check could not decide |
 | Q-003 | answered | 5.2 | harness | Task 5.2: the pre-satisfied check could not decide |
-| Q-004 | open | none | verdict | Finding F-39583b05: Unreachable request body hash is computed before the body is drained |
+| Q-004 | answered | none | verdict | Finding F-39583b05: Unreachable request body hash is computed before the body is drained |
 | Q-005 | open | none | verdict | Finding F-e6c2caec: task 4.2 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
@@ -470,7 +470,8 @@ accept: accept: The already-satisfied claim of task 5.2 holds in the repository,
 
 ## Q-004: Finding F-39583b05: Unreachable request body hash is computed before the body is drained
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -492,6 +493,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding describes the code accurately and the behaviour it names is a defect of the record, not a harmless detail. In the proxy module the unreachable path calls req.resume() and then finish(502) at once, and finish takes the digest from hash.copy(), so for a connection error the recorded bodySha256 covers only the request bytes that had already flowed before the upstream socket failed; a large or chunked body gives a timing-dependent digest. The no-route path is worse: it awaits readAll(req), which resolves the hex digest string, and feeds that string into the hash, so the record holds the SHA-256 of a hex digest rather than of the body, even for an empty body. The design says the body streams to the upstream while its SHA-256 is computed, that refusals read the body to its end before recording, and that the unreachable case is recorded with status 502 and outcome error, so the record's bodySha256 is meant to be the digest of the whole body in that case too. No scenario pins it only because the pass-through rows send GET without a body and the test compares path, status, outcome and host, so the fix is checked by the sentence below. WHEN a request with a body is forwarded to an upstream the proxy cannot reach, whether because the target host has no route and is not loopback or because the connection fails before response headers, THEN the proxy reads the request body to its end before it appends the ForwardedRequest and the record's bodySha256 equals the hex SHA-256 of the whole request body.
 ---
 
 ## Q-005: Finding F-e6c2caec: task 4.2 is ticked as already satisfied, but its text is not done
