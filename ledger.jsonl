@@ -71,3 +71,5 @@
 {"at":"2026-11-09T14:52:32Z","run":"r-20261109T1452Z-37e1","type":"unit.dispatched","unit":"openspec:add-tool-registry"}
 {"at":"2026-11-09T17:27:59Z","attempt":1,"cost_usd":1.91883,"runs":2,"type":"plan.charged","unit":"openspec:add-tool-registry"}
 {"at":"2026-11-09T17:27:59Z","run":"r-20261109T1727Z-b0a3","type":"unit.dispatched","unit":"openspec:add-tool-registry"}
+{"at":"2026-11-09T17:31:24Z","attempt":1,"cost_usd":3.745597,"runs":3,"type":"plan.charged","unit":"openspec:add-tool-registry"}
+{"at":"2026-11-09T17:31:24Z","run":"r-20261109T1731Z-f90b","type":"unit.dispatched","unit":"openspec:add-tool-registry"}
