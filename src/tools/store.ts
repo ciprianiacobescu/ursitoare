@@ -312,6 +312,7 @@ export async function submitSurface(
   actor: AuditEventInput["actor"],
   opts?: { clock?: Clock },
 ): Promise<ToolServerRecord> {
+  const checked = checkSurface(surface);
   return withTenantTx(pool, ctx, async (tx) => {
     const locked = await tx.query<ServerRow>(
       `SELECT ${SERVER_COLUMNS} FROM ursitoare.tool_server
@@ -323,7 +324,6 @@ export async function submitSurface(
       throw new ToolsError("TOOLS_NOT_FOUND", "tool server not found", { id: serverId });
     }
 
-    const checked = checkSurface(surface);
     const digest = surfaceDigest(checked);
     const newest = await newestSurface(tx, ctx, serverId);
 
