@@ -15,7 +15,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 - [x] 3.1 Write `src/tools/store.test.ts` first (scenario "Register stores a pending server and refuses what is invalid, taken or foreign"), then implement `ToolsError` in `types.ts`, `checkSurface` in `surface.ts` and `registerToolServer`, `registerToolServerTx`, `getToolServer`, `getToolServerDetail`, `listToolServers`, `assertTenant` in `src/tools/store.ts`, and add the export lines of `types.ts`, `origin.ts`, `surface.ts`, `store.ts` and `directory.ts` to `src/tools/index.ts`, implementing its requirement
 - [x] 3.2 Write `src/tools/approve.test.ts` first (scenarios "A team refuses the submitter, a solo tenant needs the flag, and every refusal writes nothing" and "Approval imports bound blocks, and a repeat completes after a failed second step"; its `zeta` row inserts the newer surface through the owner pool and it calls no `submitSurface` (task 3.3) and no `resolve` (task 4.1)), then implement `approveSurface` in `store.ts` (transaction 2 locks the server row first and rechecks the newest digest), implementing "Approval needs another admin…" and "Approval writes immutable bound block versions…"
-- [ ] 3.3 Write `src/tools/submit.test.ts` first (scenario "A submitted surface drifts an approved server and re-approval restores it"), then implement `submitSurface` in `store.ts`, implementing its requirement
+- [x] 3.3 Write `src/tools/submit.test.ts` first (scenario "A submitted surface drifts an approved server and re-approval restores it"), then implement `submitSurface` in `store.ts`, implementing its requirement
 
 ## 4. The directory and the fragment
 

@@ -305,14 +305,81 @@ export async function registerToolServerTx(
 }
 
 export async function submitSurface(
-  _pool: TenantPool,
-  _ctx: TenantContext,
-  _serverId: string,
-  _surface: ToolSurface,
-  _actor: AuditEventInput["actor"],
-  _opts?: { clock?: Clock },
+  pool: TenantPool,
+  ctx: TenantContext,
+  serverId: string,
+  surface: ToolSurface,
+  actor: AuditEventInput["actor"],
+  opts?: { clock?: Clock },
 ): Promise<ToolServerRecord> {
-  throw new Error("not implemented");
+  return withTenantTx(pool, ctx, async (tx) => {
+    const locked = await tx.query<ServerRow>(
+      `SELECT ${SERVER_COLUMNS} FROM ursitoare.tool_server
+       WHERE tenant_id = $1 AND tool_server_id = $2 FOR UPDATE`,
+      [ctx.tenantId, serverId],
+    );
+    const row = locked.rows[0];
+    if (row === undefined) {
+      throw new ToolsError("TOOLS_NOT_FOUND", "tool server not found", { id: serverId });
+    }
+
+    const checked = checkSurface(surface);
+    const digest = surfaceDigest(checked);
+    const newest = await newestSurface(tx, ctx, serverId);
+
+    if (digest === row.approved_digest) {
+      return toRecord(tx, ctx, row);
+    }
+    if (
+      newest !== null &&
+      newest.approved_by === null &&
+      newest.surface_digest === digest
+    ) {
+      return toRecord(tx, ctx, row);
+    }
+    const stored = await approvedSurface(tx, ctx, serverId, digest);
+    if (stored !== null) {
+      throw refused("surface_known");
+    }
+
+    const clock = opts?.clock ?? systemClock;
+    const now = clock.now();
+    const drift = row.approved_digest !== null;
+
+    await tx.query(
+      `INSERT INTO ursitoare.tool_surface
+         (tenant_id, tool_server_id, surface_digest, surface, submitted_by, submitted_at,
+          approved_by, approved_at, self_approved)
+       VALUES ($1, $2, $3, $4::jsonb, $5, $6, NULL, NULL, NULL)`,
+      [ctx.tenantId, serverId, digest, JSON.stringify(checked), actor.id, now],
+    );
+
+    if (row.state === "approved") {
+      await tx.query(
+        `UPDATE ursitoare.tool_server SET state = 'drifted'
+         WHERE tenant_id = $1 AND tool_server_id = $2`,
+        [ctx.tenantId, serverId],
+      );
+    }
+
+    await appendAudit(
+      tx,
+      ctx,
+      {
+        eventType: "tools.surface_submitted",
+        actor,
+        target: { kind: "tool_server", id: serverId },
+        payload: { digest, drift },
+      },
+      opts,
+    );
+
+    const updated = await loadServer(tx, ctx, serverId);
+    if (updated === null) {
+      throw new ToolsError("TOOLS_NOT_FOUND", "tool server not found", { id: serverId });
+    }
+    return toRecord(tx, ctx, updated);
+  });
 }
 
 function refused(reason: string): ToolsError {
