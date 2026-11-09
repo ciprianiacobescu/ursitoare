@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Criterion C-59cbd279 (tool-registry › Approval needs another admin in a team and an explicit, audited self-approval when solo › A team refuses the submitter, a solo tenant needs the flag, and every re |
 | Q-007 | answered | none | verdict | Criterion C-6d84e4c8 (tool-registry › Approval writes immutable bound block versions and a failure between its two steps leaves them inert › Approval imports bound blocks, and a repeat completes after |
 | Q-008 | answered | none | verdict | Criterion C-0955b490 (tool-registry › A changed surface disables the server until its new digest is approved › A submitted surface drifts an approved server and re-approval restores it): accept as sat |
-| Q-009 | open | none | verdict | Criterion C-c3474bfc (tool-registry › The directory resolves a ref only to the approved definition of a bound tool › The directory answers an approved tool, a drifted one with its state, and null for  |
+| Q-009 | answered | none | verdict | Criterion C-c3474bfc (tool-registry › The directory resolves a ref only to the approved definition of a bound tool › The directory answers an approved tool, a drifted one with its state, and null for |
 | Q-010 | open | none | verdict | Criterion C-95f2b798 (tool-registry › Tenant admins may register tool servers and approve surfaces › Only tenant admins of the tenant hold the two actions): accept as satisfied? |
 | Q-011 | open | none | verdict | Criterion C-0ab1d0b5 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Carol registers and reads, alice is refused and tenant_b sees nothing): accept as sat |
 | Q-012 | open | none | verdict | Criterion C-29de3844 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Approval over HTTP follows the tenant's profile and the approved blocks show as bound |
@@ -287,7 +287,8 @@ accept The tracing test approves acme on SURF_A and beta on SURF_ONE as ALICE so
 
 ## Q-009: Criterion C-c3474bfc (tool-registry › The directory resolves a ref only to the approved definition of a bound tool › The directory answers an approved tool, a drifted one with its state, and null for 
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -314,6 +315,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The three tracing tests walk every directory row of the test plan: null before approval, BIND_LV_1 and BIND_PAY_1 after acme is approved, null for the unbound erp ref, an unknown ref, a missing tool and tenant_b, the drifted state after SURF_B is submitted, null for lookup_vendor@1 with BIND_LV_2 and BIND_PAY_1 once D_B is approved, null for the foreign-prefix, partial and extra-key bindings, null for create_payment@1 after SURF_E is approved, null for gamma after the failed second step and BIND_GAMMA after the repeat, null for zeta after the race, and a rejection with message db down from a pool whose connect rejects. The implementation resolves only when the binding is exactly two strings, the ref starts with server.tool@, the server has an approved digest, the approved surface holds the tool and its block hash equals the version's content hash, returns the server's state in the binding, and runs inside withTenantTx so a connect failure propagates.
 ---
 
 ## Q-010: Criterion C-95f2b798 (tool-registry › Tenant admins may register tool servers and approve surfaces › Only tenant admins of the tenant hold the two actions): accept as satisfied?
