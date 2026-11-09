@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | technical | src/credentials/schema.test.ts:31-38 insertServer cannot insert into tool_server through the owner pool |
+| Q-001 | accepted | 1.1 | technical | src/credentials/schema.test.ts:31-38 insertServer cannot insert into tool_server through the owner pool |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/credentials/schema.test.ts:31-38 insertServer cannot insert into tool_server through the owner pool
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 1.1
 - **Kind:** technical
 - **Asked:** 2026-11-09T22:06Z by claude-sonnet, run r-20261109T2147Z-0cd4, task 1.1
