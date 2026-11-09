@@ -3,6 +3,7 @@ import http from "node:http";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Socket } from "node:net";
 
+import type { ValidateFunction } from "ajv";
 import { Ajv2020 } from "ajv/dist/2020.js";
 
 import type { Effect } from "../../../src/authoring/index.ts";
@@ -52,22 +53,30 @@ export interface FakeTools {
   close(): Promise<void>;
 }
 
-function loadBlocks(cataloguePath?: string): Map<string, Effect> {
+const MAX_BODY_BYTES = 1048576;
+
+interface BlockInfo {
+  effect: Effect;
+  validate: ValidateFunction;
+}
+
+function loadBlocks(cataloguePath?: string): Map<string, BlockInfo> {
   const document = readCatalogueDocument(cataloguePath);
   const ajv = new Ajv2020({ allErrors: false, strict: false, validateFormats: false });
-  const blocks = new Map<string, Effect>();
+  const blocks = new Map<string, BlockInfo>();
   for (const ref of FIXTURE_REFS) {
     const block = document.blocks[ref];
     if (!Object.hasOwn(document.blocks, ref) || block === undefined) {
       throw new CatalogueDataError("CATALOGUE_INVALID", `${ref}: missing`);
     }
+    let validate: ValidateFunction;
     try {
-      ajv.compile(block.input);
+      validate = ajv.compile(block.input);
       ajv.compile(block.output);
     } catch {
       throw new CatalogueDataError("CATALOGUE_INVALID", `${ref}: schema does not compile`);
     }
-    blocks.set(ref, block.effect);
+    blocks.set(ref, { effect: block.effect, validate });
   }
   return blocks;
 }
@@ -103,21 +112,33 @@ function respond(res: ServerResponse, status: number, body: unknown, headers: Re
   res.end(text);
 }
 
-function readBody(req: IncomingMessage): Promise<Buffer | null> {
+interface BodyRead {
+  body: Buffer;
+  tooLarge: boolean;
+}
+
+function readBody(req: IncomingMessage): Promise<BodyRead | null> {
   return new Promise((resolve) => {
     const chunks: Buffer[] = [];
+    let size = 0;
     let settled = false;
-    const finish = (body: Buffer | null): void => {
+    const finish = (result: BodyRead | null): void => {
       if (settled) {
         return;
       }
       settled = true;
-      resolve(body);
+      resolve(result);
     };
     req.on("data", (chunk: Buffer) => {
-      chunks.push(chunk);
+      size += chunk.length;
+      if (size <= MAX_BODY_BYTES) {
+        chunks.push(chunk);
+      }
     });
-    req.on("end", () => finish(Buffer.concat(chunks)));
+    req.on("end", () => {
+      const tooLarge = size > MAX_BODY_BYTES;
+      finish({ body: tooLarge ? Buffer.alloc(0) : Buffer.concat(chunks), tooLarge });
+    });
     req.on("aborted", () => finish(null));
     req.on("error", () => finish(null));
     req.on("close", () => {
@@ -130,6 +151,7 @@ function readBody(req: IncomingMessage): Promise<Buffer | null> {
 
 export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeTools> {
   const blocks = loadBlocks(opts.catalogue);
+  const strict = opts.strict ?? true;
 
   const records: FakeToolCall[] = [];
   const effects = new Map<string, unknown>();
@@ -160,17 +182,23 @@ export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeT
 
     const rawRef = path.slice(BLOCKS_PREFIX.length);
     const ref = decodeRef(rawRef);
-    const effect = blocks.get(ref);
-    if (effect === undefined) {
+    const info = blocks.get(ref);
+    if (info === undefined) {
       req.resume();
       respond(res, 404, { error: "unknown_block", block: ref });
       return;
     }
+    const effect = info.effect;
 
-    const body = await readBody(req);
-    if (body === null) {
+    const read = await readBody(req);
+    if (read === null) {
       return;
     }
+    if (read.tooLarge) {
+      respond(res, 413, { error: "body_too_large" });
+      return;
+    }
+    const body = read.body;
 
     const text = body.toString("utf8");
     let input: unknown;
@@ -180,8 +208,18 @@ export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeT
       try {
         input = JSON.parse(text);
       } catch {
-        input = {};
+        respond(res, 400, { error: "invalid_json" });
+        return;
       }
+    }
+
+    let details: { path: string; keyword: string }[] | null = null;
+    if (typeof input !== "object" || input === null || Array.isArray(input)) {
+      details = [{ path: "/", keyword: "type" }];
+    } else if (strict && !info.validate(input)) {
+      const first = info.validate.errors?.[0];
+      const pointer = first?.instancePath ?? "";
+      details = [{ path: pointer === "" ? "/" : pointer, keyword: first?.keyword ?? "schema" }];
     }
 
     const idempotencyKey = rawHeader(req, "idempotency-key");
@@ -198,6 +236,9 @@ export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeT
         error: "missing_idempotency_key",
         message: `${ref} has effect=${effect}; send an Idempotency-Key header`,
       };
+    } else if (details !== null) {
+      status = 400;
+      answer = { error: "invalid_input", block: ref, details };
     } else {
       const memoryKey = isEffect ? `${ref}|${idempotencyKey ?? ""}` : null;
       if (memoryKey !== null && effects.has(memoryKey)) {
