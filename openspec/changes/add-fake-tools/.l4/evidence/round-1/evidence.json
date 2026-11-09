@@ -1,0 +1,258 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "parts/50-tools.ts",
+      "src",
+      "src/interpreter/schema.ts",
+      "docs/decisions/0002",
+      "node:assert/strict",
+      "test/support/fake-tools/fixtures.test.ts",
+      "test/support/fake-tools/fixtures.ts",
+      "test/support/fake-tools/read-call.test.ts",
+      "test/support/fake-tools/samples.test.ts",
+      "test/support/fake-tools/catalogue.test.ts",
+      "test/support/fake-tools/index.ts",
+      "test/support/fake-tools/effects.test.ts",
+      "test/support/fake-tools/egress.test.ts",
+      "test/support/fake-egress/vault-client.ts",
+      "test/support/fake-tools/refusals.test.ts",
+      "test/support/fake-tools/knobs.test.ts",
+      "test/support/fake-tools/abort.test.ts",
+      "test/support/fake-tools/lifecycle.test.ts",
+      "test/support/fake-tools/contract.test.ts",
+      "test/support/fake-tools/contract.ts",
+      "test/support/e2e-stack/tools-part.test.ts",
+      "test/support/e2e-stack/tools-part.cluster.test.ts",
+      "test/support/readme.test.ts",
+      "test/support/e2e-stack/tools-part.ts",
+      "test/support/e2e-stack/parts/50-tools.ts",
+      "test/support/README.md",
+      "fake-tools",
+      "**/DELAY_MS_*",
+      "**/INVOICES[\"__proto__\"]",
+      "**/VENDORS[\"constructor\"]",
+      "**/index.ts",
+      "**/fixtures.ts",
+      "**/contract.ts",
+      "**/*",
+      "**/readme.test.ts",
+      "module docs",
+      "module interpreter",
+      "module node:assert",
+      "module parts",
+      "module test",
+      "module tools"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-fake-tools/.l4/ledger/r-20261109T1000Z-7bad.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-tools/.l4/ledger/r-20261109T1231Z-c5e4.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-tools/.l4/ledger/r-20261109T1401Z-50af.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-tools/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-tools/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/README.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/e2e-stack/parts/50-tools.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/tools-part.cluster.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/tools-part.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/tools-part.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-tools/abort.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-tools/catalogue.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-tools/contract.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-tools/contract.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-tools/effects.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-tools/egress.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-tools/fixtures.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-tools/fixtures.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-tools/index.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-tools/knobs.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-tools/lifecycle.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-tools/read-call.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-tools/refusals.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-tools/samples.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/readme.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: test/support/e2e-stack/parts/50-tools.ts, test/support/e2e-stack/tools-part.ts, test/support/fake-tools/contract.ts, test/support/fake-tools/fixtures.ts, test/support/fake-tools/index.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "test/support/e2e-stack/parts/50-tools.ts",
+      "test/support/e2e-stack/tools-part.ts",
+      "test/support/fake-tools/contract.ts",
+      "test/support/fake-tools/fixtures.ts",
+      "test/support/fake-tools/index.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2171,
+      "passed": 2171,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 39,
+      "new_passed": 39,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
