@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Criterion C-0ab1d0b5 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Carol registers and reads, alice is refused and tenant_b sees nothing): accept as sat |
 | Q-012 | answered | none | verdict | Criterion C-29de3844 (tool-registry › The routes register, list, read, submit and approve for tenant admins only › Approval over HTTP follows the tenant's profile and the approved blocks show as bound |
 | Q-013 | answered | none | verdict | Criterion C-4114528c (tool-registry › The routes register, list, read, submit and approve for tenant admins only › A null pool or engine key answers as the block routes do): accept as satisfied? |
-| Q-014 | open | none | verdict | Criterion C-0bfb5dc5 (tool-registry › The committed OpenAPI document lists the tool-server routes › The committed document holds the five operations with their actions): accept as satisfied? |
+| Q-014 | answered | none | verdict | Criterion C-0bfb5dc5 (tool-registry › The committed OpenAPI document lists the tool-server routes › The committed document holds the five operations with their actions): accept as satisfied? |
 | Q-015 | open | none | verdict | Hold H-332bbcee: the judge's reply was discarded (part 2 of 2, timeout: no answer within 600s) |
 <!-- l4:index:end -->
 
@@ -452,7 +452,8 @@ accept The three tracing tests build the harness with registration wrapped in as
 
 ## Q-014: Criterion C-0bfb5dc5 (tool-registry › The committed OpenAPI document lists the tool-server routes › The committed document holds the five operations with their actions): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -479,6 +480,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The committed docs/api/openapi.json holds the four tool-server paths and the five operation ids, every operation carries x-ursitoare-action register_tool_server except the approve operation with approve_tool_surface, whose x-ursitoare-errors list OPERATION_REFUSED, FORBIDDEN and NOT_FOUND; the body schema of post_api_v1_tool_servers has additionalProperties false, required id, adapter, origin and surface, and local of type boolean, matching the POST schema of design.md § Routes and the route module's POST_BODY. The tracing test reads the committed document and asserts each of these points; src/main.ts registers the tool-server routes directly after the block routes, so the real engine serves them, and the frozen conventions test comparing the committed text with the served text is part of the test gate and was not reported failing.
 ---
 
 ## Q-015: Hold H-332bbcee: the judge's reply was discarded (part 2 of 2, timeout: no answer within 600s)
