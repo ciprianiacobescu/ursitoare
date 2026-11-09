@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.1 | technical | src/config/egress.test.ts line 193 asserts maxCalls ["/s/broker"] for the L6 /s/max case |
-| Q-002 | open | 8.1 | technical | test/support/e2e-stack/egress-part.test.ts lines 147 and 227: URL check indexes the token-file key |
+| Q-002 | accepted | 8.1 | technical | test/support/e2e-stack/egress-part.test.ts lines 147 and 227: URL check indexes the token-file key |
 <!-- l4:index:end -->
 
 ---
@@ -43,7 +43,8 @@ Edit `src/config/egress.test.ts`: replace assert.deepEqual(maxCalls, ["/s/broker
 
 ## Q-002: test/support/e2e-stack/egress-part.test.ts lines 147 and 227: URL check indexes the token-file key
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 8.1
 - **Kind:** technical
 - **Asked:** 2026-11-09T09:04Z by claude-sonnet, run r-20261109T0705Z-0de6, task 8.1
