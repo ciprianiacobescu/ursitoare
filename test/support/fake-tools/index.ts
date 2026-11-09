@@ -103,6 +103,9 @@ function decodeRef(raw: string): string {
 }
 
 function respond(res: ServerResponse, status: number, body: unknown, headers: Record<string, string> = {}): void {
+  if (res.destroyed || res.writableEnded) {
+    return;
+  }
   const text = JSON.stringify(body);
   res.writeHead(status, {
     "content-type": "application/json; charset=utf-8",
@@ -155,9 +158,22 @@ export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeT
 
   const records: FakeToolCall[] = [];
   const effects = new Map<string, unknown>();
+  const delays = new Map<string, number>();
+  const failures = new Map<string, { status: number; remaining: number }>();
+  const delayWaiters = new Map<ReturnType<typeof setTimeout>, () => void>();
   let seq = 0;
   let port = 0;
   const sockets = new Set<Socket>();
+
+  function waitDelay(ms: number): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const timer = setTimeout(() => {
+        delayWaiters.delete(timer);
+        resolve();
+      }, ms);
+      delayWaiters.set(timer, resolve);
+    });
+  }
 
   async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> {
     const host = (rawHeader(req, "host") ?? "").toLowerCase();
@@ -230,7 +246,15 @@ export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeT
     let answer: unknown;
     let duplicate = false;
 
-    if (isEffect && (idempotencyKey === null || idempotencyKey === "")) {
+    const failure = failures.get(ref);
+    if (failure !== undefined) {
+      status = failure.status;
+      answer = { error: "injected_failure", status: failure.status };
+      failure.remaining -= 1;
+      if (failure.remaining <= 0) {
+        failures.delete(ref);
+      }
+    } else if (isEffect && (idempotencyKey === null || idempotencyKey === "")) {
       status = 400;
       answer = {
         error: "missing_idempotency_key",
@@ -277,6 +301,11 @@ export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeT
     };
     records.push(record);
 
+    const delay = delays.get(ref) ?? 0;
+    if (delay > 0) {
+      await waitDelay(delay);
+    }
+
     if (status === 200) {
       respond(res, 200, answer, { "x-fake-tools-duplicate": String(duplicate) });
     } else {
@@ -321,11 +350,35 @@ export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeT
         ),
       );
     },
-    setDelay(_ref: string, _ms: number): void {},
-    failNext(_ref: string, _status: number, _times?: number): void {},
+    setDelay(ref: string, ms: number): void {
+      if (!blocks.has(ref)) {
+        throw new RangeError(`unknown block ref: ${ref}`);
+      }
+      if (!Number.isInteger(ms) || ms < 0 || ms > 30000) {
+        throw new RangeError("delay must be an integer from 0 to 30000");
+      }
+      delays.set(ref, ms);
+    },
+    failNext(ref: string, status: number, times = 1): void {
+      if (!blocks.has(ref)) {
+        throw new RangeError(`unknown block ref: ${ref}`);
+      }
+      if (!Number.isInteger(status) || status < 400 || status > 599) {
+        throw new RangeError("status must be an integer from 400 to 599");
+      }
+      if (!Number.isInteger(times) || times < 1 || times > 1000) {
+        throw new RangeError("times must be an integer from 1 to 1000");
+      }
+      failures.set(ref, { status, remaining: times });
+    },
     reset(): void {},
     close(): Promise<void> {
       closing ??= new Promise<void>((resolve) => {
+        for (const [timer, wake] of delayWaiters) {
+          clearTimeout(timer);
+          wake();
+        }
+        delayWaiters.clear();
         server.close(() => resolve());
         for (const socket of sockets) {
           socket.destroy();
