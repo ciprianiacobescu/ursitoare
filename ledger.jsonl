@@ -28,3 +28,5 @@
 {"at":"2026-11-08T22:28:54Z","run":"r-20261108T2228Z-da41","type":"unit.dispatched","unit":"openspec:add-fake-egress-proxy"}
 {"at":"2026-11-08T23:46:22Z","attempt":1,"cost_usd":11.125038,"runs":4,"type":"plan.charged","unit":"openspec:add-fake-egress-proxy"}
 {"at":"2026-11-08T23:46:22Z","run":"r-20261108T2346Z-e004","type":"unit.dispatched","unit":"openspec:add-fake-egress-proxy"}
+{"at":"2026-11-09T01:13:14Z","attempt":1,"cost_usd":14.072976,"runs":5,"type":"plan.charged","unit":"openspec:add-fake-egress-proxy"}
+{"at":"2026-11-09T01:13:14Z","run":"r-20261109T0113Z-8a17","type":"unit.dispatched","unit":"openspec:add-fake-egress-proxy"}
