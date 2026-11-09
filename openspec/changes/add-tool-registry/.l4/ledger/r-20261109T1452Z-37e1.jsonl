@@ -316,3 +316,7 @@
 {"ts": "2026-11-09T17:26:30.844100Z", "run_id": "r-20261109T1452Z-37e1", "unit": "openspec:add-tool-registry", "seq": 316, "type": "pr.labels", "number": 112, "labels": ["l4:implementing", "l4:needs-answers"]}
 {"ts": "2026-11-09T17:26:30.875176Z", "run_id": "r-20261109T1452Z-37e1", "unit": "openspec:add-tool-registry", "seq": 317, "type": "phase.changed", "from": "implementing", "to": "awaiting_human", "trigger": "questions_blocking", "exit_code": 11, "questions": ["Q-001"], "task": "3.1"}
 {"ts": "2026-11-09T17:26:34.481662Z", "run_id": "r-20261109T1452Z-37e1", "unit": "openspec:add-tool-registry", "seq": 318, "type": "pr.labels", "number": 112, "labels": ["l4:awaiting_human", "l4:needs-answers"]}
+{"ts": "2026-11-09T17:26:37.729021Z", "run_id": "r-20261109T1452Z-37e1", "unit": "openspec:add-tool-registry", "seq": 319, "type": "delegate.result", "question": "Q-001", "id": "Q-001", "status": "deferred", "reason": "soft_deadline", "called": false, "tasks": ["3.1"], "target": null, "kind": "technical", "retry_after": "2026-11-09T17:26:37Z"}
+{"ts": "2026-11-09T17:26:37.730091Z", "run_id": "r-20261109T1452Z-37e1", "unit": "openspec:add-tool-registry", "seq": 320, "type": "delegate.pass", "bound": "deadline", "delegate_only": false, "calls": 0}
+{"ts": "2026-11-09T17:26:37.742127Z", "run_id": "r-20261109T1452Z-37e1", "unit": "openspec:add-tool-registry", "seq": 321, "type": "lock.released"}
+{"ts": "2026-11-09T17:26:37.742587Z", "run_id": "r-20261109T1452Z-37e1", "unit": "openspec:add-tool-registry", "seq": 322, "type": "run.finished", "exit_code": 11}
