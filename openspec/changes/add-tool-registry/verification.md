@@ -1,4 +1,4 @@
-# Verification: openspec:add-tool-registry: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-tool-registry: PASS (round 2)
 
 traceability: 13/13 criteria covered by a discriminating test
 
@@ -15,17 +15,17 @@ traceability: 13/13 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base main@5d7c9671a8 contained |
-| 1 | integrity | ok | 196.8 | 11 sub-checks (+1 unfrozen by human answers); scope: 32 changed file(s) |
-| 2 | build | ok | 28.2 |  |
-| 3 | tests | ok | 339.6 |  |
-| 4 | traceability | ok | 0.2 | 13/13 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/api/index.ts, src/api/tool-server-routes.ts, src/main.ts, src/tools/directory.ts, src/tools/index.ts and 5 more |
-| 8 | s1 judge | ok | 1.5 | 11/13 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | failed | 2571.2 | timeout: no answer within 600s |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | failed | 0.0 | timeout: no answer within 600s |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -181,31 +181,44 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-4114528c | ok | 0.930 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-0bfb5dc5 | ok | 0.790 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-002 accept C-c3dcd848 by the delegate (claude-fable-5-1 via claude-code): The schema test walks all 25 migration rows of the test plan in order with the listed outcomes (23505, 42501, 23514, 23503), asserts version 470 named tool_registry, an empty checkTenancyCatalog, and tenant_b seeing 0 rows where tenant_a sees 2 servers and 1 surface. Migration 0470 has the primary k...
+- Q-003 accept C-f1acd012 by the delegate (claude-fable-5-1 via claude-code): The origin test holds exactly the 55 rows of test-plan.md § Origins with their inputs, local flags and expected results, and deep-equals validateOrigin's result for each, including row 10 (https://2130706433 is loopback). The implementation follows design.md § validateOrigin: length and parse give n...
+- Q-004 accept C-9e03eeea by the delegate (claude-fable-5-1 via claude-code): The surface tests assert the SMALL digest, that its reordered and explicit-defaults forms give the same digest, and that the eleven one-field variants and the one-tool form give twelve digests distinct from it and each other. The support tests assert fixtureSurface yields D_A and D_A_DEFAULT, the fo...
+- Q-005 accept C-d0c13cf0 by the delegate (claude-fable-5-1 via claude-code): The store tests register acme as ALICE and deep-equal REC_PENDING, repeat it for TOOLS_EXISTS with id acme, run the 6 inputs and 16 surfaces of § Register rows with their field and reason, register loc and beta and check beta's origin is normalised both in the record and in the stored row, run regis...
+- Q-006 accept C-59cbd279 by the delegate (claude-fable-5-1 via claude-code): The approval test registers acme and beta as ALICE and runs the seven approval calls of the test plan in order: approver_is_submitter, digest_mismatch, self_approval_required and TOOLS_NOT_FOUND with id nope, then asserts no acme or beta block rows and no tools.surface_ audit event; ALICE's flagged ...
+- Q-007 accept C-6d84e4c8 by the delegate (claude-fable-5-1 via claude-code): The tracing test imports the 20 catalogue blocks unbound, has DAVE approve acme in a team and asserts 22 block rows with the two bound acme refs (binding, hash H_LV_F and H_PAY, imported_by u_dave) and the 20 originals unchanged row for row. It then approves gamma through a pool whose client rejects...
+- Q-008 accept C-0955b490 by the delegate (claude-fable-5-1 via claude-code): The tracing test approves acme on SURF_A and beta on SURF_ONE as ALICE solo flagged, registers gamma, and has DAVE submit the six plan surfaces for acme with the clock advanced one second before each: SURF_A gives REC_APPROVED_A, SURF_B twice and SURF_A once give REC_DRIFTED, the DELETE surface thro...
+- Q-009 accept C-c3474bfc by the delegate (claude-fable-5-1 via claude-code): The three tracing tests walk every directory row of the test plan: null before approval, BIND_LV_1 and BIND_PAY_1 after acme is approved, null for the unbound erp ref, an unknown ref, a missing tool and tenant_b, the drifted state after SURF_B is submitted, null for lookup_vendor@1 with BIND_LV_2 an...
+- Q-010 accept C-95f2b798 by the delegate (claude-fable-5-1 via claude-code): The fragment holds exactly the permits tools-register-admin and tools-approve-admin for principal in Role tenant_admin on the actions register_tool_server and approve_tool_surface with no resource constraint. The first tracing test builds an engine over copies of roles.cedar and tools.cedar, deep-eq...
+- Q-011 accept C-0ab1d0b5 by the delegate (claude-fable-5-1 via claude-code): The three tracing tests run the register and read rows over real fragments: carol's POST gives 201 with the pending record, the same key replays 201 with Idempotent-Replayed true, a new key gives 409 ALREADY_EXISTS, beta registers, alice's POST and list are 403 FORBIDDEN, the list pages acme then be...
+- Q-012 accept C-29de3844 by the delegate (claude-fable-5-1 via claude-code): The tracing test runs the approve, PUT and blocks rows of the route plan over HTTP: the 20 test blocks imported unbound, acme and beta registered by carol, the tenant set to team by owner SQL, carol 422 approver_is_submitter, alice 403, dave 422 digest_mismatch on ZERO then 200 with state approved, ...
+- Q-013 accept C-4114528c by the delegate (claude-fable-5-1 via claude-code): The three tracing tests build the harness with registration wrapped in assert.doesNotThrow for both registerBlockRoutes and registerToolServerRoutes, then walk the null-dependency rows: under a null PEP pool, null deps pool and null key, all five routes (the POST with BODY and with {}) answer 503 { ...
+- Q-014 accept C-0bfb5dc5 by the delegate (claude-fable-5-1 via claude-code): The committed docs/api/openapi.json holds the four tool-server paths and the five operation ids, every operation carries x-ursitoare-action register_tool_server except the approve operation with approve_tool_surface, whose x-ursitoare-errors list OPERATION_REFUSED, FORBIDDEN and NOT_FOUND; the body ...
+- Q-015 accept H-332bbcee by the delegate (claude-fable-5-1 via claude-code): The hold comes from a judge timeout on the second part of the diff, not from a finding. I read the files of that part myself: the tool-server route module, its tests, the OpenAPI test, the committed OpenAPI document and the main.ts registration line. The route module follows design.md § Routes (sche...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
-| C-c3dcd848 | tool-registry › Tool servers and surfaces are stored per tenant, and only `approveSurface` sets the approval columns › Migration 0470 stores servers and surfaces with narrow update rights | - | needs_human | the judge gave no verdict for this criterion |
-| C-f1acd012 | tool-registry › validateOrigin accepts public https origins and refuses unsafe ones › Each of 55 inputs is accepted or refused with its reason | - | needs_human | the judge gave no verdict for this criterion |
-| C-9e03eeea | tool-registry › The surface digest is canonical, fixtureSurface builds fixture surfaces, and block refs are chosen by content › The digest ignores order and fills defaults, fixtureSurface matches the catalogue, and refs take the lowest fitting major | - | needs_human | the judge gave no verdict for this criterion |
-| C-d0c13cf0 | tool-registry › Registering a server stores it pending with its first surface › Register stores a pending server and refuses what is invalid, taken or foreign | - | needs_human | the judge gave no verdict for this criterion |
-| C-59cbd279 | tool-registry › Approval needs another admin in a team and an explicit, audited self-approval when solo › A team refuses the submitter, a solo tenant needs the flag, and every refusal writes nothing | - | needs_human | the judge gave no verdict for this criterion |
-| C-6d84e4c8 | tool-registry › Approval writes immutable bound block versions and a failure between its two steps leaves them inert › Approval imports bound blocks, and a repeat completes after a failed second step | - | needs_human | the judge gave no verdict for this criterion |
-| C-0955b490 | tool-registry › A changed surface disables the server until its new digest is approved › A submitted surface drifts an approved server and re-approval restores it | - | needs_human | the judge gave no verdict for this criterion |
-| C-c3474bfc | tool-registry › The directory resolves a ref only to the approved definition of a bound tool › The directory answers an approved tool, a drifted one with its state, and null for everything else | - | needs_human | the judge gave no verdict for this criterion |
-| C-95f2b798 | tool-registry › Tenant admins may register tool servers and approve surfaces › Only tenant admins of the tenant hold the two actions | - | needs_human | the judge gave no verdict for this criterion |
-| C-0ab1d0b5 | tool-registry › The routes register, list, read, submit and approve for tenant admins only › Carol registers and reads, alice is refused and tenant_b sees nothing | - | needs_human | the judge gave no verdict for this criterion |
-| C-29de3844 | tool-registry › The routes register, list, read, submit and approve for tenant admins only › Approval over HTTP follows the tenant's profile and the approved blocks show as bound | - | needs_human | the judge gave no verdict for this criterion |
-| C-4114528c | tool-registry › The routes register, list, read, submit and approve for tenant admins only › A null pool or engine key answers as the block routes do | - | needs_human | the judge gave no verdict for this criterion |
-| C-0bfb5dc5 | tool-registry › The committed OpenAPI document lists the tool-server routes › The committed document holds the five operations with their actions | - | needs_human | the judge gave no verdict for this criterion |
+| C-c3dcd848 | tool-registry › Tool servers and surfaces are stored per tenant, and only `approveSurface` sets the approval columns › Migration 0470 stores servers and surfaces with narrow update rights | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The schema test walks all 25 migration rows of the test plan in order with the listed outcomes (23505, 42501, 23514, 23503), asserts version 470 named tool_registry, an empty checkTenancyCatalog, and tenant_b seeing 0 rows where tenant_a s... |
+| C-f1acd012 | tool-registry › validateOrigin accepts public https origins and refuses unsafe ones › Each of 55 inputs is accepted or refused with its reason | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The origin test holds exactly the 55 rows of test-plan.md § Origins with their inputs, local flags and expected results, and deep-equals validateOrigin's result for each, including row 10 (https://2130706433 is loopback). The implementatio... |
+| C-9e03eeea | tool-registry › The surface digest is canonical, fixtureSurface builds fixture surfaces, and block refs are chosen by content › The digest ignores order and fills defaults, fixtureSurface matches the catalogue, and refs take the lowest fitting major | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The surface tests assert the SMALL digest, that its reordered and explicit-defaults forms give the same digest, and that the eleven one-field variants and the one-tool form give twelve digests distinct from it and each other. The support t... |
+| C-d0c13cf0 | tool-registry › Registering a server stores it pending with its first surface › Register stores a pending server and refuses what is invalid, taken or foreign | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The store tests register acme as ALICE and deep-equal REC_PENDING, repeat it for TOOLS_EXISTS with id acme, run the 6 inputs and 16 surfaces of § Register rows with their field and reason, register loc and beta and check beta's origin is n... |
+| C-59cbd279 | tool-registry › Approval needs another admin in a team and an explicit, audited self-approval when solo › A team refuses the submitter, a solo tenant needs the flag, and every refusal writes nothing | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The approval test registers acme and beta as ALICE and runs the seven approval calls of the test plan in order: approver_is_submitter, digest_mismatch, self_approval_required and TOOLS_NOT_FOUND with id nope, then asserts no acme or beta b... |
+| C-6d84e4c8 | tool-registry › Approval writes immutable bound block versions and a failure between its two steps leaves them inert › Approval imports bound blocks, and a repeat completes after a failed second step | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The tracing test imports the 20 catalogue blocks unbound, has DAVE approve acme in a team and asserts 22 block rows with the two bound acme refs (binding, hash H_LV_F and H_PAY, imported_by u_dave) and the 20 originals unchanged row for ro... |
+| C-0955b490 | tool-registry › A changed surface disables the server until its new digest is approved › A submitted surface drifts an approved server and re-approval restores it | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The tracing test approves acme on SURF_A and beta on SURF_ONE as ALICE solo flagged, registers gamma, and has DAVE submit the six plan surfaces for acme with the clock advanced one second before each: SURF_A gives REC_APPROVED_A, SURF_B tw... |
+| C-c3474bfc | tool-registry › The directory resolves a ref only to the approved definition of a bound tool › The directory answers an approved tool, a drifted one with its state, and null for everything else | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The three tracing tests walk every directory row of the test plan: null before approval, BIND_LV_1 and BIND_PAY_1 after acme is approved, null for the unbound erp ref, an unknown ref, a missing tool and tenant_b, the drifted state after SU... |
+| C-95f2b798 | tool-registry › Tenant admins may register tool servers and approve surfaces › Only tenant admins of the tenant hold the two actions | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The fragment holds exactly the permits tools-register-admin and tools-approve-admin for principal in Role tenant_admin on the actions register_tool_server and approve_tool_surface with no resource constraint. The first tracing test builds ... |
+| C-0ab1d0b5 | tool-registry › The routes register, list, read, submit and approve for tenant admins only › Carol registers and reads, alice is refused and tenant_b sees nothing | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The three tracing tests run the register and read rows over real fragments: carol's POST gives 201 with the pending record, the same key replays 201 with Idempotent-Replayed true, a new key gives 409 ALREADY_EXISTS, beta registers, alice's... |
+| C-29de3844 | tool-registry › The routes register, list, read, submit and approve for tenant admins only › Approval over HTTP follows the tenant's profile and the approved blocks show as bound | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The tracing test runs the approve, PUT and blocks rows of the route plan over HTTP: the 20 test blocks imported unbound, acme and beta registered by carol, the tenant set to team by owner SQL, carol 422 approver_is_submitter, alice 403, da... |
+| C-4114528c | tool-registry › The routes register, list, read, submit and approve for tenant admins only › A null pool or engine key answers as the block routes do | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The three tracing tests build the harness with registration wrapped in assert.doesNotThrow for both registerBlockRoutes and registerToolServerRoutes, then walk the null-dependency rows: under a null PEP pool, null deps pool and null key, a... |
+| C-0bfb5dc5 | tool-registry › The committed OpenAPI document lists the tool-server routes › The committed document holds the five operations with their actions | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The committed docs/api/openapi.json holds the four tool-server paths and the five operation ids, every operation carries x-ursitoare-action register_tool_server except the approve operation with approve_tool_surface, whose x-ursitoare-erro... |
 
 ## Findings
 
 None.
-
-## Needs a human
-
-- the judge's reply was discarded (part 2 of 2, timeout: no answer within 600s)
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
