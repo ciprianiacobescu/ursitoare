@@ -14,6 +14,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
 | Q-002 | answered | 5.2 | harness | Task 5.2: the pre-satisfied check could not decide |
 | Q-003 | answered | 5.2 | harness | Task 5.2: the pre-satisfied check could not decide |
+| Q-004 | open | none | verdict | Finding F-39583b05: Unreachable request body hash is computed before the body is drained |
+| Q-005 | open | none | verdict | Finding F-e6c2caec: task 4.2 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
 ---
@@ -463,3 +465,54 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: accept: The already-satisfied claim of task 5.2 holds in the repository, and the single held test is genuine evidence rather than a trivially satisfied assertion. The new lifecycle test asserts the whole scenario Start, register, clear and close: six distinct loopback URLs over two fakes, seven distinct 32-character base64url secrets, the three vault identities with their scopes, the eleven TypeError registrations with the exact messages of test-plan.md Registration rows followed by the 502 vault error for the unrouted service, clearRecords emptying issued, requests and events while the credential stays, a second forward leaving one record, and a double close that resolves both calls, closes a keep-alive proxy socket and an h2 vault session, rejects a held forward, closes its upstream socket and leaves ECONNREFUSED on all three ports. The production code already does this: index.ts validates addUpstream against a lower-cased host ending in .fake.test with a label before it and a loopback http origin, validates addCredentialless ids as lowercase UUIDs and the target as an http or https origin, and its memoised close closes the three servers and destroys every tracked socket and HTTP/2 session, while proxy.ts destroys the outgoing upstream request when the caller's response closes unfinished, which is design decision 11; randomSecret gives 24 random bytes in base64url, so 32 characters of the asserted alphabet. None of these assertions passes without that code, so the test discriminates. The lint failure of the first replay came from an invalid void type annotation; the saved file uses no such annotation, and its arrow shorthand patterns are the same ones the lint-passing test files of this module already use. Nothing in the test can hang the gate: its only sleeps are 100 ms and up to fifty 20 ms polls, every awaited promise resolves on an event the close path produces, and the per-test timeout is 120 s; the 1800 s is the base run's own gate timeout, not evidence about the file. Replaying the one-file patch with every gate is the right next step; a retry would meet the same Python-only limitation of the zero-value run.
+
+---
+
+## Q-004: Finding F-39583b05: Unreachable request body hash is computed before the body is drained
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it (criterion C-4347a436). It reports behaviour that no scenario pins down.
+
+Title: Unreachable request body hash is computed before the body is drained
+Detail: For an upstream connection error, unreachable() calls req.resume() and then finish(502) immediately, so ForwardedRequest.bodySha256 is hashed only from bytes already received before the error.
+Suggested fix: WHEN a request with a body is forwarded to an unreachable upstream THEN the recorded ForwardedRequest.bodySha256 is the digest of only the bytes already hashed before the connection error, not the full request body.
+The suggested fix describes what the code does now, and a reject does not use it: to pin that behaviour, end the reason with it.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against criterion C-4347a436 as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Finding F-e6c2caec: task 4.2 is ticked as already satisfied, but its text is not done
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it.
+
+Title: task 4.2 is ticked as already satisfied, but its text is not done
+Detail: No proxy-pass-through.test.ts appears in the diff parts; pass-through and credential-less tests are in proxy-forward.test.ts.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+This finding cites no criterion: end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals, or no fix can be made from the reject.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
