@@ -132,6 +132,7 @@ export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeT
   const blocks = loadBlocks(opts.catalogue);
 
   const records: FakeToolCall[] = [];
+  const effects = new Map<string, unknown>();
   let seq = 0;
   let port = 0;
   const sockets = new Set<Socket>();
@@ -185,8 +186,37 @@ export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeT
 
     const idempotencyKey = rawHeader(req, "idempotency-key");
     const keyHeader = rawHeader(req, FAKE_TOOLS_KEY_HEADER);
-    const fixtureKey = effect === "read" ? "" : (idempotencyKey ?? "");
-    const result = fixtureFor(ref, input as Record<string, unknown>, fixtureKey);
+    const isEffect = effect !== "read";
+
+    let status: number;
+    let answer: unknown;
+    let duplicate = false;
+
+    if (isEffect && (idempotencyKey === null || idempotencyKey === "")) {
+      status = 400;
+      answer = {
+        error: "missing_idempotency_key",
+        message: `${ref} has effect=${effect}; send an Idempotency-Key header`,
+      };
+    } else {
+      const memoryKey = isEffect ? `${ref}|${idempotencyKey ?? ""}` : null;
+      if (memoryKey !== null && effects.has(memoryKey)) {
+        status = 200;
+        answer = effects.get(memoryKey);
+        duplicate = true;
+      } else {
+        const result = fixtureFor(ref, input as Record<string, unknown>, isEffect ? (idempotencyKey ?? "") : "");
+        status = result.status;
+        if (result.status === 200) {
+          answer = result.output;
+          if (memoryKey !== null) {
+            effects.set(memoryKey, result.output);
+          }
+        } else {
+          answer = result.body;
+        }
+      }
+    }
 
     seq += 1;
     const record: FakeToolCall = {
@@ -201,15 +231,15 @@ export async function startFakeTools(opts: FakeToolsOptions = {}): Promise<FakeT
       keyHeaderSeen: keyHeader !== null && keyHeader !== "",
       input,
       bodySha256: createHash("sha256").update(body).digest("hex"),
-      status: result.status,
-      duplicate: false,
+      status,
+      duplicate,
     };
     records.push(record);
 
-    if (result.status === 200) {
-      respond(res, 200, result.output, { "x-fake-tools-duplicate": "false" });
+    if (status === 200) {
+      respond(res, 200, answer, { "x-fake-tools-duplicate": String(duplicate) });
     } else {
-      respond(res, result.status, result.body);
+      respond(res, status, answer);
     }
   }
 
