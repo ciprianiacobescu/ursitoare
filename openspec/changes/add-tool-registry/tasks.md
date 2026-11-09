@@ -6,7 +6,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. The pure pieces
 
-- [ ] 2.1 Write `src/tools/origin.test.ts` first (scenario "Each of 55 inputs is accepted or refused with its reason"), then implement `validateOrigin` in `src/tools/origin.ts`, implementing its requirement
+- [x] 2.1 Write `src/tools/origin.test.ts` first (scenario "Each of 55 inputs is accepted or refused with its reason"), then implement `validateOrigin` in `src/tools/origin.ts`, implementing its requirement
 - [ ] 2.2 Write `src/tools/surface.test.ts` first (the digest part of "The digest ignores order and fills defaults, fixtureSurface matches the catalogue, and refs take the lowest fitting major": § Digests, `SMALL` and its variants, all literals, no `fixtureSurface`), then implement `surfaceDigest` in `src/tools/surface.ts`, implementing the digest part of its requirement
 - [ ] 2.3 Write `test/support/tool-surface.test.ts` first (the `fixtureSurface` part of that scenario; it compares `D_A` and `D_A_DEFAULT` with `surfaceDigest` of task 2.2), then create `test/support/tool-surface.ts` and append its row (owner `add-tool-registry`) to `test/support/README.md`, implementing the `fixtureSurface` part of that requirement
 - [ ] 2.4 Write `src/tools/refs.test.ts` first (the refs part of that scenario: § Refs, whose `ONE`, `ONE_T` and `TWO` come from `fixtureSurface` of task 2.3; row 2 holds only if `toolHash` is right), then implement `surfaceRefs`, `toolBlock` and `toolHash` in `src/tools/surface.ts`, implementing the refs part of its requirement
