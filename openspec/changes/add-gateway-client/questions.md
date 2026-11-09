@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.1 | technical | src/config/egress.test.ts line 193 asserts maxCalls ["/s/broker"] for the L6 /s/max case |
+| Q-002 | open | 8.1 | technical | test/support/e2e-stack/egress-part.test.ts lines 147 and 227: URL check indexes the token-file key |
 <!-- l4:index:end -->
 
 ---
@@ -34,6 +35,29 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/config/egress.test.ts`: replace assert.deepEqual(maxCalls, ["/s/broker"]) with assert.deepEqual(maxCalls, ["/s/max"]) on line 193
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: test/support/e2e-stack/egress-part.test.ts lines 147 and 227: URL check indexes the token-file key
+
+- **Status:** open
+- **Blocking tasks:** 8.1
+- **Kind:** technical
+- **Asked:** 2026-11-09T09:04Z by claude-sonnet, run r-20261109T0705Z-0de6, task 8.1
+
+### Context
+Both loops iterate `[EGRESS_KEYS[0], EGRESS_KEYS[1], EGRESS_KEYS[5]]` and assert each value matches the loopback URL regex. EGRESS_KEYS is alphabetically sorted, so [0] is URSITOARE_EGRESS_BROKER_TOKEN_FILE (a file path, mode 0600 per the spec), while the PROXY_URL at [2] is never checked. The spec requires only that the three URL variables be loopback URLs and the token variables be file paths.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `test/support/e2e-stack/egress-part.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-gateway-client`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `test/support/e2e-stack/egress-part.test.ts`: at lines 147 and 227 replace `[EGRESS_KEYS[0], EGRESS_KEYS[1], EGRESS_KEYS[5]]` with `[EGRESS_KEYS[1], EGRESS_KEYS[2], EGRESS_KEYS[5]]`
+
+### Clarifier suggestion
+Edit `test/support/e2e-stack/egress-part.test.ts`: at lines 147 and 227 replace `[EGRESS_KEYS[0], EGRESS_KEYS[1], EGRESS_KEYS[5]]` with `[EGRESS_KEYS[1], EGRESS_KEYS[2], EGRESS_KEYS[5]]`
 
 ### Answer
 <!-- write below this line -->
