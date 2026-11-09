@@ -1,0 +1,377 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "${auditSink}/v1/internal/audit/emit",
+      "docs/decisions/0002",
+      "src",
+      "seed/deploy/mintkey-footprint",
+      "node:assert/strict",
+      "test/support/fake-egress",
+      "test/support/fake-egress/wire.test.ts",
+      "test/support/fake-egress/wire.ts",
+      "test/support/fake-egress/echo.test.ts",
+      "test/support/fake-egress/echo.ts",
+      "test/support/fake-egress/index.ts",
+      "test/support/fake-egress/broker.test.ts",
+      "test/support/fake-egress/state.ts",
+      "test/support/fake-egress/jwt.ts",
+      "test/support/fake-egress/broker.ts",
+      "test/support/fake-egress/proxy.ts",
+      "test/support/fake-egress/vault.ts",
+      "test/support/fake-egress/vault.test.ts",
+      "test/support/fake-egress/vault-client.ts",
+      "test/support/fake-egress/proxy-forward.test.ts",
+      "test/support/fake-egress/proxy-refusals.test.ts",
+      "test/support/fake-egress/proxy-pass-through.test.ts",
+      "test/support/fake-egress/audit.test.ts",
+      "test/support/fake-egress/secrets.test.ts",
+      "test/support/fake-egress/lifecycle.test.ts",
+      "test/support/fake-egress/contract.test.ts",
+      "test/support/fake-egress/contract.ts",
+      "**/index.ts",
+      "**/state.ts",
+      "**/broker.ts",
+      "**/proxy.ts",
+      "**/vault.ts",
+      "**/?",
+      "**/[credential]",
+      "**/jwt.ts",
+      "**/vault.proto",
+      "**/contract.ts",
+      "**/[",
+      "module ${auditSink}",
+      "module docs",
+      "module node:assert",
+      "module seed",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-fake-egress-proxy-fix-1/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy-fix-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy-fix-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy-fix-1/specs/test-fake-egress/spec.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy-fix-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/.l4/evidence/round-2/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/.l4/evidence/round-2/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/.l4/evidence/round-2/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/.l4/ledger/r-20261108T1910Z-4c91.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/.l4/ledger/r-20261108T2150Z-9e5e.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/.l4/ledger/r-20261108T2228Z-da41.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/.l4/ledger/r-20261108T2346Z-e004.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/.l4/ledger/r-20261109T0113Z-8a17.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/.l4/ledger/r-20261109T0242Z-c584.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-egress-proxy/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/fake-egress/audit.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-egress/broker.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-egress/broker.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-egress/contract.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-egress/contract.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-egress/echo.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-egress/echo.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-egress/index.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-egress/jwt.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-egress/lifecycle.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-egress/proxy-forward.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-egress/proxy-refusals.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-egress/proxy-unreachable.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-egress/proxy.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-egress/secrets.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-egress/state.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-egress/vault-client.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-egress/vault.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-egress/vault.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-egress/wire.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-egress/wire.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: test/support/fake-egress/broker.ts, test/support/fake-egress/contract.ts, test/support/fake-egress/echo.ts, test/support/fake-egress/index.ts, test/support/fake-egress/jwt.ts and 5 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "test/support/fake-egress/broker.ts",
+      "test/support/fake-egress/contract.ts",
+      "test/support/fake-egress/echo.ts",
+      "test/support/fake-egress/index.ts",
+      "test/support/fake-egress/jwt.ts",
+      "test/support/fake-egress/proxy.ts",
+      "test/support/fake-egress/state.ts",
+      "test/support/fake-egress/vault-client.ts",
+      "test/support/fake-egress/vault.ts",
+      "test/support/fake-egress/wire.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2076,
+      "passed": 2076,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 38,
+      "new_passed": 38,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

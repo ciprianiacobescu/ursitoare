@@ -1,0 +1,10 @@
+# Proposal: fix 1 for add-fake-egress-proxy
+
+## Why
+The verifier found problems in `add-fake-egress-proxy` that this change fixes. The findings are listed below with their ids; each task of this change names the ones it answers.
+
+## What Changes
+- F-39583b05 (major): Unreachable request body hash is computed before the body is drained: Decided by delegate in Q-004: The finding describes the code accurately and the behaviour it names is a defect of the record, not a harmless detail. In the proxy module the unreachable path calls req.resume() and then finish(502) at once, and finish takes the digest from hash.copy(), so for a connection error the recorded bodySha256 covers only the request bytes that had already flowed before the upstream socket failed; a large or chunked body gives a timing-dependent digest. The no-route path is worse: it awaits readAll(req), which resolves the hex digest string, and feeds that string into the hash, so the record holds the SHA-256 of a hex digest rather than of the body, even for an empty body. The design says the body streams to the upstream while its SHA-256 is computed, that refusals read the body to its end before recording, and that the unreachable case is recorded with status 502 and outcome error, so the record's bodySha256 is meant to be the digest of the whole body in that case too. No scenario pins it only because the pass-through rows send GET without a body and the test compares path, status, outcome and host, so the fix is checked by the sentence below. WHEN a request with a body is forwarded to an upstream the proxy cannot reach, whether because the target host has no route and is not loopback or because the connection fails before response headers, THEN the proxy reads the request body to its end before it appends the ForwardedRequest and the record's bodySha256 equals the hex SHA-256 of the whole request body.. For an upstream connection error, unreachable() calls req.resume() and then f...
+
+## Impact
+The code and the tests of `add-fake-egress-proxy`.

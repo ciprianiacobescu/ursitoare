@@ -1,0 +1,188 @@
+import assert from "node:assert/strict";
+import http from "node:http";
+import http2 from "node:http2";
+import net from "node:net";
+import type { AddressInfo } from "node:net";
+import { test } from "node:test";
+
+import { startFakeEgress } from "./index.ts";
+import type { FakeEgress } from "./index.ts";
+import { putCredential } from "./vault-client.ts";
+
+const T_A = "4b8a2c1e-0000-8000-8000-000000000001";
+const S1 = "0b2f7e1c-5d0a-4c4e-9a51-3f2b8d6c1e01";
+const S3 = "0b2f7e1c-5d0a-4c4e-9a51-3f2b8d6c1e03";
+
+interface Upstream {
+  origin: string;
+  sockets: Set<net.Socket>;
+  close(): Promise<void>;
+}
+
+async function startUpstream(): Promise<Upstream> {
+  const sockets = new Set<net.Socket>();
+  const server = http.createServer((req, res) => {
+    req.resume();
+    if (req.url === "/hold") {
+      res.writeHead(200);
+      res.write("x");
+      return;
+    }
+    res.end("ok");
+  });
+  server.on("connection", (s: net.Socket) => {
+    sockets.add(s);
+    s.on("close", () => sockets.delete(s));
+  });
+  await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+  return {
+    origin: `http://127.0.0.1:${(server.address() as AddressInfo).port}`,
+    sockets,
+    close: async (): Promise<void> => {
+      server.closeAllConnections();
+      await new Promise<void>((resolve) => server.close(() => resolve()));
+    },
+  };
+}
+
+async function issue(f: FakeEgress, serviceId: string): Promise<string> {
+  const res = await fetch(`${f.brokerUrl}/v1/issue`, {
+    method: "POST",
+    headers: { "x-mintkey-service-token": f.brokerServiceToken, "content-type": "application/json" },
+    body: JSON.stringify({ agent_id: "alice", service_id: serviceId, tenant_id: T_A, scope: "call", ttl_seconds: 60 }),
+  });
+  return ((await res.json()) as { token: string }).token;
+}
+
+function get(f: FakeEgress, path: string, token: string): Promise<{ status: number; body: string }> {
+  return fetch(`${f.proxyUrl}${path}`, { headers: { authorization: `Bearer ${token}` } }).then(async (r) => ({
+    status: r.status,
+    body: await r.text(),
+  }));
+}
+
+function port(url: string): number {
+  return Number(new URL(url).port);
+}
+
+function refused(p: number): Promise<string> {
+  return new Promise((resolve) => {
+    const s = net.connect(p, "127.0.0.1");
+    s.once("error", (e: NodeJS.ErrnoException) => resolve(e.code ?? "none"));
+    s.once("connect", () => {
+      s.destroy();
+      resolve("connected");
+    });
+  });
+}
+
+function badCall(fn: () => unknown): string {
+  try {
+    fn();
+  } catch (e) {
+    assert.ok(e instanceof TypeError);
+    return e.message;
+  }
+  return "no throw";
+}
+
+test("C-eb168123: start, register, clear and close", async () => {
+  const up = await startUpstream();
+  const a = await startFakeEgress();
+  const b = await startFakeEgress();
+  try {
+    const urls = [a, b].flatMap((f) => [f.brokerUrl, f.proxyUrl, f.vaultUrl]);
+    for (const u of urls) assert.match(u, /^http:\/\/127\.0\.0\.1:\d+$/);
+    assert.equal(new Set(urls.map(port)).size, 6);
+
+    const secrets = [a, b].flatMap((f) => [f.brokerServiceToken, f.proxyServiceToken]);
+    secrets.push(a.vaultAdmin.token, a.vaultProxy.token, a.vaultDenied.token);
+    for (const s of secrets) assert.match(s, /^[A-Za-z0-9_-]{32}$/);
+    assert.equal(new Set(secrets).size, secrets.length);
+    assert.deepEqual(
+      [a.vaultAdmin, a.vaultProxy, a.vaultDenied].map(({ identity, scopes }) => ({ identity, scopes })),
+      [
+        { identity: "svcid_ursitoare_admin", scopes: ["vault.put", "vault.read"] },
+        { identity: "svcid_proxy", scopes: ["vault.read", "vault.put"] },
+        { identity: "svcid_email_proxy", scopes: [] },
+      ],
+    );
+
+    const O = up.origin;
+    const H = 'addUpstream: host must end with ".fake.test"';
+    const OR = "addUpstream: origin must be an http origin on a loopback host";
+    const IDS = "addCredentialless: ids must be lowercase UUIDs";
+    const TU = "addCredentialless: targetUrl must be an http or https origin";
+    const got = [
+      badCall(() => a.addUpstream("example.com", O)),
+      badCall(() => a.addUpstream("fake.test", O)),
+      badCall(() => a.addUpstream("a.fake.test:8080", O)),
+      badCall(() => a.addUpstream("a.fake.test", "https://127.0.0.1:9")),
+      badCall(() => a.addUpstream("a.fake.test", "http://example.com")),
+      badCall(() => a.addUpstream("a.fake.test", "http://127.0.0.1:9/path")),
+      badCall(() => a.addUpstream("a.fake.test", "http://u:p@127.0.0.1:9")),
+      badCall(() => a.addCredentialless("svc_1", T_A, "http://tools.fake.test")),
+      badCall(() => a.addCredentialless(S3, T_A.toUpperCase(), "http://tools.fake.test")),
+      badCall(() => a.addCredentialless(S3, T_A, "http://tools.fake.test/x")),
+      badCall(() => a.addCredentialless(S3, T_A, "ftp://tools.fake.test")),
+    ];
+    assert.deepEqual(got, [H, H, H, OR, OR, OR, OR, IDS, IDS, TU, TU]);
+    const unrouted = await get(a, `/${S3}/x`, await issue(a, S3));
+    assert.deepEqual(unrouted, { status: 502, body: "bad gateway: vault error\n" });
+
+    a.addUpstream("A.Fake.Test", O);
+    const put = await putCredential(a.vaultUrl, a.vaultAdmin, {
+      tenantId: T_A,
+      serviceId: S1,
+      authScheme: 1,
+      value: Buffer.from("kv-secret-7f3a"),
+      headerName: "x-fake-tools-key",
+      callerActorId: "alice",
+      targetUrl: "http://a.fake.test",
+    });
+    assert.equal(put.grpcStatus, 0);
+    const token = await issue(a, S1);
+    assert.equal((await get(a, `/${S1}/x`, token)).status, 200);
+    a.clearRecords();
+    assert.deepEqual([a.issued(), a.requests(), a.events()], [[], [], []]);
+    assert.equal(a.credentials().length, 1);
+    assert.equal((await get(a, `/${S1}/x`, token)).status, 200);
+    assert.equal(a.requests().length, 1);
+
+    const keepAlive = net.connect(port(a.proxyUrl), "127.0.0.1");
+    await new Promise<void>((resolve) => keepAlive.once("connect", resolve));
+    const keepAliveClosed = new Promise<void>((resolve) => keepAlive.once("close", () => resolve()));
+    const session = http2.connect(a.vaultUrl);
+    await new Promise<void>((resolve) => session.once("connect", () => resolve()));
+    const sessionClosed = new Promise<void>((resolve) => session.once("close", () => resolve()));
+    session.on("error", () => undefined);
+
+    const held = await new Promise<http.IncomingMessage>((resolve, reject) => {
+      const req = http.get(
+        `${a.proxyUrl}/${S1}/hold`,
+        { headers: { authorization: `Bearer ${token}` }, agent: false },
+        resolve,
+      );
+      req.on("error", reject);
+    });
+    const heldFailed = assert.rejects(
+      new Promise<void>((resolve, reject) => {
+        held.on("error", reject);
+        held.on("close", () => (held.complete ? resolve() : reject(new Error("aborted"))));
+        held.resume();
+      }),
+    );
+    await new Promise<void>((resolve) => setTimeout(resolve, 100));
+    assert.equal(up.sockets.size > 0, true);
+
+    await Promise.all([a.close(), a.close()]);
+    await keepAliveClosed;
+    await sessionClosed;
+    await heldFailed;
+    for (let i = 0; i < 50 && up.sockets.size > 0; i++) await new Promise<void>((resolve) => setTimeout(resolve, 20));
+    assert.equal(up.sockets.size, 0);
+    for (const u of [a.brokerUrl, a.proxyUrl, a.vaultUrl]) assert.equal(await refused(port(u)), "ECONNREFUSED");
+  } finally {
+    await Promise.all([a.close(), b.close(), up.close()]);
+  }
+});
