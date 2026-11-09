@@ -1,0 +1,355 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "test/arch/modules.ts",
+      "127/8",
+      "0/8",
+      "169.254/16",
+      "10/8",
+      "172.16/12",
+      "192.168/16",
+      "100.64/10",
+      "src/pdp/permit.ts",
+      "tools/<i>",
+      "…/name",
+      "…/http",
+      "…/http/method",
+      "…/http/path",
+      "tools/<i>/input",
+      "tools/<i>/<details.field>",
+      "src/db/migrations/0260_block_registry.sql",
+      "src/api/errors.ts:56-72",
+      "body/surface/<field>",
+      "body/<field>",
+      "body/surface",
+      "docs/decisions/0002",
+      "src/tools/index.ts",
+      "src/api/index.ts",
+      "src/identity/roles-policy.test.ts",
+      "src/api/session-auth.rbac.test.ts",
+      "src/tools/schema.test.ts",
+      "src/db/migrations/0470_tool_registry.sql",
+      "src/tools/origin.test.ts",
+      "src/tools/origin.ts",
+      "src/tools/surface.test.ts",
+      "src/tools/surface.ts",
+      "test/support/tool-surface.test.ts",
+      "test/support/tool-surface.ts",
+      "test/support/README.md",
+      "src/tools/refs.test.ts",
+      "src/tools/store.test.ts",
+      "src/tools/store.ts",
+      "src/tools/approve.test.ts",
+      "src/tools/submit.test.ts",
+      "src/tools/directory.test.ts",
+      "src/tools/directory.ts",
+      "src/tools/policy.test.ts",
+      "src/registry/policy.test.ts",
+      "src/tools/policy/tools.cedar",
+      "src/api/tool-server-routes.test.ts",
+      "src/api/tool-server-routes.ts",
+      "src/main.tools.test.ts",
+      "docs/api/openapi.json",
+      "src/main.ts",
+      "api/index.ts",
+      "**/BlockImport[\"effect\"]",
+      "**/[\"input\"]",
+      "**/?",
+      "**/*.localhost",
+      "**/erp.*",
+      "**/fields[0]",
+      "**/server.ts",
+      "**/[id]",
+      "**/surface.ts",
+      "**/store.ts",
+      "**/index.ts",
+      "**/types.ts",
+      "**/origin.ts",
+      "**/directory.ts",
+      "module 0",
+      "module 10",
+      "module 100.64",
+      "module 127",
+      "module 169.254",
+      "module 172.16",
+      "module 192.168",
+      "module api",
+      "module body",
+      "module db",
+      "module docs",
+      "module identity",
+      "module main",
+      "module main.tools.test",
+      "module pdp",
+      "module registry",
+      "module test",
+      "module tools",
+      "module …"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-registry/.l4/ledger/r-20261109T1452Z-37e1.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-registry/.l4/ledger/r-20261109T1727Z-b0a3.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-registry/.l4/ledger/r-20261109T1731Z-f90b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-registry/.l4/ledger/r-20261109T2007Z-2f1c.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-registry/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-registry/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/tool-server-routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/tool-server-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0470_tool_registry.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.tools.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/approve.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/directory.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/directory.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/index.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/origin.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/origin.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/policy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/policy/tools.cedar",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/refs.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/store.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/store.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/submit.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/surface.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/surface.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/types.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/README.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/tool-surface.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/tool-surface.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/index.ts, src/api/tool-server-routes.ts, src/main.ts, src/tools/directory.ts, src/tools/index.ts and 5 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/index.ts",
+      "src/api/tool-server-routes.ts",
+      "src/main.ts",
+      "src/tools/directory.ts",
+      "src/tools/index.ts",
+      "src/tools/origin.ts",
+      "src/tools/store.ts",
+      "src/tools/surface.ts",
+      "src/tools/types.ts",
+      "test/support/tool-surface.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 2202,
+      "passed": 2201,
+      "failed": 1,
+      "errored": 0,
+      "skipped": 0,
+      "new": 31,
+      "new_passed": 31,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

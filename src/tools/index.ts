@@ -1,4 +1,31 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
+export type {
+  Effect,
+  JsonSchema,
+  OriginCheck,
+  SurfaceTool,
+  ToolAdapter,
+  ToolBinding,
+  ToolServerRecord,
+  ToolServerState,
+  ToolSurface,
+  ToolsErrorCode,
+} from "./types.ts";
+export { ToolsError } from "./types.ts";
+
+export { validateOrigin } from "./origin.ts";
+
+export { surfaceDigest, surfaceRefs } from "./surface.ts";
+
+export type { ToolServerDetail } from "./store.ts";
+export {
+  approveSurface,
+  getToolServer,
+  getToolServerDetail,
+  listToolServers,
+  registerToolServer,
+  registerToolServerTx,
+  submitSurface,
+} from "./store.ts";
 
 export type { ToolDirectory } from "./directory.ts";
-export type { ToolBinding, ToolServerRecord, ToolSurface } from "./types.ts";
+export { createToolDirectory } from "./directory.ts";
