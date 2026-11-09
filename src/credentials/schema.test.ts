@@ -29,12 +29,14 @@ interface RefInsert {
 }
 
 async function insertServer(db: TestDatabase, tenantId: string, id: string): Promise<void> {
-  await db.ownerPool.query(
-    `INSERT INTO ursitoare.tool_server
-       (tenant_id, tool_server_id, adapter, origin, local, state, registered_by, registered_at)
-     VALUES ($1, $2, 'fixture', $3, false, 'pending', 'u_carol', $4)`,
-    [tenantId, id, ORIGIN, NOW],
-  );
+  await withTenantTx(db.ownerPool, { tenantId, reviewProfile: "solo" }, async (tx) => {
+    await tx.query(
+      `INSERT INTO ursitoare.tool_server
+         (tenant_id, tool_server_id, adapter, origin, local, state, registered_by, registered_at)
+       VALUES ($1, $2, 'fixture', $3, false, 'pending', 'u_carol', $4)`,
+      [tenantId, id, ORIGIN, NOW],
+    );
+  });
 }
 
 async function insertRef(

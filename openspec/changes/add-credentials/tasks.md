@@ -2,7 +2,7 @@ Tests follow `proposal.md` § Out of scope; fixtures are in `test-plan.md` and `
 
 ## 1. The table
 
-- [ ] 1.1 Write `src/credentials/schema.test.ts` first (scenario "Migration 0480 stores references and no value"), then create `src/db/migrations/0480_credentials.sql` (its four constraints named as design.md § The table says)
+- [x] 1.1 Write `src/credentials/schema.test.ts` first (scenario "Migration 0480 stores references and no value"), then create `src/db/migrations/0480_credentials.sql` (its four constraints named as design.md § The table says)
 
 ## 2. The vault
 
