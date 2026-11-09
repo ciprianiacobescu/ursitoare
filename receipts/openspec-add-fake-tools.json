@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-09T14:50:34Z",
+  "integrated_revision": "c53d3613161b1d872e9d06ebb9f1ee73ae0595e2",
+  "merge_commit": "c53d3613161b1d872e9d06ebb9f1ee73ae0595e2",
+  "plan_digest": "deccf2afb3391e9c",
+  "plan_id": "m6",
+  "postcheck": "pass",
+  "pr": 110,
+  "receipt_id": "m6/openspec:add-fake-tools/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "3e6dd84b9c10720b3ef3eeb6f544794582ed334c",
+  "spec_digest": "8f797e5c96854920",
+  "target": "main",
+  "unit_id": "openspec:add-fake-tools"
+}
