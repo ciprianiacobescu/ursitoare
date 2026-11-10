@@ -122,3 +122,5 @@
 {"at":"2026-11-10T11:46:32Z","branch":"l4/archive/openspec/add-grants-model","head":"7442294aa0de1c4ffa76284d5342b7c92177e075","type":"unit.branch_deleted","unit":"openspec:add-grants-model"}
 {"at":"2026-11-10T11:46:34Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-policy-deploy"}
 {"at":"2026-11-10T11:46:34Z","run":"r-20261110T1146Z-9857","type":"unit.dispatched","unit":"openspec:add-policy-deploy"}
+{"at":"2026-11-10T12:07:17Z","attempt":1,"cost_usd":1.189586,"runs":2,"type":"plan.charged","unit":"openspec:add-policy-deploy"}
+{"at":"2026-11-10T12:07:17Z","run":"r-20261110T1207Z-d463","type":"unit.dispatched","unit":"openspec:add-policy-deploy"}
