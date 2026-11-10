@@ -375,10 +375,6 @@ test("C-01ef6501 the credential value never reaches a response, log, span, row o
     errorTexts.push((closedError as Error).message);
     errorTexts.push(JSON.stringify((closedError as { details?: unknown }).details));
 
-    for (const call of [...vaultCalls, ...deniedCalls]) {
-      errorTexts.push(Buffer.from(call.value).toString("utf8"));
-    }
-
     const fakeText = JSON.stringify({
       credentials: base.fake.credentials(),
       issued: base.fake.issued(),

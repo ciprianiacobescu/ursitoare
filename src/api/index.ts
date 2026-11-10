@@ -15,6 +15,8 @@ export type { BlockApiDeps } from "./block-routes.ts";
 export { registerBlockRoutes } from "./block-routes.ts";
 export type { ToolServerApiDeps } from "./tool-server-routes.ts";
 export { registerToolServerRoutes } from "./tool-server-routes.ts";
+export type { CredentialApiDeps } from "./credential-routes.ts";
+export { registerCredentialRoutes } from "./credential-routes.ts";
 export type { FlowApiDeps } from "./flow-routes.ts";
 export { registerFlowRoutes } from "./flow-routes.ts";
 export type { RunApiDeps } from "./run-routes.ts";
