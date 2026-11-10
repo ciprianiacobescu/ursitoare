@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.1 | technical | src/grants/policy-schema.test.ts:208 expects UPDATE of current rows in tenant A to affect 2 rows, but only one current row exists in that tenant |
-| Q-002 | open | 3.4 | technical | src/grants/policy-deploy.test.ts:279 and :325 read policy_set through ownerPool, which forced RLS hides |
+| Q-002 | accepted | 3.4 | technical | src/grants/policy-deploy.test.ts:279 and :325 read policy_set through ownerPool, which forced RLS hides |
 | Q-003 | open | 3.4 | technical | src/grants/policy-deploy.test.ts:307 expects base-engine P requests to deny with errors [] although the base schema has no amount argument |
 <!-- l4:index:end -->
 
@@ -44,7 +44,8 @@ Edit `src/grants/policy-schema.test.ts`: change the expected value on line 208 f
 
 ## Q-002: src/grants/policy-deploy.test.ts:279 and :325 read policy_set through ownerPool, which forced RLS hides
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.4
 - **Kind:** technical
 - **Asked:** 2026-11-10T15:03Z by deepseek-free, run r-20261110T1444Z-ede1, task 3.4
