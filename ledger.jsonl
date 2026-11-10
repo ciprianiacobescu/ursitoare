@@ -94,3 +94,5 @@
 {"at":"2026-11-10T00:49:40Z","run":"r-20261110T0049Z-18e5","type":"unit.dispatched","unit":"openspec:add-credentials"}
 {"at":"2026-11-10T01:38:24Z","detail":"awaiting_human: no new answers (open: Q-002) (harness check inconclusive: Q-002) (escalated to a person: Q-002)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-credentials"}
 {"at":"2026-11-10T01:41:54Z","by":"harness","reason":"the cause is gone: openspec:add-credentials is awaiting_human","type":"plan.resumed"}
+{"at":"2026-11-10T01:41:56Z","attempt":1,"cost_usd":7.882591,"runs":4,"type":"plan.charged","unit":"openspec:add-credentials"}
+{"at":"2026-11-10T01:41:56Z","run":"r-20261110T0141Z-96fe","type":"unit.dispatched","unit":"openspec:add-credentials"}
