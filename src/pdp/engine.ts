@@ -15,13 +15,16 @@ export async function createPdp(opts: {
   clock: Clock;
   ids: IdSource;
   logger: Logger;
+  instanceId?: string;
 }): Promise<Pdp> {
   const loaded = loadPolicySet({ schema: opts.schema, policies: opts.policies });
   const policySetVersion = policySetVersionOf(opts.schema, opts.policies);
 
   const instance = instanceCounter++;
-  const preparsedPolicySetId = `pdp-pset-${instance}`;
-  const preparsedSchemaName = `pdp-schema-${instance}`;
+  const preparsedPolicySetId =
+    opts.instanceId === undefined ? `pdp-pset-${instance}` : `${opts.instanceId}/pset`;
+  const preparsedSchemaName =
+    opts.instanceId === undefined ? `pdp-schema-${instance}` : `${opts.instanceId}/schema`;
 
   const preparedPolicies = cedar.preparsePolicySet(preparsedPolicySetId, {
     staticPolicies: loaded.policyMap,
