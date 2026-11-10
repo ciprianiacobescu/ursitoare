@@ -2,7 +2,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 1. The table
 
-- [ ] 1.1 Write `src/grants/schema.test.ts` first (scenario "Objects, ledger and privileges"; it starts with `assert.ok` on the ledger row 490), then add `src/db/migrations/0490_grants.sql` holding the SQL of `test-plan.md` § Migration verbatim, implementing requirement "A grant is one tenant row with little mutable state"
+- [x] 1.1 Write `src/grants/schema.test.ts` first (scenario "Objects, ledger and privileges"; it starts with `assert.ok` on the ledger row 490), then add `src/db/migrations/0490_grants.sql` holding the SQL of `test-plan.md` § Migration verbatim, implementing requirement "A grant is one tenant row with little mutable state"
 
 ## 2. Fingerprints and the compiler
 
