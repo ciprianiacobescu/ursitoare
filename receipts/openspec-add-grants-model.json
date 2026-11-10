@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-10T11:44:51Z",
+  "integrated_revision": "1033549d5d84bb0a00c5384e8e3ae5579d32e3d9",
+  "merge_commit": "1033549d5d84bb0a00c5384e8e3ae5579d32e3d9",
+  "plan_digest": "deccf2afb3391e9c",
+  "plan_id": "m6",
+  "postcheck": "pass",
+  "pr": 116,
+  "receipt_id": "m6/openspec:add-grants-model/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "72d8770ca58258a07183ac72ebfc7c4d8cb73b56",
+  "spec_digest": "c810b8b55eba4c64",
+  "target": "main",
+  "unit_id": "openspec:add-grants-model"
+}
