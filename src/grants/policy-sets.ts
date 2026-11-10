@@ -276,6 +276,26 @@ export async function currentPolicySet(pool: TenantPool, ctx: TenantContext): Pr
   return stored === null ? null : toRecord(stored);
 }
 
-export async function pendingGrantCount(_pool: TenantPool, _ctx: TenantContext): Promise<number> {
-  throw new Error("not implemented");
+export async function pendingGrantCount(pool: TenantPool, ctx: TenantContext): Promise<number> {
+  const grants = await readAllGrants(pool, ctx);
+  const current = await withTenantTx(pool, ctx, (tx) => readCurrentSet(tx, ctx.tenantId));
+  if (current === null) return grants.filter((grant) => grant.state === "active").length;
+  const inSet = new Set(current.grantIds);
+  const storedText = new Map(current.tenantSources.map((entry) => [entry.id, entry.text]));
+  let pending = 0;
+  for (const grant of grants) {
+    if (grant.state === "revoked") {
+      if (inSet.has(grant.id)) pending += 1;
+    } else if (!inSet.has(grant.id)) {
+      pending += 1;
+    } else {
+      try {
+        const compiled = compileGrant(ctx.tenantId, grant, current.toolArgs);
+        if (compiled === null || compiled.text !== storedText.get(`grants/${grant.id}`)) pending += 1;
+      } catch {
+        pending += 1;
+      }
+    }
+  }
+  return pending;
 }

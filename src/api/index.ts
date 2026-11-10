@@ -21,6 +21,8 @@ export type { FlowApiDeps } from "./flow-routes.ts";
 export { registerFlowRoutes } from "./flow-routes.ts";
 export type { GrantApiDeps } from "./grant-routes.ts";
 export { registerGrantRoutes } from "./grant-routes.ts";
+export type { PolicyApiDeps } from "./policy-routes.ts";
+export { registerPolicyRoutes } from "./policy-routes.ts";
 export type { RunApiDeps } from "./run-routes.ts";
 export { registerRunRoutes } from "./run-routes.ts";
 export type { TestRunApiDeps } from "./test-run-routes.ts";

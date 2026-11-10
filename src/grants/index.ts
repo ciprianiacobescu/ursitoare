@@ -22,5 +22,14 @@ export {
   reconfirmationsFor,
 } from "./store.ts";
 export type { CedarArgs } from "./args.ts";
+export { toolArgTypes, toCedarArgs } from "./args.ts";
 export type { PolicyRuntime } from "./policy-runtime.ts";
+export { createPolicyRuntime } from "./policy-runtime.ts";
 export type { PolicySetRecord, PolicyValidation } from "./policy-sets.ts";
+export {
+  PolicyDeployError,
+  validatePolicySet,
+  deployPolicySet,
+  currentPolicySet,
+  pendingGrantCount,
+} from "./policy-sets.ts";
