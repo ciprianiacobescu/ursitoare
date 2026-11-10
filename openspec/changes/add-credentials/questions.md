@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 1.1 | technical | src/credentials/schema.test.ts:31-38 insertServer cannot insert into tool_server through the owner pool |
 | Q-002 | answered | 3.2 | harness | Task 3.2: the pre-satisfied check could not decide |
 | Q-003 | accepted | 5.2 | technical | src/api/credential-secrets.test.ts:378-380 contradicts :418 and :429 (C-01ef6501) |
-| Q-004 | open | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied? |
@@ -399,7 +399,8 @@ Edit `src/api/credential-secrets.test.ts`: delete the loop at lines 378-380 (`fo
 
 ## Q-004: Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -426,6 +427,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept ERROR_CODES in src/api/error-codes.ts holds exactly the 27 entries of the scenario with the listed status and message, isRegisteredCode is a hasOwnProperty check, and the edited frozen test asserts the exact key set, every entry, true for each code and false for cursor_invalid, the empty string and NOT_A_CODE; the new narrow test of task 5.1 asserts the EGRESS_UNAVAILABLE entry, which is the shape the proposal prescribes.
 ---
 
 ## Q-005: Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied?
