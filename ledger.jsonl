@@ -107,3 +107,5 @@
 {"at":"2026-11-10T06:06:52Z","revision":"1d8a973ffc09088e6826bd4c252d9576e27e0518","type":"unit.integrated","unit":"openspec:add-credentials"}
 {"at":"2026-11-10T06:06:52Z","attempt":1,"cost_usd":11.236176,"runs":6,"type":"plan.charged","unit":"openspec:add-credentials"}
 {"at":"2026-11-10T06:08:18Z","branch":"l4/archive/openspec/add-credentials","head":"478ed0111ab89ded3c925a08f26adfe50f7f138e","type":"unit.branch_deleted","unit":"openspec:add-credentials"}
+{"at":"2026-11-10T06:08:19Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-grants-model"}
+{"at":"2026-11-10T06:08:19Z","run":"r-20261110T0608Z-c053","type":"unit.dispatched","unit":"openspec:add-grants-model"}
