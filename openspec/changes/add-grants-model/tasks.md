@@ -6,7 +6,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. Fingerprints and the compiler
 
-- [ ] 2.1 Write `src/grants/fingerprint.test.ts` first (scenario "Fingerprint vectors"; it needs `augmentedSuccessors` and `hookPlacements` of `add-hook-checker`, imported from `../authoring/index.ts`), then implement `nodeFingerprint` in `src/grants/fingerprint.ts`, implementing requirement "A node fingerprint hashes what a grant confirms about a node"
+- [x] 2.1 Write `src/grants/fingerprint.test.ts` first (scenario "Fingerprint vectors"; it needs `augmentedSuccessors` and `hookPlacements` of `add-hook-checker`, imported from `../authoring/index.ts`), then implement `nodeFingerprint` in `src/grants/fingerprint.ts`, implementing requirement "A node fingerprint hashes what a grant confirms about a node"
 - [ ] 2.2 Write `src/grants/compile.test.ts` (scenarios "Compile vectors" and "Compile refusals") and `src/grants/compile-engine.test.ts` (scenario "Compiled grants decide like the grant says") first, then implement `GrantsError` in `src/grants/types.ts` (message: the code; `details` a frozen copy) and `compileGrant` and `compileGrants` in `src/grants/compile.ts`, implementing requirements "A grant compiles to one static policy that pins the tenant", "The compiler refuses what it cannot write safely" and "Compiled grants decide as the grant says"
 
 ## 3. The store
