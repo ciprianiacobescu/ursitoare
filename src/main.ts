@@ -19,6 +19,7 @@ import {
   registerAdminRoutes,
   registerAuditRoutes,
   registerBlockRoutes,
+  registerCredentialRoutes,
   registerFlowRoutes,
   registerMeRoute,
   registerOpenApiRoute,
@@ -42,7 +43,7 @@ import {
   testRunInvokers,
 } from "./interpreter/index.ts";
 import type { InterpreterDeps } from "./interpreter/index.ts";
-import { checkEgress } from "./gateway/index.ts";
+import { checkEgress, createVaultWriter } from "./gateway/index.ts";
 import type { LogDestination, Logger } from "./observability/index.ts";
 import { createLogger, noopTracer } from "./observability/index.ts";
 import { createPolicyEngine, defaultSrcDir } from "./pdp/index.ts";
@@ -272,6 +273,17 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     });
     registerBlockRoutes(server, { pool: pep.pool, engineKey: config.engineKey });
     registerToolServerRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
+    const egress = config.egress;
+    const vault = egress !== undefined && egress.vault !== null
+      ? createVaultWriter(egress.vault, { logger })
+      : null;
+    registerCredentialRoutes(server, {
+      pool: pep.pool,
+      vault,
+      ids: systemIds,
+      clock: pep.clock,
+      engineKey: config.engineKey,
+    });
   registerFlowRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
   registerOpenApiRoute(server, { version: VERSION });
     await definePublicRoutes(server, "oidc", (scoped) =>
