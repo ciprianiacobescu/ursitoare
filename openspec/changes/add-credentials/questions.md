@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
-| Q-007 | open | none | verdict | Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied? |
+| Q-007 | answered | none | verdict | Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied? |
 | Q-008 | open | none | verdict | Finding F-0b2a2fe6: task 3.2 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
@@ -498,7 +498,8 @@ accept The scan returns null for a non-literal second argument and skips test fi
 
 ## Q-007: Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -525,6 +526,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept unregisteredRouteErrors in src/api/error-codes.ts collects `${method} ${url}: ${code}` for each declared code that isRegisteredCode refuses and returns the sorted list, so GET /a with [NOT_FOUND, NOPE] and POST /b with [] give ["GET /a: NOPE"] and no routes give []; the tracing test asserts exactly those two results.
 ---
 
 ## Q-008: Finding F-0b2a2fe6: task 3.2 is ticked as already satisfied, but its text is not done
