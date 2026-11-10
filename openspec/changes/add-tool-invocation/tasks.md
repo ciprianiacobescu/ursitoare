@@ -8,7 +8,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. The interpreter
 
-- [ ] 2.1 Write `src/interpreter/runtimes/authorize.test.ts` first (scenario "Order, values, denial, replay and the unchanged M5 path"), then add the optional members to `types.ts`, the code to `errors.ts` (both lists), the `CallAuthorization` export, and the order, step values and `decided` call to `runtimes/block.ts`
+- [x] 2.1 Write `src/interpreter/runtimes/authorize.test.ts` first (scenario "Order, values, denial, replay and the unchanged M5 path"), then add the optional members to `types.ts`, the code to `errors.ts` (both lists), the `CallAuthorization` export, and the order, step values and `decided` call to `runtimes/block.ts`
 - [ ] 2.2 Write `src/interpreter/hooks/authorize.test.ts` first (scenario "Taint of a hook's arguments, the default and the denial"), then add `HookServices.argsTaint?`, the authorize call and the denial rule to `hooks/block-runner.ts` and `argsTaint` to `hooks/pipeline.ts`
 - [ ] 2.3 Write `src/interpreter/authorize-rows.test.ts` and `approvals-path.test.ts` first (scenarios "Fresh, replayed, denied and mock rows" and "A path through an approval node"), then add `inputTaint`, `decided`, the row id and `ctx.approvals` (only for an invoker with `authorize`) to `visit.ts` and the visited path to `execute.ts`
 
