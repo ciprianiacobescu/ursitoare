@@ -21,6 +21,7 @@ import {
   registerBlockRoutes,
   registerCredentialRoutes,
   registerFlowRoutes,
+  registerGrantRoutes,
   registerMeRoute,
   registerOpenApiRoute,
   registerRunRoutes,
@@ -282,6 +283,12 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
       vault,
       ids: systemIds,
       clock: pep.clock,
+      engineKey: config.engineKey,
+    });
+    registerGrantRoutes(server, {
+      pool: pep.pool,
+      clock: pep.clock,
+      ids: systemIds,
       engineKey: config.engineKey,
     });
   registerFlowRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
