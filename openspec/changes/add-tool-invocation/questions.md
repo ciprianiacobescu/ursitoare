@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.1 | technical | src/credentials/egress-site.test.ts:22 asserts the old two-path egress inventory |
-| Q-002 | open | 2.2 | technical | src/interpreter/hooks/authorize.test.ts:293 — seen.events assertions expect 'authorize' and 'invoke' that the test never records |
+| Q-002 | accepted | 2.2 | technical | src/interpreter/hooks/authorize.test.ts:293 — seen.events assertions expect 'authorize' and 'invoke' that the test never records |
 <!-- l4:index:end -->
 
 ---
@@ -43,7 +43,8 @@ Edit `src/credentials/egress-site.test.ts`: change line 22's allowed list to `["
 
 ## Q-002: src/interpreter/hooks/authorize.test.ts:293 — seen.events assertions expect 'authorize' and 'invoke' that the test never records
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 2.2
 - **Kind:** technical
 - **Asked:** 2026-11-10T23:38Z by glm, run r-20261110T2145Z-bb63, task 2.2
