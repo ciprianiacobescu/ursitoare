@@ -13,6 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.1 | technical | src/credentials/schema.test.ts:31-38 insertServer cannot insert into tool_server through the owner pool |
 | Q-002 | answered | 3.2 | harness | Task 3.2: the pre-satisfied check could not decide |
+| Q-003 | open | 5.2 | technical | src/api/credential-secrets.test.ts:378-380 contradicts :418 and :429 (C-01ef6501) |
 <!-- l4:index:end -->
 
 ---
@@ -364,3 +365,26 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: the 7 tests are real and pass at the head because task 3.1's green already wrote the mapping task 3.2 names (vault-call.ts maps GatewayError to CREDENTIALS_VAULT; provision.ts maps 23505 and 23503 by constraint), although tasks.md:14 told 3.1 to leave errors unmapped. Checked out of band on c7b94971 with the held patch (sha256 e19f3d66): all 7 pass; eslint and tsc are clean; with vault errors unmapped 1 test fails by AssertionError, with insert errors unmapped 3 fail by AssertionError, so the tests discriminate. The zero-value run cannot vary TypeScript and the base run timed out at 1800s without a report, so a retry only repeats the same check. Green for 3.2 has nothing left to write.
+
+---
+
+## Q-003: src/api/credential-secrets.test.ts:378-380 contradicts :418 and :429 (C-01ef6501)
+
+- **Status:** open
+- **Blocking tasks:** 5.2
+- **Kind:** technical
+- **Asked:** 2026-11-10T03:57Z by claude-sonnet, run r-20261110T0141Z-96fe, task 5.2
+
+### Context
+Lines 378-380 push Buffer.from(call.value).toString("utf8") for every call in vaultCalls and deniedCalls into errorTexts. Line 418 asserts that the same vaultCalls values include CANARY, and line 429 asserts that the joined errorTexts do not include CANARY ('errors do not contain the canary'). The vault writer must receive the canary, so errorTexts always holds it and the assertion cannot pass with any implementation. Every other test passes, including all of C-bbdd4a2c and C-94f3dabe.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/api/credential-secrets.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-credentials`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/api/credential-secrets.test.ts`: delete the loop at lines 378-380 (`for (const call of [...vaultCalls, ...deniedCalls]) { errorTexts.push(Buffer.from(call.value).toString("utf8")); }`) so errorTexts holds only the error texts
+
+### Clarifier suggestion
+Edit `src/api/credential-secrets.test.ts`: delete the loop at lines 378-380 (`for (const call of [...vaultCalls, ...deniedCalls]) { errorTexts.push(Buffer.from(call.value).toString("utf8")); }`) so errorTexts holds only the error texts
+
+### Answer
+<!-- write below this line -->
