@@ -31,5 +31,6 @@ service in the stack tier (`docs/testing.md`).
 | `sandbox-escape.ts` | `add-code-sandbox` | The 42 escape cases as shared data and their verdict helper |
 | `sandbox-exit-worker.ts` | `add-code-sandbox` | A worker that exits at its first message, for crash and respawn tests |
 | `tool-surface.ts` | `add-tool-registry` | `fixtureSurface`: a tool surface built from test-catalogue blocks |
+| `invoke-runs/` | `add-tool-invocation` | The `read-then-pay`, `hooked-pay` and `untrusted-into-write` live-run flows, their loader (`invokeRunVersion`) and `acmeCatalogue` |
 
 The files `global-setup.ts` and `e2e-stack/main.ts` began as bootstrap placeholders; `add-db-foundation` and `add-e2e-stack` replaced them.
