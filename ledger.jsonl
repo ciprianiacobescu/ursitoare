@@ -113,3 +113,4 @@
 {"at":"2026-11-10T08:42:55Z","run":"r-20261110T0842Z-90d9","type":"unit.dispatched","unit":"openspec:add-grants-model"}
 {"at":"2026-11-10T10:31:04Z","attempt":1,"cost_usd":4.459067,"runs":3,"type":"plan.charged","unit":"openspec:add-grants-model"}
 {"at":"2026-11-10T10:31:04Z","run":"r-20261110T1030Z-d9fa","type":"unit.dispatched","unit":"openspec:add-grants-model"}
+{"at":"2026-11-10T11:39:02Z","head":"72d8770ca58258a07183ac72ebfc7c4d8cb73b56","pr":116,"target_before":"478ed0111ab89ded3c925a08f26adfe50f7f138e","type":"unit.merge_requested","unit":"openspec:add-grants-model"}
