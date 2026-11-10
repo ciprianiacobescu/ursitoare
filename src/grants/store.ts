@@ -3,8 +3,9 @@
 import { appendAudit, formatAt, validateEvent } from "../audit/index.ts";
 import type { AuditEventInput } from "../audit/index.ts";
 import type { BlockDef, Flow } from "../authoring/index.ts";
-import { getFlow, getVersion, listVersions } from "../registry/index.ts";
+import { getFlow, getVersion, listVersions, loadRegistryCatalogue } from "../registry/index.ts";
 import type { VersionDetail } from "../registry/index.ts";
+import { withTenantTx } from "../tenancy/index.ts";
 import type { TenantContext, TenantPool, TenantTx } from "../tenancy/index.ts";
 import {
   IDENTIFIER,
@@ -14,6 +15,7 @@ import {
   checkValueString,
 } from "./compile.ts";
 import { nodeFingerprint } from "./fingerprint.ts";
+import { grantStatus } from "./status.ts";
 import { GrantsError } from "./types.ts";
 import type {
   ArgConstraint,
@@ -419,20 +421,116 @@ export async function confirmGrant(
   return rereadGrant(tx, ctx, grantId);
 }
 
+const MAX_LIST_LIMIT = 201;
+
 export async function listGrants(
-  _pool: TenantPool,
-  _ctx: TenantContext,
-  _page: { limit: number; after: string | null },
+  pool: TenantPool,
+  ctx: TenantContext,
+  page: { limit: number; after: string | null },
 ): Promise<{ grant: GrantRecord; status: GrantStatus }[]> {
-  throw new Error("not implemented");
+  if (!Number.isInteger(page.limit) || page.limit < 1 || page.limit > MAX_LIST_LIMIT) {
+    invalid("limit");
+  }
+  if (page.after !== null && (typeof page.after !== "string" || !IDENTIFIER.id.test(page.after))) {
+    invalid("after");
+  }
+  return withTenantTx(pool, ctx, async (tx) => {
+    await assertTenantMatches(tx, ctx);
+
+    const params: unknown[] = [ctx.tenantId];
+    let sql = `SELECT ${COLUMNS} FROM ursitoare."grant" WHERE tenant_id = $1`;
+    if (page.after !== null) {
+      params.push(page.after);
+      sql += ` AND grant_id COLLATE "C" > $${params.length}`;
+    }
+    params.push(page.limit);
+    sql += ` ORDER BY grant_id COLLATE "C" LIMIT $${params.length}`;
+    const rows = (await tx.query<GrantRow>(sql, params)).rows;
+
+    const flows = new Set<string>();
+    for (const row of rows) {
+      if (row.state === "active" && row.scope_kind === "node" && row.flow_id !== null) {
+        flows.add(row.flow_id);
+      }
+    }
+    const canonicals = new Map<string, Flow | null>();
+    for (const flowId of flows) {
+      const version = await validatedVersion(tx, ctx, flowId, null);
+      canonicals.set(flowId, version === null ? null : (version.canonical as Flow));
+    }
+    const catalogue = flows.size === 0 ? null : await loadRegistryCatalogue(pool, ctx);
+
+    return rows.map((row) => {
+      const grant = toRecord(row);
+      let latest: string | null = null;
+      if (grant.state === "active" && grant.scope.kind === "node" && catalogue !== null) {
+        const canonical = canonicals.get(grant.scope.flowId) ?? null;
+        if (canonical !== null) {
+          latest = nodeFingerprint(canonical, grant.scope.nodeId, catalogue);
+        }
+      }
+      return { grant, status: grantStatus(grant, latest) };
+    });
+  });
+}
+
+interface VersionByHash {
+  flow_id: string;
+  state: string;
+  canonical: unknown;
+}
+
+async function versionByHash(
+  tx: TenantTx,
+  ctx: TenantContext,
+  hash: string,
+): Promise<VersionByHash | null> {
+  const result = await tx.query<VersionByHash>(
+    `SELECT flow_id, state, canonical FROM ursitoare.flow_version
+     WHERE tenant_id = $1 AND content_hash = $2`,
+    [ctx.tenantId, hash],
+  );
+  return result.rows[0] ?? null;
 }
 
 export async function reconfirmationsFor(
-  _pool: TenantPool,
-  _ctx: TenantContext,
-  _oldHash: string,
-  _newHash: string,
-  _deps: GrantDeps,
+  pool: TenantPool,
+  ctx: TenantContext,
+  oldHash: string,
+  newHash: string,
+  deps: GrantDeps,
 ): Promise<Reconfirmation[]> {
-  throw new Error("not implemented");
+  for (const hash of [oldHash, newHash]) {
+    if (typeof hash !== "string" || !HASH_PATTERN.test(hash)) invalid("hash");
+  }
+  return withTenantTx(pool, ctx, async (tx) => {
+    await assertTenantMatches(tx, ctx);
+    const oldVersion = await versionByHash(tx, ctx, oldHash);
+    const newVersion = await versionByHash(tx, ctx, newHash);
+    if (oldVersion === null || newVersion === null) throw new GrantsError("GRANTS_NOT_FOUND");
+    if (oldVersion.flow_id !== newVersion.flow_id) refused("not_same_flow");
+    if (oldVersion.state === "draft" || newVersion.state === "draft") {
+      refused("version_not_validated");
+    }
+
+    const rows = (
+      await tx.query<GrantRow>(
+        `SELECT ${COLUMNS} FROM ursitoare."grant"
+         WHERE tenant_id = $1 AND scope_kind = 'node' AND flow_id = $2 AND state = 'active'
+         ORDER BY grant_id COLLATE "C"`,
+        [ctx.tenantId, oldVersion.flow_id],
+      )
+    ).rows;
+    const catalogue = await deps.catalogueFor(ctx);
+
+    const items: Reconfirmation[] = [];
+    for (const row of rows) {
+      const nodeId = row.node_id ?? "";
+      const from = nodeFingerprint(oldVersion.canonical as Flow, nodeId, catalogue);
+      const to = nodeFingerprint(newVersion.canonical as Flow, nodeId, catalogue);
+      if (from === to || (to !== null && row.fingerprints.includes(to))) continue;
+      items.push({ grantId: row.grant_id, nodeId, from, to });
+    }
+    return items;
+  });
 }
