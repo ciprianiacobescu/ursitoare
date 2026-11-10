@@ -137,3 +137,5 @@
 {"at":"2026-11-10T18:37:38Z","revision":"cf376407e6be8b12fb44d34500af4a82bb0922ba","type":"unit.integrated","unit":"openspec:add-policy-deploy"}
 {"at":"2026-11-10T18:37:38Z","attempt":1,"cost_usd":8.229699,"runs":5,"type":"plan.charged","unit":"openspec:add-policy-deploy"}
 {"at":"2026-11-10T18:39:04Z","branch":"l4/archive/openspec/add-policy-deploy","head":"99bc2d7761a93dcaecdefd38529586fba3ce784b","type":"unit.branch_deleted","unit":"openspec:add-policy-deploy"}
+{"at":"2026-11-10T18:39:05Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-tool-invocation"}
+{"at":"2026-11-10T18:39:05Z","run":"r-20261110T1839Z-5522","type":"unit.dispatched","unit":"openspec:add-tool-invocation"}
