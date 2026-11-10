@@ -2,7 +2,7 @@ import type { PolicySource, ToolArgType } from "../pdp/index.ts";
 import { GrantsError } from "./types.ts";
 import type { ArgConstraint, GrantRecord } from "./types.ts";
 
-const IDENTIFIER = {
+export const IDENTIFIER = {
   tenant: /^[A-Za-z0-9_-]{1,64}$/,
   role: /^[a-z][a-z0-9_]{0,31}$/,
   user: /^[A-Za-z0-9_-]{1,64}$/,
@@ -14,10 +14,10 @@ const IDENTIFIER = {
   id: /^grant_[A-Za-z0-9-]{1,64}$/,
 } as const;
 
-const MAX_FLOW_LENGTH = 64;
-const MAX_TOOL_LENGTH = 128;
+export const MAX_FLOW_LENGTH = 64;
+export const MAX_TOOL_LENGTH = 128;
 const MAX_STRING_LENGTH = 256;
-const MAX_DECIMAL = 922337203685477;
+export const MAX_DECIMAL =922337203685477;
 
 type IdentifierField = keyof typeof IDENTIFIER;
 
@@ -36,7 +36,7 @@ function checkIdentifier(field: IdentifierField, value: unknown, maxLength?: num
   return value;
 }
 
-function checkValueString(value: string): void {
+export function checkValueString(value: string): void {
   if (value.length > MAX_STRING_LENGTH) invalid({ reason: "value_invalid" });
   for (const character of value) {
     const code = character.codePointAt(0) ?? 0;

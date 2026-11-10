@@ -11,7 +11,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 3. The store
 
-- [ ] 3.1 Write `src/grants/create.test.ts` first (scenarios "Grants are created and audited" and "Refusals leave nothing behind"; the functions run in `withTenantTx(pool, ctx, (tx) => …)`), then implement `createGrant` in `src/grants/store.ts`, implementing requirements "createGrant stores and audits an active grant" and "createGrant refuses what it cannot store safely"
+- [x] 3.1 Write `src/grants/create.test.ts` first (scenarios "Grants are created and audited" and "Refusals leave nothing behind"; the functions run in `withTenantTx(pool, ctx, (tx) => …)`), then implement `createGrant` in `src/grants/store.ts`, implementing requirements "createGrant stores and audits an active grant" and "createGrant refuses what it cannot store safely"
 - [ ] 3.2 Write `src/grants/revoke-confirm.test.ts` first (scenario "Revoke and confirm", its `confirmGrant` rows included; rows are read with SQL, `listGrants` being task 3.3), then implement `revokeGrant` and `confirmGrant` in `src/grants/store.ts`, implementing requirement "Revoking is idempotent and confirming adds one fingerprint"
 - [ ] 3.3 Write `src/grants/chain.test.ts` first (scenario "A moved step needs re-confirmation", with its `grantStatus` rows and the tenant guard rows of test-plan-store.md § Refusals), then implement `grantStatus` in `src/grants/status.ts`, and `listGrants` and `reconfirmationsFor` in `src/grants/store.ts`, implementing requirement "Status is derived on read and a moved step needs re-confirmation"
 
