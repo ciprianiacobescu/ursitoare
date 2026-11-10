@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
 | Q-007 | answered | none | verdict | Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied? |
-| Q-008 | open | none | verdict | Finding F-0b2a2fe6: task 3.2 is ticked as already satisfied, but its text is not done |
+| Q-008 | answered | none | verdict | Finding F-0b2a2fe6: task 3.2 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
 ---
@@ -531,7 +531,8 @@ accept unregisteredRouteErrors in src/api/error-codes.ts collects `${method} ${u
 
 ## Q-008: Finding F-0b2a2fe6: task 3.2 is ticked as already satisfied, but its text is not done
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -551,3 +552,4 @@ This finding cites no criterion: end the reason with one sentence WHEN <the situ
 
 ### Answer
 <!-- write below this line -->
+accept The text of task 3.2 is done in the head: vault-call.ts maps GatewayError codes GATEWAY_TOKEN_REFUSED, GATEWAY_INVALID and GATEWAY_UNAVAILABLE to CredentialsError CREDENTIALS_VAULT with reason token_refused, vault_refused or unavailable and rethrows anything else; provision.ts maps the insert's 23505 on credential_ref_server_key and credential_ref_service_key to CREDENTIALS_EXISTS with toolServerId or serviceId and 23503 on credential_ref_tool_server_fkey to CREDENTIALS_NOT_FOUND, passing other errors unchanged; and src/credentials/provision-failures.test.ts exists with seven C-842be4dd tests covering F1 to F11. The finding only says part 1 of the split diff did not show this, which is a view limit and not a gap in the code.
