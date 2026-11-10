@@ -276,10 +276,12 @@ interface Row {
 }
 
 async function rows(f: Fixture): Promise<Row[]> {
-  const result = await f.db.ownerPool.query<Row>(
-    `SELECT deploy_seq::int AS deploy_seq, version, current,
+  const result = await withTenantTx(f.db.appPool, f.t, (tx) =>
+    tx.query<Row>(
+      `SELECT deploy_seq::int AS deploy_seq, version, current,
             to_char(deployed_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS deployed_at
        FROM ursitoare.policy_set WHERE tenant_id = 'tenant_a' ORDER BY deploy_seq`,
+    ),
   );
   return result.rows;
 }
@@ -304,7 +306,8 @@ test("C-69aa2085: a deploy stores, audits and swaps the tenant's engine", async 
       ["P1000 FP2", P(1000, FP2)],
     ];
     for (const [name, r] of requests) {
-      assert.deepEqual(dec(await rt.engine.check(r)), ["deny", [], [], VBASE], `before: ${name}`);
+      const errors = name.startsWith("P") ? ["PDP_REQUEST_INVALID"] : [];
+      assert.deepEqual(dec(await rt.engine.check(r)), ["deny", [], errors, VBASE], `before: ${name}`);
     }
     assert.deepEqual(await rt.toolArgs(T), {});
 
@@ -322,13 +325,15 @@ test("C-69aa2085: a deploy stores, audits and swaps the tenant's engine", async 
     assert.deepEqual(await currentPolicySet(f.db.appPool, f.t), expected, "currentPolicySet");
     assert.equal(await currentPolicySet(f.db.appPool, f.u), null, "no set for the other tenant");
 
-    const stored = await f.db.ownerPool.query<{
-      current: boolean;
-      grant_ids: string[];
-      tool_args: unknown;
-      tenant_sources: { id: string }[];
-    }>(
-      "SELECT current, grant_ids, tool_args, tenant_sources FROM ursitoare.policy_set WHERE tenant_id = 'tenant_a'",
+    const stored = await withTenantTx(f.db.appPool, f.t, (tx) =>
+      tx.query<{
+        current: boolean;
+        grant_ids: string[];
+        tool_args: unknown;
+        tenant_sources: { id: string }[];
+      }>(
+        "SELECT current, grant_ids, tool_args, tenant_sources FROM ursitoare.policy_set WHERE tenant_id = 'tenant_a'",
+      ),
     );
     assert.equal(stored.rows.length, 1, "one row");
     assert.equal(stored.rows[0]?.current, true);
