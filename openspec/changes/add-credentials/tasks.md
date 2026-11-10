@@ -16,7 +16,7 @@ Tests follow `proposal.md` § Out of scope; fixtures are in `test-plan.md` and `
 
 ## 4. Rotate, list and resolve
 
-- [ ] 4.1 Write `src/credentials/rotate.test.ts` first (scenario "Rotate moves the key version, refusals change nothing, list shows metadata"), then implement `rotateCredential` in `rotate.ts`, `listCredentials` in `store.ts` and the export lines of `src/credentials/index.ts`
+- [x] 4.1 Write `src/credentials/rotate.test.ts` first (scenario "Rotate moves the key version, refusals change nothing, list shows metadata"), then implement `rotateCredential` in `rotate.ts`, `listCredentials` in `store.ts` and the export lines of `src/credentials/index.ts`
 - [ ] 4.2 Write `src/credentials/resolver.test.ts` first (scenario "The resolver answers per tenant and seedServiceId matches its vectors"), then implement `createServiceResolver` and `seedServiceId` in `resolver.ts`
 
 ## 5. The error code and the routes
