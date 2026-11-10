@@ -1,0 +1,277 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/grants/{types,fingerprint,compile,status,store,index}.ts",
+      "test/arch/modules.ts",
+      "src/api/admin-rbac.ts",
+      "src/api/admin-routes.ts",
+      "src/api/index.ts",
+      "api/index.ts",
+      "pdp/index.ts",
+      "src/registry/flows/versions.ts",
+      "src/api/pagination.ts",
+      "src/api/admin-rbac.ts:86-92",
+      "src/main.ts",
+      "docs/api/openapi.json",
+      "src/grants/index.ts",
+      "test/arch",
+      "src/api/server.ts",
+      "docs/decisions/0002",
+      "src/main.conventions.test.ts",
+      "src/grants/schema.test.ts",
+      "src/db/migrations/0490_grants.sql",
+      "src/grants/fingerprint.test.ts",
+      "src/grants/fingerprint.ts",
+      "src/grants/compile.test.ts",
+      "src/grants/compile-engine.test.ts",
+      "src/grants/types.ts",
+      "src/grants/compile.ts",
+      "src/grants/create.test.ts",
+      "src/grants/store.ts",
+      "src/grants/revoke-confirm.test.ts",
+      "src/grants/chain.test.ts",
+      "src/grants/status.ts",
+      "src/grants/policy.test.ts",
+      "src/grants/policy/grants.cedar",
+      "src/api/grant-routes.test.ts",
+      "src/api/grant-openapi.test.ts",
+      "src/api/grant-routes.ts",
+      "**/AuditEventInput[\"actor\"]",
+      "**/[].contains",
+      "**/compile.ts",
+      "**/^sha256:[0-9a-f]{64}$",
+      "**/[",
+      "**/index.ts",
+      "module api",
+      "module db",
+      "module docs",
+      "module grants",
+      "module main",
+      "module main.conventions.test",
+      "module pdp",
+      "module registry",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-grants-model/.l4/ledger/r-20261110T0608Z-c053.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-grants-model/.l4/ledger/r-20261110T0842Z-90d9.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-grants-model/.l4/ledger/r-20261110T1030Z-d9fa.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-grants-model/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-grants-model/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/grant-openapi.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/grant-routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/grant-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0490_grants.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/grants/chain.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/compile-engine.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/compile.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/compile.ts",
+        "module": "grants",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/grants/create.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/fingerprint.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/fingerprint.ts",
+        "module": "grants",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/grants/policy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/policy/grants.cedar",
+        "module": "grants",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/grants/revoke-confirm.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/status.ts",
+        "module": "grants",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/grants/store.ts",
+        "module": "grants",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/grants/types.ts",
+        "module": "grants",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/grant-routes.ts, src/api/index.ts, src/grants/compile.ts, src/grants/fingerprint.ts, src/grants/status.ts and 3 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/grant-routes.ts",
+      "src/api/index.ts",
+      "src/grants/compile.ts",
+      "src/grants/fingerprint.ts",
+      "src/grants/status.ts",
+      "src/grants/store.ts",
+      "src/grants/types.ts",
+      "src/main.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2286,
+      "passed": 2286,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 38,
+      "new_passed": 38,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
