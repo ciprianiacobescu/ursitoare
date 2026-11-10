@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | 3.2 | harness | Task 3.2: the pre-satisfied check could not decide |
 | Q-003 | accepted | 5.2 | technical | src/api/credential-secrets.test.ts:378-380 contradicts :418 and :429 (C-01ef6501) |
 | Q-004 | answered | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
-| Q-005 | open | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
+| Q-005 | answered | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied? |
 | Q-008 | open | none | verdict | Finding F-0b2a2fe6: task 3.2 is ticked as already satisfied, but its text is not done |
@@ -432,7 +432,8 @@ accept ERROR_CODES in src/api/error-codes.ts holds exactly the 27 entries of the
 
 ## Q-005: Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -459,6 +460,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept checkApiErrorCodes in test/arch/error-codes.ts walks every non-test src ts file, reports each new ApiError whose second argument is a string literal not in the registered list as ARCH_API_ERROR_CODE with the file, the 1-based line and a message naming the code and src/api/error-codes.ts; the tracing test builds exactly the scenario's snapshot with the throw on line 3 and the list ["NOT_FOUND"] and asserts one violation with each of those members.
 ---
 
 ## Q-006: Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied?
