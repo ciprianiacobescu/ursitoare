@@ -351,7 +351,6 @@ test("C-8028b9c3 the grant routes require deploy_policy and map the module error
     const sessions = hx.sessions;
     const carol = sessions["carol"] as Session;
     const alice = sessions["alice"] as Session;
-    const bob = sessions["bob"] as Session;
     const mallory = sessions["mallory"] as Session;
 
     const g0: GrantRecord = {
@@ -375,7 +374,7 @@ test("C-8028b9c3 the grant routes require deploy_policy and map the module error
       args: [],
       fingerprints: [],
       state: "active",
-      createdBy: bob.userId,
+      createdBy: carol.userId,
       createdAt: AT,
       revokedBy: null,
       revokedAt: null,
@@ -472,7 +471,7 @@ test("C-8028b9c3 the grant routes require deploy_policy and map the module error
       server,
       "POST",
       "/api/v1/grants",
-      bob,
+      carol,
       {
         subject: { kind: "user", userId: "bob" },
         tool: "acme.lookup_vendor@1",
@@ -480,7 +479,7 @@ test("C-8028b9c3 the grant routes require deploy_policy and map the module error
         args: [],
       },
     );
-    assert.equal(bobCreate.statusCode, 201, "bob creates the second grant");
+    assert.equal(bobCreate.statusCode, 201, "carol creates the second grant");
     assert.deepEqual(bobCreate.json() as GrantRecord, g1);
 
     const page1 = await call(server, "GET", "/api/v1/grants?limit=1", carol);

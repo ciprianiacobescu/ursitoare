@@ -2858,6 +2858,1204 @@
         ]
       }
     },
+    "/api/v1/grants": {
+      "get": {
+        "operationId": "get_api_v1_grants",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "maxLength": 1024,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "grant": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "args": {
+                                "items": {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "arg": {
+                                      "pattern": "^[a-z][a-z0-9_]{0,63}$",
+                                      "type": "string"
+                                    },
+                                    "op": {
+                                      "enum": [
+                                        "eq",
+                                        "lte",
+                                        "gte"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "value": {}
+                                  },
+                                  "required": [
+                                    "arg",
+                                    "op",
+                                    "value"
+                                  ],
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "createdBy": {
+                                "type": "string"
+                              },
+                              "fingerprints": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "revokedAt": {
+                                "type": [
+                                  "null",
+                                  "string"
+                                ]
+                              },
+                              "revokedBy": {
+                                "type": [
+                                  "null",
+                                  "string"
+                                ]
+                              },
+                              "scope": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "flowId": {
+                                    "maxLength": 64,
+                                    "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+                                    "type": "string"
+                                  },
+                                  "kind": {
+                                    "enum": [
+                                      "any_step",
+                                      "node"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "nodeId": {
+                                    "pattern": "^[a-z][a-z0-9_]*$",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "kind"
+                                ],
+                                "type": "object"
+                              },
+                              "state": {
+                                "enum": [
+                                  "active",
+                                  "revoked"
+                                ],
+                                "type": "string"
+                              },
+                              "subject": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "kind": {
+                                    "enum": [
+                                      "role",
+                                      "user"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "role": {
+                                    "pattern": "^[a-z][a-z0-9_]{0,31}$",
+                                    "type": "string"
+                                  },
+                                  "userId": {
+                                    "pattern": "^[A-Za-z0-9_-]{1,64}$",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "kind"
+                                ],
+                                "type": "object"
+                              },
+                              "tool": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "subject",
+                              "tool",
+                              "scope",
+                              "args",
+                              "fingerprints",
+                              "state",
+                              "createdBy",
+                              "createdAt",
+                              "revokedBy",
+                              "revokedAt"
+                            ],
+                            "type": "object"
+                          },
+                          "status": {
+                            "enum": [
+                              "active",
+                              "needs_reconfirm",
+                              "revoked"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "grant",
+                          "status"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "next_cursor": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "next_cursor"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CURSOR_INVALID, VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, ENGINE_KEY_REQUIRED"
+          }
+        },
+        "x-ursitoare-action": "deploy_policy",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CURSOR_INVALID",
+          "ENGINE_KEY_REQUIRED",
+          "FORBIDDEN",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      },
+      "post": {
+        "operationId": "post_api_v1_grants",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "idempotency-key",
+            "required": false,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[!-~]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "args": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "arg": {
+                          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+                          "type": "string"
+                        },
+                        "op": {
+                          "enum": [
+                            "eq",
+                            "lte",
+                            "gte"
+                          ],
+                          "type": "string"
+                        },
+                        "value": {}
+                      },
+                      "required": [
+                        "arg",
+                        "op",
+                        "value"
+                      ],
+                      "type": "object"
+                    },
+                    "maxItems": 8,
+                    "type": "array"
+                  },
+                  "scope": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "flowId": {
+                        "maxLength": 64,
+                        "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+                        "type": "string"
+                      },
+                      "kind": {
+                        "enum": [
+                          "any_step",
+                          "node"
+                        ],
+                        "type": "string"
+                      },
+                      "nodeId": {
+                        "pattern": "^[a-z][a-z0-9_]*$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind"
+                    ],
+                    "type": "object"
+                  },
+                  "subject": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": {
+                        "enum": [
+                          "role",
+                          "user"
+                        ],
+                        "type": "string"
+                      },
+                      "role": {
+                        "pattern": "^[a-z][a-z0-9_]{0,31}$",
+                        "type": "string"
+                      },
+                      "userId": {
+                        "pattern": "^[A-Za-z0-9_-]{1,64}$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind"
+                    ],
+                    "type": "object"
+                  },
+                  "tool": {
+                    "maxLength": 128,
+                    "pattern": "^[a-z][a-z0-9._-]*@(0|[1-9][0-9]{0,8})$",
+                    "type": "string"
+                  },
+                  "versionHash": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "subject",
+                  "tool",
+                  "scope",
+                  "args"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "args": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "arg": {
+                            "pattern": "^[a-z][a-z0-9_]{0,63}$",
+                            "type": "string"
+                          },
+                          "op": {
+                            "enum": [
+                              "eq",
+                              "lte",
+                              "gte"
+                            ],
+                            "type": "string"
+                          },
+                          "value": {}
+                        },
+                        "required": [
+                          "arg",
+                          "op",
+                          "value"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "string"
+                    },
+                    "fingerprints": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "revokedAt": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "revokedBy": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "scope": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "flowId": {
+                          "maxLength": 64,
+                          "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+                          "type": "string"
+                        },
+                        "kind": {
+                          "enum": [
+                            "any_step",
+                            "node"
+                          ],
+                          "type": "string"
+                        },
+                        "nodeId": {
+                          "pattern": "^[a-z][a-z0-9_]*$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind"
+                      ],
+                      "type": "object"
+                    },
+                    "state": {
+                      "enum": [
+                        "active",
+                        "revoked"
+                      ],
+                      "type": "string"
+                    },
+                    "subject": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "enum": [
+                            "role",
+                            "user"
+                          ],
+                          "type": "string"
+                        },
+                        "role": {
+                          "pattern": "^[a-z][a-z0-9_]{0,31}$",
+                          "type": "string"
+                        },
+                        "userId": {
+                          "pattern": "^[A-Za-z0-9_-]{1,64}$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind"
+                      ],
+                      "type": "object"
+                    },
+                    "tool": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "subject",
+                    "tool",
+                    "scope",
+                    "args",
+                    "fingerprints",
+                    "state",
+                    "createdBy",
+                    "createdAt",
+                    "revokedBy",
+                    "revokedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CSRF_INVALID, FORBIDDEN"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: IDEMPOTENCY_IN_PROGRESS"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: IDEMPOTENCY_KEY_REUSED, OPERATION_REFUSED"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "deploy_policy",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CSRF_INVALID",
+          "FORBIDDEN",
+          "IDEMPOTENCY_IN_PROGRESS",
+          "IDEMPOTENCY_KEY_REUSED",
+          "OPERATION_REFUSED",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/grants/reconfirmations": {
+      "get": {
+        "operationId": "get_api_v1_grants_reconfirmations",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "from": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "grantId": {
+                            "type": "string"
+                          },
+                          "nodeId": {
+                            "type": "string"
+                          },
+                          "to": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "grantId",
+                          "nodeId",
+                          "from",
+                          "to"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: OPERATION_REFUSED"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "deploy_policy",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "FORBIDDEN",
+          "NOT_FOUND",
+          "OPERATION_REFUSED",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/grants/{id}": {
+      "delete": {
+        "operationId": "delete_api_v1_grants_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "pattern": "^grant_[A-Za-z0-9-]{1,64}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "args": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "arg": {
+                            "pattern": "^[a-z][a-z0-9_]{0,63}$",
+                            "type": "string"
+                          },
+                          "op": {
+                            "enum": [
+                              "eq",
+                              "lte",
+                              "gte"
+                            ],
+                            "type": "string"
+                          },
+                          "value": {}
+                        },
+                        "required": [
+                          "arg",
+                          "op",
+                          "value"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "string"
+                    },
+                    "fingerprints": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "revokedAt": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "revokedBy": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "scope": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "flowId": {
+                          "maxLength": 64,
+                          "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+                          "type": "string"
+                        },
+                        "kind": {
+                          "enum": [
+                            "any_step",
+                            "node"
+                          ],
+                          "type": "string"
+                        },
+                        "nodeId": {
+                          "pattern": "^[a-z][a-z0-9_]*$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind"
+                      ],
+                      "type": "object"
+                    },
+                    "state": {
+                      "enum": [
+                        "active",
+                        "revoked"
+                      ],
+                      "type": "string"
+                    },
+                    "subject": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "enum": [
+                            "role",
+                            "user"
+                          ],
+                          "type": "string"
+                        },
+                        "role": {
+                          "pattern": "^[a-z][a-z0-9_]{0,31}$",
+                          "type": "string"
+                        },
+                        "userId": {
+                          "pattern": "^[A-Za-z0-9_-]{1,64}$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind"
+                      ],
+                      "type": "object"
+                    },
+                    "tool": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "subject",
+                    "tool",
+                    "scope",
+                    "args",
+                    "fingerprints",
+                    "state",
+                    "createdBy",
+                    "createdAt",
+                    "revokedBy",
+                    "revokedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CSRF_INVALID, FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "deploy_policy",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CSRF_INVALID",
+          "FORBIDDEN",
+          "NOT_FOUND",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/grants/{id}/confirm": {
+      "post": {
+        "operationId": "post_api_v1_grants_id_confirm",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "pattern": "^grant_[A-Za-z0-9-]{1,64}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "versionHash": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "args": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "arg": {
+                            "pattern": "^[a-z][a-z0-9_]{0,63}$",
+                            "type": "string"
+                          },
+                          "op": {
+                            "enum": [
+                              "eq",
+                              "lte",
+                              "gte"
+                            ],
+                            "type": "string"
+                          },
+                          "value": {}
+                        },
+                        "required": [
+                          "arg",
+                          "op",
+                          "value"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "createdBy": {
+                      "type": "string"
+                    },
+                    "fingerprints": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "revokedAt": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "revokedBy": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "scope": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "flowId": {
+                          "maxLength": 64,
+                          "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+                          "type": "string"
+                        },
+                        "kind": {
+                          "enum": [
+                            "any_step",
+                            "node"
+                          ],
+                          "type": "string"
+                        },
+                        "nodeId": {
+                          "pattern": "^[a-z][a-z0-9_]*$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind"
+                      ],
+                      "type": "object"
+                    },
+                    "state": {
+                      "enum": [
+                        "active",
+                        "revoked"
+                      ],
+                      "type": "string"
+                    },
+                    "subject": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "enum": [
+                            "role",
+                            "user"
+                          ],
+                          "type": "string"
+                        },
+                        "role": {
+                          "pattern": "^[a-z][a-z0-9_]{0,31}$",
+                          "type": "string"
+                        },
+                        "userId": {
+                          "pattern": "^[A-Za-z0-9_-]{1,64}$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind"
+                      ],
+                      "type": "object"
+                    },
+                    "tool": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "subject",
+                    "tool",
+                    "scope",
+                    "args",
+                    "fingerprints",
+                    "state",
+                    "createdBy",
+                    "createdAt",
+                    "revokedBy",
+                    "revokedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CSRF_INVALID, FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: OPERATION_REFUSED"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "deploy_policy",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CSRF_INVALID",
+          "FORBIDDEN",
+          "NOT_FOUND",
+          "OPERATION_REFUSED",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
     "/api/v1/idp-group-map": {
       "delete": {
         "operationId": "delete_api_v1_idp_group_map",
