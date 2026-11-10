@@ -39,6 +39,6 @@ export interface ToolRequest {
 }
 
 export const INVOKE_LIMITS: Readonly<{ tokenTtlSeconds: number; maxEntities: number }> = {
-  tokenTtlSeconds: 0,
-  maxEntities: 0,
+  tokenTtlSeconds: 60,
+  maxEntities: 24,
 };

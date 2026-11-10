@@ -3,6 +3,7 @@
 import type { JsonValue } from "../../authoring/index.ts";
 import type { ServiceTarget } from "../../credentials/index.ts";
 import type { Approval, StepContext } from "../../interpreter/index.ts";
+import { bodyDigest } from "../../gateway/index.ts";
 import type {
   ApproversByRole,
   Egress,
@@ -14,19 +15,55 @@ import type {
 import type { ToolBinding } from "../../tools/index.ts";
 import type { ToolRequest } from "./types.ts";
 
+const BODY_LESS_METHODS = new Set(["GET", "DELETE"]);
+
+function sortedCopy(value: JsonValue): JsonValue {
+  if (Array.isArray(value)) return value.map((item) => sortedCopy(item));
+  if (value === null || typeof value !== "object") return value;
+  const out: Record<string, JsonValue> = {};
+  for (const key of Object.keys(value).sort()) {
+    out[key] = sortedCopy(value[key] as JsonValue);
+  }
+  return out;
+}
+
+const encoder = new TextEncoder();
+
 export function toolRequest(
-  _binding: ToolBinding,
-  _target: ServiceTarget,
-  _args: JsonValue,
-  _idemKey: string | null,
+  binding: ToolBinding,
+  target: ServiceTarget,
+  args: JsonValue,
+  idemKey: string | null,
 ): ToolRequest {
-  throw new Error("not implemented");
+  const method = binding.http.method;
+  const body = BODY_LESS_METHODS.has(method) ? null : encoder.encode(JSON.stringify(sortedCopy(args)));
+  const headers: Record<string, string> = {};
+  if (body !== null) headers["content-type"] = "application/json";
+  if (idemKey !== null) headers["idempotency-key"] = idemKey;
+  return {
+    request: {
+      method,
+      origin: target.origin,
+      path: binding.http.path,
+      headers,
+      body,
+    },
+    egress: {
+      method,
+      host: new URL(target.origin).host,
+      path: binding.http.path,
+      bodyDigest: bodyDigest(body),
+      serviceId: target.serviceId,
+      ttlSeconds: 60,
+    },
+  };
 }
 
 export function blockResourceId(
-  _ctx: Pick<StepContext, "tenant" | "flowId" | "nodeId" | "hook">,
+  ctx: Pick<StepContext, "tenant" | "flowId" | "nodeId" | "hook">,
 ): string {
-  throw new Error("not implemented");
+  const id = `${ctx.tenant.tenantId}/${ctx.flowId}/${ctx.nodeId}`;
+  return ctx.hook === undefined ? id : `${id}:${ctx.hook.phase}:${ctx.hook.label}`;
 }
 
 export function pdpApprovals(
