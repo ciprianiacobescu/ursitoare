@@ -14,6 +14,11 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 1.1 | technical | src/credentials/schema.test.ts:31-38 insertServer cannot insert into tool_server through the owner pool |
 | Q-002 | answered | 3.2 | harness | Task 3.2: the pre-satisfied check could not decide |
 | Q-003 | accepted | 5.2 | technical | src/api/credential-secrets.test.ts:378-380 contradicts :418 and :429 (C-01ef6501) |
+| Q-004 | open | none | verdict | Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied? |
+| Q-005 | open | none | verdict | Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied? |
+| Q-006 | open | none | verdict | Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied? |
+| Q-007 | open | none | verdict | Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied? |
+| Q-008 | open | none | verdict | Finding F-0b2a2fe6: task 3.2 is ticked as already satisfied, but its text is not done |
 <!-- l4:index:end -->
 
 ---
@@ -386,6 +391,155 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/api/credential-secrets.test.ts`: delete the loop at lines 378-380 (`for (const call of [...vaultCalls, ...deniedCalls]) { errorTexts.push(Buffer.from(call.value).toString("utf8")); }`) so errorTexts holds only the error texts
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-004: Criterion C-96e47324 (api-conventions › Every error code is registered › The registry): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-96e47324 (api-conventions › Every error code is registered › The registry)
+
+### Context
+Criterion C-96e47324 (api-conventions › Every error code is registered › The registry) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `ERROR_CODES` is read
+\- **THEN** it has exactly these 27 entries, `CODE status "message"`, and `isRegisteredCode` is true for each and false for `cursor_invalid`, `""` and `NOT_A_CODE`: `NOT_FOUND 404 "Route not found"`, `VALIDATION_FAILED 400 "Request validation failed"`, `PAYLOAD_TOO_LARGE 413 "Payload too large"`, `UNSUPPORTED_MEDIA_TYPE 415 "Unsupported media type"`, `BAD_REQUEST 400 "Bad request"`, `INTERNAL 500 "Internal server error"`, `WEB_NOT_BUILT 503 "Web app is not built"`, `UNAUTHENTICATED 401 "Authentication required"`, `FORBIDDEN 403 "Action not permitted"`, `CSRF_INVALID 403 "CSRF token missing or invalid"`, `OIDC_CSRF_INVALID 403 "CSRF token missing or invalid"`, `OIDC_NOT_CONFIGURED 503 "Sign-in is not configured"`, `AUTHZ_UNAVAILABLE 503 "Authorization is unavailable"`, `CURSOR_INVALID 400 "Cursor is invalid"`, `IDEMPOTENCY_KEY_REUSED 422 "Idempotency key was used with a different request"`, `IDEMPOTENCY_IN_PROGRESS 409 "A request with this idempotency key is in progress"`, `ALREADY_EXISTS 409 "Resource already exists"`, `IN_USE 409 "Resource is in use"`, `ELEVATION_REFUSED 403 "Role cannot be granted by this principal"`, `UNKNOWN_ISSUER 422 "Issuer is not routed to this tenant"`, `OPERATION_REFUSED 422 "Operation is refused"`, `ENGINE_KEY_REQUIRED 503 "Paging needs the engine key (URSITOARE_ENGINE_KEY_FILE)"`, `FLOW_TEXT_INVALID 422 "Flow text is not a readable flow document"`, `RUNS_UNAVAILABLE 503 "Runs are unavailable"`, `TEST_MOCK_MISSING 422 "A block node has no mock"`, `TEST_MOCK_INVALID 422 "A mock does not fit its node"`, `EGRESS_UNAVAILABLE 503 "The egress broker or vault is unavailable"`
+
+Why: uncovered: the tests that trace it are inadequate or did not pass
+Judge: pass
+Tracing tests: src.api.credential-codes.test.ts::C-96e47324 registers EGRESS_UNAVAILABLE with its status and message (passed, red_assertion, inadequate)
+Ignored tests: src.api.error-codes.test.ts::C-96e47324 The registry holds exactly the 16 codes of the API with status and message (no proof that it discriminates (no red, audit or generated record)); src.api.flow-errors.test.ts::C-96e47324 C-226d18fa: FLOW_TEXT_INVALID is registered with status 422 (no proof that it discriminates (no red, audit or generated record)); src.api.run-list.test.ts::C-96e47324 the runs failure code is registered with status and message (no proof that it discriminates (no red, audit or generated record)); src.api.test-run-codes.test.ts::C-96e47324 registers TEST_MOCK_INVALID with its status and message (no proof that it discriminates (no red, audit or generated record)); src.api.test-run-codes.test.ts::C-96e47324 registers TEST_MOCK_MISSING with its status and message (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan)
+
+### Context
+Criterion C-601275f9 (api-conventions › Every error code is registered › An unregistered literal code fails the scan) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `checkApiErrorCodes` runs on a snapshot whose `src/x/a.ts` has `throw new ApiError(409, "FLOW_EXISTS", "x")` on line 3, with the registered list `["NOT_FOUND"]`
+\- **THEN** it returns one violation with code `ARCH_API_ERROR_CODE`, file `src/x/a.ts`, line 3, and a message that names `FLOW_EXISTS` and `src/api/error-codes.ts`
+
+Why: the judge answered insufficient_evidence
+Judge: insufficient_evidence
+Tracing tests: test.arch.error-codes.test.ts::C-601275f9 An unregistered literal ApiError code fails the scan (passed, pass_to_pass)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-006: Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass)
+
+### Context
+Criterion C-05ca73a7 (api-conventions › Every error code is registered › Registered, dynamic and test uses pass) is needs human after round 1.
+
+Scenario:
+\- **WHEN** a snapshot holds `new ApiError(404, "NOT_FOUND", "m")`, `new ApiError(500, code, "m")` and a `src/x/a.test.ts` with the literal `"FLOW_EXISTS"`
+\- **THEN** `checkApiErrorCodes` returns `[]`, and also `[]` over `readSnapshot()` with the default registry
+
+Why: the judge answered insufficient_evidence
+Judge: insufficient_evidence
+Tracing tests: test.arch.error-codes.test.ts::C-05ca73a7 Registered, dynamic and test code use passes the scan (passed, pass_to_pass)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-007: Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-541ef4f9 (api-conventions › Every error code is registered › Route errors)
+
+### Context
+Criterion C-541ef4f9 (api-conventions › Every error code is registered › Route errors) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `unregisteredRouteErrors` gets `GET /a` with errors `["NOT_FOUND", "NOPE"]` and `POST /b` with `[]`
+\- **THEN** it returns `["GET /a: NOPE"]`, and `[]` for no routes (the real engine's routes are checked in "The real engine" of the OpenAPI requirement)
+
+Why: the judge answered insufficient_evidence
+Judge: insufficient_evidence
+Tracing tests: src.api.error-codes.test.ts::C-541ef4f9 Route errors lists only routes whose declared codes are unregistered (passed, pass_to_pass)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-008: Finding F-0b2a2fe6: task 3.2 is ticked as already satisfied, but its text is not done
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+The judge raised a major finding in round 1, and no deterministic check confirms it.
+
+Title: task 3.2 is ticked as already satisfied, but its text is not done
+Detail: task 3.2 implementation (provision.ts SQLSTATE 23505/23503 mapping, vault-call.ts GatewayError mapping, provision-failures.test.ts) is in parts 2-3, not shown in part 1; the gate report lists C-842be4dd tests as pre_satisfied/inconclusive via Q-002, so part 1 does not show the task is done.
+
+Answer `accept` to waive the finding, or `reject` and say why: a rejected finding is fixed by a fix unit, and your reason comes first in it.
+This finding cites no criterion: end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals, or no fix can be made from the reject.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
 
 ### Answer
 <!-- write below this line -->
