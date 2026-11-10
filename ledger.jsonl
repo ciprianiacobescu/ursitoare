@@ -124,3 +124,5 @@
 {"at":"2026-11-10T11:46:34Z","run":"r-20261110T1146Z-9857","type":"unit.dispatched","unit":"openspec:add-policy-deploy"}
 {"at":"2026-11-10T12:07:17Z","attempt":1,"cost_usd":1.189586,"runs":2,"type":"plan.charged","unit":"openspec:add-policy-deploy"}
 {"at":"2026-11-10T12:07:17Z","run":"r-20261110T1207Z-d463","type":"unit.dispatched","unit":"openspec:add-policy-deploy"}
+{"at":"2026-11-10T14:44:15Z","attempt":1,"cost_usd":3.358468,"runs":3,"type":"plan.charged","unit":"openspec:add-policy-deploy"}
+{"at":"2026-11-10T14:44:15Z","run":"r-20261110T1444Z-ede1","type":"unit.dispatched","unit":"openspec:add-policy-deploy"}
