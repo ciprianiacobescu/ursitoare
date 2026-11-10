@@ -131,3 +131,4 @@
 {"at":"2026-11-10T17:37:20Z","attempt":1,"cost_usd":8.229699,"runs":5,"type":"plan.charged","unit":"openspec:add-policy-deploy"}
 {"at":"2026-11-10T17:37:20Z","run":"r-20261110T1737Z-37f3","type":"unit.dispatched","unit":"openspec:add-policy-deploy"}
 {"at":"2026-11-10T18:33:08Z","head":"6ca3324164d7802436bdf8dda115d753f3aa2ad7","pr":118,"target_before":"7442294aa0de1c4ffa76284d5342b7c92177e075","type":"unit.merge_requested","unit":"openspec:add-policy-deploy"}
+{"at":"2026-11-10T18:33:17Z","ci":"not_run","head":"6ca3324164d7802436bdf8dda115d753f3aa2ad7","merge_commit":"cf376407e6be8b12fb44d34500af4a82bb0922ba","method":"squash","pr":118,"raced":false,"type":"unit.merged","unit":"openspec:add-policy-deploy"}
