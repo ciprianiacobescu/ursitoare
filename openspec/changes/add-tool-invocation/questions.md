@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | technical | src/credentials/egress-site.test.ts:22 asserts the old two-path egress inventory |
+| Q-001 | accepted | 1.1 | technical | src/credentials/egress-site.test.ts:22 asserts the old two-path egress inventory |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/credentials/egress-site.test.ts:22 asserts the old two-path egress inventory
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 1.1
 - **Kind:** technical
 - **Asked:** 2026-11-10T19:21Z by deepseek-free, run r-20261110T1839Z-5522, task 1.1
