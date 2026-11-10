@@ -2,4 +2,4 @@
 
 export type { InvokePath, InvokePathDeps } from "./invoke/types.ts";
 export { INVOKE_LIMITS } from "./invoke/types.ts";
-export { toolRequest, blockResourceId } from "./invoke/request.ts";
+export { toolRequest, blockResourceId, pdpApprovals, invokeToolRequest } from "./invoke/request.ts";
