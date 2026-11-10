@@ -1,4 +1,4 @@
-# Verification: openspec:add-credentials: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-credentials: PASS (round 2)
 
 traceability: 19/19 criteria covered by a discriminating test
 
@@ -17,17 +17,17 @@ traceability: 19/19 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.4 | base merged: main@80eebba0d9 as f279e2f20a (1 commit) |
-| 1 | integrity | ok | 874.6 | 11 sub-checks (+2 unfrozen by human answers); scope: 43 changed file(s) |
-| 2 | build | ok | 39.8 |  |
-| 3 | tests | ok | 385.5 |  |
-| 4 | traceability | ok | 0.3 | 19/19 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/api/credential-routes.ts, src/api/error-codes.ts, src/api/index.ts, src/credentials/index.ts, src/credentials/provision.ts and 11 more |
-| 8 | s1 judge | ok | 1.2 | 16/19 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 771.9 | 6 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -220,14 +220,22 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-8ba7a4db | ok | 0.860 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-5e7feae0 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-004 accept C-96e47324 by the delegate (claude-fable-5-1 via claude-code): ERROR_CODES in src/api/error-codes.ts holds exactly the 27 entries of the scenario with the listed status and message, isRegisteredCode is a hasOwnProperty check, and the edited frozen test asserts the exact key set, every entry, true for each code and false for cursor_invalid, the empty string and ...
+- Q-005 accept C-601275f9 by the delegate (claude-fable-5-1 via claude-code): checkApiErrorCodes in test/arch/error-codes.ts walks every non-test src ts file, reports each new ApiError whose second argument is a string literal not in the registered list as ARCH_API_ERROR_CODE with the file, the 1-based line and a message naming the code and src/api/error-codes.ts; the tracing...
+- Q-006 accept C-05ca73a7 by the delegate (claude-fable-5-1 via claude-code): The scan returns null for a non-literal second argument and skips test files, so the registered literal, the dynamic code and the test-file literal give no violation; the tracing test builds that snapshot and asserts [] with the default registry and with ["NOT_FOUND"], and asserts [] over readSnapsh...
+- Q-007 accept C-541ef4f9 by the delegate (claude-fable-5-1 via claude-code): unregisteredRouteErrors in src/api/error-codes.ts collects `${method} ${url}: ${code}` for each declared code that isRegisteredCode refuses and returns the sorted list, so GET /a with [NOT_FOUND, NOPE] and POST /b with [] give ["GET /a: NOPE"] and no routes give []; the tracing test asserts exactly ...
+- Q-008 accept F-0b2a2fe6 by the delegate (claude-fable-5-1 via claude-code): The text of task 3.2 is done in the head: vault-call.ts maps GatewayError codes GATEWAY_TOKEN_REFUSED, GATEWAY_INVALID and GATEWAY_UNAVAILABLE to CredentialsError CREDENTIALS_VAULT with reason token_refused, vault_refused or unavailable and rethrows anything else; provision.ts maps the insert's 2350...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
-| C-96e47324 | api-conventions › Every error code is registered › The registry | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
-| C-601275f9 | api-conventions › Every error code is registered › An unregistered literal code fails the scan | insufficient_evidence | needs_human | the judge answered insufficient_evidence |
-| C-05ca73a7 | api-conventions › Every error code is registered › Registered, dynamic and test uses pass | insufficient_evidence | needs_human | the judge answered insufficient_evidence |
-| C-541ef4f9 | api-conventions › Every error code is registered › Route errors | insufficient_evidence | needs_human | the judge answered insufficient_evidence |
+| C-96e47324 | api-conventions › Every error code is registered › The registry | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): ERROR_CODES in src/api/error-codes.ts holds exactly the 27 entries of the scenario with the listed status and message, isRegisteredCode is a hasOwnProperty check, and the edited frozen test asserts the exact key set, every entry, true for ... |
+| C-601275f9 | api-conventions › Every error code is registered › An unregistered literal code fails the scan | insufficient_evidence | pass | accepted by the delegate (claude-fable-5-1 via claude-code): checkApiErrorCodes in test/arch/error-codes.ts walks every non-test src ts file, reports each new ApiError whose second argument is a string literal not in the registered list as ARCH_API_ERROR_CODE with the file, the 1-based line and a me... |
+| C-05ca73a7 | api-conventions › Every error code is registered › Registered, dynamic and test uses pass | insufficient_evidence | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The scan returns null for a non-literal second argument and skips test files, so the registered literal, the dynamic code and the test-file literal give no violation; the tracing test builds that snapshot and asserts [] with the default re... |
+| C-541ef4f9 | api-conventions › Every error code is registered › Route errors | insufficient_evidence | pass | accepted by the delegate (claude-fable-5-1 via claude-code): unregisteredRouteErrors in src/api/error-codes.ts collects `${method} ${url}: ${code}` for each declared code that isRegisteredCode refuses and returns the sorted list, so GET /a with [NOT_FOUND, NOPE] and POST /b with [] give ["GET /a: NO... |
 | C-aebcc921 | credentials › Credential references are stored per tenant and hold no value › Migration 0480 stores references and no value | pass | pass | the judge passed it and a discriminating test passes |
 | C-5095674e | credentials › The vault codec writes seven request fields and reads the key version › The codec matches hand-written byte vectors and never sends field 7 | pass | pass | the judge passed it and a discriminating test passes |
 | C-2a5da3c6 | credentials › The vault writer puts one credential over h2c gRPC and maps what the vault answers › The writer stores through the fake vault, counts key versions and maps every refusal | pass | pass | the judge passed it and a discriminating test passes |
@@ -253,7 +261,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] a test is ignored as evidence (criterion C-96e47324): src.api.test-run-codes.test.ts::C-96e47324 registers TEST_MOCK_MISSING with its status and message: no proof that it discriminates (no red, audit or generated record)
 - [minor, judge] Vault writer sends duplicate mintkey metadata headers beyond the design-specified names (spec gap) (criterion C-2a5da3c6): design.md § Codec and writer names x-mintkey-service-token and x-mintkey-service-identity as the metadata headers, but src/gateway/vault.ts also sends x-mintkey-token and x-mintkey-identity. No scenario pins down whether extra headers may be sent, and two reasonable implementations differ. The implementer's hint flags this design/fake mismatch as unresolved.
 - [minor, judge] the judge called a test inadequate (criterion C-96e47324): src.api.credential-codes.test.ts::C-96e47324 registers EGRESS_UNAVAILABLE with its status and message
-- [major, judge] task 3.2 is ticked as already satisfied, but its text is not done: task 3.2 implementation (provision.ts SQLSTATE 23505/23503 mapping, vault-call.ts GatewayError mapping, provision-failures.test.ts) is in parts 2-3, not shown in part 1; the gate report lists C-842be4dd tests as pre_satisfied/inconclusive via Q-002, so part 1 does not show the task is done.
+- [minor, judge] task 3.2 is ticked as already satisfied, but its text is not done: task 3.2 implementation (provision.ts SQLSTATE 23505/23503 mapping, vault-call.ts GatewayError mapping, provision-failures.test.ts) is in parts 2-3, not shown in part 1; the gate report lists C-842be4dd tests as pre_satisfied/inconclusive via Q-002, so part 1 does not show the task is done. (waived by the delegate (claude-fable-5-1 via claude-code): The text of task 3.2 is done in the head: vault-call.ts maps GatewayError codes GATEWAY_TOKEN_REFUSED, GATEWAY_INVALID and GATEWAY_UNAVAILABLE to CredentialsError CREDENTIALS_VAULT with reason token_refused, vault_refused or unavailable and rethrow...
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
