@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | technical | src/grants/policy-schema.test.ts:208 expects UPDATE of current rows in tenant A to affect 2 rows, but only one current row exists in that tenant |
+| Q-001 | accepted | 1.1 | technical | src/grants/policy-schema.test.ts:208 expects UPDATE of current rows in tenant A to affect 2 rows, but only one current row exists in that tenant |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/grants/policy-schema.test.ts:208 expects UPDATE of current rows in tenant A to affect 2 rows, but only one current row exists in that tenant
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 1.1
 - **Kind:** technical
 - **Asked:** 2026-11-10T12:04Z by deepseek-free, run r-20261110T1146Z-9857, task 1.1
