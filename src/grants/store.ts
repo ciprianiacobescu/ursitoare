@@ -325,25 +325,98 @@ export async function createGrant(
   return toRecord(row);
 }
 
+async function lockGrant(tx: TenantTx, ctx: TenantContext, grantId: string): Promise<GrantRow> {
+  const result = await tx.query<GrantRow>(
+    `SELECT ${COLUMNS} FROM ursitoare."grant" WHERE tenant_id = $1 AND grant_id = $2 FOR UPDATE`,
+    [ctx.tenantId, grantId],
+  );
+  const row = result.rows[0];
+  if (row === undefined) throw new GrantsError("GRANTS_NOT_FOUND");
+  return row;
+}
+
+async function rereadGrant(tx: TenantTx, ctx: TenantContext, grantId: string): Promise<GrantRecord> {
+  const result = await tx.query<GrantRow>(
+    `SELECT ${COLUMNS} FROM ursitoare."grant" WHERE tenant_id = $1 AND grant_id = $2`,
+    [ctx.tenantId, grantId],
+  );
+  const row = result.rows[0];
+  if (row === undefined) throw new Error("grant row missing after update");
+  return toRecord(row);
+}
+
 export async function revokeGrant(
-  _tx: TenantTx,
-  _ctx: TenantContext,
-  _grantId: string,
-  _actor: AuditEventInput["actor"],
-  _deps: GrantDeps,
+  tx: TenantTx,
+  ctx: TenantContext,
+  grantId: string,
+  actor: AuditEventInput["actor"],
+  deps: GrantDeps,
 ): Promise<GrantRecord> {
-  throw new Error("not implemented");
+  await assertTenantMatches(tx, ctx);
+  const row = await lockGrant(tx, ctx, grantId);
+  if (row.state === "revoked") return toRecord(row);
+
+  await tx.query(
+    `UPDATE ursitoare."grant" SET state = 'revoked', revoked_by = $3, revoked_at = $4
+     WHERE tenant_id = $1 AND grant_id = $2`,
+    [ctx.tenantId, grantId, actor.id, deps.clock.now()],
+  );
+  await appendAudit(
+    tx,
+    ctx,
+    {
+      eventType: "grants.revoked",
+      actor,
+      target: { kind: "grant", id: grantId },
+      payload: { tool: row.tool },
+    },
+    { clock: deps.clock },
+  );
+  return rereadGrant(tx, ctx, grantId);
 }
 
 export async function confirmGrant(
-  _tx: TenantTx,
-  _ctx: TenantContext,
-  _grantId: string,
-  _versionHash: string | null,
-  _actor: AuditEventInput["actor"],
-  _deps: GrantDeps,
+  tx: TenantTx,
+  ctx: TenantContext,
+  grantId: string,
+  versionHash: string | null,
+  actor: AuditEventInput["actor"],
+  deps: GrantDeps,
 ): Promise<GrantRecord> {
-  throw new Error("not implemented");
+  await assertTenantMatches(tx, ctx);
+  if (versionHash !== null && (typeof versionHash !== "string" || !HASH_PATTERN.test(versionHash))) {
+    invalid("versionHash");
+  }
+  const row = await lockGrant(tx, ctx, grantId);
+  if (row.scope_kind !== "node" || row.flow_id === null || row.node_id === null) {
+    refused("not_node_scoped");
+  }
+  if (row.state === "revoked") refused("revoked");
+
+  const version = await validatedVersion(tx, ctx, row.flow_id, versionHash);
+  if (version === null) refused("version_not_validated");
+  const catalogue = await deps.catalogueFor(ctx);
+  const fingerprint = nodeFingerprint(version.canonical as Flow, row.node_id, catalogue);
+  if (fingerprint === null) refused("node_unknown");
+  if (row.fingerprints.includes(fingerprint)) return toRecord(row);
+
+  await tx.query(
+    `UPDATE ursitoare."grant" SET fingerprints = array_append(fingerprints, $3)
+     WHERE tenant_id = $1 AND grant_id = $2`,
+    [ctx.tenantId, grantId, fingerprint],
+  );
+  await appendAudit(
+    tx,
+    ctx,
+    {
+      eventType: "grants.confirmed",
+      actor,
+      target: { kind: "grant", id: grantId },
+      payload: { flowId: row.flow_id, nodeId: row.node_id, fingerprint },
+    },
+    { clock: deps.clock },
+  );
+  return rereadGrant(tx, ctx, grantId);
 }
 
 export async function listGrants(
