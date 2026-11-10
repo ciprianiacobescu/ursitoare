@@ -103,3 +103,6 @@
 {"at":"2026-11-10T06:02:31Z","head":"8fd237325c418826cd620fd0cf6ca670fca0ec1e","pr":114,"target_before":"80eebba0d90e825aceaa6617d09bdf8a2eb4fc63","type":"unit.merge_requested","unit":"openspec:add-credentials"}
 {"at":"2026-11-10T06:02:35Z","ci":"not_run","head":"8fd237325c418826cd620fd0cf6ca670fca0ec1e","merge_commit":"1d8a973ffc09088e6826bd4c252d9576e27e0518","method":"squash","pr":114,"raced":false,"type":"unit.merged","unit":"openspec:add-credentials"}
 {"at":"2026-11-10T06:02:40Z","branch":"l4/openspec/add-credentials","head":"8fd237325c418826cd620fd0cf6ca670fca0ec1e","type":"unit.branch_deleted","unit":"openspec:add-credentials"}
+{"at":"2026-11-10T06:06:52Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"1d8a973ffc09088e6826bd4c252d9576e27e0518","status":"pass","type":"unit.postcheck","unit":"openspec:add-credentials"}
+{"at":"2026-11-10T06:06:52Z","revision":"1d8a973ffc09088e6826bd4c252d9576e27e0518","type":"unit.integrated","unit":"openspec:add-credentials"}
+{"at":"2026-11-10T06:06:52Z","attempt":1,"cost_usd":11.236176,"runs":6,"type":"plan.charged","unit":"openspec:add-credentials"}
