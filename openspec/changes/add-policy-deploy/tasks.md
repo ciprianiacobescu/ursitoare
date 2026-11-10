@@ -2,7 +2,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 1. The table
 
-- [ ] 1.1 Write `src/grants/policy-schema.test.ts` first (it starts with `assert.ok` on the ledger row 495), then add `src/db/migrations/0495_policy_sets.sql` with the SQL of `test-plan.md` § Migration verbatim, implementing requirement "A policy set is one tenant row of which only the current flag changes"
+- [x] 1.1 Write `src/grants/policy-schema.test.ts` first (it starts with `assert.ok` on the ledger row 495), then add `src/db/migrations/0495_policy_sets.sql` with the SQL of `test-plan.md` § Migration verbatim, implementing requirement "A policy set is one tenant row of which only the current flag changes"
 
 ## 2. Argument types and conversion
 

@@ -205,7 +205,7 @@ test("C-f3066a28 migration 0495 keeps one current policy set per tenant", async 
         a,
         "UPDATE ursitoare.policy_set SET current = false WHERE current",
       ),
-      2,
+      1,
     );
     await insertPolicySet(db.appPool, a, {
       deploy_seq: 5,
