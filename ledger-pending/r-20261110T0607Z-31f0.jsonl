@@ -2,3 +2,4 @@
 {"ts": "2026-11-10T06:07:57.302722Z", "run_id": "r-20261110T0607Z-31f0", "unit": "openspec:add-credentials", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 114, "merge_commit": "1d8a973ffc09088e6826bd4c252d9576e27e0518"}
 {"ts": "2026-11-10T06:08:03.577548Z", "run_id": "r-20261110T0607Z-31f0", "unit": "openspec:add-credentials", "seq": 3, "type": "archive.opened", "number": 115, "url": "<forge>/ciprianiacobescu/ursitoare/pull/115", "branch": "l4/archive/openspec/add-credentials", "head": "478ed0111ab89ded3c925a08f26adfe50f7f138e"}
 {"ts": "2026-11-10T06:08:05.381002Z", "run_id": "r-20261110T0607Z-31f0", "unit": "openspec:add-credentials", "seq": 4, "type": "archive.merged", "head": "478ed0111ab89ded3c925a08f26adfe50f7f138e", "number": 115}
+{"ts": "2026-11-10T06:08:07.219670Z", "run_id": "r-20261110T0607Z-31f0", "unit": "openspec:add-credentials", "seq": 5, "type": "run.finished", "exit_code": 0}
