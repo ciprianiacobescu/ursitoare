@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-10T18:37:38Z",
+  "integrated_revision": "cf376407e6be8b12fb44d34500af4a82bb0922ba",
+  "merge_commit": "cf376407e6be8b12fb44d34500af4a82bb0922ba",
+  "plan_digest": "deccf2afb3391e9c",
+  "plan_id": "m6",
+  "postcheck": "pass",
+  "pr": 118,
+  "receipt_id": "m6/openspec:add-policy-deploy/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "6ca3324164d7802436bdf8dda115d753f3aa2ad7",
+  "spec_digest": "e20c5505056451dc",
+  "target": "main",
+  "unit_id": "openspec:add-policy-deploy"
+}
