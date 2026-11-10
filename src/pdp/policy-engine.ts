@@ -22,6 +22,7 @@ export interface PolicyEngineOptions {
   clock: Clock;
   ids: IdSource;
   logger: Logger;
+  instanceId?: string;
 }
 
 function optionsInvalid(reason: string): never {
@@ -58,6 +59,7 @@ export async function createPolicyEngine(opts: PolicyEngineOptions): Promise<Pol
     clock: opts.clock,
     ids: opts.ids,
     logger: opts.logger,
+    ...(opts.instanceId === undefined ? {} : { instanceId: opts.instanceId }),
   });
   const engine: PolicyEngine = {
     ...pdp,

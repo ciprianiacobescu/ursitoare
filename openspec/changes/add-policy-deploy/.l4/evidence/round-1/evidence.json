@@ -1,0 +1,343 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/grants/{args,policy-runtime,policy-sets}.ts",
+      "src/grants/index.ts",
+      "src/api/policy-routes.ts",
+      "src/pdp/{engine,policy-engine}.ts",
+      "src/pdp/errors.ts",
+      "src/pdp/load.ts",
+      "test/arch/modules.ts",
+      "src/main.ts",
+      "pdp/index.ts",
+      "test/arch/rules.ts",
+      "src/pdp/engine.ts",
+      "src/pdp/digest.ts",
+      "src/pdp/cedar-schema.ts",
+      "grants/<grantId>",
+      "tenant/source",
+      "src/tenancy/context.ts",
+      "<runtime>/base",
+      "<runtime>/live/<tenant>",
+      "<runtime>/validate/<tenant>",
+      "src/api/admin-routes.ts:80-83",
+      "docs/api/openapi.json",
+      "grants/index.ts",
+      "src/api/index.ts",
+      "src/pdp",
+      "test/arch",
+      "docs/decisions/0002",
+      "src/grants/policy-schema.test.ts",
+      "src/db/migrations/0495_policy_sets.sql",
+      "src/grants/args.test.ts",
+      "src/grants/args.ts",
+      "src/pdp/engine-instance.test.ts",
+      "src/pdp/policy-engine.ts",
+      "src/pdp/load-diagnostic.test.ts",
+      "src/grants/policy-runtime.test.ts",
+      "src/grants/policy-runtime.ts",
+      "src/grants/policy-validate.test.ts",
+      "src/grants/policy-sets.ts",
+      "src/grants/policy-deploy.test.ts",
+      "src/grants/policy-deploy-stays.test.ts",
+      "src/grants/policy-memory.test.ts",
+      "src/api/policy-routes.test.ts",
+      "src/main.policy.test.ts",
+      "src/main.conventions.test.ts",
+      "**/errors.ts",
+      "**/PolicyEngineOptions[\"logger\"]",
+      "**/\"???vet\"",
+      "**/AuditEventInput[\"actor\"]",
+      "src/main.*",
+      "**/index.ts",
+      "**/args.ts",
+      "module <runtime>",
+      "module api",
+      "module db",
+      "module docs",
+      "module grants",
+      "module main",
+      "module main.conventions.test",
+      "module main.policy.test",
+      "module pdp",
+      "module tenancy",
+      "module tenant",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-policy-deploy/.l4/ledger/r-20261110T1146Z-9857.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-policy-deploy/.l4/ledger/r-20261110T1207Z-d463.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-policy-deploy/.l4/ledger/r-20261110T1444Z-ede1.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-policy-deploy/.l4/ledger/r-20261110T1508Z-5ee0.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-policy-deploy/.l4/ledger/r-20261110T1737Z-37f3.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-policy-deploy/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-policy-deploy/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/policy-routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/policy-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0495_policy_sets.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/grants/args.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/args.ts",
+        "module": "grants",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/grants/index.ts",
+        "module": "grants",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/grants/policy-deploy-stays.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/policy-deploy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/policy-memory.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/policy-runtime.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/policy-runtime.ts",
+        "module": "grants",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/grants/policy-schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/grants/policy-sets.ts",
+        "module": "grants",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/grants/policy-validate.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.policy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/engine-instance.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/engine.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/errors.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/index.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/load-diagnostic.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/pdp/load.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/policy-engine.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/pdp/policy-ids.ts",
+        "module": "pdp",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/index.ts, src/api/policy-routes.ts, src/grants/args.ts, src/grants/index.ts, src/grants/policy-runtime.ts and 8 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/index.ts",
+      "src/api/policy-routes.ts",
+      "src/grants/args.ts",
+      "src/grants/index.ts",
+      "src/grants/policy-runtime.ts",
+      "src/grants/policy-sets.ts",
+      "src/main.ts",
+      "src/pdp/engine.ts",
+      "src/pdp/errors.ts",
+      "src/pdp/index.ts",
+      "src/pdp/load.ts",
+      "src/pdp/policy-engine.ts",
+      "src/pdp/policy-ids.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2320,
+      "passed": 2320,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 34,
+      "new_passed": 34,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

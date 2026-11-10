@@ -50,6 +50,7 @@ export type { ToolArgType } from "./cedar-schema.ts";
 export { buildSchema } from "./cedar-schema.ts";
 export type { PrincipalEntity } from "./principal.ts";
 export { isPrincipalEntity, scopedId, userEntity, tenantEntity } from "./principal.ts";
+export { policyIdsOf } from "./policy-ids.ts";
 export { loadPolicyFragments, defaultSrcDir } from "./fragments.ts";
 export { PLATFORM_SOURCE, PLATFORM_POLICY_IDS } from "./platform.ts";
 export { probeRequest } from "./capabilities.ts";

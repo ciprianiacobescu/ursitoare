@@ -24,6 +24,7 @@ import {
   registerGrantRoutes,
   registerMeRoute,
   registerOpenApiRoute,
+  registerPolicyRoutes,
   registerRunRoutes,
   registerTestRunRoutes,
   registerToolServerRoutes,
@@ -45,9 +46,10 @@ import {
 } from "./interpreter/index.ts";
 import type { InterpreterDeps } from "./interpreter/index.ts";
 import { checkEgress, createVaultWriter } from "./gateway/index.ts";
+import { createPolicyRuntime } from "./grants/index.ts";
 import type { LogDestination, Logger } from "./observability/index.ts";
 import { createLogger, noopTracer } from "./observability/index.ts";
-import { createPolicyEngine, defaultSrcDir } from "./pdp/index.ts";
+import { defaultSrcDir } from "./pdp/index.ts";
 import { loadRegistryCatalogue } from "./registry/index.ts";
 import { createEffectIntents, createRunStore } from "./runs/index.ts";
 import { createWorkerSandbox, poolSize } from "./sandbox/index.ts";
@@ -250,12 +252,18 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
 
   let internal: FastifyInstance | undefined;
   try {
-    const engine = database
-      ? await createPolicyEngine({ srcDir: defaultSrcDir(), clock: systemClock, ids: systemIds, logger })
+    const runtime = database
+      ? await createPolicyRuntime({
+          pool: database.appPool,
+          srcDir: defaultSrcDir(),
+          clock: systemClock,
+          ids: systemIds,
+          logger,
+        })
       : null;
     const pep: PepDeps = {
       pool: database?.appPool ?? null,
-      engine,
+      engine: runtime?.engine ?? null,
       clock: systemClock,
       publicBaseUrl: config.publicBaseUrl,
     };
@@ -290,6 +298,11 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
       clock: pep.clock,
       ids: systemIds,
       engineKey: config.engineKey,
+    });
+    registerPolicyRoutes(server, {
+      pool: pep.pool,
+      runtime,
+      clock: pep.clock,
     });
   registerFlowRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
   registerOpenApiRoute(server, { version: VERSION });

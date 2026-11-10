@@ -15,11 +15,17 @@ export class PdpError extends Error {
     code: PdpErrorCode,
     message: string,
     details: Record<string, string | readonly string[]> = {},
-    _diagnostic?: string,
+    diagnostic?: string,
   ) {
     super(message);
     this.name = "PdpError";
     this.code = code;
     this.details = details;
+    Object.defineProperty(this, "diagnostic", {
+      value: diagnostic,
+      enumerable: false,
+      writable: false,
+      configurable: true,
+    });
   }
 }
