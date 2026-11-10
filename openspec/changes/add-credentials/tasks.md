@@ -12,7 +12,7 @@ Tests follow `proposal.md` § Out of scope; fixtures are in `test-plan.md` and `
 ## 3. Provision
 
 - [x] 3.1 Write `src/credentials/provision.test.ts` (scenario "Provision puts first, stores the reference and refuses what is invalid, unknown or taken"), `src/credentials/echo.test.ts` (scenario "The echo shows the injected header and the fake never shows the value") and `src/credentials/egress-site.test.ts` (scenario "The inventory names the credentials module once": one test named `C-0c230dcb the credentials module is one inventoried egress site`, which fails by assertion at red because `vault-call.ts` does not exist) first, and change `test/arch/egress-sites.test.ts::C-76ead8ea the engine's egress sites are exactly the inventory` so its literal is `["src/credentials/vault-call.ts", "src/main.ts"]` (the frozen test of that scenario); then implement `CredentialsError` in `types.ts`, `validate.ts`, `vault-call.ts` (errors unmapped) and `provisionCredential`, `provisionCredentialTx` in `provision.ts`
-- [ ] 3.2 Write `src/credentials/provision-failures.test.ts` first (scenario "Vault and insert failures write nothing and a later put counts on", rows F1 to F11), then map `GatewayError` to `CREDENTIALS_VAULT` in `vault-call.ts` and the insert's SQLSTATE 23505 and 23503 in `provision.ts` by `constraint` (design.md § Provision)
+- [x] 3.2 Write `src/credentials/provision-failures.test.ts` first (scenario "Vault and insert failures write nothing and a later put counts on", rows F1 to F11), then map `GatewayError` to `CREDENTIALS_VAULT` in `vault-call.ts` and the insert's SQLSTATE 23505 and 23503 in `provision.ts` by `constraint` (design.md § Provision)
 
 ## 4. Rotate, list and resolve
 
