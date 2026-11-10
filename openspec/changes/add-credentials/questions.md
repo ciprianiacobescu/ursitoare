@@ -44,6 +44,7 @@ Edit `src/credentials/schema.test.ts`: make `insertServer` run its INSERT inside
 ## Q-002: Task 3.2: the pre-satisfied check could not decide
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): I cannot run the tests, and the repository argues against taking the claim: the head already contains everything task 3.2 names as its green work. provision.ts maps 23505 on credential_ref_server_key and credential_ref_service_key to CREDENTIALS_EXISTS and 23503 on the fkey to CREDENTIALS_NOT_FOUND
 - **Blocking tasks:** 3.2
 - **Kind:** harness
 - **Asked:** 2026-11-10T01:34Z by deepseek-free, run r-20261110T0049Z-18e5, task 3.2
