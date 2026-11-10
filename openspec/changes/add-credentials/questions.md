@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.1 | technical | src/credentials/schema.test.ts:31-38 insertServer cannot insert into tool_server through the owner pool |
 | Q-002 | answered | 3.2 | harness | Task 3.2: the pre-satisfied check could not decide |
-| Q-003 | open | 5.2 | technical | src/api/credential-secrets.test.ts:378-380 contradicts :418 and :429 (C-01ef6501) |
+| Q-003 | accepted | 5.2 | technical | src/api/credential-secrets.test.ts:378-380 contradicts :418 and :429 (C-01ef6501) |
 <!-- l4:index:end -->
 
 ---
@@ -370,7 +370,8 @@ accept: the 7 tests are real and pass at the head because task 3.1's green alrea
 
 ## Q-003: src/api/credential-secrets.test.ts:378-380 contradicts :418 and :429 (C-01ef6501)
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.2
 - **Kind:** technical
 - **Asked:** 2026-11-10T03:57Z by claude-sonnet, run r-20261110T0141Z-96fe, task 5.2
