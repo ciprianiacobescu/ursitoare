@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.1 | technical | src/credentials/schema.test.ts:31-38 insertServer cannot insert into tool_server through the owner pool |
-| Q-002 | open | 3.2 | harness | Task 3.2: the pre-satisfied check could not decide |
+| Q-002 | answered | 3.2 | harness | Task 3.2: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -43,7 +43,7 @@ Edit `src/credentials/schema.test.ts`: make `insertServer` run its INSERT inside
 
 ## Q-002: Task 3.2: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): I cannot run the tests, and the repository argues against taking the claim: the head already contains everything task 3.2 names as its green work. provision.ts maps 23505 on credential_ref_server_key and credential_ref_service_key to CREDENTIALS_EXISTS and 23503 on the fkey to CREDENTIALS_NOT_FOUND
 - **Blocking tasks:** 3.2
 - **Kind:** harness
@@ -363,3 +363,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: the 7 tests are real and pass at the head because task 3.1's green already wrote the mapping task 3.2 names (vault-call.ts maps GatewayError to CREDENTIALS_VAULT; provision.ts maps 23505 and 23503 by constraint), although tasks.md:14 told 3.1 to leave errors unmapped. Checked out of band on c7b94971 with the held patch (sha256 e19f3d66): all 7 pass; eslint and tsc are clean; with vault errors unmapped 1 test fails by AssertionError, with insert errors unmapped 3 fail by AssertionError, so the tests discriminate. The zero-value run cannot vary TypeScript and the base run timed out at 1800s without a report, so a retry only repeats the same check. Green for 3.2 has nothing left to write.
