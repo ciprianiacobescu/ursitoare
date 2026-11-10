@@ -6,7 +6,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. Argument types and conversion
 
-- [ ] 2.1 Write `src/grants/args.test.ts` first, then implement `toolArgTypes` and `toCedarArgs` in `src/grants/args.ts`, implementing requirements "toolArgTypes derives the Cedar types of the tenant's block arguments" and "toCedarArgs converts a tool call's arguments or names the first that cannot be"
+- [x] 2.1 Write `src/grants/args.test.ts` first, then implement `toolArgTypes` and `toCedarArgs` in `src/grants/args.ts`, implementing requirements "toolArgTypes derives the Cedar types of the tenant's block arguments" and "toCedarArgs converts a tool call's arguments or names the first that cannot be"
 
 ## 3. The runtime and the sets
 
