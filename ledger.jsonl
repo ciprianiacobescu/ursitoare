@@ -102,3 +102,4 @@
 {"at":"2026-11-10T05:51:48Z","run":"r-20261110T0551Z-457a","type":"unit.dispatched","unit":"openspec:add-credentials"}
 {"at":"2026-11-10T06:02:31Z","head":"8fd237325c418826cd620fd0cf6ca670fca0ec1e","pr":114,"target_before":"80eebba0d90e825aceaa6617d09bdf8a2eb4fc63","type":"unit.merge_requested","unit":"openspec:add-credentials"}
 {"at":"2026-11-10T06:02:35Z","ci":"not_run","head":"8fd237325c418826cd620fd0cf6ca670fca0ec1e","merge_commit":"1d8a973ffc09088e6826bd4c252d9576e27e0518","method":"squash","pr":114,"raced":false,"type":"unit.merged","unit":"openspec:add-credentials"}
+{"at":"2026-11-10T06:02:40Z","branch":"l4/openspec/add-credentials","head":"8fd237325c418826cd620fd0cf6ca670fca0ec1e","type":"unit.branch_deleted","unit":"openspec:add-credentials"}
