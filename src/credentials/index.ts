@@ -1,3 +1,12 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
-export type { ServiceResolver, ServiceTarget } from "./types.ts";
+export type {
+  CredentialDeps,
+  CredentialRecord,
+  CredentialsErrorCode,
+  ServiceResolver,
+  ServiceTarget,
+} from "./types.ts";
+export { CredentialsError } from "./types.ts";
+export { provisionCredential, provisionCredentialTx } from "./provision.ts";
+export { rotateCredential } from "./rotate.ts";
+export { listCredentials } from "./store.ts";
+export { createServiceResolver, seedServiceId } from "./resolver.ts";

@@ -594,6 +594,545 @@
         ]
       }
     },
+    "/api/v1/credentials": {
+      "get": {
+        "operationId": "get_api_v1_credentials",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "maxLength": 1024,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "authScheme": {
+                            "enum": [
+                              "API_KEY_HEADER",
+                              "BEARER_TOKEN"
+                            ],
+                            "type": "string"
+                          },
+                          "headerName": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "keyVersion": {
+                            "type": "integer"
+                          },
+                          "provisionedAt": {
+                            "type": "string"
+                          },
+                          "provisionedBy": {
+                            "type": "string"
+                          },
+                          "rotatedAt": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "serviceId": {
+                            "type": "string"
+                          },
+                          "targetOrigin": {
+                            "type": "string"
+                          },
+                          "toolServerId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "toolServerId",
+                          "serviceId",
+                          "authScheme",
+                          "headerName",
+                          "targetOrigin",
+                          "keyVersion",
+                          "provisionedBy",
+                          "provisionedAt",
+                          "rotatedAt"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "next_cursor": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "next_cursor"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CURSOR_INVALID, VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, ENGINE_KEY_REQUIRED"
+          }
+        },
+        "x-ursitoare-action": "manage_credentials",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CURSOR_INVALID",
+          "ENGINE_KEY_REQUIRED",
+          "FORBIDDEN",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      },
+      "post": {
+        "operationId": "post_api_v1_credentials",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "idempotency-key",
+            "required": false,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[!-~]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "authScheme": {
+                    "enum": [
+                      "API_KEY_HEADER",
+                      "BEARER_TOKEN"
+                    ],
+                    "type": "string"
+                  },
+                  "headerName": {
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "toolServerId": {
+                    "maxLength": 32,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "value": {
+                    "maxLength": 4096,
+                    "minLength": 1,
+                    "type": "string",
+                    "writeOnly": true
+                  }
+                },
+                "required": [
+                  "toolServerId",
+                  "authScheme",
+                  "value"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "authScheme": {
+                      "enum": [
+                        "API_KEY_HEADER",
+                        "BEARER_TOKEN"
+                      ],
+                      "type": "string"
+                    },
+                    "headerName": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "keyVersion": {
+                      "type": "integer"
+                    },
+                    "provisionedAt": {
+                      "type": "string"
+                    },
+                    "provisionedBy": {
+                      "type": "string"
+                    },
+                    "rotatedAt": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "serviceId": {
+                      "type": "string"
+                    },
+                    "targetOrigin": {
+                      "type": "string"
+                    },
+                    "toolServerId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "toolServerId",
+                    "serviceId",
+                    "authScheme",
+                    "headerName",
+                    "targetOrigin",
+                    "keyVersion",
+                    "provisionedBy",
+                    "provisionedAt",
+                    "rotatedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CSRF_INVALID, FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: ALREADY_EXISTS, IDEMPOTENCY_IN_PROGRESS"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: IDEMPOTENCY_KEY_REUSED"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, EGRESS_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "manage_credentials",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "ALREADY_EXISTS",
+          "AUTHZ_UNAVAILABLE",
+          "CSRF_INVALID",
+          "EGRESS_UNAVAILABLE",
+          "FORBIDDEN",
+          "IDEMPOTENCY_IN_PROGRESS",
+          "IDEMPOTENCY_KEY_REUSED",
+          "NOT_FOUND",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/credentials/{id}/rotate": {
+      "post": {
+        "operationId": "post_api_v1_credentials_id_rotate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "value": {
+                    "maxLength": 4096,
+                    "minLength": 1,
+                    "type": "string",
+                    "writeOnly": true
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "authScheme": {
+                      "enum": [
+                        "API_KEY_HEADER",
+                        "BEARER_TOKEN"
+                      ],
+                      "type": "string"
+                    },
+                    "headerName": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "keyVersion": {
+                      "type": "integer"
+                    },
+                    "provisionedAt": {
+                      "type": "string"
+                    },
+                    "provisionedBy": {
+                      "type": "string"
+                    },
+                    "rotatedAt": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "serviceId": {
+                      "type": "string"
+                    },
+                    "targetOrigin": {
+                      "type": "string"
+                    },
+                    "toolServerId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "toolServerId",
+                    "serviceId",
+                    "authScheme",
+                    "headerName",
+                    "targetOrigin",
+                    "keyVersion",
+                    "provisionedBy",
+                    "provisionedAt",
+                    "rotatedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CSRF_INVALID, FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, EGRESS_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "manage_credentials",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CSRF_INVALID",
+          "EGRESS_UNAVAILABLE",
+          "FORBIDDEN",
+          "NOT_FOUND",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
     "/api/v1/flows": {
       "get": {
         "operationId": "get_api_v1_flows",
