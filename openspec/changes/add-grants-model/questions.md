@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 4.2 | technical | src/api/grant-routes.test.ts:471 bob's create expects 201, but bob is an approver without deploy_policy |
+| Q-001 | accepted | 4.2 | technical | src/api/grant-routes.test.ts:471 bob's create expects 201, but bob is an approver without deploy_policy |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/api/grant-routes.test.ts:471 bob's create expects 201, but bob is an approver without deploy_policy
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 4.2
 - **Kind:** technical
 - **Asked:** 2026-11-10T10:28Z by claude-sonnet, run r-20261110T0842Z-90d9, task 4.2
