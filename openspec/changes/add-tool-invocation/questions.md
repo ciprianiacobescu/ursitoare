@@ -13,6 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.1 | technical | src/credentials/egress-site.test.ts:22 asserts the old two-path egress inventory |
 | Q-002 | accepted | 2.2 | technical | src/interpreter/hooks/authorize.test.ts:293 — seen.events assertions expect 'authorize' and 'invoke' that the test never records |
+| Q-003 | open | 3.3 | technical | invoke.db.test.ts:45 localBinding keeps serverId acme, so the redirect row C4 cannot reach the local server |
 <!-- l4:index:end -->
 
 ---
@@ -60,6 +61,29 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/interpreter/hooks/authorize.test.ts`: in `invokerFor` (lines 146 and 154) push each phase into seen.events as well, i.e. make the invoke callback `seen.events.push("invoke"); seen.phases.push("invoke");` and the authorize callback `seen.events.push("authorize"); seen.phases.push("authorize");`, which satisfies the events assertions at lines 293-300, 314-321 and 354 as written.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-003: invoke.db.test.ts:45 localBinding keeps serverId acme, so the redirect row C4 cannot reach the local server
+
+- **Status:** open
+- **Blocking tasks:** 3.3
+- **Kind:** technical
+- **Asked:** 2026-11-11T06:02Z by claude-sonnet, run r-20261111T0423Z-83d3, task 3.3
+
+### Context
+The test at line 45 builds local bindings as `{ ...LV, ref, origin: LOCAL_ORIGIN, http: { method: "GET", path } }`, so `serverId` stays "acme". The `services` wrapper in `rig()` (lines 134 to 138) only returns the local service (`S_LOCAL`) when `serverId === "local"`. The invoke path resolves the target from `binding.serverId`, so a call for `acme.found@1` goes to the fake tools at `/found` and answers 404. The test then expects `status: "302"` and `r.local.seen` of `["/found"]`.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/runtimes/invoke/invoke.db.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-tool-invocation`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/runtimes/invoke/invoke.db.test.ts`: in `localBinding` (line 45) add `serverId: "local"` to the returned object, i.e. `{ ...LV, serverId: "local", ref, origin: LOCAL_ORIGIN, http: { method: "GET", path } }`
+
+### Clarifier suggestion
+Edit `src/runtimes/invoke/invoke.db.test.ts`: in `localBinding` (line 45) add `serverId: "local"` to the returned object, i.e. `{ ...LV, serverId: "local", ref, origin: LOCAL_ORIGIN, http: { method: "GET", path } }`
 
 ### Answer
 <!-- write below this line -->
