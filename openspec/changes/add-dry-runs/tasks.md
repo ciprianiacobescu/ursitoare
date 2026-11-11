@@ -26,7 +26,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 7. The principal loader and main
 
-- [ ] 7.1 Write `src/api/principal-loader.test.ts` first (scenario "Entity of an active human and a service account, and null for the others": rows P1 to P5), then implement `createPrincipalLoader` in `src/api/principal-loader.ts` and add its export line to `src/api/index.ts`
+- [x] 7.1 Write `src/api/principal-loader.test.ts` first (scenario "Entity of an active human and a service account, and null for the others": rows P1 to P5), then implement `createPrincipalLoader` in `src/api/principal-loader.ts` and add its export line to `src/api/index.ts`
 - [ ] 7.2 Write `src/main.dryruns.test.ts` first (scenario "Egress wires the stub invoker and the route; its absence leaves both off", rows M1 to M4; it also reads `docs/api/openapi.json`), then edit the shared `src/main.ts` as design decision 8 says (after U46 to U49b) and run `node test/support/openapi-docs.ts`
 
 ## 8. The OpenAPI description
