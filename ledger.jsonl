@@ -158,3 +158,4 @@
 {"at":"2026-11-11T10:00:30Z","attempt":1,"cost_usd":20.084029,"runs":10,"type":"plan.charged","unit":"openspec:add-tool-invocation"}
 {"at":"2026-11-11T10:00:30Z","run":"r-20261111T1000Z-af7b","type":"unit.dispatched","unit":"openspec:add-tool-invocation"}
 {"at":"2026-11-11T11:26:08Z","detail":"awaiting_human: no new answers (open: Q-007) (harness check inconclusive: Q-007) (escalated to a person: Q-007)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-tool-invocation"}
+{"at":"2026-11-11T11:30:28Z","by":"harness","reason":"the cause is gone: openspec:add-tool-invocation is awaiting_human","type":"plan.resumed"}
