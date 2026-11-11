@@ -2,7 +2,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 1. The fake check
 
-- [ ] 1.1 Write `src/interpreter/fakes.test.ts` (scenario "Missing, read, unknown, schema and shape problems": rows F1 to F14 and F12b) first, then implement `checkFakes` in `src/interpreter/fakes.ts` (design decision 2) and add its value export line to `src/interpreter/index.ts`
+- [x] 1.1 Write `src/interpreter/fakes.test.ts` (scenario "Missing, read, unknown, schema and shape problems": rows F1 to F14 and F12b) first, then implement `checkFakes` in `src/interpreter/fakes.ts` (design decision 2) and add its value export line to `src/interpreter/index.ts`
 
 ## 2. The stub invoker
 

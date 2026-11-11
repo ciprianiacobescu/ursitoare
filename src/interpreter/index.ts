@@ -49,7 +49,8 @@ export type { RunTaints } from "./taint.ts";
 export { blocksCatalogue, createRunTaints } from "./taint.ts";
 export { resolveValue, durationMs } from "./refs.ts";
 export type { MockEntry, TestMocks, MockProblem } from "./mocks.ts";
-export type { DryRunFakes } from "./fakes.ts";
+export type { DryRunFakes, FakeProblem } from "./fakes.ts";
+export { checkFakes } from "./fakes.ts";
 export { checkMocks, createMockInvoker, testRunInvokers } from "./mocks.ts";
 export type {
   HookActionVerdict,
