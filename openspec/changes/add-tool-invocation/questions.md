@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | accepted | 2.2 | technical | src/interpreter/hooks/authorize.test.ts:293 — seen.events assertions expect 'authorize' and 'invoke' that the test never records |
 | Q-003 | accepted | 3.3 | technical | invoke.db.test.ts:45 localBinding keeps serverId acme, so the redirect row C4 cannot reach the local server |
 | Q-004 | accepted | 3.3 | technical | src/runtimes/invoke/invoke.db.test.ts:275 expects local.seen ["/found"] but rows C5/C6 must reach the local upstream |
-| Q-005 | open | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
+| Q-005 | answered | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -120,7 +120,8 @@ Edit `src/runtimes/invoke/invoke.db.test.ts`: change line 275 from `assert.deepE
 
 ## Q-005: Task 4.2: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 4.2
 - **Kind:** harness
 - **Asked:** 2026-11-11T08:12Z by glm, run r-20261111T0619Z-85a5, task 4.2
@@ -395,3 +396,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: The check cannot decide for reasons that lie in the harness, not in the change, and the repository itself expects this task's tests to pass before any new code. The plan's own text for task 4.2 says it adds no green code because every name its tests call exists after 4.1, so red is expected to report the tests as already satisfied; counting them on the evidence of the real run is therefore the outcome the plan asks for, not a shortcut around it. The zero-value run only varies Python files and this is a TypeScript repository, so a retry cannot make that part decide, and the base run stopped at the gate timeout of 30 minutes configured in the repository, which a retry would meet again under the same load. The names the five tests call are all on head: the harness run that starts a live run and drives executeRun over memory ops, liveInvoker with authorize and invoke on the invoke path, deploy, grant, decisions, intents and logs, and the harness close tears down the sandbox, the fake tools, the fake egress and the database in a finally, so the tests do not leave open handles that would explain a hang. The five tests follow the five spec scenarios they name. The accept replays the change through every gate, so a lint or test failure on head would still be caught and would use up the accept.
