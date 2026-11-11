@@ -10,7 +10,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 3. The policy fragment
 
-- [ ] 3.1 Write `src/interpreter/dry-runs-policy.test.ts` (the policy table) and `src/api/dry-run-me.test.ts` (`/me`) first (scenario "The policy table and the capability list"), then add `src/interpreter/policy/dry-runs.cedar`
+- [x] 3.1 Write `src/interpreter/dry-runs-policy.test.ts` (the policy table) and `src/api/dry-run-me.test.ts` (`/me`) first (scenario "The policy table and the capability list"), then add `src/interpreter/policy/dry-runs.cedar`
 
 ## 4. The dry-run endpoint
 
