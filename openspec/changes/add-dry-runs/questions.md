@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 7.2 | technical | src/main.flows.test.ts:30 needs the dry-run route in FLOW_ROUTES |
-| Q-002 | open | 7.2 | technical | src/main.runs.test.ts:54 needs the decisions route in RUN_ROUTES |
+| Q-002 | accepted | 7.2 | technical | src/main.runs.test.ts:54 needs the decisions route in RUN_ROUTES |
 <!-- l4:index:end -->
 
 ---
@@ -43,7 +43,8 @@ Edit `src/main.flows.test.ts`: add `{ method: "POST", url: "/api/v1/flows/:flowI
 
 ## Q-002: src/main.runs.test.ts:54 needs the decisions route in RUN_ROUTES
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 7.2
 - **Kind:** technical
 - **Asked:** 2026-11-11T22:53Z by deepseek-free, run r-20261111T2128Z-f396, task 7.2
