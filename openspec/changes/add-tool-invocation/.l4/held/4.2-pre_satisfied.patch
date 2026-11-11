@@ -1,54 +1,23 @@
 diff --git a/src/runtimes/invoke/policy-runs.db.test.ts b/src/runtimes/invoke/policy-runs.db.test.ts
 new file mode 100644
-index 0000000..96e8284
+index 0000000..1eba889
 --- /dev/null
 +++ b/src/runtimes/invoke/policy-runs.db.test.ts
-@@ -0,0 +1,565 @@
+@@ -0,0 +1,434 @@
 +import assert from "node:assert/strict";
-+import { createHash } from "node:crypto";
 +import { test } from "node:test";
 +
-+import { fixedClock, sequentialIds } from "../../core/index.ts";
-+import { confirmGrant } from "../../grants/index.ts";
-+import type { GrantRecord, PolicyRuntime } from "../../grants/index.ts";
 +import type { StepContext, ToolCall } from "../../interpreter/index.ts";
-+import type { Decision, PolicyDecisionRecord, PolicyRequest } from "../../pdp/index.ts";
-+import { loadRegistryCatalogue } from "../../registry/index.ts";
++import type { PolicyRuntime } from "../../grants/index.ts";
++import type { PolicyDecisionRecord, PolicyRequest } from "../../pdp/index.ts";
 +import { createRunStore } from "../../runs/index.ts";
 +import type { RunRecord, StepRecord } from "../../runs/index.ts";
-+import { withTenantTx } from "../../tenancy/index.ts";
 +import { invokeHarness } from "../../../test/support/invoke-runs/harness.ts";
 +import type { HarnessWrap, InvokeHarness } from "../../../test/support/invoke-runs/harness.ts";
 +
 +const T0 = "2026-11-06T10:00:00.000Z";
-+const S = "87caf624-f579-8435-9540-24d6eb57aeff";
-+const D_LV = "ad89878ead763441ddc3bdb920c15ac97d953890d73464b6cdfc28e7a14d36ad";
-+const D_PAY = "af25dc0c3f8ca575c8b06c393f52c90967511a03d6db13a277b748379e77d4f8";
-+const D_2450 = createHash("sha256")
-+  .update(JSON.stringify({ amount: 2450, currency: "EUR", reference: "inv-1", vendor_id: "V-ACME" }))
-+  .digest("hex");
 +const INPUT = { vendor_name: "Acme GmbH", amount: 12.5 };
-+const INPUT_2450 = { vendor_name: "Acme GmbH", amount: 2450 };
-+const TENANT_A = { tenantId: "tenant_a", reviewProfile: "solo" } as const;
-+const SLACK_IDEM_KEY = "ik1_b67e1caff43c8cbc2b72758a1870219a8375cace7325d2fd5ae425acb8701828";
-+
-+const V1_PERMIT = {
-+  method: "POST",
-+  host: "tools.fake.test",
-+  path: "/blocks/erp.lookup_vendor@1",
-+  bodyDigest: D_LV,
-+  serviceId: S,
-+  ttlSeconds: 60,
-+};
-+
-+const V2_PERMIT = {
-+  method: "POST",
-+  host: "tools.fake.test",
-+  path: "/blocks/erp.create_payment@1",
-+  bodyDigest: D_PAY,
-+  serviceId: S,
-+  ttlSeconds: 60,
-+};
++const PAY_IDEM_KEY_HOOK = "ik1_b67e1caff43c8cbc2b72758a1870219a8375cace7325d2fd5ae425acb8701828";
 +
 +const G_LOOKUP = {
 +  subject: { kind: "role", role: "author" },
@@ -65,13 +34,11 @@ index 0000000..96e8284
 +};
 +
 +const G_PAYH = {
-+  subject: { kind: "role", role: "author" },
-+  tool: "acme.create_payment@1",
++  ...G_PAY,
 +  scope: { kind: "node", flowId: "hooked-pay", nodeId: "pay" },
-+  args: [],
 +};
 +
-+const G_ALL_TOOLS: readonly string[] = [
++const ALL_TOOLS = [
 +  "acme.lookup_vendor@1",
 +  "acme.create_payment@1",
 +  "acme.get@1",
@@ -85,6 +52,13 @@ index 0000000..96e8284
 +const HOOK_OK =
 +  '@id("t-hook-send-ok") permit (principal in Role::"author", action == Action::"invoke_tool", resource is Block) when { resource.kind == "hook" && context.tool == Tool::"tenant_a/acme.post_message@1" };';
 +
++const PAY: ToolCall = {
++  tool: "acme.create_payment@1",
++  args: { vendor_id: "V-ACME", amount: 2450, currency: "EUR", reference: "inv-1" },
++  nodeId: "pay",
++  effectSeq: 0,
++};
++
 +// A stub's "not implemented" error must surface as an assertion failure, not a bare error.
 +async function settled<T>(what: string, fn: () => Promise<T>): Promise<T> {
 +  let value: T | undefined;
@@ -97,6 +71,10 @@ index 0000000..96e8284
 +  return value as T;
 +}
 +
++function openHarness(wrap?: HarnessWrap): Promise<InvokeHarness> {
++  return settled("invokeHarness resolves", () => invokeHarness(wrap));
++}
++
 +function finalRowOf(steps: readonly StepRecord[], nodeId: string): StepRecord | undefined {
 +  let found: StepRecord | undefined;
 +  for (const step of steps) {
@@ -107,7 +85,7 @@ index 0000000..96e8284
 +  return found;
 +}
 +
-+async function stepRows(h: InvokeHarness, runId: string): Promise<readonly StepRecord[]> {
++async function stepsOf(h: InvokeHarness, runId: string): Promise<readonly StepRecord[]> {
 +  const store = createRunStore(h.pool);
 +  const listed = await settled("the run steps are listed", () =>
 +    store.listSteps(h.ctx, runId, { limit: 50 }),
@@ -115,152 +93,93 @@ index 0000000..96e8284
 +  return listed.steps;
 +}
 +
-+function ctxOf(
-+  runId: string,
-+  nodeId: string,
-+  effect: string,
-+  extra: Record<string, unknown> = {},
-+): StepContext {
-+  return {
-+    tenant: TENANT_A,
++function decisionIds(rows: readonly PolicyDecisionRecord[]): string[] {
++  return rows.map((r) => r.decisionId);
++}
++
++function ctxOf(runId: string, taint: readonly string[] | undefined, approvals: unknown): StepContext {
++  const base = {
++    tenant: { tenantId: "tenant_a", reviewProfile: "solo" },
 +    runId,
 +    lineageId: runId,
 +    flowId: "read-then-pay",
 +    flowHash: "sha256:" + "e".repeat(64),
-+    nodeId,
++    nodeId: "pay",
 +    kind: "block",
 +    mode: "live",
 +    attempt: 1,
-+    effect,
++    effect: "pay",
 +    unsafeToRetry: false,
 +    idemKey: null,
 +    principal: { userId: "alice", kind: "human" },
 +    now: new Date(T0),
-+    ...extra,
++  };
++  return {
++    ...base,
++    ...(taint === undefined ? {} : { taint }),
++    ...(approvals === undefined ? {} : { approvals }),
 +  } as unknown as StepContext;
 +}
 +
-+function payCall(amount: number, reference = "inv-1"): ToolCall {
-+  return {
-+    tool: "acme.create_payment@1",
-+    args: { vendor_id: "V-ACME", amount, currency: "EUR", reference },
-+    nodeId: "pay",
-+    effectSeq: 1,
-+  };
-+}
-+
-+async function assertDenied(
-+  p: Promise<unknown>,
-+  node: string,
-+  reason: string,
-+  extra: Record<string, string> = {},
-+): Promise<Record<string, string>> {
-+  const found: Record<string, string> = {};
-+  await assert.rejects(p, (e: unknown) => {
-+    const err = e as { code?: unknown; message?: unknown; node?: unknown; details?: unknown };
++async function authorizeFor(
++  h: InvokeHarness,
++  runId: string,
++  taint: readonly string[] | undefined,
++  approvals: unknown,
++  amount: number = 12.5,
++): Promise<{ allowed: boolean; decisionId: string }> {
++  const run: RunRecord = await settled("h.start resolves", () =>
++    h.start("H1", { ...INPUT, amount }, runId),
++  );
++  const inv = await settled("liveInvoker resolves", () => h.path.liveInvoker(run));
++  assert.ok(inv.authorize !== undefined, "the live invoker has authorize");
++  const call: ToolCall = { ...PAY, args: { ...PAY.args, amount } as ToolCall["args"] };
++  try {
++    const granted = await inv.authorize(call, ctxOf(runId, taint, approvals));
++    return { allowed: true, decisionId: granted.decisionId };
++  } catch (e) {
++    const err = e as { code?: unknown; details?: { decisionId?: unknown } };
 +    assert.equal(err.code, "INTERPRETER_TOOL_DENIED");
-+    assert.equal(err.message, `tool call of "${node}" is not permitted (${reason})`);
-+    assert.equal(err.node, node);
-+    const details = err.details as Record<string, string> | undefined;
-+    assert.ok(details !== undefined, "the denial carries details");
-+    assert.equal(details["reason"], reason);
-+    for (const [key, value] of Object.entries(extra)) {
-+      assert.equal(details[key], value);
-+    }
-+    for (const [key, value] of Object.entries(details)) {
-+      found[key] = value;
-+    }
-+    return true;
-+  });
-+  return found;
-+}
-+
-+function assertAllowRow(
-+  row: PolicyDecisionRecord,
-+  node: string,
-+  reasons: readonly string[],
-+  permit: unknown,
-+): void {
-+  assert.equal(row.nodeId, node);
-+  assert.equal(row.decision, "allow");
-+  assert.deepEqual(row.reasons, reasons);
-+  assert.deepEqual(row.errors, []);
-+  assert.deepEqual(row.permit, permit);
-+}
-+
-+function assertDenyRow(
-+  row: PolicyDecisionRecord,
-+  node: string,
-+  reasons: readonly string[],
-+): void {
-+  assert.equal(row.nodeId, node);
-+  assert.equal(row.decision, "deny");
-+  assert.deepEqual(row.reasons, reasons);
-+  assert.deepEqual(row.errors, []);
-+  assert.equal(row.permit, null);
-+}
-+
-+function assertRunFailed(
-+  run: RunRecord,
-+  node: string,
-+  reason: string,
-+  decisionId: string,
-+  hook?: string,
-+): void {
-+  const details: Record<string, string> = { reason, decisionId };
-+  if (hook !== undefined) {
-+    details["hook"] = hook;
++    return { allowed: false, decisionId: String(err.details?.decisionId) };
 +  }
-+  assert.equal(run.state, "failed");
-+  assert.deepEqual(run.error, {
-+    code: "INTERPRETER_TOOL_DENIED",
-+    message: `tool call of "${node}" is not permitted (${reason})`,
-+    node,
-+    details,
-+  });
-+}
-+
-+async function grantAll(h: InvokeHarness): Promise<readonly GrantRecord[]> {
-+  const grants: GrantRecord[] = [];
-+  for (const tool of G_ALL_TOOLS) {
-+    grants.push(
-+      await settled("a G_ALL grant is created", () =>
-+        h.grant({ subject: { kind: "role", role: "author" }, tool, scope: { kind: "any_step" }, args: [] }),
-+      ),
-+    );
-+  }
-+  return grants;
 +}
 +
 +test("C-9baab7e2 an ungranted pay is denied in a run with nothing sent", async () => {
-+  const h = await settled("invokeHarness resolves", () => invokeHarness());
++  const h = await openHarness();
 +  try {
-+    assert.equal(typeof h.run, "function");
-+    const gLookup = await settled("G_LOOKUP is created", () => h.grant(G_LOOKUP));
-+    await settled("the granted layer is deployed", () => h.deploy(""));
++    await settled("grant", () => h.grant(G_LOOKUP));
++    await settled("deploy", () => h.deploy(""));
++    const run = await settled("h.run resolves", () => h.run("H1", INPUT, "r_2"));
++    assert.equal(run.state, "failed");
 +
-+    const run: RunRecord = await settled("h.run resolves", () => h.run("H1", INPUT, "r_2"));
 +    const rows = await h.decisions("r_2");
-+    assert.equal(rows.length, 2);
-+    const lookupRow = rows[0];
-+    const payRow = rows[1];
-+    assert.ok(lookupRow !== undefined && payRow !== undefined);
-+    assertAllowRow(lookupRow, "lookup", [gLookup.id], V1_PERMIT);
-+    assertDenyRow(payRow, "pay", []);
-+    assertRunFailed(run, "pay", "policy", payRow.decisionId);
-+
-+    const payStep = finalRowOf(await stepRows(h, "r_2"), "pay");
-+    assert.ok(payStep !== undefined, "the pay row exists");
-+    assert.equal(payStep.state, "failed");
-+    assert.equal(payStep.policyDecisionId, payRow.decisionId);
-+
-+    assert.equal(await h.intents("r_2"), 0);
-+    const calls = h.tools.calls();
-+    assert.equal(calls.length, 1);
-+    assert.equal(calls[0]?.ref, "erp.lookup_vendor@1");
-+    assert.equal(calls[0]?.callHeader, "r_2:lookup:1");
 +    assert.deepEqual(
-+      h.gateway.calls.map((call) => (call as { op: string }).op),
++      rows.map((r) => [r.nodeId, r.decision]),
++      [
++        ["lookup", "allow"],
++        ["pay", "deny"],
++      ],
++    );
++    const deny = rows[1];
++    assert.ok(deny !== undefined);
++    assert.deepEqual(deny.reasons, []);
++    assert.deepEqual(deny.errors, []);
++    assert.equal(deny.permit, null);
++    assert.deepEqual(run.error, {
++      code: "INTERPRETER_TOOL_DENIED",
++      message: 'tool call of "pay" is not permitted (policy)',
++      node: "pay",
++      details: { reason: "policy", decisionId: deny.decisionId },
++    });
++
++    const payRow = finalRowOf(await stepsOf(h, "r_2"), "pay");
++    assert.ok(payRow !== undefined);
++    assert.equal(payRow.state, "failed");
++    assert.equal(payRow.policyDecisionId, deny.decisionId);
++    assert.equal(await h.intents("r_2"), 0);
++    assert.equal(h.tools.calls().length, 1);
++    assert.deepEqual(
++      h.gateway.calls.map((c) => (c as { op: string }).op),
 +      ["requestToken", "send"],
 +    );
 +  } finally {
@@ -269,37 +188,31 @@ index 0000000..96e8284
 +});
 +
 +test("C-9b030af8 a policy error at pay fails the run", async () => {
-+  let version = "v";
-+  const wrap: HarnessWrap = {
-+    policy: (real) =>
-+      ({
-+        engine: Object.assign(Object.create(real.engine) as object, {
-+          check: async (req: PolicyRequest): Promise<Decision> => {
-+            if (req.resource.id === "tenant_a/read-then-pay/pay") {
-+              return {
-+                decision: "deny",
-+                decisionId: "dec_e6",
-+                decidedAt: T0,
-+                reasons: [],
-+                errors: ["POLICY_SET_UNAVAILABLE"],
-+                policySetVersion: version,
-+              };
-+            }
++  const policy: NonNullable<HarnessWrap["policy"]> = (real) =>
++    ({
++      engine: Object.assign(Object.create(real.engine) as object, {
++        check: async (req: PolicyRequest) => {
++          if (!JSON.stringify(req.resource).includes("/pay")) {
 +            return real.engine.check(req);
-+          },
-+        }),
-+        toolArgs: (tenantId: string) => real.toolArgs(tenantId),
-+        reload: (tenantId: string) => real.reload(tenantId),
-+      }) as unknown as PolicyRuntime,
-+  };
-+  const h = await settled("invokeHarness resolves", () => invokeHarness(wrap));
++          }
++          return {
++            decision: "deny",
++            decisionId: "dec_e6",
++            decidedAt: T0,
++            reasons: [],
++            errors: ["POLICY_SET_UNAVAILABLE"],
++            policySetVersion: real.engine.policySetVersion,
++          };
++        },
++      }),
++      toolArgs: (tenantId: string) => real.toolArgs(tenantId),
++      reload: (tenantId: string) => real.reload(tenantId),
++    }) as unknown as PolicyRuntime;
++  const h = await openHarness({ policy });
 +  try {
-+    assert.equal(typeof h.run, "function");
-+    const gLookup = await settled("G_LOOKUP is created", () => h.grant(G_LOOKUP));
-+    await settled("the granted layer is deployed", () => h.deploy(""));
-+    version = h.runtime.engine.policySetVersion;
-+
-+    const run: RunRecord = await settled("h.run resolves", () => h.run("H1", INPUT, "r_8"));
++    await settled("grant", () => h.grant(G_LOOKUP));
++    await settled("deploy", () => h.deploy(""));
++    const run = await settled("h.run resolves", () => h.run("H1", INPUT, "r_8"));
 +    assert.equal(run.state, "failed");
 +    assert.deepEqual(run.error, {
 +      code: "INTERPRETER_TOOL_DENIED",
@@ -307,107 +220,86 @@ index 0000000..96e8284
 +      node: "pay",
 +      details: { reason: "policy_error", decisionId: "dec_e6", errorCount: "1" },
 +    });
++    assert.ok(!JSON.stringify(run.error).includes("POLICY_SET_UNAVAILABLE"));
 +
 +    const rows = await h.decisions("r_8");
-+    assert.equal(rows.length, 2);
-+    const lookupRow = rows[0];
-+    const payRow = rows[1];
-+    assert.ok(lookupRow !== undefined && payRow !== undefined);
-+    assertAllowRow(lookupRow, "lookup", [gLookup.id], V1_PERMIT);
-+    assert.equal(payRow.decisionId, "dec_e6");
-+    assert.equal(payRow.decision, "deny");
-+    assert.deepEqual(payRow.reasons, []);
-+    assert.deepEqual(payRow.errors, ["POLICY_SET_UNAVAILABLE"]);
-+    assert.equal(payRow.permit, null);
-+
-+    const payStep = finalRowOf(await stepRows(h, "r_8"), "pay");
-+    assert.ok(payStep !== undefined, "the pay row exists");
-+    assert.equal(payStep.state, "failed");
-+    assert.equal(payStep.policyDecisionId, "dec_e6");
-+
++    assert.deepEqual(
++      rows.map((r) => [r.nodeId, r.decision]),
++      [
++        ["lookup", "allow"],
++        ["pay", "deny"],
++      ],
++    );
++    assert.equal(rows[1]?.decisionId, "dec_e6");
++    const payRow = finalRowOf(await stepsOf(h, "r_8"), "pay");
++    assert.ok(payRow !== undefined);
++    assert.equal(payRow.state, "failed");
++    assert.equal(payRow.policyDecisionId, "dec_e6");
 +    assert.equal(await h.intents("r_8"), 0);
 +    assert.equal(h.tools.calls().length, 1);
 +    assert.deepEqual(
-+      h.gateway.calls.map((call) => (call as { op: string }).op),
++      h.gateway.calls.map((c) => (c as { op: string }).op),
 +      ["requestToken", "send"],
 +    );
-+    const logged = JSON.stringify(run.error) + JSON.stringify(h.logs());
-+    assert.ok(!logged.includes("POLICY_SET_UNAVAILABLE"), "no error JSON names the policy error");
 +  } finally {
 +    await h.close();
 +  }
 +});
 +
-+test("C-068f45cf a missing taint an untrusted read and a rewriting pre-hook", async () => {
-+  const h = await settled("invokeHarness resolves", () => invokeHarness());
++test("C-068f45cf a missing taint, an untrusted read and a rewriting pre-hook", async () => {
++  const h = await openHarness();
 +  try {
-+    assert.equal(typeof h.run, "function");
-+    const grants = await grantAll(h);
-+    const gPay = grants[1];
-+    assert.ok(gPay !== undefined, "the pay grant of G_ALL exists");
-+    await settled("the granted layer is deployed", () => h.deploy(""));
++    for (const tool of ALL_TOOLS) {
++      await settled(`grant ${tool}`, () =>
++        h.grant({ subject: { kind: "role", role: "author" }, tool, scope: { kind: "any_step" }, args: [] }),
++      );
++    }
++    await settled("deploy", () => h.deploy(""));
 +
-+    const run9 = await settled("h.start resolves", () =>
-+      h.start("H1", INPUT, "r_9"),
-+    );
-+    const invoker = await settled("liveInvoker resolves", () => h.path.liveInvoker(run9));
-+    assert.ok(invoker.authorize !== undefined, "the live invoker has authorize");
-+    const authorize = invoker.authorize.bind(invoker);
-+    const payCtx = (extra: Record<string, unknown>) => ctxOf("r_9", "pay", "pay", extra);
++    const absent = await authorizeFor(h, "r_a", undefined, undefined, 12.5);
++    const empty = await authorizeFor(h, "r_b", [], undefined, 12.5);
++    const extracted = await authorizeFor(h, "r_c", ["extracted"], undefined, 12.5);
++    assert.deepEqual([absent.allowed, empty.allowed, extracted.allowed], [false, true, true]);
++    const absentRows = await h.decisions("r_a");
++    assert.deepEqual(decisionIds(absentRows), [absent.decisionId]);
++    assert.deepEqual(absentRows[0]?.reasons, ["platform-forbid-untrusted-egress"]);
 +
-+    await assertDenied(authorize(payCall(12.5), payCtx({})), "pay", "policy");
-+    let rows = await h.decisions("r_9");
-+    assert.equal(rows.length, 1);
-+    assertDenyRow(rows[0] as PolicyDecisionRecord, "pay", ["platform-forbid-untrusted-egress"]);
-+
-+    const empty = await settled("the empty taint allows", () =>
-+      authorize(payCall(12.5), payCtx({ taint: [] })),
-+    );
-+    assert.deepEqual(empty.permit, V2_PERMIT);
-+    const extracted = await settled("the extracted taint allows", () =>
-+      authorize(payCall(12.5), payCtx({ taint: ["extracted"] })),
-+    );
-+    assert.deepEqual(extracted.permit, V2_PERMIT);
-+    rows = await h.decisions("r_9");
-+    assert.equal(rows.length, 3);
-+    assertAllowRow(rows[1] as PolicyDecisionRecord, "pay", [gPay.id], V2_PERMIT);
-+    assertAllowRow(rows[2] as PolicyDecisionRecord, "pay", [gPay.id], V2_PERMIT);
-+
-+    const r1: RunRecord = await settled("h.run resolves", () =>
++    const r1 = await settled("untrusted-into-write runs", () =>
 +      h.run("HU", { invoice_id: "INV-1001" }, "r_1"),
 +    );
-+    const denied1 = await h.decisions("r_1");
-+    assert.equal(denied1.length, 2);
-+    const deny1 = denied1[1];
++    assert.equal(r1.state, "failed");
++    const err1 = r1.error as { code?: string; node?: string; details?: Record<string, string> } | null;
++    assert.equal(err1?.code, "INTERPRETER_TOOL_DENIED");
++    assert.equal(err1?.node, "flag");
++    assert.equal(err1?.details?.["reason"], "policy");
++    const rows1 = await h.decisions("r_1");
++    const deny1 = rows1[rows1.length - 1];
 +    assert.ok(deny1 !== undefined);
-+    assert.equal(denied1[0]?.decision, "allow");
-+    assertDenyRow(deny1, "flag", ["platform-forbid-untrusted-egress"]);
-+    assertRunFailed(r1, "flag", "policy", deny1.decisionId);
-+    const flagStep = finalRowOf(await stepRows(h, "r_1"), "flag");
-+    assert.ok(flagStep !== undefined, "the flag row exists");
-+    assert.equal(flagStep.state, "failed");
-+    assert.equal(flagStep.policyDecisionId, deny1.decisionId);
++    assert.equal(deny1.decision, "deny");
++    assert.equal(deny1.decisionId, err1?.details?.["decisionId"]);
++    assert.deepEqual(deny1.reasons, ["platform-forbid-untrusted-egress"]);
 +    assert.equal(await h.intents("r_1"), 0);
-+    const r1Calls = h.tools.calls().filter((call) => call.callHeader?.startsWith("r_1:"));
-+    assert.equal(r1Calls.length, 1);
-+    assert.equal(r1Calls[0]?.ref, "invoices.get@1");
-+
-+    const r2: RunRecord = await settled("h.run resolves", () => h.run("HV", INPUT, "r_2"));
-+    const rows2 = await h.decisions("r_2");
-+    assert.equal(rows2.length, 3);
-+    const deny2 = rows2[2];
-+    assert.ok(deny2 !== undefined);
-+    assertDenyRow(deny2, "pay", ["platform-forbid-untrusted-egress"]);
-+    assertRunFailed(r2, "pay", "policy", deny2.decisionId);
-+    const payStep = finalRowOf(await stepRows(h, "r_2"), "pay");
-+    assert.ok(payStep !== undefined, "the pay row exists");
-+    assert.equal(payStep.state, "failed");
-+    assert.equal(payStep.policyDecisionId, deny2.decisionId);
-+    assert.deepEqual(payStep.taint, ["untrusted"]);
-+    assert.equal(await h.intents("r_2"), 0);
-+    const r2Calls = h.tools.calls().filter((call) => call.callHeader?.startsWith("r_2:"));
 +    assert.deepEqual(
-+      r2Calls.map((call) => call.ref),
++      h.tools.calls().filter((c) => c.callHeader?.startsWith("r_1:")).map((c) => c.ref),
++      ["invoices.get@1"],
++    );
++
++    const r2 = await settled("pre-taint-pay runs", () => h.run("HV", INPUT, "r_2"));
++    assert.equal(r2.state, "failed");
++    const err2 = r2.error as { code?: string; node?: string; details?: Record<string, string> } | null;
++    assert.equal(err2?.code, "INTERPRETER_TOOL_DENIED");
++    assert.equal(err2?.node, "pay");
++    assert.equal(err2?.details?.["reason"], "policy");
++    const rows2 = await h.decisions("r_2");
++    const deny2 = rows2[rows2.length - 1];
++    assert.ok(deny2 !== undefined);
++    assert.equal(deny2.decision, "deny");
++    assert.deepEqual(deny2.reasons, ["platform-forbid-untrusted-egress"]);
++    const payRow = finalRowOf(await stepsOf(h, "r_2"), "pay");
++    assert.ok(payRow !== undefined);
++    assert.deepEqual(payRow.taint, ["untrusted"]);
++    assert.deepEqual(
++      h.tools.calls().filter((c) => c.callHeader?.startsWith("r_2:")).map((c) => c.ref),
 +      ["invoices.get@1", "erp.lookup_vendor@1"],
 +    );
 +  } finally {
@@ -415,156 +307,133 @@ index 0000000..96e8284
 +  }
 +});
 +
-+test("C-6f15197c old fingerprint and payment above 1000", async () => {
-+  const h = await settled("invokeHarness resolves", () => invokeHarness());
++test("C-6f15197c exit 16 and 21, old fingerprint and payment above 1000", async () => {
++  const first = await openHarness();
 +  try {
-+    assert.equal(typeof h.run, "function");
-+    const gLookup = await settled("G_LOOKUP is created", () => h.grant(G_LOOKUP));
-+    const gPay = await settled("G_PAY is created", () => h.grant({ ...G_PAY, versionHash: h.hashes.H1 }));
-+    await settled("the granted layer is deployed", () => h.deploy(""));
++    await settled("grant lookup", () => first.grant(G_LOOKUP));
++    await settled("grant pay", () => first.grant({ ...G_PAY, versionHash: first.hashes.H1 }));
++    await settled("deploy", () => first.deploy(""));
++    const r1 = await settled("H2 runs", () => first.run("H2", INPUT, "r_1"));
++    assert.equal(r1.state, "failed");
++    const err = r1.error as { code?: string; node?: string; details?: Record<string, string> } | null;
++    assert.equal(err?.code, "INTERPRETER_TOOL_DENIED");
++    assert.equal(err?.node, "pay");
++    assert.equal(err?.details?.["reason"], "policy");
++    const rows = await first.decisions("r_1");
++    const deny = rows[rows.length - 1];
++    assert.ok(deny !== undefined);
++    assert.equal(deny.decision, "deny");
++    assert.deepEqual(deny.reasons, []);
++  } finally {
++    await first.close();
++  }
 +
-+    const r1: RunRecord = await settled("h.run resolves", () => h.run("H2", INPUT, "r_1"));
-+    const rows1 = await h.decisions("r_1");
-+    assert.equal(rows1.length, 2);
-+    const payDeny1 = rows1[1];
-+    assert.ok(payDeny1 !== undefined);
-+    assertAllowRow(rows1[0] as PolicyDecisionRecord, "lookup", [gLookup.id], V1_PERMIT);
-+    assertDenyRow(payDeny1, "pay", []);
-+    assertRunFailed(r1, "pay", "policy", payDeny1.decisionId);
-+
-+    await settled("G_PAY is confirmed for H2", () =>
-+      withTenantTx(h.pool, h.ctx, (tx) =>
-+        confirmGrant(
-+          tx,
-+          h.ctx,
-+          gPay.id,
-+          h.hashes.H2,
-+          { kind: "user", id: "carol" },
-+          {
-+            ids: sequentialIds(1),
-+            clock: fixedClock(T0),
-+            catalogueFor: (c) => loadRegistryCatalogue(h.pool, c),
-+          },
-+        ),
-+      ),
++  const h = await openHarness();
++  try {
++    await settled("grant lookup", () => h.grant(G_LOOKUP));
++    const gPay = await settled("grant pay", () =>
++      h.grant({ ...G_PAY, versionHash: h.hashes.H1, confirm: h.hashes.H2 }),
 +    );
-+    await settled("the layer is redeployed", () => h.deploy(""));
-+    const r2: RunRecord = await settled("h.run resolves", () => h.run("H2", INPUT, "r_2"));
++    await settled("deploy", () => h.deploy(""));
++    const r2 = await settled("H2 runs", () => h.run("H2", INPUT, "r_2"));
 +    assert.equal(r2.state, "completed");
 +
-+    await settled("FORBID is deployed", () => h.deploy(FORBID));
-+    const r3: RunRecord = await settled("h.run resolves", () =>
-+      h.run("H1", INPUT_2450, "r_3"),
-+    );
++    await settled("deploy FORBID", () => h.deploy(FORBID));
++    const r3 = await settled("H1 runs at 2450", () => h.run("H1", { ...INPUT, amount: 2450 }, "r_3"));
++    assert.equal(r3.state, "failed");
++    const err3 = r3.error as { node?: string; details?: Record<string, string> } | null;
++    assert.equal(err3?.node, "pay");
 +    const rows3 = await h.decisions("r_3");
-+    assert.equal(rows3.length, 2);
-+    const payDeny3 = rows3[1];
-+    assert.ok(payDeny3 !== undefined);
-+    assertDenyRow(payDeny3, "pay", ["t-pay-needs-approval"]);
-+    assertRunFailed(r3, "pay", "policy", payDeny3.decisionId);
-+    const r3Calls = h.tools.calls().filter((call) => call.callHeader?.startsWith("r_3:"));
-+    assert.deepEqual(
-+      r3Calls.map((call) => call.callHeader),
-+      ["r_3:lookup:1"],
-+    );
++    const deny3 = rows3[rows3.length - 1];
++    assert.ok(deny3 !== undefined);
++    assert.equal(deny3.decision, "deny");
++    assert.deepEqual(deny3.reasons, ["t-pay-needs-approval"]);
++    const headers = h.tools.calls().map((c) => c.callHeader);
++    assert.ok(headers.includes("r_3:lookup:1"));
++    assert.ok(!headers.includes("r_3:pay:1"));
 +
-+    const r4: RunRecord = await settled("h.run resolves", () => h.run("H1", INPUT, "r_4"));
++    const r4 = await settled("H1 runs at 12.5", () => h.run("H1", INPUT, "r_4"));
 +    assert.equal(r4.state, "completed");
 +
-+    const run9 = await settled("h.start resolves", () => h.start("H1", INPUT_2450, "r_9"));
-+    const invoker = await settled("liveInvoker resolves", () => h.path.liveInvoker(run9));
-+    assert.ok(invoker.authorize !== undefined, "the live invoker has authorize");
-+    const authorize = invoker.authorize.bind(invoker);
-+    const withApprovals = (approvals: readonly Record<string, unknown>[]) =>
-+      authorize(payCall(2450), ctxOf("r_9", "pay", "pay", { taint: [], approvals }));
-+
-+    await assertDenied(withApprovals([]), "pay", "policy");
-+    const allowed = await settled("the approved bob allows", () =>
-+      withApprovals([{ nodeId: "approval", decision: "approved", approver: "bob" }]),
++    const none = await authorizeFor(h, "r_5", [], [], 2450);
++    const bob = await authorizeFor(
++      h,
++      "r_6",
++      [],
++      [{ nodeId: "approval", decision: "approved", approver: "bob" }],
++      2450,
 +    );
-+    assert.equal(allowed.decisionId.length > 0, true);
-+    await assertDenied(
-+      withApprovals([{ nodeId: "approval", decision: "rejected", approver: "bob" }]),
-+      "pay",
-+      "policy",
++    const rejected = await authorizeFor(
++      h,
++      "r_7",
++      [],
++      [{ nodeId: "approval", decision: "rejected", approver: "bob" }],
++      2450,
 +    );
-+    await assertDenied(
-+      withApprovals([{ nodeId: "approval", decision: "approved", approver: "alice" }]),
-+      "pay",
-+      "policy",
++    const alice = await authorizeFor(
++      h,
++      "r_9",
++      [],
++      [{ nodeId: "approval", decision: "approved", approver: "alice" }],
++      2450,
 +    );
-+    const rows9 = await h.decisions("r_9");
-+    assert.equal(rows9.length, 4);
-+    assertDenyRow(rows9[0] as PolicyDecisionRecord, "pay", ["t-pay-needs-approval"]);
-+    const allowedRow = rows9[1];
-+    assert.ok(allowedRow !== undefined);
-+    assertAllowRow(allowedRow, "pay", [gPay.id], {
-+      method: "POST",
-+      host: "tools.fake.test",
-+      path: "/blocks/erp.create_payment@1",
-+      serviceId: S,
-+      ttlSeconds: 60,
-+      bodyDigest: D_2450,
-+    });
-+    assertDenyRow(rows9[2] as PolicyDecisionRecord, "pay", ["t-pay-needs-approval"]);
-+    assertDenyRow(rows9[3] as PolicyDecisionRecord, "pay", ["t-pay-needs-approval"]);
++    assert.deepEqual(
++      [none.allowed, bob.allowed, rejected.allowed, alice.allowed],
++      [false, true, false, false],
++    );
++    assert.deepEqual((await h.decisions("r_5"))[0]?.reasons, ["t-pay-needs-approval"]);
++    assert.deepEqual((await h.decisions("r_6"))[0]?.reasons, [gPay.id]);
 +  } finally {
 +    await h.close();
 +  }
 +});
 +
 +test("C-a6f9dbd3 hooked-pay with a node grant and then a hook rule", async () => {
-+  const h = await settled("invokeHarness resolves", () => invokeHarness());
++  const h = await openHarness();
 +  try {
-+    assert.equal(typeof h.run, "function");
-+    const gLookup = await settled("G_LOOKUP is created", () => h.grant(G_LOOKUP));
-+    const gPayH = await settled("G_PAYH is created", () =>
-+      h.grant({ ...G_PAYH, versionHash: h.hashes.HP, confirm: h.hashes.HP }),
-+    );
-+    await settled("the granted layer is deployed", () => h.deploy(""));
++    await settled("grant lookup", () => h.grant(G_LOOKUP));
++    await settled("grant pay", () => h.grant({ ...G_PAYH, versionHash: h.hashes.HP }));
++    await settled("deploy", () => h.deploy(""));
 +
-+    const r1: RunRecord = await settled("h.run resolves", () => h.run("HP", INPUT, "r_1"));
++    const r1 = await settled("hooked-pay runs", () => h.run("HP", INPUT, "r_1"));
++    assert.equal(r1.state, "failed");
 +    const rows1 = await h.decisions("r_1");
 +    assert.equal(rows1.length, 3);
-+    const lookupRow = rows1[0];
-+    const payRow = rows1[1];
-+    const hookRow = rows1[2];
-+    assert.ok(lookupRow !== undefined && payRow !== undefined && hookRow !== undefined);
-+    assertAllowRow(lookupRow, "lookup", [gLookup.id], V1_PERMIT);
-+    assertAllowRow(payRow, "pay", [gPayH.id], V2_PERMIT);
-+    assert.equal(hookRow.resource, 'Block::"tenant_a/hooked-pay/pay:post:notify"');
-+    assertDenyRow(hookRow, "pay", []);
-+    assertRunFailed(r1, "pay", "policy", hookRow.decisionId, "pay:post:notify");
++    const hook1 = rows1[2];
++    assert.ok(hook1 !== undefined);
++    assert.deepEqual(r1.error, {
++      code: "INTERPRETER_TOOL_DENIED",
++      message: 'tool call of "pay" is not permitted (policy)',
++      node: "pay",
++      details: { reason: "policy", decisionId: hook1.decisionId, hook: "pay:post:notify" },
++    });
++    assert.equal(hook1.resource, 'Block::"tenant_a/hooked-pay/pay:post:notify"');
++    assert.equal(hook1.nodeId, "pay");
++    assert.equal(hook1.decision, "deny");
++    assert.deepEqual(hook1.reasons, []);
++    assert.equal(h.tools.calls().filter((c) => c.ref === "erp.create_payment@1").length, 1);
++    const pay1 = finalRowOf(await stepsOf(h, "r_1"), "pay");
++    assert.ok(pay1 !== undefined);
++    assert.equal(pay1.state, "failed");
++    assert.equal(pay1.policyDecisionId, rows1[1]?.decisionId);
 +
-+    const r1Calls = h.tools.calls().filter((call) => call.callHeader?.startsWith("r_1:"));
-+    assert.deepEqual(
-+      r1Calls.map((call) => call.ref),
-+      ["erp.lookup_vendor@1", "erp.create_payment@1"],
-+    );
-+    const payStep1 = finalRowOf(await stepRows(h, "r_1"), "pay");
-+    assert.ok(payStep1 !== undefined, "the pay row exists");
-+    assert.equal(payStep1.state, "failed");
-+    assert.equal(payStep1.policyDecisionId, payRow.decisionId);
-+
-+    await settled("HOOK_OK is deployed", () => h.deploy(HOOK_OK));
-+    const r2: RunRecord = await settled("h.run resolves", () => h.run("HP", INPUT, "r_2"));
++    await settled("deploy HOOK_OK", () => h.deploy(HOOK_OK));
++    const r2 = await settled("hooked-pay runs again", () => h.run("HP", INPUT, "r_2"));
 +    assert.equal(r2.state, "completed");
 +    const rows2 = await h.decisions("r_2");
-+    assert.equal(rows2.length, 3);
-+    const payRow2 = rows2[1];
-+    const hookRow2 = rows2[2];
-+    assert.ok(payRow2 !== undefined && hookRow2 !== undefined);
-+    assert.equal(payRow2.decision, "allow");
-+    assert.equal(hookRow2.decision, "allow");
-+    assert.equal(hookRow2.resource, 'Block::"tenant_a/hooked-pay/pay:post:notify"');
-+    assert.deepEqual(hookRow2.reasons, ["t-hook-send-ok"]);
-+    const slackCalls = h.tools.calls().filter((call) => call.ref === "slack.post_message@1");
-+    assert.equal(slackCalls.length, 1);
-+    assert.equal(slackCalls[0]?.callHeader, "r_2:pay:post:notify:1");
-+    assert.equal(slackCalls[0]?.idempotencyKey, SLACK_IDEM_KEY);
-+    const payStep2 = finalRowOf(await stepRows(h, "r_2"), "pay");
-+    assert.ok(payStep2 !== undefined, "the pay row exists");
-+    assert.equal(payStep2.policyDecisionId, payRow2.decisionId);
++    assert.deepEqual(
++      rows2.map((r) => r.decision),
++      ["allow", "allow", "allow"],
++    );
++    assert.deepEqual(rows2[2]?.reasons, ["t-hook-send-ok"]);
++    assert.equal(rows2[2]?.resource, 'Block::"tenant_a/hooked-pay/pay:post:notify"');
++    const slack = h.tools.calls().filter((c) => c.callHeader === "r_2:pay:post:notify:1");
++    assert.equal(slack.length, 1);
++    assert.equal(slack[0]?.ref, "slack.post_message@1");
++    assert.equal(slack[0]?.idempotencyKey, PAY_IDEM_KEY_HOOK);
++    const pay2 = finalRowOf(await stepsOf(h, "r_2"), "pay");
++    assert.ok(pay2 !== undefined);
++    assert.equal(pay2.policyDecisionId, rows2[1]?.decisionId);
 +  } finally {
 +    await h.close();
 +  }

@@ -16,6 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | accepted | 3.3 | technical | invoke.db.test.ts:45 localBinding keeps serverId acme, so the redirect row C4 cannot reach the local server |
 | Q-004 | accepted | 3.3 | technical | src/runtimes/invoke/invoke.db.test.ts:275 expects local.seen ["/found"] but rows C5/C6 must reach the local upstream |
 | Q-005 | answered | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
+| Q-006 | open | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -397,3 +398,289 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: The check cannot decide for reasons that lie in the harness, not in the change, and the repository itself expects this task's tests to pass before any new code. The plan's own text for task 4.2 says it adds no green code because every name its tests call exists after 4.1, so red is expected to report the tests as already satisfied; counting them on the evidence of the real run is therefore the outcome the plan asks for, not a shortcut around it. The zero-value run only varies Python files and this is a TypeScript repository, so a retry cannot make that part decide, and the base run stopped at the gate timeout of 30 minutes configured in the repository, which a retry would meet again under the same load. The names the five tests call are all on head: the harness run that starts a live run and drives executeRun over memory ops, liveInvoker with authorize and invoke on the invoke path, deploy, grant, decisions, intents and logs, and the harness close tears down the sandbox, the fake tools, the fake egress and the database in a finally, so the tests do not leave open handles that would explain a hang. The five tests follow the five spec scenarios they name. The accept replays the change through every gate, so a lint or test failure on head would still be caught and would use up the accept.
+
+---
+
+## Q-006: Task 4.2: the pre-satisfied check could not decide
+
+- **Status:** open
+- **Blocking tasks:** 4.2
+- **Kind:** harness
+- **Asked:** 2026-11-11T09:56Z by claude-sonnet, run r-20261111T0816Z-8c7f, task 4.2
+- **Criteria:** C-068f45cf (tool-invocation › Untrusted data reaches the policy as untrusted › A missing taint, an untrusted read and a rewriting pre-hook), C-6f15197c (tool-invocation › Grants bind to the confirmed node and rules see approvals › Exit 16 and 21, old fingerprint and payment above 1000), C-9b030af8 (tool-invocation › A live run stops at a denied call › A policy error at pay fails the run), C-9baab7e2 (tool-invocation › A live run stops at a denied call › An ungranted pay is denied in a run with nothing sent), C-a6f9dbd3 (tool-invocation › A hook call is checked as a hook › hooked-pay with a node grant and then a hook rule)
+
+### Context
+L4 could not run the pre-satisfied check of task 4.2, so it does not count the failure against the agent: no attempt was used and no profile was escalated.
+Why: the zero-value run varies Python files only, and src/runtimes/invoke/policy-runs.db.test.ts is not a Python file; the test-base-run run wrote no readable report (timed out after 1800s)
+Runs: test-base-run
+Kept real: nothing
+Tests: src.runtimes.invoke.policy-runs.db.test.ts::C-068f45cf a missing taint, an untrusted read and a rewriting pre-hook, src.runtimes.invoke.policy-runs.db.test.ts::C-6f15197c exit 16 and 21, old fingerprint and payment above 1000, src.runtimes.invoke.policy-runs.db.test.ts::C-9b030af8 a policy error at pay fails the run, src.runtimes.invoke.policy-runs.db.test.ts::C-9baab7e2 an ungranted pay is denied in a run with nothing sent, src.runtimes.invoke.policy-runs.db.test.ts::C-a6f9dbd3 hooked-pay with a node grant and then a hook rule
+
+Changes the replay applies (1 files):
+    added src/runtimes/invoke/policy-runs.db.test.ts
+
+Source of the tests (redacted; at most 40 lines each):
+src.runtimes.invoke.policy-runs.db.test.ts::C-068f45cf a missing taint, an untrusted read and a rewriting pre-hook:
+    test("C-068f45cf a missing taint, an untrusted read and a rewriting pre-hook", async () => {
+      const h = await openHarness();
+      try {
+        for (const tool of ALL_TOOLS) {
+          await settled(`grant ${tool}`, () =>
+            h.grant({ subject: { kind: "role", role: "author" }, tool, scope: { kind: "any_step" }, args: [] }),
+          );
+        }
+        await settled("deploy", () => h.deploy(""));
+    
+        const absent = await authorizeFor(h, "r_a", undefined, undefined, 12.5);
+        const empty = await authorizeFor(h, "r_b", [], undefined, 12.5);
+        const extracted = await authorizeFor(h, "r_c", ["extracted"], undefined, 12.5);
+        assert.deepEqual([absent.allowed, empty.allowed, extracted.allowed], [false, true, true]);
+        const absentRows = await h.decisions("r_a");
+        assert.deepEqual(decisionIds(absentRows), [absent.decisionId]);
+        assert.deepEqual(absentRows[0]?.reasons, ["platform-forbid-untrusted-egress"]);
+    
+        const r1 = await settled("untrusted-into-write runs", () =>
+          h.run("HU", { invoice_id: "INV-1001" }, "r_1"),
+        );
+        assert.equal(r1.state, "failed");
+        const err1 = r1.error as { code?: string; node?: string; details?: Record<string, string> } | null;
+        assert.equal(err1?.code, "INTERPRETER_TOOL_DENIED");
+        assert.equal(err1?.node, "flag");
+        assert.equal(err1?.details?.["reason"], "policy");
+        const rows1 = await h.decisions("r_1");
+        const deny1 = rows1[rows1.length - 1];
+        assert.ok(deny1 !== undefined);
+        assert.equal(deny1.decision, "deny");
+        assert.equal(deny1.decisionId, err1?.details?.["decisionId"]);
+        assert.deepEqual(deny1.reasons, ["platform-forbid-untrusted-egress"]);
+        assert.equal(await h.intents("r_1"), 0);
+        assert.deepEqual(
+          h.tools.calls().filter((c) => c.callHeader?.startsWith("r_1:")).map((c) => c.ref),
+          ["invoices.get@1"],
+        );
+    
+        const r2 = await settled("pre-taint-pay runs", () => h.run("HV", INPUT, "r_2"));
+        assert.equal(r2.state, "failed");
+    [cut: 20 more lines]
+src.runtimes.invoke.policy-runs.db.test.ts::C-6f15197c exit 16 and 21, old fingerprint and payment above 1000:
+    test("C-6f15197c exit 16 and 21, old fingerprint and payment above 1000", async () => {
+      const first = await openHarness();
+      try {
+        await settled("grant lookup", () => first.grant(G_LOOKUP));
+        await settled("grant pay", () => first.grant({ ...G_PAY, versionHash: first.hashes.H1 }));
+        await settled("deploy", () => first.deploy(""));
+        const r1 = await settled("H2 runs", () => first.run("H2", INPUT, "r_1"));
+        assert.equal(r1.state, "failed");
+        const err = r1.error as { code?: string; node?: string; details?: Record<string, string> } | null;
+        assert.equal(err?.code, "INTERPRETER_TOOL_DENIED");
+        assert.equal(err?.node, "pay");
+        assert.equal(err?.details?.["reason"], "policy");
+        const rows = await first.decisions("r_1");
+        const deny = rows[rows.length - 1];
+        assert.ok(deny !== undefined);
+        assert.equal(deny.decision, "deny");
+        assert.deepEqual(deny.reasons, []);
+      } finally {
+        await first.close();
+      }
+    
+      const h = await openHarness();
+      try {
+        await settled("grant lookup", () => h.grant(G_LOOKUP));
+        const gPay = await settled("grant pay", () =>
+          h.grant({ ...G_PAY, versionHash: h.hashes.H1, confirm: h.hashes.H2 }),
+        );
+        await settled("deploy", () => h.deploy(""));
+        const r2 = await settled("H2 runs", () => h.run("H2", INPUT, "r_2"));
+        assert.equal(r2.state, "completed");
+    
+        await settled("deploy FORBID", () => h.deploy(FORBID));
+        const r3 = await settled("H1 runs at 2450", () => h.run("H1", { ...INPUT, amount: 2450 }, "r_3"));
+        assert.equal(r3.state, "failed");
+        const err3 = r3.error as { node?: string; details?: Record<string, string> } | null;
+        assert.equal(err3?.node, "pay");
+        const rows3 = await h.decisions("r_3");
+        const deny3 = rows3[rows3.length - 1];
+        assert.ok(deny3 !== undefined);
+        assert.equal(deny3.decision, "deny");
+    [cut: 40 more lines]
+src.runtimes.invoke.policy-runs.db.test.ts::C-9b030af8 a policy error at pay fails the run:
+    test("C-9b030af8 a policy error at pay fails the run", async () => {
+      const policy: NonNullable<HarnessWrap["policy"]> = (real) =>
+        ({
+          engine: Object.assign(Object.create(real.engine) as object, {
+            check: async (req: PolicyRequest) => {
+              if (!JSON.stringify(req.resource).includes("/pay")) {
+                return real.engine.check(req);
+              }
+              return {
+                decision: "deny",
+                decisionId: "dec_e6",
+                decidedAt: T0,
+                reasons: [],
+                errors: ["POLICY_SET_UNAVAILABLE"],
+                policySetVersion: real.engine.policySetVersion,
+              };
+            },
+          }),
+          toolArgs: (tenantId: string) => real.toolArgs(tenantId),
+          reload: (tenantId: string) => real.reload(tenantId),
+        }) as unknown as PolicyRuntime;
+      const h = await openHarness({ policy });
+      try {
+        await settled("grant", () => h.grant(G_LOOKUP));
+        await settled("deploy", () => h.deploy(""));
+        const run = await settled("h.run resolves", () => h.run("H1", INPUT, "r_8"));
+        assert.equal(run.state, "failed");
+        assert.deepEqual(run.error, {
+          code: "INTERPRETER_TOOL_DENIED",
+          message: 'tool call of "pay" is not permitted (policy_error)',
+          node: "pay",
+          details: { reason: "policy_error", decisionId: "dec_e6", errorCount: "1" },
+        });
+        assert.ok(!JSON.stringify(run.error).includes("POLICY_SET_UNAVAILABLE"));
+    
+        const rows = await h.decisions("r_8");
+        assert.deepEqual(
+          rows.map((r) => [r.nodeId, r.decision]),
+          [
+            ["lookup", "allow"],
+    [cut: 18 more lines]
+src.runtimes.invoke.policy-runs.db.test.ts::C-9baab7e2 an ungranted pay is denied in a run with nothing sent:
+    test("C-9baab7e2 an ungranted pay is denied in a run with nothing sent", async () => {
+      const h = await openHarness();
+      try {
+        await settled("grant", () => h.grant(G_LOOKUP));
+        await settled("deploy", () => h.deploy(""));
+        const run = await settled("h.run resolves", () => h.run("H1", INPUT, "r_2"));
+        assert.equal(run.state, "failed");
+    
+        const rows = await h.decisions("r_2");
+        assert.deepEqual(
+          rows.map((r) => [r.nodeId, r.decision]),
+          [
+            ["lookup", "allow"],
+            ["pay", "deny"],
+          ],
+        );
+        const deny = rows[1];
+        assert.ok(deny !== undefined);
+        assert.deepEqual(deny.reasons, []);
+        assert.deepEqual(deny.errors, []);
+        assert.equal(deny.permit, null);
+        assert.deepEqual(run.error, {
+          code: "INTERPRETER_TOOL_DENIED",
+          message: 'tool call of "pay" is not permitted (policy)',
+          node: "pay",
+          details: { reason: "policy", decisionId: deny.decisionId },
+        });
+    
+        const payRow = finalRowOf(await stepsOf(h, "r_2"), "pay");
+        assert.ok(payRow !== undefined);
+        assert.equal(payRow.state, "failed");
+        assert.equal(payRow.policyDecisionId, deny.decisionId);
+        assert.equal(await h.intents("r_2"), 0);
+        assert.equal(h.tools.calls().length, 1);
+        assert.deepEqual(
+          h.gateway.calls.map((c) => (c as { op: string }).op),
+          ["requestToken", "send"],
+        );
+      } finally {
+        await h.close();
+    [cut: 2 more lines]
+src.runtimes.invoke.policy-runs.db.test.ts::C-a6f9dbd3 hooked-pay with a node grant and then a hook rule:
+    test("C-a6f9dbd3 hooked-pay with a node grant and then a hook rule", async () => {
+      const h = await openHarness();
+      try {
+        await settled("grant lookup", () => h.grant(G_LOOKUP));
+        await settled("grant pay", () => h.grant({ ...G_PAYH, versionHash: h.hashes.HP }));
+        await settled("deploy", () => h.deploy(""));
+    
+        const r1 = await settled("hooked-pay runs", () => h.run("HP", INPUT, "r_1"));
+        assert.equal(r1.state, "failed");
+        const rows1 = await h.decisions("r_1");
+        assert.equal(rows1.length, 3);
+        const hook1 = rows1[2];
+        assert.ok(hook1 !== undefined);
+        assert.deepEqual(r1.error, {
+          code: "INTERPRETER_TOOL_DENIED",
+          message: 'tool call of "pay" is not permitted (policy)',
+          node: "pay",
+          details: { reason: "policy", decisionId: hook1.decisionId, hook: "pay:post:notify" },
+        });
+        assert.equal(hook1.resource, 'Block::"tenant_a/hooked-pay/pay:post:notify"');
+        assert.equal(hook1.nodeId, "pay");
+        assert.equal(hook1.decision, "deny");
+        assert.deepEqual(hook1.reasons, []);
+        assert.equal(h.tools.calls().filter((c) => c.ref === "erp.create_payment@1").length, 1);
+        const pay1 = finalRowOf(await stepsOf(h, "r_1"), "pay");
+        assert.ok(pay1 !== undefined);
+        assert.equal(pay1.state, "failed");
+        assert.equal(pay1.policyDecisionId, rows1[1]?.decisionId);
+    
+        await settled("deploy HOOK_OK", () => h.deploy(HOOK_OK));
+        const r2 = await settled("hooked-pay runs again", () => h.run("HP", INPUT, "r_2"));
+        assert.equal(r2.state, "completed");
+        const rows2 = await h.decisions("r_2");
+        assert.deepEqual(
+          rows2.map((r) => r.decision),
+          ["allow", "allow", "allow"],
+        );
+        assert.deepEqual(rows2[2]?.reasons, ["t-hook-send-ok"]);
+        assert.equal(rows2[2]?.resource, 'Block::"tenant_a/hooked-pay/pay:post:notify"');
+        const slack = h.tools.calls().filter((c) => c.callHeader === "r_2:pay:post:notify:1");
+    [cut: 10 more lines]
+
+Diff of src/runtimes/invoke/policy-runs.db.test.ts (redacted; at most 40 lines of at most 400 characters shown; a cut says so):
+    diff --git a/src/runtimes/invoke/policy-runs.db.test.ts b/src/runtimes/invoke/policy-runs.db.test.ts
+    new file mode 100644
+    index 0000000..1eba889
+    --- /dev/null
+    +++ b/src/runtimes/invoke/policy-runs.db.test.ts
+    @@ -0,0 +1,434 @@
+    +import assert from "node:assert/strict";
+    +import { test } from "node:test";
+    +
+    +import type { StepContext, ToolCall } from "../../interpreter/index.ts";
+    +import type { PolicyRuntime } from "../../grants/index.ts";
+    +import type { PolicyDecisionRecord, PolicyRequest } from "../../pdp/index.ts";
+    +import { createRunStore } from "../../runs/index.ts";
+    +import type { RunRecord, StepRecord } from "../../runs/index.ts";
+    +import { invokeHarness } from "../../../test/support/invoke-runs/harness.ts";
+    +import type { HarnessWrap, InvokeHarness } from "../../../test/support/invoke-runs/harness.ts";
+    +
+    +const T0 = "2026-11-06T10:00:00.000Z";
+    +const INPUT = { vendor_name: "Acme GmbH", amount: 12.5 };
+    +const PAY_IDEM_KEY_HOOK = "ik1_b67e1caff43c8cbc2b72758a1870219a8375cace7325d2fd5ae425acb8701828";
+    +
+    +const G_LOOKUP = {
+    +  subject: { kind: "role", role: "author" },
+    +  tool: "acme.lookup_vendor@1",
+    +  scope: { kind: "any_step" },
+    +  args: [],
+    +};
+    +
+    +const G_PAY = {
+    +  subject: { kind: "role", role: "author" },
+    +  tool: "acme.create_payment@1",
+    +  scope: { kind: "node", flowId: "read-then-pay", nodeId: "pay" },
+    +  args: [],
+    +};
+    +
+    +const G_PAYH = {
+    +  ...G_PAY,
+    +  scope: { kind: "node", flowId: "hooked-pay", nodeId: "pay" },
+    +};
+    +
+    [cut: 400 more lines; the cut lines are replayed too: the whole change is in `openspec/changes/add-tool-invocation/.l4/held/4.2-pre_satisfied.patch` on the unit branch]
+
+`accept: <why>` replays exactly the saved change of 1 files (the whole patch is in `openspec/changes/add-tool-invocation/.l4/held/4.2-pre_satisfied.patch` on the unit branch): the next run applies it, with every guard and gate an agent's changes get, instead of starting an agent. The accept takes effect only through that replay: if the replay fails a gate or the check refutes a criterion, the accept is used up, and a later step that meets the same inconclusive check is held again with a new question. When the check cannot decide again during the replay, the claim is taken (the verifier and the judge see that it was accepted). A criterion that the check shows not to discriminate still fails the attempt.
+`retry: <note>` runs the check again, for example after an L4 upgrade; the note reaches the agent.
+A person answers; an agent only where `clarifier.answer_by_agents` is true on the base branch.
+
+### Options
+1. accept: count these on the evidence of the real run
+2. retry: run the check again (after an L4 upgrade or a fix)
+
+### Answer
+<!-- write below this line -->
