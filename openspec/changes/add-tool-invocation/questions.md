@@ -693,6 +693,7 @@ accept: accept: The check cannot decide for reasons that lie in the harness, not
 ## Q-007: Task 4.2: the pre-satisfied check could not decide
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): I cannot confirm that the five held tests pass on head, which is what an accept would assert. The run's own record of this attempt shows the full test gate with the new file applied at 2309 tests, 2308 passed and 1 failed, against a baseline of 2304 all passing; the only added tests are these five,
 - **Blocking tasks:** 4.2
 - **Kind:** harness
 - **Asked:** 2026-11-11T11:22Z by deepseek-free, run r-20261111T1000Z-af7b, task 4.2
