@@ -143,6 +143,7 @@ interface Observed {
 
 function invokerFor(s: Setup, seen: Observed): ToolInvoker {
   const invoke = async (_call: ToolCall, ctx: StepContext): Promise<{ output: JsonValue }> => {
+    seen.events.push("invoke");
     seen.phases.push("invoke");
     seen.invokeCtxs.push(ctx as AuthorizeCtx);
     return { output: { ts: "1.0" } };
@@ -151,6 +152,7 @@ function invokerFor(s: Setup, seen: Observed): ToolInvoker {
   return {
     invoke,
     async authorize(_call: ToolCall, ctx: StepContext): Promise<CallAuthorization> {
+      seen.events.push("authorize");
       seen.phases.push("authorize");
       seen.authorizeCtxs.push(ctx as AuthorizeCtx);
       if (s.authorizeFailure !== undefined) throw s.authorizeFailure;

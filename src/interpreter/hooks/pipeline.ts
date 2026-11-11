@@ -245,6 +245,11 @@ export function createHookPipeline(request: HookPipelineRequest): HookPipeline |
       block: request.block,
       resolve: post ? (value) => resolveValue(value, hookScope) : request.resolve,
       scope: hookScope,
+      argsTaint: (value) =>
+        valueTaint(value, post ? postTaintOf : request.taintOf, {
+          input: state.taint,
+          output: post ? currentProduced() : null,
+        }),
     };
     const run = await runner.run(placement, hctx, ctx, services, {
       fused,

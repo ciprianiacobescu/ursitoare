@@ -59,6 +59,7 @@ export interface HookServices {
   block(ref: string): BlockDef | undefined;
   resolve(value: unknown): JsonValue;
   scope: RunScope;
+  argsTaint?: (value: unknown) => readonly string[];
 }
 
 export interface HookRunner {
