@@ -18,7 +18,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 5. The decisions route
 
-- [ ] 5.1 Write `src/api/run-decisions.test.ts` (scenario "Allow, deny, extra and malformed permits") and `src/api/run-decisions-route.test.ts` (scenario "The owner team and the initiator read; pages are bound to the run") first, then implement `toDecisionView` and `registerRunDecisionRoutes` in `src/api/run-decisions.ts` and add their export lines to `src/api/index.ts`
+- [x] 5.1 Write `src/api/run-decisions.test.ts` (scenario "Allow, deny, extra and malformed permits") and `src/api/run-decisions-route.test.ts` (scenario "The owner team and the initiator read; pages are bound to the run") first, then implement `toDecisionView` and `registerRunDecisionRoutes` in `src/api/run-decisions.ts` and add their export lines to `src/api/index.ts`
 
 ## 6. The live proof
 
