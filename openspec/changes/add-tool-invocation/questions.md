@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.1 | technical | src/credentials/egress-site.test.ts:22 asserts the old two-path egress inventory |
 | Q-002 | accepted | 2.2 | technical | src/interpreter/hooks/authorize.test.ts:293 — seen.events assertions expect 'authorize' and 'invoke' that the test never records |
-| Q-003 | open | 3.3 | technical | invoke.db.test.ts:45 localBinding keeps serverId acme, so the redirect row C4 cannot reach the local server |
+| Q-003 | accepted | 3.3 | technical | invoke.db.test.ts:45 localBinding keeps serverId acme, so the redirect row C4 cannot reach the local server |
 <!-- l4:index:end -->
 
 ---
@@ -69,7 +69,8 @@ Edit `src/interpreter/hooks/authorize.test.ts`: in `invokerFor` (lines 146 and 1
 
 ## Q-003: invoke.db.test.ts:45 localBinding keeps serverId acme, so the redirect row C4 cannot reach the local server
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.3
 - **Kind:** technical
 - **Asked:** 2026-11-11T06:02Z by claude-sonnet, run r-20261111T0423Z-83d3, task 3.3
