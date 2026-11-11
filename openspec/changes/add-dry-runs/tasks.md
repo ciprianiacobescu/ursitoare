@@ -6,7 +6,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. The stub invoker
 
-- [ ] 2.1 Write `src/runtimes/invoke/stub.test.ts` (T1 to T9) and `src/runtimes/invoke/dry-run-invokers.test.ts` (D1 to D6) first (scenario "A read goes live, an effect is answered by its fake and every failure has a fixed detail"), then implement `stubInvoker` and `dryRunInvokers` in `src/runtimes/invoke/stub.ts` and add their export lines to `src/runtimes/index.ts`
+- [x] 2.1 Write `src/runtimes/invoke/stub.test.ts` (T1 to T9) and `src/runtimes/invoke/dry-run-invokers.test.ts` (D1 to D6) first (scenario "A read goes live, an effect is answered by its fake and every failure has a fixed detail"), then implement `stubInvoker` and `dryRunInvokers` in `src/runtimes/invoke/stub.ts` and add their export lines to `src/runtimes/index.ts`
 
 ## 3. The policy fragment
 
