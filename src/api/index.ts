@@ -25,6 +25,8 @@ export type { PolicyApiDeps } from "./policy-routes.ts";
 export { registerPolicyRoutes } from "./policy-routes.ts";
 export type { RunApiDeps } from "./run-routes.ts";
 export { registerRunRoutes } from "./run-routes.ts";
+export type { DryRunApiDeps } from "./dry-run-routes.ts";
+export { registerDryRunRoutes } from "./dry-run-routes.ts";
 export type { TestRunApiDeps } from "./test-run-routes.ts";
 export { registerTestRunRoutes, registryVersionLoader } from "./test-run-routes.ts";
 export type { RunView, StepView, PayloadView } from "./run-views.ts";

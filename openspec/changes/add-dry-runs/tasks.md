@@ -14,7 +14,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 4. The dry-run endpoint
 
-- [ ] 4.1 Write `src/api/dry-run-routes.test.ts` (scenario "alice gets 202 and the fakes are the run's mocks; a replayed key returns the same run") and `src/api/dry-run-refusals.test.ts` (scenario "Who may dry-run, and each refusal leaves no run": R1 to R15) first, then implement `registerDryRunRoutes` in `src/api/dry-run-routes.ts`, add the keyword `export` to `mapStartRunError` in `src/api/test-run-routes.ts` and the export lines to `src/api/index.ts`
+- [x] 4.1 Write `src/api/dry-run-routes.test.ts` (scenario "alice gets 202 and the fakes are the run's mocks; a replayed key returns the same run") and `src/api/dry-run-refusals.test.ts` (scenario "Who may dry-run, and each refusal leaves no run": R1 to R15) first, then implement `registerDryRunRoutes` in `src/api/dry-run-routes.ts`, add the keyword `export` to `mapStartRunError` in `src/api/test-run-routes.ts` and the export lines to `src/api/index.ts`
 
 ## 5. The decisions route
 
