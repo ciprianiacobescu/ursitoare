@@ -1,0 +1,31 @@
+ursitoare: "0.1"
+flow: read-then-pay
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    vendor_name: { type: string }
+    amount: { type: number }
+  required: [vendor_name, amount]
+start: lookup
+nodes:
+  lookup:
+    kind: block
+    uses: acme.lookup_vendor@1
+    with:
+      vendor_name: "${{ inputs.vendor_name }}"
+    next: pay
+  pay:
+    kind: block
+    uses: acme.create_payment@1
+    with:
+      vendor_id: "${{ nodes.lookup.output.vendor_id }}"
+      amount: "${{ inputs.amount }}"
+      currency: EUR
+      reference: inv-1
+    next: done
+  done:
+    kind: end
+    status: completed
+    output:
+      payment_id: "${{ nodes.pay.output.payment_id }}"

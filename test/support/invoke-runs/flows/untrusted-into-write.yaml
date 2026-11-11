@@ -1,0 +1,28 @@
+ursitoare: "0.1"
+flow: untrusted-into-write
+version: 1.0.0
+inputs:
+  type: object
+  properties:
+    invoice_id: { type: string }
+  required: [invoice_id]
+start: fetch
+nodes:
+  fetch:
+    kind: block
+    uses: acme.get@1
+    with:
+      invoice_id: "${{ inputs.invoice_id }}"
+    next: flag
+  flag:
+    kind: block
+    uses: acme.flag_vendor@1
+    with:
+      vendor_id: "${{ nodes.fetch.output.vendor_name }}"
+      reason: duplicate
+    next: done
+  done:
+    kind: end
+    status: completed
+    output:
+      flag_id: "${{ nodes.flag.output.flag_id }}"

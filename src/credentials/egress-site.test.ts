@@ -19,5 +19,12 @@ test("C-0c230dcb the credentials module is one inventoried egress site", () => {
         "src/credentials/vault-call.ts imports the gateway; add it to the egress-site inventory in test/arch/egress-sites.test.ts with the policy check it follows",
     },
   ]);
-  assert.deepEqual(checkEgressSites(readSnapshot(), ["src/credentials/vault-call.ts", "src/main.ts"]), []);
+  assert.deepEqual(
+    checkEgressSites(readSnapshot(), [
+      "src/credentials/vault-call.ts",
+      "src/main.ts",
+      "src/runtimes/invoke/request.ts",
+    ]),
+    [],
+  );
 });

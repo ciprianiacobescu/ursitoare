@@ -7,6 +7,8 @@ import type {
   TenantContext,
 } from "../runs/index.ts";
 import { InterpreterError, toInterpreterError } from "./errors.ts";
+import { approvalsOnPath } from "./hooks/approvals.ts";
+import type { PathStep } from "./hooks/approvals.ts";
 import { hookBlockRefs } from "./hooks/block-runner.ts";
 import { nodeRuntimeFor } from "./registry.ts";
 import type {
@@ -253,6 +255,7 @@ export async function executeRun(
   let seq = 0;
   let from: string | null = null;
   const visited = new Set<string>();
+  const path: PathStep[] = [];
   let completed: { output: JsonValue | null; terminalNode: string } | null = null;
   let failure: InterpreterError | null = null;
 
@@ -308,6 +311,7 @@ export async function executeRun(
         flow,
         catalogue,
         from,
+        approvals: approvalsOnPath(path),
       }));
     } catch (error) {
       const interpreted = toInterpreterError(error);
@@ -325,6 +329,13 @@ export async function executeRun(
       { output: outcome.output, outcome: outcome.outcome },
     );
     taints.record(nodeId, produced);
+    path.push({
+      nodeId,
+      kind: node.kind,
+      state: "completed",
+      outcome: outcome.outcome,
+      output: outcome.output,
+    });
 
     if (outcome.end !== null) {
       completed = { output: outcome.output, terminalNode: nodeId };

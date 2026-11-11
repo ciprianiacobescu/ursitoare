@@ -55,6 +55,8 @@ export interface StepContext {
   readonly principal: RunPrincipal;
   readonly now: Date;
   readonly hook?: { phase: HookPhase; label: string };
+  readonly authorization?: CallAuthorization;
+  readonly taint?: readonly string[];
 }
 
 export interface CallAuthorization {
@@ -64,6 +66,7 @@ export interface CallAuthorization {
 
 export interface ToolInvoker {
   invoke(call: ToolCall, ctx: StepContext): Promise<ToolResult>;
+  authorize?(call: ToolCall, ctx: StepContext): Promise<CallAuthorization>;
 }
 
 export type EffectDecision =
@@ -97,6 +100,8 @@ export interface NodeServices {
   block(ref: string): BlockDef | undefined;
   sandbox?: WorkerSandbox;
   hooks?: NodeHooks;
+  inputTaint?: () => readonly string[];
+  decided?: (decisionId: string) => void;
 }
 
 export interface NodeRuntime {

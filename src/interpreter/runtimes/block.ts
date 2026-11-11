@@ -2,7 +2,7 @@ import type { JsonValue } from "../../authoring/index.ts";
 import { isDurableCancellation } from "../../durable/index.ts";
 import { InterpreterError, toInterpreterError } from "../errors.ts";
 import { checkSchema } from "../schema.ts";
-import type { NodeRuntime, StepContext, ToolCall } from "../types.ts";
+import type { CallAuthorization, NodeRuntime, StepContext, ToolCall } from "../types.ts";
 
 function toolFailed(nodeId: string, stage: string): InterpreterError {
   return new InterpreterError("INTERPRETER_TOOL_FAILED", "node execution failed", nodeId, { stage });
@@ -78,33 +78,68 @@ export const blockRuntime: NodeRuntime = {
       end: null,
     });
 
-    const readCall = async (call: ToolCall): Promise<JsonValue> => {
+    const authorizeOf = async (call: ToolCall): Promise<CallAuthorization | undefined> => {
+      const authorize = services.invoker.authorize;
+      if (authorize === undefined) return undefined;
+      try {
+        return await authorize(
+          call,
+          Object.assign({}, ctx, { taint: services.inputTaint?.() ?? ctx.taint }),
+        );
+      } catch (error) {
+        throw mapFailure(error, nodeId, "authorize");
+      }
+    };
+
+    const readCall = async (call: ToolCall): Promise<{ output: JsonValue; decisionId?: string }> => {
+      const answer = await authorizeOf(call);
+      const invokeCtx: StepContext =
+        answer === undefined ? ctx : { ...ctx, authorization: answer };
       let result;
       try {
-        result = await services.invoker.invoke(call, ctx);
+        result = await services.invoker.invoke(call, invokeCtx);
       } catch (error) {
         throw mapFailure(error, nodeId, "invoke");
       }
-      return result.output;
+      return answer === undefined
+        ? { output: result.output }
+        : { output: result.output, decisionId: answer.decisionId };
     };
 
     if (def.effect === "read") {
-      const output = await services.ops.runStep<JsonValue>(nodeId, async () => {
+      const authorized = services.invoker.authorize !== undefined;
+      const step = await services.ops.runStep<JsonValue>(nodeId, async () => {
         let produced: JsonValue;
+        let decisionId: string | null = null;
         if (hooks === undefined) {
-          produced = await readCall(prepare());
+          const read = await readCall(prepare());
+          produced = read.output;
+          decisionId = read.decisionId ?? null;
         } else {
           const pre = await hooks.pre(resolveArgs());
-          produced = pre.action === "skip" ? pre.output : await readCall(build(pre.input as JsonValue));
+          if (pre.action === "skip") {
+            produced = pre.output;
+          } else {
+            const read = await readCall(build(pre.input as JsonValue));
+            produced = read.output;
+            decisionId = read.decisionId ?? null;
+          }
         }
         checkOutput(produced);
-        if (hooks === undefined) return produced;
-        const posted = (await hooks.post({ output: produced, outcome: null, next: node.next ?? null }))
-          .output as JsonValue;
-        checkOutput(posted);
-        return posted;
+        let value = produced;
+        if (hooks !== undefined) {
+          const posted = (await hooks.post({ output: produced, outcome: null, next: node.next ?? null }))
+            .output as JsonValue;
+          checkOutput(posted);
+          value = posted;
+        }
+        return authorized ? { output: value, decisionId } : value;
       });
-      return outcomeOf(output);
+      const recorded = authorized ? (step as { output: JsonValue; decisionId: string | null }) : null;
+      if (recorded !== null && recorded.decisionId !== null) {
+        services.decided?.(recorded.decisionId);
+      }
+      return outcomeOf(recorded === null ? step : recorded.output);
     }
 
     const first = await services.ops.runStep<JsonValue>(nodeId, async () => {
@@ -124,6 +159,7 @@ export const blockRuntime: NodeRuntime = {
         call = build(pre.input as JsonValue);
       }
       const hookArgs = hooks === undefined ? {} : { args: call.args };
+      const answer = await authorizeOf(call);
       let decision;
       try {
         decision = await services.effects.before(call, ctx);
@@ -138,22 +174,31 @@ export const blockRuntime: NodeRuntime = {
           { idemKey: decision.idemKey },
         );
       }
+      const recorded = (output: JsonValue) =>
+        answer === undefined
+          ? { output, idemKey: decision.idemKey, ...hookArgs }
+          : { output, idemKey: decision.idemKey, decisionId: answer.decisionId, ...hookArgs };
       if (decision.action === "reuse") {
-        return { output: decision.result.output, idemKey: decision.idemKey, ...hookArgs };
+        return recorded(decision.result.output);
       }
-      const withKey: StepContext = { ...ctx, idemKey: decision.idemKey };
+      const withKey: StepContext =
+        answer === undefined
+          ? { ...ctx, idemKey: decision.idemKey }
+          : { ...ctx, idemKey: decision.idemKey, authorization: answer };
       try {
         const result = await services.invoker.invoke(call, withKey);
-        return { output: result.output, idemKey: decision.idemKey, ...hookArgs };
+        return recorded(result.output);
       } catch (error) {
         throw mapFailure(error, nodeId, "invoke");
       }
     });
-    const { output, idemKey, args } = first as {
+    const { output, idemKey, args, decisionId } = first as {
       output: JsonValue;
       idemKey: string | null;
       args?: JsonValue;
+      decisionId?: string;
     };
+    if (decisionId !== undefined) services.decided?.(decisionId);
 
     const final = await services.ops.runStep<JsonValue>(`${nodeId}#done`, async () => {
       const call = args === undefined ? prepare() : build(args);
