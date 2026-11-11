@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 1.1 | technical | src/credentials/egress-site.test.ts:22 asserts the old two-path egress inventory |
 | Q-002 | accepted | 2.2 | technical | src/interpreter/hooks/authorize.test.ts:293 — seen.events assertions expect 'authorize' and 'invoke' that the test never records |
 | Q-003 | accepted | 3.3 | technical | invoke.db.test.ts:45 localBinding keeps serverId acme, so the redirect row C4 cannot reach the local server |
-| Q-004 | open | 3.3 | technical | src/runtimes/invoke/invoke.db.test.ts:275 expects local.seen ["/found"] but rows C5/C6 must reach the local upstream |
+| Q-004 | accepted | 3.3 | technical | src/runtimes/invoke/invoke.db.test.ts:275 expects local.seen ["/found"] but rows C5/C6 must reach the local upstream |
 <!-- l4:index:end -->
 
 ---
@@ -94,7 +94,8 @@ Edit `src/runtimes/invoke/invoke.db.test.ts`: in `localBinding` (line 45) add `s
 
 ## Q-004: src/runtimes/invoke/invoke.db.test.ts:275 expects local.seen ["/found"] but rows C5/C6 must reach the local upstream
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.3
 - **Kind:** technical
 - **Asked:** 2026-11-11T06:15Z by deepseek-free, run r-20261111T0604Z-ccb1, task 3.3
