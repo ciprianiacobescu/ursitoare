@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-11T13:17:39Z",
+  "integrated_revision": "8392e6552b055557ea36df0c4b5a4a9430d55d9d",
+  "merge_commit": "8392e6552b055557ea36df0c4b5a4a9430d55d9d",
+  "plan_digest": "deccf2afb3391e9c",
+  "plan_id": "m6",
+  "postcheck": "pass",
+  "pr": 120,
+  "receipt_id": "m6/openspec:add-tool-invocation/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "dbc817165d41e7b4550e554d4ac42755fee3bd59",
+  "spec_digest": "48543b247fea3f7f",
+  "target": "main",
+  "unit_id": "openspec:add-tool-invocation"
+}
