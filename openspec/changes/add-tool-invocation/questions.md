@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | accepted | 3.3 | technical | src/runtimes/invoke/invoke.db.test.ts:275 expects local.seen ["/found"] but rows C5/C6 must reach the local upstream |
 | Q-005 | answered | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
 | Q-006 | answered | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
-| Q-007 | open | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
+| Q-007 | answered | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -692,7 +692,7 @@ accept: accept: The check cannot decide for reasons that lie in the harness, not
 
 ## Q-007: Task 4.2: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): I cannot confirm that the five held tests pass on head, which is what an accept would assert. The run's own record of this attempt shows the full test gate with the new file applied at 2309 tests, 2308 passed and 1 failed, against a baseline of 2304 all passing; the only added tests are these five,
 - **Blocking tasks:** 4.2
 - **Kind:** harness
@@ -974,3 +974,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: verified on the unit head d91a68e0 with the held patch applied (sha256 21050e9b…ccc605ef): the five tests pass (node --test with the repo's global setup, 5/5), and `tsc -p tsconfig.json --noEmit` and the repo-wide `eslint --max-warnings=0 .` exit 0, so the replay's typecheck and lint gates (which failed the Q-006 replay) hold. The one failure in this attempt's test gate (2308 of 2309) is not one of the five: L4 put all five criteria into the pre-satisfied check, which takes only tests that passed at red. The likely failure is the known flaky src/interpreter/workflow.db.test.ts::C-b56c7793 (inferred, the gate log is not readable here): it broke the Q-005 replay at 08:28Z and add-code-sandbox's green on 2026-11-06 with the same excerpt, without this file; it passed 5/5 locally run together with this file. A retry cannot decide: the zero-value run varies Python files only and the base run hits its 1800s limit on every attempt. tasks.md says 4.2 adds no green code and expects already_satisfied. Answered by the owner's delegate (Claude Code).
