@@ -14,6 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 1.1 | technical | src/credentials/egress-site.test.ts:22 asserts the old two-path egress inventory |
 | Q-002 | accepted | 2.2 | technical | src/interpreter/hooks/authorize.test.ts:293 — seen.events assertions expect 'authorize' and 'invoke' that the test never records |
 | Q-003 | accepted | 3.3 | technical | invoke.db.test.ts:45 localBinding keeps serverId acme, so the redirect row C4 cannot reach the local server |
+| Q-004 | open | 3.3 | technical | src/runtimes/invoke/invoke.db.test.ts:275 expects local.seen ["/found"] but rows C5/C6 must reach the local upstream |
 <!-- l4:index:end -->
 
 ---
@@ -85,6 +86,30 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/runtimes/invoke/invoke.db.test.ts`: in `localBinding` (line 45) add `serverId: "local"` to the returned object, i.e. `{ ...LV, serverId: "local", ref, origin: LOCAL_ORIGIN, http: { method: "GET", path } }`
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-004: src/runtimes/invoke/invoke.db.test.ts:275 expects local.seen ["/found"] but rows C5/C6 must reach the local upstream
+
+- **Status:** open
+- **Blocking tasks:** 3.3
+- **Kind:** technical
+- **Asked:** 2026-11-11T06:15Z by deepseek-free, run r-20261111T0604Z-ccb1, task 3.3
+
+### Context
+With the Q-003 fix (serverId "local"), all three rows route acme.found@1, acme.text@1 and acme.array@1 to the local node:http upstream. The spec scenario "A call through the fakes, and each failure" and test-plan-runs.md rows C5/C6 require the 2xx text/plain and JSON-array responses to come from that upstream, so its request log must contain /found, /text and /array. The final assertion after the loop at line 275 expects only ["/found"], which no spec-conforming implementation can produce (the observed list is ["/found", "/text", "/array"]); its intent appears to be proving the 302 redirect was not followed to /elsewhere.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/runtimes/invoke/invoke.db.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-tool-invocation`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/runtimes/invoke/invoke.db.test.ts`: change line 275 from `assert.deepEqual(r.local.seen, ["/found"]);` to `assert.deepEqual(r.local.seen, ["/found", "/text", "/array"]);`
+2. Edit `src/runtimes/invoke/invoke.db.test.ts`: replace line 275 with `assert.deepEqual(r.local.seen.filter((p) => p === "/elsewhere"), []);` so the test asserts only that the redirect target was not followed.
+
+### Clarifier suggestion
+Edit `src/runtimes/invoke/invoke.db.test.ts`: change line 275 from `assert.deepEqual(r.local.seen, ["/found"]);` to `assert.deepEqual(r.local.seen, ["/found", "/text", "/array"]);`
 
 ### Answer
 <!-- write below this line -->
