@@ -1,5 +1,6 @@
-import type { Catalogue } from "../../authoring/index.ts";
+import type { Catalogue, JsonValue } from "../../authoring/index.ts";
 import type { ServiceTarget } from "../../credentials/index.ts";
+import type { BrokerToken, CallTag, GatewayResponse } from "../../gateway/index.ts";
 import { nodeFingerprint, toCedarArgs } from "../../grants/index.ts";
 import { InterpreterError } from "../../interpreter/index.ts";
 import type {
@@ -8,6 +9,7 @@ import type {
   StepContext,
   ToolCall,
   ToolInvoker,
+  ToolResult,
 } from "../../interpreter/index.ts";
 import { recordDecisionOwnTx } from "../../pdp/index.ts";
 import type { Decision, PrincipalEntity } from "../../pdp/index.ts";
@@ -49,10 +51,11 @@ function denied(
   );
 }
 
-function failed(call: ToolCall): InterpreterError {
-  return new InterpreterError("INTERPRETER_TOOL_FAILED", "node execution failed", call.nodeId, {
-    stage: "authorize",
-  });
+function failed(
+  call: ToolCall,
+  details: Record<string, string> = { stage: "authorize" },
+): InterpreterError {
+  return new InterpreterError("INTERPRETER_TOOL_FAILED", "node execution failed", call.nodeId, details);
 }
 
 function codeOf(error: unknown): string {
@@ -175,11 +178,58 @@ export function createInvokePath(deps: InvokePathDeps): InvokePath {
       return authorization;
     }
 
+    async function invoke(call: ToolCall, ctx: StepContext): Promise<ToolResult> {
+      const authorization = ctx.authorization;
+      const known = authorization === undefined ? undefined : authorised.get(authorization);
+      if (authorization === undefined || known === undefined) {
+        throw denied(call, ctx, "unauthorized");
+      }
+      authorised.delete(authorization);
+
+      const tag: CallTag = {
+        tenantId: ctx.tenant.tenantId,
+        runId: ctx.runId,
+        nodeId:
+          ctx.hook === undefined
+            ? call.nodeId
+            : `${call.nodeId}:${ctx.hook.phase}:${ctx.hook.label}`,
+        attempt: ctx.attempt,
+      };
+      const sent = toolRequest(known.binding, known.target, known.args, ctx.idemKey);
+
+      let token: BrokerToken;
+      try {
+        token = await deps.gateway.requestToken(authorization.permit, tag);
+      } catch {
+        throw failed(call, { stage: "token" });
+      }
+
+      let response: GatewayResponse;
+      try {
+        response = await deps.gateway.send(authorization.permit, sent.request, token, tag);
+      } catch {
+        throw failed(call, { stage: "send" });
+      }
+
+      if (response.status < 200 || response.status > 299) {
+        throw failed(call, { stage: "upstream", status: String(response.status) });
+      }
+
+      let parsed: unknown;
+      try {
+        parsed = JSON.parse(new TextDecoder().decode(response.body));
+      } catch {
+        throw failed(call, { stage: "response", reason: "not_json" });
+      }
+      if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
+        throw failed(call, { stage: "response", reason: "not_json" });
+      }
+      return { output: parsed as Record<string, JsonValue> };
+    }
+
     return {
       authorize,
-      invoke(): Promise<never> {
-        throw new Error("not implemented");
-      },
+      invoke,
     };
   }
 

@@ -43,7 +43,7 @@ const LV: ToolBinding = {
 };
 
 function localBinding(ref: string, path: string): ToolBinding {
-  return { ...LV, ref, origin: LOCAL_ORIGIN, http: { method: "GET", path } };
+  return { ...LV, serverId: "local", ref, origin: LOCAL_ORIGIN, http: { method: "GET", path } };
 }
 
 const LOCAL_ROUTES: Readonly<Record<string, ToolBinding>> = {
@@ -272,7 +272,7 @@ test("C-17a3e8b7 a redirect is not followed and a non JSON body fails, rows C4 t
         ...FAILED(details),
       );
     }
-    assert.deepEqual(r.local.seen, ["/found"]);
+    assert.deepEqual(r.local.seen, ["/found", "/text", "/array"]);
   } finally {
     await r.close();
   }
