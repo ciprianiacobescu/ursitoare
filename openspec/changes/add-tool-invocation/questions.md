@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | accepted | 3.3 | technical | invoke.db.test.ts:45 localBinding keeps serverId acme, so the redirect row C4 cannot reach the local server |
 | Q-004 | accepted | 3.3 | technical | src/runtimes/invoke/invoke.db.test.ts:275 expects local.seen ["/found"] but rows C5/C6 must reach the local upstream |
 | Q-005 | answered | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
-| Q-006 | open | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
+| Q-006 | answered | 4.2 | harness | Task 4.2: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -403,7 +403,8 @@ accept: The check cannot decide for reasons that lie in the harness, not in the 
 
 ## Q-006: Task 4.2: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 4.2
 - **Kind:** harness
 - **Asked:** 2026-11-11T09:56Z by claude-sonnet, run r-20261111T0816Z-8c7f, task 4.2
@@ -684,3 +685,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: accept: The check cannot decide for reasons that lie in the harness, not in the change. The zero-value run varies Python files only and this is a TypeScript repository, and the base run stopped at the 1800 second gate timeout, which a retry would meet again. The plan's own text for task 4.2 says it adds no green code because every name its tests call exists after 4.1, so red is expected to report the tests as already satisfied. The names the five tests call are all on head: the harness's run starts a live run and drives executeRun over memory ops with the live invoker, grant, deploy, decisions, intents and close are implemented, and the invoke path has authorize and invoke with the policy, policy_error, hook and unauthorized denials the tests assert. The five tests follow the five spec scenarios they name, with the assertions on decision rows, run errors, step rows, intents, fake tool calls and gateway calls that the scenarios state. The accept replays the change through every gate, so a lint, typecheck or test failure on head would still be caught and would use up the accept.
