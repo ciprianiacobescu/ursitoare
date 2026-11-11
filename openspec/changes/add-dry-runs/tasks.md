@@ -22,7 +22,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 6. The live proof
 
-- [ ] 6.1 Write `src/runtimes/invoke/dry-run.db.test.ts` first (scenarios "read-then-pay makes one live call, no pay call, and records both permits", "Without a grant the read is denied, and a fake error fails the node" and "A block hook is stubbed by its own effect, and its fake error follows on_error": rows H1 to H4), reaching the harness only through `dryHarness` of `test/support/invoke-runs/dry-runs.ts`, then implement it and extend `test/support/invoke-runs/harness.ts` (green) (`test-plan-runs.md` § Harness)
+- [x] 6.1 Write `src/runtimes/invoke/dry-run.db.test.ts` first (scenarios "read-then-pay makes one live call, no pay call, and records both permits", "Without a grant the read is denied, and a fake error fails the node" and "A block hook is stubbed by its own effect, and its fake error follows on_error": rows H1 to H4), reaching the harness only through `dryHarness` of `test/support/invoke-runs/dry-runs.ts`, then implement it and extend `test/support/invoke-runs/harness.ts` (green) (`test-plan-runs.md` § Harness)
 
 ## 7. The principal loader and main
 
