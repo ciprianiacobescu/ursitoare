@@ -161,3 +161,4 @@
 {"at":"2026-11-11T11:30:28Z","by":"harness","reason":"the cause is gone: openspec:add-tool-invocation is awaiting_human","type":"plan.resumed"}
 {"at":"2026-11-11T11:30:30Z","attempt":1,"cost_usd":22.132377,"runs":11,"type":"plan.charged","unit":"openspec:add-tool-invocation"}
 {"at":"2026-11-11T11:30:30Z","run":"r-20261111T1130Z-3d7c","type":"unit.dispatched","unit":"openspec:add-tool-invocation"}
+{"at":"2026-11-11T13:10:41Z","head":"dbc817165d41e7b4550e554d4ac42755fee3bd59","pr":120,"target_before":"99bc2d7761a93dcaecdefd38529586fba3ce784b","type":"unit.merge_requested","unit":"openspec:add-tool-invocation"}
