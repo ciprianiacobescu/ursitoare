@@ -20,5 +20,5 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 4. Live runs end to end
 
-- [ ] 4.1 Write `src/runtimes/invoke/exit13.db.test.ts` first (scenario "Exit 13, read-then-pay live with a granted layer"; `h.run` still throws `not implemented`, so red fails inside `await assert.doesNotReject`), then implement `run` in `harness.ts`
+- [x] 4.1 Write `src/runtimes/invoke/exit13.db.test.ts` first (scenario "Exit 13, read-then-pay live with a granted layer"; `h.run` still throws `not implemented`, so red fails inside `await assert.doesNotReject`), then implement `run` in `harness.ts`
 - [ ] 4.2 (No green code: every name its tests call exists after 4.1, so red reports `tdd_exemption: already_satisfied`.) Write `src/runtimes/invoke/policy-runs.db.test.ts` first (scenarios "An ungranted pay is denied in a run with nothing sent", "A policy error at pay fails the run", "A missing taint, an untrusted read and a rewriting pre-hook", "Exit 16 and 21, old fingerprint and payment above 1000" and "hooked-pay with a node grant and then a hook rule")

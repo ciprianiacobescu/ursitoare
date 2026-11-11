@@ -13,7 +13,7 @@ import {
   deployPolicySet,
 } from "../../../src/grants/index.ts";
 import type { GrantRecord, PolicyRuntime, PolicySetRecord } from "../../../src/grants/index.ts";
-import { startRun } from "../../../src/interpreter/index.ts";
+import { executeRun, memoryWorkflowOps, startRun, workflowIdOf } from "../../../src/interpreter/index.ts";
 import type { InterpreterDeps, VersionLoader } from "../../../src/interpreter/index.ts";
 import { defaultSrcDir, listPolicyDecisions } from "../../../src/pdp/index.ts";
 import type { PolicyDecisionRecord, PrincipalEntity } from "../../../src/pdp/index.ts";
@@ -377,6 +377,13 @@ export async function invokeHarness(wrap?: HarnessWrap): Promise<InvokeHarness> 
         runId,
       });
 
+    // A run to completion: the same start, then the interpreter over memory ops (durable is null).
+    const run = async (key: FlowKey, input: JsonValue, runId: string): Promise<RunRecord> => {
+      const stored = await start(key, input, runId);
+      const ops = memoryWorkflowOps(workflowIdOf(ctx.tenantId, stored.runId));
+      return executeRun(ops, interpreter, ctx, stored.runId);
+    };
+
     let closed = false;
     return {
       ctx,
@@ -388,9 +395,7 @@ export async function invokeHarness(wrap?: HarnessWrap): Promise<InvokeHarness> 
       path,
       hashes: hashes as Record<FlowKey, string>,
       start,
-      async run(): Promise<RunRecord> {
-        throw new Error("not implemented");
-      },
+      run,
       deploy: (source) => deployPolicySet(runtime, pool, ctx, source, carolActor, { clock }),
       async grant(spec) {
         const { confirm, ...input } = spec;
