@@ -24,7 +24,7 @@ export {
   toDecimal,
   hostOf,
 } from "./values.ts";
-export { recordDecision } from "./log.ts";
+export { recordDecision, recordDecisionOwnTx } from "./log.ts";
 export { listPolicyDecisions } from "./decisions-query.ts";
 export type {
   PolicyDecisionFilter,

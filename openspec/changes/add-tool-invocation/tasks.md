@@ -14,7 +14,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 3. The invoke path
 
-- [ ] 3.1 Write `src/pdp/log-own-tx.db.test.ts` first (scenario "A decision is recorded in a transaction of its own": a test database, no harness), then implement `recordDecisionOwnTx` in `src/pdp/log.ts` and add its export line to `src/pdp/index.ts`
+- [x] 3.1 Write `src/pdp/log-own-tx.db.test.ts` first (scenario "A decision is recorded in a transaction of its own": a test database, no harness), then implement `recordDecisionOwnTx` in `src/pdp/log.ts` and add its export line to `src/pdp/index.ts`
 - [ ] 3.2 Write `src/runtimes/invoke/authorize.db.test.ts` first (scenarios "A granted read is authorised", "Policy errors and an unrecorded decision deny with fixed reasons" and "Each refusal reason, in order": direct calls of `authorize`, no run), then create `invokeHarness` in `harness.ts` with every member of `InvokeHarness` (its `run` throws `new Error("not implemented")`, so the file typechecks), implement `createInvokePath` and `authorize` in `path.ts` and add `createInvokePath` and the `types.ts` value exports to `src/runtimes/index.ts`
 - [ ] 3.3 Write `src/runtimes/invoke/invoke.db.test.ts` first (scenario "A call through the fakes, and each failure"), then implement `invoke` in `path.ts`
 
