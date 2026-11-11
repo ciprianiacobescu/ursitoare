@@ -1,9 +1,9 @@
 diff --git a/src/runtimes/invoke/policy-runs.db.test.ts b/src/runtimes/invoke/policy-runs.db.test.ts
 new file mode 100644
-index 0000000..1eba889
+index 0000000..537f869
 --- /dev/null
 +++ b/src/runtimes/invoke/policy-runs.db.test.ts
-@@ -0,0 +1,434 @@
+@@ -0,0 +1,437 @@
 +import assert from "node:assert/strict";
 +import { test } from "node:test";
 +
@@ -133,7 +133,10 @@ index 0000000..1eba889
 +  );
 +  const inv = await settled("liveInvoker resolves", () => h.path.liveInvoker(run));
 +  assert.ok(inv.authorize !== undefined, "the live invoker has authorize");
-+  const call: ToolCall = { ...PAY, args: { ...PAY.args, amount } as ToolCall["args"] };
++  const call: ToolCall = {
++    ...PAY,
++    args: { vendor_id: "V-ACME", amount, currency: "EUR", reference: "inv-1" },
++  };
 +  try {
 +    const granted = await inv.authorize(call, ctxOf(runId, taint, approvals));
 +    return { allowed: true, decisionId: granted.decisionId };
