@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Hold H-43d41b0f: UI criterion C-35974302 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-ec30fde7: UI criterion C-4c2144fe has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-95489d0f: UI criterion C-78ea404d has no end-to-end test; see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-d38f4f7c: UI criterion C-985ca634 has no end-to-end test; see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-d38f4f7c: UI criterion C-985ca634 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-3848153d: UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-7723363f: UI criterion C-a7f551fc has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-161ae55b: UI criterion C-95a4662e has no end-to-end test; see the generated UI tests table |
@@ -342,7 +342,8 @@ accept Criterion C-78ea404d is the scenario Calls of the three pages, which runs
 
 ## Q-012: Hold H-d38f4f7c: UI criterion C-985ca634 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -361,6 +362,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-985ca634 is the scenario Policy views and texts, which runs parsePolicyView, validationText, deployText, currentText, pendingText, checkPolicySource and policyErrorText on the plan's values. These are pure functions: the 11 malformed answers never render, and a source of 65,536 code points is not a browser input. policies.test.ts traces the criterion with tests named by its id that check the parsed view, each malformed value, the fixed texts, the code-point limit with the accented and emoji inputs and the policy_invalid refusal rendered through validationText. The rendered texts on the Policies page are the last requirement's scenario, which the repository's browser test exercises. No end-to-end test is needed for this criterion.
 ---
 
 ## Q-013: Hold H-3848153d: UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table
