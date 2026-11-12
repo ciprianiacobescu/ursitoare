@@ -3,7 +3,7 @@ Spec: `specs/web-runs/spec.md`; fixtures: `test-plan.md`; decisions: `design.md`
 ## 1. The Dry run panel
 
 - [x] 1.1 Write `web/src/runs/dry-run.test.ts` (scenarios "Not allowed, needs a version, ready" and "Valid texts and each refusal") first, then implement `DRY_RUN_PANEL`, `dryRunPanelView` and `parseFakes` in `web/src/runs/dry-run.ts`, implementing requirements "The Dry run panel follows the capability and the saved version" and "The fakes text becomes a map of lists or a message"
-- [ ] 1.2 Write `web/src/runs/dry-run-start.test.ts` (scenario "The recorded request and the refusals"; the client is a full `ApiClient` whose `post` records `[path, body, opts]`; `registerRunMessages()` first) first, then implement `startDryRun` and `dryRunFormErrors`, implementing requirement "A dry run is started with one exact request, and each refusal is worded for the form"
+- [x] 1.2 Write `web/src/runs/dry-run-start.test.ts` (scenario "The recorded request and the refusals"; the client is a full `ApiClient` whose `post` records `[path, body, opts]`; `registerRunMessages()` first) first, then implement `startDryRun` and `dryRunFormErrors`, implementing requirement "A dry run is started with one exact request, and each refusal is worded for the form"
 
 ## 2. Policy decisions
 
