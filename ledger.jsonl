@@ -228,3 +228,5 @@
 {"at":"2026-11-12T19:58:57Z","branch":"l4/archive/openspec/add-web-grants","head":"94c82265e53aecc7db72db487fdd0d2281522f74","type":"unit.branch_deleted","unit":"openspec:add-web-grants"}
 {"at":"2026-11-12T19:58:59Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-web-dry-runs"}
 {"at":"2026-11-12T19:58:59Z","run":"r-20261112T1958Z-2cd3","type":"unit.dispatched","unit":"openspec:add-web-dry-runs"}
+{"at":"2026-11-12T22:35:58Z","attempt":1,"cost_usd":2.182553,"runs":2,"type":"plan.charged","unit":"openspec:add-web-dry-runs"}
+{"at":"2026-11-12T22:35:58Z","run":"r-20261112T2235Z-b476","type":"unit.dispatched","unit":"openspec:add-web-dry-runs"}
