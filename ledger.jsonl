@@ -183,3 +183,5 @@
 {"at":"2026-11-12T00:34:27Z","attempt":1,"cost_usd":6.46661,"runs":6,"type":"plan.charged","unit":"openspec:add-dry-runs"}
 {"at":"2026-11-12T00:34:27Z","detail":"task 7.2: max_task_attempts (3) reached in green on glm (2), claude-sonnet (3); last failure: the agent step reached its time limit (30m)","reason":"unit_halted","type":"plan.stopped","unit":"openspec:add-dry-runs"}
 {"at":"2026-11-12T00:41:20Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"Delegate: add-dry-runs 7.2 halted on gate traps, not design (attempt 4 passed 2360/2360; lint no-useless-assignment + TS2322 from Q-001's union). Both fixes reproduced locally; retried with a note (cae64e27).","type":"plan.resumed"}
+{"at":"2026-11-12T00:43:03Z","attempt":1,"cost_usd":6.46661,"runs":7,"type":"plan.charged","unit":"openspec:add-dry-runs"}
+{"at":"2026-11-12T00:43:03Z","run":"r-20261112T0042Z-cf7b","type":"unit.dispatched","unit":"openspec:add-dry-runs"}
