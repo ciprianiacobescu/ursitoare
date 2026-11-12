@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-95a4662e (web-tools › The pages show the loading, failure and outcome states of the API's answers › The server detail loads, fails, is refused and is approved): accept as satisfied? |
+| Q-001 | answered | none | verdict | Criterion C-95a4662e (web-tools › The pages show the loading, failure and outcome states of the API's answers › The server detail loads, fails, is refused and is approved): accept as satisfied? |
 | Q-002 | open | none | verdict | Criterion C-39cb580c (web-tools › The pages show the loading, failure and outcome states of the API's answers › A server opened from its link is approved by its submitter): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-5f4e5a5b (web-tools › The pages show the loading, failure and outcome states of the API's answers › A grant is created, confirmed and revoked, and the table reloads): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-90aeb5ab (web-tools › The pages show the loading, failure and outcome states of the API's answers › The policy loads, validates and deploys): accept as satisfied? |
@@ -35,7 +35,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-95a4662e (web-tools › The pages show the loading, failure and outcome states of the API's answers › The server detail loads, fails, is refused and is approved): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -62,6 +63,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The server detail page implements every step of the scenario. The approve handler returns at once while the detail loads or has failed, so the forced click opens no dialog and posts nothing. The pure models give the loading status, the alert and the pending tools with the plan's texts. A digest_mismatch refusal is shown as an alert and reloads the detail, and a successful approval shows the approved text and reads the detail again. The browser test in the repository follows test-plan-browser.md step by step and asserts the four and five detail requests and both posted bodies.
 ---
 
 ## Q-002: Criterion C-39cb580c (web-tools › The pages show the loading, failure and outcome states of the API's answers › A server opened from its link is approved by its submitter): accept as satisfied?
