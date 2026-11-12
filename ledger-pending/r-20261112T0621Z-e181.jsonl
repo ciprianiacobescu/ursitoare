@@ -2,3 +2,4 @@
 {"ts": "2026-11-12T06:22:05.044586Z", "run_id": "r-20261112T0621Z-e181", "unit": "openspec:add-dry-runs", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 122, "merge_commit": "3d0f715b4b8f43987d5a61735ff861739dee9bcb"}
 {"ts": "2026-11-12T06:22:12.106264Z", "run_id": "r-20261112T0621Z-e181", "unit": "openspec:add-dry-runs", "seq": 3, "type": "archive.opened", "number": 123, "url": "<forge>/ciprianiacobescu/ursitoare/pull/123", "branch": "l4/archive/openspec/add-dry-runs", "head": "c976ee8eb4ef628fdf07bd86195d0a49363e66fd"}
 {"ts": "2026-11-12T06:22:14.113703Z", "run_id": "r-20261112T0621Z-e181", "unit": "openspec:add-dry-runs", "seq": 4, "type": "archive.merged", "head": "c976ee8eb4ef628fdf07bd86195d0a49363e66fd", "number": 123}
+{"ts": "2026-11-12T06:22:16.066149Z", "run_id": "r-20261112T0621Z-e181", "unit": "openspec:add-dry-runs", "seq": 5, "type": "run.finished", "exit_code": 0}
