@@ -2,3 +2,4 @@
 {"ts": "2026-11-12T19:58:28.415557Z", "run_id": "r-20261112T1958Z-f0b0", "unit": "openspec:add-web-grants", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 124, "merge_commit": "62e0cea5c334f2cba7248e6e9a11a6aa5933ac5d"}
 {"ts": "2026-11-12T19:58:41.113852Z", "run_id": "r-20261112T1958Z-f0b0", "unit": "openspec:add-web-grants", "seq": 3, "type": "archive.opened", "number": 125, "url": "<forge>/ciprianiacobescu/ursitoare/pull/125", "branch": "l4/archive/openspec/add-web-grants", "head": "94c82265e53aecc7db72db487fdd0d2281522f74"}
 {"ts": "2026-11-12T19:58:43.927588Z", "run_id": "r-20261112T1958Z-f0b0", "unit": "openspec:add-web-grants", "seq": 4, "type": "archive.merged", "head": "94c82265e53aecc7db72db487fdd0d2281522f74", "number": 125}
+{"ts": "2026-11-12T19:58:46.264665Z", "run_id": "r-20261112T1958Z-f0b0", "unit": "openspec:add-web-grants", "seq": 5, "type": "run.finished", "exit_code": 0}
