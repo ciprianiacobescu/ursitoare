@@ -7,7 +7,7 @@ Spec: `specs/web-runs/spec.md`; fixtures: `test-plan.md`; decisions: `design.md`
 
 ## 2. Policy decisions
 
-- [ ] 2.1 Write `web/src/runs/decisions.test.ts` (scenarios "A page, an empty page and fourteen malformed values", with P1 and M1 to M18 (M15 to M17 the control characters, M18 a bracketed host), and "Deny, read, stubbed effect, hooks, a node with no step and an odd resource") first, then implement `parseDecisions`, `permitText` and `decisionRows` in `web/src/runs/decisions.ts`, implementing requirements "Policy decisions are parsed strictly and read as permits" and "Each decision is one row that names its node, outcome and permit, and says when the effect was stubbed"
+- [x] 2.1 Write `web/src/runs/decisions.test.ts` (scenarios "A page, an empty page and fourteen malformed values", with P1 and M1 to M18 (M15 to M17 the control characters, M18 a bracketed host), and "Deny, read, stubbed effect, hooks, a node with no step and an odd resource") first, then implement `parseDecisions`, `permitText` and `decisionRows` in `web/src/runs/decisions.ts`, implementing requirements "Policy decisions are parsed strictly and read as permits" and "Each decision is one row that names its node, outcome and permit, and says when the effect was stubbed"
 - [ ] 2.2 Write `web/src/runs/decisions-load.test.ts` (scenario "Paging, the section states and a hostile page") first, then implement `decisionsWanted`, `loadDecisions` and `decisionsView`, implementing the logic of "The run page lists the decisions of a finished stub run and confines their failure"
 
 ## 3. The Taint row (C14)
