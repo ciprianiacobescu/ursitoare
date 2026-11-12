@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-013 | answered | none | verdict | Hold H-3848153d: UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-7723363f: UI criterion C-a7f551fc has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-161ae55b: UI criterion C-95a4662e has no end-to-end test; see the generated UI tests table |
-| Q-016 | open | none | verdict | Hold H-dc200146: UI criterion C-39cb580c has no end-to-end test; see the generated UI tests table |
+| Q-016 | answered | none | verdict | Hold H-dc200146: UI criterion C-39cb580c has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-364e7bae: UI criterion C-5f4e5a5b has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-fca42b7c: UI criterion C-90aeb5ab has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -442,7 +442,8 @@ accept Criterion C-95a4662e does have an end-to-end test: the repository's brows
 
 ## Q-016: Hold H-dc200146: UI criterion C-39cb580c has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -461,6 +462,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-39cb580c does have an end-to-end test in the repository: the browser test for the M6 tool pages is tagged with its id and follows test-plan-browser.md § Servers 2 step by step. It makes the tenant solo, follows the link acme and asserts one detail request with no page load, the self-approval note and the unticked box, the Tick alert with no dialog and no post on an unticked click, the box unticked again after a reload, the self_approval_required alert with the box appearing and no extra detail request, and the three posted bodies with selfApproval true, false and true. The page implements each step: the tick is cleared whenever a detail loads, the approve handler shows the approveRequest message as an alert without a dialog, and a refusal sets ownSurface from approveFailure so the box appears. The hold only reflects that the harness's own generated test writer failed, not a missing test. The unit can go on.
 ---
 
 ## Q-017: Hold H-364e7bae: UI criterion C-5f4e5a5b has no end-to-end test; see the generated UI tests table
