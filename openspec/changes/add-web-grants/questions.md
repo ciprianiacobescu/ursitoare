@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Hold H-ec30fde7: UI criterion C-4c2144fe has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-95489d0f: UI criterion C-78ea404d has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-d38f4f7c: UI criterion C-985ca634 has no end-to-end test; see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-3848153d: UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-3848153d: UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-7723363f: UI criterion C-a7f551fc has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-161ae55b: UI criterion C-95a4662e has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-dc200146: UI criterion C-39cb580c has no end-to-end test; see the generated UI tests table |
@@ -367,7 +367,8 @@ accept Criterion C-985ca634 is the scenario Policy views and texts, which runs p
 
 ## Q-013: Hold H-3848153d: UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -386,6 +387,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-ba990588 is the scenario Names, tables, links and sources: it builds dataTableModel for the three tables, calls serverLink and serverIdFromSearch, and reads tools.css and the page files for raw colours, inline styles, dangerouslySetInnerHTML, kit tokens, kit components and the page tokens. These are checks on constants, pure functions and source files, which a running browser cannot observe. pages.test.ts traces the criterion with tests named by its id that assert every one of them, and the stylesheet and pages they read use kit tokens and components only. No end-to-end test is needed for this criterion.
 ---
 
 ## Q-014: Hold H-7723363f: UI criterion C-a7f551fc has no end-to-end test; see the generated UI tests table
