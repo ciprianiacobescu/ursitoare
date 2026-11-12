@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-grants: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-web-grants: PASS (round 3)
 
 traceability: 10/14 criteria covered by a discriminating test
 
@@ -17,17 +17,17 @@ traceability: 10/14 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base main@c976ee8eb4 contained |
-| 1 | integrity | ok | 263.8 | 11 sub-checks; scope: 36 changed file(s) |
-| 2 | build | ok | 32.2 |  |
-| 3 | tests | ok | 369.0 |  |
-| 4 | traceability | ok | 0.2 | 10/14 criteria covered |
-| 4a | audit sampling | ok | 387.5 | 1 not_testable, 1 rejected, 1 skipped; support files at the base: 8 |
-| 5 | ui test generation | ok | 2355.7 | 4 fails_at_head, 7 not_testable, 3 writer_failed |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/features/64-admin-tool-servers.tsx, web/src/features/65-admin-grants.tsx, web/src/features/66-admin-policies.tsx, web/src/tools/GrantsPage.tsx, web/src/tools/PoliciesPage.tsx and 6 more |
-| 8 | s1 judge | ok | 1.0 | 10/14 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 2180.0 | 10 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
+| 4a | audit sampling | reused | 0.0 | reused (round 2) |
+| 5 | ui test generation | reused | 0.0 | reused (round 2) |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -213,6 +213,27 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 - C-228ef9c6: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_228ef9c6_r2.py
 
+## Answers to verdict questions
+
+- Q-001 accept C-95a4662e by the delegate (claude-fable-5-1 via claude-code): The server detail page implements every step of the scenario. The approve handler returns at once while the detail loads or has failed, so the forced click opens no dialog and posts nothing. The pure models give the loading status, the alert and the pending tools with the plan's texts. A digest_mism...
+- Q-002 accept C-39cb580c by the delegate (claude-fable-5-1 via claude-code): The link named the server id is a router Link to the in-page detail, so following it loads the detail once without a page load. The tick is cleared each time a detail loads, an unticked needed box makes the approve click show the Tick message as an alert without a dialog or request, and a self_appro...
+- Q-003 accept C-5f4e5a5b by the delegate (claude-fable-5-1 via claude-code): The grants page implements the scenario. The 403 list error is shown by the table's ErrorPanel with the decision id; the form is busy while the tool list loads or has failed, so the submit handler returns and posts nothing; the select offers only bound refs. A refused create maps user_unknown to the...
+- Q-004 accept C-90aeb5ab by the delegate (claude-fable-5-1 via claude-code): The policies page implements the scenario. Validate and Deploy return at once while the view loads or has failed, so the forced clicks post nothing. The texts come from the pure models: No policy deployed, the one-grant pending text, Not valid with the parse problem, Valid, the policy_invalid refusa...
+- Q-005 accept H-ca42fb4d by the delegate (claude-fable-5-1 via claude-code): Criterion C-debfaec1 is about the pure parsing and text functions parseToolServer, serverRowText, toolRows and stateNote, which have no browser surface of their own: malformed answers never render, they make the list fail as a whole. The specification covers it with Node tests, and servers.test.ts t...
+- Q-006 accept H-e57e62e0 by the delegate (claude-fable-5-1 via claude-code): Criterion C-464ddcf9 is about the pure function approvalView, whose triples are consumed by the page through approveControl and never shown as such. The specification assigns page behaviour to the last requirement, whose scenarios are proved by the browser tests of test_m6_tool_pages.py, and the des...
+- Q-007 accept H-cb78452d by the delegate (claude-fable-5-1 via claude-code): Criterion C-4f5443ee is about approveRequest, approveDialog, approveFailure and toolsErrorMessage, pure functions whose return values the page turns into alerts, a dialog and a reload. approve.test.ts traces the criterion with tests named by its id that cover every row of the test-plan: the Tick mes...
+- Q-008 accept H-966b3c99 by the delegate (claude-fable-5-1 via claude-code): Criterion C-228ef9c6 is about parseGrant, grantRowText and grantActions, pure functions with no browser surface of their own: a malformed item makes the whole list fail through cursorPageFetcher rather than render. grants.test.ts traces the criterion with tests named by its id that check each table ...
+- Q-009 accept H-43d41b0f by the delegate (claude-fable-5-1 via claude-code): Criterion C-35974302 is about grantBody, a pure function over drafts. grants.test.ts traces it with tests named by its id that cover every row of the test-plan grantBody table: the role, user and node bodies, the ignored flow under any step, the boundary tool acme.lookup_vendor@999999999 accepted an...
+- Q-010 accept H-ec30fde7 by the delegate (claude-fable-5-1 via claude-code): Criterion C-4c2144fe is about regionState, actionState and approveControl, the pure page-state models, including RangeError for an unknown phase or an empty text that no page can trigger. states.test.ts traces the criterion with tests named by its id that cover every row of test-plan Page states: th...
+- Q-011 accept H-95489d0f by the delegate (claude-fable-5-1 via claude-code): Criterion C-78ea404d is the scenario Calls of the three pages, which runs the nine call functions against a recording fake and checks their paths, bodies, headers, RangeError rejections and INVALID_RESPONSE rejections. Those are module functions with no browser surface of their own: a ten-page curso...
+- Q-012 accept H-d38f4f7c by the delegate (claude-fable-5-1 via claude-code): Criterion C-985ca634 is the scenario Policy views and texts, which runs parsePolicyView, validationText, deployText, currentText, pendingText, checkPolicySource and policyErrorText on the plan's values. These are pure functions: the 11 malformed answers never render, and a source of 65,536 code poin...
+- Q-013 accept H-3848153d by the delegate (claude-fable-5-1 via claude-code): Criterion C-ba990588 is the scenario Names, tables, links and sources: it builds dataTableModel for the three tables, calls serverLink and serverIdFromSearch, and reads tools.css and the page files for raw colours, inline styles, dangerouslySetInnerHTML, kit tokens, kit components and the page token...
+- Q-014 accept H-7723363f by the delegate (claude-fable-5-1 via claude-code): Criterion C-a7f551fc is the scenario Features and navigation: featureLiterals reads the three feature files, TOOL_PAGES is registered in a fresh registry and visibleNav runs for carol, alice, a deploy_policy-only state and null. These are checks on module constants and the shared capability gate wit...
+- Q-015 accept H-161ae55b by the delegate (claude-fable-5-1 via claude-code): Criterion C-95a4662e does have an end-to-end test: the repository's browser test for the M6 tool pages is tagged with its id and follows test-plan-browser.md § Servers 1 step by step, asserting the Loading status, the alert, the aria-disabled forced clicks with no dialog and no post, the pending too...
+- Q-016 accept H-dc200146 by the delegate (claude-fable-5-1 via claude-code): Criterion C-39cb580c does have an end-to-end test in the repository: the browser test for the M6 tool pages is tagged with its id and follows test-plan-browser.md § Servers 2 step by step. It makes the tenant solo, follows the link acme and asserts one detail request with no page load, the self-appr...
+- Q-017 accept H-364e7bae by the delegate (claude-fable-5-1 via claude-code): Criterion C-5f4e5a5b does have an end-to-end test in the repository: the browser test for the M6 tool pages is tagged with its id and follows test-plan-browser.md § Grants 1 step by step. It asserts the 403 alert with the decision id, the select left on Choose a tool and the forced click posting not...
+- Q-018 accept H-fca42b7c by the delegate (claude-fable-5-1 via claude-code): Criterion C-90aeb5ab does have an end-to-end test in the repository: the browser test for the M6 tool pages is tagged with its id and follows test-plan-browser.md § Policies step by step. It asserts the Loading status and then the alert with both buttons aria-disabled and the forced clicks posting n...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -227,10 +248,10 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-985ca634 | web-tools › The policy view, validation and deployment read as fixed texts › Policy views and texts | pass | pass | the judge passed it and a discriminating test passes |
 | C-ba990588 | web-tools › The pages carry fixed names, tables and links and use kit components and tokens only › Names, tables, links and sources | pass | pass | the judge passed it and a discriminating test passes |
 | C-a7f551fc | web-tools › Three feature files register the pages and gate the navigation by capability › Features and navigation | pass | pass | the judge passed it and a discriminating test passes |
-| C-95a4662e | web-tools › The pages show the loading, failure and outcome states of the API's answers › The server detail loads, fails, is refused and is approved | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-39cb580c | web-tools › The pages show the loading, failure and outcome states of the API's answers › A server opened from its link is approved by its submitter | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-5f4e5a5b | web-tools › The pages show the loading, failure and outcome states of the API's answers › A grant is created, confirmed and revoked, and the table reloads | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-90aeb5ab | web-tools › The pages show the loading, failure and outcome states of the API's answers › The policy loads, validates and deploys | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-95a4662e | web-tools › The pages show the loading, failure and outcome states of the API's answers › The server detail loads, fails, is refused and is approved | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The server detail page implements every step of the scenario. The approve handler returns at once while the detail loads or has failed, so the forced click opens no dialog and posts nothing. The pure models give the loading status, the ale... |
+| C-39cb580c | web-tools › The pages show the loading, failure and outcome states of the API's answers › A server opened from its link is approved by its submitter | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The link named the server id is a router Link to the in-page detail, so following it loads the detail once without a page load. The tick is cleared each time a detail loads, an unticked needed box makes the approve click show the Tick mess... |
+| C-5f4e5a5b | web-tools › The pages show the loading, failure and outcome states of the API's answers › A grant is created, confirmed and revoked, and the table reloads | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The grants page implements the scenario. The 403 list error is shown by the table's ErrorPanel with the decision id; the form is busy while the tool list loads or has failed, so the submit handler returns and posts nothing; the select offe... |
+| C-90aeb5ab | web-tools › The pages show the loading, failure and outcome states of the API's answers › The policy loads, validates and deploys | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The policies page implements the scenario. Validate and Deploy return at once while the view loads or has failed, so the forced clicks post nothing. The texts come from the pure models: No policy deployed, the one-grant pending text, Not v... |
 
 ## Findings
 
@@ -256,23 +277,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] parseGrant node id length cap is not pinned by the spec (spec gap) (criterion C-228ef9c6): design.md § Parsing gives nodeId as `^[a-z][a-z0-9_]*$` with no maximum length, but grants.ts validates nodeId with matches(..., NODE, 1024), capping it at 1024 characters. test-plan.md § Grants malformed values do not pin a node-id length, so two reasonable implementations differ for over-long node ids.
 - [minor, judge] parseGrant caps nodeId at 1024 characters though the spec sets no limit (spec gap) (criterion C-5f4e5a5b): design.md § Parsing gives nodeId the pattern ^[a-z][a-z0-9_]*$ with no maximum length, but web/src/tools/grants.ts validates nodeId with matches(scope["nodeId"], NODE, 1024); a valid node id longer than 1024 characters is unpinned and two reasonable implementations differ.
 - [minor, judge] record tool with absent ref member is treated as malformed (spec gap) (criterion C-debfaec1): In parseRecordTools, when a record tool omits the `ref` member, member(item, "ref") returns undefined and the check `ref !== null && (...)` treats undefined as malformed, returning null for the whole server. The spec describes record tools as `{ name, effect, ref }` with `ref` null or a pattern-matched string, but does not state whether an absent `ref` defaults to null or makes the item malformed; two reasonable implementations differ.
-
-## Needs a human
-
-- UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table
-- UI criterion C-464ddcf9 has no end-to-end test; see the generated UI tests table
-- UI criterion C-4f5443ee has no end-to-end test; see the generated UI tests table
-- UI criterion C-228ef9c6 has no end-to-end test; see the generated UI tests table
-- UI criterion C-35974302 has no end-to-end test; see the generated UI tests table
-- UI criterion C-4c2144fe has no end-to-end test; see the generated UI tests table
-- UI criterion C-78ea404d has no end-to-end test; see the generated UI tests table
-- UI criterion C-985ca634 has no end-to-end test; see the generated UI tests table
-- UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table
-- UI criterion C-a7f551fc has no end-to-end test; see the generated UI tests table
-- UI criterion C-95a4662e has no end-to-end test; see the generated UI tests table
-- UI criterion C-39cb580c has no end-to-end test; see the generated UI tests table
-- UI criterion C-5f4e5a5b has no end-to-end test; see the generated UI tests table
-- UI criterion C-90aeb5ab has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
