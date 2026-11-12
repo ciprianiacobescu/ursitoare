@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-39cb580c (web-tools › The pages show the loading, failure and outcome states of the API's answers › A server opened from its link is approved by its submitter): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-5f4e5a5b (web-tools › The pages show the loading, failure and outcome states of the API's answers › A grant is created, confirmed and revoked, and the table reloads): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-90aeb5ab (web-tools › The pages show the loading, failure and outcome states of the API's answers › The policy loads, validates and deploys): accept as satisfied? |
-| Q-005 | open | none | verdict | Hold H-ca42fb4d: UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-ca42fb4d: UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-e57e62e0: UI criterion C-464ddcf9 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-cb78452d: UI criterion C-4f5443ee has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-966b3c99: UI criterion C-228ef9c6 has no end-to-end test; see the generated UI tests table |
@@ -167,7 +167,8 @@ accept The policies page implements the scenario. Validate and Deploy return at 
 
 ## Q-005: Hold H-ca42fb4d: UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -186,6 +187,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-debfaec1 is about the pure parsing and text functions parseToolServer, serverRowText, toolRows and stateNote, which have no browser surface of their own: malformed answers never render, they make the list fail as a whole. The specification covers it with Node tests, and servers.test.ts traces it with tests named by its id that check the 23 malformed values, the unchanged input, the drifted and list-item views and the fixed texts. The browser plan is reserved for the last requirement's page scenarios. No end-to-end test is needed for this criterion.
 ---
 
 ## Q-006: Hold H-e57e62e0: UI criterion C-464ddcf9 has no end-to-end test; see the generated UI tests table
