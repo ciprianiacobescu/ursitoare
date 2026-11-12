@@ -180,3 +180,5 @@
 {"at":"2026-11-11T21:28:35Z","run":"r-20261111T2128Z-f396","type":"unit.dispatched","unit":"openspec:add-dry-runs"}
 {"at":"2026-11-11T22:58:50Z","attempt":1,"cost_usd":5.433352,"runs":6,"type":"plan.charged","unit":"openspec:add-dry-runs"}
 {"at":"2026-11-11T22:58:50Z","run":"r-20261111T2258Z-4f7d","type":"unit.dispatched","unit":"openspec:add-dry-runs"}
+{"at":"2026-11-12T00:34:27Z","attempt":1,"cost_usd":6.46661,"runs":6,"type":"plan.charged","unit":"openspec:add-dry-runs"}
+{"at":"2026-11-12T00:34:27Z","detail":"task 7.2: max_task_attempts (3) reached in green on glm (2), claude-sonnet (3); last failure: the agent step reached its time limit (30m)","reason":"unit_halted","type":"plan.stopped","unit":"openspec:add-dry-runs"}
