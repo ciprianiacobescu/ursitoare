@@ -11,7 +11,7 @@ Paths without a directory are in `web/src/tools/`. Spec: `specs/web-tools/spec.m
 
 ## 3. Policies
 
-- [ ] 3.1 Write `policies.test.ts` (scenario "Policy views and texts") first, then implement `parsePolicyView`, `validationText`, `deployText`, `currentText`, `pendingText`, `checkPolicySource` and `policyErrorText` in `policies.ts`
+- [x] 3.1 Write `policies.test.ts` (scenario "Policy views and texts") first, then implement `parsePolicyView`, `validationText`, `deployText`, `currentText`, `pendingText`, `checkPolicySource` and `policyErrorText` in `policies.ts`
 
 ## 4. Calls and page states
 
