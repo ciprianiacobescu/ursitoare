@@ -28,7 +28,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-015 | answered | none | verdict | Hold H-161ae55b: UI criterion C-95a4662e has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-dc200146: UI criterion C-39cb580c has no end-to-end test; see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-364e7bae: UI criterion C-5f4e5a5b has no end-to-end test; see the generated UI tests table |
-| Q-018 | open | none | verdict | Hold H-fca42b7c: UI criterion C-90aeb5ab has no end-to-end test; see the generated UI tests table |
+| Q-018 | answered | none | verdict | Hold H-fca42b7c: UI criterion C-90aeb5ab has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -492,7 +492,8 @@ accept Criterion C-5f4e5a5b does have an end-to-end test in the repository: the 
 
 ## Q-018: Hold H-fca42b7c: UI criterion C-90aeb5ab has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -511,3 +512,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-90aeb5ab does have an end-to-end test in the repository: the browser test for the M6 tool pages is tagged with its id and follows test-plan-browser.md § Policies step by step. It asserts the Loading status and then the alert with both buttons aria-disabled and the forced clicks posting nothing, the empty textarea with No policy deployed and the one-grant pending text, the two validation texts with their request bodies, the policy_invalid refusal as the alert Not valid: policy t-1 with no reload, and the accepted deploy showing Deployed version 599ac6e14025 under a different Idempotency-Key followed by a fourth policy request and the Current version and All grant changes are deployed texts. The page implements it: Validate and Deploy return at once while the view loads, has failed or an action is busy, each Deploy click makes a fresh key, and an accepted deploy bumps the reload key. The hold only reflects that the harness's generated test writer ran out of output length, not a missing test. The unit can go on.
