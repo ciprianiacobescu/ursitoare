@@ -27,7 +27,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-014 | answered | none | verdict | Hold H-7723363f: UI criterion C-a7f551fc has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-161ae55b: UI criterion C-95a4662e has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-dc200146: UI criterion C-39cb580c has no end-to-end test; see the generated UI tests table |
-| Q-017 | open | none | verdict | Hold H-364e7bae: UI criterion C-5f4e5a5b has no end-to-end test; see the generated UI tests table |
+| Q-017 | answered | none | verdict | Hold H-364e7bae: UI criterion C-5f4e5a5b has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-fca42b7c: UI criterion C-90aeb5ab has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -467,7 +467,8 @@ accept Criterion C-39cb580c does have an end-to-end test in the repository: the 
 
 ## Q-017: Hold H-364e7bae: UI criterion C-5f4e5a5b has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -486,6 +487,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-5f4e5a5b does have an end-to-end test in the repository: the browser test for the M6 tool pages is tagged with its id and follows test-plan-browser.md § Grants 1 step by step. It asserts the 403 alert with the decision id, the select left on Choose a tool and the forced click posting nothing while the tool list has failed, the two bound refs only once it is ready, the user_unknown text beside Role or user with the draft kept and the same Idempotency-Key on the retry, the reset form after the created grant, the refused confirm and revoke as alerts with no table request, each GRANT_DONE text followed by a table request, the expected request bodies and no dialog. The page implements it: the submit handler returns while the tool list is not ready or an action is busy, the key is kept until a create succeeds or a field changes, and each success resets the list. The hold only reflects that the harness's generated test writer was refused a tool call, not a missing test. The unit can go on.
 ---
 
 ## Q-018: Hold H-fca42b7c: UI criterion C-90aeb5ab has no end-to-end test; see the generated UI tests table
