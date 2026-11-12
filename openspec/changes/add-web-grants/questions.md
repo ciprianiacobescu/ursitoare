@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-cb78452d: UI criterion C-4f5443ee has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-966b3c99: UI criterion C-228ef9c6 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-43d41b0f: UI criterion C-35974302 has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-ec30fde7: UI criterion C-4c2144fe has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-ec30fde7: UI criterion C-4c2144fe has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-95489d0f: UI criterion C-78ea404d has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-d38f4f7c: UI criterion C-985ca634 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-3848153d: UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table |
@@ -292,7 +292,8 @@ accept Criterion C-35974302 is about grantBody, a pure function over drafts. gra
 
 ## Q-010: Hold H-ec30fde7: UI criterion C-4c2144fe has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -311,6 +312,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-4c2144fe is about regionState, actionState and approveControl, the pure page-state models, including RangeError for an unknown phase or an empty text that no page can trigger. states.test.ts traces the criterion with tests named by its id that cover every row of test-plan Page states: the loading, error, ready and empty regions, the idle, busy, done and failed actions, the approve control disabled for no server, no session, a team submitter, nothing pending and a busy request, and the RangeError rows. The rendered states are the last requirement's scenarios, which the browser tests of test_m6_tool_pages.py exercise through Loading, alerts and aria-disabled controls. No end-to-end test is needed for this criterion.
 ---
 
 ## Q-011: Hold H-95489d0f: UI criterion C-78ea404d has no end-to-end test; see the generated UI tests table
