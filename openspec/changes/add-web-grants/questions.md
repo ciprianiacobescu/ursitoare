@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Hold H-d38f4f7c: UI criterion C-985ca634 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-3848153d: UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-7723363f: UI criterion C-a7f551fc has no end-to-end test; see the generated UI tests table |
-| Q-015 | open | none | verdict | Hold H-161ae55b: UI criterion C-95a4662e has no end-to-end test; see the generated UI tests table |
+| Q-015 | answered | none | verdict | Hold H-161ae55b: UI criterion C-95a4662e has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-dc200146: UI criterion C-39cb580c has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-364e7bae: UI criterion C-5f4e5a5b has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-fca42b7c: UI criterion C-90aeb5ab has no end-to-end test; see the generated UI tests table |
@@ -417,7 +417,8 @@ accept Criterion C-a7f551fc is the scenario Features and navigation: featureLite
 
 ## Q-015: Hold H-161ae55b: UI criterion C-95a4662e has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -436,6 +437,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-95a4662e does have an end-to-end test: the repository's browser test for the M6 tool pages is tagged with its id and follows test-plan-browser.md § Servers 1 step by step, asserting the Loading status, the alert, the aria-disabled forced clicks with no dialog and no post, the pending tools, the digest_mismatch alert with the fourth detail request, both posted bodies and the fifth detail request with Surface approved. The page implements each step: the approve handler returns at once while disabled, LoadingState renders a status and ErrorPanel an alert, a refusal with reload reads the detail again and a success shows the approved text and reloads. The criterion was already accepted as satisfied in this unit. The unit can go on.
 ---
 
 ## Q-016: Hold H-dc200146: UI criterion C-39cb580c has no end-to-end test; see the generated UI tests table
