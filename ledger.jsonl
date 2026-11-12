@@ -215,3 +215,5 @@
 {"at":"2026-11-12T17:31:25Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"add-web-grants fix-1 1.1: person commit 921e00fd fixed the frozen e2e test's races; unit retried","type":"plan.resumed"}
 {"at":"2026-11-12T17:31:57Z","attempt":1,"cost_usd":5.550013,"runs":6,"type":"plan.charged","unit":"openspec:add-web-grants"}
 {"at":"2026-11-12T17:31:57Z","run":"r-20261112T1731Z-d374","type":"unit.dispatched","unit":"openspec:add-web-grants"}
+{"at":"2026-11-12T19:31:01Z","attempt":1,"cost_usd":9.724823,"runs":7,"type":"plan.charged","unit":"openspec:add-web-grants"}
+{"at":"2026-11-12T19:31:01Z","run":"r-20261112T1930Z-4b4f","type":"unit.dispatched","unit":"openspec:add-web-grants"}
