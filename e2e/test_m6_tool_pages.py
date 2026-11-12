@@ -359,6 +359,7 @@ def test_c_39cb580c_server_link_and_self_approval(
     dialog = page.get_by_role("dialog")
     dialog.get_by_role("button", name="Approve surface", exact=True).click()
     expect(region).to_contain_text("Surface approved.")
+    expect(region).to_contain_text("acme · https://tools.fake.test · approved")
     assert len(detail) == 3
     assert approve[0]["body"] == {"digest": DP, "selfApproval": True}
 
@@ -382,6 +383,7 @@ def test_c_39cb580c_server_link_and_self_approval(
     dialog = page.get_by_role("dialog")
     dialog.get_by_role("button", name="Approve surface", exact=True).click()
     expect(region).to_contain_text("Surface approved.")
+    expect(region).to_contain_text("acme · https://tools.fake.test · approved")
     assert len(detail) == 5
     assert [hit["body"] for hit in approve] == [
         {"digest": DP, "selfApproval": True},
@@ -460,12 +462,12 @@ def test_c_5f4e5a5b_grant_create_confirm_and_revoke(
     assert_accessible(page)
 
     page.reload()
-    assert len(grants) == 2
     table = page.get_by_role("table", name="Grants", exact=True)
     first = table.get_by_role("row").filter(
         has_text="role author · acme.create_payment@1 · pay-run / pay · needs_reconfirm"
     )
     expect(first).to_be_visible()
+    assert len(grants) == 2
     expect(first.get_by_role("button", name="Revoke", exact=True)).to_be_visible()
     expect(
         first.get_by_role("button", name="Confirm for the newest version", exact=True)
@@ -483,7 +485,7 @@ def test_c_5f4e5a5b_grant_create_confirm_and_revoke(
     subject.fill("u_bob")
     select.select_option(label="acme.lookup_vendor@1")
     create_button.click()
-    expect(page.get_by_text("That user does not exist.", exact=True)).to_be_visible()
+    expect(page.get_by_text("Error: That user does not exist.", exact=True)).to_be_visible()
     expect(subject).to_have_value("u_bob")
     assert len(create) == 1
     key = _header(create[0], "Idempotency-Key")
