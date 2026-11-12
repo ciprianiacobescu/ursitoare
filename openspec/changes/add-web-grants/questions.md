@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-966b3c99: UI criterion C-228ef9c6 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-43d41b0f: UI criterion C-35974302 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-ec30fde7: UI criterion C-4c2144fe has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-95489d0f: UI criterion C-78ea404d has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-95489d0f: UI criterion C-78ea404d has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-d38f4f7c: UI criterion C-985ca634 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-3848153d: UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-7723363f: UI criterion C-a7f551fc has no end-to-end test; see the generated UI tests table |
@@ -317,7 +317,8 @@ accept Criterion C-4c2144fe is about regionState, actionState and approveControl
 
 ## Q-011: Hold H-95489d0f: UI criterion C-78ea404d has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -336,6 +337,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-78ea404d is the scenario Calls of the three pages, which runs the nine call functions against a recording fake and checks their paths, bodies, headers, RangeError rejections and INVALID_RESPONSE rejections. Those are module functions with no browser surface of their own: a ten-page cursor loop, a blank key or an unreadable answer cannot be driven from the page, so the criterion is settled by Node tests. calls.test.ts traces it with tests named by its id that record every call and check the eight records of the plan, the two-request and ten-request tool-ref loads and each refusal. The page-level use of these calls is proved by the browser scenarios of the last requirement, which the repository's browser test exercises. No end-to-end test is needed for this criterion.
 ---
 
 ## Q-012: Hold H-d38f4f7c: UI criterion C-985ca634 has no end-to-end test; see the generated UI tests table
