@@ -52,6 +52,11 @@ delegates; only `identity` talks to the OIDC provider; only `observability` expo
 
 - Node's test runner; `*.test.ts` next to the code. `pnpm test` writes `.l4-out/junit.xml` through the owner reporter
   `tools/node-test-junit.mjs` (`docs/decisions/0002-l4-typescript-test-gate.md`).
+- The only shell command an implementer may run is the test gate, `pnpm run test` (arguments are appended to its
+  globs). `node`, `tsc` and `eslint` are refused, so check types and lint by reading before you finish: a literal
+  outside a row type's union fails typecheck, and an initial value that every path overwrites fails lint
+  (`no-useless-assignment`). To regenerate `docs/api/openapi.json` after a route or `src/main.ts` change, run
+  `pnpm run test test/support/openapi-docs.ts` once: the runner executes that file, which writes the document.
 - Red steps: a new test fails by assertion or because a stub throws `new Error("not implemented")`, never with
   another error, and each criterion has at least one test that fails by assertion: L4 does not count a stub's
   not-implemented error, so a test whose call reaches a stub wraps it in `assert.doesNotThrow(() => { ... })` or
