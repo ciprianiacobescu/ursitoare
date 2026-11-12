@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-12T19:56:53Z",
+  "integrated_revision": "62e0cea5c334f2cba7248e6e9a11a6aa5933ac5d",
+  "merge_commit": "62e0cea5c334f2cba7248e6e9a11a6aa5933ac5d",
+  "plan_digest": "deccf2afb3391e9c",
+  "plan_id": "m6",
+  "postcheck": "pass",
+  "pr": 124,
+  "receipt_id": "m6/openspec:add-web-grants/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "8e2f741e2a53415eb98b211f323f2165ed0bbf7f",
+  "spec_digest": "8546ff4d4c2f3326",
+  "target": "main",
+  "unit_id": "openspec:add-web-grants"
+}
