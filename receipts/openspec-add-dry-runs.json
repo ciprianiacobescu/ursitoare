@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-12T06:20:29Z",
+  "integrated_revision": "3d0f715b4b8f43987d5a61735ff861739dee9bcb",
+  "merge_commit": "3d0f715b4b8f43987d5a61735ff861739dee9bcb",
+  "plan_digest": "deccf2afb3391e9c",
+  "plan_id": "m6",
+  "postcheck": "pass",
+  "pr": 122,
+  "receipt_id": "m6/openspec:add-dry-runs/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "ba92b87552c1bbf0a284766e7f7fc9106624e636",
+  "spec_digest": "e9e0626fd149f108",
+  "target": "main",
+  "unit_id": "openspec:add-dry-runs"
+}
