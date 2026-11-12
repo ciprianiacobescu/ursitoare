@@ -1,6 +1,8 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
 import type { Api } from "../admin/shared.ts";
+import { ApiRequestError } from "../api/client.ts";
+import { toolsErrorMessage } from "./messages.ts";
 
 export interface ToolServerView {
   id: string;
@@ -178,6 +180,15 @@ export function parseToolServer(raw: unknown): ToolServerView | null {
   };
 }
 
+function refusalReason(error: unknown): string | null {
+  if (!(error instanceof ApiRequestError)) return null;
+  if (error.status !== 422 || error.code !== "OPERATION_REFUSED") return null;
+  const details = error.details;
+  if (typeof details !== "object" || details === null || !("reason" in details)) return null;
+  const reason: unknown = (details as { reason?: unknown }).reason;
+  return typeof reason === "string" ? reason : null;
+}
+
 function shortDigest(d: string | null): string {
   return d === null ? "" : d.slice("sha256:".length, "sha256:".length + 12);
 }
@@ -210,7 +221,7 @@ export function approvalView(
   return { canApprove: true, selfApproval: false, message: null };
 }
 
-export const SURFACE_APPROVED: string = "";
+export const SURFACE_APPROVED: string = "Surface approved.";
 
 export function toolRows(
   s: ToolServerView,
@@ -234,30 +245,51 @@ export function stateNote(s: ToolServerView): string | null {
   return null;
 }
 
-export function ownBoxShown(_view: { selfApproval: boolean }, _ownSurface: boolean): boolean {
-  throw new Error("not implemented");
+export function ownBoxShown(view: { selfApproval: boolean }, ownSurface: boolean): boolean {
+  return view.selfApproval || ownSurface;
 }
 
 export function approveRequest(
-  _s: ToolServerView,
-  _me: { userId: string; reviewProfile: "solo" | "team" },
-  _input: { ticked: boolean; ownSurface: boolean },
+  s: ToolServerView,
+  me: { userId: string; reviewProfile: "solo" | "team" },
+  input: { ticked: boolean; ownSurface: boolean },
 ): { ok: true; body: { digest: string; selfApproval: boolean } } | { ok: false; message: string } {
-  throw new Error("not implemented");
+  const view = approvalView(s, me);
+  if (!view.canApprove || s.pendingDigest === null) {
+    return { ok: false, message: view.message ?? "Nothing to approve." };
+  }
+  const shown = ownBoxShown(view, input.ownSurface);
+  if (shown && !input.ticked) {
+    return {
+      ok: false,
+      message: 'Tick "I approve my own surface" to approve a surface you submitted.',
+    };
+  }
+  return { ok: true, body: { digest: s.pendingDigest, selfApproval: shown } };
 }
 
 export function approveDialog(
-  _s: ToolServerView,
+  s: ToolServerView,
 ): { title: string; description: string; action: string } | null {
-  throw new Error("not implemented");
+  if (s.pendingDigest === null) return null;
+  return {
+    title: `Approve surface ${shortDigest(s.pendingDigest)}?`,
+    description: `Once approved, the tools of ${s.id} can be used in flows that grants allow.`,
+    action: "Approve surface",
+  };
 }
 
-export function approveFailure(_error: unknown): {
+export function approveFailure(error: unknown): {
   message: string;
   ownSurface: boolean;
   reload: boolean;
 } {
-  throw new Error("not implemented");
+  const reason = refusalReason(error);
+  return {
+    message: toolsErrorMessage(error),
+    ownSurface: reason === "self_approval_required",
+    reload: reason === "digest_mismatch" || reason === "nothing_pending",
+  };
 }
 
 export function approveControl(

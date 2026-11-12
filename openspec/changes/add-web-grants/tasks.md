@@ -3,7 +3,7 @@ Paths without a directory are in `web/src/tools/`. Spec: `specs/web-tools/spec.m
 ## 1. Tool servers
 
 - [x] 1.1 Write `servers.test.ts` (scenarios "Tool servers are parsed, ignored members stay out and the texts are fixed" and "Nothing pending, team, solo, drifted and an unknown submitter") first, then implement `parseToolServer`, `serverRowText`, the module-internal `shortDigest` (tested through `stateNote` and `approveDialog`), `toolRows`, `stateNote` and `approvalView` in `servers.ts`
-- [ ] 1.2 Write `approve.test.ts` (scenario "Requests, dialog and failure texts"; it calls `registerToolMessages()` first) first, then implement `registerToolMessages` and `toolsErrorMessage` in `messages.ts` (with the module-internal `REASON_MESSAGES` and `refusalReason`) and `SURFACE_APPROVED`, `ownBoxShown`, `approveRequest`, `approveDialog` and `approveFailure` in `servers.ts`
+- [x] 1.2 Write `approve.test.ts` (scenario "Requests, dialog and failure texts"; it calls `registerToolMessages()` first) first, then implement `registerToolMessages` and `toolsErrorMessage` in `messages.ts` (with the module-internal `REASON_MESSAGES` and `refusalReason`) and `SURFACE_APPROVED`, `ownBoxShown`, `approveRequest`, `approveDialog` and `approveFailure` in `servers.ts`
 
 ## 2. Grants
 
