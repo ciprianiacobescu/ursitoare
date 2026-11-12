@@ -1,0 +1,275 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "admin/pages.ts",
+      "tools/pages.ts",
+      "kit/tokens.css",
+      "docs/decisions/0002",
+      "web/src/tools",
+      "specs/web-tools/spec.md",
+      "node:assert/strict",
+      "runs/pages.test.ts:28-31",
+      "e2e/test_m6_tool_pages.py",
+      "e2e",
+      "**/AccountMenu.tsx",
+      "**/^[a-z][a-z0-9_]{0,31}$",
+      "**/^sha256:[0-9a-f]{64}$",
+      "**/^[a-z][a-z0-9_]{0,63}$",
+      "**/^grant_[A-Za-z0-9-]{1,64}$",
+      "**/^[a-z][a-z0-9._-]*@",
+      "**/^[A-Za-z0-9_-]{1,64}$",
+      "**/^[a-z][a-z0-9]*",
+      "**/^[a-z][a-z0-9_]*$",
+      "**/?server=<id>",
+      "**/?server=",
+      "**/[",
+      "**/servers.test.ts",
+      "**/servers.ts",
+      "**/approve.test.ts",
+      "**/messages.ts",
+      "**/policies.test.ts",
+      "**/policies.ts",
+      "**/calls.test.ts",
+      "**/states.test.ts",
+      "**/pages.ts",
+      "**/pages.test.ts",
+      "**/[]",
+      "**/ServersPage.tsx",
+      "**/GrantsPage.tsx",
+      "**/PoliciesPage.tsx",
+      "module admin",
+      "module docs",
+      "module e2e",
+      "module grants",
+      "module kit",
+      "module node:assert",
+      "module runs",
+      "module specs",
+      "module tools",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m6_tool_pages.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-grants/.l4/ledger/r-20261112T0622Z-be37.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-grants/.l4/ledger/r-20261112T0837Z-065a.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-grants/.l4/ledger/r-20261112T1109Z-48ea.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-grants/.l4/ledger/r-20261112T1334Z-f2e1.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-grants/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/features/64-admin-tool-servers.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `web` is named in the spec"
+      },
+      {
+        "path": "web/src/features/65-admin-grants.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `web` is named in the spec"
+      },
+      {
+        "path": "web/src/features/66-admin-policies.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `web` is named in the spec"
+      },
+      {
+        "path": "web/src/tools/GrantsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/PoliciesPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/ServersPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/approve.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/calls.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/grants.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/grants.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/messages.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/pages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/pages.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/policies.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/policies.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/servers.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/servers.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/states.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/tools.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/features/64-admin-tool-servers.tsx, web/src/features/65-admin-grants.tsx, web/src/features/66-admin-policies.tsx, web/src/tools/GrantsPage.tsx, web/src/tools/PoliciesPage.tsx and 6 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/features/64-admin-tool-servers.tsx",
+      "web/src/features/65-admin-grants.tsx",
+      "web/src/features/66-admin-policies.tsx",
+      "web/src/tools/GrantsPage.tsx",
+      "web/src/tools/PoliciesPage.tsx",
+      "web/src/tools/ServersPage.tsx",
+      "web/src/tools/grants.ts",
+      "web/src/tools/messages.ts",
+      "web/src/tools/pages.ts",
+      "web/src/tools/policies.ts",
+      "web/src/tools/servers.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 2499,
+      "passed": 2497,
+      "failed": 2,
+      "errored": 0,
+      "skipped": 0,
+      "new": 78,
+      "new_passed": 76,
+      "skipped_unchanged": []
+    },
+    "findings": [
+      {
+        "severity": "blocker",
+        "title": "new tests failed",
+        "detail": "test_m6_tool_pages::test_c_39cb580c_server_link_and_self_approval[chromium], test_m6_tool_pages::test_c_5f4e5a5b_grant_create_confirm_and_revoke[chromium]"
+      }
+    ]
+  }
+}
