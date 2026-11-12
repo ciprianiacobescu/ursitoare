@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-95a4662e (web-tools › The pages show the loading, failure and outcome states of the API's answers › The server detail loads, fails, is refused and is approved): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-39cb580c (web-tools › The pages show the loading, failure and outcome states of the API's answers › A server opened from its link is approved by its submitter): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-5f4e5a5b (web-tools › The pages show the loading, failure and outcome states of the API's answers › A grant is created, confirmed and revoked, and the table reloads): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-5f4e5a5b (web-tools › The pages show the loading, failure and outcome states of the API's answers › A grant is created, confirmed and revoked, and the table reloads): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-90aeb5ab (web-tools › The pages show the loading, failure and outcome states of the API's answers › The policy loads, validates and deploys): accept as satisfied? |
 | Q-005 | open | none | verdict | Hold H-ca42fb4d: UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-e57e62e0: UI criterion C-464ddcf9 has no end-to-end test; see the generated UI tests table |
@@ -101,7 +101,8 @@ accept The link named the server id is a router Link to the in-page detail, so f
 
 ## Q-003: Criterion C-5f4e5a5b (web-tools › The pages show the loading, failure and outcome states of the API's answers › A grant is created, confirmed and revoked, and the table reloads): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -128,6 +129,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The grants page implements the scenario. The 403 list error is shown by the table's ErrorPanel with the decision id; the form is busy while the tool list loads or has failed, so the submit handler returns and posts nothing; the select offers only bound refs. A refused create maps user_unknown to the Role or user field with the plan's text, keeps the draft and its Idempotency-Key, and a created grant resets the form and the key; a refused revoke or confirm is an alert with no table reload, and each success shows its GRANT_DONE text and resets the list so the table reloads from page one.
 ---
 
 ## Q-004: Criterion C-90aeb5ab (web-tools › The pages show the loading, failure and outcome states of the API's answers › The policy loads, validates and deploys): accept as satisfied?
