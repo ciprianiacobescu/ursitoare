@@ -7,7 +7,7 @@ Paths without a directory are in `web/src/tools/`. Spec: `specs/web-tools/spec.m
 
 ## 2. Grants
 
-- [ ] 2.1 Write `grants.test.ts` (scenarios "Each subject and scope, the list item and the malformed items" and "Role, user and node drafts and the refused fields") first, then implement `parseGrant`, `grantRowText`, `grantActions`, `GRANT_DONE`, `grantBody` in `grants.ts`
+- [x] 2.1 Write `grants.test.ts` (scenarios "Each subject and scope, the list item and the malformed items" and "Role, user and node drafts and the refused fields") first, then implement `parseGrant`, `grantRowText`, `grantActions`, `GRANT_DONE`, `grantBody` in `grants.ts`
 
 ## 3. Policies
 
