@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-90aeb5ab (web-tools › The pages show the loading, failure and outcome states of the API's answers › The policy loads, validates and deploys): accept as satisfied? |
 | Q-005 | answered | none | verdict | Hold H-ca42fb4d: UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-e57e62e0: UI criterion C-464ddcf9 has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-cb78452d: UI criterion C-4f5443ee has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-cb78452d: UI criterion C-4f5443ee has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-966b3c99: UI criterion C-228ef9c6 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-43d41b0f: UI criterion C-35974302 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-ec30fde7: UI criterion C-4c2144fe has no end-to-end test; see the generated UI tests table |
@@ -217,7 +217,8 @@ accept Criterion C-464ddcf9 is about the pure function approvalView, whose tripl
 
 ## Q-007: Hold H-cb78452d: UI criterion C-4f5443ee has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -236,6 +237,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-4f5443ee is about approveRequest, approveDialog, approveFailure and toolsErrorMessage, pure functions whose return values the page turns into alerts, a dialog and a reload. approve.test.ts traces the criterion with tests named by its id that cover every row of the test-plan: the Tick message and selfApproval bodies for MINE and UNKNOWN, the approvalView refusals, the dialog title with the short digest and null with nothing pending, ownSurface and reload for the four approval reasons, the fallbacks, and the 13 reason texts. The page-level consequences are the last requirement's scenarios, which the browser tests of test_m6_tool_pages.py exercise, including the Tick alert and the self_approval_required refusal. No end-to-end test is needed for this criterion.
 ---
 
 ## Q-008: Hold H-966b3c99: UI criterion C-228ef9c6 has no end-to-end test; see the generated UI tests table
