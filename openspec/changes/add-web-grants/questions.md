@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-ca42fb4d: UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-e57e62e0: UI criterion C-464ddcf9 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-cb78452d: UI criterion C-4f5443ee has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-966b3c99: UI criterion C-228ef9c6 has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-966b3c99: UI criterion C-228ef9c6 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-43d41b0f: UI criterion C-35974302 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-ec30fde7: UI criterion C-4c2144fe has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-95489d0f: UI criterion C-78ea404d has no end-to-end test; see the generated UI tests table |
@@ -242,7 +242,8 @@ accept Criterion C-4f5443ee is about approveRequest, approveDialog, approveFailu
 
 ## Q-008: Hold H-966b3c99: UI criterion C-228ef9c6 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -261,6 +262,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-228ef9c6 is about parseGrant, grantRowText and grantActions, pure functions with no browser surface of their own: a malformed item makes the whole list fail through cursorPageFetcher rather than render. grants.test.ts traces the criterion with tests named by its id that check each table row's view, row text and actions, the null for all 17 malformed values and the flat record, the unchanged input and the GRANT_DONE texts. The rendered row text and the Revoke and Confirm buttons are checked on the page by the browser test of test_m6_tool_pages.py. No end-to-end test is needed for this criterion.
 ---
 
 ## Q-009: Hold H-43d41b0f: UI criterion C-35974302 has no end-to-end test; see the generated UI tests table
