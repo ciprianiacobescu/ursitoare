@@ -308,18 +308,38 @@ export function serverIdFromSearch(_search: string): string | null {
   throw new Error("not implemented");
 }
 
+function checkServerId(id: string): void {
+  if (!ID_PATTERN.test(id)) throw new RangeError("Invalid tool server id");
+}
+
 export async function loadToolServer(
-  _client: Api<"get">,
-  _id: string,
-  _signal?: AbortSignal,
+  client: Api<"get">,
+  id: string,
+  signal?: AbortSignal,
 ): Promise<ToolServerView> {
-  throw new Error("not implemented");
+  checkServerId(id);
+  const path = `/tool-servers/${id}`;
+  const answer =
+    signal === undefined
+      ? await client.get<unknown>(path)
+      : await client.get<unknown>(path, { signal });
+  const view = parseToolServer(answer);
+  if (view === null) throw new ApiRequestError(200, "INVALID_RESPONSE", "Invalid tool server");
+  return view;
 }
 
 export async function approveToolSurface(
-  _client: Api<"post">,
-  _id: string,
-  _body: { digest: string; selfApproval: boolean },
+  client: Api<"post">,
+  id: string,
+  body: { digest: string; selfApproval: boolean },
 ): Promise<ToolServerView> {
-  throw new Error("not implemented");
+  checkServerId(id);
+  const answer = await client.post<unknown>(`/tool-servers/${id}/surface/approve`, body);
+  const server =
+    typeof answer === "object" && answer !== null && !Array.isArray(answer)
+      ? (answer as Record<string, unknown>)["server"]
+      : undefined;
+  const view = parseToolServer(server);
+  if (view === null) throw new ApiRequestError(200, "INVALID_RESPONSE", "Invalid tool server");
+  return view;
 }

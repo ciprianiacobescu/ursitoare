@@ -97,21 +97,43 @@ export function policyErrorText(error: unknown): string {
   return toolsErrorMessage(error);
 }
 
-export async function loadPolicy(_client: Api<"get">, _signal?: AbortSignal): Promise<PolicyView> {
-  throw new Error("not implemented");
+export async function loadPolicy(client: Api<"get">, signal?: AbortSignal): Promise<PolicyView> {
+  const answer =
+    signal === undefined
+      ? await client.get<unknown>("/policies")
+      : await client.get<unknown>("/policies", { signal });
+  const view = parsePolicyView(answer);
+  if (view === null) throw new ApiRequestError(200, "INVALID_RESPONSE", "Invalid policy");
+  return view;
 }
 
 export async function validatePolicy(
-  _client: Api<"post">,
-  _source: string,
+  client: Api<"post">,
+  source: string,
 ): Promise<{ ok: boolean; problems: { stage: string; ids: string[]; message: string }[] }> {
-  throw new Error("not implemented");
+  const answer = await client.post<unknown>("/policies/validate", { source });
+  const ok = isRecord(answer) ? answer["ok"] : undefined;
+  const problems = isRecord(answer) ? readProblems(answer["problems"]) : null;
+  if (typeof ok !== "boolean" || problems === null) {
+    throw new ApiRequestError(200, "INVALID_RESPONSE", "Invalid validation");
+  }
+  return { ok, problems };
 }
 
 export async function deployPolicy(
-  _client: Api<"post">,
-  _source: string,
-  _key: string,
+  client: Api<"post">,
+  source: string,
+  key: string,
 ): Promise<string> {
-  throw new Error("not implemented");
+  if (key.trim() === "") throw new RangeError("Idempotency key is blank");
+  const answer = await client.post<unknown>(
+    "/policies/deploy",
+    { source },
+    { headers: { "Idempotency-Key": key } },
+  );
+  const version = isRecord(answer) ? answer["version"] : undefined;
+  if (typeof version !== "string" || !VERSION.test(version)) {
+    throw new ApiRequestError(200, "INVALID_RESPONSE", "Invalid deployment");
+  }
+  return version;
 }

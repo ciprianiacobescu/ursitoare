@@ -1,6 +1,7 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
 import type { Api } from "../admin/shared.ts";
+import { ApiRequestError } from "../api/client.ts";
 
 export interface GrantView {
   id: string;
@@ -127,22 +128,69 @@ export function grantActions(g: GrantView): { revoke: boolean; confirm: boolean 
   return { revoke: g.status !== "revoked", confirm: g.status === "needs_reconfirm" };
 }
 
-export async function loadToolRefs(_client: Api<"get">, _signal?: AbortSignal): Promise<string[]> {
-  throw new Error("not implemented");
+function invalidResponse(what: string): ApiRequestError {
+  return new ApiRequestError(200, "INVALID_RESPONSE", `Invalid ${what}`);
+}
+
+function checkGrantId(id: string): void {
+  if (!ID.test(id)) throw new RangeError("Invalid grant id");
+}
+
+function readGrantId(answer: unknown): string {
+  const id = isRecord(answer) ? answer["id"] : undefined;
+  if (!matches(id, ID, 69)) throw invalidResponse("grant");
+  return id;
+}
+
+const REF_PAGES = 10;
+
+export async function loadToolRefs(client: Api<"get">, signal?: AbortSignal): Promise<string[]> {
+  const refs: string[] = [];
+  let cursor: string | undefined;
+  for (let page = 0; page < REF_PAGES; page += 1) {
+    const query: Record<string, string | number> = { limit: 100 };
+    if (cursor !== undefined) query["cursor"] = cursor;
+    const answer =
+      signal === undefined
+        ? await client.get<unknown>("/blocks", { query })
+        : await client.get<unknown>("/blocks", { query, signal });
+    const items = isRecord(answer) ? answer["items"] : undefined;
+    const next = isRecord(answer) ? answer["next_cursor"] : undefined;
+    if (!Array.isArray(items) || (next !== null && typeof next !== "string")) {
+      throw invalidResponse("block list");
+    }
+    for (const item of items as unknown[]) {
+      if (!isRecord(item) || typeof item["ref"] !== "string" || typeof item["bound"] !== "boolean") {
+        throw invalidResponse("block list");
+      }
+      if (item["bound"]) refs.push(item["ref"]);
+    }
+    if (next === null) break;
+    cursor = next;
+  }
+  return refs;
 }
 
 export async function postGrant(
-  _client: Api<"post">,
-  _draft: GrantDraft,
-  _key: string,
+  client: Api<"post">,
+  draft: GrantDraft,
+  key: string,
 ): Promise<string> {
-  throw new Error("not implemented");
+  const checked = grantBody(draft);
+  if (!checked.ok) throw new RangeError(checked.message);
+  if (key.trim() === "") throw new RangeError("Idempotency key is blank");
+  const answer = await client.post<unknown>("/grants", checked.body, {
+    headers: { "Idempotency-Key": key },
+  });
+  return readGrantId(answer);
 }
 
-export async function revokeGrantById(_client: Api<"delete">, _id: string): Promise<void> {
-  throw new Error("not implemented");
+export async function revokeGrantById(client: Api<"delete">, id: string): Promise<void> {
+  checkGrantId(id);
+  readGrantId(await client.delete<unknown>(`/grants/${id}`));
 }
 
-export async function confirmGrantById(_client: Api<"post">, _id: string): Promise<void> {
-  throw new Error("not implemented");
+export async function confirmGrantById(client: Api<"post">, id: string): Promise<void> {
+  checkGrantId(id);
+  readGrantId(await client.post<unknown>(`/grants/${id}/confirm`, {}));
 }
