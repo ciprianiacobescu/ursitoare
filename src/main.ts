@@ -19,12 +19,15 @@ import {
   registerAdminRoutes,
   registerAuditRoutes,
   registerBlockRoutes,
+  createPrincipalLoader,
   registerCredentialRoutes,
+  registerDryRunRoutes,
   registerFlowRoutes,
   registerGrantRoutes,
   registerMeRoute,
   registerOpenApiRoute,
   registerPolicyRoutes,
+  registerRunDecisionRoutes,
   registerRunRoutes,
   registerTestRunRoutes,
   registerToolServerRoutes,
@@ -45,8 +48,12 @@ import {
   testRunInvokers,
 } from "./interpreter/index.ts";
 import type { InterpreterDeps } from "./interpreter/index.ts";
-import { checkEgress, createVaultWriter } from "./gateway/index.ts";
+import { createServiceResolver } from "./credentials/index.ts";
+import { checkEgress, createGateway, createVaultWriter } from "./gateway/index.ts";
 import { createPolicyRuntime } from "./grants/index.ts";
+import type { PolicyRuntime } from "./grants/index.ts";
+import { createInvokePath, dryRunInvokers } from "./runtimes/index.ts";
+import { createToolDirectory } from "./tools/index.ts";
 import type { LogDestination, Logger } from "./observability/index.ts";
 import { createLogger, noopTracer } from "./observability/index.ts";
 import { defaultSrcDir } from "./pdp/index.ts";
@@ -251,8 +258,9 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
   }
 
   let internal: FastifyInstance | undefined;
+  let runtime: PolicyRuntime | null;
   try {
-    const runtime = database
+    runtime = database
       ? await createPolicyRuntime({
           pool: database.appPool,
           srcDir: defaultSrcDir(),
@@ -343,12 +351,31 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
   ) {
     try {
       const store = createRunStore(database.appPool);
+      const loadVersion = registryVersionLoader(database.appPool);
+      const catalogueFor: InterpreterDeps["catalogueFor"] = (ctx) =>
+        loadRegistryCatalogue(database.appPool, ctx);
+      let invokerFor: InterpreterDeps["invokerFor"] = testRunInvokers(store);
+      if (config.egress !== undefined && runtime !== null) {
+        const path = createInvokePath({
+          pool: database.appPool,
+          policy: runtime,
+          gateway: createGateway(config.egress, { clock: systemClock, logger }),
+          tools: createToolDirectory(database.appPool),
+          services: createServiceResolver(database.appPool),
+          principals: createPrincipalLoader(database.appPool),
+          loadVersion,
+          catalogueFor,
+          clock: systemClock,
+          logger,
+        });
+        invokerFor = dryRunInvokers(path, store, invokerFor);
+      }
       const base: InterpreterDeps = {
         store,
         durable: null,
-        loadVersion: registryVersionLoader(database.appPool),
-        catalogueFor: (ctx) => loadRegistryCatalogue(database.appPool, ctx),
-        invokerFor: testRunInvokers(store),
+        loadVersion,
+        catalogueFor,
+        invokerFor,
         effects: createEffectIntents(database.appPool),
         clock: systemClock,
         ids: systemIds,
@@ -390,6 +417,17 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
       clock: systemClock,
       ids: systemIds,
       interpreter,
+    });
+    registerDryRunRoutes(server, {
+      pool: database?.appPool ?? null,
+      clock: systemClock,
+      ids: systemIds,
+      interpreter,
+      enabled: config.egress !== undefined,
+    });
+    registerRunDecisionRoutes(server, {
+      pool: database?.appPool ?? null,
+      engineKey: config.engineKey,
     });
   } catch (error) {
     await internal?.close().catch(() => undefined);

@@ -61,7 +61,7 @@ function stringDetail(details: Readonly<Record<string, string | string[]>>, key:
   return typeof value === "string" ? value : null;
 }
 
-function mapStartRunError(error: unknown): never {
+export function mapStartRunError(error: unknown): never {
   if (error instanceof InterpreterError) {
     switch (error.code) {
       case "INTERPRETER_VERSION_NOT_FOUND":

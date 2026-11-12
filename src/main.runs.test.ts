@@ -122,6 +122,21 @@ const RUN_ROUTES: readonly RunRouteRow[] = [
       "VALIDATION_FAILED",
     ],
   },
+  {
+    method: "GET",
+    url: "/api/v1/runs/:runId/decisions",
+    action: "read_run",
+    errors: [
+      "AUTHZ_UNAVAILABLE",
+      "CURSOR_INVALID",
+      "ENGINE_KEY_REQUIRED",
+      "FORBIDDEN",
+      "NOT_FOUND",
+      "RUNS_UNAVAILABLE",
+      "UNAUTHENTICATED",
+      "VALIDATION_FAILED",
+    ],
+  },
 ];
 
 const RUN_OPENAPI_PATHS: readonly string[] = [
@@ -130,6 +145,7 @@ const RUN_OPENAPI_PATHS: readonly string[] = [
   "/api/v1/runs/{runId}/steps",
   "/api/v1/runs/{runId}/payloads/{sha256}",
   "/api/v1/runs/{runId}/cancel",
+  "/api/v1/runs/{runId}/decisions",
 ];
 
 function endpointOf(source: EndpointLike): DatabaseEndpoint {

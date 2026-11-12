@@ -24,7 +24,7 @@ import {
   validateVersion,
 } from "../../../src/registry/index.ts";
 import { createEffectIntents, createRunStore } from "../../../src/runs/index.ts";
-import type { RunRecord, TenantContext, TenantPool } from "../../../src/runs/index.ts";
+import type { RunRecord, RunStore, TenantContext, TenantPool } from "../../../src/runs/index.ts";
 import { createInvokePath } from "../../../src/runtimes/index.ts";
 import type { InvokePath, InvokePathDeps } from "../../../src/runtimes/index.ts";
 import { createWorkerSandbox } from "../../../src/sandbox/index.ts";
@@ -43,6 +43,7 @@ import { FAKE_TOOLS_HOST, FAKE_TOOLS_ORIGIN, startFakeTools } from "../fake-tool
 import { seedFlowActors } from "../flow-actors.ts";
 import { captureLogger } from "../gateway-kit.ts";
 import { withTestDatabase } from "../pg.ts";
+import type { TestDatabase } from "../pg.ts";
 import { seedTwoTenants } from "../tenants.ts";
 import { fixtureSurface } from "../tool-surface.ts";
 import { loadInvokeRun } from "./index.ts";
@@ -105,6 +106,10 @@ export interface InvokeHarness {
   gateway: Gateway & { calls: unknown[] };
   runtime: PolicyRuntime;
   path: InvokePath;
+  store: RunStore;
+  loadVersion: InterpreterDeps["loadVersion"];
+  catalogueFor: InterpreterDeps["catalogueFor"];
+  db: TestDatabase;
   hashes: Readonly<Record<FlowKey, string>>;
   start(key: FlowKey, input: JsonValue, runId: string): Promise<RunRecord>;
   run(key: FlowKey, input: JsonValue, runId: string): Promise<RunRecord>;
@@ -226,6 +231,13 @@ export async function invokeHarness(wrap?: HarnessWrap): Promise<InvokeHarness> 
       clock,
     );
     const carol = users["carol"] as string;
+    const principalsById = new Map(PRINCIPALS);
+    for (const [subject, userId] of Object.entries(users)) {
+      const entity = PRINCIPALS.get(subject);
+      if (entity !== undefined) {
+        principalsById.set(userId, entity);
+      }
+    }
 
     const tools = await startFakeTools();
     closers.push(() => tools.close());
@@ -332,7 +344,7 @@ export async function invokeHarness(wrap?: HarnessWrap): Promise<InvokeHarness> 
         },
       },
       principals: async (c, userId) => {
-        const found = PRINCIPALS.get(userId);
+        const found = principalsById.get(userId);
         return found !== undefined && found.tenantId === c.tenantId ? found : null;
       },
       loadVersion: realLoadVersion,
@@ -393,6 +405,10 @@ export async function invokeHarness(wrap?: HarnessWrap): Promise<InvokeHarness> 
       gateway,
       runtime,
       path,
+      store,
+      loadVersion: realLoadVersion,
+      catalogueFor: (c) => loadRegistryCatalogue(pool, c),
+      db,
       hashes: hashes as Record<FlowKey, string>,
       start,
       run,

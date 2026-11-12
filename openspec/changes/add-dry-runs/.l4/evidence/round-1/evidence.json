@@ -1,0 +1,399 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/api/me.ts",
+      "src/api/route.ts:186-188",
+      "specs/flow-testing/spec.md",
+      "docs/decisions/0002",
+      "src/interpreter/index.ts",
+      "src/runtimes/index.ts",
+      "src/api/index.ts",
+      "src/main.ts",
+      ".l4/plans/m6.json",
+      "src/interpreter/flow-testing-policy.test.ts",
+      "src/main.mockruns.test.ts",
+      "src/api/run-views.test.ts",
+      "test/arch/egress-sites.test.ts",
+      "src/main.conventions.test.ts",
+      "src/interpreter/fakes.test.ts",
+      "src/interpreter/fakes.ts",
+      "src/runtimes/invoke/stub.test.ts",
+      "src/runtimes/invoke/dry-run-invokers.test.ts",
+      "src/runtimes/invoke/stub.ts",
+      "src/interpreter/dry-runs-policy.test.ts",
+      "src/api/dry-run-me.test.ts",
+      "src/interpreter/policy/dry-runs.cedar",
+      "src/api/dry-run-routes.test.ts",
+      "src/api/dry-run-refusals.test.ts",
+      "src/api/dry-run-routes.ts",
+      "src/api/test-run-routes.ts",
+      "src/api/run-decisions.test.ts",
+      "src/api/run-decisions-route.test.ts",
+      "src/api/run-decisions.ts",
+      "src/runtimes/invoke/dry-run.db.test.ts",
+      "test/support/invoke-runs/dry-runs.ts",
+      "test/support/invoke-runs/harness.ts",
+      "src/api/principal-loader.test.ts",
+      "src/api/principal-loader.ts",
+      "src/main.dryruns.test.ts",
+      "docs/api/openapi.json",
+      "src/api/run-views-description.test.ts",
+      "src/api/run-routes.ts",
+      "**/fakes.ts",
+      "**/stub.ts",
+      "**/mocks.ts",
+      "**/runs-read-*",
+      "**/[",
+      "**/index.ts",
+      "module .l4",
+      "module api",
+      "module docs",
+      "module interpreter",
+      "module main",
+      "module main.conventions.test",
+      "module main.dryruns.test",
+      "module main.mockruns.test",
+      "module runtimes",
+      "module specs",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dry-runs/.l4/ledger/r-20261111T1319Z-41cb.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dry-runs/.l4/ledger/r-20261111T1548Z-e289.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dry-runs/.l4/ledger/r-20261111T1815Z-a631.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dry-runs/.l4/ledger/r-20261111T2106Z-07ee.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dry-runs/.l4/ledger/r-20261111T2128Z-f396.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dry-runs/.l4/ledger/r-20261111T2258Z-4f7d.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dry-runs/.l4/ledger/r-20261112T0041Z-f045.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dry-runs/.l4/ledger/r-20261112T0042Z-cf7b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dry-runs/.l4/ledger/r-20261112T0304Z-c0f4.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dry-runs/.l4/ledger/r-20261112T0305Z-c40d.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dry-runs/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-dry-runs/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/dry-run-me.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/dry-run-refusals.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/dry-run-routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/dry-run-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/principal-loader.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/principal-loader.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/run-decisions-route.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/run-decisions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/run-decisions.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/run-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/run-views-description.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/test-run-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/dry-runs-policy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/fakes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/fakes.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/index.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/policy/dry-runs.cedar",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.dryruns.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.flows.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "imports no module of the repository"
+      },
+      {
+        "path": "src/main.runs.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "imports no module of the repository"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runtimes/index.ts",
+        "module": "runtimes",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runtimes/invoke/dry-run-invokers.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runtimes/invoke/dry-run.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runtimes/invoke/stub.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runtimes/invoke/stub.ts",
+        "module": "runtimes",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/invoke-runs/dry-runs.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/invoke-runs/harness.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/dry-run-routes.ts, src/api/index.ts, src/api/principal-loader.ts, src/api/run-decisions.ts, src/api/run-routes.ts and 8 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/dry-run-routes.ts",
+      "src/api/index.ts",
+      "src/api/principal-loader.ts",
+      "src/api/run-decisions.ts",
+      "src/api/run-routes.ts",
+      "src/api/test-run-routes.ts",
+      "src/interpreter/fakes.ts",
+      "src/interpreter/index.ts",
+      "src/main.ts",
+      "src/runtimes/index.ts",
+      "src/runtimes/invoke/stub.ts",
+      "test/support/invoke-runs/dry-runs.ts",
+      "test/support/invoke-runs/harness.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2421,
+      "passed": 2421,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 52,
+      "new_passed": 52,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
