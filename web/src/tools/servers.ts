@@ -308,12 +308,16 @@ export function approveControl(
   };
 }
 
-export function serverLink(_id: string): string {
-  throw new Error("not implemented");
+export function serverLink(id: string): string {
+  checkServerId(id);
+  return `/admin/tool-servers?server=${id}`;
 }
 
-export function serverIdFromSearch(_search: string): string | null {
-  throw new Error("not implemented");
+export function serverIdFromSearch(search: string): string | null {
+  for (const value of new URLSearchParams(search).getAll("server")) {
+    if (ID_PATTERN.test(value)) return value;
+  }
+  return null;
 }
 
 function checkServerId(id: string): void {
