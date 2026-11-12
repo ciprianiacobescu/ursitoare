@@ -2,11 +2,11 @@
 
 - Status: stopped
 - Repository: https://github.com/ciprianiacobescu/ursitoare
-- Target: main at af3a764aac3765bd7cd6016dedde8752b86fdc8f
+- Target: main at c976ee8eb4ef628fdf07bd86195d0a49363e66fd
 - Merge: auto
 - No promotion target is set. Promotion was not performed.
-- Written: 2026-11-12T02:58:54Z
-- Stopped: unit_halted (openspec:add-dry-runs): task 7.2: max_task_attempts (3) reached in green on deepseek-free (2), glm (2), claude-sonnet (3); last failure: the agent step reached its time limit (30m)
+- Written: 2026-11-12T17:17:36Z
+- Stopped: unit_halted (openspec:add-web-grants): task 1.1: max_task_attempts (3) reached in single on deepseek-free (2), glm (2), claude-sonnet (3); last failure: nothing changed: the guard put back every edit (e2e/test_m6_tool_pages.py)
 
 ## Units
 
@@ -74,21 +74,18 @@
 - Usage: $22.13, 11 run(s), 1 attempt(s)
 
 ### openspec:add-dry-runs
-- Result: not integrated
-- Pull request: <forge>/ciprianiacobescu/ursitoare/pull/122
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $6.94, 7 run(s), 1 attempt(s)
-- Delegate decisions:
-  - Q-001 (technical): accept by the delegate (claude-fable-5-1 via claude-code), $1.58
-  - Q-002 (technical): accept by the delegate (claude-fable-5-1 via claude-code), $1.00
+- Result: integrated at 3d0f715b4b8f43987d5a61735ff861739dee9bcb
+- Pull request: 122
+- Merge commit: 3d0f715b4b8f43987d5a61735ff861739dee9bcb
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $7.78, 9 run(s), 1 attempt(s)
 
 ### openspec:add-web-grants
 - Result: not integrated
-- Pull request: none
+- Pull request: <forge>/ciprianiacobescu/ursitoare/pull/124
 - Merge commit: none
 - Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Usage: $5.55, 5 run(s), 1 attempt(s)
 
 ### openspec:add-web-dry-runs
 - Result: not integrated
@@ -103,5 +100,5 @@
 
 ## Usage
 
-- Cost: $90.50
-- Runs that dispatched a unit: 54
+- Cost: $96.90
+- Runs that dispatched a unit: 61
