@@ -188,3 +188,5 @@
 {"at":"2026-11-12T02:58:54Z","attempt":1,"cost_usd":6.94208,"runs":7,"type":"plan.charged","unit":"openspec:add-dry-runs"}
 {"at":"2026-11-12T02:58:54Z","detail":"task 7.2: max_task_attempts (3) reached in green on deepseek-free (2), glm (2), claude-sonnet (3); last failure: the agent step reached its time limit (30m)","reason":"unit_halted","type":"plan.stopped","unit":"openspec:add-dry-runs"}
 {"at":"2026-11-12T03:04:26Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"Delegate: 7.2 halted twice because the implementer may run only pnpm run test (claude_code.py allowedTools), so node test/support/openapi-docs.ts is denied; retried with the exact allowed command (verified locally).","type":"plan.resumed"}
+{"at":"2026-11-12T03:06:00Z","attempt":1,"cost_usd":6.94208,"runs":8,"type":"plan.charged","unit":"openspec:add-dry-runs"}
+{"at":"2026-11-12T03:06:00Z","run":"r-20261112T0305Z-c40d","type":"unit.dispatched","unit":"openspec:add-dry-runs"}
