@@ -31,4 +31,4 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 8. The OpenAPI description
 
-- [ ] 8.1 Write `src/api/run-views-description.test.ts` first (scenario "The committed document holds both operations and the description"), then add the `description` to the `200` response schema of the steps route in `src/api/run-routes.ts` (`STEP_VIEW_SCHEMA` untouched, ruling U51-1) and run `node test/support/openapi-docs.ts`
+- [x] 8.1 Write `src/api/run-views-description.test.ts` first (scenario "The committed document holds both operations and the description"), then add the `description` to the `200` response schema of the steps route in `src/api/run-routes.ts` (`STEP_VIEW_SCHEMA` untouched, ruling U51-1) and run `node test/support/openapi-docs.ts`

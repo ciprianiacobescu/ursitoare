@@ -6780,6 +6780,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": false,
+                  "description": "Steps of the run. hooks.inputOriginalRef is the audit digest of the input before the pre-hooks changed it; the payload route does not serve it",
                   "properties": {
                     "items": {
                       "items": {
