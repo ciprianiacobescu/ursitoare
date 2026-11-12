@@ -191,3 +191,5 @@
 {"at":"2026-11-12T03:06:00Z","attempt":1,"cost_usd":6.94208,"runs":8,"type":"plan.charged","unit":"openspec:add-dry-runs"}
 {"at":"2026-11-12T03:06:00Z","run":"r-20261112T0305Z-c40d","type":"unit.dispatched","unit":"openspec:add-dry-runs"}
 {"at":"2026-11-12T05:39:05Z","detail":"the target main (6b961af4dc) is not in the unit head","reason":"stale","type":"unit.merge_refused","unit":"openspec:add-dry-runs"}
+{"at":"2026-11-12T05:40:25Z","attempt":1,"cost_usd":7.78458,"runs":9,"type":"plan.charged","unit":"openspec:add-dry-runs"}
+{"at":"2026-11-12T05:40:25Z","run":"r-20261112T0540Z-18c4","type":"unit.dispatched","unit":"openspec:add-dry-runs"}
