@@ -23,7 +23,7 @@ interface KeptServers {
 interface FlowRouteRow {
   method: DefinedRoute["method"];
   url: string;
-  action: "read_flow" | "edit_flow" | "test_flow";
+  action: "read_flow" | "edit_flow" | "test_flow" | "dry_run_flow";
   errors: readonly string[];
 }
 
@@ -97,6 +97,18 @@ const FLOW_ROUTES: readonly FlowRouteRow[] = [
       "VALIDATION_FAILED",
     ],
   },
+  {
+    method: "POST",
+    url: "/api/v1/flows/:flowId/versions/:hash/dry-run",
+    action: "dry_run_flow",
+    errors: [
+      "IDEMPOTENCY_IN_PROGRESS",
+      "IDEMPOTENCY_KEY_REUSED",
+      "OPERATION_REFUSED",
+      "RUNS_UNAVAILABLE",
+      "VALIDATION_FAILED",
+    ],
+  },
 ];
 
 const FLOW_OPENAPI_PATHS: readonly string[] = [
@@ -106,6 +118,7 @@ const FLOW_OPENAPI_PATHS: readonly string[] = [
   "/api/v1/flows/{flowId}/versions/{hash}",
   "/api/v1/flows/{flowId}/versions/{hash}/validate",
   "/api/v1/flows/{flowId}/versions/{hash}/test",
+  "/api/v1/flows/{flowId}/versions/{hash}/dry-run",
 ];
 
 function appConfig(): AppConfig {
