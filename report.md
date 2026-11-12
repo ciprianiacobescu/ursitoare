@@ -5,8 +5,8 @@
 - Target: main at af3a764aac3765bd7cd6016dedde8752b86fdc8f
 - Merge: auto
 - No promotion target is set. Promotion was not performed.
-- Written: 2026-11-12T00:34:27Z
-- Stopped: unit_halted (openspec:add-dry-runs): task 7.2: max_task_attempts (3) reached in green on glm (2), claude-sonnet (3); last failure: the agent step reached its time limit (30m)
+- Written: 2026-11-12T02:58:54Z
+- Stopped: unit_halted (openspec:add-dry-runs): task 7.2: max_task_attempts (3) reached in green on deepseek-free (2), glm (2), claude-sonnet (3); last failure: the agent step reached its time limit (30m)
 
 ## Units
 
@@ -78,7 +78,7 @@
 - Pull request: <forge>/ciprianiacobescu/ursitoare/pull/122
 - Merge commit: none
 - Post-merge check: not run
-- Usage: $6.47, 6 run(s), 1 attempt(s)
+- Usage: $6.94, 7 run(s), 1 attempt(s)
 - Delegate decisions:
   - Q-001 (technical): accept by the delegate (claude-fable-5-1 via claude-code), $1.58
   - Q-002 (technical): accept by the delegate (claude-fable-5-1 via claude-code), $1.00
@@ -103,5 +103,5 @@
 
 ## Usage
 
-- Cost: $90.03
-- Runs that dispatched a unit: 53
+- Cost: $90.50
+- Runs that dispatched a unit: 54
