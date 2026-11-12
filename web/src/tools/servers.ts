@@ -293,11 +293,19 @@ export function approveFailure(error: unknown): {
 }
 
 export function approveControl(
-  _s: ToolServerView | null,
-  _me: { userId: string; reviewProfile: "solo" | "team" } | null,
-  _busy: boolean,
+  s: ToolServerView | null,
+  me: { userId: string; reviewProfile: "solo" | "team" } | null,
+  busy: boolean,
 ): { disabled: boolean; selfApproval: boolean; message: string | null } {
-  throw new Error("not implemented");
+  if (s === null || me === null) {
+    return { disabled: true, selfApproval: false, message: null };
+  }
+  const view = approvalView(s, me);
+  return {
+    disabled: busy || !view.canApprove,
+    selfApproval: view.selfApproval,
+    message: view.message,
+  };
 }
 
 export function serverLink(_id: string): string {

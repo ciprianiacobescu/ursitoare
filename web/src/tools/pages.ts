@@ -32,10 +32,22 @@ export type RegionLoad<T> =
   | { phase: "ready"; value: T };
 
 export function regionState<T>(
-  _load: RegionLoad<T>,
-  _isEmpty?: (value: T) => boolean,
+  load: RegionLoad<T>,
+  isEmpty?: (value: T) => boolean,
 ): { view: "loading" | "error" | "empty" | "ready"; actionsDisabled: boolean } {
-  throw new Error("not implemented");
+  switch (load.phase) {
+    case "loading":
+      return { view: "loading", actionsDisabled: true };
+    case "error":
+      return { view: "error", actionsDisabled: true };
+    case "ready":
+      if (isEmpty !== undefined && isEmpty(load.value)) {
+        return { view: "empty", actionsDisabled: false };
+      }
+      return { view: "ready", actionsDisabled: false };
+    default:
+      throw new RangeError("Unknown region phase");
+  }
 }
 
 export type ActionPhase =
@@ -44,9 +56,22 @@ export type ActionPhase =
   | { phase: "done"; text: string }
   | { phase: "failed"; text: string };
 
-export function actionState(_a: ActionPhase): {
+export function actionState(a: ActionPhase): {
   disabled: boolean;
   status: { role: "status" | "alert"; text: string } | null;
 } {
-  throw new Error("not implemented");
+  switch (a.phase) {
+    case "idle":
+      return { disabled: false, status: null };
+    case "busy":
+      return { disabled: true, status: null };
+    case "done":
+      if (a.text === "") throw new RangeError("An action status needs a text");
+      return { disabled: false, status: { role: "status", text: a.text } };
+    case "failed":
+      if (a.text === "") throw new RangeError("An action status needs a text");
+      return { disabled: false, status: { role: "alert", text: a.text } };
+    default:
+      throw new RangeError("Unknown action phase");
+  }
 }

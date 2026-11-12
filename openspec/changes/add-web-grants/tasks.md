@@ -16,7 +16,7 @@ Paths without a directory are in `web/src/tools/`. Spec: `specs/web-tools/spec.m
 ## 4. Calls and page states
 
 - [x] 4.1 Write `calls.test.ts` (scenario "Calls of the three pages"; fakes record `[method, path, body, opts]`) first, then implement `loadToolServer` and `approveToolSurface` in `servers.ts`, `loadToolRefs`, `postGrant`, `revokeGrantById` and `confirmGrantById` (with the module-internal grant-record check) in `grants.ts`, and `loadPolicy`, `validatePolicy` and `deployPolicy` in `policies.ts`
-- [ ] 4.2 Write `states.test.ts` (scenario "Region, action and approve-control states"; each row of test-plan.md § Page states is an `assert.deepEqual`, the `RangeError` rows `assert.throws(…, RangeError)`) first, then implement `regionState` and `actionState` in `pages.ts` and `approveControl` in `servers.ts`
+- [x] 4.2 Write `states.test.ts` (scenario "Region, action and approve-control states"; each row of test-plan.md § Page states is an `assert.deepEqual`, the `RangeError` rows `assert.throws(…, RangeError)`) first, then implement `regionState` and `actionState` in `pages.ts` and `approveControl` in `servers.ts`
 
 ## 5. Pages and features
 
