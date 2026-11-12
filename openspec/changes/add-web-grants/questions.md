@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Hold H-e57e62e0: UI criterion C-464ddcf9 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-cb78452d: UI criterion C-4f5443ee has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-966b3c99: UI criterion C-228ef9c6 has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-43d41b0f: UI criterion C-35974302 has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-43d41b0f: UI criterion C-35974302 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-ec30fde7: UI criterion C-4c2144fe has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-95489d0f: UI criterion C-78ea404d has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-d38f4f7c: UI criterion C-985ca634 has no end-to-end test; see the generated UI tests table |
@@ -267,7 +267,8 @@ accept Criterion C-228ef9c6 is about parseGrant, grantRowText and grantActions, 
 
 ## Q-009: Hold H-43d41b0f: UI criterion C-35974302 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -286,6 +287,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-35974302 is about grantBody, a pure function over drafts. grants.test.ts traces it with tests named by its id that cover every row of the test-plan grantBody table: the role, user and node bodies, the ignored flow under any step, the boundary tool acme.lookup_vendor@999999999 accepted and @1000000000 and @01 refused, and each refused field with its text. The generated browser test failed on the rows that select the tool acme.lookup_vendor@999999999, a value the page cannot offer because the specification says the select Tool offers the bound refs only, so that failure reflects the test's choice of input and not a defect of the page. The page's use of grantBody is covered by the browser test of test_m6_tool_pages.py, which posts the body built from a draft and shows a refused field. No end-to-end test is needed for this criterion.
 ---
 
 ## Q-010: Hold H-ec30fde7: UI criterion C-4c2144fe has no end-to-end test; see the generated UI tests table
