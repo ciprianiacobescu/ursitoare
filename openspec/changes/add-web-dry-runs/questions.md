@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Hold H-c3fca69f: UI criterion C-0ba641d3 has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-1eba1f05: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-776d2026: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-4a3e3276: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-4a3e3276: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-bd785718: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-9dca9db5: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-1406e643: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table |
@@ -335,7 +335,8 @@ accept The hold may be waived. The criterion's scenario drives startDryRun with 
 
 ## Q-007: Hold H-4a3e3276: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -354,6 +355,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The criterion's scenario feeds parseDecisions one page with extra members, an empty page and eighteen malformed values, and compares the returned arrays and nulls, and gives permitText one permit; these are function values that no page exposes. The Node tests of the criterion assert every row: the kept members with decidedAt, policySetVersion and bodyDigest dropped, the empty page, each of M1 to M18 giving null including the three control characters and the bracketed host, and the permit text. The parser checks each pattern of the requirement and refuses C0 and C1 control characters by char code, and the page rendering of parsed decisions is proved in a browser by the repository's journeys.
 ---
 
 ## Q-008: Hold H-bd785718: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table
