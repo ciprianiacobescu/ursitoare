@@ -36,9 +36,11 @@ export class CredentialsError extends Error {
   readonly code: CredentialsErrorCode;
   readonly details: Readonly<Record<string, string>>;
 
-  constructor(_code: CredentialsErrorCode, message: string, _details?: Record<string, string>) {
+  constructor(code: CredentialsErrorCode, message: string, details: Record<string, string> = {}) {
     super(message);
-    throw new Error("not implemented");
+    this.name = "CredentialsError";
+    this.code = code;
+    this.details = details;
   }
 }
 

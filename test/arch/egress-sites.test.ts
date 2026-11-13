@@ -51,5 +51,14 @@ test("C-76ead8ea the engine's egress sites are exactly the inventory", () => {
   ];
 
   assert.deepEqual(answer(() => checkEgressSites(snapshotOf(RULE_FIXTURES), ALLOWED)), expected);
-  assert.deepEqual(answer(() => checkEgressSites(readSnapshot(), ["src/main.ts"])), []);
+  assert.deepEqual(
+    answer(() =>
+      checkEgressSites(readSnapshot(), [
+        "src/credentials/vault-call.ts",
+        "src/main.ts",
+        "src/runtimes/invoke/request.ts",
+      ]),
+    ),
+    [],
+  );
 });

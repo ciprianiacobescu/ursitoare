@@ -12,6 +12,7 @@ import { attemptStepName } from "./hooks/names.ts";
 import { createHookPipeline } from "./hooks/pipeline.ts";
 import type { FusedStored, HookRetry } from "./hooks/pipeline.ts";
 import type { HookTraceEntry } from "./hooks/types.ts";
+import type { Approval } from "./hooks/approvals.ts";
 import type { RunError, RunRecord, StepWrite, TenantContext } from "../runs/index.ts";
 import { isDurableCancellation } from "../durable/index.ts";
 import { resolveValue } from "./refs.ts";
@@ -39,7 +40,16 @@ function runErrorOf(error: InterpreterError, nodeId: string): RunError {
   return runError;
 }
 
+function deniedDecisionId(error: RunError | null): string | null {
+  const details = error?.details;
+  if (details === undefined || details === null) return null;
+  if (Object.hasOwn(details, "hook")) return null;
+  const id = details["decisionId"];
+  return typeof id === "string" ? id : null;
+}
+
 export interface VisitRequest {
+  readonly approvals?: readonly Approval[];
   readonly run: RunRecord;
   readonly nodeId: string;
   readonly node: FlowNode;
@@ -146,7 +156,10 @@ async function visitAttempt(
     idemKey: null,
     principal: run.principal,
     now,
+    ...(invoker.authorize === undefined ? {} : { approvals: request.approvals ?? [] }),
   };
+
+  let decidedId: string | null = null;
 
   const entries: HookTraceEntry[] = [];
   const hookDeps: InterpreterDeps = {
@@ -224,7 +237,7 @@ async function visitAttempt(
       outcome,
       error,
       taint: hookState?.taint ?? rowTaint,
-      policyDecisionId: null,
+      policyDecisionId: decidedId ?? deniedDecisionId(error),
       idemKey,
       startedAt: now,
       endedAt: deps.clock.now(),
@@ -315,6 +328,10 @@ async function visitAttempt(
     block: (ref) => blocks[ref],
     ...(deps.sandbox === undefined ? {} : { sandbox: deps.sandbox }),
     ...(pipeline === null ? {} : { hooks: pipeline.hooks }),
+    inputTaint: () => pipeline?.state.taint ?? rowTaint,
+    decided: (decisionId) => {
+      decidedId = decisionId;
+    },
   };
 
   await pipeline?.runOwnPre();

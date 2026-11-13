@@ -214,7 +214,13 @@ export function registerRunRoutes(server: FastifyInstance, deps: RunApiDeps): vo
     schema: {
       params: RUN_PARAMS,
       querystring: PAGE_QUERY,
-      response: { 200: pageSchema(STEP_VIEW_SCHEMA) },
+      response: {
+        200: {
+          ...(pageSchema(STEP_VIEW_SCHEMA) as Record<string, unknown>),
+          description:
+            "Steps of the run. hooks.inputOriginalRef is the audit digest of the input before the pre-hooks changed it; the payload route does not serve it",
+        },
+      },
     },
     errors: [
       "CURSOR_INVALID",

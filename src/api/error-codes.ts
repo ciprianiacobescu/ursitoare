@@ -35,6 +35,10 @@ export const ERROR_CODES: Readonly<Record<string, { readonly status: number; rea
     RUNS_UNAVAILABLE: { status: 503, message: "Runs are unavailable" },
     TEST_MOCK_MISSING: { status: 422, message: "A block node has no mock" },
     TEST_MOCK_INVALID: { status: 422, message: "A mock does not fit its node" },
+    EGRESS_UNAVAILABLE: {
+      status: 503,
+      message: "The egress broker or vault is unavailable",
+    },
   } as const;
 
 export function isRegisteredCode(code: string): boolean {

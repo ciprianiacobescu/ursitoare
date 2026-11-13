@@ -6,10 +6,10 @@ import {
 } from "../../authoring/index.ts";
 import type { HookPlacement, NodeMeta } from "../../authoring/index.ts";
 import { isDurableCancellation } from "../../durable/index.ts";
-import { InterpreterError } from "../errors.ts";
+import { InterpreterError, toInterpreterError } from "../errors.ts";
 import { resolveValue } from "../refs.ts";
 import { checkSchema } from "../schema.ts";
-import type { RunScope, StepContext, ToolCall } from "../types.ts";
+import type { CallAuthorization, RunScope, StepContext, ToolCall } from "../types.ts";
 import { attemptStepName, hookStepName } from "./names.ts";
 import type { HookRun, HookRunner } from "./types.ts";
 
@@ -89,6 +89,9 @@ export const blockHookRunner: HookRunner = {
         return await body();
       } catch (error) {
         if (isDurableCancellation(error)) throw error;
+        if (error instanceof InterpreterError && error.code === "INTERPRETER_TOOL_DENIED") {
+          throw error;
+        }
         const fault = error instanceof HookFault ? error : new HookFault("tool_failed");
         if (swallow && !FATAL.includes(fault.reason)) return failed(fault);
         throw toError(fault.reason);
@@ -123,14 +126,34 @@ export const blockHookRunner: HookRunner = {
       return call;
     };
 
-    const contextFor = (idem: string | null): StepContext => ({
+    const contextFor = (idem: string | null, authorization?: CallAuthorization): StepContext => ({
       ...step,
       attempt: hctx.attempt,
       effect: def?.effect ?? null,
       unsafeToRetry: def?.unsafe_to_retry === true,
       idemKey: idem,
       hook: { phase, label: placement.label },
+      ...(authorization === undefined ? {} : { authorization }),
     });
+
+    const authorizeCall = async (call: ToolCall): Promise<CallAuthorization | undefined> => {
+      const authorize = services.invoker.authorize;
+      if (authorize === undefined) return undefined;
+      const taint = services.argsTaint?.(hook.with) ?? ["untrusted"];
+      try {
+        return await authorize.call(services.invoker, call, {
+          ...step,
+          attempt: hctx.attempt,
+          hook: { phase, label: placement.label },
+          taint,
+        });
+      } catch (error) {
+        if (isDurableCancellation(error)) throw error;
+        const copied = toInterpreterError(error);
+        if (copied !== null && copied.code === "INTERPRETER_TOOL_DENIED") throw copied;
+        throw new HookFault("tool_failed");
+      }
+    };
 
     const checkOutput = (output: JsonValue, idem: string | null): void => {
       if (def === undefined || !checkSchema(def.output, output).ok) {
@@ -141,9 +164,13 @@ export const blockHookRunner: HookRunner = {
     const failedRun = (fault: HookFault): JsonValue =>
       entryOf("failed", fault.idemKey, fault.reason) as unknown as JsonValue;
 
-    const invokeTool = async (call: ToolCall, idem: string | null): Promise<JsonValue> => {
+    const invokeTool = async (
+      call: ToolCall,
+      idem: string | null,
+      authorization?: CallAuthorization,
+    ): Promise<JsonValue> => {
       try {
-        return (await services.invoker.invoke(call, contextFor(idem))).output;
+        return (await services.invoker.invoke(call, contextFor(idem, authorization))).output;
       } catch (error) {
         if (isDurableCancellation(error)) throw error;
         throw new HookFault("tool_failed", idem);
@@ -153,7 +180,9 @@ export const blockHookRunner: HookRunner = {
     if (def === undefined || def.effect === "read") {
       const stored = await services.ops.runStep<JsonValue>(site.stepName, () =>
         guard(async () => {
-          const output = await invokeTool(prepare(), null);
+          const call = prepare();
+          const authorization = await authorizeCall(call);
+          const output = await invokeTool(call, null, authorization);
           checkOutput(output, null);
           return entryOf("completed", null, null) as unknown as JsonValue;
         }, failedRun),
@@ -166,6 +195,7 @@ export const blockHookRunner: HookRunner = {
         async () => {
           if (hctx.attempt > 1 && def.effect === "pay") throw new HookFault("effect_retry");
           const call = prepare();
+          const authorization = await authorizeCall(call);
           let decision;
           try {
             decision = await services.effects.before(call, contextFor(null));
@@ -179,7 +209,7 @@ export const blockHookRunner: HookRunner = {
           if (decision.action === "reuse") {
             return { ok: true, output: decision.result.output, idemKey: decision.idemKey };
           }
-          const output = await invokeTool(call, decision.idemKey);
+          const output = await invokeTool(call, decision.idemKey, authorization);
           return { ok: true, output, idemKey: decision.idemKey };
         },
         (fault) => ({ ok: false, idemKey: fault.idemKey, reason: fault.reason }),

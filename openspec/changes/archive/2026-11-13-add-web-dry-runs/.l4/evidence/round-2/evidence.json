@@ -1,0 +1,262 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src",
+      "web/src/runs",
+      "e2e/test_m4_runs.py:134-135",
+      "src/pdp/permit.ts",
+      "src/pdp/log.ts",
+      "src/authoring/validate/schema.ts:85,92",
+      "src/pdp/values.ts",
+      "src/tenancy/context.ts",
+      "src/runs/store/validate.ts",
+      "src/pdp/load.ts:7,147",
+      "src/api/decision.ts",
+      "e2e/test_m4_runs.py",
+      "test/arch/{web-routes,imports,hygiene,modules,sources}.test.ts",
+      "docs/decisions/0002",
+      "specs/web-runs/spec.md",
+      "node:assert/strict",
+      "web/src/runs/dry-run.test.ts",
+      "web/src/runs/dry-run.ts",
+      "web/src/runs/dry-run-start.test.ts",
+      "web/src/runs/decisions.test.ts",
+      "web/src/runs/decisions.ts",
+      "web/src/runs/decisions-load.test.ts",
+      "web/src/runs/timeline-taint.test.ts",
+      "web/src/runs/timeline.ts",
+      "web/src/runs/dry-run-sources.test.ts",
+      "web/src/runs/DryRunPanel.tsx",
+      "web/src/features/80-runs.tsx",
+      "e2e/test_m6_run_decisions.py",
+      "e2e",
+      "web/src/runs/RunPage.tsx",
+      "test/journeys/m6-grants.test.ts",
+      "e2e/test_m6_grants.py",
+      "**/decisions.ts",
+      "**/DryRunPanel.tsx",
+      "**/timeline.ts",
+      "**/RunPage.tsx",
+      "**/runs-*",
+      "body/fakes/<key>[/<index>]",
+      "**/^[a-z][a-z0-9_]*$",
+      "<tenant>/<flow>/<node>[:<phase>:<label>]",
+      "**/^[A-Za-z0-9_-]{1,64}$",
+      "**/^[a-z][a-z0-9]*",
+      "**/^[a-z][a-z0-9_]{0,63}$",
+      "**/^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$",
+      "**/platform.ts",
+      "**/acme.*",
+      "**/[]",
+      "**/types.ts",
+      "**/index.ts",
+      "**/[",
+      "**/timeline.test.ts",
+      "**/pages.test.ts",
+      "module <tenant>",
+      "module api",
+      "module authoring",
+      "module body",
+      "module docs",
+      "module e2e",
+      "module node:assert",
+      "module pdp",
+      "module runs",
+      "module specs",
+      "module tenancy",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m6_grants.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "e2e/test_m6_run_decisions.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-dry-runs/.l4/ledger/r-20261112T1958Z-2cd3.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-dry-runs/.l4/ledger/r-20261112T2235Z-b476.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-dry-runs/.l4/ledger/r-20261113T0049Z-90f5.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-dry-runs/.l4/ledger/r-20261113T0322Z-b4b3.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-dry-runs/.l4/ledger/r-20261113T0414Z-58b6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-dry-runs/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-dry-runs/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/journeys/m6-grants.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/features/80-runs.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/DryRunPanel.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/RunPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/decisions-load.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/decisions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/decisions.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/dry-run-sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/dry-run-start.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/dry-run.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/dry-run.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/timeline-taint.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/timeline.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/features/80-runs.tsx, web/src/runs/DryRunPanel.tsx, web/src/runs/RunPage.tsx, web/src/runs/decisions.ts, web/src/runs/dry-run.ts and 1 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/features/80-runs.tsx",
+      "web/src/runs/DryRunPanel.tsx",
+      "web/src/runs/RunPage.tsx",
+      "web/src/runs/decisions.ts",
+      "web/src/runs/dry-run.ts",
+      "web/src/runs/timeline.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2529,
+      "passed": 2529,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 30,
+      "new_passed": 30,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

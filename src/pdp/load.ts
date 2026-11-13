@@ -25,10 +25,11 @@ function fail(
   stage: string,
   ids: readonly string[],
   extra: Record<string, string | readonly string[]> = {},
+  diagnostic?: string,
 ): never {
   const shown = ids.slice(0, MAX_MESSAGE_IDS).join(", ");
   const message = `${code}: ${stage}${shown === "" ? "" : ` ${shown}`}`;
-  throw new PdpError(code, message, { stage, ids, ...extra });
+  throw new PdpError(code, message, { stage, ids, ...extra }, diagnostic);
 }
 
 function optionsInvalid(reason: string): never {
@@ -109,16 +110,20 @@ function loadSchema(schema: string): { readonly actions: readonly string[] } {
 function parseSources(sources: readonly PolicySource[]): SourceParts[] {
   const parsed: SourceParts[] = [];
   const failed: string[] = [];
+  let diagnostic: string | undefined;
   for (const source of sources) {
     const parts = cedar.policySetTextToParts(source.text);
     if (parts.type !== "success") {
+      if (diagnostic === undefined) {
+        diagnostic = parts.errors[0]?.message;
+      }
       failed.push(source.id);
       continue;
     }
     parsed.push({ source, policies: parts.policies, templates: parts.policy_templates });
   }
   if (failed.length > 0) {
-    fail("PDP_POLICY_INVALID", "parse", [...new Set(failed)].sort());
+    fail("PDP_POLICY_INVALID", "parse", [...new Set(failed)].sort(), {}, diagnostic);
   }
   const templated = parsed
     .filter((entry) => entry.templates.length > 0)
@@ -169,7 +174,7 @@ function strictValidate(schema: string, policyMap: Record<string, string>): void
   });
   const allIds = Object.keys(policyMap).sort();
   if (validation.type === "failure") {
-    fail("PDP_POLICY_INVALID", "validate", allIds);
+    fail("PDP_POLICY_INVALID", "validate", allIds, {}, validation.errors[0]?.message);
   }
   if (
     validation.validationErrors.length > 0 ||
@@ -183,7 +188,11 @@ function strictValidate(schema: string, policyMap: Record<string, string>): void
     for (const entry of validation.validationWarnings) {
       ids.add(entry.policyId);
     }
-    fail("PDP_POLICY_INVALID", "validate", ids.size > 0 ? [...ids].sort() : allIds);
+    const diagnostic =
+      validation.validationErrors[0]?.error.message ??
+      validation.validationWarnings[0]?.error.message ??
+      validation.otherWarnings[0]?.message;
+    fail("PDP_POLICY_INVALID", "validate", ids.size > 0 ? [...ids].sort() : allIds, {}, diagnostic);
   }
 }
 

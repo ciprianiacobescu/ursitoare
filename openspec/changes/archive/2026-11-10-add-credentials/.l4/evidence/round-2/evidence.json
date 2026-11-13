@@ -1,0 +1,417 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/credentials",
+      "src",
+      "src/gateway/index.ts",
+      "src/main.ts",
+      "src/api/flow-routes.ts:85-88",
+      "src/api/errors.ts:56-72",
+      "src/observability/logger.ts",
+      "src/api/errors.ts",
+      "@grpc/grpc-js",
+      "docs/decisions/0002",
+      "src/credentials/index.ts",
+      "src/api/index.ts",
+      "parts/52-tool-servers.ts",
+      "src/credentials/schema.test.ts",
+      "src/db/migrations/0480_credentials.sql",
+      "src/gateway/vault-codec.test.ts",
+      "src/gateway/vault.ts",
+      "src/gateway/vault.test.ts",
+      "src/credentials/provision.test.ts",
+      "src/credentials/echo.test.ts",
+      "src/credentials/egress-site.test.ts",
+      "test/arch/egress-sites.test.ts",
+      "src/credentials/provision-failures.test.ts",
+      "src/credentials/rotate.test.ts",
+      "src/credentials/resolver.test.ts",
+      "src/api/credential-codes.test.ts",
+      "src/api/error-codes.test.ts",
+      "src/api/error-codes.ts",
+      "src/api/credential-routes.test.ts",
+      "src/registry/policy.test.ts",
+      "src/api/credential-secrets.test.ts",
+      "src/api/credential-deps.test.ts",
+      "src/credentials/policy/credentials.cedar",
+      "src/api/credential-routes.ts",
+      "src/main.credentials.test.ts",
+      "docs/api/openapi.json",
+      "test/support/e2e-stack/tool-servers-part.test.ts",
+      "test/support/e2e-stack/tool-servers-part.ts",
+      "test/support/e2e-stack/parts/52-tool-servers.ts",
+      "**/types.ts",
+      "**/provision.ts",
+      "**/rotate.ts",
+      "**/store.ts",
+      "**/resolver.ts",
+      "**/validate.ts",
+      "**/^[A-Za-z0-9-]{1,64}$",
+      "^https?://[^/?#@[:space:]]+$",
+      "**/^[a-z][a-z0-9_]{0,31}$",
+      "**/server.ts",
+      "**/config.egress?.vault",
+      "**/AuditEventInput[\"actor\"]",
+      "module @grpc",
+      "module api",
+      "module credentials",
+      "module db",
+      "module docs",
+      "module gateway",
+      "module main",
+      "module main.credentials.test",
+      "module observability",
+      "module parts",
+      "module registry",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-credentials/.l4/ledger/r-20261109T2147Z-0cd4.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-credentials/.l4/ledger/r-20261109T2209Z-2dc7.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-credentials/.l4/ledger/r-20261110T0049Z-18e5.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-credentials/.l4/ledger/r-20261110T0141Z-96fe.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-credentials/.l4/ledger/r-20261110T0359Z-e72e.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-credentials/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-credentials/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/credential-codes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/credential-deps.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/credential-routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/credential-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/credential-secrets.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/error-codes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/error-codes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/echo.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/credentials/egress-site.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/credentials/index.ts",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/policy/credentials.cedar",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/provision-failures.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/credentials/provision.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/credentials/provision.ts",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/resolver.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/credentials/resolver.ts",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/rotate.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/credentials/rotate.ts",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/credentials/store.ts",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/types.ts",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/validate.ts",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/vault-call.ts",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0480_credentials.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/gateway/index.ts",
+        "module": "gateway",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/gateway/vault-codec.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/gateway/vault.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/gateway/vault.ts",
+        "module": "gateway",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.credentials.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/arch/egress-sites.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/parts/52-tool-servers.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/tool-servers-part.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/tool-servers-part.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/credential-routes.ts, src/api/error-codes.ts, src/api/index.ts, src/credentials/index.ts, src/credentials/provision.ts and 11 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/credential-routes.ts",
+      "src/api/error-codes.ts",
+      "src/api/index.ts",
+      "src/credentials/index.ts",
+      "src/credentials/provision.ts",
+      "src/credentials/resolver.ts",
+      "src/credentials/rotate.ts",
+      "src/credentials/store.ts",
+      "src/credentials/types.ts",
+      "src/credentials/validate.ts",
+      "src/credentials/vault-call.ts",
+      "src/gateway/index.ts",
+      "src/gateway/vault.ts",
+      "src/main.ts",
+      "test/support/e2e-stack/parts/52-tool-servers.ts",
+      "test/support/e2e-stack/tool-servers-part.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2248,
+      "passed": 2248,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 46,
+      "new_passed": 46,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

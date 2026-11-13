@@ -64,6 +64,9 @@ export function stepDetailRows(step: StepView, runState: RunState): DetailRow[] 
       href: null,
     })),
   ];
+  if (!rows.some((row) => row.term === "Taint")) {
+    rows.push({ term: "Taint", value: step.taint.length > 0 ? step.taint.join(", ") : "none", href: null });
+  }
   if (step.error !== null) {
     rows.push({
       term: "Error",

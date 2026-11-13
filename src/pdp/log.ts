@@ -1,4 +1,4 @@
-import { TENANT_ID_PATTERN } from "../tenancy/index.ts";
+import { withTenantTx, TENANT_ID_PATTERN } from "../tenancy/index.ts";
 import type { TenantContext, TenantPool, TenantTx } from "../tenancy/index.ts";
 import { requestDigest, sha256Hex } from "./digest.ts";
 import { PdpError } from "./errors.ts";
@@ -142,11 +142,11 @@ export async function recordDecision(
 }
 
 export async function recordDecisionOwnTx(
-  _pool: TenantPool,
-  _ctx: TenantContext,
-  _decision: Decision,
-  _req: PolicyRequest,
-  _extra?: { runId?: string; nodeId?: string },
+  pool: TenantPool,
+  ctx: TenantContext,
+  decision: Decision,
+  req: PolicyRequest,
+  extra?: { runId?: string; nodeId?: string },
 ): Promise<boolean> {
-  throw new Error("not implemented");
+  return withTenantTx(pool, ctx, (tx) => recordDecision(tx, ctx, decision, req, extra));
 }

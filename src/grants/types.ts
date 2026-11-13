@@ -47,9 +47,11 @@ export class GrantsError extends Error {
   readonly code: GrantsErrorCode;
   readonly details: Readonly<Record<string, string>>;
 
-  constructor(_code: GrantsErrorCode, _details?: Readonly<Record<string, string>>) {
-    super();
-    throw new Error("not implemented");
+  constructor(code: GrantsErrorCode, details?: Readonly<Record<string, string>>) {
+    super(code);
+    this.name = "GrantsError";
+    this.code = code;
+    this.details = Object.freeze({ ...details });
   }
 }
 
