@@ -89,3 +89,10 @@ The fragment `src/tools/policy/tools.cedar` SHALL hold exactly the permits `tool
 #### Scenario: The committed document holds the five operations with their actions
 - **WHEN** `docs/api/openapi.json` is read
 - **THEN** its `paths` hold the four paths and five operation ids of test-plan-routes.md § OpenAPI rows; every `x-ursitoare-action` is `register_tool_server` except `approve_tool_surface` on the approve operation, whose `x-ursitoare-errors` include `OPERATION_REFUSED`, `FORBIDDEN` and `NOT_FOUND`; the body schema of `post_api_v1_tool_servers` has `additionalProperties` false, `required` `id`, `adapter`, `origin`, `surface` and `local` of type `boolean`; `src/main.conventions.test.ts::C-d150bfa4 the committed OpenAPI document equals the text the real engine serves` stays green
+
+### Requirement: A new surface submitted in the same millisecond is shadowed by an older one — feedback FB-001
+The behaviour pinned by the scenarios below SHALL hold.
+
+#### Scenario: A new surface submitted in the same millisecond is shadowed by an older one
+- **WHEN** a server's newest stored surface has submitted_at T and a new surface whose digest sorts below that surface's digest is submitted with the clock still at T
+- **THEN** the new surface is the newest surface: the record's pendingDigest is the new digest, approving the new digest succeeds, and for a server that was approved the record shows state drifted with pendingDigest the new digest
