@@ -1,12 +1,12 @@
 # Delivery plan m6
 
-- Status: stopped
+- Status: completed
 - Repository: https://github.com/ciprianiacobescu/ursitoare
-- Target: main at c976ee8eb4ef628fdf07bd86195d0a49363e66fd
+- Target: main at 4cd403b500107cdca546f81045970f45a0724ab2
 - Merge: auto
 - No promotion target is set. Promotion was not performed.
-- Written: 2026-11-12T17:17:36Z
-- Stopped: unit_halted (openspec:add-web-grants): task 1.1: max_task_attempts (3) reached in single on deepseek-free (2), glm (2), claude-sonnet (3); last failure: nothing changed: the guard put back every edit (e2e/test_m6_tool_pages.py)
+- Written: 2026-11-13T06:00:56Z
+- Completed at: 4cd403b500107cdca546f81045970f45a0724ab2
 
 ## Units
 
@@ -81,24 +81,24 @@
 - Usage: $7.78, 9 run(s), 1 attempt(s)
 
 ### openspec:add-web-grants
-- Result: not integrated
-- Pull request: <forge>/ciprianiacobescu/ursitoare/pull/124
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $5.55, 5 run(s), 1 attempt(s)
+- Result: integrated at 62e0cea5c334f2cba7248e6e9a11a6aa5933ac5d
+- Pull request: 124
+- Merge commit: 62e0cea5c334f2cba7248e6e9a11a6aa5933ac5d
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $16.55, 8 run(s), 1 attempt(s)
 
 ### openspec:add-web-dry-runs
-- Result: not integrated
-- Pull request: none
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Result: integrated at 2ed953e7e91441a19baac986c30b0ad9b0c76b3c
+- Pull request: 126
+- Merge commit: 2ed953e7e91441a19baac986c30b0ad9b0c76b3c
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $20.94, 8 run(s), 1 attempt(s)
 
 ## Batches
 
-- m6-grants (profile none): not checked
+- m6-grants (profile none): accepted at 4cd403b500107cdca546f81045970f45a0724ab2
 
 ## Usage
 
-- Cost: $96.90
-- Runs that dispatched a unit: 61
+- Cost: $128.84
+- Runs that dispatched a unit: 72

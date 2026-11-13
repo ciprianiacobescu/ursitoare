@@ -252,3 +252,4 @@
 {"at":"2026-11-13T05:58:01Z","attempt":1,"cost_usd":20.939397,"runs":8,"type":"plan.charged","unit":"openspec:add-web-dry-runs"}
 {"at":"2026-11-13T05:59:34Z","branch":"l4/archive/openspec/add-web-dry-runs","head":"4cd403b500107cdca546f81045970f45a0724ab2","type":"unit.branch_deleted","unit":"openspec:add-web-dry-runs"}
 {"at":"2026-11-13T05:59:35Z","batch":"m6-grants","profile":"none","revision":"4cd403b500107cdca546f81045970f45a0724ab2","type":"batch.accepted"}
+{"at":"2026-11-13T06:00:56Z","revision":"4cd403b500107cdca546f81045970f45a0724ab2","type":"plan.completed"}
