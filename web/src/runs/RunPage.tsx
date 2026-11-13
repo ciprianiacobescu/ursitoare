@@ -6,6 +6,8 @@ import { browserSession } from "../auth/browser-session.ts";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { registerCodeRenderer } from "./code-renderer.ts";
+import { decisionsView, decisionsWanted, loadDecisions } from "./decisions.ts";
+import type { DecisionLoad } from "./decisions.ts";
 import { runPageView } from "./failures.ts";
 import { hookRows, hookTraceNote } from "./hook-rows.ts";
 import { runTitle } from "./pages.ts";
@@ -50,6 +52,8 @@ export function RunPage(): ReactNode {
   const [attempt, setAttempt] = useState(0);
   const [selectedSeq, setSelectedSeq] = useState<number | null>(null);
   const [loads, setLoads] = useState<Map<string, PayloadLoad>>(() => new Map());
+  const [decisionLoad, setDecisionLoad] = useState<DecisionLoad | undefined>(undefined);
+  const [decisionTry, setDecisionTry] = useState(0);
 
   useEffect(() => {
     const previous = document.title;
@@ -64,6 +68,8 @@ export function RunPage(): ReactNode {
     setError(undefined);
     setSelectedSeq(null);
     setLoads(new Map());
+    setDecisionLoad(undefined);
+    setDecisionTry(0);
   }, [runId]);
 
   useEffect(() => {
@@ -88,6 +94,26 @@ export function RunPage(): ReactNode {
   }, [runId, attempt]);
 
   const view = runPageView(snapshot, error);
+
+  const wanted = decisionsWanted(snapshot?.run ?? null);
+  useEffect(() => {
+    if (!wanted) return undefined;
+    const controller = new AbortController();
+    setDecisionLoad({ phase: "loading" });
+    void loadDecisions(browserSession.api, runId, controller.signal).then(
+      (result) => {
+        if (!controller.signal.aborted) setDecisionLoad({ phase: "ready", ...result });
+      },
+      (failure: unknown) => {
+        if (!controller.signal.aborted) setDecisionLoad({ phase: "error", error: failure });
+      },
+    );
+    return () => {
+      controller.abort();
+    };
+  }, [runId, wanted, decisionTry]);
+
+  const decisions = decisionsView(snapshot?.run ?? null, snapshot?.steps ?? [], decisionLoad);
 
   const steps = snapshot?.steps ?? [];
   const items = useMemo(
@@ -185,6 +211,48 @@ export function RunPage(): ReactNode {
             </ol>
             {view.snapshot.truncated ? <p>Showing the first 1,000 steps.</p> : null}
           </section>
+          {decisions.kind === "hidden" ? null : (
+            <section className="runs-section" aria-labelledby={`${detailsId}-decisions`}>
+              <h2 id={`${detailsId}-decisions`}>Policy decisions</h2>
+              {decisions.kind === "loading" ? <LoadingState label="Loading policy decisions" /> : null}
+              {decisions.kind === "error" ? (
+                <>
+                  <p>{decisions.message}</p>
+                  <button
+                    type="button"
+                    className="ui-button"
+                    onClick={() => {
+                      setDecisionLoad({ phase: "loading" });
+                      setDecisionTry((count) => count + 1);
+                    }}
+                  >
+                    Try again
+                  </button>
+                </>
+              ) : null}
+              {decisions.kind === "empty" ? <p>{decisions.text}</p> : null}
+              {decisions.kind === "rows" ? (
+                <>
+                  <ul className="runs-hook-list" aria-label="Policy decisions">
+                    {decisions.rows.map((row, index) => (
+                      <li key={`${row.nodeId}-${String(index)}`}>
+                        {row.text}
+                        <dl className="runs-hook-details">
+                          {row.details.map((detail) => (
+                            <div className="runs-detail-row" key={detail.term}>
+                              <dt>{detail.term}</dt>
+                              <dd>{detail.value}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                      </li>
+                    ))}
+                  </ul>
+                  {decisions.note === null ? null : <p>{decisions.note}</p>}
+                </>
+              ) : null}
+            </section>
+          )}
           <section
             className="runs-section"
             id={detailsId}
