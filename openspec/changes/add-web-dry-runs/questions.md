@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | 5.1 | harness | Task 5.1: the pre-satisfied check could not decide |
 | Q-002 | answered | none | verdict | Criterion C-f78faba7 (web-runs › The run page lists the decisions of a finished stub run and confines their failure › Try again reads the decisions after a failure, and an empty page says so): accept |
 | Q-003 | open | none | verdict | Criterion C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs): accept as satisfied? |
-| Q-004 | open | none | verdict | Hold H-c3fca69f: UI criterion C-0ba641d3 has no end-to-end test; see the generated UI tests table |
+| Q-004 | answered | none | verdict | Hold H-c3fca69f: UI criterion C-0ba641d3 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-1eba1f05: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-776d2026: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-4a3e3276: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table |
@@ -260,7 +260,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-004: Hold H-c3fca69f: UI criterion C-0ba641d3 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -279,6 +280,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The criterion's scenario calls dryRunPanelView with capability sets and version objects and compares return values, and checks the DRY_RUN_PANEL constant; none of that is observable through a page, so no end-to-end test can trace it. The Node test of the criterion asserts every row of the scenario: not allowed without dry_run_flow, needs a version for no version and for a draft, ready for validated and tested, and the panel constant. The panel component renders from that function's result, and the browser journey checks the ready state's paragraph, example and form in a signed-in editor.
 ---
 
 ## Q-005: Hold H-1eba1f05: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table
