@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | open | none | verdict | Hold H-1406e643: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-3c3b2517: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-348b6970: UI criterion C-6d6e45b6 has no end-to-end test; see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-348b6970: UI criterion C-6d6e45b6 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-53e5119d: UI criterion C-02d224b2 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -481,7 +481,8 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ## Q-013: Hold H-348b6970: UI criterion C-6d6e45b6 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -500,6 +501,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The criterion is the Node journey against the real engine, and its scenario asserts what the fake egress recorded as issued tokens and forwarded requests and what the fake tools recorded as calls, which no browser page shows; the judge says the same. The repository's Node journey asserts every step of the scenario: the four stack handles, carol's 403 FORBIDDEN, run 1 failed with INTERPRETER_TOOL_DENIED at lookup and the one decision lookup · deny with no token, request or tool call, run 2 completed at done through lookup, pay and done with the two decision texts, one fake tool call to erp.lookup_vendor@1 with the run's call header and none for erp.create_payment@1, one issued token for the seeded acme service with TTL 60 and one forwarded request equal to lookup's permit. The parts it reads exist in the stack with the names it asserts.
 ---
 
 ## Q-014: Hold H-53e5119d: UI criterion C-02d224b2 has no end-to-end test; see the generated UI tests table
