@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Hold H-9dca9db5: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-1406e643: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-3c3b2517: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-348b6970: UI criterion C-6d6e45b6 has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-53e5119d: UI criterion C-02d224b2 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -461,7 +461,7 @@ accept The hold may be waived. The criterion's scenario runs stepDetailRows on s
 
 ## Q-012: Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -480,6 +480,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-f665c2d6 reads three source files, which no page can show, so step 5 rightly found it not testable through the page fixture. web/src/runs/dry-run-sources.test.ts holds three tests named with the id, each with a red_assertion proof in the trace and passing at head, and together they assert every clause of the scenario. For DryRunPanel.tsx and RunPage.tsx, findInlineStyleUse is [] and dangerouslySetInnerHTML is absent. 80-runs.tsx contains DRY_RUN_PANEL, exactly two `registerEditorPanel(` and one `registerRunMessages();`, and flowFeatureLiterals gives the runs feature literal. The panel contains its seven texts, including `<code>`. RunPage.tsx contains `aria-label="Policy decisions"` and `Try again`. The two browser tests also show those names and texts on the rendered pages. The delegate's earlier reply was discarded only because one of its quotes was under 12 characters. Committed by Claude Code as the owner's delegate.
 ---
 
 ## Q-013: Hold H-348b6970: UI criterion C-6d6e45b6 has no end-to-end test; see the generated UI tests table
