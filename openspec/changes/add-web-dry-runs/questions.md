@@ -12,6 +12,19 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 5.1 | harness | Task 5.1: the pre-satisfied check could not decide |
+| Q-002 | open | none | verdict | Criterion C-f78faba7 (web-runs › The run page lists the decisions of a finished stub run and confines their failure › Try again reads the decisions after a failure, and an empty page says so): accept  |
+| Q-003 | open | none | verdict | Criterion C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs): accept as satisfied? |
+| Q-004 | open | none | verdict | Hold H-c3fca69f: UI criterion C-0ba641d3 has no end-to-end test; see the generated UI tests table |
+| Q-005 | open | none | verdict | Hold H-1eba1f05: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table |
+| Q-006 | open | none | verdict | Hold H-776d2026: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table |
+| Q-007 | open | none | verdict | Hold H-4a3e3276: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table |
+| Q-008 | open | none | verdict | Hold H-bd785718: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table |
+| Q-009 | open | none | verdict | Hold H-9dca9db5: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table |
+| Q-010 | open | none | verdict | Hold H-1406e643: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table |
+| Q-011 | open | none | verdict | Hold H-3c3b2517: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table |
+| Q-012 | open | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
+| Q-013 | open | none | verdict | Hold H-348b6970: UI criterion C-6d6e45b6 has no end-to-end test; see the generated UI tests table |
+| Q-014 | open | none | verdict | Hold H-53e5119d: UI criterion C-02d224b2 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -177,3 +190,319 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: Count the journey on the evidence of the real run. The pre-satisfied check cannot discriminate here by design: tasks.md plans task 5.1 as green on arrival, with the e2e stack as its proof, and against the unit base code the journey can only fail with a stub's not-implemented error, because the proposal's scaffold puts signature stubs for startDryRun, parseFakes, loadDecisions and decisionRows on the base branch, and AGENTS.md says L4 does not count such an error. The browser journey is Python, which the Node gate never runs, so the zero-value run cannot speak to it either. The Node test asserts the whole scenario of the requirement "The grants flow works against the real engine": the four stack handles, carol's 403 FORBIDDEN, run 1 failed with INTERPRETER_TOOL_DENIED at lookup and the one decision lookup · deny with no token, request or tool call, run 2 completed at done through lookup, pay and done with the two decision texts, one fake call to erp.lookup_vendor@1 with the call header, none for create_payment, one issued token for seedServiceId(tenant, "acme") with TTL 60 and one forwarded request equal to lookup's permit. Every symbol it imports exists in the head with the members it uses, including egressApi, toolsApi, the tool-servers part, seedServiceId from the credentials barrel and the grants, policies and servers helpers, and the Python journey uses only fixtures that e2e/conftest.py defines and the markers earlier journeys use. The lint error of the gate excerpt (a control-character regex in decisions.ts) is not in the current file, which checks control characters by char code, so the replay's lint gate should pass; if any gate still fails, the replay fails the attempt and the accept is used up, which is the right safeguard.
+
+---
+
+## Q-002: Criterion C-f78faba7 (web-runs › The run page lists the decisions of a finished stub run and confines their failure › Try again reads the decisions after a failure, and an empty page says so): accept 
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-f78faba7 (web-runs › The run page lists the decisions of a finished stub run and confines their failure › Try again reads the decisions after a failure, and an empty page says so)
+
+### Context
+Criterion C-f78faba7 (web-runs › The run page lists the decisions of a finished stub run and confines their failure › Try again reads the decisions after a failure, and an empty page says so) is needs human after round 1.
+
+Scenario:
+\- **WHEN** alice opens `/runs/run_1` (`RUN` of test-plan.md: mode `stub`, state `completed`, no steps) and `GET /runs/run_1/decisions` answers 500 `INTERNAL`, then `{ items: [D2, D3], next_cursor: null }`, then `{ items: [], next_cursor: null }`; she presses "Try again" in the region "Policy decisions" and then reloads the page (test-plan-browser.md)
+\- **THEN** the region first holds the paragraph "The engine hit an unexpected problem. Try again, and tell an administrator if it keeps happening." and the button "Try again", the page has no list named "Policy decisions" and no alert, "State: completed" and "Timeline" stay, and the route was hit once; after "Try again" the list has two items, `lookup · allow · POST tools.fake.test/blocks/erp.lookup_vendor@1` and `pay · allow · POST tools.fake.test/blocks/erp.create_payment@1`, the button is gone and the route was hit twice; after the reload the region holds "No policy decisions were recorded.", no list and no button (third hit)
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6_run_decisions::test_decisions_try_again_reads_the_page[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-003: Criterion C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs)
+
+### Context
+Criterion C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs) is needs human after round 1.
+
+Scenario:
+\- **WHEN** steps 1 to 8 of test-plan.md § Browser journey run in two browser contexts (carol, alice)
+\- **THEN** the values are those of the steps: the row `acme · https://tools.fake.test · pending` and the status "Surface approved."; run 1 `State: failed` with `INTERPRETER_TOOL_DENIED: tool call of "lookup" is not permitted (policy) (at lookup)` and the one item `lookup · deny`; the grant rows `role author · acme.lookup_vendor@1 · any step · active` and `role author · acme.create_payment@1 · demo-grants / pay · active`, then "Deployed version" and 12 hex digits; run 2 `State: completed` with the buttons `lookup`, `pay`, `done`, `V-ACME` in the Output of `lookup`, the items `lookup · allow · POST tools.fake.test/blocks/erp.lookup_vendor@1` (no `stubbed`) and `pay · allow · stubbed · POST tools.fake.test/blocks/erp.create_payment@1`, and a `Taint` row `none` under `done`; with the decisions answer rewritten, the paragraph "Policy decisions could not be read." and no list named "Policy decisions"; `assert_accessible(page)` passes on each page
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6_grants::test_alice_is_denied_then_reads_and_stubs[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Hold H-c3fca69f: UI criterion C-0ba641d3 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-0ba641d3 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-0ba641d3: not_testable after 1 attempt(s); The criterion drives the internal dryRunPanelView function with capability Set and version arguments; those inputs are not parameters of any navigable public page, and the snapshot gives no authenticated flow-editor surface or backend setup to place a user in those capability/version states, so t....
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Hold H-1eba1f05: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-b51ecdbd: not_testable after 1 attempt(s); parseFakes is an internal frontend function; its return-object shape, keys, and prototype chain are not observable through the web page UI, so this criterion cannot be checked end-to-end via the page fixture..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-006: Hold H-776d2026: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-a0fe5421: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_a0fe5421::test_starting_a_dry_run_shows_the_started_run[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-007: Hold H-4a3e3276: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-320b7d94: not_testable after 1 attempt(s); parseDecisions and permitText are internal JavaScript functions; the criterion requires passing specific inputs (empty page and M1–M18 malformed values) and asserting return values/null, which is not observable through a stable public web interface and cannot be driven by browser navigation alone..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-008: Hold H-bd785718: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-0930141b: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_0930141b::test_policy_decisions_show_each_decision_as_one_row[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-009: Hold H-9dca9db5: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-0d1cacce: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_0d1cacce::test_run_page_lists_policy_decisions_of_finished_stub_run[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-010: Hold H-1406e643: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-f78faba7: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_f78faba7::test_run_page_decisions_try_again[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-011: Hold H-3c3b2517: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-acb416e2: not_testable after 1 attempt(s); The criterion asserts exact per-step `stepDetailRows` output for test-plan cases T1–T6 (e.g. `Branch=active`, `Taint=none`). The change and snapshot expose no public page, URL, or step-details UI element for taint rows, so these values cannot be asserted via the `page` fixture without mirroring i....
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-012: Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-f665c2d6: not_testable after 1 attempt(s); This criterion verifies source file contents (findInlineStyleUse, dangerouslySetInnerHTML, registerEditorPanel counts, flowFeatureLiterals) by reading .tsx files, which cannot be observed through the browser page fixture at L4_E2E_BASE_URL..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-013: Hold H-348b6970: UI criterion C-6d6e45b6 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-6d6e45b6 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-6d6e45b6: not_testable after 1 attempt(s); The criterion asserts backend state (issued token, forwarded request, recorded tool calls) and a stack start/sign-in flow that cannot be driven or observed through the public web UI; the page snapshot is an empty SPA shell with no interactive elements or selectors, and no sign-in or navigation ta....
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-014: Hold H-53e5119d: UI criterion C-02d224b2 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-02d224b2 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-02d224b2: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_02d224b2::test_carol_approves_grants_and_alice_dry_run[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
