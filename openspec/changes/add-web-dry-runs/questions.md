@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-4a3e3276: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-bd785718: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-9dca9db5: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-1406e643: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-1406e643: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-3c3b2517: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-348b6970: UI criterion C-6d6e45b6 has no end-to-end test; see the generated UI tests table |
@@ -410,7 +410,8 @@ accept The hold may be waived. The criterion's scenario drives loadDecisions wit
 
 ## Q-010: Hold H-1406e643: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -429,6 +430,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The repository holds an end-to-end browser test for this criterion, tagged with its id, that follows the scenario step by step: alice signs in through the shared login helper, the decisions route answers 500 INTERNAL, then two decisions, then an empty page; the test asserts the engine paragraph and the one Try again button in the region named Policy decisions, no list named Policy decisions and no alert, State completed and the Timeline heading staying, and one route hit; after Try again it asserts two items with the lookup and pay texts, the Reasons, Service and Token lifetime details, the button gone and two hits; after a reload it asserts the empty paragraph, no list, no button and three hits. The code matches that scenario: the run page loads the decisions once the run is terminal and not a mock run, keyed on the run id, the wanted flag and a retry count, renders an error as a plain paragraph followed by the only Try again button, which resets the loading state and bumps the counter so the effect requests again, and renders an empty page as the paragraph that no policy decisions were recorded. The error text comes from the kit's INTERNAL message through runErrorMessage. The harness's generated test failing at head says nothing about the repository's own journey, which the e2e gate runs at every verification.
 ---
 
 ## Q-011: Hold H-3c3b2517: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table
