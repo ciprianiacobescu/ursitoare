@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 5.1 | harness | Task 5.1: the pre-satisfied check could not decide |
-| Q-002 | open | none | verdict | Criterion C-f78faba7 (web-runs › The run page lists the decisions of a finished stub run and confines their failure › Try again reads the decisions after a failure, and an empty page says so): accept  |
+| Q-002 | answered | none | verdict | Criterion C-f78faba7 (web-runs › The run page lists the decisions of a finished stub run and confines their failure › Try again reads the decisions after a failure, and an empty page says so): accept |
 | Q-003 | open | none | verdict | Criterion C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs): accept as satisfied? |
 | Q-004 | open | none | verdict | Hold H-c3fca69f: UI criterion C-0ba641d3 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-1eba1f05: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table |
@@ -195,7 +195,8 @@ accept: Count the journey on the evidence of the real run. The pre-satisfied che
 
 ## Q-002: Criterion C-f78faba7 (web-runs › The run page lists the decisions of a finished stub run and confines their failure › Try again reads the decisions after a failure, and an empty page says so): accept 
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -222,6 +223,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion holds as it stands. The run page loads the decisions once the run is terminal and not a mock run, keyed on the run id, the terminal state and a retry count, so the first visit makes one request. A 500 INTERNAL answer becomes an ApiRequestError whose kit text is the expected engine paragraph, rendered as a plain paragraph followed by the only Try again button, with no alert and no list named Policy decisions, while State and Timeline stay. Try again sets the loading state and bumps the retry count, so the effect requests again, and the two decisions parse and render as the two expected texts with their details, the button gone. A reload makes the third request and an empty page gives the paragraph that no policy decisions were recorded, with no list and no button. The browser test in the repository asserts exactly these steps, counting the route hits, and the Node tests cover the section logic for every state.
 ---
 
 ## Q-003: Criterion C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs): accept as satisfied?
