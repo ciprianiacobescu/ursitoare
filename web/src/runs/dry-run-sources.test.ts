@@ -10,6 +10,7 @@ assert.equal(typeof flowFeatureLiterals, "function");
 assert.equal(typeof findInlineStyleUse, "function");
 
 const PANEL_URL = new URL("./DryRunPanel.tsx", import.meta.url);
+const RUN_PAGE_URL = new URL("./RunPage.tsx", import.meta.url);
 const RUNS_FEATURE_URL = new URL("../features/80-runs.tsx", import.meta.url);
 
 function readSource(url: URL): string {
@@ -32,6 +33,17 @@ test("C-f665c2d6: DryRunPanel.tsx has the form texts, a code element and no inli
   ]) {
     assert.ok(source.includes(text), `the panel contains ${text}`);
   }
+});
+
+test("C-f665c2d6: RunPage reads as the rules say", () => {
+  const source = readSource(RUN_PAGE_URL);
+  assert.deepEqual(findInlineStyleUse(source), [], "the run page has no inline style");
+  assert.ok(!source.includes("dangerouslySetInnerHTML"), "the run page injects no HTML");
+  assert.ok(
+    source.includes('aria-label="Policy decisions"'),
+    "the run page names the Policy decisions region",
+  );
+  assert.ok(source.includes("Try again"), "the run page offers Try again after a failed load");
 });
 
 test("C-f665c2d6: 80-runs.tsx registers the Dry run panel beside the Test run panel", () => {
