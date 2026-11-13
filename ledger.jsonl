@@ -242,3 +242,5 @@
 {"at":"2026-11-13T05:34:34Z","run":"r-20261113T0534Z-e9bb","type":"unit.dispatched","unit":"openspec:add-web-dry-runs"}
 {"at":"2026-11-13T05:37:40Z","detail":"awaiting_human: no new answers (verdicts open: Q-003, Q-012) (escalated to a person: Q-003)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-dry-runs"}
 {"at":"2026-11-13T05:40:31Z","by":"harness","reason":"the cause is gone: openspec:add-web-dry-runs is awaiting_human","type":"plan.resumed"}
+{"at":"2026-11-13T05:40:35Z","attempt":1,"cost_usd":20.939397,"runs":8,"type":"plan.charged","unit":"openspec:add-web-dry-runs"}
+{"at":"2026-11-13T05:40:35Z","run":"r-20261113T0540Z-fd4a","type":"unit.dispatched","unit":"openspec:add-web-dry-runs"}
