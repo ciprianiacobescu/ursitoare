@@ -350,7 +350,16 @@ export async function submitSurface(
       `INSERT INTO ursitoare.tool_surface
          (tenant_id, tool_server_id, surface_digest, surface, submitted_by, submitted_at,
           approved_by, approved_at, self_approved)
-       VALUES ($1, $2, $3, $4::jsonb, $5, $6, NULL, NULL, NULL)`,
+       VALUES ($1, $2, $3, $4::jsonb, $5,
+         GREATEST(
+           $6::timestamptz,
+           (SELECT submitted_at + interval '1 microsecond'
+              FROM ursitoare.tool_surface
+             WHERE tenant_id = $1 AND tool_server_id = $2
+             ORDER BY submitted_at DESC, surface_digest DESC
+             LIMIT 1)
+         ),
+         NULL, NULL, NULL)`,
       [ctx.tenantId, serverId, digest, JSON.stringify(checked), actor.id, now],
     );
 

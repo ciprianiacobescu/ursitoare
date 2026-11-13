@@ -10,15 +10,15 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | submitted | behaviour | src/tools/store.ts:131 | A new surface submitted in the same millisecond is shadowed by an older one |
-| FB-002 | submitted | tests | src/api/tool-server-routes.ts:128 | Route and tenant rows of the test plan that no test sends |
+| FB-001 | addressed | behaviour | src/tools/store.ts:131 | A new surface submitted in the same millisecond is shadowed by an older one |
+| FB-002 | addressed | tests | src/api/tool-server-routes.ts:128 | Route and tenant rows of the test plan that no test sends |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: A new surface submitted in the same millisecond is shadowed by an older one
 
-- **Status:** submitted
+- **Status:** addressed
 - **Kind:** behaviour
 - **Where:** `src/tools/store.ts:131-143`
 - **Lesson:** no
@@ -50,12 +50,13 @@ The requirement on submitSurface says a new digest SHALL be stored as the newest
 
 ### Outcome
 <!-- written by the harness -->
+Addressed in round 1 at 595b9104ff: src/tools/store.ts:353-362 stores submitted_at as GREATEST(now, newest submitted_at + 1 microsecond); C-70e19ad9 tests pass.
 
 ---
 
 ## FB-002: Route and tenant rows of the test plan that no test sends
 
-- **Status:** submitted
+- **Status:** addressed
 - **Kind:** tests
 - **Where:** `src/api/tool-server-routes.ts:128-140`
 - **Lesson:** no
@@ -83,3 +84,4 @@ Add new tests (existing tests unchanged) for the rows of test-plan-routes.md tha
 
 ### Outcome
 <!-- written by the harness -->
+Addressed in round 1 at 595b9104ff: New tests in src/api/tool-server-routes-followup.test.ts and src/tools/store-tenant.test.ts all pass; they cover the register refusals, malformed PUT/approve rows, and the tenant-b writes-nothing check.

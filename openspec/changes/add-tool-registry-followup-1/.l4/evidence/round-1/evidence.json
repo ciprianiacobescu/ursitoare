@@ -1,0 +1,121 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [],
+    "skipped": true,
+    "note": "the spec names no path or module in backticks: nothing to compare against",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-tool-registry-followup-1/.l4/followup.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-registry-followup-1/.l4/ledger/r-20261109T2209Z-c326.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-registry-followup-1/.l4/ledger/r-20261113T0605Z-ff44.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-registry-followup-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-registry-followup-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-registry-followup-1/specs/tool-registry/spec.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-registry-followup-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/archive/2026-11-09-add-tool-registry/feedback.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/tool-server-routes-followup.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "src/tools/store-tenant.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "src/tools/store.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "src/tools/submit-same-instant.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "the spec declares no scope"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/tools/store.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/tools/store.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2534,
+      "passed": 2534,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 2,
+      "new_passed": 2,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
