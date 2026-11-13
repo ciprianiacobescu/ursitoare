@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 5.1 | harness | Task 5.1: the pre-satisfied check could not decide |
+| Q-001 | answered | 5.1 | harness | Task 5.1: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 5.1: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.1
 - **Kind:** harness
 - **Asked:** 2026-11-13T04:09Z by claude-sonnet, run r-20261113T0322Z-b4b3, task 5.1
@@ -175,3 +176,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: Count the journey on the evidence of the real run. The pre-satisfied check cannot discriminate here by design: tasks.md plans task 5.1 as green on arrival, with the e2e stack as its proof, and against the unit base code the journey can only fail with a stub's not-implemented error, because the proposal's scaffold puts signature stubs for startDryRun, parseFakes, loadDecisions and decisionRows on the base branch, and AGENTS.md says L4 does not count such an error. The browser journey is Python, which the Node gate never runs, so the zero-value run cannot speak to it either. The Node test asserts the whole scenario of the requirement "The grants flow works against the real engine": the four stack handles, carol's 403 FORBIDDEN, run 1 failed with INTERPRETER_TOOL_DENIED at lookup and the one decision lookup · deny with no token, request or tool call, run 2 completed at done through lookup, pay and done with the two decision texts, one fake call to erp.lookup_vendor@1 with the call header, none for create_payment, one issued token for seedServiceId(tenant, "acme") with TTL 60 and one forwarded request equal to lookup's permit. Every symbol it imports exists in the head with the members it uses, including egressApi, toolsApi, the tool-servers part, seedServiceId from the credentials barrel and the grants, policies and servers helpers, and the Python journey uses only fixtures that e2e/conftest.py defines and the markers earlier journeys use. The lint error of the gate excerpt (a control-character regex in decisions.ts) is not in the current file, which checks control characters by char code, so the replay's lint gate should pass; if any gate still fails, the replay fails the attempt and the accept is used up, which is the right safeguard.
