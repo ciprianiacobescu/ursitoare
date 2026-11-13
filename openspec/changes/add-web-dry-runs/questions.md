@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-bd785718: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-9dca9db5: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-1406e643: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-3c3b2517: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-3c3b2517: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-348b6970: UI criterion C-6d6e45b6 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-53e5119d: UI criterion C-02d224b2 has no end-to-end test; see the generated UI tests table |
@@ -433,7 +433,8 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ## Q-011: Hold H-3c3b2517: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -452,6 +453,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The criterion's scenario runs stepDetailRows on six steps and compares the full row lists, which are function values; the judge itself says they cannot be asserted through a page without mirroring the implementation. The Node tests of the criterion assert each of T1 to T6 by value: the switch ends Branch then Taint none, the wait ends Wait then the two labels, the end step and the unknown kind end with their Taint, the failed switch has Taint before Error and Decision with the decision href, and the block step keeps its ten rows with one Taint. The implementation appends the row after the renderer's rows only when none of them is Taint and before Error and Decision, and the built-in renderers are unchanged. The browser journey also reads the Taint row with the value none under the done step.
 ---
 
 ## Q-012: Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table
