@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-f78faba7 (web-runs › The run page lists the decisions of a finished stub run and confines their failure › Try again reads the decisions after a failure, and an empty page says so): accept |
 | Q-003 | open | none | verdict | Criterion C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs): accept as satisfied? |
 | Q-004 | answered | none | verdict | Hold H-c3fca69f: UI criterion C-0ba641d3 has no end-to-end test; see the generated UI tests table |
-| Q-005 | open | none | verdict | Hold H-1eba1f05: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-1eba1f05: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-776d2026: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-4a3e3276: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-bd785718: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table |
@@ -285,7 +285,8 @@ accept The hold may be waived. The criterion's scenario calls dryRunPanelView wi
 
 ## Q-005: Hold H-1eba1f05: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -304,6 +305,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The criterion's scenario feeds eleven texts to parseFakes and compares result objects, including the own keys, the prototype of the result and that lists are copies; none of that is observable through a page. The Node tests of the criterion assert every row: the valid texts with the a/b key and the __proto__ key as an own key on an object with Object.prototype, each refusal message, and that two parses give distinct list copies. The function trims, parses, refuses non-objects and non-list values with the spec's messages and defines each key as an own property with a copied list.
 ---
 
 ## Q-006: Hold H-776d2026: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table
