@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Hold H-776d2026: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-4a3e3276: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-bd785718: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-9dca9db5: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-9dca9db5: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-1406e643: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-3c3b2517: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
@@ -385,7 +385,8 @@ accept The hold may be waived. The criterion's scenario runs decisionRows on sev
 
 ## Q-009: Hold H-9dca9db5: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -404,6 +405,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The criterion's scenario drives loadDecisions with a recording client over four cases, decisionsWanted over seven runs and decisionsView over ten inputs, and compares recorded queries, thrown errors and section objects; those are function values. The Node tests of the criterion assert every row: the two paged requests with limit and cursor, five pages then truncated, the INVALID_RESPONSE error for an unreadable page, the RangeError with no request, the seven wanted values, and the hidden, loading, error, empty and rows sections with the 403 text, the unreadable text and the truncation note. The page half of the requirement is proved in a browser by the repository's Try again test and journey, which read the region's error paragraph, its list and its empty text.
 ---
 
 ## Q-010: Hold H-1406e643: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table
