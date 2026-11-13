@@ -229,6 +229,7 @@ accept The criterion holds as it stands. The run page loads the decisions once t
 ## Q-003: Criterion C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: the reply has 25 checked entries: the limit is 20
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
