@@ -176,6 +176,9 @@ test("C-b56c7793 a started run completes on DBOS and bad workflow input ends in 
 
     const run = await waitForRun(store, tenant, "r_dbos_1", ["completed", "failed"]);
     assert.equal(run.state, "completed");
+    // The run row turns completed inside the run:finish step, before that step's "after" observer fires; the workflow
+    // reaches SUCCESS only after the step returns, so wait for it before reading the observed steps.
+    assert.equal(await finalState(rt, workflowId), "SUCCESS");
     assert.deepEqual(
       observed.filter(([id]) => id === workflowId).map(([, step]) => step),
       ["run:load", "run:start", "lookup", "route", "pay", "pay#done", "done", "run:finish"],
@@ -185,7 +188,6 @@ test("C-b56c7793 a started run completes on DBOS and bad workflow input ends in 
       steps.steps.map((s) => s.seq),
       [0, 1, 2, 3],
     );
-    assert.equal(await finalState(rt, workflowId), "SUCCESS");
 
     const bad: Record<string, JsonValue>[] = [
       { tenantId: "bad tenant", runId: "r_1", reviewProfile: "solo" },
