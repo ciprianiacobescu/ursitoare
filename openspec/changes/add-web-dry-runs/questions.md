@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 5.1 | harness | Task 5.1: the pre-satisfied check could not decide |
 | Q-002 | answered | none | verdict | Criterion C-f78faba7 (web-runs › The run page lists the decisions of a finished stub run and confines their failure › Try again reads the decisions after a failure, and an empty page says so): accept |
-| Q-003 | open | none | verdict | Criterion C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs): accept as satisfied? |
 | Q-004 | answered | none | verdict | Hold H-c3fca69f: UI criterion C-0ba641d3 has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-1eba1f05: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-776d2026: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table |
@@ -228,7 +228,7 @@ accept The criterion holds as it stands. The run page loads the decisions once t
 
 ## Q-003: Criterion C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: the reply has 25 checked entries: the limit is 20
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -256,6 +256,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion holds as it stands. It is uncovered only because e2e/test_m6_grants.py::test_alice_is_denied_then_reads_and_stubs has no red record (a red step cannot run e2e/), and the generated test failed at head because it never signs in. I read the committed test against test-plan.md § Browser journey, steps 1 to 8. It runs carol and alice in two contexts on the real stack, logs both in, and uses exact role and name locators. It asserts every value of the scenario: the pending row `acme · https://tools.fake.test · pending`, `trusted` and the POST calls before approval, the dialog name, "Surface approved." and both refs; run 1 `State: failed` (20 s), the INTERPRETER_TOOL_DENIED text, and one decision `lookup · deny` with its reason; both grant rows `active`; "2 grant changes are not deployed.", `Deployed version` with 12 hex digits, and "All grant changes are deployed."; run 2 `State: completed`, the buttons lookup, pay and done, V-ACME and P-1 in Output, and Taint `none` under done; the two decision texts, the first without `stubbed`; and, with the decisions answer rewritten, "Policy decisions could not be read." with no list and no alert. assert_accessible runs after steps 1, 2, 3, 4, 5, 7 and 8. The test passed in round 1's e2e gate (66 tests, 0 failures). At base the Dry run panel and the decisions region do not exist, so the test discriminates. The delegate had reached accept too, but its reply was discarded because it cited 25 checked entries and the limit is 20. Committed by Claude Code as the owner's delegate.
 ---
 
 ## Q-004: Hold H-c3fca69f: UI criterion C-0ba641d3 has no end-to-end test; see the generated UI tests table
