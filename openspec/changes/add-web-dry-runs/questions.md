@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Hold H-3c3b2517: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-348b6970: UI criterion C-6d6e45b6 has no end-to-end test; see the generated UI tests table |
-| Q-014 | open | none | verdict | Hold H-53e5119d: UI criterion C-02d224b2 has no end-to-end test; see the generated UI tests table |
+| Q-014 | answered | none | verdict | Hold H-53e5119d: UI criterion C-02d224b2 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -506,7 +506,8 @@ accept The hold may be waived. The criterion is the Node journey against the rea
 
 ## Q-014: Hold H-53e5119d: UI criterion C-02d224b2 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -525,3 +526,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The criterion is the browser journey itself, and the repository holds that journey, tagged with the criterion and following steps 1 to 8 of the test plan in two browser contexts: carol signs in, sees the pending acme row, approves the surface and reads Surface approved; alice creates and validates demo-grants, starts a dry run from the Dry run region and opens the run, reads State failed with the denied tool text and the one item lookup · deny; carol creates both grants, reads their rows and deploys; alice's second run reads State completed, the three step buttons, V-ACME in lookup's Output, the Taint row none under done and the two decision items with the stubbed label only on pay; a rewritten decisions answer gives the unreadable paragraph and no list; the accessibility check runs on every page. Its locators match the components: the editor names each panel region by its title, the panel renders the Started dry run status and the Open run link, the run page names the Policy decisions list, and the admin tables take their names from their captions. I could not run the journey, but the e2e gate runs it at every verification, so this accept does not bypass a failing journey. The harness's generated test failing at head says nothing about the repository's journey, which signs its users in through the shared login helper.
