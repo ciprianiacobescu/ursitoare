@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | open | none | verdict | Criterion C-02d224b2 (web-runs › The M6 journey proves grants and the dry run in a browser › Carol approves and grants; alice's dry run is denied, then reads and stubs): accept as satisfied? |
 | Q-004 | answered | none | verdict | Hold H-c3fca69f: UI criterion C-0ba641d3 has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-1eba1f05: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table |
-| Q-006 | open | none | verdict | Hold H-776d2026: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-776d2026: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-4a3e3276: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-bd785718: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-9dca9db5: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table |
@@ -310,7 +310,8 @@ accept The hold may be waived. The criterion's scenario feeds eleven texts to pa
 
 ## Q-006: Hold H-776d2026: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -329,6 +330,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The criterion's scenario drives startDryRun with a recording client and dryRunFormErrors with eight errors, and compares the recorded request, the thrown errors and the form error maps; those are function values, not page states. The Node tests of the criterion assert all of it: the one recorded path, body and Idempotency-Key header and the returned run, the three RangeErrors with no request, the two INVALID_RESPONSE errors and the rethrown post error, and each of the eight error mappings. The start itself is proved in a browser by the repository's journey, where a signed-in author fills the panel, presses Start dry run and sees the status Started dry run and the Open run link. The harness's generated test failed at head because its tests take only the page fixture and sign nobody in, so it could not reach the editor.
 ---
 
 ## Q-007: Hold H-4a3e3276: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table
