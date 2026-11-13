@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-1eba1f05: UI criterion C-b51ecdbd has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-776d2026: UI criterion C-a0fe5421 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-4a3e3276: UI criterion C-320b7d94 has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-bd785718: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-bd785718: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-9dca9db5: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-1406e643: UI criterion C-f78faba7 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-3c3b2517: UI criterion C-acb416e2 has no end-to-end test; see the generated UI tests table |
@@ -360,7 +360,8 @@ accept The hold may be waived. The criterion's scenario feeds parseDecisions one
 
 ## Q-008: Hold H-bd785718: UI criterion C-0930141b has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -379,6 +380,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The criterion's scenario runs decisionRows on seven decisions and two steps and then on four variants, and compares row texts and detail lists; those are function values. The Node tests of the criterion assert all of it: the seven texts including the hook labels, the stubbed label and the unknown node, the details of R3, R1, R7 and R5 with the deny and allow reason texts, and the four variants where only the last pay step with a key gives stubbed. The rendering of those rows is proved in a browser by the repository's own journey, which reads the item lookup · deny with its Reasons detail after the first dry run and the lookup and stubbed pay items after the second, and by the Try again test, which reads the Reasons, Service and Token lifetime details of a row.
 ---
 
 ## Q-009: Hold H-9dca9db5: UI criterion C-0d1cacce has no end-to-end test; see the generated UI tests table
