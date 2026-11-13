@@ -12,7 +12,7 @@ Spec: `specs/web-runs/spec.md`; fixtures: `test-plan.md`; decisions: `design.md`
 
 ## 3. The Taint row (C14)
 
-- [ ] 3.1 Write `web/src/runs/timeline-taint.test.ts` (scenario "Switch, wait, end and an unknown kind gain the row; block rows are unchanged"; it also re-asserts the ten block rows of `timeline.test.ts` by value) first, then edit `stepDetailRows` in `web/src/runs/timeline.ts`: after the renderer's rows, when none has the term `Taint`, push `{ term: "Taint", value: <labels joined by ", " or "none">, href: null }`, implementing requirement "Every step's details carry a Taint row". In the same task run `node --test "web/src/**/*.test.ts"`: `timeline.test.ts`, `step-renderers.test.ts` and `pages.test.ts` stay green
+- [x] 3.1 Write `web/src/runs/timeline-taint.test.ts` (scenario "Switch, wait, end and an unknown kind gain the row; block rows are unchanged"; it also re-asserts the ten block rows of `timeline.test.ts` by value) first, then edit `stepDetailRows` in `web/src/runs/timeline.ts`: after the renderer's rows, when none has the term `Taint`, push `{ term: "Taint", value: <labels joined by ", " or "none">, href: null }`, implementing requirement "Every step's details carry a Taint row". In the same task run `node --test "web/src/**/*.test.ts"`: `timeline.test.ts`, `step-renderers.test.ts` and `pages.test.ts` stay green
 
 ## 4. The components
 
