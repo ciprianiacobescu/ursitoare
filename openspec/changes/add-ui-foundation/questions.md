@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-ab85b284: UI criterion C-d69c05cb has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-ad97dd92: UI criterion C-a22e8a8b has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-52afaabe: UI criterion C-48ccaf77 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-c11b074f: UI criterion C-67de6235 has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-c11b074f: UI criterion C-67de6235 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-e8d05402: UI criterion C-97e30a51 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-53d309b3: UI criterion C-f357664d has no end-to-end test; see the generated UI tests table |
@@ -289,7 +289,8 @@ accept The hold can be waived. Criterion C-48ccaf77 is the scenario Tone mappers
 
 ## Q-011: Hold H-c11b074f: UI criterion C-67de6235 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -308,6 +309,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-67de6235 is the scenario Durations, instants and ages, which by its own text runs the three pure functions formatDuration, formatInstant and formatAgo on the D1 to D13, I1 to I6 and A1 to A10 rows of test-plan.md T8 and compares the returned strings. No file under web/src other than format.ts and its test names these functions, and the design says this unit changes no page's markup, so nothing a browser can observe depends on them and step 5's generated file could only fail to collect. Three Node tests named with the criterion id in web/src/ui/format.test.ts cover every row, including 999 ms as <1 s, 2,349 ms as 2.3 s, 245 s as 4 min 5 s, 7,410 s as 2 h 3 min, the reversed range as a dash, the +01:00 instant as 21:38 UTC, yesterday and the out-of-range year kept, 5 min ago, 49 h as 2 d ago, and formatInstant of the input for one second ahead and junk. The implementation in format.ts matches the requirement's rules.
 ---
 
 ## Q-012: Hold H-e8d05402: UI criterion C-97e30a51 has no end-to-end test; see the generated UI tests table
