@@ -18,7 +18,7 @@ Paths without a directory are in `web/src/ui/`. No frozen test changes: `web/src
 
 ## 5. Formats
 
-- [ ] 5.1 Write `format.test.ts` (scenario "Durations, instants and ages", test-plan.md T8; `nowMs` is an argument in every row) first, then implement `formatDuration`, `formatInstant` and `formatAgo` in `format.ts`, implementing requirement "Durations, instants and ages read as fixed texts"
+- [x] 5.1 Write `format.test.ts` (scenario "Durations, instants and ages", test-plan.md T8; `nowMs` is an argument in every row) first, then implement `formatDuration`, `formatInstant` and `formatAgo` in `format.ts`, implementing requirement "Durations, instants and ages read as fixed texts"
 
 ## 6. Components
 
