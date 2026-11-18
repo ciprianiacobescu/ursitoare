@@ -248,9 +248,36 @@ export interface PersonName {
 }
 
 export async function getPersonNames(
-  _tx: TenantTx,
-  _ctx: TenantContext,
-  _userIds: readonly string[],
+  tx: TenantTx,
+  ctx: TenantContext,
+  userIds: readonly string[],
 ): Promise<PersonName[]> {
-  throw new Error("not implemented");
+  if (userIds.length > 50) throw identityError("IDENTITY_INVALID");
+  const unique: string[] = [];
+  const seen = new Set<string>();
+  for (const userId of userIds) {
+    if (typeof userId !== "string" || !ID_PATTERN.test(userId)) {
+      throw identityError("IDENTITY_INVALID");
+    }
+    if (!seen.has(userId)) {
+      seen.add(userId);
+      unique.push(userId);
+    }
+  }
+  if (unique.length === 0) return [];
+  await assertTenantMatches(tx, ctx);
+  const res = await tx.query<{ user_id: string; display_name: string; kind: UserKind }>(
+    `SELECT user_id, display_name, kind FROM ursitoare."user"
+     WHERE tenant_id = $1 AND user_id = ANY($2::text[])`,
+    [ctx.tenantId, unique],
+  );
+  const byId = new Map(res.rows.map((row) => [row.user_id, row] as const));
+  const names: PersonName[] = [];
+  for (const userId of unique) {
+    const row = byId.get(userId);
+    if (row !== undefined) {
+      names.push({ userId: row.user_id, displayName: row.display_name, kind: row.kind });
+    }
+  }
+  return names;
 }
