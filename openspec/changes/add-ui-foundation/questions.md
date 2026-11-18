@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Hold H-c11b074f: UI criterion C-67de6235 has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-e8d05402: UI criterion C-97e30a51 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
-| Q-014 | open | none | verdict | Hold H-53d309b3: UI criterion C-f357664d has no end-to-end test; see the generated UI tests table |
+| Q-014 | answered | none | verdict | Hold H-53d309b3: UI criterion C-f357664d has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -364,7 +364,8 @@ accept The hold can be waived. Criterion C-f665c2d6 is the web-runs scenario Sou
 
 ## Q-014: Hold H-53d309b3: UI criterion C-f357664d has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -383,3 +384,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-f357664d is the new web-runs scenario The run sources import no stylesheet and the feature files stay, which by its own text is ui-foundation-sources.test.ts running findCssImports on DryRunPanel.tsx, RunPage.tsx and 80-runs.tsx and listing web/src/features. A stylesheet import line in a source file and the file names of a directory are not observable through the browser, so no end-to-end test can check them; step 5 did not even get to write one because a tool call was refused, which says nothing about the unit. One Node test named with the id in web/src/runs/ui-foundation-sources.test.ts asserts an empty findCssImports result for each of the three files, the presence of the 15 named feature files and no .css file in the directory. I checked the tree: none of the three sources holds a .css import line and web/src/features holds exactly those 15 files and no stylesheet.
