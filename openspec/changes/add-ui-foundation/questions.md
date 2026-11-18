@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Hold H-52afaabe: UI criterion C-48ccaf77 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-c11b074f: UI criterion C-67de6235 has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-e8d05402: UI criterion C-97e30a51 has no end-to-end test; see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-53d309b3: UI criterion C-f357664d has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -339,7 +339,8 @@ accept The hold can be waived. Criterion C-97e30a51 is the scenario watch_csp se
 
 ## Q-013: Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -358,6 +359,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-f665c2d6 is the web-runs scenario Sources read as the rules say, kept unchanged by this unit's MODIFIED requirement; by its own text it is dry-run-sources.test.ts reading DryRunPanel.tsx, RunPage.tsx and 80-runs.tsx and checking findInlineStyleUse, the absence of dangerouslySetInnerHTML, the registration call counts, flowFeatureLiterals and some literal strings. These are source-text properties, so step 5 is right that a browser test cannot verify the criterion. The frozen Node test in web/src/runs/dry-run-sources.test.ts holds three tests named with the id covering each file, and the sources still satisfy them: 80-runs.tsx has one registerRunMessages(); call and two registerEditorPanel( calls, the second with DRY_RUN_PANEL; RunPage.tsx has aria-label Policy decisions and Try again; DryRunPanel.tsx has the form labels, the broker sentence and a code element; neither has an inline style or dangerouslySetInnerHTML. The design says this test never asserted the dropped clause, so it is unchanged.
 ---
 
 ## Q-014: Hold H-53d309b3: UI criterion C-f357664d has no end-to-end test; see the generated UI tests table
