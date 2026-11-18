@@ -1,0 +1,101 @@
+{
+  "schema": "l4/delivery-plan@1",
+  "plan_id": "m6b",
+  "target": "main",
+  "merge": "auto",
+  "limits": {
+    "max_cost_usd": 300,
+    "max_unit_attempts": 3,
+    "max_runs": 100
+  },
+  "external_dependencies": [],
+  "exclude": [],
+  "batches": [
+    {
+      "id": "m6b-ui",
+      "acceptance_profile": "none",
+      "depends_on": [],
+      "units": [
+        {
+          "id": "openspec:add-ui-foundation",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-people-lookup",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:restyle-web-kit",
+          "depends_on": [
+            "openspec:add-ui-foundation"
+          ]
+        },
+        {
+          "id": "openspec:add-app-shell",
+          "depends_on": [
+            "openspec:add-ui-foundation"
+          ]
+        },
+        {
+          "id": "openspec:restyle-admin-pages",
+          "depends_on": [
+            "openspec:add-ui-foundation",
+            "openspec:restyle-web-kit",
+            "openspec:add-people-lookup",
+            "openspec:add-app-shell"
+          ]
+        },
+        {
+          "id": "openspec:add-home-dashboard",
+          "depends_on": [
+            "openspec:add-ui-foundation",
+            "openspec:restyle-web-kit",
+            "openspec:add-people-lookup",
+            "openspec:add-app-shell"
+          ]
+        },
+        {
+          "id": "openspec:add-flow-workspace",
+          "depends_on": [
+            "openspec:add-ui-foundation",
+            "openspec:restyle-web-kit",
+            "openspec:add-people-lookup",
+            "openspec:add-app-shell"
+          ]
+        },
+        {
+          "id": "openspec:add-run-inputs-form",
+          "depends_on": [
+            "openspec:add-ui-foundation",
+            "openspec:restyle-web-kit",
+            "openspec:add-app-shell",
+            "openspec:add-flow-workspace"
+          ]
+        },
+        {
+          "id": "openspec:add-run-view",
+          "depends_on": [
+            "openspec:add-ui-foundation",
+            "openspec:restyle-web-kit",
+            "openspec:add-people-lookup",
+            "openspec:add-app-shell"
+          ]
+        },
+        {
+          "id": "openspec:add-visual-review",
+          "depends_on": [
+            "openspec:add-ui-foundation",
+            "openspec:add-people-lookup",
+            "openspec:restyle-web-kit",
+            "openspec:add-app-shell",
+            "openspec:restyle-admin-pages",
+            "openspec:add-home-dashboard",
+            "openspec:add-flow-workspace",
+            "openspec:add-run-inputs-form",
+            "openspec:add-run-view"
+          ]
+        }
+      ]
+    }
+  ]
+}

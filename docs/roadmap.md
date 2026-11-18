@@ -31,6 +31,7 @@ architecture v0.1-r5 (§13 Phase-1 plan and exit tests 1–23). Owner decisions:
 | M4 | An author test-runs a validated flow with mocked tools and follows each step on the run timeline; runs survive a kill | U30–U37, U35b | `test_m4_runs.py` | — |
 | M5 | Flows with pure `code` nodes and pre/post hooks run durably; hook routes into effect nodes are rejected | U38–U44, U42b | `test_m5_code_hooks.py` | — |
 | M6 | Admins register tool servers and grant tools per role and step; an attended dry run reads through the broker with a one-step token and shows each effect's permit while stubbing it | U45–U52, U40b, U49b, U52b | `test_m6_grants.py` | — |
+| M6b | The web app is restyled on Tailwind CSS v4 and Radix primitives: grouped sidebar, home of recent work, flow workspace, schema-built run inputs, a readable run view and people's names; zero CSP violations | U15c, U18b, U15d, U07b, U21b, U07c, U28b, U37b, U37c, U52c | `test_m6b_ui.py` | the orchestrator's screenshot review |
 | M7 | An admin adds an HTTP/OpenAPI, MCP or code-block tool, approves its surface and stores its credential; a flow calls it (F9) | U53–U56 | `test_m7_tools.py` | — |
 | M8 | `docker compose up` runs the six-container hobbyist stack; every journey so far passes against real Keycloak and Mintkey | U57–U61 | all so far | **first stack run**: journeys, contract suites against the real services, exit tests 10 (runtime), 12, 19 |
 | M9 | The RF-1 core flow runs with LLM extract and decide nodes, every call journaled and costed; a `pay` whose amount an LLM extracted is refused when no approval is on the path, with the reason shown | U62–U70 | `test_m9_llm.py` | stack run; exit 11 at the concurrency the broker allows |
@@ -93,6 +94,13 @@ order of their edges, one at a time.
 - **Usability:** every UI unit states keyboard and screen-reader behaviour, empty, loading and error states, uses
   U15's kit and messages, and passes `assert_accessible(page)` in its journey. Every list endpoint uses U14's cursor
   contract; every error code is in U14's registry; every create endpoint honours `Idempotency-Key`.
+- **Web styles (from M6b):** tokens only (no palette utilities such as `bg-red-500`); one stylesheet entry,
+  `web/src/styles/app.css`, and no CSS import elsewhere (U15c's rule tests walk `web/src` and enforce both).
+- **Web dialogs and selects (from M6b):** native `<dialog>` and `<select>`; no Radix primitive that injects a `<style>`
+  element under the engine's CSP (Dialog, AlertDialog, Select, a modal DropdownMenu; M6b decision memo). Only the
+  allowlisted primitives of U15c's `web/src/ui/` are used.
+- **Browser tests watch the CSP and the layout (from M6b):** every new browser test calls `watch_csp(page)` and
+  `assert_layout(page)` (U15c, `e2e/conftest.py`) and asserts that no Content Security Policy violation was raised.
 - **Partition-ready:** tables that architecture §6 partitions are created partitioned, with the partition column in
   their key, plus a DEFAULT partition, by the unit that creates them. U02's `ensurePartitions(ownerPool, clock)` runs
   after `migrate` at boot as the owner role: it finds every partitioned table of schema `ursitoare` from the catalog
@@ -218,6 +226,23 @@ All units start as `planned`.
 | U52 | `add-web-grants` | `web-tools` | `web` | Tool-server and grant administration, re-confirmations, policy validation and deploy | U07, U15, U15b, U16, U21, U47, U49, U49b | — | — | planned |
 | U52b | `add-web-dry-runs` | `web-runs` | `web` | The "Dry run" button (input and fakes), each effect's permit and "stubbed" on the run page; journey `test_m6_grants.py` (denied without a grant; granted, the read reaches the fake upstream; `pay` stubbed with its permit shown). **Closing** | U07, U15, U15b, U16, U28, U35, U36, U37, U40b, U44, U45, U45b, U46, U47, U48, U49, U49b, U50, U51, U52 | — | — | planned |
 
+### M6b UI foundation
+
+The owner's review of the live offline stack (2026-11-17) found the web app unusable by eye: about 17 KB of hand-written CSS, a 297 px bulleted nav, a home page that says only "Engine healthy", raw ids, a 4,634 px flow page and hand-typed JSON for runs. M6b restyles the web app and keeps the frozen pins of the M0 to M6 journeys. Plan `.l4/plans/m6b.json`, batch `m6b-ui`; it runs between M6 and M7, and M7's web specs are re-based on its delivered shapes before activation.
+
+| U | Change id | Cap | Module | Scope | Depends on | Exit | Seed | Status |
+|---|---|---|---|---|---|---|---|---|
+| U15c | `add-ui-foundation` | `web-design-system` (new); MODIFIED `web-runs` | `web` | Tailwind v4 build, the single stylesheet entry with cascade layers, token utilities, new tokens, `web/src/ui/` primitives, the design-system rule tests, `watch_csp` and `assert_layout` | U05, U07, U15, U15b, U16, U21, U28, U29, U37, U44, U52, U52b | — | — | planned |
+| U18b | `add-people-lookup` | `people-directory` (new) | `identity`, `api`, `web` | `GET /api/v1/people` and `GET /api/v1/me/teams` (`read_self`), with the web name cache and hooks | U03, U07, U10, U11, U11b, U13, U14, U17, U21 | — | — | planned |
+| U15d | `restyle-web-kit` | `web-kit`, `web-data-kit` | `web` | The kit restyled through its own CSS, with its API kept; `captionDisplay`; `PageHeader` and `Section` | U15, U15b, U15c | — | — | planned |
+| U07b | `add-app-shell` | `web-shell` | `web` | Grouped left sidebar, compact banner, narrow-screen menu, sign-in and not-found pages | U07, U15, U15c, U16, U21, U28, U37, U52 | — | — | planned |
+| U21b | `restyle-admin-pages` | `web-admin`, `web-tools` | `web` | The seven admin pages through the kit, with names instead of ids where nothing pins the id | U07b, U15c, U15d, U18b, U21, U52, U52b | — | — | planned |
+| U07c | `add-home-dashboard` | `web-shell` | `web` | Recent runs, recent flows and next steps for a signed-in user; the public home unchanged | U07, U07b, U15, U15b, U15c, U15d, U16, U18, U18b, U21, U27, U28, U36, U37, U47, U49b, U52 | — | — | planned |
+| U28b | `add-flow-workspace` | `web-flow-editor` (ADDED, MODIFIED ×1) | `web` | Two-column workspace, panel placement, jump links, owner-team suggestions, author names | U07b, U15c, U15d, U18b, U28, U29, U37, U52b | — | — | planned |
+| U37b | `add-run-inputs-form` | `web-runs` | `web` | Input form from the flow's input schema, synced with "Input (JSON)"; per-node answer rows synced with the mocks and fakes JSON | U07b, U15b, U15c, U15d, U28, U28b, U29, U35, U37, U52b | — | — | planned |
+| U37c | `add-run-view` | `web-runs` | `web` | Run header badge, durations, inline output previews, a two-column timeline and details; runs list with durations and names | U07b, U15, U15b, U15c, U15d, U18b, U36, U37, U44, U51, U52, U52b | — | — | planned |
+| U52c | `add-visual-review` | `web-design-system` | `web` | Journey `test_m6b_ui.py`: every page per role, CSP, layout, axe, screenshots for the orchestrator's review by eye. **Closing** | U06, U07b, U07c, U09, U15c, U15d, U16, U18b, U21b, U28b, U37, U37b, U37c, U52b | — | — | planned |
+
 ### M7 Tool adapters (F9)
 
 | U | Change id | Cap | Module | Scope | Depends on | Exit | Seed | Status |
@@ -226,6 +251,8 @@ All units start as `planned`.
 | U54 | `add-mcp-client` | `tool-mcp` | `tools` | MCP client (2026-07-28 and the older handshake), `tools/list` to a surface digest, tool namespacing with collisions refused, `tools/call` through the gateway, results untrusted; `test/support/fake-mcp/`, its proxy route and e2e part `parts/55-mcp.ts` | U06, U45, U47, U48, U50 | 6 | — | planned |
 | U55 | `add-code-block-tools` | `tool-code` | `tools`, `runtimes` | `code_block` tool servers: blocks implemented as pure sandboxed code, surface digest over the source | U38, U39, U47, U50 | — | — | planned |
 | U56 | `add-web-tools` | `web-tools` | `web` | Register an MCP URL, an OpenAPI upload or a code block; review and approve the surface with a drift diff; write-only credential entry; journey `test_m7_tools.py` (F9 through a dry run). **Closing** | U52b, U53, U54, U55 | — | — | planned |
+
+Re-based on M6b's delivered web shapes before activation (U56, U56b, U56c).
 
 ### M8 Hobbyist stack
 
@@ -360,13 +387,15 @@ Each unit's spec defines its interfaces in full; this table fixes the names so t
 | Tenancy | `TenantContext { tenantId; reviewProfile: "solo" \| "team" }`; `withTenantTx(pool, ctx, fn)`; `ensureDefaultTenant(pool, name)`; `resolveTenantBy(pool, kind, key): Promise<TenantContext \| null>`; SQL `ursitoare.register_tenant_route(kind, key_hash)` and `ursitoare.unregister_tenant_route(p_kind, p_key_hash)`; `seedTwoTenants(db)` | U03 |
 | Module graph | `test/arch/modules.ts` `MODULES: Record<string, { allowed: string[]; egress?: "tools" \| "oidc" \| "otlp" }>` | U04 |
 | e2e stack | `startE2eStack(opts?): Promise<E2eStack>`; `E2eStackPart { name; start(ctx): Promise<PartHandle>; seed?(ctx): Promise<void> }`; `discoverParts(dir?)` loads `parts/NN-<name>.ts` (one-line re-exports of `<name>-part.ts`) in file-name order; `PartHandle { env; close() }`; control listener `POST /reset`, `POST /faults` | U06 |
+| People lookup | `GET /api/v1/people?ids=` (at most 50 ids; `{ userId, displayName, kind }`) and `GET /api/v1/me/teams`, both under `read_self`; web `nameCache`, `useDisplayNames`, `useMyTeams`, `personLabel` | U18b |
 | Web shell | `registerFeature({ id, path, navLabel?, capability?, element })`; `createApiClient(opts): ApiClient` with `ApiRequestError`; features are files `web/src/features/NN-<name>.tsx`; U07 owns the registry and the pure nav filter; U15 passes `/me` capabilities to it | U07 |
 | Audit | `appendAudit(tx, ctx, event): Promise<{ seq: bigint; hash: string }>`; `appendAuditCommitted(pool, ctx, event)`; `verifyChain(pool, ctx)`; `canonicalize(value): string` | U08 |
 | Principal | `Principal { tenantId; userId; kind: "human" \| "service"; sessionId?; roles: string[]; teams: string[]; actorChain: string[] }` on `request.principal` | U12 (roles and teams filled by U17) |
 | PDP | `createPdp(opts): Promise<Pdp>`; `Pdp.check(req: PolicyRequest): Promise<Decision>`; `PolicyEngine.allowedActions(principal, actions)`; `Decision { decision; decisionId; reasons; errors; policySetVersion; permit?: Permit }`; `Permit { method; host; path; bodyDigest; serviceId; ttlSeconds }` | U11 (engine), U11b (catalogue, `allowedActions`) |
 | Routes | `defineRoute(server, { method, url, auth, action?, resource?, schema, errors, handler })`; `auth` is the union of U13 | U13 |
 | API conventions | `Cursor` (`limit`, `cursor`, `next_cursor`), `ERROR_CODES`, `withIdempotency(key, fn)` | U14 |
-| Web kit | `DataTable`, `Form`, `Field`, `SchemaForm`, `EmptyState`, `LoadingState`, `ErrorPanel`, `ConfirmDialog`, `toast()`; `messages.ts` | U15, U15b |
+| Web kit | `DataTable`, `Form`, `Field`, `SchemaForm`, `EmptyState`, `LoadingState`, `ErrorPanel`, `ConfirmDialog`, `toast()`; `messages.ts`; from M6b `PageHeader`, `Section` and `captionDisplay` (on `DataTable`) | U15, U15b, U15d |
+| Web ui | `web/src/ui/`: `cn`, `Button`, `Badge`, `Card`, `Tooltip`, `Collapsible`, `Skeleton`, `Tone` (and its state mappers), `format*` (`formatDuration`, `formatInstant`, `formatAgo`) | U15c |
 | Catalogue | `Catalogue { block(ref); modelProfile(ref); role(name); delegateTarget(target, workflow); flow(ref, major): { input; output } \| undefined }` | U22 (interface); filled by U24, U26 (block, role), U67 (modelProfile), U82 (flow), U84 (delegateTarget) |
 | Taint | `Taint` labels, `joinTaint(a, b)`, `flowCapabilities(flow, catalogue)` | U23 |
 | Node runtimes | `registerNodeRuntime(kind, runtime: NodeRuntime)`; `ToolInvoker { invoke(call: ToolCall, ctx: StepContext): Promise<ToolResult>; authorize?(call: ToolCall, ctx: StepContext): Promise<CallAuthorization> }`; `ToolCall { tool; args; nodeId; effectSeq; phase?: "pre" \| "post"; hookId? }`; `EffectMode = "live" \| "mock" \| "stub"` | U33 (`authorize?`: U50) |

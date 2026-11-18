@@ -41,4 +41,4 @@ Same imports as T1. For every page: `count("<PageHeader") === 1`, `count(root) =
 
 Mutations of `ServersPage.tsx`, each giving at least one problem: `const c = "#ffffff";` appended; `<p style="x"/>` appended; `<ConfirmDialog` replaced by `<ConfirmDialog destructive`.
 
-Frozen tests that stay green unchanged: `admin/admin-css.test.ts` (C-52c26a32), `tools/pages.test.ts` (C-ba990588, C-2c3410e3, C-a7f551fc), `admin/pages.test.ts`, the `tools/*.test.ts` model tests, `test/arch/web-routes.test.ts`.
+Frozen tests that stay green unchanged: `admin/admin-css.test.ts` (C-52c26a32), `web/src/tools/pages.test.ts` (C-ba990588, C-2c3410e3, C-a7f551fc), `admin/pages.test.ts`, the `web/src/tools/*.test.ts` model tests, `test/arch/web-routes.test.ts`.
