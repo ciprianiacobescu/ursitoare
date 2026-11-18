@@ -26,7 +26,7 @@ Paths without a directory are in `web/src/ui/`. No frozen test changes: `web/src
 
 ## 7. The pipeline
 
-- [ ] 7.1 Write `web/src/styles/app-css.test.ts` (scenario "app.css keeps its imports, bridge and base layer in order", test-plan.md T2; every file is read after `assert.ok(existsSync(url))`) and `web/src/styles/build.test.ts` (scenario "The build emits layers, kit rules and token utilities", T2; it also asserts that no other `*.test.ts` under `web/src` imports `vite`) first, then create `web/src/styles/app.css`, edit `web/vite.config.ts` (the import and `tailwindcss()` in `plugins`) and edit `web/src/main.tsx` (its three CSS imports become `import "./styles/app.css";`), implementing requirements "One stylesheet entry layers the kit under the utilities" and "The build emits the layers, the kit rules and the token utilities". Run `pnpm run test web/src/styles/build.test.ts` here and again after task 8.1
+- [x] 7.1 Write `web/src/styles/app-css.test.ts` (scenario "app.css keeps its imports, bridge and base layer in order", test-plan.md T2; every file is read after `assert.ok(existsSync(url))`) and `web/src/styles/build.test.ts` (scenario "The build emits layers, kit rules and token utilities", T2; it also asserts that no other `*.test.ts` under `web/src` imports `vite`) first, then create `web/src/styles/app.css`, edit `web/vite.config.ts` (the import and `tailwindcss()` in `plugins`) and edit `web/src/main.tsx` (its three CSS imports become `import "./styles/app.css";`), implementing requirements "One stylesheet entry layers the kit under the utilities" and "The build emits the layers, the kit rules and the token utilities". Run `pnpm run test web/src/styles/build.test.ts` here and again after task 8.1
 
 ## 8. The tree and the 22 import lines
 
