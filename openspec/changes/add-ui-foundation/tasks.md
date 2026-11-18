@@ -2,7 +2,7 @@ Paths without a directory are in `web/src/ui/`. No frozen test changes: `web/src
 
 ## 1. Tokens and contrast
 
-- [ ] 1.1 Write `web/src/kit/extra-contrast.test.ts` (scenario "The new tokens are hex and their contrast pairs pass", test-plan.md T1; it reads the real `web/src/kit/tokens.css` after `assert.ok(existsSync(url))`) first, then append the tokens to `web/src/kit/tokens.css`, change `--ui-font-sans` there, and implement `EXTRA_CONTRAST_PAIRS` in `web/src/kit/extra-contrast.ts`, implementing requirement "The new tokens are hex colours whose contrast pairs pass"
+- [x] 1.1 Write `web/src/kit/extra-contrast.test.ts` (scenario "The new tokens are hex and their contrast pairs pass", test-plan.md T1; it reads the real `web/src/kit/tokens.css` after `assert.ok(existsSync(url))`) first, then append the tokens to `web/src/kit/tokens.css`, change `--ui-font-sans` there, and implement `EXTRA_CONTRAST_PAIRS` in `web/src/kit/extra-contrast.ts`, implementing requirement "The new tokens are hex colours whose contrast pairs pass"
 
 ## 2. Scanners and packages
 
