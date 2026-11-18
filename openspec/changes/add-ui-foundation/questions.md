@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-546ee64e (web-design-system › Unstyled elements stay readable and the signed-out pages stay clean › Signed-out pages are styled, clean and accessible): accept as satisfied? |
 | Q-002 | answered | none | verdict | Hold H-b858d0c9: UI criterion C-52eda073 has no end-to-end test; see the generated UI tests table |
-| Q-003 | open | none | verdict | Hold H-9ada2edb: UI criterion C-c476cd94 has no end-to-end test; see the generated UI tests table |
+| Q-003 | answered | none | verdict | Hold H-9ada2edb: UI criterion C-c476cd94 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-508a051f: UI criterion C-546ee64e has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-ee794d23: UI criterion C-d77fa65f has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-7cfd2d65: UI criterion C-d3240b20 has no end-to-end test; see the generated UI tests table |
@@ -89,7 +89,8 @@ accept The hold can be waived. Criterion C-52eda073 is the scenario The new toke
 
 ## Q-003: Hold H-9ada2edb: UI criterion C-c476cd94 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -108,6 +109,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-c476cd94 is the scenario app.css keeps its imports, bridge and base layer in order, which by its own text is a test that reads app.css, tokens.css, main.tsx and vite.config.ts and checks their lines. That is source-file content, not anything observable through the browser, so step 5 is right that no end-to-end test can assert it. Three Node tests named with the criterion id in web/src/styles/app-css.test.ts check the 13 imports in order and the allowed top-level lines, the single --color-*: initial line, one bridge line per colour token, the ten base rules and no raw colour, and the one stylesheet import in main.tsx with the tailwind plugin in vite.config.ts. I also read app.css and main.tsx and they match.
 ---
 
 ## Q-004: Hold H-508a051f: UI criterion C-546ee64e has no end-to-end test; see the generated UI tests table
