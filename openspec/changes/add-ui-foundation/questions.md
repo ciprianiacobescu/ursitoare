@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-546ee64e (web-design-system › Unstyled elements stay readable and the signed-out pages stay clean › Signed-out pages are styled, clean and accessible): accept as satisfied? |
+| Q-001 | answered | none | verdict | Criterion C-546ee64e (web-design-system › Unstyled elements stay readable and the signed-out pages stay clean › Signed-out pages are styled, clean and accessible): accept as satisfied? |
 | Q-002 | open | none | verdict | Hold H-b858d0c9: UI criterion C-52eda073 has no end-to-end test; see the generated UI tests table |
 | Q-003 | open | none | verdict | Hold H-9ada2edb: UI criterion C-c476cd94 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-508a051f: UI criterion C-546ee64e has no end-to-end test; see the generated UI tests table |
@@ -31,7 +31,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-546ee64e (web-design-system › Unstyled elements stay readable and the signed-out pages stay clean › Signed-out pages are styled, clean and accessible): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -58,6 +59,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. Its own scenario says the browser test is green on arrival at main and guards the base layer rather than proving it, so no red or discriminating record can exist for it by design, and the project's rules leave browser-only criteria to the verifier rather than to a red step. The unit's test test_signed_out_pages_are_styled_clean_and_accessible in e2e/test_m6b_foundation.py performs exactly the scenario: viewport 1366 by 860, watch_csp before goto, assert_layout with max_banner_px=300, h1 font-size at least 24, assert_accessible, and an empty violation list, parametrized over / and /sign-in. The base layer in web/src/styles/app.css holds the h1 rule at 1.5rem and no other stylesheet sets an h1 font-size, and main.tsx imports only app.css, so the 24 px floor follows from the code. The test-plan-browser record and the design's probe report the four runs green against the scratch build and main's live stack, and the e2e gate keeps running this test on every verification.
 ---
 
 ## Q-002: Hold H-b858d0c9: UI criterion C-52eda073 has no end-to-end test; see the generated UI tests table
