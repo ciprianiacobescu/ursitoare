@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-ee794d23: UI criterion C-d77fa65f has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-7cfd2d65: UI criterion C-d3240b20 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-0311979d: UI criterion C-3c9f8b7f has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-ab85b284: UI criterion C-d69c05cb has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-ab85b284: UI criterion C-d69c05cb has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-ad97dd92: UI criterion C-a22e8a8b has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-52afaabe: UI criterion C-48ccaf77 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-c11b074f: UI criterion C-67de6235 has no end-to-end test; see the generated UI tests table |
@@ -214,7 +214,8 @@ accept The hold can be waived. Criterion C-3c9f8b7f is the scenario The packages
 
 ## Q-008: Hold H-ab85b284: UI criterion C-d69c05cb has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -233,6 +234,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-d69c05cb is the scenario cn and buttonClasses merge and order their classes, which by its own text runs the two pure functions on the K1 to K12 and B1 to B6 rows and the eight tone and size pairs of test-plan.md T5 and compares the returned class strings. These are string-in, string-out unit checks; this unit changes no page markup and mounts no Button, so step 5 is right that no end-to-end test can assert them. Three Node tests named with the criterion id in web/src/ui/classes.test.ts cover the cn rows including the listed three, the buttonClasses rows including primary sm and the className bg-accent override, and all eight pairs for ui-button, aria-disabled:cursor-not-allowed and an empty findPaletteUtilities result.
 ---
 
 ## Q-009: Hold H-ad97dd92: UI criterion C-a22e8a8b has no end-to-end test; see the generated UI tests table
