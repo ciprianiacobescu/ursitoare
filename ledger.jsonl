@@ -24,3 +24,5 @@
 {"at":"2026-11-18T21:22:21Z","branch":"l4/archive/openspec/add-ui-foundation","head":"3c5e366929a5a2b0b477331d586d1ff51e8db458","type":"unit.branch_deleted","unit":"openspec:add-ui-foundation"}
 {"at":"2026-11-18T21:22:22Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-people-lookup"}
 {"at":"2026-11-18T21:22:22Z","run":"r-20261118T2122Z-44a0","type":"unit.dispatched","unit":"openspec:add-people-lookup"}
+{"at":"2026-11-18T23:48:28Z","attempt":1,"cost_usd":0.0,"runs":2,"type":"plan.charged","unit":"openspec:add-people-lookup"}
+{"at":"2026-11-18T23:48:28Z","run":"r-20261118T2348Z-6bec","type":"unit.dispatched","unit":"openspec:add-people-lookup"}
