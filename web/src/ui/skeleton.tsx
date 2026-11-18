@@ -1,7 +1,13 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 import type { ReactNode } from "react";
 
-export function Skeleton(_props: { className?: string }): ReactNode {
-  throw new Error("not implemented");
+import { cn } from "./cn.ts";
+
+export function Skeleton({ className }: { className?: string }): ReactNode {
+  return (
+    <div
+      data-slot="skeleton"
+      aria-hidden="true"
+      className={cn("animate-pulse rounded-(--ui-radius) bg-quiet-surface", className)}
+    />
+  );
 }

@@ -1,7 +1,16 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 import type { ComponentProps, ReactNode } from "react";
 
-export function Card(_props: ComponentProps<"div">): ReactNode {
-  throw new Error("not implemented");
+import { cn } from "./cn.ts";
+
+export function Card({ className, ...props }: ComponentProps<"div">): ReactNode {
+  return (
+    <div
+      data-slot="card"
+      className={cn(
+        "rounded-(--ui-radius-lg) border border-border bg-surface p-4 shadow-(--ui-shadow-sm)",
+        className,
+      )}
+      {...props}
+    />
+  );
 }

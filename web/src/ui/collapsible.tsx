@@ -1,20 +1,27 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
-import type * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
+import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import type { ComponentProps, ReactNode } from "react";
 
-export function Collapsible(_props: ComponentProps<typeof CollapsiblePrimitive.Root>): ReactNode {
-  throw new Error("not implemented");
+import { cn } from "./cn.ts";
+
+export function Collapsible(props: ComponentProps<typeof CollapsiblePrimitive.Root>): ReactNode {
+  return <CollapsiblePrimitive.Root data-slot="collapsible" {...props} />;
 }
 
 export function CollapsibleTrigger(
-  _props: ComponentProps<typeof CollapsiblePrimitive.Trigger>,
+  props: ComponentProps<typeof CollapsiblePrimitive.Trigger>,
 ): ReactNode {
-  throw new Error("not implemented");
+  return <CollapsiblePrimitive.Trigger data-slot="collapsible-trigger" {...props} />;
 }
 
-export function CollapsibleContent(
-  _props: ComponentProps<typeof CollapsiblePrimitive.Content>,
-): ReactNode {
-  throw new Error("not implemented");
+export function CollapsibleContent({
+  className,
+  ...props
+}: ComponentProps<typeof CollapsiblePrimitive.Content>): ReactNode {
+  return (
+    <CollapsiblePrimitive.Content
+      data-slot="collapsible-content"
+      className={cn("overflow-hidden", className)}
+      {...props}
+    />
+  );
 }

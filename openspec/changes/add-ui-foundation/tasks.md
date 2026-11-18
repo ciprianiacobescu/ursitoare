@@ -22,7 +22,7 @@ Paths without a directory are in `web/src/ui/`. No frozen test changes: `web/src
 
 ## 6. Components
 
-- [ ] 6.1 Write `components.test.ts` (scenario "The components' sources keep the markup rules", test-plan.md T6; it reads the six `.tsx` files with `readFileSync` after `assert.ok(existsSync(url))`) first, then implement `Button` and the re-exports in `button.tsx`, `Badge` in `badge.tsx`, `Card` in `card.tsx`, `Skeleton` in `skeleton.tsx`, `Tooltip` and `TooltipProvider` in `tooltip.tsx`, and the three collapsible parts in `collapsible.tsx`, implementing requirement "The components keep the markup, role and class rules"
+- [x] 6.1 Write `components.test.ts` (scenario "The components' sources keep the markup rules", test-plan.md T6; it reads the six `.tsx` files with `readFileSync` after `assert.ok(existsSync(url))`) first, then implement `Button` and the re-exports in `button.tsx`, `Badge` in `badge.tsx`, `Card` in `card.tsx`, `Skeleton` in `skeleton.tsx`, `Tooltip` and `TooltipProvider` in `tooltip.tsx`, and the three collapsible parts in `collapsible.tsx`, implementing requirement "The components keep the markup, role and class rules"
 
 ## 7. The pipeline
 
