@@ -1,0 +1,107 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [],
+    "skipped": true,
+    "note": "the spec names no path or module in backticks: nothing to compare against",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-audit-api-followup-1/.l4/followup.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-api-followup-1/.l4/ledger/r-20261118T0946Z-173b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-api-followup-1/.l4/ledger/r-20261118T0946Z-a00e.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-api-followup-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-api-followup-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-api-followup-1/specs/audit-api/spec.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-audit-api-followup-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/archive/2026-11-01-add-audit-api/feedback.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/audit-list-seq-order.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "src/audit/query.ts",
+        "module": "audit",
+        "kind": "code",
+        "label": null,
+        "reason": "the spec declares no scope"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/audit/query.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/audit/query.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2535,
+      "passed": 2535,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 1,
+      "new_passed": 1,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

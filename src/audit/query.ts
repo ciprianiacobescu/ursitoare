@@ -187,7 +187,7 @@ export async function listAuditEvents(
               mk_trace_id, mk_request_id, mk_jti, encode(prev_hash, 'hex') AS prev_hash, encode(hash, 'hex') AS hash
        FROM ursitoare.audit_event
        WHERE ${where.join(" AND ")}
-       ORDER BY seq ${dir}, at ${dir}
+       ORDER BY audit_event.seq ${dir}, audit_event.at ${dir}
        LIMIT $${params.length}`,
       params,
     );
