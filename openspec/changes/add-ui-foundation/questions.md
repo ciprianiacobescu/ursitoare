@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-0311979d: UI criterion C-3c9f8b7f has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-ab85b284: UI criterion C-d69c05cb has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-ad97dd92: UI criterion C-a22e8a8b has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-52afaabe: UI criterion C-48ccaf77 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-52afaabe: UI criterion C-48ccaf77 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-c11b074f: UI criterion C-67de6235 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-e8d05402: UI criterion C-97e30a51 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
@@ -264,7 +264,8 @@ accept The hold can be waived. Criterion C-a22e8a8b is the scenario The componen
 
 ## Q-010: Hold H-52afaabe: UI criterion C-48ccaf77 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -283,6 +284,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-48ccaf77 is the scenario Tone mappers, which by its own text runs the five pure mapper functions on the rows of test-plan.md T7 and compares the returned Tone strings. No page in this unit calls these mappers, so step 5 is right that no end-to-end test can observe their output. Six Node tests named with the criterion id in web/src/ui/tones.test.ts cover each mapper's known states, including failed to danger, published to info, tested to success, drifted to warning and needs_reconfirm to warning, and the fallback to neutral for weird, the empty string, __proto__ and toString across all five. The implementation in tones.ts uses switch statements with a neutral default, so prototype keys cannot leak.
 ---
 
 ## Q-011: Hold H-c11b074f: UI criterion C-67de6235 has no end-to-end test; see the generated UI tests table
