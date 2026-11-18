@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Hold H-b858d0c9: UI criterion C-52eda073 has no end-to-end test; see the generated UI tests table |
 | Q-003 | answered | none | verdict | Hold H-9ada2edb: UI criterion C-c476cd94 has no end-to-end test; see the generated UI tests table |
 | Q-004 | answered | none | verdict | Hold H-508a051f: UI criterion C-546ee64e has no end-to-end test; see the generated UI tests table |
-| Q-005 | open | none | verdict | Hold H-ee794d23: UI criterion C-d77fa65f has no end-to-end test; see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-ee794d23: UI criterion C-d77fa65f has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-7cfd2d65: UI criterion C-d3240b20 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-0311979d: UI criterion C-3c9f8b7f has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-ab85b284: UI criterion C-d69c05cb has no end-to-end test; see the generated UI tests table |
@@ -139,7 +139,8 @@ accept The hold can be waived. The verifier's generated file for C-546ee64e was 
 
 ## Q-005: Hold H-ee794d23: UI criterion C-d77fa65f has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -158,6 +159,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-d77fa65f is the scenario Palette utilities, stylesheet imports and banned imports: hits and misses, which by its own text runs the three pure scanner functions on the sample rows P1 to P11, C1 to C8 and B1 to B11 of test-plan.md T3. These are string-in, hits-out unit checks of source-code scanners with no browser-observable outcome, so step 5 is right that no end-to-end test can drive them. Three Node tests named with the criterion id in web/src/ui/rules.test.ts cover the palette rows including the joined arbitrary-colour samples and the line-2 hit, the css-import hits and misses including the .css.ts miss, and the banned-import hits and misses including the react-slot and react-dialog-extra misses and the bare string line.
 ---
 
 ## Q-006: Hold H-7cfd2d65: UI criterion C-d3240b20 has no end-to-end test; see the generated UI tests table
