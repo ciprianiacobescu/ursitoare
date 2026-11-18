@@ -1,4 +1,4 @@
-# Verification: openspec:add-ui-foundation: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-ui-foundation: PASS (round 3)
 
 traceability: 13/14 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 13/14 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base main@3a3a0a143c contained |
-| 1 | integrity | ok | 256.2 | 11 sub-checks (+1 unfrozen by human answers); scope: 64 changed file(s) |
-| 2 | build | ok | 28.8 |  |
-| 3 | tests | ok | 362.7 |  |
-| 4 | traceability | ok | 0.2 | 13/14 criteria covered |
-| 4a | audit sampling | ok | 87.7 | 2 not_testable, 2 skipped; support files at the base: 14 |
-| 5 | ui test generation | ok | 592.9 | 1 accepted, 1 base_error, 9 not_testable, 2 uncollectable, 1 writer_failed |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/admin/AuditPage.tsx, web/src/admin/MappingsPage.tsx, web/src/admin/TeamsPage.tsx, web/src/admin/UsersPage.tsx, web/src/auth/AccountMenu.tsx and 29 more |
-| 8 | s1 judge | ok | 1.9 | 14/14 criteria judged by jev |
-| 9 | judge | ok | 809.5 | 5 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
+| 4a | audit sampling | reused | 0.0 | reused (round 2) |
+| 5 | ui test generation | reused | 0.0 | reused (round 2) |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -216,6 +216,23 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-595839c2 | not_testable | - | - | The criterion is exercised by web/src/styles/build.test.ts, a Node/Vite test that runs build() on the real config; it requires the installed Vite/Tailwind toolchain (network) and exposes no Python public interface to import, so pytest cannot run it offline. |
 | C-f357664d | not_testable | - | - | The criterion is checked by ui-foundation-sources.test.ts (Node/TypeScript) reading DryRunPanel.tsx, RunPage.tsx and 80-runs.tsx and calling findCssImports; the shown sources define no Python module under test implementing findCssImports, so pytest cannot import it. |
 
+## Answers to verdict questions
+
+- Q-001 accept C-546ee64e by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. Its own scenario says the browser test is green on arrival at main and guards the base layer rather than proving it, so no red or discriminating record can exist for it by design, and the project's rules leave browser-only criteria to the verifier rather than...
+- Q-002 accept H-b858d0c9 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-52eda073 is the scenario The new tokens are hex and their contrast pairs pass, which by its own text reads the real tokens.css and runs the F0 to F3 rows of test-plan.md T1 through checkTokenContrast; it is a Node unit-test scenario about a source file and a pure ...
+- Q-003 accept H-9ada2edb by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-c476cd94 is the scenario app.css keeps its imports, bridge and base layer in order, which by its own text is a test that reads app.css, tokens.css, main.tsx and vite.config.ts and checks their lines. That is source-file content, not anything observable through the...
+- Q-004 accept H-508a051f by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The verifier's generated file for C-546ee64e was uncollectable at the merge base, but the unit does have an end-to-end test for this criterion: test_signed_out_pages_are_styled_clean_and_accessible in e2e/test_m6b_foundation.py, tagged with the criterion id, imports pytest co...
+- Q-005 accept H-ee794d23 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-d77fa65f is the scenario Palette utilities, stylesheet imports and banned imports: hits and misses, which by its own text runs the three pure scanner functions on the sample rows P1 to P11, C1 to C8 and B1 to B11 of test-plan.md T3. These are string-in, hits-out u...
+- Q-006 accept H-7cfd2d65 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-d3240b20 is the scenario The real tree holds the rules, and the scanners scan themselves clean, which by its own text is a Node test that walks every .ts and .tsx under web/src except *.test.ts with the three scanners and then scans ui/rules.ts alone. That is a fi...
+- Q-007 accept H-0311979d by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-3c9f8b7f is the scenario The packages: no banned name, nine exact versions, which by its own text is a test that reads web/package.json and compares it with BANNED_PACKAGES and M6B_PACKAGES. A package manifest is not visible through the browser, so step 5 is right...
+- Q-008 accept H-ab85b284 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-d69c05cb is the scenario cn and buttonClasses merge and order their classes, which by its own text runs the two pure functions on the K1 to K12 and B1 to B6 rows and the eight tone and size pairs of test-plan.md T5 and compares the returned class strings. These ar...
+- Q-009 accept H-ad97dd92 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-a22e8a8b is the scenario The components' sources keep the markup rules, which by its own text is a test that reads the six component sources and checks findInlineStyleUse, forbidden substrings and required markers. That is source-text inspection, and this unit mou...
+- Q-010 accept H-52afaabe by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-48ccaf77 is the scenario Tone mappers, which by its own text runs the five pure mapper functions on the rows of test-plan.md T7 and compares the returned Tone strings. No page in this unit calls these mappers, so step 5 is right that no end-to-end test can observe...
+- Q-011 accept H-c11b074f by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-67de6235 is the scenario Durations, instants and ages, which by its own text runs the three pure functions formatDuration, formatInstant and formatAgo on the D1 to D13, I1 to I6 and A1 to A10 rows of test-plan.md T8 and compares the returned strings. No file under...
+- Q-012 accept H-e8d05402 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-97e30a51 is the scenario watch_csp sees a violation and assert_layout reports numbers, and the unit does have end-to-end tests for it: test_watch_csp_reports_a_violation and test_assert_layout_reports_the_numbers in e2e/test_m6b_foundation.py, both tagged with the...
+- Q-013 accept H-b5dcea3b by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-f665c2d6 is the web-runs scenario Sources read as the rules say, kept unchanged by this unit's MODIFIED requirement; by its own text it is dry-run-sources.test.ts reading DryRunPanel.tsx, RunPage.tsx and 80-runs.tsx and checking findInlineStyleUse, the absence of ...
+- Q-014 accept H-53d309b3 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-f357664d is the new web-runs scenario The run sources import no stylesheet and the feature files stay, which by its own text is ui-foundation-sources.test.ts running findCssImports on DryRunPanel.tsx, RunPage.tsx and 80-runs.tsx and listing web/src/features. A sty...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -223,7 +240,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-52eda073 | web-design-system › The new tokens are hex colours whose contrast pairs pass › The new tokens are hex and their contrast pairs pass | pass | pass | the judge passed it and a discriminating test passes |
 | C-c476cd94 | web-design-system › One stylesheet entry layers the kit under the utilities › app.css keeps its imports, bridge and base layer in order | pass | pass | the judge passed it and a discriminating test passes |
 | C-595839c2 | web-design-system › The build emits the layers, the kit rules and the token utilities › The build emits layers, kit rules and token utilities | pass | pass | the judge passed it and a discriminating test passes |
-| C-546ee64e | web-design-system › Unstyled elements stay readable and the signed-out pages stay clean › Signed-out pages are styled, clean and accessible | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-546ee64e | web-design-system › Unstyled elements stay readable and the signed-out pages stay clean › Signed-out pages are styled, clean and accessible | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. Its own scenario says the browser test is green on arrival at main and guards the base layer rather than proving it, so no red or discriminating record can exist for it by design, and the project's ... |
 | C-d77fa65f | web-design-system › Source rules hold over `web/src` and `web/package.json` › Palette utilities, stylesheet imports and banned imports: hits and misses | pass | pass | the judge passed it and a discriminating test passes |
 | C-d3240b20 | web-design-system › Source rules hold over `web/src` and `web/package.json` › The real tree holds the rules, and the scanners scan themselves clean | pass | pass | the judge passed it and a discriminating test passes |
 | C-3c9f8b7f | web-design-system › Source rules hold over `web/src` and `web/package.json` › The packages: no banned name, nine exact versions | pass | pass | the judge passed it and a discriminating test passes |
@@ -255,22 +272,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-97e30a51): The end-to-end test test_m6b_foundation::test_assert_layout_reports_the_numbers[chromium], test_m6b_foundation::test_watch_csp_reports_a_violation[chromium] traces criterion C-97e30a51 (web-design-system › Two browser helpers watch the CSP and measure the layout › watch_csp sees a violation and assert_layout reports numbers), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-f665c2d6): No end-to-end test traces criterion C-f665c2d6 (web-runs › The new components follow the run sources' rules › Sources read as the rules say); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-f357664d): No end-to-end test traces criterion C-f357664d (web-runs › The new components follow the run sources' rules › The run sources import no stylesheet and the feature files stay); step 5 generates one.
-
-## Needs a human
-
-- UI criterion C-52eda073 has no end-to-end test; see the generated UI tests table
-- UI criterion C-c476cd94 has no end-to-end test; see the generated UI tests table
-- UI criterion C-546ee64e has no end-to-end test; see the generated UI tests table
-- UI criterion C-d77fa65f has no end-to-end test; see the generated UI tests table
-- UI criterion C-d3240b20 has no end-to-end test; see the generated UI tests table
-- UI criterion C-3c9f8b7f has no end-to-end test; see the generated UI tests table
-- UI criterion C-d69c05cb has no end-to-end test; see the generated UI tests table
-- UI criterion C-a22e8a8b has no end-to-end test; see the generated UI tests table
-- UI criterion C-48ccaf77 has no end-to-end test; see the generated UI tests table
-- UI criterion C-67de6235 has no end-to-end test; see the generated UI tests table
-- UI criterion C-97e30a51 has no end-to-end test; see the generated UI tests table
-- UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table
-- UI criterion C-f357664d has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
