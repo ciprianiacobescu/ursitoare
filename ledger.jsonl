@@ -15,3 +15,4 @@
 {"at":"2026-11-18T20:57:48Z","run":"r-20261118T2057Z-2cbc","type":"unit.dispatched","unit":"openspec:add-ui-foundation"}
 {"at":"2026-11-18T21:03:44Z","attempt":1,"cost_usd":9.467918,"runs":6,"type":"plan.charged","unit":"openspec:add-ui-foundation"}
 {"at":"2026-11-18T21:03:44Z","run":"r-20261118T2103Z-3d6b","type":"unit.dispatched","unit":"openspec:add-ui-foundation"}
+{"at":"2026-11-18T21:14:34Z","head":"14b2b42aa5ff64f5c89d1ec637399f163cfc9324","pr":132,"target_before":"3a3a0a143c4af6b78e636c9f86129480f0edefab","type":"unit.merge_requested","unit":"openspec:add-ui-foundation"}
