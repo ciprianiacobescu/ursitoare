@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | ambiguous | Task 1.1 is blocked |
+| Q-001 | answered | 1.1 | ambiguous | Task 1.1 is blocked |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 1.1 is blocked
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The failing browser test test_assert_layout_reports_the_numbers (e2e/test_m6b_foundation.py:48-63) builds its pages with page.set_content and never loads the application, so no production code is on its path; the only code involved is assert_layout and watch_csp in e2e/conftest.py plus the test itse
 - **Blocking tasks:** 1.1
 - **Kind:** ambiguous
@@ -29,3 +29,4 @@ No change made. The finding is a failure of test_m6b_foundation::test_assert_lay
 
 ### Answer
 <!-- write below this line -->
+The failure was in the test's own fixture, not in production code: the fixture put a 1500 px div inside a body with Chromium's default 8 px margin, so the helper correctly reported a scroll width of 1508 while the spec scenario says a 1,500 px body. The owner's delegate corrected the fixture in commit 3cceda88 on this unit's branch (body margin 0; no assertion changed; reproduced and re-run 3 of 3 green locally). Make no code change for task 1.1; run its gates, which now pass.
