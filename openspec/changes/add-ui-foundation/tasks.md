@@ -10,7 +10,7 @@ Paths without a directory are in `web/src/ui/`. No frozen test changes: `web/src
 
 ## 3. Classes
 
-- [ ] 3.1 Write `classes.test.ts` (scenario "cn and buttonClasses merge and order their classes", test-plan.md T5; it imports `cn` from `cn.ts`, `buttonClasses` from `button-classes.ts` and `findPaletteUtilities` from `rules.ts`) first, then implement `cn` in `cn.ts` and `buttonClasses` with `ButtonTone` in `button-classes.ts`, implementing requirement "cn and buttonClasses merge classes by Tailwind's rules"
+- [x] 3.1 Write `classes.test.ts` (scenario "cn and buttonClasses merge and order their classes", test-plan.md T5; it imports `cn` from `cn.ts`, `buttonClasses` from `button-classes.ts` and `findPaletteUtilities` from `rules.ts`) first, then implement `cn` in `cn.ts` and `buttonClasses` with `ButtonTone` in `button-classes.ts`, implementing requirement "cn and buttonClasses merge classes by Tailwind's rules"
 
 ## 4. Tones
 
