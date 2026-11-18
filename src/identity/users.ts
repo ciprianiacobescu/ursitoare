@@ -240,3 +240,17 @@ export async function createServiceAccount(
     state: "active",
   };
 }
+
+export interface PersonName {
+  userId: string;
+  displayName: string;
+  kind: UserKind;
+}
+
+export async function getPersonNames(
+  _tx: TenantTx,
+  _ctx: TenantContext,
+  _userIds: readonly string[],
+): Promise<PersonName[]> {
+  throw new Error("not implemented");
+}

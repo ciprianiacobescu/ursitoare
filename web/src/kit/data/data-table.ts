@@ -201,3 +201,7 @@ export function focusAfterChange(
   }
   return "none";
 }
+
+export function captionClass(_display: "visible" | "hidden" | undefined): string {
+  return "";
+}
