@@ -49,7 +49,8 @@ def test_assert_layout_reports_the_numbers(page: Page, base_url: str) -> None:
     violations = watch_csp(page)
     page.set_viewport_size({"width": 1000, "height": 700})
     page.set_content(
-        '<header style="height:100px">h</header><div style="width:1500px">w</div>'
+        '<body style="margin:0"><header style="height:100px">h</header>'
+        '<div style="width:1500px">w</div></body>'
     )
     with pytest.raises(AssertionError) as wide:
         assert_layout(page)
