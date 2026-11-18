@@ -12,7 +12,7 @@
 
 ## 4. Wiring and the OpenAPI document
 
-- [ ] 4.1 Write `src/api/people-openapi.test.ts` first (scenario "The document lists the two routes"; it reads `docs/api/openapi.json` with `readFile` and compares `servedOpenApiText()` of `test/support/openapi-docs.ts` with it; at red the file has 48 paths, so it fails by assertion), then call `registerPeopleRoutes(server, pep)` in `src/main.ts` right after `registerMeRoute(server, pep)` and regenerate `docs/api/openapi.json` with `pnpm run test test/support/openapi-docs.ts` implementing requirement "The committed OpenAPI document describes both routes". The frozen `src/main.conventions.test.ts::C-d150bfa4 the committed OpenAPI document equals the text the real engine serves` is not edited and must stay green. Run `pnpm run test src/api/people-openapi.test.ts`.
+- [x] 4.1 Write `src/api/people-openapi.test.ts` first (scenario "The document lists the two routes"; it reads `docs/api/openapi.json` with `readFile` and compares `servedOpenApiText()` of `test/support/openapi-docs.ts` with it; at red the file has 48 paths, so it fails by assertion), then call `registerPeopleRoutes(server, pep)` in `src/main.ts` right after `registerMeRoute(server, pep)` and regenerate `docs/api/openapi.json` with `pnpm run test test/support/openapi-docs.ts` implementing requirement "The committed OpenAPI document describes both routes". The frozen `src/main.conventions.test.ts::C-d150bfa4 the committed OpenAPI document equals the text the real engine serves` is not edited and must stay green. Run `pnpm run test src/api/people-openapi.test.ts`.
 
 ## 5. Web parsers and the teams loader
 

@@ -26,6 +26,7 @@ import {
   registerGrantRoutes,
   registerMeRoute,
   registerOpenApiRoute,
+  registerPeopleRoutes,
   registerPolicyRoutes,
   registerRunDecisionRoutes,
   registerRunRoutes,
@@ -277,6 +278,7 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     };
     installPep(server, pep);
     registerMeRoute(server, pep);
+    registerPeopleRoutes(server, pep);
     registerAdminRoutes(server, {
       pool: pep.pool,
       clock: pep.clock,
