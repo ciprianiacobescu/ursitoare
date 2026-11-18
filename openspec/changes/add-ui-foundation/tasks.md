@@ -6,7 +6,7 @@ Paths without a directory are in `web/src/ui/`. No frozen test changes: `web/src
 
 ## 2. Scanners and packages
 
-- [ ] 2.1 Write `rules.test.ts` (scenario "Palette utilities, stylesheet imports and banned imports: hits and misses", rows P, C and B of test-plan.md T3) and `packages.test.ts` (scenario "The packages: no banned name, nine exact versions", test-plan.md T4; the scaffold stubs `BANNED_PACKAGES` and `M6B_PACKAGES` as empty values, so its deep-equals fail by assertion) first, then implement `findPaletteUtilities`, `findCssImports`, `findBannedImports`, `BANNED_PACKAGES` and `M6B_PACKAGES` in `rules.ts`, implementing requirement "Source rules hold over `web/src` and `web/package.json`" (the scanner and package halves)
+- [x] 2.1 Write `rules.test.ts` (scenario "Palette utilities, stylesheet imports and banned imports: hits and misses", rows P, C and B of test-plan.md T3) and `packages.test.ts` (scenario "The packages: no banned name, nine exact versions", test-plan.md T4; the scaffold stubs `BANNED_PACKAGES` and `M6B_PACKAGES` as empty values, so its deep-equals fail by assertion) first, then implement `findPaletteUtilities`, `findCssImports`, `findBannedImports`, `BANNED_PACKAGES` and `M6B_PACKAGES` in `rules.ts`, implementing requirement "Source rules hold over `web/src` and `web/package.json`" (the scanner and package halves)
 
 ## 3. Classes
 
