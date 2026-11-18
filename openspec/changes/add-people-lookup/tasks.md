@@ -8,7 +8,7 @@
 
 ## 3. The teams route
 
-- [ ] 3.1 Write `src/api/me-teams.test.ts` first (scenarios "Missing session, disabled caller, HEAD and no database" and "Teams of alice, bob and mallory and the unchanged /me"; it imports `registerPeopleRoutes` from `./people-routes.ts` and `registerMeRoute` from `./me.ts`; at red the teams route is a 404, so it fails by assertion), then add `GET /api/v1/me/teams` to `registerPeopleRoutes` in `src/api/people-routes.ts` implementing requirements "Both routes refuse a caller who is not signed in or not active, and exist without a database" and "GET /api/v1/me/teams answers the caller's own teams and /me keeps its shape". Run `pnpm run test src/api/me-teams.test.ts`.
+- [x] 3.1 Write `src/api/me-teams.test.ts` first (scenarios "Missing session, disabled caller, HEAD and no database" and "Teams of alice, bob and mallory and the unchanged /me"; it imports `registerPeopleRoutes` from `./people-routes.ts` and `registerMeRoute` from `./me.ts`; at red the teams route is a 404, so it fails by assertion), then add `GET /api/v1/me/teams` to `registerPeopleRoutes` in `src/api/people-routes.ts` implementing requirements "Both routes refuse a caller who is not signed in or not active, and exist without a database" and "GET /api/v1/me/teams answers the caller's own teams and /me keeps its shape". Run `pnpm run test src/api/me-teams.test.ts`.
 
 ## 4. Wiring and the OpenAPI document
 

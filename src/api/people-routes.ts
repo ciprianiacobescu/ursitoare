@@ -40,6 +40,24 @@ const PEOPLE_RESPONSE_SCHEMA = {
   },
 } as const;
 
+const MY_TEAMS_RESPONSE_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["items", "next_cursor"],
+  properties: {
+    items: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["id"],
+        properties: { id: { type: "string" } },
+      },
+    },
+    next_cursor: { type: "null" },
+  },
+} as const;
+
 function unavailable(): ApiError {
   return new ApiError(503, "AUTHZ_UNAVAILABLE", "Authorization is unavailable");
 }
@@ -82,6 +100,30 @@ export function registerPeopleRoutes(server: FastifyInstance, deps: PepDeps): vo
       }
 
       return { items: names };
+    },
+  });
+
+  defineRoute(server, {
+    method: "GET",
+    url: "/api/v1/me/teams",
+    auth: { kind: "session" },
+    action: "read_self",
+    schema: { response: { 200: MY_TEAMS_RESPONSE_SCHEMA } },
+    errors: [],
+    handler: async (request) => {
+      const tenant: TenantContext | undefined = request.tenant;
+      const principal = request.principal;
+      if (deps.pool === null || deps.engine === null || tenant === undefined || principal === undefined) {
+        throw unavailable();
+      }
+
+      const found = await withTenantTx(deps.pool, tenant, (tx) => getUser(tx, tenant, principal.userId));
+      if (found === null || found.state !== "active") {
+        throw unauthenticated();
+      }
+
+      const teams = [...new Set(principal.teams)].sort();
+      return { items: teams.map((id) => ({ id })), next_cursor: null };
     },
   });
 }
