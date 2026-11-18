@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-546ee64e (web-design-system › Unstyled elements stay readable and the signed-out pages stay clean › Signed-out pages are styled, clean and accessible): accept as satisfied? |
-| Q-002 | open | none | verdict | Hold H-b858d0c9: UI criterion C-52eda073 has no end-to-end test; see the generated UI tests table |
+| Q-002 | answered | none | verdict | Hold H-b858d0c9: UI criterion C-52eda073 has no end-to-end test; see the generated UI tests table |
 | Q-003 | open | none | verdict | Hold H-9ada2edb: UI criterion C-c476cd94 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-508a051f: UI criterion C-546ee64e has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-ee794d23: UI criterion C-d77fa65f has no end-to-end test; see the generated UI tests table |
@@ -64,7 +64,8 @@ accept The criterion is satisfied as it stands. Its own scenario says the browse
 
 ## Q-002: Hold H-b858d0c9: UI criterion C-52eda073 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -83,6 +84,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-52eda073 is the scenario The new tokens are hex and their contrast pairs pass, which by its own text reads the real tokens.css and runs the F0 to F3 rows of test-plan.md T1 through checkTokenContrast; it is a Node unit-test scenario about a source file and a pure function, with nothing a browser can observe over the base origin. Six Node tests named with the criterion id in web/src/kit/extra-contrast.test.ts cover each row: the nine ids and minimums, the real tokens passing with the listed ratios, the 25 hex colours, the weak quiet-text failure, the five sidebar zero-ratio failures and the two accent-surface failures. An end-to-end test would add nothing the scenario asks for.
 ---
 
 ## Q-003: Hold H-9ada2edb: UI criterion C-c476cd94 has no end-to-end test; see the generated UI tests table
