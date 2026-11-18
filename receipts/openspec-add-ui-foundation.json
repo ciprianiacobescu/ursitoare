@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-18T21:20:57Z",
+  "integrated_revision": "c497f47062b2003239bf7dcc44f65cdf3a23f2c5",
+  "merge_commit": "c497f47062b2003239bf7dcc44f65cdf3a23f2c5",
+  "plan_digest": "03b7600f239a655c",
+  "plan_id": "m6b",
+  "postcheck": "pass",
+  "pr": 132,
+  "receipt_id": "m6b/openspec:add-ui-foundation/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "14b2b42aa5ff64f5c89d1ec637399f163cfc9324",
+  "spec_digest": "baa8cf0256f61e2f",
+  "target": "main",
+  "unit_id": "openspec:add-ui-foundation"
+}

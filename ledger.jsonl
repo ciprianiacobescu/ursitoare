@@ -18,3 +18,6 @@
 {"at":"2026-11-18T21:14:34Z","head":"14b2b42aa5ff64f5c89d1ec637399f163cfc9324","pr":132,"target_before":"3a3a0a143c4af6b78e636c9f86129480f0edefab","type":"unit.merge_requested","unit":"openspec:add-ui-foundation"}
 {"at":"2026-11-18T21:14:39Z","ci":"not_run","head":"14b2b42aa5ff64f5c89d1ec637399f163cfc9324","merge_commit":"c497f47062b2003239bf7dcc44f65cdf3a23f2c5","method":"squash","pr":132,"raced":false,"type":"unit.merged","unit":"openspec:add-ui-foundation"}
 {"at":"2026-11-18T21:14:44Z","branch":"l4/openspec/add-ui-foundation","head":"14b2b42aa5ff64f5c89d1ec637399f163cfc9324","type":"unit.branch_deleted","unit":"openspec:add-ui-foundation"}
+{"at":"2026-11-18T21:20:57Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"c497f47062b2003239bf7dcc44f65cdf3a23f2c5","status":"pass","type":"unit.postcheck","unit":"openspec:add-ui-foundation"}
+{"at":"2026-11-18T21:20:57Z","revision":"c497f47062b2003239bf7dcc44f65cdf3a23f2c5","type":"unit.integrated","unit":"openspec:add-ui-foundation"}
+{"at":"2026-11-18T21:20:57Z","attempt":1,"cost_usd":9.467918,"runs":6,"type":"plan.charged","unit":"openspec:add-ui-foundation"}
