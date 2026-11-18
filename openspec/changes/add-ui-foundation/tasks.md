@@ -14,7 +14,7 @@ Paths without a directory are in `web/src/ui/`. No frozen test changes: `web/src
 
 ## 4. Tones
 
-- [ ] 4.1 Write `tones.test.ts` (scenario "Tone mappers", test-plan.md T7) first, then implement the five mappers in `tones.ts`, implementing requirement "The tone mappers map known states and fall back to neutral"
+- [x] 4.1 Write `tones.test.ts` (scenario "Tone mappers", test-plan.md T7) first, then implement the five mappers in `tones.ts`, implementing requirement "The tone mappers map known states and fall back to neutral"
 
 ## 5. Formats
 
