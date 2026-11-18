@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Hold H-ad97dd92: UI criterion C-a22e8a8b has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-52afaabe: UI criterion C-48ccaf77 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-c11b074f: UI criterion C-67de6235 has no end-to-end test; see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-e8d05402: UI criterion C-97e30a51 has no end-to-end test; see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-e8d05402: UI criterion C-97e30a51 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-53d309b3: UI criterion C-f357664d has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -314,7 +314,8 @@ accept The hold can be waived. Criterion C-67de6235 is the scenario Durations, i
 
 ## Q-012: Hold H-e8d05402: UI criterion C-97e30a51 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -333,6 +334,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-97e30a51 is the scenario watch_csp sees a violation and assert_layout reports numbers, and the unit does have end-to-end tests for it: test_watch_csp_reports_a_violation and test_assert_layout_reports_the_numbers in e2e/test_m6b_foundation.py, both tagged with the criterion id, perform exactly the scenario's steps, namely a routed page with the style-src header and a style element whose list gains an entry starting Content Security Policy violation: style-src, and a 100 px banner above a 1,500 px body in a 1,000 px window that raises the two numbered messages, passes at 100 and raises exactly layout: banner 100px is taller than 99px at 99. The helpers in e2e/conftest.py match the requirement: watch_csp adds an init script that logs each securitypolicyviolation with its directive and blocked URI, listens on console for Content Security Policy and returns the live list; assert_layout reads the banner by role and raises AssertionError with layout: and the joined problems. The Node test web/src/ui/e2e-helpers.test.ts checks both definitions, the violation text, and that login and assert_accessible remain. The generated test erroring at the merge base proves nothing only because the helpers do not exist there, which is the expected state before this unit; the unit's own tests import the helpers and so would also fail at main, so they do discriminate.
 ---
 
 ## Q-013: Hold H-b5dcea3b: UI criterion C-f665c2d6 has no end-to-end test; see the generated UI tests table
