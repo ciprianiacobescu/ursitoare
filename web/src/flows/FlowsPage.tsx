@@ -10,7 +10,6 @@ import { Form } from "../kit/data/Form.tsx";
 import { createCursorList } from "../kit/data/cursor-list.ts";
 import type { FormErrors } from "../kit/data/form-errors.ts";
 import { toast } from "../kit/toast.ts";
-import "./flows.css";
 import {
   checkFlowName,
   checkOwnerTeam,

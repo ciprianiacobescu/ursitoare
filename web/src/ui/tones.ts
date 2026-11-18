@@ -1,23 +1,64 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 export type Tone = "neutral" | "info" | "success" | "warning" | "danger";
 
-export function runStateTone(_state: string): Tone {
-  return "neutral";
+export function runStateTone(state: string): Tone {
+  switch (state) {
+    case "running":
+      return "info";
+    case "completed":
+      return "success";
+    case "failed":
+      return "danger";
+    default:
+      return "neutral";
+  }
 }
 
-export function stepStateTone(_state: string): Tone {
-  return "neutral";
+export function stepStateTone(state: string): Tone {
+  switch (state) {
+    case "started":
+      return "info";
+    case "completed":
+      return "success";
+    case "failed":
+      return "danger";
+    default:
+      return "neutral";
+  }
 }
 
-export function versionStateTone(_state: string): Tone {
-  return "neutral";
+export function versionStateTone(state: string): Tone {
+  switch (state) {
+    case "validated":
+    case "tested":
+    case "reviewed":
+      return "success";
+    case "published":
+      return "info";
+    default:
+      return "neutral";
+  }
 }
 
-export function serverStateTone(_state: string): Tone {
-  return "neutral";
+export function serverStateTone(state: string): Tone {
+  switch (state) {
+    case "pending":
+      return "warning";
+    case "approved":
+      return "success";
+    case "drifted":
+      return "warning";
+    default:
+      return "neutral";
+  }
 }
 
-export function grantStatusTone(_status: string): Tone {
-  return "neutral";
+export function grantStatusTone(status: string): Tone {
+  switch (status) {
+    case "active":
+      return "success";
+    case "needs_reconfirm":
+      return "warning";
+    default:
+      return "neutral";
+  }
 }

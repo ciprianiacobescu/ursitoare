@@ -10,7 +10,6 @@ import type { FormErrors } from "../kit/data/form-errors.ts";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { runLinkName, runPath } from "./pages.ts";
 import { parseTestInputs, startTestRun, testPanelView, testRunFormErrors } from "./test-run.ts";
-import "./runs.css";
 
 const FORM_FIELDS = ["input", "mocks"] as const;
 

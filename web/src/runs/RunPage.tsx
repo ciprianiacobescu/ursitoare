@@ -22,8 +22,6 @@ import {
   timelineItems,
 } from "./timeline.ts";
 import type { PayloadLoad } from "./timeline.ts";
-import "./runs.css";
-import "./hooks.css";
 
 registerCodeRenderer();
 

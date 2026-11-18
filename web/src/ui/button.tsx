@@ -1,14 +1,32 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
+import { Slot } from "@radix-ui/react-slot";
 import type { ComponentProps, ReactNode } from "react";
 
-import type { ButtonTone } from "./button-classes.ts";
+import { buttonClasses, type ButtonTone } from "./button-classes.ts";
 
 export { buttonClasses } from "./button-classes.ts";
 export type { ButtonTone } from "./button-classes.ts";
 
-export function Button(
-  _props: ComponentProps<"button"> & { tone?: ButtonTone; size?: "sm" | "md"; asChild?: boolean },
-): ReactNode {
-  throw new Error("not implemented");
+type ButtonProps = ComponentProps<"button"> & {
+  tone?: ButtonTone;
+  size?: "sm" | "md";
+  asChild?: boolean;
+};
+
+export function Button({
+  tone,
+  size,
+  asChild = false,
+  className,
+  type = "button",
+  ...props
+}: ButtonProps): ReactNode {
+  const classes = buttonClasses({
+    ...(tone === undefined ? {} : { tone }),
+    ...(size === undefined ? {} : { size }),
+    ...(className === undefined ? {} : { className }),
+  });
+  if (asChild) {
+    return <Slot data-slot="button" className={classes} {...props} />;
+  }
+  return <button data-slot="button" type={type} className={classes} {...props} />;
 }

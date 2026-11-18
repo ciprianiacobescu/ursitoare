@@ -10,7 +10,6 @@ import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { toast } from "../kit/toast.ts";
 import { CodeEditor } from "./CodeEditor.tsx";
-import "./flows.css";
 import { diagnosticRows, diagnosticsSummary, textProblemRow } from "./diagnostics.ts";
 import type { DiagnosticRow, ValidationView } from "./diagnostics.ts";
 import { lintItems } from "./editor-config.ts";

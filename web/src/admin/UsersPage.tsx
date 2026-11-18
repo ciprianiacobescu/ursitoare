@@ -8,7 +8,6 @@ import { DataTable } from "../kit/data/DataTable.tsx";
 import { createCursorList } from "../kit/data/cursor-list.ts";
 import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
 import { toast } from "../kit/toast.ts";
-import "./admin.css";
 import { adminErrorMessage } from "./messages.ts";
 import { ADMIN_TABLES } from "./pages.ts";
 import { accountAction, accountCells, parseAccount, patchAccountState } from "./users.ts";

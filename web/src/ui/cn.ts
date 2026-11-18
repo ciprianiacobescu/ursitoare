@@ -1,7 +1,7 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
+import { clsx } from "clsx";
 import type { ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-export function cn(..._inputs: ClassValue[]): string {
-  return "";
+export function cn(...inputs: ClassValue[]): string {
+  return twMerge(clsx(inputs));
 }

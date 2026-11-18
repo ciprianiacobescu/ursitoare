@@ -12,7 +12,6 @@ import { FORM_ERROR_KEY } from "../kit/data/form-errors.ts";
 import type { FormErrors } from "../kit/data/form-errors.ts";
 import { createCursorList } from "../kit/data/cursor-list.ts";
 import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
-import "./tools.css";
 import { TOOL_NAMES, TOOL_TABLES, TOOL_TITLES, actionState, regionState } from "./pages.ts";
 import type { ActionPhase, RegionLoad } from "./pages.ts";
 import {

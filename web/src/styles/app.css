@@ -1,0 +1,56 @@
+@import "tailwindcss" source("../");
+@import "../kit/tokens.css";
+@import "../kit/theme.css" layer(components);
+@import "../kit/data/data.css" layer(components);
+@import "../app/shell.css" layer(components);
+@import "../auth/auth.css" layer(components);
+@import "../admin/admin.css" layer(components);
+@import "../tools/tools.css" layer(components);
+@import "../flows/flows.css" layer(components);
+@import "../flow-graph/flow-graph.css" layer(components);
+@import "../flow-graph/hook-overlay.css" layer(components);
+@import "../runs/runs.css" layer(components);
+@import "../runs/hooks.css" layer(components);
+  @source not "../**/*.test.ts";
+@theme inline {
+  --color-*: initial;
+  --color-bg: var(--ui-color-bg);
+  --color-surface: var(--ui-color-surface);
+  --color-text: var(--ui-color-text);
+  --color-text-muted: var(--ui-color-text-muted);
+  --color-border: var(--ui-color-border);
+  --color-focus: var(--ui-color-focus);
+  --color-accent: var(--ui-color-accent);
+  --color-on-accent: var(--ui-color-on-accent);
+  --color-danger: var(--ui-color-danger);
+  --color-on-danger: var(--ui-color-on-danger);
+  --color-danger-surface: var(--ui-color-danger-surface);
+  --color-danger-text: var(--ui-color-danger-text);
+  --color-success-surface: var(--ui-color-success-surface);
+  --color-success-text: var(--ui-color-success-text);
+  --color-info-surface: var(--ui-color-info-surface);
+  --color-info-text: var(--ui-color-info-text);
+  --color-toast-bg: var(--ui-color-toast-bg);
+  --color-toast-text: var(--ui-color-toast-text);
+  --color-warning-surface: var(--ui-color-warning-surface);
+  --color-warning-text: var(--ui-color-warning-text);
+  --color-quiet-surface: var(--ui-color-quiet-surface);
+  --color-quiet-text: var(--ui-color-quiet-text);
+  --color-accent-surface: var(--ui-color-accent-surface);
+  --color-sidebar: var(--ui-color-sidebar);
+  --color-divider: var(--ui-color-divider);
+  --font-sans: var(--ui-font-sans);
+  --font-mono: var(--ui-font-mono);
+}
+@layer base {
+  :root { color-scheme: light; }
+  body { background: var(--ui-color-bg); color: var(--ui-color-text); font-family: var(--ui-font-sans); }
+  h1 { font-size: 1.5rem; font-weight: 600; }
+  h2 { font-size: 1.25rem; font-weight: 600; }
+  h3 { font-size: 1.0625rem; font-weight: 600; }
+  a:not([class]) { color: var(--ui-color-accent); text-decoration: underline; }
+  button:not([class]) { min-height: var(--ui-target-min); padding: var(--ui-space-2) var(--ui-space-3); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius); background: var(--ui-color-surface); color: var(--ui-color-text); cursor: pointer; }
+  dialog { margin: auto; }
+  ul:not([class]) { list-style: disc; padding-left: 1.5rem; }
+  ol:not([class]) { list-style: decimal; padding-left: 1.5rem; }
+}

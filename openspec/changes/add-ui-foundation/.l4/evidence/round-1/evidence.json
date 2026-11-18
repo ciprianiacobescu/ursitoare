@@ -1,0 +1,533 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "ui/button.tsx",
+      "web/src",
+      "web/src/styles/build.test.ts",
+      "web",
+      "web/dist",
+      "styles/app.css",
+      "web/src/features",
+      "test/arch/licences.test.ts",
+      "features/index.ts",
+      "docs/decisions/0002",
+      "e2e/test_m6b_foundation.py",
+      "web/src/ui",
+      "web/src/kit/contrast.test.ts",
+      "web/src/runs/dry-run-sources.test.ts",
+      "node:assert/strict",
+      "web/src/kit/extra-contrast.test.ts",
+      "web/src/kit/tokens.css",
+      "web/src/kit/extra-contrast.ts",
+      "web/package.json",
+      "web/src/styles/app-css.test.ts",
+      "web/src/styles/app.css",
+      "web/vite.config.ts",
+      "web/src/main.tsx",
+      "web/src/runs/ui-foundation-sources.test.ts",
+      "web/src/kit/data/{DataTable,Field,Form,SchemaForm}.tsx",
+      "web/src/auth/{AccountMenu,SignInPage}.tsx",
+      "web/src/admin/{AuditPage,MappingsPage,TeamsPage,UsersPage}.tsx",
+      "web/src/flows/{FlowEditorPage,FlowsPage}.tsx",
+      "web/src/flow-graph/FlowGraphView.tsx",
+      "web/src/runs/{DryRunPanel,TestRunPanel,RunsPage}.tsx",
+      "web/src/runs/RunPage.tsx",
+      "web/src/tools/{GrantsPage,PoliciesPage,ServersPage}.tsx",
+      "web/src/admin/admin-css.test.ts",
+      "web/src/auth/auth-css.test.ts",
+      "web/src/kit/data/data-css.test.ts",
+      "web/src/tools/pages.test.ts",
+      "web/src/ui/e2e-helpers.test.ts",
+      "e2e/conftest.py",
+      "**/app.css",
+      "**/tokens.css",
+      "**/.ui-*",
+      "**/bg-[#ff0000]",
+      "**/*-surface",
+      "**/*-text",
+      "**/button.tsx",
+      "**/rules.ts",
+      "**/-[",
+      "**/shell.css",
+      "**/[]",
+      "**/build.test.ts",
+      "**/theme.css",
+      "**/data.css",
+      "**/vite.config.ts",
+      "**/contrast.ts",
+      "**/[",
+      "**/rules.test.ts",
+      "**/classes.test.ts",
+      "**/cn.ts",
+      "**/tones.test.ts",
+      "**/tones.ts",
+      "**/format.test.ts",
+      "**/format.ts",
+      "**/components.test.ts",
+      "**/badge.tsx",
+      "**/card.tsx",
+      "**/skeleton.tsx",
+      "**/tooltip.tsx",
+      "**/collapsible.tsx",
+      "**/*.test.ts",
+      "module docs",
+      "module e2e",
+      "module features",
+      "module main",
+      "module node:assert",
+      "module styles",
+      "module test",
+      "module ui",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/conftest.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "e2e/test_m6b_foundation.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-ui-foundation/.l4/ledger/r-20261118T1340Z-3d2a.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-ui-foundation/.l4/ledger/r-20261118T1604Z-68a7.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-ui-foundation/.l4/ledger/r-20261118T1820Z-992f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-ui-foundation/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/admin/AuditPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/MappingsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/TeamsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/UsersPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/AccountMenu.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/auth/SignInPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/FlowGraphView.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/FlowEditorPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/FlowsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/DataTable.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/Field.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/Form.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/SchemaForm.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/extra-contrast.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/extra-contrast.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/tokens.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/main.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/DryRunPanel.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/RunPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/RunsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/TestRunPanel.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/ui-foundation-sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/styles/app-css.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/styles/app.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/styles/build.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/GrantsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/PoliciesPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/ServersPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/ui/badge.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/ui/button-classes.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/ui/button.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/ui/card.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/ui/classes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/ui/cn.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/ui/collapsible.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/ui/components.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/ui/e2e-helpers.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/ui/format.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/ui/format.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/ui/packages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/ui/rules-tree.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/ui/rules.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/ui/rules.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/ui/skeleton.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/ui/tones.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/ui/tones.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/ui/tooltip.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/vite.config.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/admin/AuditPage.tsx, web/src/admin/MappingsPage.tsx, web/src/admin/TeamsPage.tsx, web/src/admin/UsersPage.tsx, web/src/auth/AccountMenu.tsx and 29 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/admin/AuditPage.tsx",
+      "web/src/admin/MappingsPage.tsx",
+      "web/src/admin/TeamsPage.tsx",
+      "web/src/admin/UsersPage.tsx",
+      "web/src/auth/AccountMenu.tsx",
+      "web/src/auth/SignInPage.tsx",
+      "web/src/flow-graph/FlowGraphView.tsx",
+      "web/src/flows/FlowEditorPage.tsx",
+      "web/src/flows/FlowsPage.tsx",
+      "web/src/kit/data/DataTable.tsx",
+      "web/src/kit/data/Field.tsx",
+      "web/src/kit/data/Form.tsx",
+      "web/src/kit/data/SchemaForm.tsx",
+      "web/src/kit/extra-contrast.ts",
+      "web/src/main.tsx",
+      "web/src/runs/DryRunPanel.tsx",
+      "web/src/runs/RunPage.tsx",
+      "web/src/runs/RunsPage.tsx",
+      "web/src/runs/TestRunPanel.tsx",
+      "web/src/tools/GrantsPage.tsx",
+      "web/src/tools/PoliciesPage.tsx",
+      "web/src/tools/ServersPage.tsx",
+      "web/src/ui/badge.tsx",
+      "web/src/ui/button-classes.ts",
+      "web/src/ui/button.tsx",
+      "web/src/ui/card.tsx",
+      "web/src/ui/cn.ts",
+      "web/src/ui/collapsible.tsx",
+      "web/src/ui/format.ts",
+      "web/src/ui/rules.ts",
+      "web/src/ui/skeleton.tsx",
+      "web/src/ui/tones.ts",
+      "web/src/ui/tooltip.tsx",
+      "web/vite.config.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 2578,
+      "passed": 2577,
+      "failed": 1,
+      "errored": 0,
+      "skipped": 0,
+      "new": 43,
+      "new_passed": 42,
+      "skipped_unchanged": []
+    },
+    "findings": [
+      {
+        "severity": "blocker",
+        "title": "new tests failed",
+        "detail": "test_m6b_foundation::test_assert_layout_reports_the_numbers[chromium]"
+      }
+    ]
+  }
+}

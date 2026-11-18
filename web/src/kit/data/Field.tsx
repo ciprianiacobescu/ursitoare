@@ -1,5 +1,3 @@
-import "./data.css";
-
 import type { ReactNode } from "react";
 
 import { fieldModel } from "./field.ts";

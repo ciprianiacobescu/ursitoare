@@ -11,7 +11,6 @@ import { mapEnvelopeErrors } from "../kit/data/form-errors.ts";
 import type { FormErrors } from "../kit/data/form-errors.ts";
 import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
 import { toast } from "../kit/toast.ts";
-import "./admin.css";
 import { adminErrorMessage } from "./messages.ts";
 import { ADMIN_TABLES } from "./pages.ts";
 import {

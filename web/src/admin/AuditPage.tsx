@@ -7,7 +7,6 @@ import { Field } from "../kit/data/Field.tsx";
 import { Form } from "../kit/data/Form.tsx";
 import { createCursorList } from "../kit/data/cursor-list.ts";
 import type { FormErrors } from "../kit/data/form-errors.ts";
-import "./admin.css";
 import { ADMIN_TABLES } from "./pages.ts";
 import {
   auditCells,

@@ -7,7 +7,6 @@ import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { signInView } from "./sign-in-page.ts";
 import { useSession } from "./use-session.ts";
-import "./auth.css";
 
 const PAGE_TITLE = "Sign in · Ursitoare";
 
