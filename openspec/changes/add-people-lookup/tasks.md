@@ -4,7 +4,7 @@
 
 ## 2. The people route
 
-- [ ] 2.1 Write `src/api/people-routes.test.ts` first (scenarios "A member reads the names of the ids it holds", "A member of tenant B gets nothing for tenant A's ids" and "Refusals, the limit and the largest answer"; it imports `PEOPLE_MAX_IDS` and `registerPeopleRoutes` from `./people-routes.ts` and builds its 50 and 51 ids from `PEOPLE_MAX_IDS`; engines, sessions and rows of test-plan.md), then implement `PEOPLE_MAX_IDS` and `registerPeopleRoutes` with `GET /api/v1/people` in `src/api/people-routes.ts` (`getUser` then `getPersonNames` in one `withTenantTx`) and add the export line to `src/api/index.ts` implementing requirements "GET /api/v1/people answers display names under read_self and nothing else" and "The people route bounds the ids and the size of its answer". Run `pnpm run test src/api/people-routes.test.ts`.
+- [x] 2.1 Write `src/api/people-routes.test.ts` first (scenarios "A member reads the names of the ids it holds", "A member of tenant B gets nothing for tenant A's ids" and "Refusals, the limit and the largest answer"; it imports `PEOPLE_MAX_IDS` and `registerPeopleRoutes` from `./people-routes.ts` and builds its 50 and 51 ids from `PEOPLE_MAX_IDS`; engines, sessions and rows of test-plan.md), then implement `PEOPLE_MAX_IDS` and `registerPeopleRoutes` with `GET /api/v1/people` in `src/api/people-routes.ts` (`getUser` then `getPersonNames` in one `withTenantTx`) and add the export line to `src/api/index.ts` implementing requirements "GET /api/v1/people answers display names under read_self and nothing else" and "The people route bounds the ids and the size of its answer". Run `pnpm run test src/api/people-routes.test.ts`.
 
 ## 3. The teams route
 
