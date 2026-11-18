@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Hold H-7cfd2d65: UI criterion C-d3240b20 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-0311979d: UI criterion C-3c9f8b7f has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-ab85b284: UI criterion C-d69c05cb has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-ad97dd92: UI criterion C-a22e8a8b has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-ad97dd92: UI criterion C-a22e8a8b has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-52afaabe: UI criterion C-48ccaf77 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-c11b074f: UI criterion C-67de6235 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-e8d05402: UI criterion C-97e30a51 has no end-to-end test; see the generated UI tests table |
@@ -239,7 +239,8 @@ accept The hold can be waived. Criterion C-d69c05cb is the scenario cn and butto
 
 ## Q-009: Hold H-ad97dd92: UI criterion C-a22e8a8b has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -258,6 +259,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-a22e8a8b is the scenario The components' sources keep the markup rules, which by its own text is a test that reads the six component sources and checks findInlineStyleUse, forbidden substrings and required markers. That is source-text inspection, and this unit mounts none of the six components in a page, so step 5 is right that no end-to-end test can observe it. Six Node tests named with the criterion id in web/src/ui/components.test.ts cover each file: no inline style and no outline-none, focus ring or role= in any of them, button.tsx without the standalone word disabled and with data-slot button, Slot, buttonClasses(, type = button and the props spread, badge.tsx with data-slot badge, data-tone and the five tone pairs, and the card, skeleton, tooltip and collapsible tokens.
 ---
 
 ## Q-010: Hold H-52afaabe: UI criterion C-48ccaf77 has no end-to-end test; see the generated UI tests table
