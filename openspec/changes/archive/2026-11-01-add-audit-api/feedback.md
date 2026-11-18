@@ -10,14 +10,14 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | taken | behaviour | src/audit/query.ts:185 | Audit events are listed in numeric seq order |
+| FB-001 | addressed | behaviour | src/audit/query.ts:185 | Audit events are listed in numeric seq order |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: Audit events are listed in numeric seq order
 
-- **Status:** taken
+- **Status:** addressed
 - **Kind:** behaviour
 - **Where:** `src/audit/query.ts:185-192`
 - **Lesson:** no
@@ -44,4 +44,4 @@ src/audit/query.ts selects `seq::text AS seq` and then orders by `ORDER BY seq`.
 
 ### Outcome
 <!-- written by the harness -->
-Taken into add-audit-api-followup-1
+Addressed in round 1 at 4c97a03f3b: src/audit/query.ts:187 changes ORDER BY seq to ORDER BY audit_event.seq, ordering by the table's bigint column as requested.
