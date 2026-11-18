@@ -16,7 +16,7 @@ Batch `m6b-ui` (U15c, U18b, U15d, U07b, U21b, U07c, U28b, U37b, U37c, U52c in pl
 ## Impact
 
 - **Scaffold:** none. Not scaffolded: everything; both files are the unit's own tests, and the unit gives no name to another unit, so there is no signature to stub. It takes `watch_csp` and `assert_layout` from `e2e/conftest.py`, which `add-ui-foundation` appends in its task 9.1; this unit does not edit that file.
-- **Depends on** (in plan, each with the evidence it gives):
+- **Depends on** (in plan, each with the evidence it gives). This is the closing unit, last of the ten in plan order: it depends on all nine other units of `m6b-ui`, and no unit runs after it.
   - `add-ui-foundation` (U15c): `watch_csp`, `assert_layout`, the tokens and the CSP-clean base.
   - `add-people-lookup` (U18b): the names "Alice Example" on the run page, the runs list and home.
   - `restyle-web-kit` (U15d): `PageHeader`, `Section` and the hidden captions that give the `h1` and region names the journey finds.

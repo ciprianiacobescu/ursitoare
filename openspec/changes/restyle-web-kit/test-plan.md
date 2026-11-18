@@ -35,7 +35,7 @@ Also: R3's rule comes after R2's; `findRawColours(theme)` is `[]` and no `var(--
 
 ## T1b data.css (`web/src/kit/data/data-restyle.test.ts`)
 
-Exactly one rule for each of 21 selectors: the 16 of `data-css.test.ts` plus `.ui-table thead th`, `.ui-table tbody th, .ui-table tbody td`, `.ui-input[aria-invalid="true"]`, `.ui-table-caption`, `.ui-table tbody tr:hover` (probed: all count 1).
+Exactly one rule for each of 22 selectors: the 16 of `data-css.test.ts` plus `.ui-table thead th`, `.ui-table tbody th, .ui-table tbody td`, `.ui-input[aria-invalid="true"]`, `.ui-table-caption`, `.ui-table tbody tr:hover`, `.ui-table tbody tr:last-child > *` (probed: all count 1).
 
 | row | selector | declarations |
 |---|---|---|
@@ -54,6 +54,7 @@ Exactly one rule for each of 21 selectors: the 16 of `data-css.test.ts` plus `.u
 | D13 | `.ui-checkbox` | `width: 1.5rem`, `height: 1.5rem` |
 | D14 | `.ui-input[aria-invalid="true"]` | `border: var(--ui-color-danger)` |
 | D15 | `.ui-table-region` | `max-width: 100%` |
+| D16 | `.ui-table tbody tr:last-child > *` | `border-bottom: 0` |
 
 Also: `findRawColours(data)` `[]`, no undefined token, the text `@media` absent.
 

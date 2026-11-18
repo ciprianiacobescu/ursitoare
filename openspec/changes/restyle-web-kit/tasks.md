@@ -6,7 +6,7 @@ Paths without a directory are in `web/src/kit/` (`data/` and `layout/` files in 
 
 ## 2. data.css
 
-- [ ] 2.1 Write `data/data-restyle.test.ts` (scenario "data.css keeps every pinned rule and adds the new declarations", test-plan.md T1 rows D1 to D15) first, then edit `data/data.css`: change the declarations inside the existing rules (never a second rule for a pinned selector, never `@media`) and add `.ui-table-caption`, `.ui-table tbody tr:hover` and `.ui-table tbody tr:last-child > *` (no line under the last row), implementing requirement "data.css makes tables cards and bounds fields without breaking a pinned rule". `data/data-css.test.ts` stays green unchanged
+- [ ] 2.1 Write `data/data-restyle.test.ts` (scenario "data.css keeps every pinned rule and adds the new declarations", test-plan.md T1b rows D1 to D16) first, then edit `data/data.css`: change the declarations inside the existing rules (never a second rule for a pinned selector, never `@media`) and add `.ui-table-caption`, `.ui-table tbody tr:hover` and `.ui-table tbody tr:last-child > *` (no line under the last row), implementing requirement "data.css makes tables cards and bounds fields without breaking a pinned rule". `data/data-css.test.ts` stays green unchanged
 
 ## 3. Captions
 

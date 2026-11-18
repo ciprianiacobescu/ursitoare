@@ -12,7 +12,7 @@ The web app is styled by one Tailwind CSS v4 stylesheet entry with cascade layer
 - **THEN** F0 gives `[]` for the nine pairs (ratios 7.21 to 3.30 as listed) and the frozen sixteen, and all 25 `--ui-color-*` values are six-digit hex; F1 gives only `quiet-text-on-quiet-surface` with a ratio below 4.5; F2 gives the five `sidebar` ids with ratio 0; F3 gives two failures with ratio 0
 
 ### Requirement: One stylesheet entry layers the kit under the utilities
-`web/src/styles/app.css` SHALL start with the 13 `@import` lines of design.md § Interfaces and hold at top level only one `@theme inline` block (`--color-*: initial;`, one `--color-<name>: var(--ui-color-<name>);` per `--ui-color-*` token, `--font-sans`, `--font-mono`) and one `@layer base` block of the nine rules of design.md decision 3, with no raw colour. `web/src/main.tsx` SHALL import `./styles/app.css` and no other stylesheet; `web/vite.config.ts` SHALL keep its first comment line and use `plugins: [react(), tailwindcss()]`.
+`web/src/styles/app.css` SHALL start with the 13 `@import` lines of design.md § Interfaces and hold at top level only one `@theme inline` block (`--color-*: initial;`, one `--color-<name>: var(--ui-color-<name>);` per `--ui-color-*` token, `--font-sans`, `--font-mono`) and one `@layer base` block of the ten rules of design.md decision 3, with no raw colour. `web/src/main.tsx` SHALL import `./styles/app.css` and no other stylesheet; `web/vite.config.ts` SHALL keep its first comment line and use `plugins: [react(), tailwindcss()]`.
 
 #### Scenario: app.css keeps its imports, bridge and base layer in order
 - **WHEN** a test reads `app.css`, `tokens.css`, `main.tsx` and `vite.config.ts` (test-plan.md T2)
