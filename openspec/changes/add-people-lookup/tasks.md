@@ -16,7 +16,7 @@
 
 ## 5. Web parsers and the teams loader
 
-- [ ] 5.1 Write `web/src/people/people.test.ts` first (scenario "Parsers, labels and the teams loader"; rows of test-plan.md § Parsers; it imports `loadMyTeams`, `parseMyTeams`, `parsePeople` and `personLabel` from `./people.ts`), then implement them in `web/src/people/people.ts` (take `Api` with `import type` from `../admin/shared.ts`) implementing requirement "Answers are parsed without being stricter than the engine, and a name falls back to the id". Run `pnpm run test web/src/people/people.test.ts`.
+- [x] 5.1 Write `web/src/people/people.test.ts` first (scenario "Parsers, labels and the teams loader"; rows of test-plan.md § Parsers; it imports `loadMyTeams`, `parseMyTeams`, `parsePeople` and `personLabel` from `./people.ts`), then implement them in `web/src/people/people.ts` (take `Api` with `import type` from `../admin/shared.ts`) implementing requirement "Answers are parsed without being stricter than the engine, and a name falls back to the id". Run `pnpm run test web/src/people/people.test.ts`.
 
 ## 6. The name cache and the hooks
 
