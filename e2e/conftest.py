@@ -137,3 +137,42 @@ def assert_accessible(page) -> None:
             ),
             pytrace=False,
         )
+
+
+_CSP_PROBE = """() => {
+  document.addEventListener("securitypolicyviolation", (e) => {
+    console.log("Content Security Policy violation: " + e.effectiveDirective + " " + e.blockedURI);
+  });
+}"""
+
+
+def watch_csp(page) -> list[str]:
+    """Collect CSP violations of the page; call before the first goto. Returns the live list."""
+    found: list[str] = []
+    page.add_init_script(f"({_CSP_PROBE})()")
+    page.on(
+        "console",
+        lambda message: found.append(message.text)
+        if "Content Security Policy" in message.text
+        else None,
+    )
+    return found
+
+
+def assert_layout(page, max_banner_px: int = 72) -> None:
+    """Fail with the numbers unless the banner is short enough and the page does not scroll sideways."""
+    height = page.get_by_role("banner").first.evaluate(
+        "el => Math.round(el.getBoundingClientRect().height)"
+    )
+    widths = page.evaluate(
+        "() => ({ scroll: document.documentElement.scrollWidth, inner: window.innerWidth })"
+    )
+    problems = []
+    if height > max_banner_px:
+        problems.append(f"banner {height}px is taller than {max_banner_px}px")
+    if widths["scroll"] > widths["inner"]:
+        problems.append(
+            f"scrollWidth {widths['scroll']} exceeds innerWidth {widths['inner']}"
+        )
+    if problems:
+        raise AssertionError("layout: " + "; ".join(problems))
