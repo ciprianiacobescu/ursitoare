@@ -221,12 +221,14 @@ roles:
   # 2026-11-03: kiro first for unit verification. On add-dbos-runtime (a 3.6k-line diff) nemotron timed out 3 times
   # in 47 min and returned no usable verdict: a timeout splits the criteria across the same judge and never falls
   # through to the next one, so the unit sat on a verdict hold. Kiro answered 16 plan-review rounds of 30-66k chars.
-  # 2026-11-18 (delegate): beam ONLY while the m6b readiness review records. Readiness takes the first judge whose
-  # hello passes and has no fallback after a judge error. Nemotron length-stops at 32k on every plan review; when
-  # beam's hello failed (12:23Z) the review fell through to it and recorded nothing. With beam alone a failed hello
-  # makes the run wait for the next one. No unit is active. Restore the full order (kiro, nemotron, beam, mimo, glm,
-  # claude) in the config push before m6b activation.
+  # 2026-11-18: order restored for m6b unit verification (the readiness review was recorded by beam alone, 3 rounds,
+  # 11/11 READY at c636547e). Kiro is skipped under its 10% credit floor until 2026-12-01.
+  - kiro-judge
+  - nemotron-judge
   - beam-judge
+  - mimo-judge
+  - glm-judge
+  - claude-judge
   s1_judge:
   - jev
   - laya
