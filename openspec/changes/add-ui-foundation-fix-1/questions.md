@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: Task 1.1 is blocked
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The failing browser test test_assert_layout_reports_the_numbers (e2e/test_m6b_foundation.py:48-63) builds its pages with page.set_content and never loads the application, so no production code is on its path; the only code involved is assert_layout and watch_csp in e2e/conftest.py plus the test itse
 - **Blocking tasks:** 1.1
 - **Kind:** ambiguous
 - **Asked:** 2026-11-18T19:51Z by claude-sonnet, run r-20261118T1820Z-992f, task 1.1
