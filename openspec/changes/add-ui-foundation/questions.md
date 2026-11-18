@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Hold H-9ada2edb: UI criterion C-c476cd94 has no end-to-end test; see the generated UI tests table |
 | Q-004 | answered | none | verdict | Hold H-508a051f: UI criterion C-546ee64e has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-ee794d23: UI criterion C-d77fa65f has no end-to-end test; see the generated UI tests table |
-| Q-006 | open | none | verdict | Hold H-7cfd2d65: UI criterion C-d3240b20 has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-7cfd2d65: UI criterion C-d3240b20 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-0311979d: UI criterion C-3c9f8b7f has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-ab85b284: UI criterion C-d69c05cb has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-ad97dd92: UI criterion C-a22e8a8b has no end-to-end test; see the generated UI tests table |
@@ -164,7 +164,8 @@ accept The hold can be waived. Criterion C-d77fa65f is the scenario Palette util
 
 ## Q-006: Hold H-7cfd2d65: UI criterion C-d3240b20 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -183,6 +184,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-d3240b20 is the scenario The real tree holds the rules, and the scanners scan themselves clean, which by its own text is a Node test that walks every .ts and .tsx under web/src except *.test.ts with the three scanners and then scans ui/rules.ts alone. That is a filesystem and source-content check with nothing a browser can observe, so step 5 is right that no end-to-end test can drive it. Two Node tests named with the criterion id in web/src/ui/rules-tree.test.ts assert at least 100 files, the single stylesheet import in main.tsx, no banned-import and no palette hit in any file, rules.ts clean for all three scanners, and no stylesheet import left in the 20 task files.
 ---
 
 ## Q-007: Hold H-0311979d: UI criterion C-3c9f8b7f has no end-to-end test; see the generated UI tests table
