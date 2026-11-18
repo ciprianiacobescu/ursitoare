@@ -8,7 +8,6 @@ import { LoadingState } from "../LoadingState.tsx";
 import type { CursorList, CursorListState } from "./cursor-list.ts";
 import { dataTableModel, focusAfterChange, tableView } from "./data-table.ts";
 import type { DataColumn, DataTableSpec } from "./data-table.ts";
-import "./data.css";
 
 export interface DataTableProps<T> extends DataTableSpec {
   columns: readonly (DataColumn & { cell: (row: T) => ReactNode })[];

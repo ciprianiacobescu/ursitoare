@@ -11,7 +11,6 @@ import { LoadingState } from "../kit/LoadingState.tsx";
 import { dryRunFormErrors, dryRunPanelView, parseFakes, startDryRun } from "./dry-run.ts";
 import { runLinkName, runPath } from "./pages.ts";
 import { parseTestInputs } from "./test-run.ts";
-import "./runs.css";
 
 const FORM_FIELDS = ["input", "fakes"] as const;
 

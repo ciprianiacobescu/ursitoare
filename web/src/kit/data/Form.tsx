@@ -1,5 +1,3 @@
-import "./data.css";
-
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 

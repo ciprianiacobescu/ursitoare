@@ -5,8 +5,6 @@ import { drawEdges, drawNodes, viewBox } from "./drawing.ts";
 import { chooseNode, nodeDetailRows } from "./graph-model.ts";
 import type { GraphView } from "./graph-model.ts";
 import { hookOverlay, hookRoutePaths, hookSectionView } from "./hook-overlay.ts";
-import "./flow-graph.css";
-import "./hook-overlay.css";
 
 export interface FlowGraphViewProps {
   view: GraphView;

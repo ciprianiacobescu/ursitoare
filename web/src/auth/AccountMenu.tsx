@@ -7,7 +7,6 @@ import { toast } from "../kit/toast.ts";
 import { accountView } from "./account.ts";
 import { browserSession } from "./browser-session.ts";
 import { useSession } from "./use-session.ts";
-import "./auth.css";
 
 export function AccountMenu(): ReactNode {
   const state = useSession();

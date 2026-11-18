@@ -1,5 +1,3 @@
-import "./data.css";
-
 import { useEffect, useId, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 

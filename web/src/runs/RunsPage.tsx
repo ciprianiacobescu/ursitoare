@@ -7,7 +7,6 @@ import { createCursorList } from "../kit/data/cursor-list.ts";
 import { RUNS_TITLE, runLinkName, runPath } from "./pages.ts";
 import { runListFetcher } from "./runs-source.ts";
 import type { RunView } from "./types.ts";
-import "./runs.css";
 
 const RUN_COLUMNS = [
   { key: "run", header: "Run", rowHeader: true },
