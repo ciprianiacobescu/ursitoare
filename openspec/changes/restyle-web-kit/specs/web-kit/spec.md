@@ -1,0 +1,37 @@
+## Purpose
+
+The kit's own rules give every page the same finished look: toned buttons, calm state panels, a centred dialog, toasts, and two layout wrappers, with its components' roles, names, texts and order as the frozen tests and journeys pin them.
+
+## ADDED Requirements
+
+### Requirement: Kit buttons, dialogs, states and toasts are styled by token-only rules in theme.css
+`web/src/kit/theme.css` SHALL hold as exactly one rule each (selectors compared with whitespace collapsed): `.ui-button[data-tone="primary"]` (`border-color` and `background` `var(--ui-color-accent)`, `color` `var(--ui-color-on-accent)`), the same for `danger` with `--ui-color-danger` and `--ui-color-on-danger`, their `:hover` rules (`filter: brightness(0.9)`), `.ui-button[data-tone][aria-disabled="true"]` (`filter: none`, `opacity: 0.6`), `.ui-dialog` (`width: 32rem`, `max-width: calc(100vw - 2rem)`), `.ui-page-header` (`display: grid`), `.ui-page-header-title` and `.ui-page-header-description` (each `overflow-wrap: anywhere`) and `.ui-section`. The toast rules SHALL keep their values: `.ui-toast` `background: var(--ui-color-toast-bg)`, the toast hover rule (exactly `background: transparent` and `color: var(--ui-color-toast-text)`) and the toast focus rule (exactly `outline-color: var(--ui-color-toast-text)`); `.ui-toast button` SHALL also set `box-shadow: none`. The tone rules SHALL come after `.ui-button:disabled, .ui-button[aria-disabled="true"]`. The file SHALL hold no raw colour, use only tokens that `tokens.css` defines, and add no token.
+
+#### Scenario: Tone, dialog, state and toast rules are token-only and the toast is unchanged
+- **WHEN** `theme-restyle.test.ts` reads `theme.css` and `tokens.css` and checks the rows R1 to R20 of test-plan.md T1
+- **THEN** every row's selector is one rule with its declarations (`.ui-button[data-tone="primary"]` has `background: var(--ui-color-accent)`, `.ui-toast` has `background: var(--ui-color-toast-bg)`, the toast hover rule has 2 declarations and the focus rule 1); the primary rule comes after the disabled rule; `findRawColours(theme)` is `[]`; no `var(--ui-…)` is missing from `tokens.css`; the C-92d9ac35 needles are present; `tokens.css` still has 25 `--ui-color-*` values and `--ui-color-toast-bg` `#1b1f27`; three altered texts fail the checker
+
+### Requirement: The pinned kit markup is unchanged and a tone is only an attribute
+`ConfirmDialog` SHALL stay a native `<dialog>` holding `<form method="dialog">`, with the cancel button before the confirm button; its confirm button SHALL carry `data-tone` `danger` when `destructive` is true and `primary` otherwise, and nothing else in it carries `data-tone`. `Form`'s submit button SHALL carry `data-tone="primary"` and keep `aria-disabled={model.submit === "busy"}`. `ErrorPanel`, `LoadingState`, `EmptyState` and `ToastRegion` SHALL keep their roles, classes and texts and carry no `data-tone`. No kit `.tsx` SHALL use `buttonClasses` or import `ui/button`.
+
+#### Scenario: Kit sources keep their roles, texts and order
+- **WHEN** `kit-markup.test.ts` reads the eleven kit `.tsx` files of test-plan.md T2 with `readFileSync`
+- **THEN** each file holds its T2 strings and counts: `ConfirmDialog.tsx` has `<dialog`, `<form method="dialog">`, `showModal()`, `value="cancel"` before `value="confirm"` and one `data-tone`, `data-tone={props.destructive === true ? "danger" : "primary"}`; `Form.tsx` one `data-tone="primary"` and one `role="alert"`; `ErrorPanel.tsx` `role="alert"`, `Error code: <code>{model.code}</code>` and `Copy decision id`, no `data-tone`; `ToastRegion.tsx` `className="ui-toasts" aria-live="polite" aria-atomic="false"`; no file has `buttonClasses`, `ui/button`, an inline style, a stylesheet import or a palette utility
+
+### Requirement: Layout helpers are fixed strings and PageHeader and Section are plain wrappers
+`sectionHeadingId(prefix, title)` SHALL be `${prefix}-` plus the title lower-cased with each run of characters outside `[a-z0-9]` as one `-`, trimmed of `-`. `captionDisplayFor(caption, heading)` SHALL be `"hidden"` when the two trimmed texts are equal (case-sensitive) and `"visible"` otherwise. `PAGE_WIDTHS` SHALL deep-equal `{ form: "max-w-3xl", list: "max-w-6xl", wide: "max-w-none" }`. `PageHeader.tsx` and `Section.tsx` SHALL hold no `role=`, `aria-live`, `<header`, `<nav`, `<a `, stylesheet import or inline style; `PageHeader`'s `h1` SHALL be `tabIndex={-1}` with the given `ref`, and `Section` SHALL be labelled by its heading's `useId()`. A `Section` is a `region` named `title`: a page SHALL NOT give it a title equal to a pinned page-wide heading or region name on that page. The files SHALL live in `web/src/kit/layout/`, so `kit/` keeps its five direct-child components and `KEYBOARD` its five keys.
+
+#### Scenario: sectionHeadingId, captionDisplayFor and PAGE_WIDTHS
+- **WHEN** `layout.test.ts` runs the rows V1 to V8, W1 to W5 and the table of test-plan.md T3
+- **THEN** `sectionHeadingId("flow", "Test run")` is `flow-test-run`, `("flow", "  Hello, World!  ")` is `flow-hello-world`, `("a", "Résumé")` is `a-r-sum`, `("a", "!!!")` and `("a", "")` are `a-`, `("x", "---Already-Slugged---")` is `x-already-slugged`; `captionDisplayFor("Flows", "Flows")` and `(" Flows ", "Flows")` are `hidden`, `("Flows", "flows")` and `("Versions", "Flows")` are `visible`; `PAGE_WIDTHS` deep-equals the three strings
+
+#### Scenario: The layout sources hold no landmark, role, link or inline style
+- **WHEN** `layout-sources.test.ts` reads `PageHeader.tsx`, `Section.tsx`, lists `web/src/kit` and `web/src/kit/layout`, and reads `keyboard.ts` (test-plan.md T2)
+- **THEN** neither source contains `role=`, `aria-live`, `<header`, `<nav`, `<a ` or `.css`, `findInlineStyleUse` gives `[]`; `PageHeader.tsx` contains `<h1 className="ui-page-header-title" tabIndex={-1} ref={props.headingRef}>`; `Section.tsx` contains `aria-labelledby={headingId}`, `useId()` and `cn("ui-section", props.className)`; `kit/` holds exactly five `.tsx` files (`ConfirmDialog`, `EmptyState`, `ErrorPanel`, `LoadingState`, `ToastRegion`) and `kit/layout/` the non-test files `layout.ts`, `PageHeader.tsx`, `Section.tsx`
+
+### Requirement: A confirm dialog opens centred with its tone and returns focus
+The native dialog SHALL open centred (at most 512 px wide at 1366), the confirm button's background SHALL equal the colour token of its own `data-tone` (`--ui-color-accent` for `primary`, `--ui-color-danger` for `danger`), the cancel button's the quiet surface token (`--ui-color-surface`), Escape SHALL close it and return focus to the opener, and the page SHALL raise no Content Security Policy message and pass axe.
+
+#### Scenario: The Disable dialog is centred, toned and returns focus
+- **WHEN** `test_disable_dialog_is_centred_toned_and_returns_focus` opens `/admin/users` with mocked `/api/v1/me` and `/api/v1/users` at 1366 by 860 after `watch_csp(page)`, clicks "Disable Bob Example" and presses Escape (test-plan-browser.md)
+- **THEN** the `dialog` has one heading and two buttons, its horizontal centre is within 1 px of 683 and its width at most 512, the `data-tone` of "Disable user" is `primary` or `danger` and its computed background equals that token's resolved colour (read from the tokens at run time, not a literal; `rgb(29, 78, 216)` for `primary`, `rgb(180, 35, 24)` for `danger`), and "Cancel" equals `--ui-color-surface`; after Escape there is no `dialog`, "Disable Bob Example" is focused, `assert_accessible(page)` passes and the `watch_csp` list is `[]`

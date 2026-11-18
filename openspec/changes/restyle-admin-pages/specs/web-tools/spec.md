@@ -1,0 +1,33 @@
+## Purpose
+
+The three tool pages (Tool servers, Grants, Policies) are built from the kit's page header, titled cards and badges, with the pinned row texts, native controls and alert counts unchanged, and with a person's name only where the page shows who registered a server.
+
+## ADDED Requirements
+
+### Requirement: The three tool pages are built from PageHeader, Section and the page widths
+`ServersPage.tsx`, `GrantsPage.tsx` and `PoliciesPage.tsx` SHALL each render `PageHeader` with its current `h1` text, no `<h1`, no `style=`, no `tools.css` import and no colour word or hex (`findRawColours` `[]`), and keep the C-ba990588 substrings. Roots SHALL be `cn("tools-page", PAGE_WIDTHS.list)` for Servers and Grants and `cn("tools-page", PAGE_WIDTHS.form)` for Policies. The surface block SHALL be `<Section title={TOOL_NAMES["surfaceHeading"] ?? "Surface"}>`, the grant form `<Section title={label("grantForm")}>`; Grants SHALL pass `description={label("deployHint")}`. Servers SHALL call `useDisplayNames(` and `personLabel(` once each; Grants and Policies SHALL import nothing from `web/src/people/`. `tools.css` SHALL stay token-only, hold no `max-width`, no `.tools-section` and no `.tools-form` rule, and give `.tools-feedback[role="status"]` the success pair and `.tools-feedback[role="alert"]` the danger pair.
+
+#### Scenario: The tool sources use the layout parts and keep their pins
+- **WHEN** `tools/tools-pages-restyle.test.ts` reads the three page sources and `tools.css` with `tokens.css` (test-plan.md T3)
+- **THEN** every T3 row holds: `<PageHeader` once per page, `findRawColours` `[]`, `findInlineStyleUse` `[]`, `findCssImports` `[]`, the five C-ba990588 substrings per page, `data-tone="primary"` once in Servers (the approve button) and once in Policies (Deploy) and not in Grants, `<ConfirmDialog` once in Servers without `destructive`, none in Grants (no confirm for "Revoke"), `xl:grid-cols-[20rem_minmax(0,1fr)]` in Grants, `people/` imported by Servers only, `className="tools-feedback"` on the message `<p` of all three; `tools.css` has `findRawColours` `[]`, every `var(--…)` defined in `tokens.css`, `.tools-feedback[role="status"]` with `--ui-color-success-text` on `--ui-color-success-surface`, `.tools-feedback[role="alert"]` with `--ui-color-danger-text` on `--ui-color-danger-surface`, no `max-width`; three mutated texts (`#fff` added, `style="x"` added, `destructive` added to Servers) fail the checker
+
+### Requirement: The tool server detail names who registered the server outside the Surface region
+With `?server=<id>` the page SHALL show the line `Registered by <personLabel>` after the servers table and before the region "Surface", never inside it, and SHALL send one `/people` request for `registeredBy`. The list and the Surface line SHALL be `serverRowText` with the state in a `Badge` of tone `serverStateTone(state)`, the composed text unchanged. "Approve surface" SHALL carry `data-tone="primary"`, and its confirm dialog, not being destructive, SHALL keep `data-tone="primary"`.
+
+#### Scenario: Registered by Carol Example sits outside the region and the row text is unchanged
+- **WHEN** `test_tool_servers_show_who_registered_outside_the_surface_region` opens `/admin/tool-servers?server=acme` at 1366 by 860 with the server `acme` pending, `registeredBy` `u_carol`, and `/people` answering `u_carol` as "Carol Example" (test-plan-browser.md), then clicks "Approve surface"
+- **THEN** the region "Surface" contains "acme · https://tools.fake.test · pending" and has one `[data-slot="badge"]` with text "pending" and `data-tone` `warning`; the text "Registered by Carol Example" (`exact=True`) is visible and the same text inside the region has count 0; the `/people` queries are exactly `ids=u_carol`; the caption of "Tool servers" has the class `ui-table-caption ui-visually-hidden`; the button "Approve surface" has background `rgb(29, 78, 216)`; the dialog's heading is "Approve surface 0123456789ab?" and its confirm has `data-tone` `primary` and `rgb(29, 78, 216)`; `assert_layout`, `assert_accessible` and `watch_csp` (`[]`) pass
+
+### Requirement: The Grants page keeps its errors, options and subject ids and shows status badges
+Grants SHALL keep exactly 2 `alert`s when the tools and the grants both fail, the select "Tool" with the single option "Choose a tool" and the disabled "Create grant". With rows it SHALL show `grantRowText` with the status in a `Badge` of tone `grantStatusTone(status)`, the subjects as ids (`user u_bob`, `role author`), the hint "A role, for example author, or a user id from the Users page." under "Role or user", no `/people` request, no dialog, and the "New grant" card left of the table from 1280 px.
+
+#### Scenario: Grants in the error state and with rows
+- **WHEN** `test_grants_error_state_has_two_alerts_and_one_option` answers `/blocks` and `/grants` with 403 and a `decisionId`, and `test_grants_rows_keep_subject_ids_and_show_status_badges_beside_the_form` answers one active user grant, one `needs_reconfirm` role grant scoped to `pay-run` / `pay`, one block and `/people` (test-plan-browser.md), both at 1366 by 860
+- **THEN** the first test finds 2 `alert`s, the options of "Tool" are exactly `["Choose a tool"]`, "Create grant" has `aria-disabled` `true`; the second finds the rows containing `user u_bob · acme.lookup_vendor@1 · any step · active` (badge `data-tone` `success`) and `role author · acme.lookup_vendor@1 · pay-run / pay · needs_reconfirm` (badge `warning`), the buttons "Revoke" and "Confirm for the newest version" visible, the caption of "Grants" hidden, the right edge of the region "New grant" at most the left edge of the table, and an empty `/people` hit list; both pass `assert_layout`, `assert_accessible` and `watch_csp` (`[]`)
+
+### Requirement: The Policies page keeps one editor, bounded to the form width
+Policies SHALL show its two status sentences in the header, the "Hand-written Cedar" editor in a `Card` at most 768 px wide, "Deploy" with `data-tone="primary"`, no `status` once loaded, and no heading other than the `h1`.
+
+#### Scenario: Policies with no deployed policy
+- **WHEN** `test_policies_page_has_no_status_once_loaded_and_a_bounded_editor` opens `/admin/policies` at 1366 by 860 with `/policies` answering `{ "current": null, "pendingGrants": 1 }` (test-plan-browser.md)
+- **THEN** the texts "No policy deployed." and "1 grant change is not deployed." (both `exact=True`) are visible, the editor "Hand-written Cedar" is at most 768 px wide, "Deploy" has background `rgb(29, 78, 216)`, `status` has count 0, and `assert_layout`, `assert_accessible` and `watch_csp` (`[]`) pass

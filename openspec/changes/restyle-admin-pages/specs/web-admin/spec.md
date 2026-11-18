@@ -1,0 +1,47 @@
+## Purpose
+
+The four admin pages (Users, Roles and teams, Group mappings, Audit log) are built from the kit's page header, titled cards and badges, bounded to the list width, with names where a person is known and ids where a test or a record needs them.
+
+## ADDED Requirements
+
+### Requirement: The four admin pages are built from PageHeader, Section and the list width
+`UsersPage.tsx`, `TeamsPage.tsx`, `MappingsPage.tsx` and `AuditPage.tsx` SHALL each render `PageHeader` with its current `h1` text and `headingRef={headingRef}`, a root `className={cn("admin-page", PAGE_WIDTHS.list)}`, no `<h1`, no `style=` and no `admin.css` import. Forms and the verification block SHALL be `Section`s titled "Create team", "Map a group", "Chain verification" and "Filter the audit log". `admin.css` SHALL stay token-only with its four `.admin-status--*` tone pairs, hold no `max-width` and no `.admin-section`, `.admin-form` rule. Users, Roles and teams and Audit SHALL import nothing from `web/src/people/`; Group mappings SHALL call `useDisplayNames(` once and `personLabel(` once.
+
+#### Scenario: The admin sources use the layout parts and keep their pins
+- **WHEN** `admin/admin-pages-restyle.test.ts` reads the four page sources, `admin.css` and `tokens.css` (test-plan.md T1)
+- **THEN** each page has `<PageHeader` once, `headingRef={headingRef}` once, `PAGE_WIDTHS.list` once, no `<h1`, `findInlineStyleUse` and `findCssImports` `[]`; `<ConfirmDialog` and `destructive` occur once each in Users, Teams and Mappings and not in Audit; only Mappings imports `people/`; Audit holds `lg:grid-cols-2`, `whitespace-nowrap`, `[overflow-wrap:anywhere]` and `block min-w-48 max-w-sm break-all`; Mappings holds `<span className="break-all">{cells.issuer}</span>` and `className="ui-button whitespace-nowrap"`; Teams holds `xl:grid-cols-[20rem_minmax(0,1fr)]` and Mappings no `xl:grid-cols`; `admin.css` has `findRawColours` `[]`, the four tone pairs of C-52c26a32 and no `max-width`; three altered texts (`<h1` added, `destructive` removed from Users, `style="x"` added) fail the checker
+
+### Requirement: A table caption that repeats its page heading is hidden, and only four are
+Each page SHALL pass `captionDisplay={captionDisplayFor(<spec>.caption, <its h1 text>)}` for every table whose caption equals its `h1` text. Over the caption of every table of `ADMIN_TABLES` and `TOOL_TABLES` with its page's `h1` text, `captionDisplayFor` SHALL give `"hidden"` for exactly "Users", "Group mappings", "Tool servers" and "Grants".
+
+#### Scenario: Exactly four captions are hidden
+- **WHEN** `admin/captions-by-page.test.ts` calls `captionDisplayFor` with the eight pairs of test-plan.md T2 and reads the page sources
+- **THEN** the hidden set, in table order, is `["Users", "Group mappings", "Tool servers", "Grants"]` and the visible set `["Roles", "Teams", "Audit events", "Tools"]`; the pairs `("Roles", "Roles and teams")`, `("Audit events", "Audit log")` and `("Tools", "Tool servers")` give `"visible"`; exactly `UsersPage.tsx`, `MappingsPage.tsx`, `ServersPage.tsx` and `GrantsPage.tsx` contain `captionDisplay={captionDisplayFor(`; the function half is green on arrival, the source half red
+
+### Requirement: A destructive confirm is red and a state is a badge
+The Users page SHALL pass `destructive` to its `ConfirmDialog`, so "Disable user" has `data-tone="danger"`, the background `rgb(180, 35, 24)` and the first focus on "Cancel"; the dialog's name, texts and the `h1` focus after it SHALL be unchanged. The Name cell SHALL show the user id under the name in `font-mono` (the id a user grant needs). The state cell SHALL be a `Badge` with `data-tone` `success` for "Active" and `neutral` for "Disabled", and the Users table SHALL have a hidden caption and still be named "Users".
+
+#### Scenario: Disable user opens red and the table keeps its name
+- **WHEN** `test_users_page_hides_its_caption_toned_badge_and_red_disable_confirm` opens `/admin/users` at 1366 by 860 with `/users` answering "Alice Example" (the signed-in user) and "Bob Example" (test-plan-browser.md), then clicks "Disable Bob Example"
+- **THEN** one `heading` "Users" exists; the caption has the class `ui-table-caption ui-visually-hidden`, `position` `absolute` and `clip` `rect(0px, 0px, 0px, 0px)`, and the table's first header cell is at most 2 px below the table's top; Bob's row has one `[data-slot="badge"]` with text "Active" and `data-tone` `success` and contains `user-2`; the dialog has one heading, "Disable user" has `data-tone` `danger` and background `rgb(180, 35, 24)`, "Cancel" is focused; after `Escape` no dialog remains and "Disable Bob Example" is focused; `assert_layout`, `assert_accessible` and `watch_csp` (`[]`) pass
+
+### Requirement: A form sits beside the tables from 1280 px and above them below
+On Roles and teams the "Create team" `Section` SHALL be left of the Roles and Teams tables from a 1280 px viewport and above them below it; the "Team name" field SHALL be at most 640 px wide. The "Roles" and "Teams" captions SHALL stay visible. On Group mappings the "Map a group" `Section` SHALL be above the table at every width, and the table SHALL fit its card: the group and reviewer cells and the "Remove <group>" buttons SHALL not wrap, the Issuer MAY, every "Remove" button SHALL be as tall as the others within 1 px, and the `.ui-table-wrap` SHALL have `scrollWidth` at most `clientWidth`.
+
+#### Scenario: The team form is beside the tables at 1366 and above them at 1100
+- **WHEN** `test_teams_form_sits_beside_the_tables_at_1366_and_above_them_at_1100` opens `/admin/roles-and-teams` with `/roles` answering `author` and `tenant_admin` and `/teams` answering `finance` (test-plan-browser.md), measures at 1366 by 860, then sets the viewport to 1100 by 860
+- **THEN** at 1366 the right edge of the region "Create team" is at most the left edge of the table "Teams", the "Team name" width is at most 640 and the caption of "Roles" has the class `ui-table-caption`; at 1100 the bottom edge of the region is at most the top edge of the table; `assert_layout` passes at both widths, `assert_accessible` passes and `watch_csp` is `[]`
+
+### Requirement: Reviewer names replace ids only when a person is found
+The "Reviewed by" cell of Group mappings SHALL show `clip(personLabel(names, mapping.reviewedBy))` where `names` is `useDisplayNames` of the distinct `reviewedBy` values. A value that is not a user id SHALL be shown as it is and never requested; a failed lookup SHALL leave every id; the table caption SHALL be hidden.
+
+#### Scenario: Group mappings show Carol Example, keep operator:e2e-seed and fall back on a failure
+- **WHEN** `test_mappings_show_the_reviewer_name_and_keep_ids_that_are_not_people` opens `/admin/group-mappings` with two mappings, `reviewedBy` `u_carol` and `operator:e2e-seed`, and `/people` answering `u_carol` as "Carol Example"; then a second page opens it with `/people` answering 500 (test-plan-browser.md)
+- **THEN** the "ursitoare-authors" row contains "Carol Example" and not "u_carol"; the "ursitoare-admins" row contains "operator:e2e-seed"; the `/people` requests of the first page are exactly one, with the query `ids=u_carol`; the caption has the class `ui-table-caption ui-visually-hidden`; the bottom edge of the region "Map a group" is at most the top edge of the table; the right edge of "Remove ursitoare-authors" is at most the right edge of its `.ui-table-wrap`; with four rows (the two above, `ursitoare-approvers` and `team-finance`, the last two with issuer `http://127.0.0.1:53086/realms/ursitoare`) the four "Remove" buttons differ in height by at most 1 px, the wrapper's `scrollWidth <= clientWidth`, and the cells "operator:e2e-seed" and "ursitoare-approvers" are each at most 30 px tall; on the second page, after the response to its one `/people` request (500), the same row contains "u_carol" and the hit list has one entry; `assert_layout`, `assert_accessible` and both `watch_csp` lists (`[]`) pass
+
+### Requirement: The Audit log keeps actor ids and reads its times on one line
+The Audit log page SHALL show "Chain verification" and "Filter the audit log" side by side from 1024 px, the table below them, the Time cell on one line and the Details cell bounded so that the `.ui-table-wrap` has `scrollWidth` at most `clientWidth` at 1366 with long event types and 64-hex hashes; actors and targets SHALL stay `<kind>: <id>` and the page SHALL send no `/people` request.
+
+#### Scenario: One audit row keeps its ids and its time on one line
+- **WHEN** `test_audit_page_keeps_actor_ids_and_one_line_times` opens `/admin/audit` at 1366 by 860 with `/audit/verify` answering ok, `/people` answering `u_carol`, and one `identity.group_mapped` event by `{ "kind": "user", "id": "u_carol" }` at `2026-11-18T09:15:00.123456Z` whose details hold a 200-character issuer, an `identity.memberships_synced` event whose target is `usr_01a1ed71-e612-7000-849d-10aa1e127a47`, and a `registry.block_imported` event whose details hold a 64-hex `contentHash` (test-plan-browser.md)
+- **THEN** the region "Chain verification" has a `status` containing "Audit chain verified"; the row contains "user: u_carol" and not "Carol Example"; the `/people` hit list is empty; the cell "2026-11-18 09:15:00 UTC" is at most 24 px tall and the `.ui-table-wrap` has `scrollWidth <= clientWidth`; the two regions have tops within 1 px and the first ends at or before the second's left edge; `assert_layout`, `assert_accessible` and `watch_csp` (`[]`) pass

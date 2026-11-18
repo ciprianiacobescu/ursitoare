@@ -1,0 +1,20 @@
+Paths without a directory are in `web/src/app/`. No frozen test changes. Each Node test begins with `assert.equal(typeof <function>, "function")` for the names it imports, wraps a call that reaches a stub in `assert.doesNotThrow`, uses `node:assert/strict` and has no `.`, `[` or `::` in its name. The `.tsx` files render what `home.ts` returns; no Node test imports a `.tsx`. This change adds no CSS import.
+
+## 1. Rows
+
+- [ ] 1.1 Write `home-rows.test.ts` with the test "homeView shows the dashboard only for a ready session" (scenario "The view follows the session state", test-plan.md T1) first, then implement `homeView` in `home.ts`, implementing requirement "Only a ready session gets the dashboard" (logic half)
+- [ ] 1.2 Append the test "the recent runs rows keep five runs with their badge, time, duration and name" (scenario "Seven runs give five rows with distinct link names", T2) first, then implement `recentRunLinkName` and `runRows` (`formatAgo`, `formatInstant`, `formatDuration`, `runStateTone` of `web/src/ui/`), implementing requirement "Recent runs show at most five runs with state, flow, time, duration and name"
+- [ ] 1.3 Append the test "the recent flows rows are the five most recently changed" (scenario "Seven flows in name order give five by recency", T3) first, then implement `recentFlows` and `flowRows` (`versionStateTone`), implementing requirement "Recent flows are the five changed last"
+
+## 2. Next steps
+
+- [ ] 2.1 Write `home-steps.test.ts` with the test "an author's steps follow the flows and runs the API shows" (scenario "An author's steps follow her flows and runs", rows N1 to N5b of T4) first, then implement the flow and failed-run parts of `nextSteps`, implementing the first two bullets of requirement "Next steps follow the role and the state the API shows"
+- [ ] 2.2 Append the tests "an administrator's steps are the three setup counts the API shows" (rows N10 to N15) and "nothing is claimed when no fact is known or the role has no setup" (rows N6 to N9, N13, N16 to N18) and "every next step links to a page that exists and names no navigation entry" (scenario "The seven steps link to registered pages", T5; it imports `ADMIN_PAGES`, `TOOL_PAGES`, `FLOW_PAGES` and `RUN_PAGES` from the four `pages.ts` of `web/src/admin`, `tools`, `flows` and `runs`; it fails at red because the admin steps are missing) first, then implement the three admin steps, `badge` and `settled`, implementing the rest of that requirement (scenarios "An administrator's steps are the three setup counts" and "Nothing is claimed that the page has not read"), and requirement "Every next step links to a page that exists"
+
+## 3. Loaders
+
+- [ ] 3.1 Write `home-load.test.ts` (scenario "The loaders ask one page, count, and fail loudly", T6) first, then implement the five loaders (`runListFetcher`, `flowListFetcher` and `parseCursorPage` for the page; `ApiRequestError` `INVALID_RESPONSE` for the rest), implementing requirement "The home loaders read one page each and fail loudly"
+
+## 4. The page
+
+- [ ] 4.1 Write `home-sources.test.ts` (scenario "The sources keep the pinned markup", T7) first, and create `e2e/test_m6b_home.py` with the four tests of test-plan-browser.md (their four scenarios; a red step cannot run `e2e/`, so their criteria stay out of `criteria_ids` and the verifier checks them), then create `HomePage.tsx` as design decisions 1 and 5 to 8 say (the signed-out branch is `Landing`'s markup, moved; `Dashboard` reads the loaders with `createApiClient()`) and edit `web/src/features/10-home.tsx` to render `<HomePage />` with its `id`, `path` and `navLabel` unchanged, implementing requirements "The home page keeps its pins" and "The dashboard renders each list and step from its own state". The journeys `e2e/test_m0_skeleton.py`, `test_m1_sign_in.py`, `test_m1_web_kit.py`, the `test_l4_c_*` tests and the m2 to m6 journeys are green on arrival and stay unchanged. Run `pnpm run test web/src/app/features.test.ts`, `pnpm run test test/arch/web-routes.test.ts` and `pnpm run test web/src/kit/contrast.test.ts` here: all stay green
