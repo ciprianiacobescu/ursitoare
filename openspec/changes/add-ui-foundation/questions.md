@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | none | verdict | Criterion C-546ee64e (web-design-system › Unstyled elements stay readable and the signed-out pages stay clean › Signed-out pages are styled, clean and accessible): accept as satisfied? |
 | Q-002 | answered | none | verdict | Hold H-b858d0c9: UI criterion C-52eda073 has no end-to-end test; see the generated UI tests table |
 | Q-003 | answered | none | verdict | Hold H-9ada2edb: UI criterion C-c476cd94 has no end-to-end test; see the generated UI tests table |
-| Q-004 | open | none | verdict | Hold H-508a051f: UI criterion C-546ee64e has no end-to-end test; see the generated UI tests table |
+| Q-004 | answered | none | verdict | Hold H-508a051f: UI criterion C-546ee64e has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-ee794d23: UI criterion C-d77fa65f has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-7cfd2d65: UI criterion C-d3240b20 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-0311979d: UI criterion C-3c9f8b7f has no end-to-end test; see the generated UI tests table |
@@ -114,7 +114,8 @@ accept The hold can be waived. Criterion C-c476cd94 is the scenario app.css keep
 
 ## Q-004: Hold H-508a051f: UI criterion C-546ee64e has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -133,6 +134,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The verifier's generated file for C-546ee64e was uncollectable at the merge base, but the unit does have an end-to-end test for this criterion: test_signed_out_pages_are_styled_clean_and_accessible in e2e/test_m6b_foundation.py, tagged with the criterion id, imports pytest correctly, and performs every step of the scenario over / and /sign-in at 1366 by 860, with watch_csp before goto, assert_layout at 300 px, an h1 of at least 24 px, assert_accessible and an empty violation list. The criterion's own text says this test is green at main and guards rather than proves the base layer, so a generated discriminating test is not something the specification expects. The base layer in app.css holds the h1 rule, main.tsx imports only app.css, and the unit's browser plan records the test passing against the scratch build and main. The e2e gate continues to run this test on every verification.
 ---
 
 ## Q-005: Hold H-ee794d23: UI criterion C-d77fa65f has no end-to-end test; see the generated UI tests table
