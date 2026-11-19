@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-5b9e6539 (web-kit › A confirm dialog opens centred with its tone and returns focus › The Disable dialog is centred, toned and returns focus): accept as satisfied? |
 | Q-004 | answered | none | verdict | Hold H-09735f2a: UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table |
-| Q-006 | open | none | verdict | Hold H-5c5d8c36: UI criterion C-859c63d2 has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-5c5d8c36: UI criterion C-859c63d2 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-f260119c: UI criterion C-40cb2e75 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-1db9756c: UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table |
@@ -179,7 +179,8 @@ accept The hold can be waived. The criterion's scenario is a Node audit of data.
 
 ## Q-006: Hold H-5c5d8c36: UI criterion C-859c63d2 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -198,6 +199,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The repository's own browser test for this scenario opens the Users page with the mocked answers, reads the card wrapper, the Name header, the caption and the Bob Example row before and after the hover, and it ran green in the unit's end-to-end gate at the head. The sources give every value it asserts: the wrapper rule sets a one pixel divider border, the large radius and horizontal scrolling, and the divider token is #d0d5dd, which is rgb(208, 213, 221), while the radius token is 0.5rem, which is 8px; the header cell rule paints the surface token #f4f5f7 at weight 600; the caption rule gives weight 600 and the Users page passes the caption Users; the hover rule paints the accent surface token #eff4ff, which is rgb(239, 244, 255), and no rule gives an unhovered row a background. The data stylesheet is loaded in the components layer and no other stylesheet touches tables, rows or captions. The generated test failed at the base and at the head alike, so it discriminates nothing and says nothing about the code at the head.
 ---
 
 ## Q-007: Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table
