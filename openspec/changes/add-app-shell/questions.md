@@ -198,6 +198,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-006: Criterion C-88a078f0 (web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: the reply has 21 checked entries: the limit is 20
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
