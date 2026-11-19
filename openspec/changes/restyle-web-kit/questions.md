@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Hold H-2dab7e00: UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-6bc82384: UI criterion C-ab3cdbf6 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-a317ca0a: UI criterion C-dac61932 has no end-to-end test; see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-95a10e9a: UI criterion C-5b9e6539 has no end-to-end test; see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-95a10e9a: UI criterion C-5b9e6539 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -348,7 +348,8 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ## Q-013: Hold H-95a10e9a: UI criterion C-5b9e6539 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -367,3 +368,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion is covered by the unit's own browser test in the end-to-end suite, tagged with the criterion id, which opens the Users page with the mocked me and users answers at 1366 by 860 after watching for Content Security Policy messages, clicks Disable Bob Example, checks one heading and two buttons, the horizontal centre within one pixel of 683 and width at most 512, reads the data-tone of Disable user and compares its background to that token resolved at run time, compares Cancel to the surface token, presses Escape and checks that the dialog is gone, the opener is focused, axe passes and the message list is empty. The sources give every value: the dialog is the native dialog element with one h2 and a cancel button before a confirm button, the app stylesheet centres a dialog with margin auto, the dialog rule sets width 32rem bounded by the viewport, the confirm button's tone is danger when destructive and primary otherwise, the Users page passes no destructive prop so the primary rule paints the accent token, the quiet button rule paints Cancel with the surface token, and the close handler returns focus to the stored opener. The generated writer only failed on a tool permission, which says nothing about the code.
