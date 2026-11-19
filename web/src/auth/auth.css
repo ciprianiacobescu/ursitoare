@@ -22,7 +22,7 @@
   gap: var(--ui-space-3);
   max-width: 24rem;
   margin: var(--ui-space-4) auto 0;
-  padding: var(--ui-space-3);
+  padding: var(--ui-space-4);
   border: 1px solid var(--ui-color-divider);
   border-radius: var(--ui-radius-lg);
   box-shadow: var(--ui-shadow-sm);

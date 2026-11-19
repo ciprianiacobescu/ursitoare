@@ -17,7 +17,7 @@ function NotFoundPage() {
   return (
     <>
       <DocumentTitle routeId="not-found" />
-      <div className="mx-auto mt-8 flex max-w-md flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-surface p-6 text-center">
+      <div className="mx-auto mt-12 flex max-w-md flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-surface p-6 text-center">
         <h1>Page not found</h1>
         <p>The page you asked for does not exist.</p>
         <Button asChild tone="primary">
