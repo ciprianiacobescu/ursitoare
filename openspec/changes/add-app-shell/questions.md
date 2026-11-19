@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Hold H-e4efbea1: UI criterion C-14067443 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-ec613652: UI criterion C-2d3f3998 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
-| Q-015 | open | none | verdict | Hold H-75cdf554: UI criterion C-425a9f46 has no end-to-end test; see the generated UI tests table |
+| Q-015 | answered | none | verdict | Hold H-75cdf554: UI criterion C-425a9f46 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-45489073: UI criterion C-9eeb9987 has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-d1f76909: UI criterion C-2159a890 has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-cdb99000: UI criterion C-88a078f0 has no end-to-end test; see the generated UI tests table |
@@ -427,7 +427,8 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ## Q-015: Hold H-75cdf554: UI criterion C-425a9f46 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -446,6 +447,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The generated test only errored at the merge base, which says nothing against the head, and the shell gives the scenario. The Menu button is a plain Button with lg:hidden, aria-expanded bound to React state and aria-controls main-nav, so below 1024 px it is visible with aria-expanded false and from 1024 px it is display none. The sidebar nav is hidden when the state is closed and block when open, with lg:block from 1024 px, so a closed menu below 1024 px removes the navigation from the accessibility tree and the count is 0, while at 1024 px there is one navigation with id main-nav. A click toggles the state and an effect on the pathname closes it, so navigating from the not-found page to Home leaves aria-expanded false and no navigation. No Radix primitive is involved. The unit's own browser test, tagged with this criterion, asserts the button at 1023 and 1024, the two clicks at 900 with assert_layout and assert_accessible, the close on navigation and an empty CSP list.
 ---
 
 ## Q-016: Hold H-45489073: UI criterion C-9eeb9987 has no end-to-end test; see the generated UI tests table
