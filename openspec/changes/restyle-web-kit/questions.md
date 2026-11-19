@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Hold H-09735f2a: UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-5c5d8c36: UI criterion C-859c63d2 has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-f260119c: UI criterion C-40cb2e75 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-1db9756c: UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-2dab7e00: UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table |
@@ -204,7 +204,8 @@ accept The hold can be waived. The repository's own browser test for this scenar
 
 ## Q-007: Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -223,6 +224,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion's scenario is a Node source test, not a browser journey: it reads the Field and Form sources and checks the order of the label, control and described blocks, the hidden Error prefix pattern and one primary tone on the submit button. That test exists, is named with the criterion id in three test functions, and its assertions hold against the current sources: the stacked block renders label, then the control, then the hint and error; the inline block keeps control, label, described; the error paragraph starts with the visually hidden Error span; and the Form submit carries data-tone primary exactly once. The end-to-end writer rightly reported that JSX child order and a source occurrence count are not page-observable, and the sibling browser scenario on the Flows form checks the visible effect of the same order and tone.
 ---
 
 ## Q-008: Hold H-f260119c: UI criterion C-40cb2e75 has no end-to-end test; see the generated UI tests table
