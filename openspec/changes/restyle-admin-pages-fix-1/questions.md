@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: Cell height limits in two e2e tests are not reachable with the current table layout
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The repository confirms the premise: web/src/kit/data/data.css gives every body cell padding var(--ui-space-2) (0.5rem each side) plus a 1 px border, shell.css sets line-height 1.5 at a 1rem font, so a one-line cell is about 41 px, and theme.css gives .ui-button min-height var(--ui-target-min) = 2.5
 - **Blocking tasks:** 1.1
 - **Kind:** ambiguous
 - **Asked:** 2026-11-19T22:34Z by claude-sonnet, run r-20261119T2206Z-463f, task 1.1
