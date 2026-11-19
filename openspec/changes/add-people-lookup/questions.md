@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | none | verdict | Hold H-f8921f64: UI criterion C-748ce889 has no end-to-end test; see the generated UI tests table |
 | Q-002 | answered | none | verdict | Hold H-4ed1905b: UI criterion C-55e76eb6 has no end-to-end test; see the generated UI tests table |
 | Q-003 | answered | none | verdict | Hold H-f666a58b: UI criterion C-db4fc15e has no end-to-end test; see the generated UI tests table |
-| Q-004 | open | none | verdict | Hold H-30c70910: UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table |
+| Q-004 | answered | none | verdict | Hold H-30c70910: UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-d44a38f6: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-a783bd38: UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-baa4dc41: UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table |
@@ -104,7 +104,8 @@ accept C-db4fc15e checks getPersonNames on a recording transaction: refusals bef
 
 ## Q-004: Hold H-30c70910: UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -123,6 +124,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-57481c19 is the behaviour of GET /api/v1/people for an active member, including the exact body, the no-store header, one read_self decision row, an unchanged audit count and the 403 of a denying engine. The decision and audit rows are database facts a browser cannot read, and no page in this unit calls the route. The Node test for the criterion builds the real server with the real PEP over embedded Postgres and asserts every one of these rows, the deny case on its own server. The hold on a missing end-to-end test is therefore waived.
 ---
 
 ## Q-005: Hold H-d44a38f6: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table
