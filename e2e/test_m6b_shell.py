@@ -34,7 +34,7 @@ def test_sign_in_and_not_found_render_as_centred_cards(page: Page, base_url: str
 
     for path in ["/sign-in", "/sign-in?error=OIDC_USER_DISABLED"]:
         page.goto(base_url + path)
-        expect(page.get_by_role("heading", name="Sign in")).to_be_visible()
+        expect(page.get_by_role("heading", name="Sign in", exact=True)).to_be_visible()
         button = page.get_by_role("button", name="Sign in")
         expect(button).to_have_count(1)
         assert abs(_box(button)["width"] - 334) <= 1
