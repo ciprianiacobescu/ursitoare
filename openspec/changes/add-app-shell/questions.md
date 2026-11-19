@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-14067443 (web-shell › The shell holds one banner, one navigation, one main and one footer › Alice and a signed-out visitor see fewer groups): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-2d3f3998 (web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
-| Q-005 | open | none | verdict | Criterion C-425a9f46 (web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px): accept as satisfied? |
+| Q-005 | answered | none | verdict | Criterion C-425a9f46 (web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-88a078f0 (web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards): accept as satisfied? |
 | Q-007 | answered | none | verdict | Hold H-817f132e: UI criterion C-e722bbf4 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-49d28f26: UI criterion C-4ef0679b has no end-to-end test; see the generated UI tests table |
@@ -167,7 +167,7 @@ reject: measured by the owner's delegate on head 46b3bf4a: with 60-character nam
 
 ## Q-005: Criterion C-425a9f46 (web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): I withdraw this one to escalate: see the accept variant was considered but the delegate must give exactly one result per question; this placeholder is replaced below.
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -195,6 +195,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept: verified by the owner's delegate. test_the_menu_folds_below_1024_px implements every clause of the scenario: at 1023 Menu is visible with aria-expanded false and there are 0 navigations; at 1024 it is hidden and there is 1, with id main-nav; at 900 it opens and closes, assert_layout and assert_accessible pass, and it closes after Home is clicked from /no-such-page; CSP list []. It passes at head 46b3bf4a locally (twice) and in the round-2 CI e2e gate, and it fails at base c2129af7 (no Menu button), so it discriminates. I checked a screenshot of the open menu at 900 px by eye. The generated test errored at the base, which proves nothing either way.
 ---
 
 ## Q-006: Criterion C-88a078f0 (web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards): accept as satisfied?
