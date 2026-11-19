@@ -380,6 +380,7 @@ accept The generated test was never collected, so there is no result against the
 ## Q-013: Hold H-ec613652: UI criterion C-2d3f3998 has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The generated test for this criterion fails at the head after two attempts and I cannot read it or its trace: it is not in the repository I can see. The code reads right: shell.css sets [tabindex="-1"]:focus to outline none in the same components layer as theme.css's 3 px :focus-visible rule with hi
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
