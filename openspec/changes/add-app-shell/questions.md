@@ -34,7 +34,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-021 | answered | none | verdict | Criterion C-0cbfa992 (web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60...): accept as s |
 | Q-022 | answered | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
 | Q-023 | answered | none | verdict | Hold H-f10f11d2: UI criterion C-c6a08479 has no end-to-end test; see the generated UI tests table |
-| Q-024 | open | none | verdict | Hold H-c9e043b3: UI criterion C-0cbfa992 has no end-to-end test; see the generated UI tests table |
+| Q-024 | answered | none | verdict | Hold H-c9e043b3: UI criterion C-0cbfa992 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -689,7 +689,8 @@ accept The unit can go on. The generated test fails at the head for a premise of
 
 ## Q-024: Hold H-c9e043b3: UI criterion C-0cbfa992 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
@@ -708,3 +709,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on. The hold says the criterion has no end-to-end test, but the head holds two: test_long_names_banner.py is tagged with C-0cbfa992 and mocks /api/v1/me with a 60-character display name and tenant name at 1366 by 860 and 900 by 800, then asserts both whole names in the banner, the banner at 56 px within 1, both account paragraphs with text-overflow ellipsis and scrollWidth greater than clientWidth, the Sign out button on one line at 38 px, and its right edge inside the viewport; and the spec's own test_long_names_truncate_and_never_grow_the_banner in test_m6b_shell.py asserts the names, assert_layout at 72, the ellipsis cut and the right edge at the same two sizes. The code gives those results: the header is one flex-nowrap row with a minimum height of the banner token, 3.5rem, the brand and Menu button carry shrink-0, the Sign out Button carries shrink-0 and whitespace-nowrap so it cannot wrap onto two lines, and auth.css gives the account paragraphs min-width 0, overflow hidden, white-space nowrap and text-overflow ellipsis. The generated test's failure at the head follows the pattern of the earlier rounds: it seeds a session in browser storage, and no file under web/src reads localStorage or sessionStorage, so nobody is signed in and its premise fails, not the shell. The generated file is not in the head, so its content could not be re-read here, but the project's own tagged tests make the hold's claim of no end-to-end test false.
