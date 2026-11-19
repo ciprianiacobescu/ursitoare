@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Hold H-e45e045d: UI criterion C-ffb190b2 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-36707f19: UI criterion C-1577878d has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-e4efbea1: UI criterion C-14067443 has no end-to-end test; see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-ec613652: UI criterion C-2d3f3998 has no end-to-end test; see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-ec613652: UI criterion C-2d3f3998 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-75cdf554: UI criterion C-425a9f46 has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-45489073: UI criterion C-9eeb9987 has no end-to-end test; see the generated UI tests table |
@@ -380,7 +380,7 @@ accept The generated test was never collected, so there is no result against the
 
 ## Q-013: Hold H-ec613652: UI criterion C-2d3f3998 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The generated test for this criterion fails at the head after two attempts and I cannot read it or its trace: it is not in the repository I can see. The code reads right: shell.css sets [tabindex="-1"]:focus to outline none in the same components layer as theme.css's 3 px :focus-visible rule with hi
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -400,6 +400,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept: verified by the owner's delegate. The generated test could not be read (CI artefacts are not uploaded), but the scenario holds as written: the project test test_key_stops_keep_their_ring_and_script_focus_draws_none passes at head locally and in the round-2 CI e2e gate and fails at base c2129af7 (Tab order), and an independent probe as carol at 1280 by 720 measured solid 3px on the four Tab stops and outline none on main after the skip link, on the focused status and on main after Dismiss.
 ---
 
 ## Q-014: Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table
