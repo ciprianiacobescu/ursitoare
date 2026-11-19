@@ -202,6 +202,6 @@ export function focusAfterChange(
   return "none";
 }
 
-export function captionClass(_display: "visible" | "hidden" | undefined): string {
-  return "";
+export function captionClass(display: "visible" | "hidden" | undefined): string {
+  return display === "hidden" ? "ui-table-caption ui-visually-hidden" : "ui-table-caption";
 }

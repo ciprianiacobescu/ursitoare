@@ -1,0 +1,251 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "e2e",
+      "kit/layout",
+      "test/arch/web-routes.test.ts",
+      "docs/decisions/0002",
+      "e2e/test_m6b_kit.py",
+      "web/src/ui/cn.ts",
+      "web/src/kit",
+      "data",
+      "layout",
+      "data/data-restyle.test.ts",
+      "data/data.css",
+      "data/data-css.test.ts",
+      "data/caption-class.test.ts",
+      "data/data-table.ts",
+      "data/DataTable.tsx",
+      "data/data-table.test.ts",
+      "data/field-order.test.ts",
+      "data/Field.tsx",
+      "data/Form.tsx",
+      "data/field.test.ts",
+      "data/form.test.ts",
+      "layout/layout.test.ts",
+      "layout/layout.ts",
+      "layout/layout-sources.test.ts",
+      "layout/PageHeader.tsx",
+      "layout/Section.tsx",
+      "data/data-keyboard.test.ts",
+      "**/.ui-*",
+      "**/TeamsPage.tsx",
+      "**/MappingsPage.tsx",
+      "**/ConfirmDialog.tsx",
+      "**/.ui-field-*",
+      "**/[name=...]",
+      "**/EmptyState.tsx",
+      "**/ErrorPanel.tsx",
+      "**/LoadingState.tsx",
+      "**/ToastRegion.tsx",
+      "**/theme.css",
+      "**/[a-z0-9]",
+      "**/section[role=alert]",
+      "**/[]",
+      "kit/*.tsx",
+      "**/[aria-disabled=\"true\"]",
+      "**/data.css",
+      "**/DataTable.tsx",
+      "**/Field.tsx",
+      "**/Form.tsx",
+      "**/app.css",
+      "**/.ui-page-header*",
+      "**/.ui-section*",
+      "**/contrast.test.ts",
+      "**/keyboard.test.ts",
+      "module data",
+      "module docs",
+      "module e2e",
+      "module kit",
+      "module layout",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m6b_kit.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/restyle-web-kit/.l4/ledger/r-20261119T0127Z-db24.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/restyle-web-kit/.l4/ledger/r-20261119T0403Z-bfe7.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/restyle-web-kit/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/kit/ConfirmDialog.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/DataTable.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/Field.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/Form.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/caption-class.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/data/data-restyle.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/data/data-table.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/data.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/data/field-order.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/kit-markup.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/layout/PageHeader.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/layout/Section.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/layout/layout-sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/layout/layout.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/layout/layout.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/kit/theme-restyle.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/kit/theme.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/kit/ConfirmDialog.tsx, web/src/kit/data/DataTable.tsx, web/src/kit/data/Field.tsx, web/src/kit/data/Form.tsx, web/src/kit/data/data-table.ts and 3 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/kit/ConfirmDialog.tsx",
+      "web/src/kit/data/DataTable.tsx",
+      "web/src/kit/data/Field.tsx",
+      "web/src/kit/data/Form.tsx",
+      "web/src/kit/data/data-table.ts",
+      "web/src/kit/layout/PageHeader.tsx",
+      "web/src/kit/layout/Section.tsx",
+      "web/src/kit/layout/layout.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2617,
+      "passed": 2617,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 13,
+      "new_passed": 13,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

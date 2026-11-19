@@ -52,8 +52,8 @@ export function Field(props: FieldProps): ReactNode {
   return (
     <div className="ui-field">
       {label}
-      {described}
       {props.children(control)}
+      {described}
     </div>
   );
 }

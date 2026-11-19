@@ -6,13 +6,14 @@ import { EmptyState } from "../EmptyState.tsx";
 import { ErrorPanel } from "../ErrorPanel.tsx";
 import { LoadingState } from "../LoadingState.tsx";
 import type { CursorList, CursorListState } from "./cursor-list.ts";
-import { dataTableModel, focusAfterChange, tableView } from "./data-table.ts";
+import { captionClass, dataTableModel, focusAfterChange, tableView } from "./data-table.ts";
 import type { DataColumn, DataTableSpec } from "./data-table.ts";
 
 export interface DataTableProps<T> extends DataTableSpec {
   columns: readonly (DataColumn & { cell: (row: T) => ReactNode })[];
   list: CursorList<T>;
   rowKey: (row: T) => string;
+  captionDisplay?: "visible" | "hidden";
 }
 
 export function DataTable<T>(props: DataTableProps<T>): ReactNode {
@@ -57,7 +58,7 @@ export function DataTable<T>(props: DataTableProps<T>): ReactNode {
     body = (
       <div className="ui-table-wrap" role="region" aria-label={model.caption} tabIndex={0}>
         <table className="ui-table">
-          <caption>{model.caption}</caption>
+          <caption className={captionClass(props.captionDisplay)}>{model.caption}</caption>
           <thead>
             <tr>
               {model.columns.map((column) => (

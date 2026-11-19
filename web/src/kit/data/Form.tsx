@@ -44,7 +44,7 @@ export function Form(props: FormProps): ReactNode {
       )}
       {props.children}
       <div className="ui-form-actions">
-        <button type="submit" className="ui-button" aria-disabled={model.submit === "busy"}>
+        <button type="submit" className="ui-button" data-tone="primary" aria-disabled={model.submit === "busy"}>
           {model.submitLabel}
         </button>
       </div>

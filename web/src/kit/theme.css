@@ -20,21 +20,50 @@ textarea,
   background: var(--ui-color-surface);
   color: var(--ui-color-text);
   cursor: pointer;
+  font-weight: 500;
 }
 
 .ui-button:hover {
   background: var(--ui-color-bg);
 }
 
-.ui-button:disabled {
+.ui-button:disabled,
+.ui-button[aria-disabled="true"] {
   color: var(--ui-color-text-muted);
   cursor: not-allowed;
 }
 
+.ui-button[data-tone="primary"] {
+  border-color: var(--ui-color-accent);
+  background: var(--ui-color-accent);
+  color: var(--ui-color-on-accent);
+}
+
+.ui-button[data-tone="primary"]:hover {
+  background: var(--ui-color-accent);
+  filter: brightness(0.9);
+}
+
+.ui-button[data-tone="danger"] {
+  border-color: var(--ui-color-danger);
+  background: var(--ui-color-danger);
+  color: var(--ui-color-on-danger);
+}
+
+.ui-button[data-tone="danger"]:hover {
+  background: var(--ui-color-danger);
+  filter: brightness(0.9);
+}
+
+.ui-button[data-tone][aria-disabled="true"] {
+  filter: none;
+  opacity: 0.6;
+}
+
 .ui-empty {
   padding: var(--ui-space-4);
-  border: 1px dashed var(--ui-color-border);
-  border-radius: var(--ui-radius);
+  border: 1px dashed var(--ui-color-divider);
+  border-radius: var(--ui-radius-lg);
   background: var(--ui-color-surface);
   color: var(--ui-color-text);
   text-align: center;
@@ -50,7 +79,10 @@ textarea,
   align-items: center;
   gap: var(--ui-space-2);
   padding: var(--ui-space-3);
-  color: var(--ui-color-text);
+  border: 1px solid var(--ui-color-divider);
+  border-radius: var(--ui-radius-lg);
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text-muted);
 }
 
 .ui-spinner {
@@ -69,11 +101,17 @@ textarea,
 }
 
 .ui-error {
+  max-width: 40rem;
   padding: var(--ui-space-3);
+  border: 1px solid var(--ui-color-danger);
   border-left: var(--ui-focus-width) solid var(--ui-color-danger);
-  border-radius: var(--ui-radius);
+  border-radius: var(--ui-radius-lg);
   background: var(--ui-color-danger-surface);
   color: var(--ui-color-danger-text);
+}
+
+.ui-error .ui-button {
+  min-height: 2rem;
 }
 
 .ui-error h2 {
@@ -86,16 +124,18 @@ textarea,
 }
 
 .ui-error code {
-  font-family: var(--ui-font-sans);
+  font-family: var(--ui-font-mono);
 }
 
 .ui-dialog {
-  max-width: 32rem;
+  width: 32rem;
+  max-width: calc(100vw - 2rem);
   padding: var(--ui-space-4);
-  border: 1px solid var(--ui-color-border);
-  border-radius: var(--ui-radius);
+  border: 1px solid var(--ui-color-divider);
+  border-radius: var(--ui-radius-lg);
   background: var(--ui-color-bg);
   color: var(--ui-color-text);
+  box-shadow: var(--ui-shadow-sm);
 }
 
 .ui-dialog::backdrop {
@@ -134,15 +174,18 @@ textarea,
   gap: var(--ui-space-2);
   max-width: 24rem;
   padding: var(--ui-space-2) var(--ui-space-3);
-  border-radius: var(--ui-radius);
+  border-radius: var(--ui-radius-lg);
   background: var(--ui-color-toast-bg);
   color: var(--ui-color-toast-text);
+  box-shadow: var(--ui-shadow-sm);
 }
 
 .ui-toast button {
   padding: 0 var(--ui-space-1);
   border: 0;
   background: transparent;
+  box-shadow: none;
+  font-weight: inherit;
   color: var(--ui-color-toast-text);
   cursor: pointer;
   text-decoration: underline;
@@ -157,6 +200,38 @@ textarea,
 .ui-toast button:focus-visible,
 .ui-toast .ui-button:focus-visible {
   outline-color: var(--ui-color-toast-text);
+}
+
+.ui-page-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--ui-space-2) var(--ui-space-4);
+  align-items: start;
+  margin-bottom: var(--ui-space-4);
+}
+
+.ui-page-header-title {
+  grid-column: 1;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.ui-page-header-description {
+  grid-column: 1;
+  margin: 0;
+  color: var(--ui-color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.ui-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--ui-space-3);
+  padding: var(--ui-space-4);
+  border: 1px solid var(--ui-color-divider);
+  border-radius: var(--ui-radius-lg);
+  background: var(--ui-color-bg);
+  box-shadow: var(--ui-shadow-sm);
 }
 
 .ui-visually-hidden {
