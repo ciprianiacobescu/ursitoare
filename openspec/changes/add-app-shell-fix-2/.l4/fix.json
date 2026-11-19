@@ -1,0 +1,14 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-app-shell",
+  "round": 2,
+  "findings": [
+    "H-829dbc6c",
+    "F-4b912d38"
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": [],
+  "repairs": []
+}
