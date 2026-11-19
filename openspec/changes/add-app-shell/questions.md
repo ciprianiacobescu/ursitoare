@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-013 | open | none | verdict | Hold H-ec613652: UI criterion C-2d3f3998 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-75cdf554: UI criterion C-425a9f46 has no end-to-end test; see the generated UI tests table |
-| Q-016 | open | none | verdict | Hold H-45489073: UI criterion C-9eeb9987 has no end-to-end test; see the generated UI tests table |
+| Q-016 | answered | none | verdict | Hold H-45489073: UI criterion C-9eeb9987 has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-d1f76909: UI criterion C-2159a890 has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-cdb99000: UI criterion C-88a078f0 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -452,7 +452,8 @@ accept The generated test only errored at the merge base, which says nothing aga
 
 ## Q-016: Hold H-45489073: UI criterion C-9eeb9987 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -471,6 +472,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is a static scan of shell.css, auth.css and tokens.css through the kit's parseTokens and findRawColours helpers, which no browser page exposes, so the specification itself assigns it to the Node test shell-css.test.ts and an end-to-end test is neither possible nor needed. That Node test, tagged with this criterion, asserts every row of the scenario, and the files hold what it asks: shell.css declares color-scheme light, keeps .skip-link:focus with var(--ui-focus-width), replaces main:focus by the tabindex minus one rule with outline none, and holds no light dark, Canvas, currentColor or .app-* selector; auth.css keeps .auth-account and .auth-page with text-overflow ellipsis, max-width 24rem, the divider, radius-lg and shadow-sm tokens and no 32rem width. Neither file holds a raw colour, and every var() name they use, the space, bg, text, accent, divider, focus-width, radius-lg and shadow-sm tokens, is declared in tokens.css. The browser-visible consequences, the light scheme and the focus behaviour, are covered by the separate focus-ring browser scenario of the unit.
 ---
 
 ## Q-017: Hold H-d1f76909: UI criterion C-2159a890 has no end-to-end test; see the generated UI tests table
