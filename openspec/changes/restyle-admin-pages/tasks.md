@@ -2,7 +2,7 @@ Paths are in `web/src/admin/` or `web/src/tools/`. Each task is one red-green cy
 
 ## 1. Captions
 
-- [ ] 1.1 Write `admin/captions-by-page.test.ts` (scenario "Exactly four captions are hidden", test-plan.md T2) first: it is one test function: its `captionDisplayFor` rows hold on arrival (U15d's function) and its page-source rows fail by assertion (L4 refuses a new test that passes at red, and a criterion with a failing test is not pre-satisfied). Then in `UsersPage.tsx`, `MappingsPage.tsx`, `ServersPage.tsx` and `GrantsPage.tsx` add `const PAGE_HEADING = "<h1 text>";` and `captionDisplay={captionDisplayFor(<SPEC>.<table>.caption, PAGE_HEADING)}` on the main `DataTable`, implementing requirement "A table caption that repeats its page heading is hidden, and only four are". Run `pnpm run test web/src/admin/captions-by-page.test.ts`
+- [x] 1.1 Write `admin/captions-by-page.test.ts` (scenario "Exactly four captions are hidden", test-plan.md T2) first: it is one test function: its `captionDisplayFor` rows hold on arrival (U15d's function) and its page-source rows fail by assertion (L4 refuses a new test that passes at red, and a criterion with a failing test is not pre-satisfied). Then in `UsersPage.tsx`, `MappingsPage.tsx`, `ServersPage.tsx` and `GrantsPage.tsx` add `const PAGE_HEADING = "<h1 text>";` and `captionDisplay={captionDisplayFor(<SPEC>.<table>.caption, PAGE_HEADING)}` on the main `DataTable`, implementing requirement "A table caption that repeats its page heading is hidden, and only four are". Run `pnpm run test web/src/admin/captions-by-page.test.ts`
 
 ## 2. Admin pages
 

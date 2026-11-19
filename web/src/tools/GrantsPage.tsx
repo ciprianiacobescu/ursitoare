@@ -6,6 +6,7 @@ import { ApiRequestError } from "../api/client.ts";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { DataTable } from "../kit/data/DataTable.tsx";
+import { captionDisplayFor } from "../kit/layout/layout.ts";
 import { Field } from "../kit/data/Field.tsx";
 import { Form } from "../kit/data/Form.tsx";
 import { FORM_ERROR_KEY } from "../kit/data/form-errors.ts";
@@ -28,6 +29,7 @@ import {
 import type { GrantView } from "./grants.ts";
 import { toolsErrorMessage } from "./messages.ts";
 
+const PAGE_HEADING = "Grants";
 const GRANTS_PATH = "/grants";
 
 const CREATE_FIELDS: Readonly<Record<string, string>> = {
@@ -218,6 +220,7 @@ export function GrantsPage(): ReactNode {
       <section aria-label="Grants">
         <DataTable
           caption={TOOL_TABLES.grants.caption}
+          captionDisplay={captionDisplayFor(TOOL_TABLES.grants.caption, PAGE_HEADING)}
           columns={columns}
           list={list}
           rowKey={(grant) => grant.id}

@@ -6,6 +6,7 @@ import { ConfirmDialog } from "../kit/ConfirmDialog.tsx";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { DataTable } from "../kit/data/DataTable.tsx";
+import { captionDisplayFor } from "../kit/layout/layout.ts";
 import { Field } from "../kit/data/Field.tsx";
 import { Form } from "../kit/data/Form.tsx";
 import { createCursorList } from "../kit/data/cursor-list.ts";
@@ -34,6 +35,7 @@ import type { GrantOption, MappingRow } from "./mappings.ts";
 type MappingId = Pick<MappingRow, "issuer" | "group">;
 import { parseNamed } from "./teams.ts";
 
+const PAGE_HEADING = "Group mappings";
 const PAGE_TITLE = "Group mappings · Ursitoare";
 const ROLES_PATH = "/roles";
 const TEAMS_PATH = "/teams";
@@ -288,6 +290,7 @@ export function MappingsPage(): ReactNode {
       <section className="admin-section" aria-label="Group mappings">
         <DataTable
           caption={ADMIN_TABLES.mappings.caption}
+          captionDisplay={captionDisplayFor(ADMIN_TABLES.mappings.caption, PAGE_HEADING)}
           columns={columns}
           list={list}
           rowKey={(mapping) => `${mapping.issuer}\n${mapping.group}`}

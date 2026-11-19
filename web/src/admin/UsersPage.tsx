@@ -5,6 +5,7 @@ import { browserSession } from "../auth/browser-session.ts";
 import { useSession } from "../auth/use-session.ts";
 import { ConfirmDialog } from "../kit/ConfirmDialog.tsx";
 import { DataTable } from "../kit/data/DataTable.tsx";
+import { captionDisplayFor } from "../kit/layout/layout.ts";
 import { createCursorList } from "../kit/data/cursor-list.ts";
 import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
 import { toast } from "../kit/toast.ts";
@@ -13,6 +14,7 @@ import { ADMIN_TABLES } from "./pages.ts";
 import { accountAction, accountCells, parseAccount, patchAccountState } from "./users.ts";
 import type { AccountRow } from "./users.ts";
 
+const PAGE_HEADING = "Users";
 const PAGE_TITLE = "Users · Ursitoare";
 const USERS_PATH = "/users";
 
@@ -122,6 +124,7 @@ export function UsersPage(): ReactNode {
       </h1>
       <DataTable
         caption={ADMIN_TABLES.users.caption}
+        captionDisplay={captionDisplayFor(ADMIN_TABLES.users.caption, PAGE_HEADING)}
         columns={columns}
         list={list}
         rowKey={(account) => account.userId}

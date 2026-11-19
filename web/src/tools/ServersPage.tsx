@@ -8,6 +8,7 @@ import { ConfirmDialog } from "../kit/ConfirmDialog.tsx";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { DataTable } from "../kit/data/DataTable.tsx";
+import { captionDisplayFor } from "../kit/layout/layout.ts";
 import { createCursorList } from "../kit/data/cursor-list.ts";
 import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
 import { TOOL_NAMES, TOOL_TABLES, TOOL_TITLES, actionState, regionState } from "./pages.ts";
@@ -32,6 +33,7 @@ import type { ToolServerView } from "./servers.ts";
 
 type ToolRow = ReturnType<typeof toolRows>[number];
 
+const PAGE_HEADING = "Tool servers";
 const SERVERS_PATH = "/tool-servers";
 
 function toolsList(rows: readonly ToolRow[]) {
@@ -195,6 +197,7 @@ export function ServersPage(): ReactNode {
       <section aria-label="Tool servers">
         <DataTable
           caption={TOOL_TABLES.servers.caption}
+          captionDisplay={captionDisplayFor(TOOL_TABLES.servers.caption, PAGE_HEADING)}
           columns={serverColumns}
           list={servers}
           rowKey={(row) => row.id}
