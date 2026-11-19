@@ -14,7 +14,7 @@ Paths without a directory are in `web/src/kit/` (`data/` and `layout/` files in 
 
 ## 4. Fields and forms
 
-- [ ] 4.1 Write `data/field-order.test.ts` (scenario "The field order, the hidden prefix and the form tone in the sources", T5) first, then reorder the stacked `Field` in `data/Field.tsx` to label, control, described (the inline block and the "Error: " span are untouched) and add `data-tone="primary"` to the submit button in `data/Form.tsx`, implementing requirement "Field puts the control before its hint and error, and Form's submit is the accent tone". `data/field.test.ts` and `data/form.test.ts` stay green unchanged
+- [x] 4.1 Write `data/field-order.test.ts` (scenario "The field order, the hidden prefix and the form tone in the sources", T5) first, then reorder the stacked `Field` in `data/Field.tsx` to label, control, described (the inline block and the "Error: " span are untouched) and add `data-tone="primary"` to the submit button in `data/Form.tsx`, implementing requirement "Field puts the control before its hint and error, and Form's submit is the accent tone". `data/field.test.ts` and `data/form.test.ts` stay green unchanged
 
 ## 5. Dialog and the pinned markup
 
