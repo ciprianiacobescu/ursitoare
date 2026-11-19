@@ -32,7 +32,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-019 | answered | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
 | Q-020 | answered | none | verdict | Criterion C-c6a08479 (web-shell › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table — finding H-829dbc6c › Rejected hold: UI criterion C-51d4764a has no e |
 | Q-021 | answered | none | verdict | Criterion C-0cbfa992 (web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60...): accept as s |
-| Q-022 | open | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
+| Q-022 | answered | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
 | Q-023 | open | none | verdict | Hold H-f10f11d2: UI criterion C-c6a08479 has no end-to-end test; see the generated UI tests table |
 | Q-024 | open | none | verdict | Hold H-c9e043b3: UI criterion C-0cbfa992 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -639,7 +639,8 @@ accept The scenario holds in the head. The Sign out button carries shrink-0 and 
 
 ## Q-022: Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
@@ -658,6 +659,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on. The step-5 writer did not produce a test because a tooling permission rejected a shell call, which says nothing about the shell. The head already holds two end-to-end tests of this criterion: the spec's own test in test_m6b_shell.py, tagged with the criterion, asserts both whole names in the banner, assert_layout at 72, both paragraphs ellipsis and cut and the Sign out right edge inside the viewport at 1366 by 860 and 900 by 800; and test_long_names_banner.py, also tagged, asserts the banner at 56 px within 1 and the button at 38 px on one line. The code gives these results by construction: the Sign out button has shrink-0 and whitespace-nowrap, the header is a 3.5rem minimum non-wrapping row, and the account paragraphs truncate with an ellipsis.
 ---
 
 ## Q-023: Hold H-f10f11d2: UI criterion C-c6a08479 has no end-to-end test; see the generated UI tests table
