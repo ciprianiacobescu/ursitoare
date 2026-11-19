@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-5c5d8c36: UI criterion C-859c63d2 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-f260119c: UI criterion C-40cb2e75 has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-f260119c: UI criterion C-40cb2e75 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-1db9756c: UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-2dab7e00: UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-6bc82384: UI criterion C-ab3cdbf6 has no end-to-end test; see the generated UI tests table |
@@ -229,7 +229,7 @@ accept The hold can be waived. The criterion's scenario is a Node source test, n
 
 ## Q-008: Hold H-f260119c: UI criterion C-40cb2e75 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -248,6 +248,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept: the judge passed it and test_flows_form_is_bounded_and_keeps_its_focus_ring, which asserts every THEN value of the scenario, passed in the round-1 e2e gate (all tests pass at head). It discriminates although no red record exists for a browser test: at the unit base 1ff8361a the Form submit had no data-tone and .ui-button's background was var(--ui-color-surface), so the asserted backgroundColor rgb(29, 78, 216) fails there; this unit adds data-tone="primary" in Form.tsx and the .ui-button[data-tone="primary"] rule in theme.css. Step 5's generated file was uncollectable at the base, which adds nothing either way.
 ---
 
 ## Q-009: Hold H-1db9756c: UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table
