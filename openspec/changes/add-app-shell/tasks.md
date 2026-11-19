@@ -6,7 +6,7 @@ Paths without a directory are in `web/src/app/`. No frozen test changes: `web/sr
 - [x] 1.2 Write `nav-groups.test.ts` (scenario "Entries are grouped, ordered and passed through", rows G1 to G9 of test-plan.md T2) first, then implement `navGroups` in `nav-groups.ts` (`Object.hasOwn` on the map; a group per id in the order home, build, admin, more; empty groups left out), implementing the function half of requirement "Navigation entries are grouped by a fixed map"
 - [x] 1.3 Write `shell-layout.test.ts` (scenario "The width decides the layout", the nine widths of the spec) first, then implement `shellLayout` in `nav-groups.ts`, implementing requirement "The layout is a sidebar from 1024 px and collapsed below". Run `pnpm run test web/src/app/routes.test.ts` here: it stays green
 
-- [ ] 1.4 Write `nav-placement.test.ts` (scenario "The placement follows the session state", rows P1 to P4 of test-plan.md T2b) first, then implement `navPlacement` in `nav-groups.ts`, implementing requirement "With nobody signed in the navigation sits in the banner and there is no sidebar"
+- [x] 1.4 Write `nav-placement.test.ts` (scenario "The placement follows the session state", rows P1 to P4 of test-plan.md T2b) first, then implement `navPlacement` in `nav-groups.ts`, implementing requirement "With nobody signed in the navigation sits in the banner and there is no sidebar"
 
 ## 2. Stylesheets
 

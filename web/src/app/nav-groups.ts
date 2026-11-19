@@ -50,6 +50,6 @@ export function shellLayout(widthPx: number): "sidebar" | "collapsed" {
   return widthPx >= 1024 ? "sidebar" : "collapsed";
 }
 
-export function navPlacement(_state: CapabilityState | null): "sidebar" | "inline" {
-  throw new Error("not implemented");
+export function navPlacement(state: CapabilityState | null): "sidebar" | "inline" {
+  return state !== null && (state.status === "signed_out" || state.status === "failed") ? "inline" : "sidebar";
 }
