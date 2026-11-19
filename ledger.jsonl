@@ -39,3 +39,5 @@
 {"at":"2026-11-19T01:27:05Z","branch":"l4/archive/openspec/add-people-lookup","head":"1ff8361a9b146f38f37370bc176ab6ec81000cff","type":"unit.branch_deleted","unit":"openspec:add-people-lookup"}
 {"at":"2026-11-19T01:27:06Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:restyle-web-kit"}
 {"at":"2026-11-19T01:27:06Z","run":"r-20261119T0127Z-db24","type":"unit.dispatched","unit":"openspec:restyle-web-kit"}
+{"at":"2026-11-19T04:03:58Z","attempt":1,"cost_usd":1.741788,"runs":2,"type":"plan.charged","unit":"openspec:restyle-web-kit"}
+{"at":"2026-11-19T04:03:58Z","run":"r-20261119T0403Z-bfe7","type":"unit.dispatched","unit":"openspec:restyle-web-kit"}
