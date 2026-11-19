@@ -70,7 +70,7 @@ export function ConfirmDialog(props: ConfirmDialogProps): ReactNode {
           <button ref={cancelRef} type="submit" value="cancel" className="ui-button">
             {model.cancelLabel}
           </button>
-          <button ref={confirmRef} type="submit" value="confirm" className="ui-button">
+          <button ref={confirmRef} type="submit" value="confirm" className="ui-button" data-tone={props.destructive === true ? "danger" : "primary"}>
             {model.confirmLabel}
           </button>
         </div>

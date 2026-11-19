@@ -18,7 +18,7 @@ Paths without a directory are in `web/src/kit/` (`data/` and `layout/` files in 
 
 ## 5. Dialog and the pinned markup
 
-- [ ] 5.1 Write `kit-markup.test.ts` (scenario "Kit sources keep their roles, texts and order", test-plan.md T2) first, then add `data-tone={props.destructive === true ? "danger" : "primary"}` to the confirm button in `ConfirmDialog.tsx`; `EmptyState.tsx`, `ErrorPanel.tsx`, `LoadingState.tsx` and `ToastRegion.tsx` are not edited, implementing requirement "The pinned kit markup is unchanged and a tone is only an attribute". `kit-markup.test.ts` is one test function: the needles of the four untouched files and the absences hold at red, the `ConfirmDialog` `data-tone` needle fails, so it fails at red
+- [x] 5.1 Write `kit-markup.test.ts` (scenario "Kit sources keep their roles, texts and order", test-plan.md T2) first, then add `data-tone={props.destructive === true ? "danger" : "primary"}` to the confirm button in `ConfirmDialog.tsx`; `EmptyState.tsx`, `ErrorPanel.tsx`, `LoadingState.tsx` and `ToastRegion.tsx` are not edited, implementing requirement "The pinned kit markup is unchanged and a tone is only an attribute". `kit-markup.test.ts` is one test function: the needles of the four untouched files and the absences hold at red, the `ConfirmDialog` `data-tone` needle fails, so it fails at red
 
 ## 6. Layout
 
