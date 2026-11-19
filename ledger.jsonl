@@ -56,3 +56,5 @@
 {"at":"2026-11-19T08:31:14Z","revision":"812c6cbf839435c22172d1031bc9c99f648cee89","type":"unit.integrated","unit":"openspec:restyle-web-kit"}
 {"at":"2026-11-19T08:31:14Z","attempt":1,"cost_usd":11.500542,"runs":5,"type":"plan.charged","unit":"openspec:restyle-web-kit"}
 {"at":"2026-11-19T08:32:59Z","branch":"l4/archive/openspec/restyle-web-kit","head":"c2129af737f8ba6b447d66d3a592f7e9089b9f2d","type":"unit.branch_deleted","unit":"openspec:restyle-web-kit"}
+{"at":"2026-11-19T08:33:01Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-app-shell"}
+{"at":"2026-11-19T08:33:01Z","run":"r-20261119T0832Z-886c","type":"unit.dispatched","unit":"openspec:add-app-shell"}
