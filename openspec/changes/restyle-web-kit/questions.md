@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-859c63d2 (web-data-kit › data.css makes tables cards and bounds fields without breaking a pinned rule › A table is a card with a header row and a hover row): accept as satisfied? |
-| Q-002 | open | none | verdict | Criterion C-40cb2e75 (web-data-kit › Field puts the control before its hint and error, and Form's submit is the accent tone › The Flows form is bounded, toned and keeps its prefix and focus ring): acc |
+| Q-002 | answered | none | verdict | Criterion C-40cb2e75 (web-data-kit › Field puts the control before its hint and error, and Form's submit is the accent tone › The Flows form is bounded, toned and keeps its prefix and focus ring): acc |
 | Q-003 | open | none | verdict | Criterion C-5b9e6539 (web-kit › A confirm dialog opens centred with its tone and returns focus › The Disable dialog is centred, toned and returns focus): accept as satisfied? |
 | Q-004 | open | none | verdict | Hold H-09735f2a: UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table |
@@ -63,7 +63,8 @@ accept The repository's own browser test pins this scenario exactly and the kit 
 
 ## Q-002: Criterion C-40cb2e75 (web-data-kit › Field puts the control before its hint and error, and Form's submit is the accent tone › The Flows form is bounded, toned and keeps its prefix and focus ring): acc
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -90,6 +91,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The repository's own browser test pins this scenario exactly and the sources produce every value it asserts. The stacked Field renders label, control, then hint and error, so the children of the Flow name field are the label, the input, the hint paragraph and the error paragraph in that order; the Flows page gives that field a hint and the empty-name check produces the message Enter a flow name. The error paragraph starts with the visually hidden Error: span, which theme.css positions absolutely at one pixel wide. The Form submit carries the primary tone, which theme.css paints with the accent token #1d4ed8, that is rgb(29, 78, 216), and the on-accent token white. The field rule bounds the field to 40rem, which is 640px, and the focus outline is the 3px focus width token. The test is ignored only because a red step cannot run the browser suite, as the unit's task plan states; the harness's generated replacement could not even be collected.
 ---
 
 ## Q-003: Criterion C-5b9e6539 (web-kit › A confirm dialog opens centred with its tone and returns focus › The Disable dialog is centred, toned and returns focus): accept as satisfied?
