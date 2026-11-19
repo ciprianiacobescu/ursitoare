@@ -1,4 +1,4 @@
-# Verification: openspec:restyle-web-kit: NEEDS_HUMAN (round 1)
+# Verification: openspec:restyle-web-kit: PASS (round 2)
 
 traceability: 7/10 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 7/10 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base main@1ff8361a9b contained |
-| 1 | integrity | ok | 249.7 | 11 sub-checks; scope: 21 changed file(s) |
-| 2 | build | ok | 30.7 |  |
-| 3 | tests | ok | 356.4 |  |
-| 4 | traceability | ok | 0.2 | 7/10 criteria covered |
-| 4a | audit sampling | ok | 488.7 | 1 not_testable, 1 rejected, 1 skipped; support files at the base: 8 |
-| 5 | ui test generation | ok | 1435.3 | 1 fails_at_head, 6 not_testable, 1 uncollectable, 2 writer_failed |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/kit/ConfirmDialog.tsx, web/src/kit/data/DataTable.tsx, web/src/kit/data/Field.tsx, web/src/kit/data/Form.tsx, web/src/kit/data/data-table.ts and 3 more |
-| 8 | s1 judge | ok | 0.7 | 10/10 criteria judged by jev |
-| 9 | judge | ok | 196.8 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 4a | audit sampling | reused | 0.0 | reused (round 1) |
+| 5 | ui test generation | reused | 0.0 | reused (round 1) |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -152,20 +152,36 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 - C-97684e64: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_97684e64_r1.py
 
+## Answers to verdict questions
+
+- Q-001 accept C-859c63d2 by the delegate (claude-fable-5-1 via claude-code): The repository's own browser test pins this scenario exactly and the kit sources produce every value it asserts. The card wrapper rule gives the divider border, the large radius and horizontal scrolling, and the tokens resolve to the asserted colours: the divider token is #d0d5dd, which is rgb(208, ...
+- Q-002 accept C-40cb2e75 by the delegate (claude-fable-5-1 via claude-code): The repository's own browser test pins this scenario exactly and the sources produce every value it asserts. The stacked Field renders label, control, then hint and error, so the children of the Flow name field are the label, the input, the hint paragraph and the error paragraph in that order; the F...
+- Q-003 accept C-5b9e6539 by the delegate (claude-fable-5-1 via claude-code): The repository's own browser test pins this scenario exactly and the sources produce every value it asserts. The dialog is the native dialog element with one h2 and two buttons; its rule sets width 32rem, which is 512px, and the app stylesheet gives dialog margin auto, so a modal dialog is centred a...
+- Q-004 accept H-09735f2a by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion's scenario is a Node source test, not a browser journey: it runs captionClass on three inputs and reads DataTable.tsx and theme.css. That test exists, is named with the criterion id, and its assertions hold against the current sources: captionClass returns the v...
+- Q-005 accept H-b35898ab by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion's scenario is a Node audit of data.css and tokens.css: one rule per pinned selector, the listed declarations, no raw colour, only defined tokens and no media query. That test exists, is named with the criterion id, and its rows hold against the current data.css:...
+- Q-006 accept H-5c5d8c36 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The repository's own browser test for this scenario opens the Users page with the mocked answers, reads the card wrapper, the Name header, the caption and the Bob Example row before and after the hover, and it ran green in the unit's end-to-end gate at the head. The sources g...
+- Q-007 accept H-7415271d by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion's scenario is a Node source test, not a browser journey: it reads the Field and Form sources and checks the order of the label, control and described blocks, the hidden Error prefix pattern and one primary tone on the submit button. That test exists, is named wi...
+- Q-008 accept H-f260119c by agent (CLAUDECODE): the judge passed it and test_flows_form_is_bounded_and_keeps_its_focus_ring, which asserts every THEN value of the scenario, passed in the round-1 e2e gate (all tests pass at head). It discriminates although no red record exists for a browser test: at the unit base 1ff8361a the Form submit had no da...
+- Q-009 accept H-1db9756c by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion's scenario is a Node audit of the theme and tokens stylesheets: one rule per listed selector with its declarations, the primary tone rule after the disabled rule, no raw colour, only defined tokens, 25 colour tokens with the toast background unchanged, and three...
+- Q-010 accept H-2dab7e00 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion's scenario is a Node source test that reads the eleven kit component files and checks their pinned strings and counts: the native dialog with its form, showModal, cancel before confirm and one data-tone computed from destructive; one primary tone and one alert r...
+- Q-011 accept H-6bc82384 by agent (CLAUDECODE): the criterion is about the fixed strings returned by the pure helpers sectionHeadingId, captionDisplayFor and PAGE_WIDTHS, which no page shows by itself, so step 5 rightly found no browser test to write. Its Node test failed red then passed green (task 6.1), and the judge passed it. The judge's mino...
+- Q-012 accept H-a317ca0a by agent (CLAUDECODE): the criterion checks the source text of the layout files (no landmark, role, link or inline style) and the kit directory listing, which no page shows, so step 5 rightly found no browser test to write. Its Node test failed red then passed green (task 6.1), and the judge passed it.
+- Q-013 accept H-95a10e9a by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion is covered by the unit's own browser test in the end-to-end suite, tagged with the criterion id, which opens the Users page with the mocked me and users answers at 1366 by 860 after watching for Content Security Policy messages, clicks Disable Bob Example, check...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
 | C-97684e64 | web-data-kit › A table caption can be hidden and still names the table › captionClass and the DataTable wiring | pass | pass | the judge passed it and a discriminating test passes |
 | C-66cb6cb0 | web-data-kit › data.css makes tables cards and bounds fields without breaking a pinned rule › data.css keeps every pinned rule and adds the new declarations | pass | pass | the judge passed it and a discriminating test passes |
-| C-859c63d2 | web-data-kit › data.css makes tables cards and bounds fields without breaking a pinned rule › A table is a card with a header row and a hover row | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-859c63d2 | web-data-kit › data.css makes tables cards and bounds fields without breaking a pinned rule › A table is a card with a header row and a hover row | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The repository's own browser test pins this scenario exactly and the kit sources produce every value it asserts. The card wrapper rule gives the divider border, the large radius and horizontal scrolling, and the tokens resolve to the asser... |
 | C-23da30c9 | web-data-kit › Field puts the control before its hint and error, and Form's submit is the accent tone › The field order, the hidden prefix and the form tone in the sources | pass | pass | the judge passed it and a discriminating test passes |
-| C-40cb2e75 | web-data-kit › Field puts the control before its hint and error, and Form's submit is the accent tone › The Flows form is bounded, toned and keeps its prefix and focus ring | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-40cb2e75 | web-data-kit › Field puts the control before its hint and error, and Form's submit is the accent tone › The Flows form is bounded, toned and keeps its prefix and focus ring | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The repository's own browser test pins this scenario exactly and the sources produce every value it asserts. The stacked Field renders label, control, then hint and error, so the children of the Flow name field are the label, the input, th... |
 | C-3192e29f | web-kit › Kit buttons, dialogs, states and toasts are styled by token-only rules in theme.css › Tone, dialog, state and toast rules are token-only and the toast is unchanged | pass | pass | the judge passed it and a discriminating test passes |
 | C-2c488542 | web-kit › The pinned kit markup is unchanged and a tone is only an attribute › Kit sources keep their roles, texts and order | pass | pass | the judge passed it and a discriminating test passes |
 | C-ab3cdbf6 | web-kit › Layout helpers are fixed strings and PageHeader and Section are plain wrappers › sectionHeadingId, captionDisplayFor and PAGE_WIDTHS | pass | pass | the judge passed it and a discriminating test passes |
 | C-dac61932 | web-kit › Layout helpers are fixed strings and PageHeader and Section are plain wrappers › The layout sources hold no landmark, role, link or inline style | pass | pass | the judge passed it and a discriminating test passes |
-| C-5b9e6539 | web-kit › A confirm dialog opens centred with its tone and returns focus › The Disable dialog is centred, toned and returns focus | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-5b9e6539 | web-kit › A confirm dialog opens centred with its tone and returns focus › The Disable dialog is centred, toned and returns focus | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The repository's own browser test pins this scenario exactly and the sources produce every value it asserts. The dialog is the native dialog element with one h2 and two buttons; its rule sets width 32rem, which is 512px, and the app styles... |
 
 ## Findings
 
@@ -184,19 +200,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-dac61932): No end-to-end test traces criterion C-dac61932 (web-kit › Layout helpers are fixed strings and PageHeader and Section are plain wrappers › The layout sources hold no landmark, role, link or inline style); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-5b9e6539): The end-to-end test test_m6b_kit::test_disable_dialog_is_centred_toned_and_returns_focus[chromium] traces criterion C-5b9e6539 (web-kit › A confirm dialog opens centred with its tone and returns focus › The Disable dialog is centred, toned and returns focus), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, judge] sectionHeadingId leaves the prefix unslugified (spec gap) (criterion C-ab3cdbf6): test-plan.md T3 pins only lowercase prefixes (flow, runs, a, x, p). The implementation returns `${prefix}-${slug}`, copying the prefix verbatim, so a prefix with uppercase letters or characters outside [a-z0-9] (e.g. "Flow", "A-B") is unpinned and two reasonable implementations could differ (slugify the prefix too, or keep it raw as the code does).
-
-## Needs a human
-
-- UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table
-- UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table
-- UI criterion C-859c63d2 has no end-to-end test; see the generated UI tests table
-- UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table
-- UI criterion C-40cb2e75 has no end-to-end test; see the generated UI tests table
-- UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table
-- UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table
-- UI criterion C-ab3cdbf6 has no end-to-end test; see the generated UI tests table
-- UI criterion C-dac61932 has no end-to-end test; see the generated UI tests table
-- UI criterion C-5b9e6539 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
