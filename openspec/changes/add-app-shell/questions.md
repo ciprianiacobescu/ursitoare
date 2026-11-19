@@ -102,6 +102,7 @@ accept For alice the registry yields Home, Flows and Runs, navGroups leaves empt
 ## Q-003: Criterion C-2d3f3998 (web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The code reads right: shell.css sets [tabindex="-1"]:focus to outline none in the same layer as theme.css's 3 px :focus-visible with higher specificity, the Menu button is display none at 1280 px so the Tab order is skip link, brand, Sign out, Home, the home status has tabIndex -1 and ToastRegion fo
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
