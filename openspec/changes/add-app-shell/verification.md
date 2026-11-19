@@ -1,4 +1,4 @@
-# Verification: openspec:add-app-shell: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-app-shell: FAIL (round 3)
 
 traceability: 7/13 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 7/13 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base main@c2129af737 contained |
-| 1 | integrity | ok | 253.8 | 11 sub-checks; scope: 28 changed file(s) |
-| 2 | build | ok | 31.3 |  |
-| 3 | tests | ok | 362.8 |  |
-| 4 | traceability | ok | 0.2 | 7/13 criteria covered |
-| 4a | audit sampling | ok | 56.3 | 2 not_testable, 1 skipped; support files at the base: 8 |
-| 5 | ui test generation | ok | 2240.7 | 1 accepted, 3 base_error, 3 fails_at_head, 5 not_testable, 1 uncollectable |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/app/App.tsx, web/src/app/Shell.tsx, web/src/app/nav-groups.ts, web/src/auth/AccountMenu.tsx, web/src/auth/SignInPage.tsx |
-| 8 | s1 judge | ok | 0.8 | 13/13 criteria judged by jev |
-| 9 | judge | ok | 170.9 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
+| 4a | audit sampling | reused | 0.0 | reused (round 2) |
+| 5 | ui test generation | reused | 0.0 | reused (round 2) |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -168,6 +168,27 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-20b4a37d | not_testable | - | - | The criterion names navPlacement(session) called from the TypeScript test nav-placement.test.ts; no Python module under test is defined in the shown sources, so a self-contained pytest test cannot import a real public interface without guessing a name (forbidden). |
 | C-b054e7d6 | not_testable | - | - | shellLayout is a CSS/Tailwind breakpoint threshold (lg at 1024 px) with no runtime caller and no Python module to import; it is verified in a browser. |
 
+## Answers to verdict questions
+
+- Q-001 accept C-1577878d by the delegate (claude-fable-5-1 via claude-code): The shell as built renders carol's ten links in the asserted order and grouping, and the geometry the scenario measures follows from the tokens. The sidebar grid column is var(--ui-sidebar-width), which tokens.css sets to 15rem, so the nav is 240 px wide and main, placed in column 2, starts at x 240...
+- Q-002 accept C-14067443 by the delegate (claude-fable-5-1 via claude-code): For alice the registry yields Home, Flows and Runs, navGroups leaves empty groups out, so only the Build label is rendered and no Admin or More label exists. With a 401 the capability state is signed_out, navPlacement answers inline, and Shell.tsx then renders the single nav inside the header after ...
+- Q-003 accept C-2d3f3998 by agent (CLAUDECODE): verified by the owner's delegate. test_m6b_shell::test_key_stops_keep_their_ring_and_script_focus_draws_none implements every clause of the scenario (four Tab stops with an outline of at least 2 px; main after the skip link, the script-focused status and main after Dismiss with outline none; CSP lis...
+- Q-004 reject C-51d4764a by agent (CLAUDECODE): measured by the owner's delegate on head 46b3bf4a: with 60-character names the banner is 59 px, not 56, at 1366, 1024, 900 and 375 px wide. The "Sign out" Button in web/src/auth/AccountMenu.tsx is a flex item without shrink-0, so the long names squeeze it until its label wraps onto two lines (58 px ...
+- Q-005 accept C-425a9f46 by agent (CLAUDECODE): verified by the owner's delegate. test_the_menu_folds_below_1024_px implements every clause of the scenario: at 1023 Menu is visible with aria-expanded false and there are 0 navigations; at 1024 it is hidden and there is 1, with id main-nav; at 900 it opens and closes, assert_layout and assert_acces...
+- Q-006 accept C-88a078f0 by agent (CLAUDECODE): verified by the owner's delegate. test_sign_in_and_not_found_render_as_centred_cards asserts every clause of the scenario. Delegate commit 40bb697b made only the heading locator exact; no assertion was loosened. It passes at head 46b3bf4a locally and in the round-2 CI e2e gate, and it fails at base ...
+- Q-014 reject H-829dbc6c by agent (CLAUDECODE): the generated test is right to fail at the head; measured by the owner's delegate on head 46b3bf4a: with 60-character names the banner is 59 px, not 56, at 1366, 1024, 900 and 375 px wide. The "Sign out" Button in web/src/auth/AccountMenu.tsx is a flex item without shrink-0, so the long names squeez...
+- Q-007 accept H-817f132e by the delegate (claude-fable-5-1 via claude-code): The criterion checks the module constants NAV_GROUP_OF and NAV_GROUP_LABELS against the page tables, which the specification itself assigns to a Node test and which no browser page exposes. The Node test reads the constants and the four page tables and asserts the exact ten keys, their values, the f...
+- Q-008 accept H-49d28f26 by the delegate (claude-fable-5-1 via claude-code): The criterion specifies the pure function navGroups over the G1 to G9 inputs, including prototype-style ids, a frozen input and item identity by reference, none of which a browser page can feed or observe. The Node test covers each row: carol's three groups, empty groups left out, an unknown id in M...
+- Q-009 accept H-91c87ac7 by the delegate (claude-fable-5-1 via claude-code): The criterion specifies the pure function shellLayout over the inputs 0, 1023, 1023.9, 1024, 1280, 1366, NaN, Infinity and -1, and five of those are not viewport widths any browser can take, so the generated end-to-end test could not be a faithful check and its failures at -1 and 0 are failures of t...
+- Q-010 accept H-e45e045d by the delegate (claude-fable-5-1 via claude-code): The criterion is a source scan of Shell.tsx: it requires the file to contain markers such as navGroups(, navPlacement(, useSession(), aria-labelledby, TooltipProvider, lg:hidden and useState(, to hold exactly two nav elements and one header, main and footer, to keep an order of markers, and to conta...
+- Q-011 accept H-36707f19 by the delegate (claude-fable-5-1 via claude-code): The generated test only errored at the merge base, which says nothing against the head, and the shell as built gives every row of the scenario. For a ready session the root is a two-column grid whose first column is the sidebar width token, 15rem, so the navigation is 240 px wide and main, placed in...
+- Q-012 accept H-e4efbea1 by the delegate (claude-fable-5-1 via claude-code): The generated test was never collected, so there is no result against the head, and the code gives the scenario. Alice's three capabilities yield Home, Flows and Runs, navGroups leaves empty groups out, so only the Build label renders and no Admin or More label exists. A 401 makes the loader answer ...
+- Q-013 accept H-ec613652 by agent (CLAUDECODE): verified by the owner's delegate. The generated test could not be read (CI artefacts are not uploaded), but the scenario holds as written: the project test test_key_stops_keep_their_ring_and_script_focus_draws_none passes at head locally and in the round-2 CI e2e gate and fails at base c2129af7 (Tab...
+- Q-015 accept H-75cdf554 by the delegate (claude-fable-5-1 via claude-code): The generated test only errored at the merge base, which says nothing against the head, and the shell gives the scenario. The Menu button is a plain Button with lg:hidden, aria-expanded bound to React state and aria-controls main-nav, so below 1024 px it is visible with aria-expanded false and from ...
+- Q-016 accept H-45489073 by the delegate (claude-fable-5-1 via claude-code): The criterion is a static scan of shell.css, auth.css and tokens.css through the kit's parseTokens and findRawColours helpers, which no browser page exposes, so the specification itself assigns it to the Node test shell-css.test.ts and an end-to-end test is neither possible nor needed. That Node tes...
+- Q-017 accept H-d1f76909 by the delegate (claude-fable-5-1 via claude-code): The criterion is a static scan of AccountMenu.tsx, SignInPage.tsx and App.tsx for imports, the shared Button, asChild, banned attributes and the kit's inline-style and palette scanners, none of which a browser page exposes, so the specification assigns it to the Node test auth-sources.test.ts and an...
+- Q-018 accept H-cdb99000 by the delegate (claude-fable-5-1 via claude-code): The generated test only errored at the merge base, which says nothing against the head, and the code as built gives every row of the scenario. Signed out, navPlacement answers inline and the shell uses a plain flex column with the navigation inside the banner, so main is full width and starts at x 0...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -176,15 +197,15 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-4ef0679b | web-shell › Navigation entries are grouped by a fixed map › Entries are grouped, ordered and passed through | pass | pass | the judge passed it and a discriminating test passes |
 | C-b054e7d6 | web-shell › The layout is a sidebar from 1024 px and collapsed below › The width decides the layout | pass | pass | the judge passed it and a discriminating test passes |
 | C-ffb190b2 | web-shell › The shell holds one banner, one navigation, one main and one footer › The shell source holds the landmark, group and menu markup | pass | pass | the judge passed it and a discriminating test passes |
-| C-1577878d | web-shell › The shell holds one banner, one navigation, one main and one footer › Carol's navigation is grouped and the banner is compact | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-14067443 | web-shell › The shell holds one banner, one navigation, one main and one footer › Alice and a signed-out visitor see fewer groups | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-2d3f3998 | web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-1577878d | web-shell › The shell holds one banner, one navigation, one main and one footer › Carol's navigation is grouped and the banner is compact | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The shell as built renders carol's ten links in the asserted order and grouping, and the geometry the scenario measures follows from the tokens. The sidebar grid column is var(--ui-sidebar-width), which tokens.css sets to 15rem, so the nav... |
+| C-14067443 | web-shell › The shell holds one banner, one navigation, one main and one footer › Alice and a signed-out visitor see fewer groups | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): For alice the registry yields Home, Flows and Runs, navGroups leaves empty groups out, so only the Build label is rendered and no Admin or More label exists. With a 401 the capability state is signed_out, navPlacement answers inline, and S... |
+| C-2d3f3998 | web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none | pass | pass | accepted by agent (CLAUDECODE): verified by the owner's delegate. test_m6b_shell::test_key_stops_keep_their_ring_and_script_focus_draws_none implements every clause of the scenario (four Tab stops with an outline of at least 2 px; main after the skip link, the script-focused status and main after Di... |
 | C-20b4a37d | web-shell › With nobody signed in the navigation sits in the banner and there is no sidebar › The placement follows the session state | pass | pass | the judge passed it and a discriminating test passes |
-| C-51d4764a | web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-425a9f46 | web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-51d4764a | web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner | pass | fail | rejected by agent (CLAUDECODE): measured by the owner's delegate on head 46b3bf4a: with 60-character names the banner is 59 px, not 56, at 1366, 1024, 900 and 375 px wide. The "Sign out" Button in web/src/auth/AccountMenu.tsx is a flex item without shrink-0, so the long names squeeze it until its la... |
+| C-425a9f46 | web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px | pass | pass | accepted by agent (CLAUDECODE): verified by the owner's delegate. test_the_menu_folds_below_1024_px implements every clause of the scenario: at 1023 Menu is visible with aria-expanded false and there are 0 navigations; at 1024 it is hidden and there is 1, with id main-nav; at 900 it opens and closes... |
 | C-9eeb9987 | web-shell › Shell and auth stylesheets hold tokens only and a light colour scheme › The stylesheets use tokens and a light scheme | pass | pass | the judge passed it and a discriminating test passes |
 | C-2159a890 | web-shell › The sign-in and not-found pages are cards in the shell › The account, sign-in and not-found sources use the shared Button | pass | pass | the judge passed it and a discriminating test passes |
-| C-88a078f0 | web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-88a078f0 | web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards | pass | pass | accepted by agent (CLAUDECODE): verified by the owner's delegate. test_sign_in_and_not_found_render_as_centred_cards asserts every clause of the scenario. Delegate commit 40bb697b made only the heading locator exact; no assertion was loosened. It passes at head 46b3bf4a locally and in the round-2 CI... |
 
 ## Findings
 
@@ -209,21 +230,13 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-9eeb9987): No end-to-end test traces criterion C-9eeb9987 (web-shell › Shell and auth stylesheets hold tokens only and a light colour scheme › The stylesheets use tokens and a light scheme); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-2159a890): No end-to-end test traces criterion C-2159a890 (web-shell › The sign-in and not-found pages are cards in the shell › The account, sign-in and not-found sources use the shared Button); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-88a078f0): The end-to-end test test_m6b_shell::test_sign_in_and_not_found_render_as_centred_cards[chromium] traces criterion C-88a078f0 (web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
+- [major, deterministic] Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table: Change the behaviour the hold names as the human's reason says; the reason ends with the scenario to pin. Hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table [rejected by agent (CLAUDECODE) (the generated test is right to fail at the head; measured by the owner's delegate on head 46b3bf4a: with 60-character names the banner is 59 px, not 56, at 1366, 1024, 900 and 375 px wide. The "Sign out" Button in web/src/auth/AccountMenu.tsx is a flex item without shrink-0, so the long names squeeze it until its label wraps onto two lines (58 px tall, 47 to 51 px wide; 7...
 
-## Needs a human
+## Fix unit
 
-- UI criterion C-e722bbf4 has no end-to-end test; see the generated UI tests table
-- UI criterion C-4ef0679b has no end-to-end test; see the generated UI tests table
-- UI criterion C-b054e7d6 has no end-to-end test; see the generated UI tests table
-- UI criterion C-ffb190b2 has no end-to-end test; see the generated UI tests table
-- UI criterion C-1577878d has no end-to-end test; see the generated UI tests table
-- UI criterion C-14067443 has no end-to-end test; see the generated UI tests table
-- UI criterion C-2d3f3998 has no end-to-end test; see the generated UI tests table
-- UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table
-- UI criterion C-425a9f46 has no end-to-end test; see the generated UI tests table
-- UI criterion C-9eeb9987 has no end-to-end test; see the generated UI tests table
-- UI criterion C-2159a890 has no end-to-end test; see the generated UI tests table
-- UI criterion C-88a078f0 has no end-to-end test; see the generated UI tests table
+Fix unit 2 is created for these tasks:
+- H-829dbc6c Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table
+- F-4b912d38 Criterion web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and n...
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
