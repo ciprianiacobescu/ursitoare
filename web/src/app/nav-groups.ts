@@ -46,8 +46,8 @@ export function navGroups(items: readonly NavItem[]): NavGroup[] {
   return groups;
 }
 
-export function shellLayout(_widthPx: number): "sidebar" | "collapsed" {
-  return "collapsed";
+export function shellLayout(widthPx: number): "sidebar" | "collapsed" {
+  return widthPx >= 1024 ? "sidebar" : "collapsed";
 }
 
 export function navPlacement(_state: CapabilityState | null): "sidebar" | "inline" {
