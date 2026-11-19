@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-49d28f26: UI criterion C-4ef0679b has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-91c87ac7: UI criterion C-b054e7d6 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-e45e045d: UI criterion C-ffb190b2 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-36707f19: UI criterion C-1577878d has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-36707f19: UI criterion C-1577878d has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-e4efbea1: UI criterion C-14067443 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-ec613652: UI criterion C-2d3f3998 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
@@ -329,7 +329,8 @@ accept The criterion is a source scan of Shell.tsx: it requires the file to cont
 
 ## Q-011: Hold H-36707f19: UI criterion C-1577878d has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -348,6 +349,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The generated test only errored at the merge base, which says nothing against the head, and the shell as built gives every row of the scenario. For a ready session the root is a two-column grid whose first column is the sidebar width token, 15rem, so the navigation is 240 px wide and main, placed in column 2, starts at x 240. The banner is one non-wrapping flex row with a minimum height of the banner token, 3.5rem, so it measures 56 px and passes the 72 px bound. Features register in file-name order and navGroups buckets them in the order home, build, admin, which yields Home, Flows, Runs, Users, Roles and teams, Group mappings, Audit log, Tool servers, Grants and Policies, each group being a p label followed by a ul named through aria-labelledby. The unit's own browser test, tagged with this criterion, asserts the link order, the two named lists, the single aria-current link, the 240 px nav and main offset, assert_layout, assert_accessible and an empty CSP list at both sizes, and it discriminates because the base shell was a header list far taller than 72 px with no 240 px column.
 ---
 
 ## Q-012: Hold H-e4efbea1: UI criterion C-14067443 has no end-to-end test; see the generated UI tests table
