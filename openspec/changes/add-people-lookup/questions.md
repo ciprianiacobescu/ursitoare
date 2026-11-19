@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-baa4dc41: UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-96121bdf: UI criterion C-64158aad has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-10bbd12e: UI criterion C-fb2cd0d1 has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-94d8b7e3: UI criterion C-20c4fd10 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-94d8b7e3: UI criterion C-20c4fd10 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-dc3d7c1e: UI criterion C-674bb9f6 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-3d48684d: UI criterion C-929a4c25 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -254,7 +254,8 @@ accept C-fb2cd0d1 checks the committed OpenAPI document against the served one a
 
 ## Q-010: Hold H-94d8b7e3: UI criterion C-20c4fd10 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -273,6 +274,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-20c4fd10 is the behaviour of the pure web functions parsePeople, parseMyTeams, personLabel and loadMyTeams, which no page of this unit renders or calls; the browser writer rightly found no surface to drive. Eight Node tests named with the criterion cover it: the valid bodies with the non-breaking-space name kept, the repeated team once and the extra member dropped, the 13 malformed people bodies and 7 malformed team bodies giving null, personLabel trimming and falling back to the id for an unknown, empty and blank name, loadMyTeams recording the call with and without a signal, answering empty for a 401, a 500, a TypeError and a malformed body, and rethrowing an AbortError. The implementation matches: the parsers enforce the two patterns, personLabel trims and falls back, and loadMyTeams returns an empty list on any failure but an abort. The hold on a missing end-to-end test is therefore waived.
 ---
 
 ## Q-011: Hold H-dc3d7c1e: UI criterion C-674bb9f6 has no end-to-end test; see the generated UI tests table
