@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | open | none | verdict | Criterion C-425a9f46 (web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-88a078f0 (web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards): accept as satisfied? |
 | Q-007 | answered | none | verdict | Hold H-817f132e: UI criterion C-e722bbf4 has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-49d28f26: UI criterion C-4ef0679b has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-49d28f26: UI criterion C-4ef0679b has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-91c87ac7: UI criterion C-b054e7d6 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-e45e045d: UI criterion C-ffb190b2 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-36707f19: UI criterion C-1577878d has no end-to-end test; see the generated UI tests table |
@@ -254,7 +254,8 @@ accept The criterion checks the module constants NAV_GROUP_OF and NAV_GROUP_LABE
 
 ## Q-008: Hold H-49d28f26: UI criterion C-4ef0679b has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -273,6 +274,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The criterion specifies the pure function navGroups over the G1 to G9 inputs, including prototype-style ids, a frozen input and item identity by reference, none of which a browser page can feed or observe. The Node test covers each row: carol's three groups, empty groups left out, an unknown id in More after Build, constructor, toString and __proto__ in More, a frozen input passing through by reference with ten items, and input order kept inside a group. The implementation uses Object.hasOwn and buckets in the fixed order, so the rows hold. The rendered grouping is covered by the browser scenarios for carol and alice. An end-to-end test is not possible for this criterion.
 ---
 
 ## Q-009: Hold H-91c87ac7: UI criterion C-b054e7d6 has no end-to-end test; see the generated UI tests table
