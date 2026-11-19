@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Hold H-10bbd12e: UI criterion C-fb2cd0d1 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-94d8b7e3: UI criterion C-20c4fd10 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-dc3d7c1e: UI criterion C-674bb9f6 has no end-to-end test; see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-3d48684d: UI criterion C-929a4c25 has no end-to-end test; see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-3d48684d: UI criterion C-929a4c25 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -304,7 +304,8 @@ accept C-674bb9f6 is the batching, memory, invalid-id and shared-request behavio
 
 ## Q-012: Hold H-3d48684d: UI criterion C-929a4c25 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -323,3 +324,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-929a4c25 is the failure and abort behaviour of createNameCache and the plain-client rule for nameCache and loadMyTeams, pure web module behaviour that no page of this unit imports or renders, so a browser cannot observe request counts, forgotten failures, AbortError rejections or the module sources. Four Node tests named with the criterion cover every row: a 500, a 401 UNAUTHENTICATED, a TypeError and a malformed body each give an empty map and are asked again with exactly two requests; of two batches of 60 ids only the failed last 10 are asked again and the retry fills 60; a pre-aborted signal rejects with AbortError after zero requests and an abort during the request rejects and remembers nothing; with a stubbed window at /flows?x=1 and a stubbed fetch, nameCache sends GET /api/v1/people?ids=u_carol and resolves Carol Example, each 401 for u_bob gives an empty map and is sent again, loadMyTeams over createApiClient gives an empty list after one GET /api/v1/me/teams, window.location.assign is called zero times, and the sources of people.ts and use-names.ts contain no browser-session reference and each contains createApiClient. The implementation forgets a failed batch, rethrows only AbortError, and builds nameCache over createApiClient. The hold on a missing end-to-end test is therefore waived.
