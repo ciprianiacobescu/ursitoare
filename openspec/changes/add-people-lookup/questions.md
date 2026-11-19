@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-d44a38f6: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-a783bd38: UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-baa4dc41: UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-96121bdf: UI criterion C-64158aad has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-96121bdf: UI criterion C-64158aad has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-10bbd12e: UI criterion C-fb2cd0d1 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-94d8b7e3: UI criterion C-20c4fd10 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-dc3d7c1e: UI criterion C-674bb9f6 has no end-to-end test; see the generated UI tests table |
@@ -204,7 +204,8 @@ accept C-a68cc186 covers the 401 of a missing session or a disabled caller, the 
 
 ## Q-008: Hold H-96121bdf: UI criterion C-64158aad has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -223,6 +224,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-64158aad is the behaviour of GET /api/v1/me/teams for three members and the unchanged four-key /me, which no page of this unit calls. The generated browser test could not pass at the head because the fake e2e stack seeds only the team finance through its group mapping and holds no audit or ops team, so alice cannot be in finance and audit nor mallory in ops there; the failure is a fixture gap, not a defect. The Node test for the criterion builds the real server with the real PEP over embedded Postgres, inserts alice's finance and audit memberships and mallory's ops membership, and asserts alice's sorted body, the byte-equal body with a tenant_id member, bob's empty page, mallory's ops, the no-store header and that /me has exactly the four keys and no teams. The handler sorts the deduplicated principal teams. The hold on a missing end-to-end test is therefore waived.
 ---
 
 ## Q-009: Hold H-10bbd12e: UI criterion C-fb2cd0d1 has no end-to-end test; see the generated UI tests table
