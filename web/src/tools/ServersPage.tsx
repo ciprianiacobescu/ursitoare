@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { Link, useLocation } from "react-router";
 
@@ -8,7 +8,14 @@ import { ConfirmDialog } from "../kit/ConfirmDialog.tsx";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { DataTable } from "../kit/data/DataTable.tsx";
-import { captionDisplayFor } from "../kit/layout/layout.ts";
+import { PageHeader } from "../kit/layout/PageHeader.tsx";
+import { Section } from "../kit/layout/Section.tsx";
+import { PAGE_WIDTHS, captionDisplayFor } from "../kit/layout/layout.ts";
+import { personLabel } from "../people/people.ts";
+import { useDisplayNames } from "../people/use-names.ts";
+import { Badge } from "../ui/badge.tsx";
+import { cn } from "../ui/cn.ts";
+import { serverStateTone } from "../ui/tones.ts";
 import { createCursorList } from "../kit/data/cursor-list.ts";
 import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
 import { TOOL_NAMES, TOOL_TABLES, TOOL_TITLES, actionState, regionState } from "./pages.ts";
@@ -36,6 +43,18 @@ type ToolRow = ReturnType<typeof toolRows>[number];
 const PAGE_HEADING = "Tool servers";
 const SERVERS_PATH = "/tool-servers";
 
+function summaryWithBadge(server: ToolServerView): ReactNode {
+  const text = serverRowText(server);
+  const state: string = server.state;
+  if (state.length === 0 || !text.endsWith(state)) return text;
+  return (
+    <>
+      {text.slice(0, text.length - state.length)}
+      <Badge tone={serverStateTone(state)}>{state}</Badge>
+    </>
+  );
+}
+
 function toolsList(rows: readonly ToolRow[]) {
   return createCursorList<ToolRow>(async () => ({ items: rows, next_cursor: null }));
 }
@@ -43,7 +62,6 @@ function toolsList(rows: readonly ToolRow[]) {
 export function ServersPage(): ReactNode {
   const location = useLocation();
   const session = useSession();
-  const idPrefix = useId();
   const serverId = serverIdFromSearch(location.search);
 
   const [detail, setDetail] = useState<RegionLoad<ToolServerView>>({ phase: "loading" });
@@ -106,6 +124,7 @@ export function ServersPage(): ReactNode {
         }
       : null;
   const view = detail.phase === "ready" ? detail.value : null;
+  const names = useDisplayNames(view === null ? [] : [view.registeredBy]);
   const region = regionState(detail);
   const actionView = actionState(action);
   const busy = action.phase === "busy";
@@ -164,7 +183,7 @@ export function ServersPage(): ReactNode {
         case "server":
           return <Link to={serverLink(row.id)}>{row.id}</Link>;
         case "summary":
-          return serverRowText(row);
+          return summaryWithBadge(row);
         default:
           return null;
       }
@@ -192,31 +211,34 @@ export function ServersPage(): ReactNode {
   }));
 
   return (
-    <div className="tools-page">
-      <h1>Tool servers</h1>
-      <section aria-label="Tool servers">
-        <DataTable
-          caption={TOOL_TABLES.servers.caption}
-          captionDisplay={captionDisplayFor(TOOL_TABLES.servers.caption, PAGE_HEADING)}
-          columns={serverColumns}
-          list={servers}
-          rowKey={(row) => row.id}
-          {...(TOOL_TABLES.servers.emptyTitle === undefined
-            ? {}
-            : { emptyTitle: TOOL_TABLES.servers.emptyTitle })}
-          {...(TOOL_TABLES.servers.emptyDescription === undefined
-            ? {}
-            : { emptyDescription: TOOL_TABLES.servers.emptyDescription })}
-        />
-      </section>
+    <div className={cn("tools-page", PAGE_WIDTHS.list)}>
+      <PageHeader
+        title={PAGE_HEADING}
+        description="Servers whose tools flows can call. A surface must be approved before its tools can be used."
+      />
+      <DataTable
+        caption={TOOL_TABLES.servers.caption}
+        captionDisplay={captionDisplayFor(TOOL_TABLES.servers.caption, PAGE_HEADING)}
+        columns={serverColumns}
+        list={servers}
+        rowKey={(row) => row.id}
+        {...(TOOL_TABLES.servers.emptyTitle === undefined
+          ? {}
+          : { emptyTitle: TOOL_TABLES.servers.emptyTitle })}
+        {...(TOOL_TABLES.servers.emptyDescription === undefined
+          ? {}
+          : { emptyDescription: TOOL_TABLES.servers.emptyDescription })}
+      />
+      {view === null ? null : (
+        <p className="text-text-muted">Registered by {personLabel(names, view.registeredBy)}</p>
+      )}
       {serverId === null ? null : (
-        <section className="tools-section" aria-labelledby={`${idPrefix}-surface`}>
-          <h2 id={`${idPrefix}-surface`}>{TOOL_NAMES["surfaceHeading"]}</h2>
+        <Section title={TOOL_NAMES["surfaceHeading"] ?? "Surface"}>
           {region.view === "loading" ? <LoadingState /> : null}
           {detail.phase === "error" ? <ErrorPanel error={detail.error} /> : null}
           {view === null ? null : (
             <>
-              <p>{serverRowText(view)}</p>
+              <p>{summaryWithBadge(view)}</p>
               {note === null ? null : <p className="tools-note">{note}</p>}
               <DataTable
                 caption={TOOL_TABLES.tools.caption}
@@ -247,6 +269,7 @@ export function ServersPage(): ReactNode {
             <button
               type="button"
               className="ui-button"
+              data-tone="primary"
               aria-disabled={disabled ? true : undefined}
               onClick={openApprove}
             >
@@ -254,7 +277,9 @@ export function ServersPage(): ReactNode {
             </button>
           </div>
           {actionView.status === null ? null : (
-            <p role={actionView.status.role}>{actionView.status.text}</p>
+            <p className="tools-feedback" role={actionView.status.role}>
+              {actionView.status.text}
+            </p>
           )}
           {dialog === null || !dialogOpen ? null : (
             <ConfirmDialog
@@ -266,7 +291,7 @@ export function ServersPage(): ReactNode {
               onCancel={cancelApprove}
             />
           )}
-        </section>
+        </Section>
       )}
     </div>
   );

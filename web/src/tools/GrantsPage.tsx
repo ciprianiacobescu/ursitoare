@@ -6,7 +6,12 @@ import { ApiRequestError } from "../api/client.ts";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { DataTable } from "../kit/data/DataTable.tsx";
-import { captionDisplayFor } from "../kit/layout/layout.ts";
+import { PageHeader } from "../kit/layout/PageHeader.tsx";
+import { Section } from "../kit/layout/Section.tsx";
+import { PAGE_WIDTHS, captionDisplayFor } from "../kit/layout/layout.ts";
+import { Badge } from "../ui/badge.tsx";
+import { cn } from "../ui/cn.ts";
+import { grantStatusTone } from "../ui/tones.ts";
 import { Field } from "../kit/data/Field.tsx";
 import { Form } from "../kit/data/Form.tsx";
 import { FORM_ERROR_KEY } from "../kit/data/form-errors.ts";
@@ -52,6 +57,18 @@ function refusalReason(error: unknown): string | null {
   if (typeof details !== "object" || details === null || !("reason" in details)) return null;
   const reason: unknown = (details as { reason?: unknown }).reason;
   return typeof reason === "string" ? reason : null;
+}
+
+function grantTextWithBadge(grant: GrantView): ReactNode {
+  const text = grantRowText(grant);
+  const status: string = grant.status;
+  if (status.length === 0 || !text.endsWith(status)) return text;
+  return (
+    <>
+      {text.slice(0, text.length - status.length)}
+      <Badge tone={grantStatusTone(status)}>{status}</Badge>
+    </>
+  );
 }
 
 export function GrantsPage(): ReactNode {
@@ -177,7 +194,7 @@ export function GrantsPage(): ReactNode {
     cell: (grant: GrantView): ReactNode => {
       switch (column.key) {
         case "grant":
-          return <span id={grantTextId(grant.id)}>{grantRowText(grant)}</span>;
+          return <span id={grantTextId(grant.id)}>{grantTextWithBadge(grant)}</span>;
         case "actions": {
           const actions = grantActions(grant);
           return (
@@ -214,26 +231,15 @@ export function GrantsPage(): ReactNode {
   }));
 
   return (
-    <div className="tools-page">
-      <h1>Grants</h1>
-      <p>{label("deployHint")}</p>
-      <section aria-label="Grants">
-        <DataTable
-          caption={TOOL_TABLES.grants.caption}
-          captionDisplay={captionDisplayFor(TOOL_TABLES.grants.caption, PAGE_HEADING)}
-          columns={columns}
-          list={list}
-          rowKey={(grant) => grant.id}
-          {...(TOOL_TABLES.grants.emptyTitle === undefined
-            ? {}
-            : { emptyTitle: TOOL_TABLES.grants.emptyTitle })}
-          {...(TOOL_TABLES.grants.emptyDescription === undefined
-            ? {}
-            : { emptyDescription: TOOL_TABLES.grants.emptyDescription })}
-        />
-      </section>
-      <section className="tools-section" aria-label={label("grantForm")}>
-        <h2>{label("grantForm")}</h2>
+    <div className={cn("tools-page", PAGE_WIDTHS.list)}>
+      <PageHeader title={PAGE_HEADING} description={label("deployHint")} />
+      {actionView.status === null ? null : (
+        <p className="tools-feedback" role={actionView.status.role}>
+          {actionView.status.text}
+        </p>
+      )}
+      <div className="grid gap-4 xl:grid-cols-[20rem_minmax(0,1fr)] xl:items-start">
+        <Section title={label("grantForm")}>
         <Form
           label={label("grantForm")}
           submitLabel={label("createGrant")}
@@ -385,10 +391,23 @@ export function GrantsPage(): ReactNode {
             </>
           ) : null}
         </Form>
-      </section>
-      {actionView.status === null ? null : (
-        <p role={actionView.status.role}>{actionView.status.text}</p>
-      )}
+        </Section>
+        <div className="min-w-0">
+          <DataTable
+            caption={TOOL_TABLES.grants.caption}
+            captionDisplay={captionDisplayFor(TOOL_TABLES.grants.caption, PAGE_HEADING)}
+            columns={columns}
+            list={list}
+            rowKey={(grant) => grant.id}
+            {...(TOOL_TABLES.grants.emptyTitle === undefined
+              ? {}
+              : { emptyTitle: TOOL_TABLES.grants.emptyTitle })}
+            {...(TOOL_TABLES.grants.emptyDescription === undefined
+              ? {}
+              : { emptyDescription: TOOL_TABLES.grants.emptyDescription })}
+          />
+        </div>
+      </div>
     </div>
   );
 }
