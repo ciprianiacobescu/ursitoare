@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-f260119c: UI criterion C-40cb2e75 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-1db9756c: UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-2dab7e00: UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-2dab7e00: UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-6bc82384: UI criterion C-ab3cdbf6 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-a317ca0a: UI criterion C-dac61932 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-95a10e9a: UI criterion C-5b9e6539 has no end-to-end test; see the generated UI tests table |
@@ -277,7 +277,8 @@ accept The hold can be waived. The criterion's scenario is a Node audit of the t
 
 ## Q-010: Hold H-2dab7e00: UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -296,6 +297,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion's scenario is a Node source test that reads the eleven kit component files and checks their pinned strings and counts: the native dialog with its form, showModal, cancel before confirm and one data-tone computed from destructive; one primary tone and one alert role in Form; the error panel, loading, empty and toast texts with no data-tone; and no inline style, stylesheet import, palette utility, buttonClasses or ui/button import in any file. That test exists, is named with the criterion id, and its needles hold against the current sources: the confirm dialog is a native dialog with a method dialog form, the cancel button precedes the confirm button, which alone carries the tone expression, and the Form submit carries the primary tone once beside its aria-disabled. The end-to-end writer rightly reported that source strings are not page-observable; the Disable dialog browser scenario checks the visible effect of the tone.
 ---
 
 ## Q-011: Hold H-6bc82384: UI criterion C-ab3cdbf6 has no end-to-end test; see the generated UI tests table
