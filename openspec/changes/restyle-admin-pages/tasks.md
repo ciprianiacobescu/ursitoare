@@ -6,7 +6,7 @@ Paths are in `web/src/admin/` or `web/src/tools/`. Each task is one red-green cy
 
 ## 2. Admin pages
 
-- [ ] 2.1 Write `admin/admin-pages-restyle.test.ts` (scenario "The admin sources use the layout parts and keep their pins", T1 with its mutations) first, then edit the four pages and `admin.css` (design decisions 2 to 8):
+- [x] 2.1 Write `admin/admin-pages-restyle.test.ts` (scenario "The admin sources use the layout parts and keep their pins", T1 with its mutations) first, then edit the four pages and `admin.css` (design decisions 2 to 8):
   - all four: `PageHeader` with the `h1` text, its description and `headingRef={headingRef}`; root `cn("admin-page", PAGE_WIDTHS.list)`; outer `<section aria-label>` wrappers removed;
   - `UsersPage.tsx`: the state cell as a `Badge` (`success` for active, else `neutral`), `destructive` on the `ConfirmDialog`;
   - `TeamsPage.tsx`: `<Section title="Create team">` and the two tables in `grid gap-4 xl:grid-cols-[20rem_minmax(0,1fr)] xl:items-start`;
