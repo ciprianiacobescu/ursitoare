@@ -1,4 +1,4 @@
-# Verification: openspec:add-app-shell: NEEDS_HUMAN (round 4)
+# Verification: openspec:add-app-shell: PASS (round 5)
 
 traceability: 10/15 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 10/15 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.8 | base main@c2129af737 contained |
-| 1 | integrity | ok | 258.4 | 11 sub-checks; scope: 45 changed file(s) |
-| 2 | build | ok | 32.5 |  |
-| 3 | tests | ok | 380.2 |  |
-| 4 | traceability | ok | 0.2 | 10/15 criteria covered |
-| 4a | audit sampling | ok | 32.3 | 2 not_testable, 1 skipped; support files at the base: 11 |
-| 5 | ui test generation | ok | 585.2 | 2 fails_at_head, 1 writer_failed |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/app/App.tsx, web/src/app/Shell.tsx, web/src/app/nav-groups.ts, web/src/auth/AccountMenu.tsx, web/src/auth/SignInPage.tsx |
-| 8 | s1 judge | ok | 1.1 | 15/15 criteria judged by jev |
-| 9 | judge | ok | 86.9 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 4) |
+| 1 | integrity | reused | 0.0 | reused (round 4) |
+| 2 | build | reused | 0.0 | reused (round 4) |
+| 3 | tests | reused | 0.0 | reused (round 4) |
+| 4 | traceability | reused | 0.0 | reused (round 4) |
+| 4a | audit sampling | reused | 0.0 | reused (round 4) |
+| 5 | ui test generation | reused | 0.0 | reused (round 4) |
+| 6 | quality | reused | 0.0 | reused (round 4) |
+| 8 | s1 judge | reused | 0.0 | reused (round 4) |
+| 9 | judge | reused | 0.0 | reused (round 4) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -195,8 +195,14 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - Q-001 accept C-1577878d by the delegate (claude-fable-5-1 via claude-code): The shell as built renders carol's ten links in the asserted order and grouping, and the geometry the scenario measures follows from the tokens. The sidebar grid column is var(--ui-sidebar-width), which tokens.css sets to 15rem, so the nav is 240 px wide and main, placed in column 2, starts at x 240...
 - Q-002 accept C-14067443 by the delegate (claude-fable-5-1 via claude-code): For alice the registry yields Home, Flows and Runs, navGroups leaves empty groups out, so only the Build label is rendered and no Admin or More label exists. With a 401 the capability state is signed_out, navPlacement answers inline, and Shell.tsx then renders the single nav inside the header after ...
 - Q-003 accept C-2d3f3998 by agent (CLAUDECODE): verified by the owner's delegate. test_m6b_shell::test_key_stops_keep_their_ring_and_script_focus_draws_none implements every clause of the scenario (four Tab stops with an outline of at least 2 px; main after the skip link, the script-focused status and main after Dismiss with outline none; CSP lis...
+- Q-019 accept C-51d4764a by the delegate (claude-fable-5-1 via claude-code): The criterion holds in the head. The Sign out button in AccountMenu.tsx now carries shrink-0 and whitespace-nowrap, which the Button merges into its classes, so it can no longer be squeezed onto two lines by the 60-character names; that wrap was the only cause of the earlier 59 px measurement. The h...
 - Q-005 accept C-425a9f46 by agent (CLAUDECODE): verified by the owner's delegate. test_the_menu_folds_below_1024_px implements every clause of the scenario: at 1023 Menu is visible with aria-expanded false and there are 0 navigations; at 1024 it is hidden and there is 1, with id main-nav; at 900 it opens and closes, assert_layout and assert_acces...
 - Q-006 accept C-88a078f0 by agent (CLAUDECODE): verified by the owner's delegate. test_sign_in_and_not_found_render_as_centred_cards asserts every clause of the scenario. Delegate commit 40bb697b made only the heading locator exact; no assertion was loosened. It passes at head 46b3bf4a locally and in the round-2 CI e2e gate, and it fails at base ...
+- Q-020 accept C-c6a08479 by the delegate (claude-fable-5-1 via claude-code): The scenario holds in the head. The Sign out button carries shrink-0 and whitespace-nowrap, so beside the 60-character names it stays on one line at its natural 38 px height (32 px minimum, 8 px vertical padding, a 20 px text line and 1 px borders); the header is a single non-wrapping flex row with ...
+- Q-021 accept C-0cbfa992 by the delegate (claude-fable-5-1 via claude-code): The scenario holds in the head. The Sign out button carries shrink-0 and whitespace-nowrap, so it stays on one line at 38 px (32 px minimum, 8 px vertical padding, a 20 px text line, 1 px borders) beside the 60-character names; the header is one non-wrapping flex row with a 3.5rem minimum height and...
+- Q-022 accept H-829dbc6c by the delegate (claude-fable-5-1 via claude-code): The unit can go on. The step-5 writer did not produce a test because a tooling permission rejected a shell call, which says nothing about the shell. The head already holds two end-to-end tests of this criterion: the spec's own test in test_m6b_shell.py, tagged with the criterion, asserts both whole ...
+- Q-023 accept H-f10f11d2 by the delegate (claude-fable-5-1 via claude-code): The unit can go on. The generated test fails at the head for a premise of its own, not for the shell: it seeds a session object in localStorage, and no file under web/src reads browser storage; the session comes only from the capability loader's request to the /me endpoint, so without a mocked API r...
+- Q-024 accept H-c9e043b3 by the delegate (claude-fable-5-1 via claude-code): The unit can go on. The hold says the criterion has no end-to-end test, but the head holds two: test_long_names_banner.py is tagged with C-0cbfa992 and mocks /api/v1/me with a 60-character display name and tenant name at 1366 by 860 and 900 by 800, then asserts both whole names in the banner, the ba...
 
 ## Criteria
 
@@ -210,13 +216,13 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-14067443 | web-shell › The shell holds one banner, one navigation, one main and one footer › Alice and a signed-out visitor see fewer groups | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): For alice the registry yields Home, Flows and Runs, navGroups leaves empty groups out, so only the Build label is rendered and no Admin or More label exists. With a 401 the capability state is signed_out, navPlacement answers inline, and S... |
 | C-2d3f3998 | web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none | pass | pass | accepted by agent (CLAUDECODE): verified by the owner's delegate. test_m6b_shell::test_key_stops_keep_their_ring_and_script_focus_draws_none implements every clause of the scenario (four Tab stops with an outline of at least 2 px; main after the skip link, the script-focused status and main after Di... |
 | C-20b4a37d | web-shell › With nobody signed in the navigation sits in the banner and there is no sidebar › The placement follows the session state | pass | pass | the judge passed it and a discriminating test passes |
-| C-51d4764a | web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-51d4764a | web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion holds in the head. The Sign out button in AccountMenu.tsx now carries shrink-0 and whitespace-nowrap, which the Button merges into its classes, so it can no longer be squeezed onto two lines by the 60-character names; that wr... |
 | C-425a9f46 | web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px | pass | pass | accepted by agent (CLAUDECODE): verified by the owner's delegate. test_the_menu_folds_below_1024_px implements every clause of the scenario: at 1023 Menu is visible with aria-expanded false and there are 0 navigations; at 1024 it is hidden and there is 1, with id main-nav; at 900 it opens and closes... |
 | C-9eeb9987 | web-shell › Shell and auth stylesheets hold tokens only and a light colour scheme › The stylesheets use tokens and a light scheme | pass | pass | the judge passed it and a discriminating test passes |
 | C-2159a890 | web-shell › The sign-in and not-found pages are cards in the shell › The account, sign-in and not-found sources use the shared Button | pass | pass | the judge passed it and a discriminating test passes |
 | C-88a078f0 | web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards | pass | pass | accepted by agent (CLAUDECODE): verified by the owner's delegate. test_sign_in_and_not_found_render_as_centred_cards asserts every clause of the scenario. Delegate commit 40bb697b made only the heading locator exact; no assertion was loosened. It passes at head 46b3bf4a locally and in the round-2 CI... |
-| C-c6a08479 | web-shell › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table — finding H-829dbc6c › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
-| C-0cbfa992 | web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60... | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-c6a08479 | web-shell › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table — finding H-829dbc6c › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The scenario holds in the head. The Sign out button carries shrink-0 and whitespace-nowrap, so beside the 60-character names it stays on one line at its natural 38 px height (32 px minimum, 8 px vertical padding, a 20 px text line and 1 px... |
+| C-0cbfa992 | web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60... | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The scenario holds in the head. The Sign out button carries shrink-0 and whitespace-nowrap, so it stays on one line at 38 px (32 px minimum, 8 px vertical padding, a 20 px text line, 1 px borders) beside the 60-character names; the header ... |
 
 ## Findings
 
@@ -254,12 +260,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] the judge called a test inadequate (criterion C-51d4764a): web.src.auth.long-names-banner.test.ts::C-c6a08479 C-51d4764a C-0cbfa992 the sign-out button neither shrinks nor wraps beside long account names
 - [minor, judge] the judge called a test inadequate (criterion C-c6a08479): web.src.auth.long-names-banner.test.ts::C-c6a08479 C-51d4764a C-0cbfa992 the sign-out button neither shrinks nor wraps beside long account names
 - [minor, judge] the judge called a test inadequate (criterion C-0cbfa992): web.src.auth.long-names-banner.test.ts::C-c6a08479 C-51d4764a C-0cbfa992 the sign-out button neither shrinks nor wraps beside long account names
-
-## Needs a human
-
-- UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table
-- UI criterion C-c6a08479 has no end-to-end test; see the generated UI tests table
-- UI criterion C-0cbfa992 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
