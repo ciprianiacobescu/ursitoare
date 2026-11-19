@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-f260119c: UI criterion C-40cb2e75 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-1db9756c: UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-2dab7e00: UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-6bc82384: UI criterion C-ab3cdbf6 has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-6bc82384: UI criterion C-ab3cdbf6 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-a317ca0a: UI criterion C-dac61932 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-95a10e9a: UI criterion C-5b9e6539 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -303,7 +303,7 @@ accept The hold can be waived. The criterion's scenario is a Node source test th
 
 ## Q-011: Hold H-6bc82384: UI criterion C-ab3cdbf6 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -322,6 +322,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept: the criterion is about the fixed strings returned by the pure helpers sectionHeadingId, captionDisplayFor and PAGE_WIDTHS, which no page shows by itself, so step 5 rightly found no browser test to write. Its Node test failed red then passed green (task 6.1), and the judge passed it. The judge's minor note (a prefix outside [a-z0-9] is not slugified) is a spec gap only: every caller passes a fixed lowercase prefix; recorded for a later spec.
 ---
 
 ## Q-012: Hold H-a317ca0a: UI criterion C-dac61932 has no end-to-end test; see the generated UI tests table
