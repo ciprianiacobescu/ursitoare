@@ -1,4 +1,4 @@
-# Verification: openspec:add-people-lookup: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-people-lookup: PASS (round 2)
 
 traceability: 12/12 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 12/12 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base main@3c5e366929 contained |
-| 1 | integrity | ok | 752.5 | 11 sub-checks; scope: 18 changed file(s) |
-| 2 | build | ok | 31.3 |  |
-| 3 | tests | ok | 367.7 |  |
-| 4 | traceability | ok | 0.2 | 12/12 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
-| 5 | ui test generation | ok | 1013.1 | 2 fails_at_head, 8 not_testable, 2 writer_failed |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/api/index.ts, src/api/people-routes.ts, src/identity/index.ts, src/identity/users.ts, src/main.ts and 2 more |
-| 8 | s1 judge | ok | 0.6 | 10/12 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 151.9 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 5 | ui test generation | reused | 0.0 | reused (round 1) |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -143,6 +143,21 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-674bb9f6 | ok | 0.950 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-929a4c25 | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
 
+## Answers to verdict questions
+
+- Q-001 accept H-f8921f64 by the delegate (claude-fable-5-1 via claude-code): C-748ce889 is the behaviour of getPersonNames, a server-side function with no page, route or control of its own in this unit, so no browser test can drive it; the design states that nothing renders until later units take the hooks. The Node test for the criterion seeds the six users of the test plan...
+- Q-002 accept H-4ed1905b by the delegate (claude-fable-5-1 via claude-code): C-55e76eb6 checks getPersonNames in a tenant-B transaction, the IDENTITY_TENANT_MISMATCH rejection for a foreign context and a bare row-level-security SELECT; none of these has a page or route to drive from a browser. The Node test for the criterion runs all three against embedded Postgres and asser...
+- Q-003 accept H-f666a58b by the delegate (claude-fable-5-1 via claude-code): C-db4fc15e checks getPersonNames on a recording transaction: refusals before any query, the empty list, the query count of a 50-id list and a propagated database error. These are internal call counts and typed rejections that no browser can observe, and this unit renders nothing. The Node test for t...
+- Q-004 accept H-30c70910 by the delegate (claude-fable-5-1 via claude-code): C-57481c19 is the behaviour of GET /api/v1/people for an active member, including the exact body, the no-store header, one read_self decision row, an unchanged audit count and the 403 of a denying engine. The decision and audit rows are database facts a browser cannot read, and no page in this unit ...
+- Q-005 accept H-d44a38f6 by the delegate (claude-fable-5-1 via claude-code): C-59f63ed0 is the two-tenant behaviour of GET /api/v1/people, which no page of this unit calls. The generated browser test could not pass at the head because the fake e2e stack seeds only alice, bob, carol and mallory and holds none of the scenario's rows such as twin or u_erin, so the expected bodi...
+- Q-006 accept H-a783bd38 by the delegate (claude-fable-5-1 via claude-code): C-1c488737 is the validation and size bound of GET /api/v1/people, which no page of this unit calls; the browser writer never produced a test because its tooling refused a shell call, not because of any defect. The Node test for the criterion builds the real server with the real PEP over embedded Po...
+- Q-007 accept H-baa4dc41 by the delegate (claude-fable-5-1 via claude-code): C-a68cc186 covers the 401 of a missing session or a disabled caller, the 404 of HEAD and the registration of both routes without a pool, including listDefinedRoutes and the 503. These are server construction details and database state that a browser over HTTP cannot set up or observe, and no page of...
+- Q-008 accept H-96121bdf by the delegate (claude-fable-5-1 via claude-code): C-64158aad is the behaviour of GET /api/v1/me/teams for three members and the unchanged four-key /me, which no page of this unit calls. The generated browser test could not pass at the head because the fake e2e stack seeds only the team finance through its group mapping and holds no audit or ops tea...
+- Q-009 accept H-10bbd12e by the delegate (claude-fable-5-1 via claude-code): C-fb2cd0d1 checks the committed OpenAPI document against the served one and the shape of the two new operations; it is a document comparison with no page and no HTTP surface a browser could observe, and the browser writer failed on its own output format, not on the code. The Node test for the criter...
+- Q-010 accept H-94d8b7e3 by the delegate (claude-fable-5-1 via claude-code): C-20c4fd10 is the behaviour of the pure web functions parsePeople, parseMyTeams, personLabel and loadMyTeams, which no page of this unit renders or calls; the browser writer rightly found no surface to drive. Eight Node tests named with the criterion cover it: the valid bodies with the non-breaking-...
+- Q-011 accept H-dc3d7c1e by the delegate (claude-fable-5-1 via claude-code): C-674bb9f6 is the batching, memory, invalid-id and shared-request behaviour of createNameCache, a pure web module that no page of this unit imports or renders; the design states nothing renders until later units take the hooks, so no browser can drive or observe request counts, peek or the shared in...
+- Q-012 accept H-3d48684d by the delegate (claude-fable-5-1 via claude-code): C-929a4c25 is the failure and abort behaviour of createNameCache and the plain-client rule for nameCache and loadMyTeams, pure web module behaviour that no page of this unit imports or renders, so a browser cannot observe request counts, forgotten failures, AbortError rejections or the module source...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -175,21 +190,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-20c4fd10): No end-to-end test traces criterion C-20c4fd10 (people-directory › Answers are parsed without being stricter than the engine, and a name falls back to the id › Parsers, labels and the teams loader); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-674bb9f6): No end-to-end test traces criterion C-674bb9f6 (people-directory › The name cache batches, remembers and shares requests, and a failed lookup never ends the session › Batches, memory, invalid ids and shared requests); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-929a4c25): No end-to-end test traces criterion C-929a4c25 (people-directory › The name cache batches, remembers and shares requests, and a failed lookup never ends the session › Failures are forgotten and aborts reject); step 5 generates one.
-
-## Needs a human
-
-- UI criterion C-748ce889 has no end-to-end test; see the generated UI tests table
-- UI criterion C-55e76eb6 has no end-to-end test; see the generated UI tests table
-- UI criterion C-db4fc15e has no end-to-end test; see the generated UI tests table
-- UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table
-- UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table
-- UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table
-- UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table
-- UI criterion C-64158aad has no end-to-end test; see the generated UI tests table
-- UI criterion C-fb2cd0d1 has no end-to-end test; see the generated UI tests table
-- UI criterion C-20c4fd10 has no end-to-end test; see the generated UI tests table
-- UI criterion C-674bb9f6 has no end-to-end test; see the generated UI tests table
-- UI criterion C-929a4c25 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 

@@ -1,0 +1,221 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "web/src/auth/session-fetch.ts:47-70",
+      "web/src/flows/flows.ts",
+      "src/core/ids.ts",
+      "src/api/me.test.ts",
+      "src/api/admin-policy.test.ts",
+      "src/main.admin.test.ts",
+      "src/main.conventions.test.ts",
+      "test/arch/modules.test.ts",
+      "test/arch/web-routes.test.ts",
+      "web/src/kit/contrast.test.ts",
+      "test/arch/repo.test.ts",
+      "docs/decisions/0002",
+      "src/identity/index.ts",
+      "src/api/index.ts",
+      "src/main.ts",
+      "docs/api/openapi.json",
+      "src/identity/person-names.test.ts",
+      "src/interpreter/taint.test.ts",
+      "src/identity/users.ts",
+      "src/api/people-routes.test.ts",
+      "src/api/people-routes.ts",
+      "src/api/me-teams.test.ts",
+      "src/api/people-openapi.test.ts",
+      "test/support/openapi-docs.ts",
+      "web/src/people/people.test.ts",
+      "web/src/people/people.ts",
+      "web/src/people/name-cache.test.ts",
+      "web/src/people/use-names.ts",
+      "**/^[A-Za-z0-9_-]{1,64}$",
+      "**/[]",
+      "**/client.ts",
+      "**/people.ts",
+      "**/test_m6b_kit.py",
+      "**/test_m6b_workspace.py",
+      "**/test_m6b_run_inputs.py",
+      "**/{\"items\":[]}",
+      "**/me.ts",
+      "src/main.*.test.ts",
+      "**/me.test.ts",
+      "web/**",
+      "**/users.ts",
+      "module api",
+      "module core",
+      "module docs",
+      "module identity",
+      "module interpreter",
+      "module main",
+      "module main.admin.test",
+      "module main.conventions.test",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-people-lookup/.l4/ledger/r-20261118T2122Z-44a0.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-people-lookup/.l4/ledger/r-20261118T2348Z-6bec.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-people-lookup/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/me-teams.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/people-openapi.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/people-routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/people-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/index.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/person-names.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/users.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.conventions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/people/name-cache.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/people/people.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/people/people.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/people/use-names.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/index.ts, src/api/people-routes.ts, src/identity/index.ts, src/identity/users.ts, src/main.ts and 2 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/index.ts",
+      "src/api/people-routes.ts",
+      "src/identity/index.ts",
+      "src/identity/users.ts",
+      "src/main.ts",
+      "web/src/people/people.ts",
+      "web/src/people/use-names.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2604,
+      "passed": 2604,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 25,
+      "new_passed": 25,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
