@@ -10,7 +10,7 @@ Paths without a directory are in `web/src/kit/` (`data/` and `layout/` files in 
 
 ## 3. Captions
 
-- [ ] 3.1 Write `data/caption-class.test.ts` (scenario "captionClass and the DataTable wiring", test-plan.md T4; it imports `captionClass` from `data/data-table.ts`) first, then implement `captionClass` in `data/data-table.ts`, add the optional `captionDisplay` to `DataTableProps` and write `captionClass(props.captionDisplay)` on the `<caption>` in `data/DataTable.tsx` (U15c has already deleted that file's stylesheet import line), implementing requirement "A table caption can be hidden and still names the table". `data/data-table.test.ts` stays green unchanged
+- [x] 3.1 Write `data/caption-class.test.ts` (scenario "captionClass and the DataTable wiring", test-plan.md T4; it imports `captionClass` from `data/data-table.ts`) first, then implement `captionClass` in `data/data-table.ts`, add the optional `captionDisplay` to `DataTableProps` and write `captionClass(props.captionDisplay)` on the `<caption>` in `data/DataTable.tsx` (U15c has already deleted that file's stylesheet import line), implementing requirement "A table caption can be hidden and still names the table". `data/data-table.test.ts` stays green unchanged
 
 ## 4. Fields and forms
 
