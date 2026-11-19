@@ -10,7 +10,7 @@ Paths without a directory are in `web/src/app/`. No frozen test changes: `web/sr
 
 ## 2. Stylesheets
 
-- [ ] 2.1 Write `shell-css.test.ts` (scenario "The stylesheets use tokens and a light scheme", test-plan.md T4; it reads `web/src/app/shell.css`, `web/src/auth/auth.css` and `web/src/kit/tokens.css`) first, then edit `web/src/app/shell.css` (drop the `.app-*` rules; `color-scheme: light`; the skip link on tokens; `main:focus` becomes `[tabindex="-1"]:focus { outline: none; }`) and `web/src/auth/auth.css` (`.auth-account` with truncating paragraphs, `.auth-page` as a 24rem card), implementing requirement "Shell and auth stylesheets hold tokens only and a light colour scheme". Run `pnpm run test web/src/auth/auth-css.test.ts` here: it stays green unchanged
+- [x] 2.1 Write `shell-css.test.ts` (scenario "The stylesheets use tokens and a light scheme", test-plan.md T4; it reads `web/src/app/shell.css`, `web/src/auth/auth.css` and `web/src/kit/tokens.css`) first, then edit `web/src/app/shell.css` (drop the `.app-*` rules; `color-scheme: light`; the skip link on tokens; `main:focus` becomes `[tabindex="-1"]:focus { outline: none; }`) and `web/src/auth/auth.css` (`.auth-account` with truncating paragraphs, `.auth-page` as a 24rem card), implementing requirement "Shell and auth stylesheets hold tokens only and a light colour scheme". Run `pnpm run test web/src/auth/auth-css.test.ts` here: it stays green unchanged
 
 ## 3. Account, sign-in and not-found
 
