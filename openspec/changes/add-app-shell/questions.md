@@ -33,7 +33,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-020 | answered | none | verdict | Criterion C-c6a08479 (web-shell › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table — finding H-829dbc6c › Rejected hold: UI criterion C-51d4764a has no e |
 | Q-021 | answered | none | verdict | Criterion C-0cbfa992 (web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60...): accept as s |
 | Q-022 | answered | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
-| Q-023 | open | none | verdict | Hold H-f10f11d2: UI criterion C-c6a08479 has no end-to-end test; see the generated UI tests table |
+| Q-023 | answered | none | verdict | Hold H-f10f11d2: UI criterion C-c6a08479 has no end-to-end test; see the generated UI tests table |
 | Q-024 | open | none | verdict | Hold H-c9e043b3: UI criterion C-0cbfa992 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -664,7 +664,8 @@ accept The unit can go on. The step-5 writer did not produce a test because a to
 
 ## Q-023: Hold H-f10f11d2: UI criterion C-c6a08479 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
@@ -683,6 +684,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on. The generated test fails at the head for a premise of its own, not for the shell: it seeds a session object in localStorage, and no file under web/src reads browser storage; the session comes only from the capability loader's request to the /me endpoint, so without a mocked API route nobody is signed in, no Sign out button exists and the test's first expectation fails. The head holds an end-to-end test of this criterion, test_long_names_banner.py, tagged with it, which mocks the /api/v1/me route with 60-character names and asserts the banner at 56 px within 1, the Sign out button at 38 px on one line, both paragraphs ellipsis and cut, and the right edge inside the viewport at 1366 by 860 and 900 by 800. The code gives those values: shrink-0 and whitespace-nowrap on the button, a 3.5rem minimum non-wrapping header, and ellipsis on the paragraphs.
 ---
 
 ## Q-024: Hold H-c9e043b3: UI criterion C-0cbfa992 has no end-to-end test; see the generated UI tests table
