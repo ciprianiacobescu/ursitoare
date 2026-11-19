@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Hold H-30c70910: UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-d44a38f6: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-a783bd38: UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-baa4dc41: UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-baa4dc41: UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-96121bdf: UI criterion C-64158aad has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-10bbd12e: UI criterion C-fb2cd0d1 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-94d8b7e3: UI criterion C-20c4fd10 has no end-to-end test; see the generated UI tests table |
@@ -179,7 +179,8 @@ accept C-1c488737 is the validation and size bound of GET /api/v1/people, which 
 
 ## Q-007: Hold H-baa4dc41: UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -198,6 +199,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-a68cc186 covers the 401 of a missing session or a disabled caller, the 404 of HEAD and the registration of both routes without a pool, including listDefinedRoutes and the 503. These are server construction details and database state that a browser over HTTP cannot set up or observe, and no page of this unit calls either route. The Node test for the criterion runs all of it: five unauthenticated bodies, bob disabled in the database and refused with no Carol in the body, both HEADs 404, a bare server with pool and engine null whose listDefinedRoutes holds both routes with the expected errors, session auth and read_self, and both answering 503 AUTHZ_UNAVAILABLE. Both handlers read the caller's row and throw 401 when it is missing or not active. The hold on a missing end-to-end test is therefore waived.
 ---
 
 ## Q-008: Hold H-96121bdf: UI criterion C-64158aad has no end-to-end test; see the generated UI tests table
