@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-1577878d (web-shell › The shell holds one banner, one navigation, one main and one footer › Carol's navigation is grouped and the banner is compact): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-14067443 (web-shell › The shell holds one banner, one navigation, one main and one footer › Alice and a signed-out visitor see fewer groups): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-2d3f3998 (web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-2d3f3998 (web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-425a9f46 (web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-88a078f0 (web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards): accept as satisfied? |
@@ -101,7 +101,7 @@ accept For alice the registry yields Home, Flows and Runs, navGroups leaves empt
 
 ## Q-003: Criterion C-2d3f3998 (web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The code reads right: shell.css sets [tabindex="-1"]:focus to outline none in the same layer as theme.css's 3 px :focus-visible with higher specificity, the Menu button is display none at 1280 px so the Tab order is skip link, brand, Sign out, Home, the home status has tabIndex -1 and ToastRegion fo
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -129,6 +129,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept: verified by the owner's delegate. test_m6b_shell::test_key_stops_keep_their_ring_and_script_focus_draws_none implements every clause of the scenario (four Tab stops with an outline of at least 2 px; main after the skip link, the script-focused status and main after Dismiss with outline none; CSP list []). It passes at head 46b3bf4a locally (twice) and in the round-2 CI e2e gate, and it fails at base c2129af7 (Locator expected to be focused), so it discriminates. An independent probe as carol at 1280 by 720 measured solid 3px on Skip to content, Ursitoare, Sign out and Home, and outline none on main after Enter, on the focused status and on main after Dismiss.
 ---
 
 ## Q-004: Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied?
