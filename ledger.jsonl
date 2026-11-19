@@ -81,3 +81,4 @@
 {"at":"2026-11-19T19:39:45Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"6d340a539ef97781acec8214ac0d6b185056b585","status":"pass","type":"unit.postcheck","unit":"openspec:add-app-shell"}
 {"at":"2026-11-19T19:39:45Z","revision":"6d340a539ef97781acec8214ac0d6b185056b585","type":"unit.integrated","unit":"openspec:add-app-shell"}
 {"at":"2026-11-19T19:39:45Z","attempt":1,"cost_usd":21.295458,"runs":7,"type":"plan.charged","unit":"openspec:add-app-shell"}
+{"at":"2026-11-19T19:41:23Z","branch":"l4/archive/openspec/add-app-shell","head":"e62be04a7038d7b7d6c6a7667a30df1a274b829c","type":"unit.branch_deleted","unit":"openspec:add-app-shell"}
