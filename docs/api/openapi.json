@@ -4879,6 +4879,85 @@
         ]
       }
     },
+    "/api/v1/me/teams": {
+      "get": {
+        "operationId": "get_api_v1_me_teams",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "next_cursor": {
+                      "type": "null"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "next_cursor"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "read_self",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "FORBIDDEN",
+          "UNAUTHENTICATED"
+        ]
+      }
+    },
     "/api/v1/openapi.json": {
       "get": {
         "operationId": "get_api_v1_openapi_json",
@@ -4889,6 +4968,115 @@
         },
         "x-ursitoare-auth": "public:static",
         "x-ursitoare-errors": []
+      }
+    },
+    "/api/v1/people": {
+      "get": {
+        "operationId": "get_api_v1_people",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ids",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{1,64}(,[A-Za-z0-9_-]{1,64}){0,49}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "kind": {
+                            "enum": [
+                              "human",
+                              "service"
+                            ],
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "displayName",
+                          "kind"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: FORBIDDEN"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "read_self",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "FORBIDDEN",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
       }
     },
     "/api/v1/policies": {

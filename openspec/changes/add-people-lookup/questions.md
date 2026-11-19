@@ -1,0 +1,327 @@
+# Questions — add-people-lookup
+
+<!-- l4:questions v1
+How to answer: write under "### Answer" and set **Status** to `answered`.
+To accept the clarifier's suggestion as-is, set **Status** to `accepted`.
+Status values: open · answered · accepted · answered-by-clarifier · dismissed · superseded
+Kind values: technical · product · ambiguous · verdict · harness. For a `verdict` question, start the answer with `accept` or
+`reject`, then give your reason; for a `harness` question, with `accept` or `retry`.
+Do not change question IDs. Commit and push to the l4/… branch to resume the run. -->
+
+<!-- l4:index:start -->
+| ID | Status | Blocking | Kind | Question |
+|----|--------|----------|------|----------|
+| Q-001 | answered | none | verdict | Hold H-f8921f64: UI criterion C-748ce889 has no end-to-end test; see the generated UI tests table |
+| Q-002 | answered | none | verdict | Hold H-4ed1905b: UI criterion C-55e76eb6 has no end-to-end test; see the generated UI tests table |
+| Q-003 | answered | none | verdict | Hold H-f666a58b: UI criterion C-db4fc15e has no end-to-end test; see the generated UI tests table |
+| Q-004 | answered | none | verdict | Hold H-30c70910: UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-d44a38f6: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-a783bd38: UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-baa4dc41: UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-96121bdf: UI criterion C-64158aad has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-10bbd12e: UI criterion C-fb2cd0d1 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-94d8b7e3: UI criterion C-20c4fd10 has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-dc3d7c1e: UI criterion C-674bb9f6 has no end-to-end test; see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-3d48684d: UI criterion C-929a4c25 has no end-to-end test; see the generated UI tests table |
+<!-- l4:index:end -->
+
+---
+
+## Q-001: Hold H-f8921f64: UI criterion C-748ce889 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-748ce889 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-748ce889: not_testable after 1 attempt(s); getPersonNames is an internal function called with explicit id lists inside a tenant transaction; the page snapshot exposes no people-directory UI, route, or input to trigger or observe that behavior through the page fixture..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-748ce889 is the behaviour of getPersonNames, a server-side function with no page, route or control of its own in this unit, so no browser test can drive it; the design states that nothing renders until later units take the hooks. The Node test for the criterion seeds the six users of the test plan in embedded Postgres, runs both id lists in a tenant-A transaction and deep-equals the full expected answers, the key set of each item and the absence of the e-mails. The hold on a missing end-to-end test is therefore waived.
+---
+
+## Q-002: Hold H-4ed1905b: UI criterion C-55e76eb6 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-55e76eb6 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-55e76eb6: not_testable after 1 attempt(s); The criterion covers backend-only behavior (getPersonNames tenant-B transactions, IdentityError IDENTITY_TENANT_MISMATCH, bare SQL row-level security against ursitoare."user") with no UI surface or page fixture to exercise it..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-55e76eb6 checks getPersonNames in a tenant-B transaction, the IDENTITY_TENANT_MISMATCH rejection for a foreign context and a bare row-level-security SELECT; none of these has a page or route to drive from a browser. The Node test for the criterion runs all three against embedded Postgres and asserts the exact answer, the rejection code and the zero-row result, and the implementation filters on the context's tenant after assertTenantMatches. The hold on a missing end-to-end test is therefore waived.
+---
+
+## Q-003: Hold H-f666a58b: UI criterion C-db4fc15e has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-db4fc15e has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-db4fc15e: not_testable after 1 attempt(s); getPersonNames is a server-side function over recording transactions and database queries; the page snapshot exposes no people-directory UI, so pytest-playwright cannot drive tenant checks, query counts, or IdentityError rejections through the browser..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-db4fc15e checks getPersonNames on a recording transaction: refusals before any query, the empty list, the query count of a 50-id list and a propagated database error. These are internal call counts and typed rejections that no browser can observe, and this unit renders nothing. The Node test for the criterion runs every listed input, asserts the IDENTITY_INVALID rejections with zero recorded queries, the empty answer, exactly two queries for 50 ids and the propagated db down error. The hold on a missing end-to-end test is therefore waived.
+---
+
+## Q-004: Hold H-30c70910: UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-57481c19: not_testable after 1 attempt(s); The criterion requires database assertions (exactly one policy_decision row with read_self/allow and unchanged audit_event count) that are not observable through the page fixture or the GET /api/v1/people public interface..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-57481c19 is the behaviour of GET /api/v1/people for an active member, including the exact body, the no-store header, one read_self decision row, an unchanged audit count and the 403 of a denying engine. The decision and audit rows are database facts a browser cannot read, and no page in this unit calls the route. The Node test for the criterion builds the real server with the real PEP over embedded Postgres and asserts every one of these rows, the deny case on its own server. The hold on a missing end-to-end test is therefore waived.
+---
+
+## Q-005: Hold H-d44a38f6: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-59f63ed0: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_59f63ed0::test_tenant_b_gets_nothing_for_tenant_a_ids[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-59f63ed0 is the two-tenant behaviour of GET /api/v1/people, which no page of this unit calls. The generated browser test could not pass at the head because the fake e2e stack seeds only alice, bob, carol and mallory and holds none of the scenario's rows such as twin or u_erin, so the expected bodies cannot exist there; its failure is a fixture gap, not evidence of a defect. The Node test for the criterion builds the real server with the real PEP over embedded Postgres, seeds both tenants, and asserts mallory's exact answer, the byte-equal empty bodies for tenant A's ids and for ids that exist nowhere, the ignored x-tenant-id header, the 400 for tenant_id, alice's own twin and the absence of every tenant-A name. The route takes the tenant from the session and the statement filters on it. The hold on a missing end-to-end test is therefore waived.
+---
+
+## Q-006: Hold H-a783bd38: UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-1c488737: writer_failed after 2 attempt(s); opencode's permission rules rejected a tool call (bash).
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-1c488737 is the validation and size bound of GET /api/v1/people, which no page of this unit calls; the browser writer never produced a test because its tooling refused a shell call, not because of any defect. The Node test for the criterion builds the real server with the real PEP over embedded Postgres, sends all nine refusals and asserts 400 VALIDATION_FAILED with the named field and the must be string message, checks that the read_self decision count is unchanged, accepts exactly PEOPLE_MAX_IDS ids with an empty answer, seeds 50 service accounts with 64-character ids and 200 control-character names and measures the answer at 65,611 bytes and under 66,000. The route schema carries the pattern and additionalProperties false. The hold on a missing end-to-end test is therefore waived.
+---
+
+## Q-007: Hold H-baa4dc41: UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-a68cc186: not_testable after 1 attempt(s); Requires direct backend calls (registerPeopleRoutes with null pool/engine, listDefinedRoutes) and database state (bob disabled) that are not reachable via the page fixture over HTTP..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-a68cc186 covers the 401 of a missing session or a disabled caller, the 404 of HEAD and the registration of both routes without a pool, including listDefinedRoutes and the 503. These are server construction details and database state that a browser over HTTP cannot set up or observe, and no page of this unit calls either route. The Node test for the criterion runs all of it: five unauthenticated bodies, bob disabled in the database and refused with no Carol in the body, both HEADs 404, a bare server with pool and engine null whose listDefinedRoutes holds both routes with the expected errors, session auth and read_self, and both answering 503 AUTHZ_UNAVAILABLE. Both handlers read the caller's row and throw 401 when it is missing or not active. The hold on a missing end-to-end test is therefore waived.
+---
+
+## Q-008: Hold H-96121bdf: UI criterion C-64158aad has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-64158aad has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-64158aad: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_64158aad::test_teams_of_alice_bob_mallory_and_unchanged_me[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-64158aad is the behaviour of GET /api/v1/me/teams for three members and the unchanged four-key /me, which no page of this unit calls. The generated browser test could not pass at the head because the fake e2e stack seeds only the team finance through its group mapping and holds no audit or ops team, so alice cannot be in finance and audit nor mallory in ops there; the failure is a fixture gap, not a defect. The Node test for the criterion builds the real server with the real PEP over embedded Postgres, inserts alice's finance and audit memberships and mallory's ops membership, and asserts alice's sorted body, the byte-equal body with a tenant_id member, bob's empty page, mallory's ops, the no-store header and that /me has exactly the four keys and no teams. The handler sorts the deduplicated principal teams. The hold on a missing end-to-end test is therefore waived.
+---
+
+## Q-009: Hold H-10bbd12e: UI criterion C-fb2cd0d1 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-fb2cd0d1 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-fb2cd0d1: writer_failed after 2 attempt(s); structured output missing: the reply holds no JSON object.
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-fb2cd0d1 checks the committed OpenAPI document against the served one and the shape of the two new operations; it is a document comparison with no page and no HTTP surface a browser could observe, and the browser writer failed on its own output format, not on the code. The Node test for the criterion renders the served document, asserts it equals the committed docs/api/openapi.json byte for byte, counts 50 paths, and checks both operations' errors, action, auth, responses and the single ids parameter with the required pattern, plus the four required keys of /me. The committed document holds both paths and the pattern, and main wires registerPeopleRoutes right after registerMeRoute. The hold on a missing end-to-end test is therefore waived.
+---
+
+## Q-010: Hold H-94d8b7e3: UI criterion C-20c4fd10 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-20c4fd10 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-20c4fd10: not_testable after 2 attempt(s); The criterion covers module-level functions parsePeople, parseMyTeams, personLabel and loadMyTeams, none of which are exposed through any UI page or HTTP endpoint observable from a browser; the page snapshot shows an empty app shell with no people-directory surface, so an e2e test at L4_E2E_BASE_....
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-20c4fd10 is the behaviour of the pure web functions parsePeople, parseMyTeams, personLabel and loadMyTeams, which no page of this unit renders or calls; the browser writer rightly found no surface to drive. Eight Node tests named with the criterion cover it: the valid bodies with the non-breaking-space name kept, the repeated team once and the extra member dropped, the 13 malformed people bodies and 7 malformed team bodies giving null, personLabel trimming and falling back to the id for an unknown, empty and blank name, loadMyTeams recording the call with and without a signal, answering empty for a 401, a 500, a TypeError and a malformed body, and rethrowing an AbortError. The implementation matches: the parsers enforce the two patterns, personLabel trims and falls back, and loadMyTeams returns an empty list on any failure but an abort. The hold on a missing end-to-end test is therefore waived.
+---
+
+## Q-011: Hold H-dc3d7c1e: UI criterion C-674bb9f6 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-674bb9f6 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-674bb9f6: not_testable after 1 attempt(s); The criterion covers internal NameCache behavior (batching into 50/10, maxBatch, AbortSignal, peek, dedup, concurrent request sharing) that is not exposed through any people-directory UI or user-observable action; the page shows only an empty app root, so a user cannot trigger or observe name-cac....
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-674bb9f6 is the batching, memory, invalid-id and shared-request behaviour of createNameCache, a pure web module that no page of this unit imports or renders; the design states nothing renders until later units take the hooks, so no browser can drive or observe request counts, peek or the shared in-flight batches. Four Node tests named with the criterion run against a recording fake client and assert every row of the scenario: 60 ids make exactly two requests of 50 and 10 with a 60-entry map in order and peek of u7, a repeated resolve sends none; maxBatch 2 gives a,b then c each with query and signal; the invalid-and-duplicate row makes one request for b,ok,ghost, keeps b and ok, never asks ghost again, ignores the unasked u_x and asks it later; concurrent a,b and b,a make one request and a,b and b,c make two. The implementation filters by the id pattern, dedupes, flushes at maxBatch, tracks in-flight batches and stores only asked ids. The hold on a missing end-to-end test is therefore waived.
+---
+
+## Q-012: Hold H-3d48684d: UI criterion C-929a4c25 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-929a4c25 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-929a4c25: not_testable after 1 attempt(s); The criterion checks JavaScript module internals (nameCache.resolve/loadMyTeams results and request counts) and source-file contents of people.ts and use-names.ts, which are not observable through a browser page and cannot be verified by reading the server filesystem from a single-origin page-fix....
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-929a4c25 is the failure and abort behaviour of createNameCache and the plain-client rule for nameCache and loadMyTeams, pure web module behaviour that no page of this unit imports or renders, so a browser cannot observe request counts, forgotten failures, AbortError rejections or the module sources. Four Node tests named with the criterion cover every row: a 500, a 401 UNAUTHENTICATED, a TypeError and a malformed body each give an empty map and are asked again with exactly two requests; of two batches of 60 ids only the failed last 10 are asked again and the retry fills 60; a pre-aborted signal rejects with AbortError after zero requests and an abort during the request rejects and remembers nothing; with a stubbed window at /flows?x=1 and a stubbed fetch, nameCache sends GET /api/v1/people?ids=u_carol and resolves Carol Example, each 401 for u_bob gives an empty map and is sent again, loadMyTeams over createApiClient gives an empty list after one GET /api/v1/me/teams, window.location.assign is called zero times, and the sources of people.ts and use-names.ts contain no browser-session reference and each contains createApiClient. The implementation forgets a failed batch, rethrows only AbortError, and builds nameCache over createApiClient. The hold on a missing end-to-end test is therefore waived.
