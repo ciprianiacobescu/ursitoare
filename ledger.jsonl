@@ -69,3 +69,5 @@
 {"at":"2026-11-19T14:03:20Z","run":"r-20261119T1403Z-ccf1","type":"unit.dispatched","unit":"openspec:add-app-shell"}
 {"at":"2026-11-19T14:17:48Z","detail":"awaiting_human: no new answers (verdicts open: Q-003, Q-004, Q-005, Q-006, Q-013, Q-014) (escalated to a person: Q-003, Q-004, Q-005, Q-006, Q-013, Q-014)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-app-shell"}
 {"at":"2026-11-19T17:47:58Z","by":"harness","reason":"the cause is gone: openspec:add-app-shell is awaiting_human","type":"plan.resumed"}
+{"at":"2026-11-19T17:47:59Z","attempt":1,"cost_usd":15.973359,"runs":5,"type":"plan.charged","unit":"openspec:add-app-shell"}
+{"at":"2026-11-19T17:47:59Z","run":"r-20261119T1747Z-5c39","type":"unit.dispatched","unit":"openspec:add-app-shell"}
