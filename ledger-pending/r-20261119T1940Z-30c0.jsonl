@@ -2,3 +2,4 @@
 {"ts": "2026-11-19T19:40:59.428834Z", "run_id": "r-20261119T1940Z-30c0", "unit": "openspec:add-app-shell", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 138, "merge_commit": "6d340a539ef97781acec8214ac0d6b185056b585"}
 {"ts": "2026-11-19T19:41:08.195222Z", "run_id": "r-20261119T1940Z-30c0", "unit": "openspec:add-app-shell", "seq": 3, "type": "archive.opened", "number": 139, "url": "<forge>/ciprianiacobescu/ursitoare/pull/139", "branch": "l4/archive/openspec/add-app-shell", "head": "e62be04a7038d7b7d6c6a7667a30df1a274b829c"}
 {"ts": "2026-11-19T19:41:09.657490Z", "run_id": "r-20261119T1940Z-30c0", "unit": "openspec:add-app-shell", "seq": 4, "type": "archive.merged", "head": "e62be04a7038d7b7d6c6a7667a30df1a274b829c", "number": 139}
+{"ts": "2026-11-19T19:41:11.312382Z", "run_id": "r-20261119T1940Z-30c0", "unit": "openspec:add-app-shell", "seq": 5, "type": "run.finished", "exit_code": 0}
