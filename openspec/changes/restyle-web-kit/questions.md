@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-859c63d2 (web-data-kit › data.css makes tables cards and bounds fields without breaking a pinned rule › A table is a card with a header row and a hover row): accept as satisfied? |
+| Q-001 | answered | none | verdict | Criterion C-859c63d2 (web-data-kit › data.css makes tables cards and bounds fields without breaking a pinned rule › A table is a card with a header row and a hover row): accept as satisfied? |
 | Q-002 | open | none | verdict | Criterion C-40cb2e75 (web-data-kit › Field puts the control before its hint and error, and Form's submit is the accent tone › The Flows form is bounded, toned and keeps its prefix and focus ring): acc |
 | Q-003 | open | none | verdict | Criterion C-5b9e6539 (web-kit › A confirm dialog opens centred with its tone and returns focus › The Disable dialog is centred, toned and returns focus): accept as satisfied? |
 | Q-004 | open | none | verdict | Hold H-09735f2a: UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table |
@@ -30,7 +30,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-859c63d2 (web-data-kit › data.css makes tables cards and bounds fields without breaking a pinned rule › A table is a card with a header row and a hover row): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -57,6 +58,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The repository's own browser test pins this scenario exactly and the kit sources produce every value it asserts. The card wrapper rule gives the divider border, the large radius and horizontal scrolling, and the tokens resolve to the asserted colours: the divider token is #d0d5dd, which is rgb(208, 213, 221), the radius token is 0.5rem, which is 8px, the surface token is #f4f5f7 for the header cell with weight 600, and the accent surface token is #eff4ff, which is rgb(239, 244, 255), on the hovered body row, while no rule gives an unhovered row a background. The caption carries the ui-table-caption class with weight 600 and the Users page passes the caption Users. No other stylesheet touches tables, rows or captions, and data.css is loaded in the components layer. The only reason the test is ignored is that a red step cannot run the browser suite, which the unit's task plan states and leaves to the verifier; the harness's generated replacement failed at base and head alike, which points at that generated test rather than at the code.
 ---
 
 ## Q-002: Criterion C-40cb2e75 (web-data-kit › Field puts the control before its hint and error, and Form's submit is the accent tone › The Flows form is bounded, toned and keeps its prefix and focus ring): acc
