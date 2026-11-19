@@ -134,6 +134,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-004: Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): auth.css gives the account paragraphs min-width 0, overflow hidden, nowrap and text-overflow ellipsis, the account group has min-width 0 and the header is a non-wrapping row of min-height 3.5rem, so the layout should hold at 1366 and 900 px. But the verification table records a harness-generated tes
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
