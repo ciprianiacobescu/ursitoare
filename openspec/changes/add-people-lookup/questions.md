@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Hold H-f8921f64: UI criterion C-748ce889 has no end-to-end test; see the generated UI tests table |
 | Q-002 | answered | none | verdict | Hold H-4ed1905b: UI criterion C-55e76eb6 has no end-to-end test; see the generated UI tests table |
-| Q-003 | open | none | verdict | Hold H-f666a58b: UI criterion C-db4fc15e has no end-to-end test; see the generated UI tests table |
+| Q-003 | answered | none | verdict | Hold H-f666a58b: UI criterion C-db4fc15e has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-30c70910: UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-d44a38f6: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-a783bd38: UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table |
@@ -79,7 +79,8 @@ accept C-55e76eb6 checks getPersonNames in a tenant-B transaction, the IDENTITY_
 
 ## Q-003: Hold H-f666a58b: UI criterion C-db4fc15e has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -98,6 +99,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-db4fc15e checks getPersonNames on a recording transaction: refusals before any query, the empty list, the query count of a 50-id list and a propagated database error. These are internal call counts and typed rejections that no browser can observe, and this unit renders nothing. The Node test for the criterion runs every listed input, asserts the IDENTITY_INVALID rejections with zero recorded queries, the empty answer, exactly two queries for 50 ids and the propagated db down error. The hold on a missing end-to-end test is therefore waived.
 ---
 
 ## Q-004: Hold H-30c70910: UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table
