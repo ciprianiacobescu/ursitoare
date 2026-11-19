@@ -29,6 +29,12 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-016 | answered | none | verdict | Hold H-45489073: UI criterion C-9eeb9987 has no end-to-end test; see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-d1f76909: UI criterion C-2159a890 has no end-to-end test; see the generated UI tests table |
 | Q-018 | answered | none | verdict | Hold H-cdb99000: UI criterion C-88a078f0 has no end-to-end test; see the generated UI tests table |
+| Q-019 | open | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
+| Q-020 | open | none | verdict | Criterion C-c6a08479 (web-shell › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table — finding H-829dbc6c › Rejected hold: UI criterion C-51d4764a has no e |
+| Q-021 | open | none | verdict | Criterion C-0cbfa992 (web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60...): accept as s |
+| Q-022 | open | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
+| Q-023 | open | none | verdict | Hold H-f10f11d2: UI criterion C-c6a08479 has no end-to-end test; see the generated UI tests table |
+| Q-024 | open | none | verdict | Hold H-c9e043b3: UI criterion C-0cbfa992 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -529,3 +535,166 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ### Answer
 <!-- write below this line -->
 accept The generated test only errored at the merge base, which says nothing against the head, and the code as built gives every row of the scenario. Signed out, navPlacement answers inline and the shell uses a plain flex column with the navigation inside the banner, so main is full width and starts at x 0. The sign-in page is the .auth-page card with max-width 24rem, 384 px, centred by auto margins, whose top margin and the main padding are both the 1.5rem space token under the 56 px banner, which gives y 104 and a centre at half of 1366, and its primary Button stretches to the card's inner width of 334 px. With the error query the page renders one ErrorPanel, whose section has role alert, inside the card. The not-found page is a single div with max-w-md, 448 px, auto margins and a 3rem top margin, which gives y 128, holds the heading Page not found and an asChild Button around the link to /, and sets the title through DocumentTitle for the not-found route. The unit's own browser test, tagged with this criterion, asserts the main offset, the card widths, positions and centre, the one Sign in button and its width, the single alert in the card, the heading, href and title, assert_layout, assert_accessible and an empty CSP list on all three pages.
+
+---
+
+## Q-019: Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+- **Criteria:** C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner)
+
+### Context
+Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner) is needs human after round 4.
+
+Scenario:
+\- **WHEN** `test_long_names_truncate_and_never_grow_the_banner` mocks a display name of 60 "W" and a tenant name of 60 "M" and opens `/` at 1366 by 860 and at 900 by 800
+\- **THEN** the banner text contains both whole names; `assert_layout(page, 72)` passes with a banner of 56 px; both paragraphs compute `text-overflow: ellipsis` and are cut (`scrollWidth` greater than `clientWidth`; font-dependent, measured on macOS 921 against 607 and 804 against 530 at 1366, 921 against 323 and 804 against 282 at 900); the right edge of "Sign out" is at most the viewport width (measured 1350 and 884)
+
+Why: uncovered: the tests that trace it are inadequate or did not pass
+Judge: pass
+Tracing tests: web.src.auth.long-names-banner.test.ts::C-c6a08479 C-51d4764a C-0cbfa992 the sign-out button neither shrinks nor wraps beside long account names (passed, red_assertion, inadequate)
+Ignored tests: test_long_names_banner::test_long_names_keep_the_banner_at_56_px_and_sign_out_on_one_line[chromium-1366-860] (no proof that it discriminates (no red, audit or generated record)); test_long_names_banner::test_long_names_keep_the_banner_at_56_px_and_sign_out_on_one_line[chromium-900-800] (no proof that it discriminates (no red, audit or generated record)); test_m6b_shell::test_long_names_truncate_and_never_grow_the_banner[chromium-1366-860] (no proof that it discriminates (no red, audit or generated record)); test_m6b_shell::test_long_names_truncate_and_never_grow_the_banner[chromium-900-800] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-020: Criterion C-c6a08479 (web-shell › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table — finding H-829dbc6c › Rejected hold: UI criterion C-51d4764a has no e
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+- **Criteria:** C-c6a08479 (web-shell › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table — finding H-829dbc6c › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table)
+
+### Context
+Criterion C-c6a08479 (web-shell › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table — finding H-829dbc6c › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table) is needs human after round 4.
+
+Scenario:
+\- **WHEN** the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60 "M", at 1366 by 860 and at 900 by 800,
+\- **THEN** the banner is 56 px tall (within 1), the button "Sign out" is on one line and 38 px tall (within 1), both account paragraphs compute text-overflow ellipsis and are cut, and the right edge of "Sign out" is at most the viewport width.
+
+Why: uncovered: the tests that trace it are inadequate or did not pass
+Judge: pass
+Tracing tests: web.src.auth.long-names-banner.test.ts::C-c6a08479 C-51d4764a C-0cbfa992 the sign-out button neither shrinks nor wraps beside long account names (passed, red_assertion, inadequate)
+Ignored tests: test_long_names_banner::test_long_names_keep_the_banner_at_56_px_and_sign_out_on_one_line[chromium-1366-860] (no proof that it discriminates (no red, audit or generated record)); test_long_names_banner::test_long_names_keep_the_banner_at_56_px_and_sign_out_on_one_line[chromium-900-800] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-021: Criterion C-0cbfa992 (web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60...): accept as s
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+- **Criteria:** C-0cbfa992 (web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60...)
+
+### Context
+Criterion C-0cbfa992 (web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60...) is needs human after round 4.
+
+Scenario:
+\- **WHEN** the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60 "M", at 1366 by 860 and at 900 by 800,
+\- **THEN** the banner is 56 px tall (within 1), the button "Sign out" is on one line and 38 px tall (within 1), both account paragraphs compute text-overflow ellipsis and are cut, and the right edge of "Sign out" is at most the viewport width.
+
+Why: uncovered: the tests that trace it are inadequate or did not pass
+Judge: pass
+Tracing tests: web.src.auth.long-names-banner.test.ts::C-c6a08479 C-51d4764a C-0cbfa992 the sign-out button neither shrinks nor wraps beside long account names (passed, red_assertion, inadequate)
+Ignored tests: test_long_names_banner::test_long_names_keep_the_banner_at_56_px_and_sign_out_on_one_line[chromium-1366-860] (no proof that it discriminates (no red, audit or generated record)); test_long_names_banner::test_long_names_keep_the_banner_at_56_px_and_sign_out_on_one_line[chromium-900-800] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-022: Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+
+### Context
+After round 4 the verifier cannot decide on its own: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-51d4764a: writer_failed after 1 attempt(s); opencode's permission rules rejected a tool call (bash).
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-023: Hold H-f10f11d2: UI criterion C-c6a08479 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+
+### Context
+After round 4 the verifier cannot decide on its own: UI criterion C-c6a08479 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-c6a08479: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_c6a08479::test_rejected_hold_banner_sign_out_ellipsis[chromium-1366-860], test_l4_c_c6a08479::test_rejected_hold_banner_sign_out_ellipsis[chromium-900-800].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-024: Hold H-c9e043b3: UI criterion C-0cbfa992 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+
+### Context
+After round 4 the verifier cannot decide on its own: UI criterion C-0cbfa992 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-0cbfa992: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_0cbfa992::test_banner_stays_at_most_72px_tall[chromium-viewport0], test_l4_c_0cbfa992::test_banner_stays_at_most_72px_tall[chromium-viewport1].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
