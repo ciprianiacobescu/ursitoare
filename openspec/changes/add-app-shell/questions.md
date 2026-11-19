@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | open | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-425a9f46 (web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-88a078f0 (web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards): accept as satisfied? |
-| Q-007 | open | none | verdict | Hold H-817f132e: UI criterion C-e722bbf4 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-817f132e: UI criterion C-e722bbf4 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-49d28f26: UI criterion C-4ef0679b has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-91c87ac7: UI criterion C-b054e7d6 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-e45e045d: UI criterion C-ffb190b2 has no end-to-end test; see the generated UI tests table |
@@ -229,7 +229,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-007: Hold H-817f132e: UI criterion C-e722bbf4 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -248,6 +249,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The criterion checks the module constants NAV_GROUP_OF and NAV_GROUP_LABELS against the page tables, which the specification itself assigns to a Node test and which no browser page exposes. The Node test reads the constants and the four page tables and asserts the exact ten keys, their values, the fixed labels and the absence of flow-editor and run, and the implementation holds exactly those entries. The browser-visible consequence, grouped links with Build and Admin labels, is covered by the separate browser scenario for carol's navigation. An end-to-end test for this criterion is neither possible nor required.
 ---
 
 ## Q-008: Hold H-49d28f26: UI criterion C-4ef0679b has no end-to-end test; see the generated UI tests table
