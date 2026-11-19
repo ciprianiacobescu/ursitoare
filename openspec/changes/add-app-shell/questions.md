@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Hold H-36707f19: UI criterion C-1577878d has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-e4efbea1: UI criterion C-14067443 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-ec613652: UI criterion C-2d3f3998 has no end-to-end test; see the generated UI tests table |
-| Q-014 | open | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
+| Q-014 | answered | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-75cdf554: UI criterion C-425a9f46 has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-45489073: UI criterion C-9eeb9987 has no end-to-end test; see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-d1f76909: UI criterion C-2159a890 has no end-to-end test; see the generated UI tests table |
@@ -406,7 +406,7 @@ accept: verified by the owner's delegate. The generated test could not be read (
 
 ## Q-014: Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The generated test for this criterion fails at the head after two attempts and I cannot read it or its trace. The code reads right: auth.css gives the account paragraphs min-width 0, overflow hidden, nowrap and text-overflow ellipsis, the account group has min-width 0, the brand and Menu button are
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -426,6 +426,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+reject: the generated test is right to fail at the head; measured by the owner's delegate on head 46b3bf4a: with 60-character names the banner is 59 px, not 56, at 1366, 1024, 900 and 375 px wide. The "Sign out" Button in web/src/auth/AccountMenu.tsx is a flex item without shrink-0, so the long names squeeze it until its label wraps onto two lines (58 px tall, 47 to 51 px wide; 73 by 38 with short names). The scenario says assert_layout passes "with a banner of 56 px" and the requirement says long names never grow the banner. The unit test only checks at most 72 px, which is why it passed. A likely fix is shrink-0 and whitespace-nowrap on that Button. WHEN the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60 "M", at 1366 by 860 and at 900 by 800, THEN the banner is 56 px tall (within 1), the button "Sign out" is on one line and 38 px tall (within 1), both account paragraphs compute text-overflow ellipsis and are cut, and the right edge of "Sign out" is at most the viewport width.
 ---
 
 ## Q-015: Hold H-75cdf554: UI criterion C-425a9f46 has no end-to-end test; see the generated UI tests table
