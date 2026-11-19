@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-40cb2e75 (web-data-kit › Field puts the control before its hint and error, and Form's submit is the accent tone › The Flows form is bounded, toned and keeps its prefix and focus ring): acc |
 | Q-003 | answered | none | verdict | Criterion C-5b9e6539 (web-kit › A confirm dialog opens centred with its tone and returns focus › The Disable dialog is centred, toned and returns focus): accept as satisfied? |
 | Q-004 | answered | none | verdict | Hold H-09735f2a: UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table |
-| Q-005 | open | none | verdict | Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-5c5d8c36: UI criterion C-859c63d2 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-f260119c: UI criterion C-40cb2e75 has no end-to-end test; see the generated UI tests table |
@@ -154,7 +154,8 @@ accept The hold can be waived. The criterion's scenario is a Node source test, n
 
 ## Q-005: Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -173,6 +174,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion's scenario is a Node audit of data.css and tokens.css: one rule per pinned selector, the listed declarations, no raw colour, only defined tokens and no media query. That test exists, is named with the criterion id, and its rows hold against the current data.css: each of the 22 selectors appears once, the wrapper has the divider border, large radius, shadow and background in five declarations, the field rules carry max-width 40rem, the hover row uses the accent surface token, the last row drops its bottom line, the input keeps its frozen border, width and min-height, every token used is defined in tokens.css and the text @media does not occur. The end-to-end writer itself reported that this static audit has no page-observable outcome, and the browser table test already covers the visible effect of these rules.
 ---
 
 ## Q-006: Hold H-5c5d8c36: UI criterion C-859c63d2 has no end-to-end test; see the generated UI tests table
