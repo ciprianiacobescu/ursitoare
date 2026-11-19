@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-817f132e: UI criterion C-e722bbf4 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-49d28f26: UI criterion C-4ef0679b has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-91c87ac7: UI criterion C-b054e7d6 has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-e45e045d: UI criterion C-ffb190b2 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-e45e045d: UI criterion C-ffb190b2 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-36707f19: UI criterion C-1577878d has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-e4efbea1: UI criterion C-14067443 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-ec613652: UI criterion C-2d3f3998 has no end-to-end test; see the generated UI tests table |
@@ -304,7 +304,8 @@ accept The criterion specifies the pure function shellLayout over the inputs 0, 
 
 ## Q-010: Hold H-e45e045d: UI criterion C-ffb190b2 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -323,6 +324,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is a source scan of Shell.tsx: it requires the file to contain markers such as navGroups(, navPlacement(, useSession(), aria-labelledby, TooltipProvider, lg:hidden and useState(, to hold exactly two nav elements and one header, main and footer, to keep an order of markers, and to contain none of a list of banned strings, with the kit's scanners returning empty. Source text is not observable from a browser page, so an end-to-end test cannot check it. The Node test reads the file and asserts each of these, and the Shell source holds the required markers and none of the banned ones. The rendered landmarks are covered by the browser scenarios of the same requirement.
 ---
 
 ## Q-011: Hold H-36707f19: UI criterion C-1577878d has no end-to-end test; see the generated UI tests table
