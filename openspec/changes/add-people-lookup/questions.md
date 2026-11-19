@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-96121bdf: UI criterion C-64158aad has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-10bbd12e: UI criterion C-fb2cd0d1 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-94d8b7e3: UI criterion C-20c4fd10 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-dc3d7c1e: UI criterion C-674bb9f6 has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-dc3d7c1e: UI criterion C-674bb9f6 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-3d48684d: UI criterion C-929a4c25 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -279,7 +279,8 @@ accept C-20c4fd10 is the behaviour of the pure web functions parsePeople, parseM
 
 ## Q-011: Hold H-dc3d7c1e: UI criterion C-674bb9f6 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -298,6 +299,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-674bb9f6 is the batching, memory, invalid-id and shared-request behaviour of createNameCache, a pure web module that no page of this unit imports or renders; the design states nothing renders until later units take the hooks, so no browser can drive or observe request counts, peek or the shared in-flight batches. Four Node tests named with the criterion run against a recording fake client and assert every row of the scenario: 60 ids make exactly two requests of 50 and 10 with a 60-entry map in order and peek of u7, a repeated resolve sends none; maxBatch 2 gives a,b then c each with query and signal; the invalid-and-duplicate row makes one request for b,ok,ghost, keeps b and ok, never asks ghost again, ignores the unasked u_x and asks it later; concurrent a,b and b,a make one request and a,b and b,c make two. The implementation filters by the id pattern, dedupes, flushes at maxBatch, tracks in-flight batches and stores only asked ids. The hold on a missing end-to-end test is therefore waived.
 ---
 
 ## Q-012: Hold H-3d48684d: UI criterion C-929a4c25 has no end-to-end test; see the generated UI tests table
