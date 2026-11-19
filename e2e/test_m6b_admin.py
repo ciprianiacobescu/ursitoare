@@ -89,6 +89,15 @@ def box(locator) -> dict[str, float]:
     return found
 
 
+def text_height(cell) -> float:
+    """The height of a table cell's text, not of the cell: a cell is as tall as its row, so its own box cannot say
+    whether its text is on one line."""
+    return cell.evaluate(
+        "(el) => { const r = document.createRange(); r.selectNodeContents(el);"
+        " return r.getBoundingClientRect().height; }"
+    )
+
+
 def open_page(page: Page, path: str) -> list[str]:
     csp = watch_csp(page)
     page.set_viewport_size({"width": 1366, "height": 860})
@@ -246,8 +255,8 @@ def test_mappings_show_the_reviewer_name_and_keep_ids_that_are_not_people(
     assert len(heights) == 4
     assert max(heights) - min(heights) <= 1
     assert wrap.evaluate("el => el.scrollWidth <= el.clientWidth")
-    assert box(table.get_by_role("cell", name="operator:e2e-seed", exact=True).first)["height"] <= 30
-    assert box(table.get_by_role("cell", name="ursitoare-approvers", exact=True))["height"] <= 30
+    assert text_height(table.get_by_role("cell", name="operator:e2e-seed", exact=True).first) <= 30
+    assert text_height(table.get_by_role("rowheader", name="ursitoare-approvers", exact=True)) <= 30
     assert_layout(page)
     assert_accessible(page)
 
@@ -319,7 +328,7 @@ def test_audit_page_keeps_actor_ids_and_one_line_times(page: Page, base_url: str
     expect(row).not_to_contain_text("Carol Example")
     assert people == []
     cell = page.get_by_role("cell", name="2026-11-18 09:15:00 UTC", exact=True)
-    assert box(cell)["height"] <= 24
+    assert text_height(cell) <= 24
     assert page.locator(".ui-table-wrap").evaluate("el => el.scrollWidth <= el.clientWidth")
     first = box(chain)
     second = box(page.get_by_role("region", name="Filter the audit log", exact=True))
