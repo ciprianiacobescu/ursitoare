@@ -2,3 +2,4 @@
 {"ts": "2026-11-19T08:32:39.006749Z", "run_id": "r-20261119T0832Z-ea7d", "unit": "openspec:restyle-web-kit", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 136, "merge_commit": "812c6cbf839435c22172d1031bc9c99f648cee89"}
 {"ts": "2026-11-19T08:32:45.570209Z", "run_id": "r-20261119T0832Z-ea7d", "unit": "openspec:restyle-web-kit", "seq": 3, "type": "archive.opened", "number": 137, "url": "<forge>/ciprianiacobescu/ursitoare/pull/137", "branch": "l4/archive/openspec/restyle-web-kit", "head": "c2129af737f8ba6b447d66d3a592f7e9089b9f2d"}
 {"ts": "2026-11-19T08:32:47.392992Z", "run_id": "r-20261119T0832Z-ea7d", "unit": "openspec:restyle-web-kit", "seq": 4, "type": "archive.merged", "head": "c2129af737f8ba6b447d66d3a592f7e9089b9f2d", "number": 137}
+{"ts": "2026-11-19T08:32:49.218014Z", "run_id": "r-20261119T0832Z-ea7d", "unit": "openspec:restyle-web-kit", "seq": 5, "type": "run.finished", "exit_code": 0}
