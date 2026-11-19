@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-1577878d (web-shell › The shell holds one banner, one navigation, one main and one footer › Carol's navigation is grouped and the banner is compact): accept as satisfied? |
+| Q-001 | answered | none | verdict | Criterion C-1577878d (web-shell › The shell holds one banner, one navigation, one main and one footer › Carol's navigation is grouped and the banner is compact): accept as satisfied? |
 | Q-002 | open | none | verdict | Criterion C-14067443 (web-shell › The shell holds one banner, one navigation, one main and one footer › Alice and a signed-out visitor see fewer groups): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-2d3f3998 (web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
@@ -35,7 +35,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-1577878d (web-shell › The shell holds one banner, one navigation, one main and one footer › Carol's navigation is grouped and the banner is compact): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -62,6 +63,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The shell as built renders carol's ten links in the asserted order and grouping, and the geometry the scenario measures follows from the tokens. The sidebar grid column is var(--ui-sidebar-width), which tokens.css sets to 15rem, so the nav is 240 px wide and main, placed in column 2, starts at x 240. The banner is one non-wrapping flex row with min-height var(--ui-banner-height), 3.5rem, so it measures 56 px. Each group is a p label followed by a ul named through aria-labelledby, group order is home, build, admin, more, and features register in file-name order, which gives Home, Flows, Runs, then Users, Roles and teams, Group mappings, Audit log, Tool servers, Grants, Policies. Exactly one nav is rendered because the same nav element is placed either in the header or after it. The unit's browser test asserts every item of the scenario, and it discriminates: design.md records that the base shell was a header list with a 297 px banner for carol, which fails assert_layout(page, 72) and the 240 px checks. The harness-generated test only errored at the merge base, which says nothing against the head.
 ---
 
 ## Q-002: Criterion C-14067443 (web-shell › The shell holds one banner, one navigation, one main and one footer › Alice and a signed-out visitor see fewer groups): accept as satisfied?
