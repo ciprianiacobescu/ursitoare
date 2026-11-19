@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-2d3f3998 (web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-425a9f46 (web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px): accept as satisfied? |
-| Q-006 | open | none | verdict | Criterion C-88a078f0 (web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards): accept as satisfied? |
+| Q-006 | answered | none | verdict | Criterion C-88a078f0 (web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards): accept as satisfied? |
 | Q-007 | answered | none | verdict | Hold H-817f132e: UI criterion C-e722bbf4 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-49d28f26: UI criterion C-4ef0679b has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-91c87ac7: UI criterion C-b054e7d6 has no end-to-end test; see the generated UI tests table |
@@ -200,7 +200,7 @@ accept: verified by the owner's delegate. test_the_menu_folds_below_1024_px impl
 
 ## Q-006: Criterion C-88a078f0 (web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: the reply has 21 checked entries: the limit is 20
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -228,6 +228,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept: verified by the owner's delegate. test_sign_in_and_not_found_render_as_centred_cards asserts every clause of the scenario. Delegate commit 40bb697b made only the heading locator exact; no assertion was loosened. It passes at head 46b3bf4a locally and in the round-2 CI e2e gate, and it fails at base c2129af7 (card geometry off by 178 px), so it discriminates. Screenshots at 1366 checked by eye: the sign-in card is 384 px wide, centred at y 104, with the alert inside; the not-found card is 448 px wide and dashed, at y 128.
 ---
 
 ## Q-007: Hold H-817f132e: UI criterion C-e722bbf4 has no end-to-end test; see the generated UI tests table
