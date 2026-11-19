@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Hold H-4ed1905b: UI criterion C-55e76eb6 has no end-to-end test; see the generated UI tests table |
 | Q-003 | answered | none | verdict | Hold H-f666a58b: UI criterion C-db4fc15e has no end-to-end test; see the generated UI tests table |
 | Q-004 | answered | none | verdict | Hold H-30c70910: UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table |
-| Q-005 | open | none | verdict | Hold H-d44a38f6: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-d44a38f6: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-a783bd38: UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-baa4dc41: UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-96121bdf: UI criterion C-64158aad has no end-to-end test; see the generated UI tests table |
@@ -129,7 +129,8 @@ accept C-57481c19 is the behaviour of GET /api/v1/people for an active member, i
 
 ## Q-005: Hold H-d44a38f6: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -148,6 +149,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-59f63ed0 is the two-tenant behaviour of GET /api/v1/people, which no page of this unit calls. The generated browser test could not pass at the head because the fake e2e stack seeds only alice, bob, carol and mallory and holds none of the scenario's rows such as twin or u_erin, so the expected bodies cannot exist there; its failure is a fixture gap, not evidence of a defect. The Node test for the criterion builds the real server with the real PEP over embedded Postgres, seeds both tenants, and asserts mallory's exact answer, the byte-equal empty bodies for tenant A's ids and for ids that exist nowhere, the ignored x-tenant-id header, the 400 for tenant_id, alice's own twin and the absence of every tenant-A name. The route takes the tenant from the session and the statement filters on it. The hold on a missing end-to-end test is therefore waived.
 ---
 
 ## Q-006: Hold H-a783bd38: UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table
