@@ -11,13 +11,24 @@ export interface NavGroup {
   items: NavItem[];
 }
 
-export const NAV_GROUP_OF: Readonly<Record<string, NavGroupId>> = {};
+export const NAV_GROUP_OF: Readonly<Record<string, NavGroupId>> = {
+  home: "home",
+  flows: "build",
+  runs: "build",
+  "admin-users": "admin",
+  "admin-roles-teams": "admin",
+  "admin-group-mappings": "admin",
+  "admin-audit": "admin",
+  "admin-tool-servers": "admin",
+  "admin-grants": "admin",
+  "admin-policies": "admin",
+};
 
 export const NAV_GROUP_LABELS: Readonly<Record<NavGroupId, string | null>> = {
   home: null,
-  build: null,
-  admin: null,
-  more: null,
+  build: "Build",
+  admin: "Admin",
+  more: "More",
 };
 
 export function navGroups(_items: readonly NavItem[]): NavGroup[] {
