@@ -31,8 +31,19 @@ export const NAV_GROUP_LABELS: Readonly<Record<NavGroupId, string | null>> = {
   more: "More",
 };
 
-export function navGroups(_items: readonly NavItem[]): NavGroup[] {
-  return [];
+const GROUP_ORDER: readonly NavGroupId[] = ["home", "build", "admin", "more"];
+
+export function navGroups(items: readonly NavItem[]): NavGroup[] {
+  const buckets: Record<NavGroupId, NavItem[]> = { home: [], build: [], admin: [], more: [] };
+  for (const item of items) {
+    const id = Object.hasOwn(NAV_GROUP_OF, item.id) ? NAV_GROUP_OF[item.id] : undefined;
+    buckets[id ?? "more"].push(item);
+  }
+  const groups: NavGroup[] = [];
+  for (const id of GROUP_ORDER) {
+    if (buckets[id].length > 0) groups.push({ id, label: NAV_GROUP_LABELS[id], items: buckets[id] });
+  }
+  return groups;
 }
 
 export function shellLayout(_widthPx: number): "sidebar" | "collapsed" {
