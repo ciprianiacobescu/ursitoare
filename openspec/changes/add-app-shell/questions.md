@@ -31,7 +31,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-018 | answered | none | verdict | Hold H-cdb99000: UI criterion C-88a078f0 has no end-to-end test; see the generated UI tests table |
 | Q-019 | answered | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
 | Q-020 | answered | none | verdict | Criterion C-c6a08479 (web-shell › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table — finding H-829dbc6c › Rejected hold: UI criterion C-51d4764a has no e |
-| Q-021 | open | none | verdict | Criterion C-0cbfa992 (web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60...): accept as s |
+| Q-021 | answered | none | verdict | Criterion C-0cbfa992 (web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60...): accept as s |
 | Q-022 | open | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
 | Q-023 | open | none | verdict | Hold H-f10f11d2: UI criterion C-c6a08479 has no end-to-end test; see the generated UI tests table |
 | Q-024 | open | none | verdict | Hold H-c9e043b3: UI criterion C-0cbfa992 has no end-to-end test; see the generated UI tests table |
@@ -606,7 +606,8 @@ accept The scenario holds in the head. The Sign out button carries shrink-0 and 
 
 ## Q-021: Criterion C-0cbfa992 (web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60...): accept as s
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
@@ -633,6 +634,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The scenario holds in the head. The Sign out button carries shrink-0 and whitespace-nowrap, so it stays on one line at 38 px (32 px minimum, 8 px vertical padding, a 20 px text line, 1 px borders) beside the 60-character names; the header is one non-wrapping flex row with a 3.5rem minimum height and centred items, so it is 56 px; the account paragraphs truncate with text-overflow ellipsis and are cut; the account group shrinks while the brand and buttons keep their width, so the Sign out button ends inside the viewport at 1366 and at 900. The head's browser test tagged with this criterion asserts each of these clauses at both viewports. The generated end-to-end test fails at the head for its own premise: it seeds a session in browser storage, which nothing under web/src reads, because the session comes only from the capability loader's /me request.
 ---
 
 ## Q-022: Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table
