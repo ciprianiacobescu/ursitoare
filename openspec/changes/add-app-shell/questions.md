@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | open | none | verdict | Criterion C-88a078f0 (web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards): accept as satisfied? |
 | Q-007 | answered | none | verdict | Hold H-817f132e: UI criterion C-e722bbf4 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-49d28f26: UI criterion C-4ef0679b has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-91c87ac7: UI criterion C-b054e7d6 has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-91c87ac7: UI criterion C-b054e7d6 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-e45e045d: UI criterion C-ffb190b2 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-36707f19: UI criterion C-1577878d has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-e4efbea1: UI criterion C-14067443 has no end-to-end test; see the generated UI tests table |
@@ -279,7 +279,8 @@ accept The criterion specifies the pure function navGroups over the G1 to G9 inp
 
 ## Q-009: Hold H-91c87ac7: UI criterion C-b054e7d6 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -298,6 +299,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The criterion specifies the pure function shellLayout over the inputs 0, 1023, 1023.9, 1024, 1280, 1366, NaN, Infinity and -1, and five of those are not viewport widths any browser can take, so the generated end-to-end test could not be a faithful check and its failures at -1 and 0 are failures of the test's premise, not of the shell. The Node test maps exactly these nine inputs and the implementation is a single comparison against 1024, which gives collapsed for NaN and negatives and sidebar for Infinity. The design states that shellLayout has no runtime caller and only names the threshold that the Tailwind lg variant implements; the browser-visible switch at 1023 and 1024 is the separate scenario about the Menu button, which has its own browser test and its own open question. An end-to-end test for this criterion is therefore not needed for the unit to go on.
 ---
 
 ## Q-010: Hold H-e45e045d: UI criterion C-ffb190b2 has no end-to-end test; see the generated UI tests table
