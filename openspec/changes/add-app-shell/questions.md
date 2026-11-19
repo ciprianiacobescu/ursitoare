@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Hold H-91c87ac7: UI criterion C-b054e7d6 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-e45e045d: UI criterion C-ffb190b2 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-36707f19: UI criterion C-1577878d has no end-to-end test; see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-e4efbea1: UI criterion C-14067443 has no end-to-end test; see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-e4efbea1: UI criterion C-14067443 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-ec613652: UI criterion C-2d3f3998 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-75cdf554: UI criterion C-425a9f46 has no end-to-end test; see the generated UI tests table |
@@ -354,7 +354,8 @@ accept The generated test only errored at the merge base, which says nothing aga
 
 ## Q-012: Hold H-e4efbea1: UI criterion C-14067443 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -373,6 +374,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The generated test was never collected, so there is no result against the head, and the code gives the scenario. Alice's three capabilities yield Home, Flows and Runs, navGroups leaves empty groups out, so only the Build label renders and no Admin or More label exists. A 401 makes the loader answer signed_out, navPlacement then answers inline, and the shell renders the one nav inside the header after the brand as a single flat list, renders no Menu button and uses a plain flex column instead of the grid, so main is full width at x 0. The signed-out nav falls back to the public entries, and Home is the only navigation feature without a capability, so the inline list holds Home alone, centred in the 56 px banner. The unit's own browser test, tagged with this criterion, asserts alice's links and labels, the single navigation inside the banner with Home alone, one list, no Menu button, main at x 0, the nav's bottom edge at most 56 px, assert_layout, assert_accessible and an empty CSP list.
 ---
 
 ## Q-013: Hold H-ec613652: UI criterion C-2d3f3998 has no end-to-end test; see the generated UI tests table
