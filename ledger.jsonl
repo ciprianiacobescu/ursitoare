@@ -46,3 +46,4 @@
 {"at":"2026-11-19T07:38:25Z","attempt":1,"cost_usd":7.196229,"runs":4,"type":"plan.charged","unit":"openspec:restyle-web-kit"}
 {"at":"2026-11-19T07:38:25Z","run":"r-20261119T0738Z-d381","type":"unit.dispatched","unit":"openspec:restyle-web-kit"}
 {"at":"2026-11-19T07:45:39Z","detail":"awaiting_human: no new answers (verdicts open: Q-008, Q-011, Q-012)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:restyle-web-kit"}
+{"at":"2026-11-19T08:15:02Z","by":"harness","reason":"the cause is gone: openspec:restyle-web-kit is awaiting_human","type":"plan.resumed"}
