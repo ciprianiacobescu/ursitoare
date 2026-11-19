@@ -166,6 +166,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-005: Criterion C-425a9f46 (web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): I withdraw this one to escalate: see the accept variant was considered but the delegate must give exactly one result per question; this placeholder is replaced below.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
