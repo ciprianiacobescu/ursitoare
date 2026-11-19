@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router";
 
 import { messageFor } from "../kit/messages.ts";
 import { toast } from "../kit/toast.ts";
+import { Button } from "../ui/button.tsx";
 import { accountView } from "./account.ts";
 import { browserSession } from "./browser-session.ts";
 import { useSession } from "./use-session.ts";
@@ -31,7 +32,9 @@ export function AccountMenu(): ReactNode {
   if (view.kind === "signed_out") {
     return (
       <div className="auth-account">
-        <Link to={view.href}>Sign in</Link>
+        <Button asChild tone="secondary" size="sm">
+          <Link to={view.href}>Sign in</Link>
+        </Button>
       </div>
     );
   }
@@ -44,14 +47,13 @@ export function AccountMenu(): ReactNode {
       <p>
         Tenant: <strong>{view.tenantName}</strong>
       </p>
-      <button
-        type="button"
-        className="ui-button"
+      <Button
+        size="sm"
         aria-disabled={signingOut ? true : undefined}
         onClick={() => void handleSignOut()}
       >
         Sign out
-      </button>
+      </Button>
     </div>
   );
 }

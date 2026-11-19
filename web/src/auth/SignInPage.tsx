@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import { ApiRequestError } from "../api/client.ts";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
+import { Button } from "../ui/button.tsx";
 import { signInView } from "./sign-in-page.ts";
 import { useSession } from "./use-session.ts";
 
@@ -47,15 +48,14 @@ export function SignInPage(): ReactNode {
         <ErrorPanel error={new ApiRequestError(401, view.errorCode, "Sign-in refused")} />
       )}
       <p>Use your organization account to open Ursitoare.</p>
-      <button
-        type="button"
-        className="ui-button"
+      <Button
+        tone="primary"
         onClick={() => {
           window.location.assign(view.loginHref);
         }}
       >
         Sign in
-      </button>
+      </Button>
     </div>
   );
 }
