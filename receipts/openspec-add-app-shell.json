@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-19T19:39:45Z",
+  "integrated_revision": "6d340a539ef97781acec8214ac0d6b185056b585",
+  "merge_commit": "6d340a539ef97781acec8214ac0d6b185056b585",
+  "plan_digest": "03b7600f239a655c",
+  "plan_id": "m6b",
+  "postcheck": "pass",
+  "pr": 138,
+  "receipt_id": "m6b/openspec:add-app-shell/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "c52027a7fcb40fd6d68b2e94e647ab240146f983",
+  "spec_digest": "b6060bc6264972ef",
+  "target": "main",
+  "unit_id": "openspec:add-app-shell"
+}
