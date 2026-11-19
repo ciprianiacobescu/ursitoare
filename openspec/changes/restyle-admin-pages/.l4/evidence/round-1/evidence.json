@@ -1,0 +1,197 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "web/src/kit/layout/layout.ts",
+      "e2e/test_m6b_kit.py",
+      "web/src/people",
+      "web/src",
+      "e2e/test_m6b_admin.py",
+      "web/src/admin",
+      "web/src/tools",
+      "admin/captions-by-page.test.ts",
+      "admin/admin-pages-restyle.test.ts",
+      "admin/admin-css.test.ts",
+      "web/src/tools/tools-pages-restyle.test.ts",
+      "e2e",
+      "web/src/tools/pages.test.ts",
+      "web/src/tools/servers.test.ts",
+      "web/src/tools/states.test.ts",
+      "**/theme.css",
+      "**/.ui-button[data-tone=\"primary\"]",
+      "**/[data-tone=\"danger\"]",
+      "**/^[A-Za-z0-9_-]{1,64}$",
+      "**/UsersPage.tsx",
+      "**/TeamsPage.tsx",
+      "**/MappingsPage.tsx",
+      "**/ServersPage.tsx",
+      "**/confirm.ts",
+      "**/admin.css",
+      "**/[overflow-wrap:anywhere]",
+      "**/.admin-status*",
+      "**/[]",
+      "**/test_m6b_admin.py",
+      "**/test_m6_tool_pages.py",
+      "**/test_m2_admin.py",
+      "**/GrantsPage.tsx",
+      "**/AuditPage.tsx",
+      "**/xl:grid-cols-[20rem_minmax",
+      "**/PoliciesPage.tsx",
+      "**/[role=\"status\"]",
+      "**/[role=\"alert\"]",
+      "module admin",
+      "module e2e",
+      "module identity",
+      "module tools",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m6b_admin.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/restyle-admin-pages/.l4/ledger/r-20261119T1941Z-03bc.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/restyle-admin-pages/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/admin/AuditPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/MappingsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/TeamsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/UsersPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/admin-pages-restyle.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/admin/admin.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/admin/captions-by-page.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/GrantsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/PoliciesPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/ServersPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/tools-pages-restyle.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/tools.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/admin/AuditPage.tsx, web/src/admin/MappingsPage.tsx, web/src/admin/TeamsPage.tsx, web/src/admin/UsersPage.tsx, web/src/tools/GrantsPage.tsx and 2 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/admin/AuditPage.tsx",
+      "web/src/admin/MappingsPage.tsx",
+      "web/src/admin/TeamsPage.tsx",
+      "web/src/admin/UsersPage.tsx",
+      "web/src/tools/GrantsPage.tsx",
+      "web/src/tools/PoliciesPage.tsx",
+      "web/src/tools/ServersPage.tsx"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 2662,
+      "passed": 2660,
+      "failed": 2,
+      "errored": 0,
+      "skipped": 0,
+      "new": 18,
+      "new_passed": 16,
+      "skipped_unchanged": []
+    },
+    "findings": [
+      {
+        "severity": "blocker",
+        "title": "new tests failed",
+        "detail": "test_m6b_admin::test_audit_page_keeps_actor_ids_and_one_line_times[chromium], test_m6b_admin::test_mappings_show_the_reviewer_name_and_keep_ids_that_are_not_people[chromium]"
+      }
+    ]
+  }
+}
