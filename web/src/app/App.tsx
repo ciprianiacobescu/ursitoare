@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router";
 
+import { Button } from "../ui/button.tsx";
 import { listFeatures, type Feature } from "./features.ts";
 import { pageTitle, routeTable } from "./routes.ts";
 import { Shell } from "./Shell.tsx";
@@ -16,10 +17,13 @@ function NotFoundPage() {
   return (
     <>
       <DocumentTitle routeId="not-found" />
-      <h1>Page not found</h1>
-      <p>
-        <Link to="/">Go to the landing page</Link>
-      </p>
+      <div className="mx-auto mt-12 flex max-w-md flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-surface p-6 text-center">
+        <h1>Page not found</h1>
+        <p>The page you asked for does not exist.</p>
+        <Button asChild tone="primary">
+          <Link to="/">Go to the landing page</Link>
+        </Button>
+      </div>
     </>
   );
 }
