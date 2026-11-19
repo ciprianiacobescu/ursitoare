@@ -29,7 +29,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-016 | answered | none | verdict | Hold H-45489073: UI criterion C-9eeb9987 has no end-to-end test; see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-d1f76909: UI criterion C-2159a890 has no end-to-end test; see the generated UI tests table |
 | Q-018 | answered | none | verdict | Hold H-cdb99000: UI criterion C-88a078f0 has no end-to-end test; see the generated UI tests table |
-| Q-019 | open | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
+| Q-019 | answered | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
 | Q-020 | open | none | verdict | Criterion C-c6a08479 (web-shell › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table — finding H-829dbc6c › Rejected hold: UI criterion C-51d4764a has no e |
 | Q-021 | open | none | verdict | Criterion C-0cbfa992 (web-shell › The banner stays at most 72 px tall — regression 2 › the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60...): accept as s |
 | Q-022 | open | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
@@ -540,7 +540,8 @@ accept The generated test only errored at the merge base, which says nothing aga
 
 ## Q-019: Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
@@ -567,6 +568,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion holds in the head. The Sign out button in AccountMenu.tsx now carries shrink-0 and whitespace-nowrap, which the Button merges into its classes, so it can no longer be squeezed onto two lines by the 60-character names; that wrap was the only cause of the earlier 59 px measurement. The header is a single non-wrapping flex row with items-center and a minimum height of the banner token, 3.5rem, and its tallest item is the small Button at 38 px (32 px minimum plus 8 px padding, a 20 px line and 1 px borders), so the banner measures 56 px at every width. The account paragraphs keep min-width 0, overflow hidden, white-space nowrap and text-overflow ellipsis, so with 60 Ws and 60 Ms they are cut and the whole names stay in the DOM; the account group shrinks while the brand and buttons do not, so the Sign out button ends inside the viewport. The head holds a browser test tagged with this criterion that asserts the banner at 56 px within 1, the button at 38 px on one line, both paragraphs ellipsis and cut and the right edge inside the viewport at 1366 by 860 and 900 by 800, and the spec's own browser test asserts assert_layout 72, the ellipsis cut and the right edge.
 ---
 
 ## Q-020: Criterion C-c6a08479 (web-shell › Rejected hold: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table — finding H-829dbc6c › Rejected hold: UI criterion C-51d4764a has no e
