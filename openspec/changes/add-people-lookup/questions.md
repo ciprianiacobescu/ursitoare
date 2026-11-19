@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Hold H-f666a58b: UI criterion C-db4fc15e has no end-to-end test; see the generated UI tests table |
 | Q-004 | answered | none | verdict | Hold H-30c70910: UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-d44a38f6: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table |
-| Q-006 | open | none | verdict | Hold H-a783bd38: UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-a783bd38: UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-baa4dc41: UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-96121bdf: UI criterion C-64158aad has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-10bbd12e: UI criterion C-fb2cd0d1 has no end-to-end test; see the generated UI tests table |
@@ -154,7 +154,8 @@ accept C-59f63ed0 is the two-tenant behaviour of GET /api/v1/people, which no pa
 
 ## Q-006: Hold H-a783bd38: UI criterion C-1c488737 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -173,6 +174,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-1c488737 is the validation and size bound of GET /api/v1/people, which no page of this unit calls; the browser writer never produced a test because its tooling refused a shell call, not because of any defect. The Node test for the criterion builds the real server with the real PEP over embedded Postgres, sends all nine refusals and asserts 400 VALIDATION_FAILED with the named field and the must be string message, checks that the read_self decision count is unchanged, accepts exactly PEOPLE_MAX_IDS ids with an empty answer, seeds 50 service accounts with 64-character ids and 200 control-character names and measures the answer at 65,611 bytes and under 66,000. The route schema carries the pattern and additionalProperties false. The hold on a missing end-to-end test is therefore waived.
 ---
 
 ## Q-007: Hold H-baa4dc41: UI criterion C-a68cc186 has no end-to-end test; see the generated UI tests table
