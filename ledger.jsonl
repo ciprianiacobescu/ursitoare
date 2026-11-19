@@ -65,3 +65,5 @@
 {"at":"2026-11-19T12:44:32Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"add-app-shell fix-1 halted on a frozen test defect; delegate test commit 40bb697b (exact heading locator) plus l4 retry with the two code fixes. Verified locally.","type":"plan.resumed"}
 {"at":"2026-11-19T12:46:36Z","attempt":1,"cost_usd":4.274314,"runs":3,"type":"plan.charged","unit":"openspec:add-app-shell"}
 {"at":"2026-11-19T12:46:36Z","run":"r-20261119T1246Z-d8b6","type":"unit.dispatched","unit":"openspec:add-app-shell"}
+{"at":"2026-11-19T14:03:20Z","attempt":1,"cost_usd":7.853863,"runs":4,"type":"plan.charged","unit":"openspec:add-app-shell"}
+{"at":"2026-11-19T14:03:20Z","run":"r-20261119T1403Z-ccf1","type":"unit.dispatched","unit":"openspec:add-app-shell"}
