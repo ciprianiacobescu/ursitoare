@@ -49,6 +49,7 @@ export function AccountMenu(): ReactNode {
       </p>
       <Button
         size="sm"
+        className="shrink-0 whitespace-nowrap"
         aria-disabled={signingOut ? true : undefined}
         onClick={() => void handleSignOut()}
       >
