@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | none | verdict | Criterion C-1577878d (web-shell › The shell holds one banner, one navigation, one main and one footer › Carol's navigation is grouped and the banner is compact): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-14067443 (web-shell › The shell holds one banner, one navigation, one main and one footer › Alice and a signed-out visitor see fewer groups): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-2d3f3998 (web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-425a9f46 (web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-88a078f0 (web-shell › The sign-in and not-found pages are cards in the shell › Sign-in and not-found render as centred cards): accept as satisfied? |
 | Q-007 | answered | none | verdict | Hold H-817f132e: UI criterion C-e722bbf4 has no end-to-end test; see the generated UI tests table |
@@ -134,7 +134,7 @@ accept: verified by the owner's delegate. test_m6b_shell::test_key_stops_keep_th
 
 ## Q-004: Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): auth.css gives the account paragraphs min-width 0, overflow hidden, nowrap and text-overflow ellipsis, the account group has min-width 0 and the header is a non-wrapping row of min-height 3.5rem, so the layout should hold at 1366 and 900 px. But the verification table records a harness-generated tes
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -162,6 +162,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject: measured by the owner's delegate on head 46b3bf4a: with 60-character names the banner is 59 px, not 56, at 1366, 1024, 900 and 375 px wide. The "Sign out" Button in web/src/auth/AccountMenu.tsx is a flex item without shrink-0, so the long names squeeze it until its label wraps onto two lines (58 px tall, 47 to 51 px wide; 73 by 38 with short names). The scenario says assert_layout passes "with a banner of 56 px" and the requirement says long names never grow the banner. The unit test only checks at most 72 px, which is why it passed. A likely fix is shrink-0 and whitespace-nowrap on that Button. WHEN the shell opens / with a mocked ready session whose display name is 60 "W" and tenant name is 60 "M", at 1366 by 860 and at 900 by 800, THEN the banner is 56 px tall (within 1), the button "Sign out" is on one line and 38 px tall (within 1), both account paragraphs compute text-overflow ellipsis and are cut, and the right edge of "Sign out" is at most the viewport width.
 ---
 
 ## Q-005: Criterion C-425a9f46 (web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px): accept as satisfied?
