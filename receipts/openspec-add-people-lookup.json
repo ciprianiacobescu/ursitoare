@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-19T01:25:29Z",
+  "integrated_revision": "454dc652dedab5e6fe38f2c8e16e98faa0acde83",
+  "merge_commit": "454dc652dedab5e6fe38f2c8e16e98faa0acde83",
+  "plan_digest": "03b7600f239a655c",
+  "plan_id": "m6b",
+  "postcheck": "pass",
+  "pr": 134,
+  "receipt_id": "m6b/openspec:add-people-lookup/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "0d5b916f37fb58670ec382a2e913e6529ee7879c",
+  "spec_digest": "34dc6c18967f3ecd",
+  "target": "main",
+  "unit_id": "openspec:add-people-lookup"
+}
