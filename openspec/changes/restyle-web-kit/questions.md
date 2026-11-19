@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Hold H-5c5d8c36: UI criterion C-859c63d2 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-f260119c: UI criterion C-40cb2e75 has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-1db9756c: UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-1db9756c: UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-2dab7e00: UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-6bc82384: UI criterion C-ab3cdbf6 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-a317ca0a: UI criterion C-dac61932 has no end-to-end test; see the generated UI tests table |
@@ -252,7 +252,8 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ## Q-009: Hold H-1db9756c: UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -271,6 +272,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion's scenario is a Node audit of the theme and tokens stylesheets: one rule per listed selector with its declarations, the primary tone rule after the disabled rule, no raw colour, only defined tokens, 25 colour tokens with the toast background unchanged, and three mutations that the checker rejects. That test exists, is named with the criterion id, and its rows hold against the current theme: the primary and danger tone rules and their hover and toned-disabled rules follow the disabled rule, the dialog is 32rem with a viewport bound, the toast keeps its token background and its hover and focus rules keep exactly two and one declarations, the toast button resets box-shadow, and the page header, section and visually hidden rules are present. The end-to-end writer rightly reported that a stylesheet's internal structure is not page-observable; the browser scenarios on the toned Create flow button and the Disable dialog check the visible effect of these rules.
 ---
 
 ## Q-010: Hold H-2dab7e00: UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table
