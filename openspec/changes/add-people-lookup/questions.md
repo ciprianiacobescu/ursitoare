@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Hold H-f8921f64: UI criterion C-748ce889 has no end-to-end test; see the generated UI tests table |
-| Q-002 | open | none | verdict | Hold H-4ed1905b: UI criterion C-55e76eb6 has no end-to-end test; see the generated UI tests table |
+| Q-002 | answered | none | verdict | Hold H-4ed1905b: UI criterion C-55e76eb6 has no end-to-end test; see the generated UI tests table |
 | Q-003 | open | none | verdict | Hold H-f666a58b: UI criterion C-db4fc15e has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-30c70910: UI criterion C-57481c19 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-d44a38f6: UI criterion C-59f63ed0 has no end-to-end test; see the generated UI tests table |
@@ -54,7 +54,8 @@ accept C-748ce889 is the behaviour of getPersonNames, a server-side function wit
 
 ## Q-002: Hold H-4ed1905b: UI criterion C-55e76eb6 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -73,6 +74,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-55e76eb6 checks getPersonNames in a tenant-B transaction, the IDENTITY_TENANT_MISMATCH rejection for a foreign context and a bare row-level-security SELECT; none of these has a page or route to drive from a browser. The Node test for the criterion runs all three against embedded Postgres and asserts the exact answer, the rejection code and the zero-row result, and the implementation filters on the context's tenant after assertTenantMatches. The hold on a missing end-to-end test is therefore waived.
 ---
 
 ## Q-003: Hold H-f666a58b: UI criterion C-db4fc15e has no end-to-end test; see the generated UI tests table
