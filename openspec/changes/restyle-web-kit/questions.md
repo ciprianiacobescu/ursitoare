@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | none | verdict | Criterion C-859c63d2 (web-data-kit › data.css makes tables cards and bounds fields without breaking a pinned rule › A table is a card with a header row and a hover row): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-40cb2e75 (web-data-kit › Field puts the control before its hint and error, and Form's submit is the accent tone › The Flows form is bounded, toned and keeps its prefix and focus ring): acc |
 | Q-003 | answered | none | verdict | Criterion C-5b9e6539 (web-kit › A confirm dialog opens centred with its tone and returns focus › The Disable dialog is centred, toned and returns focus): accept as satisfied? |
-| Q-004 | open | none | verdict | Hold H-09735f2a: UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table |
+| Q-004 | answered | none | verdict | Hold H-09735f2a: UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-5c5d8c36: UI criterion C-859c63d2 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table |
@@ -129,7 +129,8 @@ accept The repository's own browser test pins this scenario exactly and the sour
 
 ## Q-004: Hold H-09735f2a: UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -148,6 +149,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion's scenario is a Node source test, not a browser journey: it runs captionClass on three inputs and reads DataTable.tsx and theme.css. That test exists, is named with the criterion id, and its assertions hold against the current sources: captionClass returns the visible and hidden class strings, DataTable declares the optional captionDisplay prop, writes the class on the caption, keeps aria-label on the group and the region, and theme.css has one visually-hidden rule positioned absolutely. No page passes captionDisplay yet, as the design states, so a browser test on the served pages has nothing to observe beyond what the browser table test already checks; the end-to-end writer timing out adds no doubt about the code.
 ---
 
 ## Q-005: Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table
