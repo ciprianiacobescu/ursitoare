@@ -27,7 +27,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-014 | open | none | verdict | Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-75cdf554: UI criterion C-425a9f46 has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-45489073: UI criterion C-9eeb9987 has no end-to-end test; see the generated UI tests table |
-| Q-017 | open | none | verdict | Hold H-d1f76909: UI criterion C-2159a890 has no end-to-end test; see the generated UI tests table |
+| Q-017 | answered | none | verdict | Hold H-d1f76909: UI criterion C-2159a890 has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-cdb99000: UI criterion C-88a078f0 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -477,7 +477,8 @@ accept The criterion is a static scan of shell.css, auth.css and tokens.css thro
 
 ## Q-017: Hold H-d1f76909: UI criterion C-2159a890 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -496,6 +497,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is a static scan of AccountMenu.tsx, SignInPage.tsx and App.tsx for imports, the shared Button, asChild, banned attributes and the kit's inline-style and palette scanners, none of which a browser page exposes, so the specification assigns it to the Node test auth-sources.test.ts and an end-to-end test is not possible. That test, tagged with this criterion, asserts each row of the scenario, and the three files hold what it asks: each imports Button from ../ui/button.tsx and renders it, none contains className ui-button, style= or a native disabled attribute; AccountMenu.tsx holds the Account group with Signed in as, Tenant:, Sign out, aria-disabled and an asChild Sign in link; SignInPage.tsx holds tone primary, two Sign in headings, ErrorPanel and Checking your session; App.tsx holds Page not found, Go to the landing page through an asChild Button and the not-found DocumentTitle. The utility classes in the not-found card use token names such as border-border and bg-surface, which the palette scanner does not match. The rendered result of these sources is covered by the separate browser scenario on the centred cards.
 ---
 
 ## Q-018: Hold H-cdb99000: UI criterion C-88a078f0 has no end-to-end test; see the generated UI tests table
