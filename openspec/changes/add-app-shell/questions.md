@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-1577878d (web-shell › The shell holds one banner, one navigation, one main and one footer › Carol's navigation is grouped and the banner is compact): accept as satisfied? |
-| Q-002 | open | none | verdict | Criterion C-14067443 (web-shell › The shell holds one banner, one navigation, one main and one footer › Alice and a signed-out visitor see fewer groups): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-14067443 (web-shell › The shell holds one banner, one navigation, one main and one footer › Alice and a signed-out visitor see fewer groups): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-2d3f3998 (web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-51d4764a (web-shell › The banner stays at most 72 px tall › Names of 60 characters truncate and never grow the banner): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-425a9f46 (web-shell › Below 1024 px a Menu button folds the navigation › The menu folds below 1024 px): accept as satisfied? |
@@ -68,7 +68,8 @@ accept The shell as built renders carol's ten links in the asserted order and gr
 
 ## Q-002: Criterion C-14067443 (web-shell › The shell holds one banner, one navigation, one main and one footer › Alice and a signed-out visitor see fewer groups): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -95,6 +96,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept For alice the registry yields Home, Flows and Runs, navGroups leaves empty groups out, so only the Build label is rendered and no Admin or More label exists. With a 401 the capability state is signed_out, navPlacement answers inline, and Shell.tsx then renders the single nav inside the header after the brand as one flat ul without labels, renders no Menu button, and uses a plain flex column instead of the grid, so main is full width at x 0. visibleNav falls back to the public entries, and Home is the only feature with a navLabel and no capability, so the inline list holds Home alone. The nav sits in a 56 px banner with items-center, so its bottom edge is within 56 px. The unit's browser test asserts each of these, including the nav inside the banner and the 56 px bound, and discriminates because the base shell had no Build label and a 129 px banner for alice. The harness-generated test was uncollectable for an import error of its own.
 ---
 
 ## Q-003: Criterion C-2d3f3998 (web-shell › The shell holds one banner, one navigation, one main and one footer › Key stops keep their ring and script focus draws none): accept as satisfied?
