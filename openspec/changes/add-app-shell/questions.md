@@ -404,6 +404,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ## Q-014: Hold H-829dbc6c: UI criterion C-51d4764a has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The generated test for this criterion fails at the head after two attempts and I cannot read it or its trace. The code reads right: auth.css gives the account paragraphs min-width 0, overflow hidden, nowrap and text-overflow ellipsis, the account group has min-width 0, the brand and Menu button are
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
