@@ -63,3 +63,5 @@
 {"at":"2026-11-19T12:38:54Z","attempt":1,"cost_usd":4.274314,"runs":2,"type":"plan.charged","unit":"openspec:add-app-shell"}
 {"at":"2026-11-19T12:38:54Z","detail":"task 1.1: max_task_attempts (3) reached in single on deepseek-free (2), claude-sonnet (3); last failure: `e2e/.venv/bin/python -m pytest e2e --junitxml=.l4-out/e2e-junit.xml --tracing retain-on-failure --screenshot only-on-failure` failed: exit code 1; failing: test_m6b_shell::test_sign_in_and_not_f","reason":"unit_halted","type":"plan.stopped","unit":"openspec:add-app-shell"}
 {"at":"2026-11-19T12:44:32Z","by":"the+github@ciprianiacobescu.com","extend":{},"reason":"add-app-shell fix-1 halted on a frozen test defect; delegate test commit 40bb697b (exact heading locator) plus l4 retry with the two code fixes. Verified locally.","type":"plan.resumed"}
+{"at":"2026-11-19T12:46:36Z","attempt":1,"cost_usd":4.274314,"runs":3,"type":"plan.charged","unit":"openspec:add-app-shell"}
+{"at":"2026-11-19T12:46:36Z","run":"r-20261119T1246Z-d8b6","type":"unit.dispatched","unit":"openspec:add-app-shell"}
