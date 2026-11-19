@@ -52,3 +52,6 @@
 {"at":"2026-11-19T08:25:55Z","head":"cfa899dcdc93062662db3080174531d1582e406c","pr":136,"target_before":"1ff8361a9b146f38f37370bc176ab6ec81000cff","type":"unit.merge_requested","unit":"openspec:restyle-web-kit"}
 {"at":"2026-11-19T08:26:00Z","ci":"not_run","head":"cfa899dcdc93062662db3080174531d1582e406c","merge_commit":"812c6cbf839435c22172d1031bc9c99f648cee89","method":"squash","pr":136,"raced":false,"type":"unit.merged","unit":"openspec:restyle-web-kit"}
 {"at":"2026-11-19T08:26:05Z","branch":"l4/openspec/restyle-web-kit","head":"cfa899dcdc93062662db3080174531d1582e406c","type":"unit.branch_deleted","unit":"openspec:restyle-web-kit"}
+{"at":"2026-11-19T08:31:14Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"812c6cbf839435c22172d1031bc9c99f648cee89","status":"pass","type":"unit.postcheck","unit":"openspec:restyle-web-kit"}
+{"at":"2026-11-19T08:31:14Z","revision":"812c6cbf839435c22172d1031bc9c99f648cee89","type":"unit.integrated","unit":"openspec:restyle-web-kit"}
+{"at":"2026-11-19T08:31:14Z","attempt":1,"cost_usd":11.500542,"runs":5,"type":"plan.charged","unit":"openspec:restyle-web-kit"}

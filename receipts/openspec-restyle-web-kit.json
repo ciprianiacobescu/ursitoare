@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-19T08:31:14Z",
+  "integrated_revision": "812c6cbf839435c22172d1031bc9c99f648cee89",
+  "merge_commit": "812c6cbf839435c22172d1031bc9c99f648cee89",
+  "plan_digest": "03b7600f239a655c",
+  "plan_id": "m6b",
+  "postcheck": "pass",
+  "pr": 136,
+  "receipt_id": "m6b/openspec:restyle-web-kit/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "cfa899dcdc93062662db3080174531d1582e406c",
+  "spec_digest": "77c293678d0f6b43",
+  "target": "main",
+  "unit_id": "openspec:restyle-web-kit"
+}
