@@ -1,6 +1,7 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
 import type { ApiClient } from "../api/client.ts";
+import { loadVersion } from "../flows/versions.ts";
 import type { FormErrors } from "../kit/data/form-errors.ts";
 import { schemaToFields } from "../kit/data/schema-fields.ts";
 import type { SchemaField, SchemaFields } from "../kit/data/schema-fields.ts";
@@ -223,19 +224,30 @@ export type RunDocument =
   | { phase: "ready"; canonical: unknown }
   | { phase: "failed" };
 
-export function runDocumentWanted(_version: { hash: string } | null, _canonical: unknown): boolean {
-  throw new Error("not implemented");
+const UNREADABLE_REASON = "The inputs of this version could not be read, so enter the input as JSON.";
+
+export function runDocumentWanted(version: { hash: string } | null, canonical: unknown): boolean {
+  return version !== null && (canonical === null || canonical === undefined);
 }
 
 export async function loadRunDocument(
-  _client: Pick<ApiClient, "get">,
-  _flowId: string,
-  _hash: string,
-  _signal?: AbortSignal,
+  client: Pick<ApiClient, "get">,
+  flowId: string,
+  hash: string,
+  signal?: AbortSignal,
 ): Promise<unknown> {
-  throw new Error("not implemented");
+  const detail = await loadVersion(client, flowId, hash, signal);
+  return detail.canonical;
 }
 
-export function inputFormModelFor(_document: RunDocument): InputFormModel | null {
-  return null;
+export function inputFormModelFor(document: RunDocument): InputFormModel | null {
+  switch (document.phase) {
+    case "none":
+    case "loading":
+      return null;
+    case "ready":
+      return inputFormModel(document.canonical);
+    case "failed":
+      return jsonOnly(UNREADABLE_REASON);
+  }
 }

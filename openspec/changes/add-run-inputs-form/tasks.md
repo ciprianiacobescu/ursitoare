@@ -5,7 +5,7 @@ Paths without a directory are in `web/src/runs/`. Frozen tests unchanged: `dry-r
 - [x] 1.1 Write `input-form-model.test.ts` (scenario "demo-pay's inputs give a form, and each other shape gives JSON only", test-plan.md T1, rows M1 to M10) first, then implement `inputFormModel` in `input-form.ts`, implementing requirement "The input form is built from the flow's inputs when they fit the kit subset".
 - [x] 1.2 Write `input-form-text.test.ts` (scenario "The form writes with two-space indent and the text reads field by field", T2, rows W1 to W4 and R1 to R14) first, then implement `inputJsonFromForm` and `formFromInputJson` in `input-form.ts`, implementing requirement "A form's values become the input JSON and an input JSON becomes form values, by fixed rules"
 - [x] 1.3 Write `input-sync.test.ts` (scenario "A form edit writes, a text edit refills, and a bad text leaves the form alone", T3 to T3c) first, then implement `inputSyncStart`, `inputSyncStep` and `inputSyncView` in `input-form.ts`, implementing requirement "One text is the truth, so a form edit rewrites it, a text edit refills the form, and the form never blocks a text it cannot show"
-- [ ] 1.4 Write `run-document.test.ts` (scenario "Wanted, loaded and failed", T4) first, then implement `runDocumentWanted`, `loadRunDocument` and `inputFormModelFor` in `input-form.ts`, implementing requirement "The panels read a version's document when the editor has none"
+- [x] 1.4 Write `run-document.test.ts` (scenario "Wanted, loaded and failed", T4) first, then implement `runDocumentWanted`, `loadRunDocument` and `inputFormModelFor` in `input-form.ts`, implementing requirement "The panels read a version's document when the editor has none"
 
 ## 2. The answer rows
 
