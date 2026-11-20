@@ -123,3 +123,4 @@
 {"at":"2026-11-20T11:37:43Z","run":"r-20261120T1137Z-73d2","type":"unit.dispatched","unit":"openspec:add-home-dashboard"}
 {"at":"2026-11-20T11:48:22Z","head":"beeb27caf671c2c255634216519acdc8bd27a8ca","pr":142,"target_before":"36414c8654556cf4a593734ec69b009f815b415a","type":"unit.merge_requested","unit":"openspec:add-home-dashboard"}
 {"at":"2026-11-20T11:48:27Z","ci":"not_run","head":"beeb27caf671c2c255634216519acdc8bd27a8ca","merge_commit":"745444abf7d9cb824757be3b0a439fec278d5375","method":"squash","pr":142,"raced":false,"type":"unit.merged","unit":"openspec:add-home-dashboard"}
+{"at":"2026-11-20T11:48:33Z","branch":"l4/openspec/add-home-dashboard","head":"beeb27caf671c2c255634216519acdc8bd27a8ca","type":"unit.branch_deleted","unit":"openspec:add-home-dashboard"}
