@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | none | verdict | Criterion C-9517e900 (web-shell › Only a ready session gets the dashboard › The signed-out home is unchanged): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-c3d0d88f (web-shell › The dashboard renders each list and step from its own state › Alice sees her runs, flows and next step): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-7837c9f9 (web-shell › The dashboard renders each list and step from its own state › Carol sees setup steps from what the API shows): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-c8aaa647 (web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-c8aaa647 (web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again): accept as satisfied? |
 | Q-005 | answered | none | verdict | Hold H-08110025: UI criterion C-48588514 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-cea9172c: UI criterion C-9517e900 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-cee9c0fd: UI criterion C-f82b7f78 has no end-to-end test; see the generated UI tests table |
@@ -132,7 +132,7 @@ accept The code gives carol the three setup steps from what the API shows. loadP
 
 ## Q-004: Criterion C-c8aaa647 (web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The verification table says the harness's generated test for this criterion ran and fails at the head, with a screenshot and a trace as evidence. None of that is in the repository: the generated file, the test-results folder and the page capture are absent from the worktree or are harness output I m
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -160,6 +160,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is met. I proved the unit's own browser test discriminates on a private e2e stack. test_a_failing_list_fails_alone_and_try_again_reads_it_again, tagged C-c8aaa647, passes at the head 586291d4 (with the later answer and ledger commits, whose web code is unchanged). It fails with an AssertionError ("Recent runs could not be loaded." not found) when web/src is put back to the merge base 36414c86 and rebuilt, because the base home has no dashboard. The same holds for the other three tests in e2e/test_m6b_home.py: all 4 pass at the head and all 4 fail at the base on their assertions, not on setup. The landing-page health tests in test_m0_skeleton.py, test_l4_c_1542e67b.py and test_l4_c_3dda369f.py pass at the head too (18 passed). The screenshots at the head show both lists with their own "could not be loaded." line and Try again, Engine healthy, no alert and no Next steps. After the click they show "No runs yet" with "Choose a flow to test". The second page shows "Your session has ended." with Sign in again and no Try again. The harness's generated test fails at the head because of its own setup, not the code: its /me body has no user, tenant or csrfToken, so the session never becomes ready; its catch-all /api/v1/** route, registered last, answers {} to every request first; and its runs route has no query string, while the page asks /api/v1/runs?... .
 ---
 
 ## Q-005: Hold H-08110025: UI criterion C-48588514 has no end-to-end test; see the generated UI tests table
