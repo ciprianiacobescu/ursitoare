@@ -121,3 +121,4 @@
 {"at":"2026-11-20T11:37:41Z","by":"harness","reason":"the cause is gone: openspec:add-home-dashboard is awaiting_human","type":"plan.resumed"}
 {"at":"2026-11-20T11:37:43Z","attempt":1,"cost_usd":15.365282,"runs":7,"type":"plan.charged","unit":"openspec:add-home-dashboard"}
 {"at":"2026-11-20T11:37:43Z","run":"r-20261120T1137Z-73d2","type":"unit.dispatched","unit":"openspec:add-home-dashboard"}
+{"at":"2026-11-20T11:48:22Z","head":"beeb27caf671c2c255634216519acdc8bd27a8ca","pr":142,"target_before":"36414c8654556cf4a593734ec69b009f815b415a","type":"unit.merge_requested","unit":"openspec:add-home-dashboard"}
