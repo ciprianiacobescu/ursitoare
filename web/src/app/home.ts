@@ -1,9 +1,16 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
+import { ApiRequestError } from "../api/client.ts";
 import type { ApiClient } from "../api/client.ts";
+import { parseAccount } from "../admin/users.ts";
+import { flowListFetcher } from "../flows/flows.ts";
 import type { FlowRow } from "../flows/flows.ts";
 import type { CapabilityState } from "../kit/capabilities.ts";
+import { parseCursorPage } from "../kit/data/page-fetcher.ts";
+import { runListFetcher } from "../runs/runs-source.ts";
 import type { RunView } from "../runs/types.ts";
+import { parsePolicyView } from "../tools/policies.ts";
+import { parseToolServer } from "../tools/servers.ts";
 import { formatAgo, formatDuration, formatInstant } from "../ui/format.ts";
 import { runStateTone, versionStateTone } from "../ui/tones.ts";
 import type { Tone } from "../ui/tones.ts";
@@ -301,37 +308,81 @@ export function nextSteps(
   return { steps, settled };
 }
 
+function invalidPage(): ApiRequestError {
+  return new ApiRequestError(200, "INVALID_RESPONSE", "Invalid page");
+}
+
 export async function loadRecentRuns(
-  _client: Pick<ApiClient, "get">,
-  _signal: AbortSignal,
+  client: Pick<ApiClient, "get">,
+  signal: AbortSignal,
 ): Promise<readonly RunView[]> {
-  return [];
+  const page = await runListFetcher(client)({ cursor: null, limit: HOME_LIMIT, signal });
+  return page.items;
 }
 
 export async function loadFlowSet(
-  _client: Pick<ApiClient, "get">,
-  _signal: AbortSignal,
+  client: Pick<ApiClient, "get">,
+  signal: AbortSignal,
 ): Promise<{ items: readonly FlowRow[]; complete: boolean }> {
-  return { items: [], complete: false };
+  const page = await flowListFetcher(client)({
+    cursor: null,
+    limit: HOME_PAGE_SIZE,
+    signal,
+  });
+  return { items: page.items, complete: page.next_cursor === null };
 }
 
 export async function loadPendingServers(
-  _client: Pick<ApiClient, "get">,
-  _signal: AbortSignal,
+  client: Pick<ApiClient, "get">,
+  signal: AbortSignal,
 ): Promise<Counted> {
-  return { count: 0, complete: false };
+  const body: unknown = await client.get<unknown>("/tool-servers", {
+    query: { limit: HOME_PAGE_SIZE },
+    signal,
+  });
+  const page = parseCursorPage(body);
+  if (page === null) throw invalidPage();
+  let count = 0;
+  for (const raw of page.items) {
+    const server = parseToolServer(raw);
+    if (server === null) throw invalidPage();
+    if (server.state === "pending") count += 1;
+  }
+  return { count, complete: page.next_cursor === null };
 }
 
 export async function loadUnassigned(
-  _client: Pick<ApiClient, "get">,
-  _signal: AbortSignal,
+  client: Pick<ApiClient, "get">,
+  signal: AbortSignal,
 ): Promise<Counted> {
-  return { count: 0, complete: false };
+  const body: unknown = await client.get<unknown>("/users", {
+    query: { limit: HOME_PAGE_SIZE },
+    signal,
+  });
+  const page = parseCursorPage(body);
+  if (page === null) throw invalidPage();
+  let count = 0;
+  for (const raw of page.items) {
+    const account = parseAccount(raw);
+    if (account === null) throw invalidPage();
+    if (
+      account.kind === "human" &&
+      account.state === "active" &&
+      account.roles.length === 0 &&
+      account.localRoles.length === 0
+    ) {
+      count += 1;
+    }
+  }
+  return { count, complete: page.next_cursor === null };
 }
 
 export async function loadPolicyFact(
-  _client: Pick<ApiClient, "get">,
-  _signal: AbortSignal,
+  client: Pick<ApiClient, "get">,
+  signal: AbortSignal,
 ): Promise<{ deployed: boolean; pendingGrants: number }> {
-  return { deployed: false, pendingGrants: 0 };
+  const body: unknown = await client.get<unknown>("/policies", { signal });
+  const policy = parsePolicyView(body);
+  if (policy === null) throw new ApiRequestError(200, "INVALID_RESPONSE", "Invalid policy");
+  return { deployed: policy.version !== null, pendingGrants: policy.pendingGrants };
 }

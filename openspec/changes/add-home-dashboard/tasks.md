@@ -13,7 +13,7 @@ Paths without a directory are in `web/src/app/`. No frozen test changes. Each No
 
 ## 3. Loaders
 
-- [ ] 3.1 Write `home-load.test.ts` (scenario "The loaders ask one page, count, and fail loudly", T6) first, then implement the five loaders (`runListFetcher`, `flowListFetcher` and `parseCursorPage` for the page; `ApiRequestError` `INVALID_RESPONSE` for the rest), implementing requirement "The home loaders read one page each and fail loudly"
+- [x] 3.1 Write `home-load.test.ts` (scenario "The loaders ask one page, count, and fail loudly", T6) first, then implement the five loaders (`runListFetcher`, `flowListFetcher` and `parseCursorPage` for the page; `ApiRequestError` `INVALID_RESPONSE` for the rest), implementing requirement "The home loaders read one page each and fail loudly"
 
 ## 4. The page
 
