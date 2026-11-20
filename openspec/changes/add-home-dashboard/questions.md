@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Hold H-26953a7c: UI criterion C-d54270f7 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-4faceff9: UI criterion C-1818ac9b has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-8d0fd794: UI criterion C-9de28eec has no end-to-end test; see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-5215cd10: UI criterion C-942b137c has no end-to-end test; see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-5215cd10: UI criterion C-942b137c has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-c77bd28c: UI criterion C-d63e4803 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-157de455: UI criterion C-c3d0d88f has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-5c39e94a: UI criterion C-7837c9f9 has no end-to-end test; see the generated UI tests table |
@@ -339,7 +339,8 @@ accept Criterion C-9de28eec is the scenario in which nothing is claimed that the
 
 ## Q-012: Hold H-5215cd10: UI criterion C-942b137c has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -358,6 +359,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-942b137c is the scenario in which the seven steps link to registered pages. The specification frames it as a collection of nextSteps results in a Node test, and that test exists, is named with the criterion id, builds the page patterns from ADMIN_PAGES, TOOL_PAGES, FLOW_PAGES and RUN_PAGES, and asserts the seven ids, the seven hrefs, that every href matches a registered path, that no label is a navigation label or contains Ursitoare, and that the seven labels are distinct. I checked the hrefs the implementation emits against the page tables: /admin/users, /admin/tool-servers and /admin/policies are literal paths there, /flows is a path, and /flows/<id> and /runs/<id> match the parameterised flow editor and run pages. The seven labels are Create your first flow, Start a test run, Open a flow, Review a failed run, Give people a role, Review pending tool servers and Deploy grant changes, none of which is a navigation label. The generated browser test that failed at the head is not in the repository, so its failure could not be read, but the criterion as written is satisfied and traced. The hold can be waived.
 ---
 
 ## Q-013: Hold H-c77bd28c: UI criterion C-d63e4803 has no end-to-end test; see the generated UI tests table
