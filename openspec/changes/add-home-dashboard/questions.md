@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-9517e900 (web-shell › Only a ready session gets the dashboard › The signed-out home is unchanged): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-c3d0d88f (web-shell › The dashboard renders each list and step from its own state › Alice sees her runs, flows and next step): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-7837c9f9 (web-shell › The dashboard renders each list and step from its own state › Carol sees setup steps from what the API shows): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-7837c9f9 (web-shell › The dashboard renders each list and step from its own state › Carol sees setup steps from what the API shows): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-c8aaa647 (web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again): accept as satisfied? |
 | Q-005 | open | none | verdict | Hold H-08110025: UI criterion C-48588514 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-cea9172c: UI criterion C-9517e900 has no end-to-end test; see the generated UI tests table |
@@ -99,7 +99,8 @@ accept The code renders alice's dashboard as the scenario describes. Run rows ar
 
 ## Q-003: Criterion C-7837c9f9 (web-shell › The dashboard renders each list and step from its own state › Carol sees setup steps from what the API shows): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -126,6 +127,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The code gives carol the three setup steps from what the API shows. loadPendingServers counts servers whose state is pending (2 of 3), loadUnassigned counts active human accounts with empty roles and localRoles (1 of 3), and a policy body with current null and pendingGrants 2 parses. nextSteps then returns Give people a role, Review pending tool servers and Deploy grant changes in that order with the T4 N10 descriptions and the hrefs /admin/users, /admin/tool-servers and /admin/policies; with every asked fact known the section is settled. Empty runs and flows render EmptyState No runs yet and No flows yet, and since carol lacks test_flow the links read Browse flows and Go to flows, both to /flows. The unit's browser test asserts these texts, hrefs, layout, axe and CSP and was ignored only for lacking a red run; the generated test for this criterion failed to import a module that is not installed and never ran.
 ---
 
 ## Q-004: Criterion C-c8aaa647 (web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again): accept as satisfied?
