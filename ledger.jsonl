@@ -91,3 +91,4 @@
 {"at":"2026-11-20T00:04:03Z","attempt":1,"cost_usd":9.999111,"runs":4,"type":"plan.charged","unit":"openspec:restyle-admin-pages"}
 {"at":"2026-11-20T00:04:03Z","run":"r-20261120T0003Z-f99f","type":"unit.dispatched","unit":"openspec:restyle-admin-pages"}
 {"at":"2026-11-20T00:24:25Z","detail":"awaiting_human: no new answers (verdicts open: Q-006) (escalated to a person: Q-006)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:restyle-admin-pages"}
+{"at":"2026-11-20T00:35:59Z","by":"harness","reason":"the cause is gone: openspec:restyle-admin-pages is awaiting_human","type":"plan.resumed"}
