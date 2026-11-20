@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | none | verdict | Criterion C-1baa1083 (web-admin › A destructive confirm is red and a state is a badge › Disable user opens red and the table keeps its name): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-23f3a934 (web-admin › A form sits beside the tables from 1280 px and above them below › The team form is beside the tables at 1366 and above them at 1100): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-5d8c406e (web-admin › Reviewer names replace ids only when a person is found › Group mappings show Carol Example, keep operator:e2e-seed and fall back on a failure): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-effeb70f (web-admin › The Audit log keeps actor ids and reads its times on one line › One audit row keeps its ids and its time on one line): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-effeb70f (web-admin › The Audit log keeps actor ids and reads its times on one line › One audit row keeps its ids and its time on one line): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-68a6b8c2 (web-tools › The tool server detail names who registered the server outside the Surface region › Registered by Carol Example sits outside the region and the row text is unchanged) |
 | Q-006 | open | none | verdict | Criterion C-3c7c4fbe (web-tools › The Grants page keeps its errors, options and subject ids and shows status badges › Grants in the error state and with rows): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-403c66db (web-tools › The Policies page keeps one editor, bounded to the form width › Policies with no deployed policy): accept as satisfied? |
@@ -133,7 +133,8 @@ accept The Group mappings page satisfies the scenario. It collects the distinct 
 
 ## Q-004: Criterion C-effeb70f (web-admin › The Audit log keeps actor ids and reads its times on one line › One audit row keeps its ids and its time on one line): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -160,6 +161,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The Audit log page satisfies the scenario. The Chain verification and Filter the audit log Sections sit in a grid with lg:grid-cols-2 and lg:items-start, so at 1366 their tops align and the first ends at the second's left edge, and the table follows below. The verification status paragraph has role status and the headline Audit chain verified for an ok result. The actor cell is kind: id from auditCells, so the row reads user: u_carol, and the page imports nothing from people, so no /people request is sent. The Time cell is a whitespace-nowrap span of the formatted time 2026-11-18 09:15:00 UTC, so its text is one line, and the Details cell is block min-w-48 max-w-sm break-all so the long issuer and the hash do not widen the table. The browser test asserts each point.
 ---
 
 ## Q-005: Criterion C-68a6b8c2 (web-tools › The tool server detail names who registered the server outside the Surface region › Registered by Carol Example sits outside the region and the row text is unchanged)
