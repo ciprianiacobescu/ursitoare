@@ -101,3 +101,6 @@
 {"at":"2026-11-20T03:11:35Z","head":"db49eabce5911b2009e0601abf9c4ee597d49fec","pr":140,"target_before":"e62be04a7038d7b7d6c6a7667a30df1a274b829c","type":"unit.merge_requested","unit":"openspec:restyle-admin-pages"}
 {"at":"2026-11-20T03:11:40Z","ci":"not_run","head":"db49eabce5911b2009e0601abf9c4ee597d49fec","merge_commit":"21ba04d8924114b8f0a80a8fac1b7c0727ffb910","method":"squash","pr":140,"raced":false,"type":"unit.merged","unit":"openspec:restyle-admin-pages"}
 {"at":"2026-11-20T03:11:46Z","branch":"l4/openspec/restyle-admin-pages","head":"db49eabce5911b2009e0601abf9c4ee597d49fec","type":"unit.branch_deleted","unit":"openspec:restyle-admin-pages"}
+{"at":"2026-11-20T03:16:22Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"21ba04d8924114b8f0a80a8fac1b7c0727ffb910","status":"pass","type":"unit.postcheck","unit":"openspec:restyle-admin-pages"}
+{"at":"2026-11-20T03:16:22Z","revision":"21ba04d8924114b8f0a80a8fac1b7c0727ffb910","type":"unit.integrated","unit":"openspec:restyle-admin-pages"}
+{"at":"2026-11-20T03:16:22Z","attempt":1,"cost_usd":25.374793,"runs":6,"type":"plan.charged","unit":"openspec:restyle-admin-pages"}

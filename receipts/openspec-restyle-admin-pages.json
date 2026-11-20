@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-20T03:16:22Z",
+  "integrated_revision": "21ba04d8924114b8f0a80a8fac1b7c0727ffb910",
+  "merge_commit": "21ba04d8924114b8f0a80a8fac1b7c0727ffb910",
+  "plan_digest": "03b7600f239a655c",
+  "plan_id": "m6b",
+  "postcheck": "pass",
+  "pr": 140,
+  "receipt_id": "m6b/openspec:restyle-admin-pages/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "db49eabce5911b2009e0601abf9c4ee597d49fec",
+  "spec_digest": "0a438c14d2e671b7",
+  "target": "main",
+  "unit_id": "openspec:restyle-admin-pages"
+}
