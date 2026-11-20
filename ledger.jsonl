@@ -111,3 +111,5 @@
 {"at":"2026-11-20T05:46:55Z","run":"r-20261120T0546Z-4db6","type":"unit.dispatched","unit":"openspec:add-home-dashboard"}
 {"at":"2026-11-20T08:07:41Z","attempt":1,"cost_usd":1.743503,"runs":3,"type":"plan.charged","unit":"openspec:add-home-dashboard"}
 {"at":"2026-11-20T08:07:41Z","run":"r-20261120T0807Z-a5b2","type":"unit.dispatched","unit":"openspec:add-home-dashboard"}
+{"at":"2026-11-20T08:56:03Z","attempt":1,"cost_usd":2.623086,"runs":4,"type":"plan.charged","unit":"openspec:add-home-dashboard"}
+{"at":"2026-11-20T08:56:03Z","run":"r-20261120T0856Z-d6a7","type":"unit.dispatched","unit":"openspec:add-home-dashboard"}
