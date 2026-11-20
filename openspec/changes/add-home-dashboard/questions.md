@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Hold H-8d0fd794: UI criterion C-9de28eec has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-5215cd10: UI criterion C-942b137c has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-c77bd28c: UI criterion C-d63e4803 has no end-to-end test; see the generated UI tests table |
-| Q-014 | open | none | verdict | Hold H-157de455: UI criterion C-c3d0d88f has no end-to-end test; see the generated UI tests table |
+| Q-014 | answered | none | verdict | Hold H-157de455: UI criterion C-c3d0d88f has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-5c39e94a: UI criterion C-7837c9f9 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-48d2a201: UI criterion C-c8aaa647 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -389,7 +389,8 @@ accept Criterion C-d63e4803 is the source-pin scenario: it reads HomePage.tsx, 1
 
 ## Q-014: Hold H-157de455: UI criterion C-c3d0d88f has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -408,6 +409,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-c3d0d88f is the scenario in which alice sees her runs, flows and next step. The unit ships its own browser test for it, test_alice_sees_recent_runs_recent_flows_and_her_next_step, tagged with the criterion id, and it asserts the three run texts, the three flow rows, the two next-step links and hrefs, the tooltip minute, the status, alert and aria-live counts, the single me and people requests, layout, axe and CSP. I traced the code against those texts: a run started 200 seconds ago reads 3 min ago and a 1.4 second span reads 1.4 s, 7500 seconds reads 2 h ago and 75 seconds reads 1 min 15 s, a queued run shows its createdAt age and the dash, own runs read by you and the other principal's name comes from the name lookup, which requests only the ids that are not the signed-in user, so one people request with ids user-2. Flows are sorted by recency to demo-draft, demo-pay, alpha-flow, the validated demo-pay gives Start a test run and the failed run gives Review a failed run, and the time element carries a Tooltip of the exact UTC minute. The harness's writer failed for a length limit, not for anything in the code. The hold can be waived.
 ---
 
 ## Q-015: Hold H-5c39e94a: UI criterion C-7837c9f9 has no end-to-end test; see the generated UI tests table
