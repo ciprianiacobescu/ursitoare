@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Hold H-cea9172c: UI criterion C-9517e900 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-cee9c0fd: UI criterion C-f82b7f78 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-5c823df8: UI criterion C-d8b03242 has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-26953a7c: UI criterion C-d54270f7 has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-26953a7c: UI criterion C-d54270f7 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-4faceff9: UI criterion C-1818ac9b has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-8d0fd794: UI criterion C-9de28eec has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-5215cd10: UI criterion C-942b137c has no end-to-end test; see the generated UI tests table |
@@ -264,7 +264,8 @@ accept Criterion C-d8b03242 is the recentFlows and flowRows scenario, which the 
 
 ## Q-009: Hold H-26953a7c: UI criterion C-d54270f7 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -283,6 +284,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-d54270f7 is the author scenario of nextSteps, which the specification frames as a direct call with the author capabilities and the facts of rows N1 to N5b of test-plan.md T4. nextSteps is a pure function of home.ts, so the Node test is the proper trace; the browser cannot set those fact states and the rows and texts are fixed by the test plan. The test exists, is named with the criterion id, and asserts each row: no flow gives only create-first-flow with settled true, a validated demo-pay gives start-test-run at /flows/demo-pay, two unvalidated flows give open-a-flow at /flows/demo-draft, a failed run with no flow gives create-first-flow then review-failed-run, and an incomplete flow page still gives start-test-run, with the T4 labels and descriptions. I traced the implementation: the flow step needs test_flow and a known flows fact, picks the flow changed last whose latest version is validated, else the flow changed last, the failed-run step needs read_run and a known runs fact and takes the first failed of the first five, and settled is true when every asked fact is known. The hold can be waived.
 ---
 
 ## Q-010: Hold H-4faceff9: UI criterion C-1818ac9b has no end-to-end test; see the generated UI tests table
