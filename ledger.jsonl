@@ -130,3 +130,5 @@
 {"at":"2026-11-20T11:57:59Z","branch":"l4/archive/openspec/add-home-dashboard","head":"2cfaaadf9e37d26da7306129edd3d1d24c8c87bb","type":"unit.branch_deleted","unit":"openspec:add-home-dashboard"}
 {"at":"2026-11-20T11:58:01Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-flow-workspace"}
 {"at":"2026-11-20T11:58:01Z","run":"r-20261120T1157Z-061f","type":"unit.dispatched","unit":"openspec:add-flow-workspace"}
+{"at":"2026-11-20T14:36:01Z","attempt":1,"cost_usd":1.417239,"runs":2,"type":"plan.charged","unit":"openspec:add-flow-workspace"}
+{"at":"2026-11-20T14:36:01Z","run":"r-20261120T1435Z-6545","type":"unit.dispatched","unit":"openspec:add-flow-workspace"}
