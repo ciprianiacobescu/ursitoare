@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-c3d0d88f (web-shell › The dashboard renders each list and step from its own state › Alice sees her runs, flows and next step): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-7837c9f9 (web-shell › The dashboard renders each list and step from its own state › Carol sees setup steps from what the API shows): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-c8aaa647 (web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again): accept as satisfied? |
-| Q-005 | open | none | verdict | Hold H-08110025: UI criterion C-48588514 has no end-to-end test; see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-08110025: UI criterion C-48588514 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-cea9172c: UI criterion C-9517e900 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-cee9c0fd: UI criterion C-f82b7f78 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-5c823df8: UI criterion C-d8b03242 has no end-to-end test; see the generated UI tests table |
@@ -164,7 +164,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-005: Hold H-08110025: UI criterion C-48588514 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -183,6 +184,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-48588514 is the view-selection scenario of homeView, a pure function of home.ts, and the specification itself frames it as a Node test: its WHEN clause says home-rows.test.ts calls homeView with the four session states. That test exists, is named with the criterion id, and asserts all four answers; the implementation returns public for null, signed_out and failed sessions and the dashboard view with the capabilities, user id and display name for a ready session. The session states cannot be set from a browser, and the browser-visible consequence of the same logic is covered by the signed-out home scenario. The hold can be waived.
 ---
 
 ## Q-006: Hold H-cea9172c: UI criterion C-9517e900 has no end-to-end test; see the generated UI tests table
