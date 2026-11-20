@@ -46,6 +46,25 @@ test("C-b538162f: MockRows.tsx uses Collapsible and Button and follows the sourc
   assert.ok(source.includes("Button"), "uses Button");
 });
 
+test("C-b538162f: TestRunPanel.tsx keeps its link and status and calls the hook and both sync steps", () => {
+  const source = readSource("TestRunPanel.tsx");
+  assert.ok(source.length > 0, "TestRunPanel.tsx exists");
+  assert.deepEqual(findInlineStyleUse(source), [], "no inline style");
+  assert.deepEqual(findPaletteUtilities(source), [], "no palette utility");
+  assert.deepEqual(findCssImports(source), [], "no stylesheet import");
+  assert.equal(source.split("<Link").length - 1, 1, "one Link");
+  assert.equal(source.split('role="status"').length - 1, 1, "one status");
+  assert.ok(!source.includes("dangerouslySetInnerHTML"), "no raw html");
+  assert.ok(!source.includes("<code"), "no code element");
+  assert.ok(source.includes("<Form"), "keeps Form");
+  for (const label of ["Input (JSON)", "Mocks (JSON)"]) {
+    assert.ok(source.includes(label), `keeps ${label}`);
+  }
+  assert.ok(source.includes("useRunDocument("), "calls useRunDocument");
+  assert.ok(source.includes("inputSyncStep("), "calls inputSyncStep");
+  assert.ok(source.includes("rowSyncStep("), "calls rowSyncStep");
+});
+
 test("C-b538162f: use-run-document.ts reads the version with loadRunDocument and follows the source rules", () => {
   const source = readSource("use-run-document.ts");
   assertPlain("use-run-document.ts", source);
