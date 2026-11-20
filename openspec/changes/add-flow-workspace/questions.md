@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | none | verdict | Criterion C-592f8050 (web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-c88ddf4d (web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times): |
-| Q-004 | open | none | verdict | Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie |
+| Q-004 | answered | none | verdict | Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie |
 | Q-005 | answered | none | verdict | Hold H-c9eda519: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-f1cd4626: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table |
@@ -127,7 +127,7 @@ accept The scenario follows from the sources at the head. The editor host is fol
 
 ## Q-004: Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The deterministic part holds in the sources: FlowsPage.tsx reads useMyTeams, passes the teams to ownerTeamSuggestions, renders a datalist of the options under the Owner team text input and prefills the field once when the teams arrive and the field is empty; loadMyTeams does a GET on /me/teams, which the test's route answers with one team, so the value is finance and one option exists, and fill keeps ops. But the scenario also requires assert_accessible (an axe run over the whole Flows page, including the kit's form, table and shell) and assert_layout to pass, and I cannot run a browser to check them. The verifier's generated test for this criterion failed at the head twice and I cannot see why. A person should run or inspect test-results for C-5368fc63 before accepting.
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -155,6 +155,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Checked by the owner's delegate in a real browser on a private e2e stack, at head 55576665. The unit's own test e2e/test_m6b_workspace.py::test_owner_team_is_prefilled_from_my_teams asserts this scenario line by line (value finance before the fill, ops after it, one datalist option, assert_layout, assert_accessible with axe, empty CSP list) and passes at the head; with web/src reset to the base e8e2660d it fails with Owner team value "" instead of finance (line 188), so it discriminates. A probe with two teams left the field empty and offered both as suggestions, as the only-team rule says. The generated test test_l4_c_5368fc63 fails at the head because it mocks /api/v1/me as {"id","displayName"} instead of the {user, tenant, capabilities, csrfToken} reply the app reads, so the shell reports that permissions could not be loaded and the page asks to sign in; that is a setup error in the generated test, not the code.
 ---
 
 ## Q-005: Hold H-c9eda519: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table
