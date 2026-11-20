@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-1baa1083 (web-admin › A destructive confirm is red and a state is a badge › Disable user opens red and the table keeps its name): accept as satisfied? |
+| Q-001 | answered | none | verdict | Criterion C-1baa1083 (web-admin › A destructive confirm is red and a state is a badge › Disable user opens red and the table keeps its name): accept as satisfied? |
 | Q-002 | open | none | verdict | Criterion C-23f3a934 (web-admin › A form sits beside the tables from 1280 px and above them below › The team form is beside the tables at 1366 and above them at 1100): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-5d8c406e (web-admin › Reviewer names replace ids only when a person is found › Group mappings show Carol Example, keep operator:e2e-seed and fall back on a failure): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-effeb70f (web-admin › The Audit log keeps actor ids and reads its times on one line › One audit row keeps its ids and its time on one line): accept as satisfied? |
@@ -34,7 +34,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-1baa1083 (web-admin › A destructive confirm is red and a state is a badge › Disable user opens red and the table keeps its name): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -61,6 +62,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The Users page satisfies the scenario as written. It passes destructive to its ConfirmDialog, and the kit writes data-tone danger on the confirm button and puts the first focus on Cancel when destructive is true; the danger token is #b42318, which is rgb(180, 35, 24). The state cell is a Badge with tone success for Active and neutral for Disabled, the Name cell shows the user id under the name in font-mono, and the main table passes captionDisplayFor("Users", "Users"), which hides the caption with the class ui-table-caption ui-visually-hidden while the table keeps its name. The confirm action text is still "Disable user" and the native dialog restores the opener's focus on close. The browser test in e2e/test_m6b_admin.py asserts each of these points at 1366 by 860.
 ---
 
 ## Q-002: Criterion C-23f3a934 (web-admin › A form sits beside the tables from 1280 px and above them below › The team form is beside the tables at 1366 and above them at 1100): accept as satisfied?
