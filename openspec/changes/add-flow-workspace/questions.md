@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | open | none | verdict | Criterion C-592f8050 (web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-c88ddf4d (web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times): |
+| Q-003 | answered | none | verdict | Criterion C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times): |
 | Q-004 | open | none | verdict | Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie |
 | Q-005 | open | none | verdict | Hold H-c9eda519: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-f1cd4626: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table |
@@ -93,7 +93,8 @@ accept Every assertion of the scenario follows from the sources at the head. jum
 
 ## Q-003: Criterion C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times):
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -120,6 +121,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The scenario follows from the sources at the head. The editor host is followed directly by the Save version button inside the Edit the flow section, and the editor keymap binds only the default and history keys, so Tab leaves the editor for Save version, as the frozen m3e pin already relies on. The editor theme keeps overflow-x auto on .cm-scroller. The Versions table takes its rows from the cursor list, resolves authors with useDisplayNames through GET /people with an ids query, which the test's /people route answers with Alice Example, and renders personLabel, a Badge around the state and a time element whose dateTime is the raw createdAt and whose text is formatInstant's YYYY-MM-DD HH:mm UTC. The caption is Versions and is hidden visually only, so the table keeps its name. No inline style is added, so the CSP list stays empty. The browser test test_tab_from_the_editor_names_authors_and_keeps_the_scroller asserts exactly this.
 ---
 
 ## Q-004: Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie
