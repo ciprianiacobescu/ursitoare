@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-cee9c0fd: UI criterion C-f82b7f78 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-5c823df8: UI criterion C-d8b03242 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-26953a7c: UI criterion C-d54270f7 has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-4faceff9: UI criterion C-1818ac9b has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-4faceff9: UI criterion C-1818ac9b has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-8d0fd794: UI criterion C-9de28eec has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-5215cd10: UI criterion C-942b137c has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-c77bd28c: UI criterion C-d63e4803 has no end-to-end test; see the generated UI tests table |
@@ -289,7 +289,8 @@ accept Criterion C-d54270f7 is the author scenario of nextSteps, which the speci
 
 ## Q-010: Hold H-4faceff9: UI criterion C-1818ac9b has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -308,6 +309,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-1818ac9b is the administrator scenario of nextSteps, which the specification frames as a direct call with carol's eleven capabilities and rows N10 to N15 of test-plan.md T4. nextSteps is a pure function of home.ts, so the Node test is the proper trace. That test exists, is named with the criterion id, and asserts the rows: one unassigned person, two pending servers and two undeployed grants give assign-roles, review-pending-tool-servers and deploy-grant-changes in that order with badges 1, 2 and 2 and settled true; an incomplete page of 200 gives badge 200+ and an At least description; counts of zero give no step with settled true; and the unknown-fact rows give a floor badge with settled false. I traced the implementation: each count step needs its capability and a known fact, the badge is the count or count plus a plus sign when the page was incomplete, the description gets the At least prefix in that case, the steps are concatenated in the specified order, and settled follows the asked facts. The generated browser test that failed at the head is not in the repository, so its failure could not be read, but the unit's own carol browser test drives the same role and counts through the page and expects the three steps with their texts and hrefs. The hold can be waived.
 ---
 
 ## Q-011: Hold H-8d0fd794: UI criterion C-9de28eec has no end-to-end test; see the generated UI tests table
