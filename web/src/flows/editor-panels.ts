@@ -17,6 +17,7 @@ export interface EditorPanel {
   id: string;
   title: string;
   render: (context: EditorPanelContext) => ReactNode;
+  placement?: "side" | "below";
 }
 
 export interface EditorPanelRegistry {
