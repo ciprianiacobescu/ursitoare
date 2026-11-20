@@ -155,3 +155,5 @@
 {"at":"2026-11-20T20:52:33Z","by":"harness","reason":"the cause is gone: openspec:add-run-inputs-form is awaiting_human","type":"plan.resumed"}
 {"at":"2026-11-20T20:52:36Z","attempt":1,"cost_usd":3.111261,"runs":2,"type":"plan.charged","unit":"openspec:add-run-inputs-form"}
 {"at":"2026-11-20T20:52:36Z","run":"r-20261120T2052Z-e527","type":"unit.dispatched","unit":"openspec:add-run-inputs-form"}
+{"at":"2026-11-20T22:53:48Z","attempt":1,"cost_usd":9.151189,"runs":3,"type":"plan.charged","unit":"openspec:add-run-inputs-form"}
+{"at":"2026-11-20T22:53:48Z","run":"r-20261120T2253Z-dedd","type":"unit.dispatched","unit":"openspec:add-run-inputs-form"}
