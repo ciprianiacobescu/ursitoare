@@ -136,3 +136,5 @@
 {"at":"2026-11-20T16:30:55Z","by":"harness","reason":"the cause is gone: openspec:add-flow-workspace is waiting_capacity","type":"plan.resumed"}
 {"at":"2026-11-20T16:30:58Z","attempt":1,"cost_usd":2.548211,"runs":3,"type":"plan.charged","unit":"openspec:add-flow-workspace"}
 {"at":"2026-11-20T16:30:58Z","run":"r-20261120T1630Z-0560","type":"unit.dispatched","unit":"openspec:add-flow-workspace"}
+{"at":"2026-11-20T17:52:34Z","attempt":1,"cost_usd":6.039066,"runs":4,"type":"plan.charged","unit":"openspec:add-flow-workspace"}
+{"at":"2026-11-20T17:52:34Z","run":"r-20261120T1752Z-7231","type":"unit.dispatched","unit":"openspec:add-flow-workspace"}
