@@ -1,0 +1,17 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-home-dashboard",
+  "round": 1,
+  "findings": [
+    "F-22a9abae",
+    "F-c17c0f0a"
+  ],
+  "chores": [
+    "F-22a9abae",
+    "F-c17c0f0a"
+  ],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": [],
+  "repairs": []
+}
