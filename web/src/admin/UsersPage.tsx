@@ -5,6 +5,10 @@ import { browserSession } from "../auth/browser-session.ts";
 import { useSession } from "../auth/use-session.ts";
 import { ConfirmDialog } from "../kit/ConfirmDialog.tsx";
 import { DataTable } from "../kit/data/DataTable.tsx";
+import { PageHeader } from "../kit/layout/PageHeader.tsx";
+import { PAGE_WIDTHS, captionDisplayFor } from "../kit/layout/layout.ts";
+import { Badge } from "../ui/badge.tsx";
+import { cn } from "../ui/cn.ts";
 import { createCursorList } from "../kit/data/cursor-list.ts";
 import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
 import { toast } from "../kit/toast.ts";
@@ -13,6 +17,7 @@ import { ADMIN_TABLES } from "./pages.ts";
 import { accountAction, accountCells, parseAccount, patchAccountState } from "./users.ts";
 import type { AccountRow } from "./users.ts";
 
+const PAGE_HEADING = "Users";
 const PAGE_TITLE = "Users · Ursitoare";
 const USERS_PATH = "/users";
 
@@ -98,11 +103,20 @@ export function UsersPage(): ReactNode {
       const cells = accountCells(account);
       switch (column.key) {
         case "name":
-          return cells.name;
+          return (
+            <>
+              {cells.name}
+              <span className="block font-mono text-text-muted">{account.userId}</span>
+            </>
+          );
         case "email":
           return cells.email;
         case "state":
-          return cells.state;
+          return account.state === "active" ? (
+            <Badge tone="success">Active</Badge>
+          ) : (
+            <Badge tone="neutral">Disabled</Badge>
+          );
         case "rolesTeams":
           return cells.rolesTeams;
         case "actions":
@@ -116,12 +130,15 @@ export function UsersPage(): ReactNode {
   const pendingAction = pending === null ? null : accountAction(pending, selfId);
 
   return (
-    <div className="admin-page">
-      <h1 ref={headingRef} tabIndex={-1}>
-        Users
-      </h1>
+    <div className={cn("admin-page", PAGE_WIDTHS.list)}>
+      <PageHeader
+        title={PAGE_HEADING}
+        description="Everyone who has signed in, with their roles and teams."
+        headingRef={headingRef}
+      />
       <DataTable
         caption={ADMIN_TABLES.users.caption}
+        captionDisplay={captionDisplayFor(ADMIN_TABLES.users.caption, PAGE_HEADING)}
         columns={columns}
         list={list}
         rowKey={(account) => account.userId}
@@ -141,6 +158,7 @@ export function UsersPage(): ReactNode {
           title={pendingAction.confirm.title}
           description={pendingAction.confirm.description}
           action={pendingAction.confirm.action}
+          destructive
           onConfirm={() => apply(pending)}
           onCancel={() => setPending(null)}
         />

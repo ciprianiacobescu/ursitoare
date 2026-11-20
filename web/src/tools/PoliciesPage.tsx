@@ -4,6 +4,10 @@ import type { ReactNode } from "react";
 import { browserSession } from "../auth/browser-session.ts";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
+import { PageHeader } from "../kit/layout/PageHeader.tsx";
+import { PAGE_WIDTHS } from "../kit/layout/layout.ts";
+import { Card } from "../ui/card.tsx";
+import { cn } from "../ui/cn.ts";
 import { TOOL_NAMES, TOOL_TITLES, actionState, regionState } from "./pages.ts";
 import type { ActionPhase, RegionLoad } from "./pages.ts";
 import {
@@ -97,15 +101,25 @@ export function PoliciesPage(): ReactNode {
   };
 
   return (
-    <div className="tools-page">
-      <h1>Policies</h1>
-      {view === null ? null : (
-        <>
-          <p>{currentText(view)}</p>
-          <p>{pendingText(view.pendingGrants)}</p>
-        </>
+    <div className={cn("tools-page", PAGE_WIDTHS.form)}>
+      <PageHeader
+        title="Policies"
+        description="The Cedar policy that decides who may do what. Validate a draft, then deploy it."
+        meta={
+          view === null ? undefined : (
+            <>
+              <p>{currentText(view)}</p>
+              <p>{pendingText(view.pendingGrants)}</p>
+            </>
+          )
+        }
+      />
+      {actionView.status === null ? null : (
+        <p className="tools-feedback" role={actionView.status.role}>
+          {actionView.status.text}
+        </p>
       )}
-      <section className="tools-section" aria-label="Policies">
+      <Card className="flex flex-col gap-3 p-4">
         <label htmlFor={`${idPrefix}-source`}>{label("cedarField")}</label>
         <textarea
           id={`${idPrefix}-source`}
@@ -125,6 +139,7 @@ export function PoliciesPage(): ReactNode {
           <button
             type="button"
             className="ui-button"
+            data-tone="primary"
             aria-disabled={disabled ? true : undefined}
             onClick={deploy}
           >
@@ -133,10 +148,7 @@ export function PoliciesPage(): ReactNode {
         </div>
         {region.view === "loading" ? <LoadingState /> : null}
         {policy.phase === "error" ? <ErrorPanel error={policy.error} /> : null}
-      </section>
-      {actionView.status === null ? null : (
-        <p role={actionView.status.role}>{actionView.status.text}</p>
-      )}
+      </Card>
     </div>
   );
 }

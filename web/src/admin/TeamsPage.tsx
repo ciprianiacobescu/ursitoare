@@ -10,7 +10,11 @@ import { createCursorList } from "../kit/data/cursor-list.ts";
 import { mapEnvelopeErrors } from "../kit/data/form-errors.ts";
 import type { FormErrors } from "../kit/data/form-errors.ts";
 import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
+import { PageHeader } from "../kit/layout/PageHeader.tsx";
+import { Section } from "../kit/layout/Section.tsx";
+import { PAGE_WIDTHS } from "../kit/layout/layout.ts";
 import { toast } from "../kit/toast.ts";
+import { cn } from "../ui/cn.ts";
 import { adminErrorMessage } from "./messages.ts";
 import { ADMIN_TABLES } from "./pages.ts";
 import {
@@ -139,13 +143,15 @@ export function TeamsPage(): ReactNode {
   const teamError = errors["teamId"] ?? null;
 
   return (
-    <div className="admin-page">
-      <h1 ref={headingRef} tabIndex={-1}>
-        Roles and teams
-      </h1>
-      <section className="admin-section" aria-labelledby={`${idPrefix}-create-title`}>
-        <h2 id={`${idPrefix}-create-title`}>Create team</h2>
-        <Form
+    <div className={cn("admin-page", PAGE_WIDTHS.list)}>
+      <PageHeader
+        title="Roles and teams"
+        description="Roles are fixed. Teams group people, and a group mapping can give a team to everyone in an identity-provider group."
+        headingRef={headingRef}
+      />
+      <div className="grid gap-4 xl:grid-cols-[20rem_minmax(0,1fr)] xl:items-start">
+        <Section title="Create team">
+          <Form
           label="Create team"
           submitLabel="Create team"
           fields={TEAM_FIELDS}
@@ -169,34 +175,35 @@ export function TeamsPage(): ReactNode {
               />
             )}
           </Field>
-        </Form>
-      </section>
-      <section className="admin-section" aria-label="Roles and teams">
-        <DataTable
-          caption={ADMIN_TABLES.roles.caption}
-          columns={rolesColumns}
-          list={roles}
-          rowKey={(role) => role}
-          {...(ADMIN_TABLES.roles.emptyTitle === undefined
-            ? {}
-            : { emptyTitle: ADMIN_TABLES.roles.emptyTitle })}
-          {...(ADMIN_TABLES.roles.emptyDescription === undefined
-            ? {}
-            : { emptyDescription: ADMIN_TABLES.roles.emptyDescription })}
-        />
-        <DataTable
-          caption={ADMIN_TABLES.teams.caption}
-          columns={teamsColumns}
-          list={teams}
-          rowKey={(id) => id}
-          {...(ADMIN_TABLES.teams.emptyTitle === undefined
-            ? {}
-            : { emptyTitle: ADMIN_TABLES.teams.emptyTitle })}
-          {...(ADMIN_TABLES.teams.emptyDescription === undefined
-            ? {}
-            : { emptyDescription: ADMIN_TABLES.teams.emptyDescription })}
-        />
-      </section>
+          </Form>
+        </Section>
+        <div className="flex flex-col gap-4">
+          <DataTable
+            caption={ADMIN_TABLES.roles.caption}
+            columns={rolesColumns}
+            list={roles}
+            rowKey={(role) => role}
+            {...(ADMIN_TABLES.roles.emptyTitle === undefined
+              ? {}
+              : { emptyTitle: ADMIN_TABLES.roles.emptyTitle })}
+            {...(ADMIN_TABLES.roles.emptyDescription === undefined
+              ? {}
+              : { emptyDescription: ADMIN_TABLES.roles.emptyDescription })}
+          />
+          <DataTable
+            caption={ADMIN_TABLES.teams.caption}
+            columns={teamsColumns}
+            list={teams}
+            rowKey={(id) => id}
+            {...(ADMIN_TABLES.teams.emptyTitle === undefined
+              ? {}
+              : { emptyTitle: ADMIN_TABLES.teams.emptyTitle })}
+            {...(ADMIN_TABLES.teams.emptyDescription === undefined
+              ? {}
+              : { emptyDescription: ADMIN_TABLES.teams.emptyDescription })}
+          />
+        </div>
+      </div>
       {pending !== null && pendingConfirm !== null ? (
         <ConfirmDialog
           open

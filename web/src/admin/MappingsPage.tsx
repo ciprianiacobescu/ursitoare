@@ -6,6 +6,12 @@ import { ConfirmDialog } from "../kit/ConfirmDialog.tsx";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { DataTable } from "../kit/data/DataTable.tsx";
+import { PageHeader } from "../kit/layout/PageHeader.tsx";
+import { Section } from "../kit/layout/Section.tsx";
+import { PAGE_WIDTHS, captionDisplayFor } from "../kit/layout/layout.ts";
+import { useDisplayNames } from "../people/use-names.ts";
+import { personLabel } from "../people/people.ts";
+import { cn } from "../ui/cn.ts";
 import { Field } from "../kit/data/Field.tsx";
 import { Form } from "../kit/data/Form.tsx";
 import { createCursorList } from "../kit/data/cursor-list.ts";
@@ -34,6 +40,7 @@ import type { GrantOption, MappingRow } from "./mappings.ts";
 type MappingId = Pick<MappingRow, "issuer" | "group">;
 import { parseNamed } from "./teams.ts";
 
+const PAGE_HEADING = "Group mappings";
 const PAGE_TITLE = "Group mappings · Ursitoare";
 const ROLES_PATH = "/roles";
 const TEAMS_PATH = "/teams";
@@ -57,6 +64,7 @@ export function MappingsPage(): ReactNode {
   const [grants, setGrants] = useState<GrantsState>({ status: "loading" });
   const [removing, setRemoving] = useState<MappingId | null>(null);
   const [pending, setPending] = useState<MappingRow | null>(null);
+  const [reviewers, setReviewers] = useState<readonly string[]>([]);
 
   const list = useMemo(
     () =>
@@ -116,6 +124,21 @@ export function MappingsPage(): ReactNode {
     return list.subscribe(sync);
   }, [list]);
 
+  useEffect(() => {
+    const collect = (): void => {
+      const distinct = [...new Set(list.getState().items.map((item) => item.reviewedBy))];
+      setReviewers((current) =>
+        current.length === distinct.length && current.every((id, i) => id === distinct[i])
+          ? current
+          : distinct,
+      );
+    };
+    collect();
+    return list.subscribe(collect);
+  }, [list]);
+
+  const names = useDisplayNames(reviewers);
+
   const options = grants.status === "ready" ? grants.options : [];
 
   const save = (): void => {
@@ -173,19 +196,23 @@ export function MappingsPage(): ReactNode {
       const cells = mappingCells(mapping);
       switch (column.key) {
         case "group":
-          return cells.group;
+          return <span className="whitespace-nowrap">{cells.group}</span>;
         case "grants":
-          return cells.grants;
+          return <span className="whitespace-nowrap">{cells.grants}</span>;
         case "issuer":
-          return cells.issuer;
+          return <span className="break-all">{cells.issuer}</span>;
         case "reviewedBy":
-          return cells.reviewedBy;
+          return (
+            <span className="whitespace-nowrap">
+              {clip(personLabel(names, mapping.reviewedBy))}
+            </span>
+          );
         case "actions": {
           const label = `Remove ${clip(mapping.group)}`;
           return (
             <button
               type="button"
-              className="ui-button"
+              className="ui-button whitespace-nowrap"
               aria-disabled={removing !== null ? true : undefined}
               onClick={() => {
                 if (removing !== null) return;
@@ -205,12 +232,13 @@ export function MappingsPage(): ReactNode {
   const pendingConfirm = pending === null ? null : removeMappingConfirm(pending);
 
   return (
-    <div className="admin-page">
-      <h1 ref={headingRef} tabIndex={-1}>
-        Group mappings
-      </h1>
-      <section className="admin-section" aria-labelledby={`${idPrefix}-map-title`}>
-        <h2 id={`${idPrefix}-map-title`}>Map a group</h2>
+    <div className={cn("admin-page", PAGE_WIDTHS.list)}>
+      <PageHeader
+        title={PAGE_HEADING}
+        description="Give people a role or a team when they sign in through an identity-provider group."
+        headingRef={headingRef}
+      />
+      <Section title="Map a group" className="max-w-xl">
         {grants.status === "loading" ? (
           <LoadingState label="Loading roles and teams" />
         ) : null}
@@ -284,21 +312,20 @@ export function MappingsPage(): ReactNode {
             </Field>
           </Form>
         ) : null}
-      </section>
-      <section className="admin-section" aria-label="Group mappings">
-        <DataTable
-          caption={ADMIN_TABLES.mappings.caption}
-          columns={columns}
-          list={list}
-          rowKey={(mapping) => `${mapping.issuer}\n${mapping.group}`}
-          {...(ADMIN_TABLES.mappings.emptyTitle === undefined
-            ? {}
-            : { emptyTitle: ADMIN_TABLES.mappings.emptyTitle })}
-          {...(ADMIN_TABLES.mappings.emptyDescription === undefined
-            ? {}
-            : { emptyDescription: ADMIN_TABLES.mappings.emptyDescription })}
-        />
-      </section>
+      </Section>
+      <DataTable
+        caption={ADMIN_TABLES.mappings.caption}
+        captionDisplay={captionDisplayFor(ADMIN_TABLES.mappings.caption, PAGE_HEADING)}
+        columns={columns}
+        list={list}
+        rowKey={(mapping) => `${mapping.issuer}\n${mapping.group}`}
+        {...(ADMIN_TABLES.mappings.emptyTitle === undefined
+          ? {}
+          : { emptyTitle: ADMIN_TABLES.mappings.emptyTitle })}
+        {...(ADMIN_TABLES.mappings.emptyDescription === undefined
+          ? {}
+          : { emptyDescription: ADMIN_TABLES.mappings.emptyDescription })}
+      />
       {pending !== null && pendingConfirm !== null ? (
         <ConfirmDialog
           open

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
 import { browserSession } from "../auth/browser-session.ts";
@@ -7,6 +7,10 @@ import { Field } from "../kit/data/Field.tsx";
 import { Form } from "../kit/data/Form.tsx";
 import { createCursorList } from "../kit/data/cursor-list.ts";
 import type { FormErrors } from "../kit/data/form-errors.ts";
+import { PageHeader } from "../kit/layout/PageHeader.tsx";
+import { Section } from "../kit/layout/Section.tsx";
+import { PAGE_WIDTHS } from "../kit/layout/layout.ts";
+import { cn } from "../ui/cn.ts";
 import { ADMIN_TABLES } from "./pages.ts";
 import {
   auditCells,
@@ -19,6 +23,17 @@ import type { AuditEvent, VerificationState } from "./audit.ts";
 
 const PAGE_TITLE = "Audit log · Ursitoare";
 const AUDIT_FIELDS = ["eventType"] as const;
+const PAGE_HEADING = "Audit log";
+
+function breakable(text: string): ReactNode {
+  const parts = text.split(/(?<=[._])/);
+  return parts.map((part, index) => (
+    <Fragment key={index}>
+      {index > 0 ? <wbr /> : null}
+      {part}
+    </Fragment>
+  ));
+}
 
 export function AuditPage(): ReactNode {
   const headingRef = useRef<HTMLHeadingElement | null>(null);
@@ -89,15 +104,15 @@ export function AuditPage(): ReactNode {
         case "seq":
           return cells.seq;
         case "time":
-          return cells.time;
+          return <span className="whitespace-nowrap">{cells.time}</span>;
         case "type":
-          return cells.type;
+          return <span className="[overflow-wrap:anywhere]">{breakable(cells.type)}</span>;
         case "actor":
           return cells.actor;
         case "target":
-          return cells.target;
+          return <span className="[overflow-wrap:anywhere]">{breakable(cells.target)}</span>;
         case "details":
-          return cells.details;
+          return <span className="block min-w-48 max-w-sm break-all">{cells.details}</span>;
         default:
           return null;
       }
@@ -107,12 +122,14 @@ export function AuditPage(): ReactNode {
   const view = verificationView(verificationState);
 
   return (
-    <div className="admin-page">
-      <h1 ref={headingRef} tabIndex={-1}>
-        Audit log
-      </h1>
-      <section className="admin-section" aria-labelledby={`${idPrefix}-verification-title`}>
-        <h2 id={`${idPrefix}-verification-title`}>Chain verification</h2>
+    <div className={cn("admin-page", PAGE_WIDTHS.list)}>
+      <PageHeader
+        title={PAGE_HEADING}
+        description="Every recorded action, with a check that the chain of events is unbroken."
+        headingRef={headingRef}
+      />
+      <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
+      <Section title="Chain verification">
         <p role="status" className={`admin-status admin-status--${view.tone}`}>
           <strong>{view.headline}</strong> {view.detail}
         </p>
@@ -130,9 +147,8 @@ export function AuditPage(): ReactNode {
             Verify again
           </button>
         </div>
-      </section>
-      <section className="admin-section" aria-labelledby={`${idPrefix}-filter-title`}>
-        <h2 id={`${idPrefix}-filter-title`}>Filter the audit log</h2>
+      </Section>
+      <Section title="Filter the audit log">
         <Form
           label="Filter the audit log"
           submitLabel="Apply filter"
@@ -157,21 +173,20 @@ export function AuditPage(): ReactNode {
             )}
           </Field>
         </Form>
-      </section>
-      <section className="admin-section" aria-label="Audit events">
-        <DataTable
-          caption={ADMIN_TABLES.audit.caption}
-          columns={columns}
-          list={list}
-          rowKey={(event) => event.seq}
-          {...(ADMIN_TABLES.audit.emptyTitle === undefined
-            ? {}
-            : { emptyTitle: ADMIN_TABLES.audit.emptyTitle })}
-          {...(ADMIN_TABLES.audit.emptyDescription === undefined
-            ? {}
-            : { emptyDescription: ADMIN_TABLES.audit.emptyDescription })}
-        />
-      </section>
+      </Section>
+      </div>
+      <DataTable
+        caption={ADMIN_TABLES.audit.caption}
+        columns={columns}
+        list={list}
+        rowKey={(event) => event.seq}
+        {...(ADMIN_TABLES.audit.emptyTitle === undefined
+          ? {}
+          : { emptyTitle: ADMIN_TABLES.audit.emptyTitle })}
+        {...(ADMIN_TABLES.audit.emptyDescription === undefined
+          ? {}
+          : { emptyDescription: ADMIN_TABLES.audit.emptyDescription })}
+      />
     </div>
   );
 }
