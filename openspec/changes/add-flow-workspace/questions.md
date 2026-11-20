@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Hold H-f1cd4626: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-93e49184: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-903f2410: UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-903f2410: UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-a3cd42da: UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -257,7 +257,8 @@ accept The criterion has an end-to-end test at the head: test_jump_links_reach_t
 
 ## Q-009: Hold H-903f2410: UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -276,6 +277,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The criterion has an end-to-end test at the head: test_tab_from_the_editor_names_authors_and_keeps_the_scroller in e2e/test_m6b_workspace.py, tagged with the criterion id, focuses the textbox Flow text, presses Tab, expects Save version focused, reads overflow-x of the first .cm-scroller, finds the cells Alice Example, validated and 2026-11-17 10:00 UTC in the table Versions, checks the time element's datetime and asserts an empty CSP list, which is the scenario line by line. Each fact follows from the sources: the editor host is followed directly by the Save version button inside the Edit the flow section and the editor keymap binds only the default and history keys, so Tab leaves the editor; the theme keeps overflow-x auto on .cm-scroller; the page resolves the rows' authors with useDisplayNames, which fetches /people with an ids query that the test's route answers with Alice Example, and renders personLabel, a Badge around the state and a time element whose dateTime is the raw createdAt and whose text is formatInstant's YYYY-MM-DD HH:mm UTC; the caption Versions is only visually hidden, so the table keeps its name. The generated test's failure at the head is unexplained and does not change what the sources show. The unit can go on.
 ---
 
 ## Q-010: Hold H-a3cd42da: UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table
