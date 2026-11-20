@@ -127,6 +127,7 @@ accept The scenario follows from the sources at the head. The editor host is fol
 ## Q-004: Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The deterministic part holds in the sources: FlowsPage.tsx reads useMyTeams, passes the teams to ownerTeamSuggestions, renders a datalist of the options under the Owner team text input and prefills the field once when the teams arrive and the field is empty; loadMyTeams does a GET on /me/teams, which the test's route answers with one team, so the value is finance and one option exists, and fill keeps ops. But the scenario also requires assert_accessible (an axe run over the whole Flows page, including the kit's form, table and shell) and assert_layout to pass, and I cannot run a browser to check them. The verifier's generated test for this criterion failed at the head twice and I cannot see why. A person should run or inspect test-results for C-5368fc63 before accepting.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
