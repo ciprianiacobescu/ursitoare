@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie |
 | Q-005 | answered | none | verdict | Hold H-c9eda519: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-f1cd4626: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-93e49184: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-903f2410: UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-a3cd42da: UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table |
@@ -210,7 +210,7 @@ accept The criterion ownerTeamSuggestions sorts, drops and prefills is a Node-te
 
 ## Q-007: Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The hold concerns end-to-end coverage of the layout scenario, whose assertions are rendered measurements (page height at most 2,600 px, matching region tops, the Diagnostics heading, drawing and Save version button inside the first 860 px) plus an axe run and the banner-height check. The unit's own browser test in e2e/test_m6b_workspace.py asserts exactly these numbers and the sources hold the two xl:grid-cols-2 grids, the Section ids and the clamp() editor height, but I cannot run a browser, the numbers depend on fonts, paddings and the graph's rendered size, and the verifier's generated test for this criterion failed at the head twice for a reason I cannot read. The criterion itself (Q-001) is already with a person for the same reason; the hold needs the same test-results.
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -230,6 +230,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-592f8050 has a discriminating end-to-end test: e2e/test_m6b_workspace.py::test_workspace_is_two_columns_with_every_panel_visible, tagged with the criterion id, passes at head 55576665 and fails with web/src at the base e8e2660d (checked by the owner's delegate on a private e2e stack; see Q-001 for the numbers and the screenshots). The generated test fails at the head only because it never mocks /api/v1/me and lands on "Sign in required"; it is wrong in setup and says nothing about the code.
 ---
 
 ## Q-008: Hold H-93e49184: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table
