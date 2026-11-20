@@ -9,7 +9,12 @@ import { Field } from "../kit/data/Field.tsx";
 import { Form } from "../kit/data/Form.tsx";
 import { createCursorList } from "../kit/data/cursor-list.ts";
 import type { FormErrors } from "../kit/data/form-errors.ts";
+import { PAGE_WIDTHS, captionDisplayFor } from "../kit/layout/layout.ts";
+import { PageHeader } from "../kit/layout/PageHeader.tsx";
+import { Section } from "../kit/layout/Section.tsx";
 import { toast } from "../kit/toast.ts";
+import { useMyTeams } from "../people/use-names.ts";
+import { cn } from "../ui/cn.ts";
 import {
   checkFlowName,
   checkOwnerTeam,
@@ -21,6 +26,7 @@ import {
 import type { FlowRow } from "./flows.ts";
 import { flowErrorMessage } from "./messages.ts";
 import { FLOW_TABLES } from "./pages.ts";
+import { ownerTeamSuggestions } from "./workspace.ts";
 
 const PAGE_TITLE = "Flows · Ursitoare";
 const FORM_FIELDS = ["name", "ownerTeam"] as const;
@@ -35,6 +41,19 @@ export function FlowsPage(): ReactNode {
   const [creating, setCreating] = useState(false);
 
   const list = useMemo(() => createCursorList(flowListFetcher(browserSession.api)), []);
+
+  const teams = useMyTeams();
+  const suggestions = ownerTeamSuggestions(teams ?? []);
+  const teamListId = `${idPrefix}-owner-teams`;
+  const prefilled = useRef(false);
+  const prefill = suggestions.prefill;
+  useEffect(() => {
+    if (teams === null || prefilled.current) return;
+    prefilled.current = true;
+    if (prefill !== "") {
+      setOwnerTeam((current) => (current === "" ? prefill : current));
+    }
+  }, [teams, prefill]);
 
   useEffect(() => {
     const previous = document.title;
@@ -99,12 +118,9 @@ export function FlowsPage(): ReactNode {
   }));
 
   return (
-    <div className="flow-page">
-      <h1 ref={headingRef} tabIndex={-1}>
-        Flows
-      </h1>
-      <section className="flow-section" aria-labelledby={`${idPrefix}-create-title`}>
-        <h2 id={`${idPrefix}-create-title`}>Create flow</h2>
+    <div className={cn("flow-page flex flex-col gap-4", PAGE_WIDTHS.list)}>
+      <PageHeader title="Flows" headingRef={headingRef} />
+      <Section title="Create flow">
         <Form
           label="Create flow"
           submitLabel="Create flow"
@@ -138,19 +154,28 @@ export function FlowsPage(): ReactNode {
             error={errors["ownerTeam"] ?? null}
           >
             {(control) => (
-              <input
-                {...control}
-                className="ui-input"
-                type="text"
-                value={ownerTeam}
-                onChange={(event) => setOwnerTeam(event.target.value)}
-              />
+              <>
+                <input
+                  {...control}
+                  className="ui-input"
+                  type="text"
+                  list={teamListId}
+                  value={ownerTeam}
+                  onChange={(event) => setOwnerTeam(event.target.value)}
+                />
+                <datalist id={teamListId}>
+                  {suggestions.options.map((team) => (
+                    <option key={team} value={team} />
+                  ))}
+                </datalist>
+              </>
             )}
           </Field>
         </Form>
-      </section>
+      </Section>
       <DataTable
         caption={FLOW_TABLES.flows.caption}
+        captionDisplay={captionDisplayFor(FLOW_TABLES.flows.caption, "Flows")}
         columns={columns}
         list={list}
         rowKey={(row) => row.flowId}
