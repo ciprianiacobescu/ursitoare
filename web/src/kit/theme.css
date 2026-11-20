@@ -234,6 +234,10 @@ textarea,
   box-shadow: var(--ui-shadow-sm);
 }
 
+.ui-section > :not(.ui-section-title, .ui-section-actions) {
+  grid-column: 1 / -1;
+}
+
 .ui-visually-hidden {
   position: absolute;
   width: 1px;

@@ -279,6 +279,7 @@ export function GrantsPage(): ReactNode {
             idPrefix={idPrefix}
             name="subject"
             label={label("subjectField")}
+            hint="A role, for example author, or a user id from the Users page."
             error={errors["subject"] ?? null}
           >
             {(control) => (
