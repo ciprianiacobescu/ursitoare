@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-c88ddf4d (web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times): |
 | Q-004 | open | none | verdict | Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie |
-| Q-005 | open | none | verdict | Hold H-c9eda519: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-c9eda519: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-f1cd4626: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-93e49184: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table |
@@ -158,7 +158,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-005: Hold H-c9eda519: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -177,6 +178,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The criterion jumpLinks lists the index in page order is a Node-tested scenario of the pure function jumpLinks, not a browser scenario: the specification names workspace.test.ts and test-plan T2, and that test exists at the head with the full assertion of the six links, the three-link empty case and the nav-label exclusion. The implementation in workspace.ts returns exactly those values, so no end-to-end test is needed for this criterion; the verifier's generated browser test is for a scenario the specification never asks a browser to check, and its failure does not reflect on the criterion. The unit can go on.
 ---
 
 ## Q-006: Hold H-f1cd4626: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table
