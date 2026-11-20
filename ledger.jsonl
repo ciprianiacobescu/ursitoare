@@ -151,3 +151,4 @@
 {"at":"2026-11-20T18:32:06Z","branch":"l4/archive/openspec/add-flow-workspace","head":"07b879df56523f338a63584ca8f3e9fbc682dde9","type":"unit.branch_deleted","unit":"openspec:add-flow-workspace"}
 {"at":"2026-11-20T18:32:08Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-run-inputs-form"}
 {"at":"2026-11-20T18:32:08Z","run":"r-20261120T1831Z-5dd5","type":"unit.dispatched","unit":"openspec:add-run-inputs-form"}
+{"at":"2026-11-20T20:42:35Z","detail":"awaiting_human: no new answers (open: Q-001) (escalated to a person: Q-001)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-run-inputs-form"}
