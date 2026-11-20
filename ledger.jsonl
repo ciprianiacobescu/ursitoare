@@ -94,3 +94,4 @@
 {"at":"2026-11-20T00:35:59Z","by":"harness","reason":"the cause is gone: openspec:restyle-admin-pages is awaiting_human","type":"plan.resumed"}
 {"at":"2026-11-20T00:36:00Z","attempt":1,"cost_usd":20.910849,"runs":5,"type":"plan.charged","unit":"openspec:restyle-admin-pages"}
 {"at":"2026-11-20T00:36:00Z","run":"r-20261120T0035Z-bdb9","type":"unit.dispatched","unit":"openspec:restyle-admin-pages"}
+{"at":"2026-11-20T02:47:48Z","detail":"awaiting_human: no new answers (verdicts open: Q-020) (escalated to a person: Q-020)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:restyle-admin-pages"}
