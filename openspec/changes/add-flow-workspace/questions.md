@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | open | none | verdict | Criterion C-592f8050 (web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860): accept as satisfied? |
-| Q-002 | open | none | verdict | Criterion C-c88ddf4d (web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-c88ddf4d (web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times): |
 | Q-004 | open | none | verdict | Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie |
 | Q-005 | open | none | verdict | Hold H-c9eda519: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table |
@@ -60,7 +60,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-002: Criterion C-c88ddf4d (web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -87,6 +88,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Every assertion of the scenario follows from the sources at the head. jumpLinks builds the six links in page order from the graph side panel and the two below panels of 80-runs.tsx, each href pointing at a Section id that FlowEditorPage.tsx renders exactly once (flow-editor, flow-diagnostics, flow-versions and flow-panel-<id>). The index is a ul with aria-label On this page and the utilities sticky top-0, so after a hash jump it sits at the top of the viewport, and every Section carries scroll-mt-16, which puts the target 64 px down, above the bar's height of about 33 px. The links are plain anchors, so the URL ends with the fragment. The shell renders one nav (inline or sidebar, never both) and the page adds none. No inline style is added, so the CSP list stays empty. The browser test test_jump_links_reach_their_panels_and_the_bar_sticks asserts precisely this scenario.
 ---
 
 ## Q-003: Criterion C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times):
