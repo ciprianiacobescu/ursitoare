@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times): |
 | Q-004 | open | none | verdict | Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie |
 | Q-005 | answered | none | verdict | Hold H-c9eda519: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table |
-| Q-006 | open | none | verdict | Hold H-f1cd4626: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-f1cd4626: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-93e49184: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-903f2410: UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table |
@@ -183,7 +183,8 @@ accept The criterion jumpLinks lists the index in page order is a Node-tested sc
 
 ## Q-006: Hold H-f1cd4626: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -202,6 +203,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The criterion ownerTeamSuggestions sorts, drops and prefills is a Node-tested scenario of the pure function ownerTeamSuggestions, not a browser scenario: the specification names workspace.test.ts and test-plan T3, and that test exists at the head under the criterion id with every row of the scenario (the empty list, the single team that prefills, the duplicate, the mixed list that keeps the 64-letter team, finance and ops, the code-unit order a-b, a_b, ab, and the capitalised team that is dropped). The implementation in workspace.ts passes each entry through checkOwnerTeam, which trims and applies the owner-team pattern, keeps the valid values in a set, sorts by code unit and prefills only when exactly one option remains, so it gives those values by construction. No end-to-end test is required for this criterion; the verifier's writer failed to produce a browser test for a scenario the specification never asks a browser to check. The unit can go on.
 ---
 
 ## Q-007: Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table
