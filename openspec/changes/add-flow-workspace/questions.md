@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-c9eda519: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-f1cd4626: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-93e49184: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-93e49184: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-903f2410: UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-a3cd42da: UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
@@ -232,7 +232,8 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ## Q-008: Hold H-93e49184: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -251,6 +252,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The criterion has an end-to-end test at the head: test_jump_links_reach_their_panels_and_the_bar_sticks in e2e/test_m6b_workspace.py, tagged with the criterion id, asserts the six links with their texts and hrefs in order, one target per href, one navigation landmark, the URL fragment after the click, the bar's top at 0 and the target's top at least the bar's height minus 1, and an empty CSP list, which is the scenario line by line. Every one of those facts follows from the sources: jumpLinks builds Editor, Diagnostics, the side panel Graph, Versions, then the below panels with the label title plus panel, from the graph panel registered with placement side and the two run panels registered without placement; FlowEditorPage.tsx renders the Section ids flow-editor, flow-diagnostics, flow-versions and flow-panel-<id> once each, the index as a ul with aria-label On this page and the utilities sticky top-0, and scroll-mt-16 on every Section; the shell renders one nav and the page adds none. The generated test's failure at the head is unexplained and does not change what the sources show. The unit can go on.
 ---
 
 ## Q-009: Hold H-903f2410: UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table
