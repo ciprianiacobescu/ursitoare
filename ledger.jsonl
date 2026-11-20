@@ -133,3 +133,4 @@
 {"at":"2026-11-20T14:36:01Z","attempt":1,"cost_usd":1.417239,"runs":2,"type":"plan.charged","unit":"openspec:add-flow-workspace"}
 {"at":"2026-11-20T14:36:01Z","run":"r-20261120T1435Z-6545","type":"unit.dispatched","unit":"openspec:add-flow-workspace"}
 {"at":"2026-11-20T15:59:26Z","detail":"waiting_capacity until 2026-11-20T16:28:06Z","reason":"unit_waiting_capacity","type":"plan.waiting","unit":"openspec:add-flow-workspace"}
+{"at":"2026-11-20T16:30:55Z","by":"harness","reason":"the cause is gone: openspec:add-flow-workspace is waiting_capacity","type":"plan.resumed"}
