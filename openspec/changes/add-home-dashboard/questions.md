@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Hold H-4faceff9: UI criterion C-1818ac9b has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-8d0fd794: UI criterion C-9de28eec has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-5215cd10: UI criterion C-942b137c has no end-to-end test; see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-c77bd28c: UI criterion C-d63e4803 has no end-to-end test; see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-c77bd28c: UI criterion C-d63e4803 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-157de455: UI criterion C-c3d0d88f has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-5c39e94a: UI criterion C-7837c9f9 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-48d2a201: UI criterion C-c8aaa647 has no end-to-end test; see the generated UI tests table |
@@ -364,7 +364,8 @@ accept Criterion C-942b137c is the scenario in which the seven steps link to reg
 
 ## Q-013: Hold H-c77bd28c: UI criterion C-d63e4803 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -383,6 +384,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-d63e4803 is the source-pin scenario: it reads HomePage.tsx, 10-home.tsx and home.ts as text and checks needles, counts and the four scanners. These are properties of source files, not of the rendered page, so no browser test can check them and the Node test is the only proper trace. That test exists, is named with the criterion id, and I checked every one of its assertions against the current sources: HomePage.tsx holds exactly two role status attributes, one literal h1 Ursitoare, one page header title, no role alert, aria-live, DataTable, ErrorPanel, LoadingState, browserSession, style attribute, outline-none or native disabled, and reads its lists with createApiClient; 10-home.tsx renders HomePage with id home, path / and navLabel Home and holds no state; home.ts imports no React and uses Date.parse rather than new Date, Date.now, Math.random, document or window. The hold can be waived.
 ---
 
 ## Q-014: Hold H-157de455: UI criterion C-c3d0d88f has no end-to-end test; see the generated UI tests table
