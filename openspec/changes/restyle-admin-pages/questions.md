@@ -28,6 +28,9 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-015 | answered | none | verdict | Hold H-48b9bece: UI criterion C-68a6b8c2 has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-16db4d27: UI criterion C-403c66db has no end-to-end test; see the generated UI tests table |
+| Q-018 | open | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
+| Q-019 | open | none | verdict | Hold H-0fde35a8: UI criterion C-e96ac1a6 has no end-to-end test; see the generated UI tests table |
+| Q-020 | open | none | verdict | Hold H-c33b0d83: UI criterion C-3802bfd0 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -511,3 +514,73 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ### Answer
 <!-- write below this line -->
 accept The hold can be waived. The unit carries a browser test for C-403c66db, test_policies_page_has_no_status_once_loaded_and_a_bounded_editor, tagged with the criterion, which asserts every clause of the scenario: the texts No policy deployed. and 1 grant change is not deployed. visible with exact match, the Hand-written Cedar editor at most 768 px wide, Deploy with background rgb(29, 78, 216), status with count 0, assert_layout, assert_accessible and an empty CSP list. The sources make each clause true: the Policies root is cn(tools-page, PAGE_WIDTHS.form), which is max-w-3xl or 768 px, and the editor is a textarea of width 100 percent inside a Card with padding, so it is narrower than 768 px; once loaded the PageHeader meta holds currentText and pendingText, which for a null version and one pending grant are exactly those two sentences; Deploy carries data-tone primary and the kit paints that tone with the accent token #1d4ed8; an idle action gives a null status so no feedback paragraph is rendered, and the only role status is the LoadingState shown while the policy loads; the textarea is labelled by a label with htmlFor, so axe finds it named. The generated test errors at the merge base, which proves nothing about this head.
+
+---
+
+## Q-018: Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+
+### Context
+After round 4 the verifier cannot decide on its own: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-3c7c4fbe: base_error after 2 attempt(s); the test errors at the merge base, which proves nothing: test_l4_c_3c7c4fbe::test_grants_error_state_has_two_alerts_and_one_option[chromium], test_l4_c_3c7c4fbe::test_grants_rows_keep_subject_ids_and_show_status_badges_beside_the_form[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-019: Hold H-0fde35a8: UI criterion C-e96ac1a6 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+
+### Context
+After round 4 the verifier cannot decide on its own: UI criterion C-e96ac1a6 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-e96ac1a6: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_e96ac1a6::test_grants_role_user_field_shows_hint[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-020: Hold H-c33b0d83: UI criterion C-3802bfd0 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 4, verifier
+
+### Context
+After round 4 the verifier cannot decide on its own: UI criterion C-3802bfd0 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-3802bfd0: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_3802bfd0::test_admin_region_headings_single_line_and_left_aligned[chromium-audit-chain-verification], test_l4_c_3802bfd0::test_admin_region_headings_single_line_and_left_aligned[chromium-audit-filter-audit-log], test_l4_c_3802bfd0::test_admin_region_headings_....
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
