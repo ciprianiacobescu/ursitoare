@@ -1,4 +1,4 @@
-# Verification: openspec:add-home-dashboard: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-home-dashboard: PASS (round 3)
 
 traceability: 9/13 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 9/13 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.7 | base main@36414c8654 contained |
-| 1 | integrity | ok | 309.3 | 11 sub-checks; scope: 23 changed file(s) |
-| 2 | build | ok | 36.6 |  |
-| 3 | tests | ok | 442.6 |  |
-| 4 | traceability | ok | 0.2 | 9/13 criteria covered |
-| 4a | audit sampling | ok | 50.5 | 2 not_testable, 1 skipped; support files at the base: 5 |
-| 5 | ui test generation | ok | 2138.2 | 1 accepted, 3 fails_at_head, 5 not_testable, 1 uncollectable, 3 writer_failed |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/app/HomePage.tsx, web/src/app/home.ts, web/src/features/10-home.tsx |
-| 8 | s1 judge | ok | 0.9 | 12/13 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 107.9 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
+| 4a | audit sampling | reused | 0.0 | reused (round 2) |
+| 5 | ui test generation | reused | 0.0 | reused (round 2) |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -163,12 +163,31 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-d63e4803 | not_testable | - | - | The criterion targets TypeScript source files (HomePage.tsx, 10-home.tsx, home.ts) and a TypeScript test (home-sources.test.ts); no Python module under test is provided, and findInlineStyleUse, findPaletteUtilities, findCssImports and findBannedImports are TypeScript functions, so pytest has no publ |
 | C-48588514 | not_testable | - | - | homeView is specified only as a TypeScript export (web/src/app/home.ts); no Python module under test is shown to import, and the ready-session input field names are not defined, so a self-contained pytest test would require guessing names. |
 
+## Answers to verdict questions
+
+- Q-001 accept C-9517e900 by the delegate (claude-fable-5-1 via claude-code): The signed-out home is unchanged in the code. HomePage renders the old Landing markup (h1, the engine-health paragraph with role status, Check again with aria-disabled) whenever homeView answers public, which it does for a null, signed_out or failed session, and the single health effect lives in Hom...
+- Q-002 accept C-c3d0d88f by the delegate (claude-fable-5-1 via claude-code): The code renders alice's dashboard as the scenario describes. Run rows are a Badge, a link named by recentRunLinkName, then the ago text in a time element wrapped in a Tooltip of the exact UTC minute, followed by the duration and the by text; runRows gives by you for the signed-in user and by Bob Ex...
+- Q-003 accept C-7837c9f9 by the delegate (claude-fable-5-1 via claude-code): The code gives carol the three setup steps from what the API shows. loadPendingServers counts servers whose state is pending (2 of 3), loadUnassigned counts active human accounts with empty roles and localRoles (1 of 3), and a policy body with current null and pendingGrants 2 parses. nextSteps then ...
+- Q-004 accept C-c8aaa647 by agent (CLAUDECODE): The criterion is met. I proved the unit's own browser test discriminates on a private e2e stack. test_a_failing_list_fails_alone_and_try_again_reads_it_again, tagged C-c8aaa647, passes at the head 586291d4 (with the later answer and ledger commits, whose web code is unchanged). It fails with an Asse...
+- Q-005 accept H-08110025 by the delegate (claude-fable-5-1 via claude-code): Criterion C-48588514 is the view-selection scenario of homeView, a pure function of home.ts, and the specification itself frames it as a Node test: its WHEN clause says home-rows.test.ts calls homeView with the four session states. That test exists, is named with the criterion id, and asserts all fo...
+- Q-006 accept H-cea9172c by the delegate (claude-fable-5-1 via claude-code): Criterion C-9517e900 is the signed-out home scenario and the code gives exactly what it describes. A 401 from /me is turned into a signed_out state by the capability loader, homeView answers public for it, and HomePage then renders the old Landing markup: the h1 Ursitoare, the engine-health paragrap...
+- Q-007 accept H-cee9c0fd by the delegate (claude-fable-5-1 via claude-code): Criterion C-f82b7f78 is the runRows and recentRunLinkName scenario, which the specification itself frames as a direct call from home-rows.test.ts with a fixed nowMs, meId and name map. These are pure functions of home.ts with no browser surface of their own, so an end-to-end test cannot drive them a...
+- Q-008 accept H-5c823df8 by the delegate (claude-fable-5-1 via claude-code): Criterion C-d8b03242 is the recentFlows and flowRows scenario, which the specification frames as a direct call from home-rows.test.ts with the seven T3 flows and a fixed nowMs. These are pure functions of home.ts, so the Node test is the proper trace and there is no browser surface to drive them wit...
+- Q-009 accept H-26953a7c by the delegate (claude-fable-5-1 via claude-code): Criterion C-d54270f7 is the author scenario of nextSteps, which the specification frames as a direct call with the author capabilities and the facts of rows N1 to N5b of test-plan.md T4. nextSteps is a pure function of home.ts, so the Node test is the proper trace; the browser cannot set those fact ...
+- Q-010 accept H-4faceff9 by the delegate (claude-fable-5-1 via claude-code): Criterion C-1818ac9b is the administrator scenario of nextSteps, which the specification frames as a direct call with carol's eleven capabilities and rows N10 to N15 of test-plan.md T4. nextSteps is a pure function of home.ts, so the Node test is the proper trace. That test exists, is named with the...
+- Q-011 accept H-8d0fd794 by the delegate (claude-fable-5-1 via claude-code): Criterion C-9de28eec is the scenario in which nothing is claimed that the page has not read. The specification frames it as a direct call of nextSteps with the reader capabilities and rows N6 to N9, N13 and N16 to N18, and nextSteps is a pure function with no browser surface of its own, so a Node te...
+- Q-012 accept H-5215cd10 by the delegate (claude-fable-5-1 via claude-code): Criterion C-942b137c is the scenario in which the seven steps link to registered pages. The specification frames it as a collection of nextSteps results in a Node test, and that test exists, is named with the criterion id, builds the page patterns from ADMIN_PAGES, TOOL_PAGES, FLOW_PAGES and RUN_PAG...
+- Q-013 accept H-c77bd28c by the delegate (claude-fable-5-1 via claude-code): Criterion C-d63e4803 is the source-pin scenario: it reads HomePage.tsx, 10-home.tsx and home.ts as text and checks needles, counts and the four scanners. These are properties of source files, not of the rendered page, so no browser test can check them and the Node test is the only proper trace. That...
+- Q-014 accept H-157de455 by the delegate (claude-fable-5-1 via claude-code): Criterion C-c3d0d88f is the scenario in which alice sees her runs, flows and next step. The unit ships its own browser test for it, test_alice_sees_recent_runs_recent_flows_and_her_next_step, tagged with the criterion id, and it asserts the three run texts, the three flow rows, the two next-step lin...
+- Q-015 accept H-5c39e94a by the delegate (claude-fable-5-1 via claude-code): Criterion C-7837c9f9 is the scenario in which carol sees setup steps from what the API shows. The unit ships its own browser test for it, test_carol_sees_setup_steps_from_what_the_api_shows, tagged with the criterion id, and it asserts the three step links and hrefs, the three descriptions, the No r...
+- Q-016 accept H-48d2a201 by the delegate (claude-fable-5-1 via claude-code): Criterion C-c8aaa647 is the scenario in which a failing list fails alone and Try again reads it again. The unit ships its own browser test for it, test_a_failing_list_fails_alone_and_try_again_reads_it_again, tagged with the criterion id, and it asserts every row of the scenario: both could-not-be-l...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
 | C-48588514 | web-shell › Only a ready session gets the dashboard › The view follows the session state | pass | pass | the judge passed it and a discriminating test passes |
-| C-9517e900 | web-shell › Only a ready session gets the dashboard › The signed-out home is unchanged | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-9517e900 | web-shell › Only a ready session gets the dashboard › The signed-out home is unchanged | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The signed-out home is unchanged in the code. HomePage renders the old Landing markup (h1, the engine-health paragraph with role status, Check again with aria-disabled) whenever homeView answers public, which it does for a null, signed_out... |
 | C-f82b7f78 | web-shell › Recent runs show at most five runs with state, flow, time, duration and name › Seven runs give five rows with distinct link names | pass | pass | the judge passed it and a discriminating test passes |
 | C-d8b03242 | web-shell › Recent flows are the five changed last › Seven flows in name order give five by recency | pass | pass | the judge passed it and a discriminating test passes |
 | C-d54270f7 | web-shell › Next steps follow the role and the state the API shows › An author's steps follow her flows and runs | pass | pass | the judge passed it and a discriminating test passes |
@@ -177,9 +196,9 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-942b137c | web-shell › Every next step links to a page that exists › The seven steps link to registered pages | pass | pass | the judge passed it and a discriminating test passes |
 | C-4771fd19 | web-shell › The home loaders read one page each and fail loudly › The loaders ask one page, count, and fail loudly | pass | pass | the judge passed it and a discriminating test passes |
 | C-d63e4803 | web-shell › The home page keeps its pins › The sources keep the pinned markup | pass | pass | the judge passed it and a discriminating test passes |
-| C-c3d0d88f | web-shell › The dashboard renders each list and step from its own state › Alice sees her runs, flows and next step | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-7837c9f9 | web-shell › The dashboard renders each list and step from its own state › Carol sees setup steps from what the API shows | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-c8aaa647 | web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-c3d0d88f | web-shell › The dashboard renders each list and step from its own state › Alice sees her runs, flows and next step | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The code renders alice's dashboard as the scenario describes. Run rows are a Badge, a link named by recentRunLinkName, then the ago text in a time element wrapped in a Tooltip of the exact UTC minute, followed by the duration and the by te... |
+| C-7837c9f9 | web-shell › The dashboard renders each list and step from its own state › Carol sees setup steps from what the API shows | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The code gives carol the three setup steps from what the API shows. loadPendingServers counts servers whose state is pending (2 of 3), loadUnassigned counts active human accounts with empty roles and localRoles (1 of 3), and a policy body ... |
+| C-c8aaa647 | web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again | pass | pass | accepted by agent (CLAUDECODE): The criterion is met. I proved the unit's own browser test discriminates on a private e2e stack. test_a_failing_list_fails_alone_and_try_again_reads_it_again, tagged C-c8aaa647, passes at the head 586291d4 (with the later answer and ledger commits, whose web code is u... |
 
 ## Findings
 
@@ -200,21 +219,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-c3d0d88f): The end-to-end test test_m6b_home::test_alice_sees_recent_runs_recent_flows_and_her_next_step[chromium] traces criterion C-c3d0d88f (web-shell › The dashboard renders each list and step from its own state › Alice sees her runs, flows and next step), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-7837c9f9): The end-to-end test test_m6b_home::test_carol_sees_setup_steps_from_what_the_api_shows[chromium] traces criterion C-7837c9f9 (web-shell › The dashboard renders each list and step from its own state › Carol sees setup steps from what the API shows), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-c8aaa647): The end-to-end test test_m6b_home::test_a_failing_list_fails_alone_and_try_again_reads_it_again[chromium] traces criterion C-c8aaa647 (web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
-
-## Needs a human
-
-- UI criterion C-48588514 has no end-to-end test; see the generated UI tests table
-- UI criterion C-9517e900 has no end-to-end test; see the generated UI tests table
-- UI criterion C-f82b7f78 has no end-to-end test; see the generated UI tests table
-- UI criterion C-d8b03242 has no end-to-end test; see the generated UI tests table
-- UI criterion C-d54270f7 has no end-to-end test; see the generated UI tests table
-- UI criterion C-1818ac9b has no end-to-end test; see the generated UI tests table
-- UI criterion C-9de28eec has no end-to-end test; see the generated UI tests table
-- UI criterion C-942b137c has no end-to-end test; see the generated UI tests table
-- UI criterion C-d63e4803 has no end-to-end test; see the generated UI tests table
-- UI criterion C-c3d0d88f has no end-to-end test; see the generated UI tests table
-- UI criterion C-7837c9f9 has no end-to-end test; see the generated UI tests table
-- UI criterion C-c8aaa647 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
