@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-7837c9f9 (web-shell › The dashboard renders each list and step from its own state › Carol sees setup steps from what the API shows): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-c8aaa647 (web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again): accept as satisfied? |
 | Q-005 | answered | none | verdict | Hold H-08110025: UI criterion C-48588514 has no end-to-end test; see the generated UI tests table |
-| Q-006 | open | none | verdict | Hold H-cea9172c: UI criterion C-9517e900 has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-cea9172c: UI criterion C-9517e900 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-cee9c0fd: UI criterion C-f82b7f78 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-5c823df8: UI criterion C-d8b03242 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-26953a7c: UI criterion C-d54270f7 has no end-to-end test; see the generated UI tests table |
@@ -189,7 +189,8 @@ accept Criterion C-48588514 is the view-selection scenario of homeView, a pure f
 
 ## Q-006: Hold H-cea9172c: UI criterion C-9517e900 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -208,6 +209,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-9517e900 is the signed-out home scenario and the code gives exactly what it describes. A 401 from /me is turned into a signed_out state by the capability loader, homeView answers public for it, and HomePage then renders the old Landing markup: the h1 Ursitoare, the engine-health paragraph with role status and tabIndex -1, and Check again with aria-disabled, so the main text is Ursitoare plus the health text with one status and no region, since the shell's main holds only the page and the toast region carries aria-live without a region role. When every /api/v1 call answers the /me body, the session is ready with read_self, read_flow and read_run, the runs and flows loaders reject with INVALID_RESPONSE because the body has no items array, both sections show the could-not-be-loaded line with a Try again button and no alert, and with the runs fact unknown the Next steps section is not rendered, which gives the T8 main text word for word. The frozen landing pins read the same heading, status text, Check again attribute and focus behaviour, all of which the kept PublicHome markup provides. The unit's own browser test test_the_signed_out_home_is_unchanged is tagged with this criterion and asserts these texts, counts, axe and CSP; the hold exists only because the harness could not write its own copy.
 ---
 
 ## Q-007: Hold H-cee9c0fd: UI criterion C-f82b7f78 has no end-to-end test; see the generated UI tests table
