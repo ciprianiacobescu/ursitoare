@@ -4,11 +4,13 @@ import type { ApiClient } from "../api/client.ts";
 import type { FlowRow } from "../flows/flows.ts";
 import type { CapabilityState } from "../kit/capabilities.ts";
 import type { RunView } from "../runs/types.ts";
+import { formatAgo, formatDuration, formatInstant } from "../ui/format.ts";
+import { runStateTone } from "../ui/tones.ts";
 import type { Tone } from "../ui/tones.ts";
 
-export const HOME_LIMIT: number = 0;
+export const HOME_LIMIT = 5;
 
-export const HOME_PAGE_SIZE: number = 0;
+export const HOME_PAGE_SIZE = 200;
 
 export interface NextStep {
   id: string;
@@ -47,8 +49,20 @@ export function homeView(session: CapabilityState | null): HomeView {
   };
 }
 
-export function recentRunLinkName(_run: { id: string; flowId: string }): string {
-  throw new Error("not implemented");
+const SHORT_ID_LENGTH = 8;
+
+function shortRunId(id: string): string {
+  return id.length > SHORT_ID_LENGTH ? id.slice(-SHORT_ID_LENGTH) : id;
+}
+
+function isoWithMicros(iso: string): string {
+  const match = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,9}))?Z$/.exec(iso);
+  if (match === null) return iso;
+  return `${match[1] ?? ""}.${(match[2] ?? "").slice(0, 6).padEnd(6, "0")}Z`;
+}
+
+export function recentRunLinkName(run: { id: string; flowId: string }): string {
+  return `Run ${shortRunId(run.id)} of ${run.flowId}`;
 }
 
 export interface RunRowView {
@@ -66,10 +80,31 @@ export interface RunRowView {
 }
 
 export function runRows(
-  _runs: readonly RunView[],
-  _ctx: { nowMs: number; meId: string; names: ReadonlyMap<string, string> },
+  runs: readonly RunView[],
+  ctx: { nowMs: number; meId: string; names: ReadonlyMap<string, string> },
 ): RunRowView[] {
-  return [];
+  return runs.slice(0, HOME_LIMIT).map((run) => {
+    const at = run.startedAt ?? run.createdAt;
+    const userId = run.principal.userId;
+    const name = ctx.names.get(userId)?.trim() ?? "";
+    let by: string | null = null;
+    if (userId === ctx.meId) by = "by you";
+    else if (name !== "") by = `by ${name}`;
+    return {
+      id: run.id,
+      href: `/runs/${run.id}`,
+      shortId: shortRunId(run.id),
+      flowId: run.flowId,
+      state: run.state,
+      tone: runStateTone(run.state),
+      started: formatAgo(at, ctx.nowMs),
+      startedIso: isoWithMicros(at),
+      exact: formatInstant(at),
+      duration:
+        run.startedAt === null ? "—" : formatDuration(run.startedAt, run.endedAt, ctx.nowMs),
+      by,
+    };
+  });
 }
 
 export function recentFlows(_flows: readonly FlowRow[]): FlowRow[] {
