@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-9517e900 (web-shell › Only a ready session gets the dashboard › The signed-out home is unchanged): accept as satisfied? |
-| Q-002 | open | none | verdict | Criterion C-c3d0d88f (web-shell › The dashboard renders each list and step from its own state › Alice sees her runs, flows and next step): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-c3d0d88f (web-shell › The dashboard renders each list and step from its own state › Alice sees her runs, flows and next step): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-7837c9f9 (web-shell › The dashboard renders each list and step from its own state › Carol sees setup steps from what the API shows): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-c8aaa647 (web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again): accept as satisfied? |
 | Q-005 | open | none | verdict | Hold H-08110025: UI criterion C-48588514 has no end-to-end test; see the generated UI tests table |
@@ -66,7 +66,8 @@ accept The signed-out home is unchanged in the code. HomePage renders the old La
 
 ## Q-002: Criterion C-c3d0d88f (web-shell › The dashboard renders each list and step from its own state › Alice sees her runs, flows and next step): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -93,6 +94,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The code renders alice's dashboard as the scenario describes. Run rows are a Badge, a link named by recentRunLinkName, then the ago text in a time element wrapped in a Tooltip of the exact UTC minute, followed by the duration and the by text; runRows gives by you for the signed-in user and by Bob Example from the name map, formatDuration gives 1.4 s and 1 min 15 s, formatAgo gives 3 min ago, 2 h ago and 1 d ago. Flow rows are sorted by recency so demo-draft, demo-pay and alpha-flow come in that order. nextSteps gives Start a test run at /flows/demo-pay for the validated flow and Review a failed run for the failed run. Only the other principals' ids are looked up, so one people request with ids=user-2 is made, and the capability loader caches /me so one request is made. The page's only status is the health pill and the only aria-live is the toast region. The unit's browser test asserts all of this and was ignored only for lacking a red run.
 ---
 
 ## Q-003: Criterion C-7837c9f9 (web-shell › The dashboard renders each list and step from its own state › Carol sees setup steps from what the API shows): accept as satisfied?
