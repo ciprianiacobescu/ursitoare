@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 2.2 | technical | Allow writing web/src/runs/mock-rows-sync.test.ts? |
+| Q-002 | open | 3.3 | technical | e2e/test_m6b_run_inputs.py line 235-236: names are read before the rows exist |
 <!-- l4:index:end -->
 
 ---
@@ -34,3 +35,37 @@ The Write tool is denied in this session, and Bash is limited to the test gate, 
 ### Answer
 <!-- write below this line -->
 No permission change is needed: retry the step. The implementer session already allows Write and Edit for every path inside the worktree (L4 passes the rule Edit(./**), which covers Write, with --tools Read,Edit,Write,Glob,Grep,Bash). In this same run the red steps of 1.2, 1.3, 1.4 and 2.1 created the new files input-form-text.test.ts, input-sync.test.ts, run-document.test.ts and mock-rows.test.ts with Write and no denial. The one denied Write in 2.2 red was therefore a path outside the worktree. Create the file with Write at the repo-relative path web/src/runs/mock-rows-sync.test.ts (no absolute path, nothing under /tmp or a home directory, no other checkout), write test-plan.md T6 rows R1 to R8 as the task says, then run pnpm run test web/src/runs/mock-rows-sync.test.ts. No person writes this file: the red test is the task's own work.
+
+---
+
+## Q-002: e2e/test_m6b_run_inputs.py line 235-236: names are read before the rows exist
+
+- **Status:** open
+- **Blocking tasks:** 3.3
+- **Kind:** technical
+- **Asked:** 2026-11-20T22:50Z by claude-sonnet, run r-20261120T2052Z-e527, task 3.3
+
+### Context
+`all_inner_texts()` does not auto-wait. The heading `open_flow` waits for is visible while the editor is still loading (`FlowEditorPage.tsx`, `loaded === null`), so the Answers buttons are not rendered yet and the list is `[]`. This is what the previous attempt hit.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `e2e/test_m6b_run_inputs.py`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-run-inputs-form`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `e2e/test_m6b_run_inputs.py`: before `names = ...`, insert `expect(test_run.get_by_role("button", name="Answers for lookup", exact=True)).to_be_visible()`
+2. Edit `e2e/test_m6b_run_inputs.py`: replace the `all_inner_texts()` assertion with `expect(test_run.get_by_role("button", name=re.compile(r"^Answers for "))).to_have_text(["Answers for lookup", "Answers for pay"])`
+
+### Harness notes
+Harness note: the previous attempt of this task was rejected: the task's browser tests do not pass: test_m6b_run_inputs::test_answer_rows_write_the_mocks_and_the_fakes[chromium]
+E       AssertionError: assert [] == ['Answers for...wers for pay']
+E         Right contains 2 more items, first extra item: 'Answers for lookup'
+E         Full diff:
+E         + []
+E         - [
+E         -     'Answers for lookup',
+e2e/test_m6b_run_inputs.py:236
+
+### Clarifier suggestion
+Edit `e2e/test_m6b_run_inputs.py`: before `names = ...`, insert `expect(test_run.get_by_role("button", name="Answers for lookup", exact=True)).to_be_visible()`
+
+### Answer
+<!-- write below this line -->
