@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | open | none | verdict | Criterion C-3c7c4fbe (web-tools › The Grants page keeps its errors, options and subject ids and shows status badges › Grants in the error state and with rows): accept as satisfied? |
 | Q-007 | answered | none | verdict | Criterion C-403c66db (web-tools › The Policies page keeps one editor, bounded to the form width › Policies with no deployed policy): accept as satisfied? |
 | Q-008 | answered | none | verdict | Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-84f9c6e9: UI criterion C-1baa1083 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-85d419d4: UI criterion C-23f3a934 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-1dd17d4f: UI criterion C-5d8c406e has no end-to-end test; see the generated UI tests table |
@@ -289,7 +289,8 @@ accept The hold can be waived. Criterion C-b824c627 is a source-reading scenario
 
 ## Q-009: Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -308,6 +309,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-e4e27fab is satisfied WHEN captions-by-page.test.ts calls captionDisplayFor with the eight caption and heading pairs and reads the page sources for the captionDisplay marker. The passing Node test does exactly that: the hidden set is Users, Group mappings, Tool servers and Grants in table order, the visible set is Roles, Teams, Audit events and Tools, and exactly UsersPage, MappingsPage, ServersPage and GrantsPage contain captionDisplay={captionDisplayFor(. The function compares the trimmed caption with the trimmed heading, the table specs carry those captions, and the four sources hold the marker on their main table. Nothing in this criterion is observable in a browser beyond what the hidden-caption browser scenarios of the other criteria already check.
 ---
 
 ## Q-010: Hold H-84f9c6e9: UI criterion C-1baa1083 has no end-to-end test; see the generated UI tests table
