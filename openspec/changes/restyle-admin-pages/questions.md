@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-84f9c6e9: UI criterion C-1baa1083 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-85d419d4: UI criterion C-23f3a934 has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-85d419d4: UI criterion C-23f3a934 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-1dd17d4f: UI criterion C-5d8c406e has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-ddba32f9: UI criterion C-effeb70f has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table |
@@ -339,7 +339,8 @@ accept The hold can be waived. The unit already carries a browser test for this 
 
 ## Q-011: Hold H-85d419d4: UI criterion C-23f3a934 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -358,6 +359,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The unit carries a browser test for C-23f3a934, test_teams_form_sits_beside_the_tables_at_1366_and_above_them_at_1100 in e2e/test_m6b_admin.py, tagged with the criterion, which asserts every clause of the scenario: the right edge of the region Create team at most the left edge of the table Teams at 1366, the Team name width at most 640, the Roles caption class ui-table-caption, the region bottom at most the table top at 1100, assert_layout at both widths, assert_accessible and an empty CSP list. The sources make each clause true: the Roles and teams page puts the Create team Section first and the two tables second inside a grid with xl:grid-cols-[20rem_minmax(0,1fr)] and xl:items-start, the stylesheet entry overrides no breakpoint so xl is 1280 px, the Team name input sits in the 20 rem column, the Roles table passes no captionDisplay so its caption keeps the visible class, and the U07b shell with its header is in place for assert_layout. The harness lacks a passing record for this test, not the test itself.
 ---
 
 ## Q-012: Hold H-1dd17d4f: UI criterion C-5d8c406e has no end-to-end test; see the generated UI tests table
