@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-93e49184: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-903f2410: UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-a3cd42da: UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -306,7 +306,8 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ## Q-011: Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -325,3 +326,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The criterion The panel registry is a Node-tested scenario of createEditorPanelRegistry plus a source check of FlowEditorPage.tsx, not a browser scenario: its scenario names only registry calls, EditorPanelError codes, the immutability of list() and the position of listEditorPanels( after function FlowEditorPage( in the page source, and the specification itself says the frozen editor-panels.test.ts for this criterion stays green. Those frozen tests exist at the head and assert every row (valid registration, EDITOR_PANEL_DUPLICATE, EDITOR_PANEL_INVALID for the bad ids, titles and render, the copied list, registration order), and editor-sources.test.ts asserts the source ordering. The registry at the head throws exactly those codes and returns a copy, and the page calls listEditorPanels inside FlowEditorPage. Nothing in the scenario is a browser outcome, so no end-to-end test is needed and the unit can go on.
