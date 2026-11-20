@@ -1,4 +1,4 @@
-# Verification: openspec:restyle-admin-pages: NEEDS_HUMAN (round 4)
+# Verification: openspec:restyle-admin-pages: PASS (round 5)
 
 traceability: 10/12 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 10/12 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 1.0 | base main@e62be04a70 contained |
-| 1 | integrity | ok | 325.8 | 11 sub-checks; scope: 44 changed file(s) |
-| 2 | build | ok | 37.1 |  |
-| 3 | tests | ok | 445.6 |  |
-| 4 | traceability | ok | 0.2 | 10/12 criteria covered |
-| 4a | audit sampling | ok | 413.1 | 1 not_testable, 1 rejected, 1 skipped; support files at the base: 6 |
-| 5 | ui test generation | ok | 1040.8 | 1 base_error, 2 fails_at_head |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/admin/AuditPage.tsx, web/src/admin/MappingsPage.tsx, web/src/admin/TeamsPage.tsx, web/src/admin/UsersPage.tsx, web/src/tools/GrantsPage.tsx and 2 more |
-| 8 | s1 judge | ok | 0.5 | 11/12 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 673.7 | 3 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 4) |
+| 1 | integrity | reused | 0.0 | reused (round 4) |
+| 2 | build | reused | 0.0 | reused (round 4) |
+| 3 | tests | reused | 0.0 | reused (round 4) |
+| 4 | traceability | reused | 0.0 | reused (round 4) |
+| 4a | audit sampling | reused | 0.0 | reused (round 4) |
+| 5 | ui test generation | reused | 0.0 | reused (round 4) |
+| 6 | quality | reused | 0.0 | reused (round 4) |
+| 8 | s1 judge | reused | 0.0 | reused (round 4) |
+| 9 | judge | reused | 0.0 | reused (round 4) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -193,6 +193,9 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - Q-004 accept C-effeb70f by the delegate (claude-fable-5-1 via claude-code): The Audit log page satisfies the scenario. The Chain verification and Filter the audit log Sections sit in a grid with lg:grid-cols-2 and lg:items-start, so at 1366 their tops align and the first ends at the second's left edge, and the table follows below. The verification status paragraph has role ...
 - Q-005 accept C-68a6b8c2 by the delegate (claude-fable-5-1 via claude-code): The Tool servers page satisfies the scenario. With a server selected it renders the paragraph Registered by followed by personLabel of registeredBy after the servers table and before the Surface Section, so the text is visible and absent from the region, and useDisplayNames is called with that one i...
 - Q-007 accept C-403c66db by the delegate (claude-fable-5-1 via claude-code): The Policies page satisfies the scenario as written. Its root is cn(tools-page, PAGE_WIDTHS.form), that is max-w-3xl or 768 px, and the editor sits in a Card with padding inside it with a textarea of width 100 percent, so the Hand-written Cedar editor is at most 768 px wide. Once loaded the PageHead...
+- Q-018 accept H-5a571db9 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The generated test errors at the merge base, which proves nothing, and the unit carries two browser tests tagged with C-3c7c4fbe, test_grants_error_state_has_two_alerts_and_one_option and test_grants_rows_keep_subject_ids_and_show_status_badges_beside_the_form, which assert e...
+- Q-019 accept H-0fde35a8 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion says the hint A role, for example author, or a user id from the Users page. is shown under the Role or user field, and the sources make that a certainty: the subject Field in the Grants page passes that hint with the label Role or user, the field model turns a n...
+- Q-020 accept H-c33b0d83 by agent (CLAUDECODE): The generated test is wrong, not the code. It opens /grants, /roles, /mappings, /audit and /servers, but the pages are at /admin/grants, /admin/roles-and-teams, /admin/group-mappings, /admin/audit and /admin/tool-servers, and it mocks no /api/v1/me, so no heading ever appears: run locally at 13f109d...
 
 ## Criteria
 
@@ -236,12 +239,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-3802bfd0): No end-to-end test traces criterion C-3802bfd0 (web-tools › The Grants page keeps its errors, options and subject ids and shows status badges — regression 2 › the Grants page is open at 1366 by 860 with the rows and with the error state of its two e2e test...); step 5 generates one.
 - [minor, judge] Observable outcome for Grants hint not confirmed by a passing browser test (criterion C-e96ac1a6): The trace test for C-e96ac1a6 only asserts hint= is present on the subject Field (source-level); it does not verify the hint is rendered under the Role or user field in the browser. The gate report's supplementary generated UI test e2e/test_l4_c_e96ac1a6.py fails at head (also failed at base), so the observable outcome is unconfirmed. Evidence: gate report "UI tests the verifier generated" (C-e96ac1a6 fails_at_head); web/src/tools/grants-subject-hint.test.ts.
 - [minor, judge] Observable outcome for section heading geometry not confirmed by a passing browser test (criterion C-3802bfd0): The trace test for C-3802bfd0 only asserts the .ui-section grid-column CSS rule exists (source-level); it does not verify the pixel geometry (heading height < 2x font size, children aligned within 1px) in the browser. The gate report's supplementary generated UI test e2e/test_l4_c_3802bfd0.py fails at head (also failed at base), so the observable outcome is unconfirmed. Evidence: gate report "UI tests the verifier generated" (C-3802bfd0 fails_at_head); web/src/tools/grants-section-layout.test.ts.
-
-## Needs a human
-
-- UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table
-- UI criterion C-e96ac1a6 has no end-to-end test; see the generated UI tests table
-- UI criterion C-3802bfd0 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
