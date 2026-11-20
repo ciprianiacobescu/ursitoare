@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Criterion C-403c66db (web-tools › The Policies page keeps one editor, bounded to the form width › Policies with no deployed policy): accept as satisfied? |
 | Q-008 | answered | none | verdict | Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-84f9c6e9: UI criterion C-1baa1083 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-84f9c6e9: UI criterion C-1baa1083 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-85d419d4: UI criterion C-23f3a934 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-1dd17d4f: UI criterion C-5d8c406e has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-ddba32f9: UI criterion C-effeb70f has no end-to-end test; see the generated UI tests table |
@@ -314,7 +314,8 @@ accept The hold can be waived. Criterion C-e4e27fab is satisfied WHEN captions-b
 
 ## Q-010: Hold H-84f9c6e9: UI criterion C-1baa1083 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -333,6 +334,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The unit already carries a browser test for this criterion, test_users_page_hides_its_caption_toned_badge_and_red_disable_confirm in e2e/test_m6b_admin.py, tagged with C-1baa1083, which asserts every clause of the scenario: one heading Users, the caption class ui-table-caption ui-visually-hidden with position absolute and clip rect(0px, 0px, 0px, 0px), the header cell at most 2 px below the table top, one success badge Active and the id user-2 in Bob's row, one dialog heading, Disable user with data-tone danger and background rgb(180, 35, 24), Cancel focused, no dialog after Escape with the opener focused, and assert_layout, assert_accessible and an empty CSP list. The sources make each of these true: the Users page passes destructive to its ConfirmDialog, which the kit turns into data-tone danger and an initial focus on Cancel, the danger token is #b42318, the visually-hidden rule sets position absolute and clip rect(0, 0, 0, 0), the state cell is a success or neutral Badge, the id is shown under the name in font-mono, and the main table hides its caption through captionDisplayFor. The harness lacks only a red record for this test, not the test itself.
 ---
 
 ## Q-011: Hold H-85d419d4: UI criterion C-23f3a934 has no end-to-end test; see the generated UI tests table
