@@ -133,6 +133,7 @@ accept The code gives carol the three setup steps from what the API shows. loadP
 ## Q-004: Criterion C-c8aaa647 (web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The verification table says the harness's generated test for this criterion ran and fails at the head, with a screenshot and a trace as evidence. None of that is in the repository: the generated file, the test-results folder and the page capture are absent from the worktree or are harness output I m
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
