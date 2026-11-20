@@ -143,3 +143,4 @@
 {"at":"2026-11-20T18:14:15Z","attempt":1,"cost_usd":10.040994,"runs":5,"type":"plan.charged","unit":"openspec:add-flow-workspace"}
 {"at":"2026-11-20T18:14:15Z","run":"r-20261120T1814Z-4c5e","type":"unit.dispatched","unit":"openspec:add-flow-workspace"}
 {"at":"2026-11-20T18:25:09Z","head":"67b82724be7d626a3dfccabbdd32482d8f1821ce","pr":144,"target_before":"e8e2660d4a6e14d87afde3a95c6474b426f82859","type":"unit.merge_requested","unit":"openspec:add-flow-workspace"}
+{"at":"2026-11-20T18:25:13Z","ci":"not_run","head":"67b82724be7d626a3dfccabbdd32482d8f1821ce","merge_commit":"31ae513e15487d5d6ea3076df8217d945d8bb038","method":"squash","pr":144,"raced":false,"type":"unit.merged","unit":"openspec:add-flow-workspace"}
