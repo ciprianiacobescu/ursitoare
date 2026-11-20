@@ -29,7 +29,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-016 | answered | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-16db4d27: UI criterion C-403c66db has no end-to-end test; see the generated UI tests table |
 | Q-018 | answered | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
-| Q-019 | open | none | verdict | Hold H-0fde35a8: UI criterion C-e96ac1a6 has no end-to-end test; see the generated UI tests table |
+| Q-019 | answered | none | verdict | Hold H-0fde35a8: UI criterion C-e96ac1a6 has no end-to-end test; see the generated UI tests table |
 | Q-020 | open | none | verdict | Hold H-c33b0d83: UI criterion C-3802bfd0 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -544,7 +544,8 @@ accept The hold can be waived. The generated test errors at the merge base, whic
 
 ## Q-019: Hold H-0fde35a8: UI criterion C-e96ac1a6 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
@@ -563,6 +564,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion says the hint A role, for example author, or a user id from the Users page. is shown under the Role or user field, and the sources make that a certainty: the subject Field in the Grants page passes that hint with the label Role or user, the field model turns a non-empty hint into a hint id, and the kit's Field renders the hint paragraph with the class ui-field-hint after the control inside the field block, styled display block in muted text. The Node test named with the criterion checks that the subject Field passes the hint and that the text is defined. Nothing in the code can keep the hint out of the rendered page, and the rows, badges, alerts, options, subject ids and layout of the Grants scenario are unchanged.
 ---
 
 ## Q-020: Hold H-c33b0d83: UI criterion C-3802bfd0 has no end-to-end test; see the generated UI tests table
