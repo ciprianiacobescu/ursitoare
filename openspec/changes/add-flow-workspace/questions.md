@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-592f8050 (web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860): accept as satisfied? |
+| Q-001 | answered | none | verdict | Criterion C-592f8050 (web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-c88ddf4d (web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times): |
 | Q-004 | open | none | verdict | Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie |
@@ -28,7 +28,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-592f8050 (web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The scenario is made of rendered measurements (page height at most 2,600 px, the Graph and Edit the flow tops within 8 px, the Diagnostics heading bottom and the Save version bottom at most 860, the drawing top under 860) plus an axe run and a banner-height check. The source does hold the two xl:grid-cols-2 grids, the Section ids and the clamp() editor height, and e2e/test_m6b_workspace.py asserts exactly these numbers, but I cannot run a browser and the heights depend on fonts, paddings and the graph's rendered size. The verifier's own generated test for this criterion failed at the head twice and I cannot read its screenshot or trace. A person with the e2e stack should look at test-results for C-592f8050 before this is accepted.
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -56,6 +56,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Checked by the owner's delegate in a real browser on a private e2e stack, at head 55576665 (web code identical to the verified d8b6abcf). The unit's own test e2e/test_m6b_workspace.py::test_workspace_is_two_columns_with_every_panel_visible asserts this scenario line by line and passes at the head; with web/src reset to the base e8e2660d it fails on its first region assertion (line 119), so it discriminates. Measured at 1366 by 860: the page is 2,282 px tall (limit 2,600; it was 4,634 before this unit), Edit the flow and Graph both start at 218, Test run and Dry run both at 1,377, no two regions overlap and nothing scrolls sideways; at 1920, 1024 and 390 px wide there is also no overlap and no sideways scroll. I looked at the screenshots: editor and diagnostics on the left, graph on the right, versions full width, the two run panels side by side. The generated test test_l4_c_592f8050 fails at the head only because it never mocks /api/v1/me, so the page shows "Sign in required" (SESSION_ENDED); that is a setup error in the generated test, not the code.
 ---
 
 ## Q-002: Criterion C-c88ddf4d (web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view): accept as satisfied?
