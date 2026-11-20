@@ -9,7 +9,7 @@ Paths without a directory are in `web/src/runs/`. Frozen tests unchanged: `dry-r
 
 ## 2. The answer rows
 
-- [ ] 2.1 Write `mock-rows.test.ts` (scenario "Block nodes, labels and the text of the answers", T5, rows O1 to O5, A1 to A8 and B1 to B4) first, then implement `mockableNodes` (through `layoutFlow` of `web/src/flow-graph/layout.ts`), `answerLabel`, `mockRowsFromText` and `mockTextFromRows` in `mock-rows.ts`, implementing requirement "Answer rows list the block nodes and read and write the answers"
+- [x] 2.1 Write `mock-rows.test.ts` (scenario "Block nodes, labels and the text of the answers", T5, rows O1 to O5, A1 to A8 and B1 to B4) first, then implement `mockableNodes` (through `layoutFlow` of `web/src/flow-graph/layout.ts`), `answerLabel`, `mockRowsFromText` and `mockTextFromRows` in `mock-rows.ts`, implementing requirement "Answer rows list the block nodes and read and write the answers"
 - [ ] 2.2 Write `mock-rows-sync.test.ts` (scenario "Add, answer, remove, a bad answer and a text edit", T6, rows R1 to R8) first, then implement `rowSyncStart`, `rowSyncStep` and `rowSyncView` in `mock-rows.ts`, implementing requirement "Answer rows and the mocks or fakes text stay in step by the same rules"
 
 ## 3. The components and the panels
