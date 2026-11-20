@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-23f3a934 (web-admin › A form sits beside the tables from 1280 px and above them below › The team form is beside the tables at 1366 and above them at 1100): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-5d8c406e (web-admin › Reviewer names replace ids only when a person is found › Group mappings show Carol Example, keep operator:e2e-seed and fall back on a failure): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-effeb70f (web-admin › The Audit log keeps actor ids and reads its times on one line › One audit row keeps its ids and its time on one line): accept as satisfied? |
-| Q-005 | open | none | verdict | Criterion C-68a6b8c2 (web-tools › The tool server detail names who registered the server outside the Surface region › Registered by Carol Example sits outside the region and the row text is unchanged) |
+| Q-005 | answered | none | verdict | Criterion C-68a6b8c2 (web-tools › The tool server detail names who registered the server outside the Surface region › Registered by Carol Example sits outside the region and the row text is unchanged) |
 | Q-006 | open | none | verdict | Criterion C-3c7c4fbe (web-tools › The Grants page keeps its errors, options and subject ids and shows status badges › Grants in the error state and with rows): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-403c66db (web-tools › The Policies page keeps one editor, bounded to the form width › Policies with no deployed policy): accept as satisfied? |
 | Q-008 | open | none | verdict | Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table |
@@ -166,7 +166,8 @@ accept The Audit log page satisfies the scenario. The Chain verification and Fil
 
 ## Q-005: Criterion C-68a6b8c2 (web-tools › The tool server detail names who registered the server outside the Surface region › Registered by Carol Example sits outside the region and the row text is unchanged)
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -193,6 +194,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The Tool servers page satisfies the scenario. With a server selected it renders the paragraph Registered by followed by personLabel of registeredBy after the servers table and before the Surface Section, so the text is visible and absent from the region, and useDisplayNames is called with that one id, giving one /people request with ids=u_carol. The Surface line is serverRowText with the trailing state in a Badge of tone serverStateTone, so the region text is acme · https://tools.fake.test · pending with one badge pending of tone warning. The servers table hides its caption. The Approve surface button carries data-tone primary, the accent token is #1d4ed8 which is rgb(29, 78, 216), and its ConfirmDialog passes no destructive so the confirm keeps data-tone primary; the dialog title is Approve surface followed by the 12-character short digest. The browser test asserts each point.
 ---
 
 ## Q-006: Criterion C-3c7c4fbe (web-tools › The Grants page keeps its errors, options and subject ids and shows status badges › Grants in the error state and with rows): accept as satisfied?
