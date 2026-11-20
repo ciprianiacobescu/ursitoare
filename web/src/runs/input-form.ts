@@ -4,6 +4,7 @@ import type { ApiClient } from "../api/client.ts";
 import type { FormErrors } from "../kit/data/form-errors.ts";
 import { schemaToFields } from "../kit/data/schema-fields.ts";
 import type { SchemaField, SchemaFields } from "../kit/data/schema-fields.ts";
+import { initialValues, validateValues } from "../kit/data/schema-values.ts";
 import type { RawValues } from "../kit/data/schema-values.ts";
 
 export type InputFormModel = { kind: "form"; fields: SchemaFields } | { kind: "json"; reason: string };
@@ -82,17 +83,62 @@ export function inputFormModel(canonical: unknown): InputFormModel {
 }
 
 export function inputJsonFromForm(
-  _model: Extract<InputFormModel, { kind: "form" }>,
-  _raw: RawValues,
+  model: Extract<InputFormModel, { kind: "form" }>,
+  raw: RawValues,
 ): { ok: true; text: string } | { ok: false; errors: FormErrors } {
-  throw new Error("not implemented");
+  const result = validateValues(model.fields, raw);
+  if (!result.ok) return { ok: false, errors: result.errors };
+  return { ok: true, text: JSON.stringify(result.value, null, 2) };
+}
+
+function rawFromJsonValue(field: SchemaField, value: unknown): string | boolean | null {
+  switch (field.kind) {
+    case "boolean":
+      return typeof value === "boolean" ? value : null;
+    case "string":
+      return typeof value === "string" ? value : null;
+    case "enum":
+      return typeof value === "string" && field.options.includes(value) ? value : null;
+    case "integer":
+      return typeof value === "number" && Number.isSafeInteger(value) ? String(value) : null;
+    case "number":
+      return typeof value === "number" && Number.isFinite(value) ? String(value) : null;
+    case "string-list": {
+      if (!Array.isArray(value)) return null;
+      for (const entry of value) {
+        if (typeof entry !== "string" || entry.length === 0) return null;
+        if (entry !== entry.trim() || /[\r\n]/.test(entry)) return null;
+      }
+      return value.join("\n");
+    }
+    default:
+      return null;
+  }
 }
 
 export function formFromInputJson(
-  _model: Extract<InputFormModel, { kind: "form" }>,
-  _text: string,
+  model: Extract<InputFormModel, { kind: "form" }>,
+  text: string,
 ): RawValues | null {
-  return null;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    return null;
+  }
+  if (!isPlainObject(parsed)) return null;
+  const known = new Set(model.fields.fields.map((field) => field.name));
+  for (const key of Object.keys(parsed)) {
+    if (!known.has(key)) return null;
+  }
+  const filled: Record<string, string | boolean> = { ...initialValues(model.fields) };
+  for (const field of model.fields.fields) {
+    if (!Object.hasOwn(parsed, field.name)) continue;
+    const converted = rawFromJsonValue(field, parsed[field.name]);
+    if (converted === null) return null;
+    filled[field.name] = converted;
+  }
+  return filled;
 }
 
 export interface InputSync {
