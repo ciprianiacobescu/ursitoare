@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-9517e900 (web-shell › Only a ready session gets the dashboard › The signed-out home is unchanged): accept as satisfied? |
+| Q-001 | answered | none | verdict | Criterion C-9517e900 (web-shell › Only a ready session gets the dashboard › The signed-out home is unchanged): accept as satisfied? |
 | Q-002 | open | none | verdict | Criterion C-c3d0d88f (web-shell › The dashboard renders each list and step from its own state › Alice sees her runs, flows and next step): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-7837c9f9 (web-shell › The dashboard renders each list and step from its own state › Carol sees setup steps from what the API shows): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-c8aaa647 (web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again): accept as satisfied? |
@@ -33,7 +33,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-9517e900 (web-shell › Only a ready session gets the dashboard › The signed-out home is unchanged): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -60,6 +61,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The signed-out home is unchanged in the code. HomePage renders the old Landing markup (h1, the engine-health paragraph with role status, Check again with aria-disabled) whenever homeView answers public, which it does for a null, signed_out or failed session, and the single health effect lives in HomePage so the branch swap does not refetch it. A 401 from /me gives signed_out through the capability loader, so no list request is made and no section (region) exists. When every /api/v1 call answers the /me body, the cursor-page parser rejects it with INVALID_RESPONSE, both lists show the could-not-be-loaded line with a Try again button and no alert, and with the runs fact unknown the Next steps section is not rendered, which gives exactly the T8 main text. The unit's browser test test_the_signed_out_home_is_unchanged asserts these texts, the status and region counts, axe and the CSP list; it was only ignored because a browser test has no red run, which the project's rules do not require.
 ---
 
 ## Q-002: Criterion C-c3d0d88f (web-shell › The dashboard renders each list and step from its own state › Alice sees her runs, flows and next step): accept as satisfied?
