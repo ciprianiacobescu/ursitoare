@@ -36,6 +36,7 @@ I changed nothing. The e2e gate failed with exit code 2 and the new file `e2e/te
 ## Q-002: Task 1.2 is blocked
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The gate failure is a defect in the test file itself: e2e/test_m6b_home.py line 12 reads `HASH = "sha256:" + "ab".repeat(32)`, and Python str has no repeat method (it should be `"ab" * 32`), so the module raises AttributeError on import and collects no test. The question comes from a fix task, and t
 - **Blocking tasks:** 1.2
 - **Kind:** ambiguous
 - **Asked:** 2026-11-20T09:05Z by claude-sonnet, run r-20261120T0856Z-d6a7, task 1.2
