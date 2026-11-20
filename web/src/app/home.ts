@@ -5,7 +5,7 @@ import type { FlowRow } from "../flows/flows.ts";
 import type { CapabilityState } from "../kit/capabilities.ts";
 import type { RunView } from "../runs/types.ts";
 import { formatAgo, formatDuration, formatInstant } from "../ui/format.ts";
-import { runStateTone } from "../ui/tones.ts";
+import { runStateTone, versionStateTone } from "../ui/tones.ts";
 import type { Tone } from "../ui/tones.ts";
 
 export const HOME_LIMIT = 5;
@@ -107,8 +107,23 @@ export function runRows(
   });
 }
 
-export function recentFlows(_flows: readonly FlowRow[]): FlowRow[] {
-  return [];
+function changedAt(flow: FlowRow): string {
+  return flow.latest?.createdAt ?? flow.createdAt;
+}
+
+function changedMs(flow: FlowRow): number {
+  const ms = Date.parse(changedAt(flow));
+  return Number.isFinite(ms) ? ms : 0;
+}
+
+export function recentFlows(flows: readonly FlowRow[]): FlowRow[] {
+  return [...flows]
+    .sort((a, b) => {
+      const diff = changedMs(b) - changedMs(a);
+      if (diff !== 0) return diff;
+      return a.flowId < b.flowId ? -1 : a.flowId > b.flowId ? 1 : 0;
+    })
+    .slice(0, HOME_LIMIT);
 }
 
 export interface FlowRowView {
@@ -122,8 +137,32 @@ export interface FlowRowView {
   exact: string;
 }
 
-export function flowRows(_flows: readonly FlowRow[], _nowMs: number): FlowRowView[] {
-  return [];
+export function flowRows(flows: readonly FlowRow[], nowMs: number): FlowRowView[] {
+  return recentFlows(flows).map((flow) => {
+    const at = changedAt(flow);
+    const latest = flow.latest;
+    let version = "No version yet";
+    let tone: Tone = "neutral";
+    if (latest !== null) {
+      if (latest.validationOk === false) {
+        version = `v${latest.number} · has errors`;
+        tone = "danger";
+      } else {
+        version = `v${latest.number} · ${latest.state}`;
+        tone = versionStateTone(latest.state);
+      }
+    }
+    return {
+      flowId: flow.flowId,
+      href: `/flows/${flow.flowId}`,
+      ownerTeam: flow.ownerTeam,
+      version,
+      tone,
+      changed: formatAgo(at, nowMs),
+      changedIso: isoWithMicros(at),
+      exact: formatInstant(at),
+    };
+  });
 }
 
 export function nextSteps(
