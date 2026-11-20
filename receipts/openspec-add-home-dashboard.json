@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-20T11:55:44Z",
+  "integrated_revision": "745444abf7d9cb824757be3b0a439fec278d5375",
+  "merge_commit": "745444abf7d9cb824757be3b0a439fec278d5375",
+  "plan_digest": "03b7600f239a655c",
+  "plan_id": "m6b",
+  "postcheck": "pass",
+  "pr": 142,
+  "receipt_id": "m6b/openspec:add-home-dashboard/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "beeb27caf671c2c255634216519acdc8bd27a8ca",
+  "spec_digest": "583a0d444419a35d",
+  "target": "main",
+  "unit_id": "openspec:add-home-dashboard"
+}
