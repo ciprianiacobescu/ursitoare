@@ -9,7 +9,7 @@ from playwright.sync_api import Page, expect
 
 from conftest import assert_accessible, assert_layout, watch_csp
 
-HASH = "sha256:" + "ab".repeat(32)
+HASH = "sha256:" + "ab" * 32
 ALICE = ["read_self", "read_flow", "read_run", "read_registry", "test_flow", "dry_run_flow"]
 CAROL = [
     "read_self",
