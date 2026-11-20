@@ -6,7 +6,7 @@ Paths without a directory are in `web/src/flows/`. Each task is one red-green cy
 
 ## 2. Placement
 
-- [ ] 2.1 Write `panel-placement.test.ts` (scenario "Placement is read by splitPanels and a registry still accepts a panel without it", test-plan.md T5; this is the new test of the MODIFIED requirement and carries this unit's own C-id for that scenario) first, then add `placement: "side"` to the `registerEditorPanel` call of `features/75-flow-graph.tsx` (`GRAPH_PANEL` untouched), implementing the MODIFIED requirement "Other units can add panels to the editor page" (its type member came with task 1.1). The registry rows of the test are green at red (the registry is unchanged); the rows on `75-flow-graph.tsx` fail by assertion. `editor-panels.test.ts` and `flow-graph/pages.test.ts` stay green unchanged
+- [x] 2.1 Write `panel-placement.test.ts` (scenario "Placement is read by splitPanels and a registry still accepts a panel without it", test-plan.md T5; this is the new test of the MODIFIED requirement and carries this unit's own C-id for that scenario) first, then add `placement: "side"` to the `registerEditorPanel` call of `features/75-flow-graph.tsx` (`GRAPH_PANEL` untouched), implementing the MODIFIED requirement "Other units can add panels to the editor page" (its type member came with task 1.1). The registry rows of the test are green at red (the registry is unchanged); the rows on `75-flow-graph.tsx` fail by assertion. `editor-panels.test.ts` and `flow-graph/pages.test.ts` stay green unchanged
 
 ## 3. The workspace
 
