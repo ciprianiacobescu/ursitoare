@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-1baa1083 (web-admin › A destructive confirm is red and a state is a badge › Disable user opens red and the table keeps its name): accept as satisfied? |
-| Q-002 | open | none | verdict | Criterion C-23f3a934 (web-admin › A form sits beside the tables from 1280 px and above them below › The team form is beside the tables at 1366 and above them at 1100): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-23f3a934 (web-admin › A form sits beside the tables from 1280 px and above them below › The team form is beside the tables at 1366 and above them at 1100): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-5d8c406e (web-admin › Reviewer names replace ids only when a person is found › Group mappings show Carol Example, keep operator:e2e-seed and fall back on a failure): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-effeb70f (web-admin › The Audit log keeps actor ids and reads its times on one line › One audit row keeps its ids and its time on one line): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-68a6b8c2 (web-tools › The tool server detail names who registered the server outside the Surface region › Registered by Carol Example sits outside the region and the row text is unchanged) |
@@ -67,7 +67,8 @@ accept The Users page satisfies the scenario as written. It passes destructive t
 
 ## Q-002: Criterion C-23f3a934 (web-admin › A form sits beside the tables from 1280 px and above them below › The team form is beside the tables at 1366 and above them at 1100): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -94,6 +95,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The Roles and teams page satisfies the scenario. The Create team Section and the two tables sit in a grid with xl:grid-cols-[20rem_minmax(0,1fr)] and the Section first in DOM order, and the stylesheet entry overrides no Tailwind breakpoint, so the xl breakpoint is 1280 px: at 1366 the form is a 20 rem column left of the tables and at 1100 the grid is one column with the form above them. The Team name input is width 100% inside a .ui-field bounded at 40 rem and inside the 20 rem column, so it is at most 640 px wide. The Roles table passes no captionDisplay, so its caption keeps the visible class ui-table-caption. The browser test asserts these relations at both widths.
 ---
 
 ## Q-003: Criterion C-5d8c406e (web-admin › Reviewer names replace ids only when a person is found › Group mappings show Carol Example, keep operator:e2e-seed and fall back on a failure): accept as satisfied?
