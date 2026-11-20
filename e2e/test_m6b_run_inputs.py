@@ -12,7 +12,8 @@ HASH = "sha256:" + "a" * 64
 ENC = HASH.replace(":", "%3A")
 MISMATCH = "The JSON no longer matches the form; it is used as written."
 ROWS_MISMATCH = "The JSON no longer matches the answer rows; it is used as written."
-BAD_JSON = "This is not valid JSON."
+# The kit field error and the answer rows put a visually hidden "Error: " before the message.
+BAD_JSON = "Error: This is not valid JSON."
 CANNOT_SHOW = "The input schema uses features the form cannot show, so enter the input as JSON."
 ME = {
     "user": {"id": "user-1", "displayName": "Alice Example", "email": None},
@@ -232,6 +233,7 @@ def test_a_missing_required_field_blocks_the_start(page: Page) -> None:
 @pytest.mark.l4("C-6bc1b603")
 def test_answer_rows_write_the_mocks_and_the_fakes(page: Page) -> None:
     test_run, dry_run, posts, refuse, csp = open_flow(page, [canonical(FIELDS)])
+    expect(test_run.get_by_role("button", name="Answers for lookup", exact=True)).to_be_visible()
     names = test_run.get_by_role("button", name=re.compile(r"^Answers for ")).all_inner_texts()
     assert [n.strip() for n in names] == ["Answers for lookup", "Answers for pay"]
     mocks = test_run.get_by_role("textbox", name="Mocks (JSON)", exact=True)
