@@ -1,4 +1,4 @@
-# Verification: openspec:add-flow-workspace: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-flow-workspace: PASS (round 2)
 
 traceability: 7/11 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 7/11 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base main@e8e2660d4a contained |
-| 1 | integrity | ok | 757.0 | 11 sub-checks; scope: 16 changed file(s) |
-| 2 | build | ok | 32.4 |  |
-| 3 | tests | ok | 385.8 |  |
-| 4 | traceability | ok | 0.2 | 7/11 criteria covered |
-| 4a | audit sampling | ok | 312.6 | 1 not_testable, 1 rejected; support files at the base: 5 |
-| 5 | ui test generation | ok | 2165.2 | 5 fails_at_head, 5 not_testable, 1 writer_failed; 4 not_testable covered by step 4: notes, no hold (L4-VER-067); e2e support files shown to the writer: 1 |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/features/75-flow-graph.tsx, web/src/flow-graph/FlowGraphPage.tsx, web/src/flows/FlowEditorPage.tsx, web/src/flows/FlowsPage.tsx, web/src/flows/editor-panels.ts and 1 more |
-| 8 | s1 judge | ok | 0.5 | 10/11 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 718.1 | 3 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 4a | audit sampling | reused | 0.0 | reused (round 1) |
+| 5 | ui test generation | reused | 0.0 | reused (round 1) |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -149,6 +149,20 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 - C-2aa2aa19: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_2aa2aa19_r1.py
 
+## Answers to verdict questions
+
+- Q-001 accept C-592f8050 by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack, at head 55576665 (web code identical to the verified d8b6abcf). The unit's own test e2e/test_m6b_workspace.py::test_workspace_is_two_columns_with_every_panel_visible asserts this scenario line by line and passes at the head; w...
+- Q-002 accept C-c88ddf4d by the delegate (claude-fable-5-1 via claude-code): Every assertion of the scenario follows from the sources at the head. jumpLinks builds the six links in page order from the graph side panel and the two below panels of 80-runs.tsx, each href pointing at a Section id that FlowEditorPage.tsx renders exactly once (flow-editor, flow-diagnostics, flow-v...
+- Q-003 accept C-a1593e86 by the delegate (claude-fable-5-1 via claude-code): The scenario follows from the sources at the head. The editor host is followed directly by the Save version button inside the Edit the flow section, and the editor keymap binds only the default and history keys, so Tab leaves the editor for Save version, as the frozen m3e pin already relies on. The ...
+- Q-004 accept C-5368fc63 by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack, at head 55576665. The unit's own test e2e/test_m6b_workspace.py::test_owner_team_is_prefilled_from_my_teams asserts this scenario line by line (value finance before the fill, ops after it, one datalist option, assert_layout, a...
+- Q-005 accept H-c9eda519 by the delegate (claude-fable-5-1 via claude-code): The criterion jumpLinks lists the index in page order is a Node-tested scenario of the pure function jumpLinks, not a browser scenario: the specification names workspace.test.ts and test-plan T2, and that test exists at the head with the full assertion of the six links, the three-link empty case and...
+- Q-006 accept H-f1cd4626 by the delegate (claude-fable-5-1 via claude-code): The criterion ownerTeamSuggestions sorts, drops and prefills is a Node-tested scenario of the pure function ownerTeamSuggestions, not a browser scenario: the specification names workspace.test.ts and test-plan T3, and that test exists at the head under the criterion id with every row of the scenario...
+- Q-007 accept H-09acf823 by agent (CLAUDECODE): C-592f8050 has a discriminating end-to-end test: e2e/test_m6b_workspace.py::test_workspace_is_two_columns_with_every_panel_visible, tagged with the criterion id, passes at head 55576665 and fails with web/src at the base e8e2660d (checked by the owner's delegate on a private e2e stack; see Q-001 for...
+- Q-008 accept H-93e49184 by the delegate (claude-fable-5-1 via claude-code): The criterion has an end-to-end test at the head: test_jump_links_reach_their_panels_and_the_bar_sticks in e2e/test_m6b_workspace.py, tagged with the criterion id, asserts the six links with their texts and hrefs in order, one target per href, one navigation landmark, the URL fragment after the clic...
+- Q-009 accept H-903f2410 by the delegate (claude-fable-5-1 via claude-code): The criterion has an end-to-end test at the head: test_tab_from_the_editor_names_authors_and_keeps_the_scroller in e2e/test_m6b_workspace.py, tagged with the criterion id, focuses the textbox Flow text, presses Tab, expects Save version focused, reads overflow-x of the first .cm-scroller, finds the ...
+- Q-010 accept H-a3cd42da by agent (CLAUDECODE): C-5368fc63 has a discriminating end-to-end test: e2e/test_m6b_workspace.py::test_owner_team_is_prefilled_from_my_teams, tagged with the criterion id, passes at head 55576665 and fails with web/src at the base e8e2660d (Owner team "" instead of finance), checked by the owner's delegate on a private e...
+- Q-011 accept H-bbd88603 by the delegate (claude-fable-5-1 via claude-code): The criterion The panel registry is a Node-tested scenario of createEditorPanelRegistry plus a source check of FlowEditorPage.tsx, not a browser scenario: its scenario names only registry calls, EditorPanelError codes, the immutability of list() and the position of listEditorPanels( after function F...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -157,11 +171,11 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-48e39912 | web-flow-editor › The workspace helpers split panels, list the section index and suggest owner teams › jumpLinks lists the index in page order | pass | pass | the judge passed it and a discriminating test passes |
 | C-2aa2aa19 | web-flow-editor › The workspace helpers split panels, list the section index and suggest owner teams › ownerTeamSuggestions sorts, drops and prefills | pass | pass | the judge passed it and a discriminating test passes |
 | C-6e1daab9 | web-flow-editor › The flow page is a two-column workspace with every panel visible › The page sources hold the layout, the ids, the index and the rules | pass | pass | the judge passed it and a discriminating test passes |
-| C-592f8050 | web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860 | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-c88ddf4d | web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-a1593e86 | web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-592f8050 | web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860 | pass | pass | accepted by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack, at head 55576665 (web code identical to the verified d8b6abcf). The unit's own test e2e/test_m6b_workspace.py::test_workspace_is_two_columns_with_every_panel_visible asserts this scenario line b... |
+| C-c88ddf4d | web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): Every assertion of the scenario follows from the sources at the head. jumpLinks builds the six links in page order from the graph side panel and the two below panels of 80-runs.tsx, each href pointing at a Section id that FlowEditorPage.ts... |
+| C-a1593e86 | web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The scenario follows from the sources at the head. The editor host is followed directly by the Save version button inside the Edit the flow section, and the editor keymap binds only the default and history keys, so Tab leaves the editor fo... |
 | C-529a32ce | web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › The Flows page sources keep their labels and use the datalist | pass | pass | the judge passed it and a discriminating test passes |
-| C-5368fc63 | web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-5368fc63 | web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one | pass | pass | accepted by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack, at head 55576665. The unit's own test e2e/test_m6b_workspace.py::test_owner_team_is_prefilled_from_my_teams asserts this scenario line by line (value finance before the fill, ops after it, one d... |
 | C-159129bd | web-flow-editor › Other units can add panels to the editor page › The panel registry | pass | pass | the judge passed it and a discriminating test passes |
 | C-fde02d58 | web-flow-editor › Other units can add panels to the editor page › Placement is read by splitPanels and a registry still accepts a panel without it | pass | pass | the judge passed it and a discriminating test passes |
 
@@ -186,16 +200,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-fde02d58): No end-to-end test traces criterion C-fde02d58 (web-flow-editor › Other units can add panels to the editor page › Placement is read by splitPanels and a registry still accepts a panel without it); step 5 generates one.
 - [minor, judge] ownerTeamSuggestions does not trim entries itself (spec gap) (criterion C-2aa2aa19): No scenario pins down a team entry with surrounding whitespace. The spec says to keep the valid trimmed values, but ownerTeamSuggestions stores checkOwnerTeam's returned value with no separate trim step, so an implementation that trims before validation could behave differently (for example accepting " finance " where this code relies on checkOwnerTeam).
 - [minor, judge] jumpLinks may emit duplicate link ids (spec gap) (criterion C-48e39912): No scenario uses a panel id equal to editor/diagnostics/versions. jumpLinks fixes ids editor/diagnostics/versions and reuses panel ids for panel links, so a panel with id "editor" yields two links with id "editor" (different hrefs); the page renders keys by href, but the DOM would hold duplicate ids.
-
-## Needs a human
-
-- UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table
-- UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table
-- UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table
-- UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table
-- UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table
-- UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table
-- UI criterion C-159129bd has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
