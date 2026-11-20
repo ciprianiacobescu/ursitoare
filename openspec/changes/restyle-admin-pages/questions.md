@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Hold H-85d419d4: UI criterion C-23f3a934 has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-1dd17d4f: UI criterion C-5d8c406e has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-ddba32f9: UI criterion C-effeb70f has no end-to-end test; see the generated UI tests table |
-| Q-014 | open | none | verdict | Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table |
+| Q-014 | answered | none | verdict | Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-48b9bece: UI criterion C-68a6b8c2 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-16db4d27: UI criterion C-403c66db has no end-to-end test; see the generated UI tests table |
@@ -414,7 +414,8 @@ accept The hold can be waived. The unit carries a browser test for C-effeb70f, t
 
 ## Q-014: Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -433,6 +434,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-e553aba2 is a source-reading scenario by its own text: it is satisfied WHEN tools-pages-restyle.test.ts reads the three page sources and tools.css with tokens.css and finds the pinned substrings, counts, token pairs and checker results, including three mutated sources that must fail the checker. That is exactly what the two Node tests named with the criterion do, so a browser test adds nothing a browser can observe, as the verifier's own not_testable finding says. The design also records that this unit's Node tests read the page sources because a Node test cannot import a tsx file, and leaves behaviour to the separate browser scenarios of the other criteria.
 ---
 
 ## Q-015: Hold H-48b9bece: UI criterion C-68a6b8c2 has no end-to-end test; see the generated UI tests table
