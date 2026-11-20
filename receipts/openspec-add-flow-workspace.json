@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-20T18:30:07Z",
+  "integrated_revision": "31ae513e15487d5d6ea3076df8217d945d8bb038",
+  "merge_commit": "31ae513e15487d5d6ea3076df8217d945d8bb038",
+  "plan_digest": "03b7600f239a655c",
+  "plan_id": "m6b",
+  "postcheck": "pass",
+  "pr": 144,
+  "receipt_id": "m6b/openspec:add-flow-workspace/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "67b82724be7d626a3dfccabbdd32482d8f1821ce",
+  "spec_digest": "82e57802c1d4527e",
+  "target": "main",
+  "unit_id": "openspec:add-flow-workspace"
+}
