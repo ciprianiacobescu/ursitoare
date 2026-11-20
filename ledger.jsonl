@@ -148,3 +148,4 @@
 {"at":"2026-11-20T18:30:07Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"31ae513e15487d5d6ea3076df8217d945d8bb038","status":"pass","type":"unit.postcheck","unit":"openspec:add-flow-workspace"}
 {"at":"2026-11-20T18:30:07Z","revision":"31ae513e15487d5d6ea3076df8217d945d8bb038","type":"unit.integrated","unit":"openspec:add-flow-workspace"}
 {"at":"2026-11-20T18:30:07Z","attempt":1,"cost_usd":10.040994,"runs":5,"type":"plan.charged","unit":"openspec:add-flow-workspace"}
+{"at":"2026-11-20T18:32:06Z","branch":"l4/archive/openspec/add-flow-workspace","head":"07b879df56523f338a63584ca8f3e9fbc682dde9","type":"unit.branch_deleted","unit":"openspec:add-flow-workspace"}
