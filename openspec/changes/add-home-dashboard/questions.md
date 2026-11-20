@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-5c823df8: UI criterion C-d8b03242 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-26953a7c: UI criterion C-d54270f7 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-4faceff9: UI criterion C-1818ac9b has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-8d0fd794: UI criterion C-9de28eec has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-8d0fd794: UI criterion C-9de28eec has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-5215cd10: UI criterion C-942b137c has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-c77bd28c: UI criterion C-d63e4803 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-157de455: UI criterion C-c3d0d88f has no end-to-end test; see the generated UI tests table |
@@ -314,7 +314,8 @@ accept Criterion C-1818ac9b is the administrator scenario of nextSteps, which th
 
 ## Q-011: Hold H-8d0fd794: UI criterion C-9de28eec has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -333,6 +334,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-9de28eec is the scenario in which nothing is claimed that the page has not read. The specification frames it as a direct call of nextSteps with the reader capabilities and rows N6 to N9, N13 and N16 to N18, and nextSteps is a pure function with no browser surface of its own, so a Node test is the intended trace. That test exists, is named with the criterion id, and asserts each row: a completed run gives no step with settled true, a failed run in sixth place gives no step, unknown runs give no step with settled false, an administrator with policy and users unknown and three servers on an incomplete page gets only the pending tool servers step with badge 3+ and settled false, and read_self alone or an author with no facts gives no step with settled false. The implementation returns a step only when the capability is present and the fact is known, looks only at the first five runs, and sets settled only when at least one fact was asked for and every asked fact is known. The hold can be waived.
 ---
 
 ## Q-012: Hold H-5215cd10: UI criterion C-942b137c has no end-to-end test; see the generated UI tests table
