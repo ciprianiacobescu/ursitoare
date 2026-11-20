@@ -570,6 +570,7 @@ accept The hold can be waived. The criterion says the hint A role, for example a
 ## Q-020: Hold H-c33b0d83: UI criterion C-3802bfd0 has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The criterion is pixel geometry in a browser: in six regions the heading must be on one line and every other child must start at the heading's left edge within 1 px and at or below its bottom. The repository holds the rule meant to give that, theme.css:237 spans every non-title child of .ui-section
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
