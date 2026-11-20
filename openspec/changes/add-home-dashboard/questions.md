@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Hold H-5215cd10: UI criterion C-942b137c has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-c77bd28c: UI criterion C-d63e4803 has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-157de455: UI criterion C-c3d0d88f has no end-to-end test; see the generated UI tests table |
-| Q-015 | open | none | verdict | Hold H-5c39e94a: UI criterion C-7837c9f9 has no end-to-end test; see the generated UI tests table |
+| Q-015 | answered | none | verdict | Hold H-5c39e94a: UI criterion C-7837c9f9 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-48d2a201: UI criterion C-c8aaa647 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -414,7 +414,8 @@ accept Criterion C-c3d0d88f is the scenario in which alice sees her runs, flows 
 
 ## Q-015: Hold H-5c39e94a: UI criterion C-7837c9f9 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -433,6 +434,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-7837c9f9 is the scenario in which carol sees setup steps from what the API shows. The unit ships its own browser test for it, test_carol_sees_setup_steps_from_what_the_api_shows, tagged with the criterion id, and it asserts the three step links and hrefs, the three descriptions, the No runs yet and No flows yet empty states with Browse flows and Go to flows to /flows, layout, axe and CSP. The harness's generated copy was uncollectable only because it imported a playwright_axe module that is not installed; the unit's test uses the accessibility helper of the e2e conftest instead. I traced the code: the tool server parser accepts the three servers and the loader counts the two pending ones, the account parser accepts the three accounts and the loader counts the one active human with empty roles and localRoles, a policy body with current null and pendingGrants 2 parses to two pending grants, and nextSteps gives Give people a role, Review pending tool servers and Deploy grant changes in that order with the T4 N10 texts and the admin hrefs. Carol lacks test_flow, so the empty states link Browse flows and Go to flows. The hold can be waived.
 ---
 
 ## Q-016: Hold H-48d2a201: UI criterion C-c8aaa647 has no end-to-end test; see the generated UI tests table
