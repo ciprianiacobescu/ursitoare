@@ -17,6 +17,8 @@
 .flow-graph-svg {
   display: block;
   width: 100%;
+  max-width: 36rem;
+  margin-inline: auto;
   height: auto;
 }
 
@@ -74,6 +76,9 @@
   fill: var(--ui-color-text-muted);
   font-family: var(--ui-font-sans);
   font-size: 0.75rem;
+  paint-order: stroke;
+  stroke: var(--ui-color-bg);
+  stroke-width: 4px;
 }
 
 .flow-graph-arrow {

@@ -10,7 +10,7 @@ Paths without a directory are in `web/src/flows/`. Each task is one red-green cy
 
 ## 3. The workspace
 
-- [ ] 3.1 Write `workspace-sources.test.ts` (scenario "The page sources hold the layout, the ids, the index and the rules", test-plan.md T4 rows `FlowEditorPage.tsx`, `FlowGraphPage.tsx`, `75-flow-graph.tsx`, `flows.css` and `flow-graph.css`) first, then:
+- [x] 3.1 Write `workspace-sources.test.ts` (scenario "The page sources hold the layout, the ids, the index and the rules", test-plan.md T4 rows `FlowEditorPage.tsx`, `FlowGraphPage.tsx`, `75-flow-graph.tsx`, `flows.css` and `flow-graph.css`) first, then:
   - rewrite the return of `FlowEditorPage.tsx` as design.md decisions 1, 2 and 5 to 8 say: `PageHeader` in all four branches, the sticky list "On this page" from `jumpLinks(splitPanels(listEditorPanels()))`, the two grids, `Section`s with the ids of the spec, `Button`, `Badge` and `personLabel(names, row.author)` fed by `useDisplayNames` over the list's rows (`useSyncExternalStore(list.subscribe, …)`), the saved time as `<time dateTime={row.createdAt}>` around `formatInstant(row.createdAt)`, the hidden caption from `captionDisplayFor`, `Loaded` gaining `ownerTeam`, and the `scrollIntoView` call at the end of `show` (decision 4);
   - edit `flows.css` (`.flow-editor-host` as decision 3; delete the two `.flow-section` rules);
   - edit `flow-graph.css` (`.flow-graph-svg` `max-width: 36rem` and `margin-inline: auto`);

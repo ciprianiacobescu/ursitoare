@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { ReactNode } from "react";
 import { useParams } from "react-router";
 
@@ -7,8 +7,17 @@ import { browserSession } from "../auth/browser-session.ts";
 import { DataTable } from "../kit/data/DataTable.tsx";
 import { createCursorList } from "../kit/data/cursor-list.ts";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
+import { captionDisplayFor } from "../kit/layout/layout.ts";
+import { PageHeader } from "../kit/layout/PageHeader.tsx";
+import { Section } from "../kit/layout/Section.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { toast } from "../kit/toast.ts";
+import { personLabel } from "../people/people.ts";
+import { useDisplayNames } from "../people/use-names.ts";
+import { Badge } from "../ui/badge.tsx";
+import { Button } from "../ui/button.tsx";
+import { formatInstant } from "../ui/format.ts";
+import { versionStateTone } from "../ui/tones.ts";
 import { CodeEditor } from "./CodeEditor.tsx";
 import { diagnosticRows, diagnosticsSummary, textProblemRow } from "./diagnostics.ts";
 import type { DiagnosticRow, ValidationView } from "./diagnostics.ts";
@@ -17,10 +26,12 @@ import { editorStatus, planValidate, saveMessage } from "./editor-model.ts";
 import type { Baseline } from "./editor-model.ts";
 import type { EditorHandle } from "./editor-mount.ts";
 import { listEditorPanels } from "./editor-panels.ts";
+import type { EditorPanel } from "./editor-panels.ts";
 import { loadFlow } from "./flows.ts";
 import { flowErrorMessage } from "./messages.ts";
 import { FLOW_TABLES } from "./pages.ts";
 import { lineColumnOffset, pointerRange } from "./positions.ts";
+import { jumpLinks, splitPanels } from "./workspace.ts";
 import {
   loadVersion,
   saveVersion,
@@ -36,6 +47,7 @@ interface Loaded {
   initialText: string;
   baseline: Baseline | null;
   outcome: Outcome | null;
+  ownerTeam: string;
 }
 
 interface Outcome {
@@ -49,7 +61,6 @@ export function FlowEditorPage(): ReactNode {
   const flowId = params["flowId"] ?? "";
   const valid = FLOW_ID.test(flowId) && flowId.length <= 64;
   const headingRef = useRef<HTMLHeadingElement | null>(null);
-  const idPrefix = useId();
   const handleRef = useRef<EditorHandle | null>(null);
   const busyRef = useRef(false);
 
@@ -67,6 +78,8 @@ export function FlowEditorPage(): ReactNode {
     () => createCursorList(versionListFetcher(browserSession.api, valid ? flowId : "a")),
     [flowId, valid],
   );
+  const versionRows = useSyncExternalStore(list.subscribe, list.getState).items;
+  const names = useDisplayNames(versionRows.map((row) => row.author));
 
   useEffect(() => {
     const previous = document.title;
@@ -86,7 +99,12 @@ export function FlowEditorPage(): ReactNode {
         const flow = await loadFlow(browserSession.api, flowId, controller.signal);
         let next: Loaded;
         if (flow.latest === null) {
-          next = { initialText: starterText(flowId), baseline: null, outcome: null };
+          next = {
+            initialText: starterText(flowId),
+            baseline: null,
+            outcome: null,
+            ownerTeam: flow.ownerTeam,
+          };
         } else {
           const detail = await loadVersion(
             browserSession.api,
@@ -99,6 +117,7 @@ export function FlowEditorPage(): ReactNode {
             initialText: savedText,
             baseline: { text: savedText, version },
             outcome: { canonical, result, validatedAt: version.validatedAt },
+            ownerTeam: flow.ownerTeam,
           };
         }
         if (controller.signal.aborted) return;
@@ -228,12 +247,13 @@ export function FlowEditorPage(): ReactNode {
     }
     editor.focus();
     editor.select(range.from, range.to);
+    document.getElementById("flow-editor")?.scrollIntoView({ block: "start" });
   };
 
   if (!valid) {
     return (
-      <div className="flow-page">
-        <h1 ref={headingRef} tabIndex={-1}>{`Flow ${flowId}`}</h1>
+      <div className="flow-page flex flex-col gap-4 max-w-none">
+        <PageHeader title={`Flow ${flowId}`} headingRef={headingRef} />
         <ErrorPanel error={new ApiRequestError(404, "NOT_FOUND", "Not found")} />
       </div>
     );
@@ -241,30 +261,45 @@ export function FlowEditorPage(): ReactNode {
 
   if (loadError !== null) {
     return (
-      <div className="flow-page">
-        <h1 ref={headingRef} tabIndex={-1}>{`Flow ${flowId}`}</h1>
+      <div className="flow-page flex flex-col gap-4 max-w-none">
+        <PageHeader title={`Flow ${flowId}`} headingRef={headingRef} />
         <ErrorPanel error={loadError} />
-        <button
-          type="button"
-          className="ui-button"
+        <Button
           onClick={() => {
             setAttempt((n) => n + 1);
           }}
         >
           Try again
-        </button>
+        </Button>
       </div>
     );
   }
 
   if (loaded === null) {
     return (
-      <div className="flow-page">
-        <h1 ref={headingRef} tabIndex={-1}>{`Flow ${flowId}`}</h1>
+      <div className="flow-page flex flex-col gap-4 max-w-none">
+        <PageHeader title={`Flow ${flowId}`} headingRef={headingRef} />
         <LoadingState label="Loading flow" />
       </div>
     );
   }
+
+  const savedState = baseline === null ? null : baseline.version.state;
+  const header = (
+    <PageHeader
+      title={`Flow ${flowId}`}
+      headingRef={headingRef}
+      meta={
+        <>
+          <span>{`Owner team: ${loaded.ownerTeam}`}</span>
+          {savedState === null ? null : (
+            <Badge tone={versionStateTone(savedState)}>{savedState}</Badge>
+          )}
+          <p role="status">{editorStatus(baseline, text)}</p>
+        </>
+      }
+    />
+  );
 
   const unchanged = baseline !== null && baseline.text === text;
   const shownResult = unchanged && textRow === null ? (outcome?.result ?? null) : null;
@@ -273,7 +308,8 @@ export function FlowEditorPage(): ReactNode {
     summaryResult === null
       ? "No validation result yet. Choose Validate."
       : diagnosticsSummary(summaryResult, outcome?.validatedAt ?? null);
-  const panels = listEditorPanels();
+  const workspace = splitPanels(listEditorPanels());
+  const links = jumpLinks(workspace);
 
   const columns = FLOW_TABLES.versions.columns.map((column) => ({
     ...column,
@@ -282,23 +318,22 @@ export function FlowEditorPage(): ReactNode {
         case "number":
           return String(row.number);
         case "state":
-          return row.state;
+          return <Badge tone={versionStateTone(row.state)}>{row.state}</Badge>;
         case "saved":
-          return row.createdAt;
+          return <time dateTime={row.createdAt}>{formatInstant(row.createdAt)}</time>;
         case "author":
-          return row.author;
+          return personLabel(names, row.author);
         case "actions":
           return (
-            <button
-              type="button"
-              className="ui-button"
+            <Button
+              size="sm"
               aria-disabled={busy}
               onClick={() => {
                 onOpen(row);
               }}
             >
               {`Open version ${row.number}`}
-            </button>
+            </Button>
           );
         default:
           return null;
@@ -306,76 +341,97 @@ export function FlowEditorPage(): ReactNode {
     },
   }));
 
+  const renderPanel = (panel: EditorPanel): ReactNode => (
+    <Section
+      key={panel.id}
+      title={panel.title}
+      id={`flow-panel-${panel.id}`}
+      className="scroll-mt-16"
+    >
+      {panel.render({
+        flowId,
+        text,
+        version: unchanged ? (baseline?.version ?? null) : null,
+        canonical: unchanged ? (outcome?.canonical ?? null) : null,
+        result: shownResult,
+      })}
+    </Section>
+  );
+
   return (
-    <div className="flow-page">
-      <h1 ref={headingRef} tabIndex={-1}>{`Flow ${flowId}`}</h1>
-      <p role="status">{editorStatus(baseline, text)}</p>
-      <section className="flow-section" aria-labelledby={`${idPrefix}-edit`}>
-        <h2 id={`${idPrefix}-edit`}>Edit the flow</h2>
-        <CodeEditor initialText={loaded.initialText} onChange={setText} onReady={onReady} />
-        <p className="flow-hint">Press Tab to leave the editor.</p>
-        <div>
-          <button type="button" className="ui-button" aria-disabled={busy} onClick={onSave}>
-            Save version
-          </button>{" "}
-          <button type="button" className="ui-button" aria-disabled={busy} onClick={onValidate}>
-            Validate
-          </button>
+    <div className="flow-page flex flex-col gap-4 max-w-none">
+      {header}
+      <ul
+        aria-label="On this page"
+        className="sticky top-0 z-10 m-0 flex list-none flex-wrap gap-4 border-b border-divider bg-bg p-0"
+      >
+        {links.map((link) => (
+          <li key={link.href}>
+            <a href={link.href} className="inline-flex min-h-8 items-center text-accent">
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-2">
+        <div className="flex min-w-0 flex-col gap-4">
+          <Section title="Edit the flow" id="flow-editor" className="scroll-mt-16">
+            <CodeEditor initialText={loaded.initialText} onChange={setText} onReady={onReady} />
+            <div className="flex flex-wrap items-center gap-2">
+              <Button tone="primary" aria-disabled={busy} onClick={onSave}>
+                Save version
+              </Button>
+              <Button tone="secondary" aria-disabled={busy} onClick={onValidate}>
+                Validate
+              </Button>
+              <span className="flow-hint">Press Tab to leave the editor.</span>
+            </div>
+          </Section>
+          <Section title="Diagnostics" id="flow-diagnostics" className="scroll-mt-16">
+            <p role="status">{summary}</p>
+            <ul className="flow-issues" aria-label="Issues">
+              {rows.map((row) => (
+                <li key={row.key}>
+                  <strong>{row.severity}</strong> <code>{row.code}</code> {row.where}:{" "}
+                  {row.message}{" "}
+                  {row.href === null ? null : (
+                    <a href={row.href} target="_blank" rel="noopener noreferrer">
+                      {row.linkText}
+                    </a>
+                  )}{" "}
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      show(row);
+                    }}
+                  >
+                    {`Show ${row.code} in the editor`}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </Section>
         </div>
-      </section>
-      <section className="flow-section" aria-labelledby={`${idPrefix}-diag`}>
-        <h2 id={`${idPrefix}-diag`}>Diagnostics</h2>
-        <p role="status">{summary}</p>
-        <ul className="flow-issues" aria-label="Issues">
-          {rows.map((row) => (
-            <li key={row.key}>
-              <strong>{row.severity}</strong> <code>{row.code}</code> {row.where}: {row.message}{" "}
-              {row.href === null ? null : (
-                <a href={row.href} target="_blank" rel="noopener noreferrer">
-                  {row.linkText}
-                </a>
-              )}{" "}
-              <button
-                type="button"
-                className="ui-button"
-                onClick={() => {
-                  show(row);
-                }}
-              >
-                {`Show ${row.code} in the editor`}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </section>
-      <DataTable
-        caption={FLOW_TABLES.versions.caption}
-        columns={columns}
-        list={list}
-        rowKey={(row) => row.hash}
-        {...(FLOW_TABLES.versions.emptyTitle === undefined
-          ? {}
-          : { emptyTitle: FLOW_TABLES.versions.emptyTitle })}
-        {...(FLOW_TABLES.versions.emptyDescription === undefined
-          ? {}
-          : { emptyDescription: FLOW_TABLES.versions.emptyDescription })}
-      />
-      {panels.map((panel) => (
-        <section
-          key={panel.id}
-          className="flow-section"
-          aria-labelledby={`${idPrefix}-panel-${panel.id}`}
-        >
-          <h2 id={`${idPrefix}-panel-${panel.id}`}>{panel.title}</h2>
-          {panel.render({
-            flowId,
-            text,
-            version: unchanged ? (baseline?.version ?? null) : null,
-            canonical: unchanged ? (outcome?.canonical ?? null) : null,
-            result: shownResult,
-          })}
-        </section>
-      ))}
+        <div className="flex min-w-0 flex-col gap-4">{workspace.side.map(renderPanel)}</div>
+      </div>
+      <Section title="Versions" id="flow-versions" className="scroll-mt-16">
+        <DataTable
+          caption={FLOW_TABLES.versions.caption}
+          captionDisplay={captionDisplayFor("Versions", "Versions")}
+          columns={columns}
+          list={list}
+          rowKey={(row) => row.hash}
+          {...(FLOW_TABLES.versions.emptyTitle === undefined
+            ? {}
+            : { emptyTitle: FLOW_TABLES.versions.emptyTitle })}
+          {...(FLOW_TABLES.versions.emptyDescription === undefined
+            ? {}
+            : { emptyDescription: FLOW_TABLES.versions.emptyDescription })}
+        />
+      </Section>
+      <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-2">
+        {workspace.below.map(renderPanel)}
+      </div>
     </div>
   );
 }
