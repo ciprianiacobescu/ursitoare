@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: Allow writing web/src/runs/mock-rows-sync.test.ts?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The question asks for a change to the implementer session's tool permissions (Write/Edit denied) or for a person to create the red test file by hand. The repository confirms web/src/runs/mock-rows-sync.test.ts does not exist yet, but nothing in the repository, specification or steering settles a harness permission problem, and I cannot grant permissions, verify the denial, or create files myself. Only a person or the harness operator can resolve this.
 - **Blocking tasks:** 2.2
 - **Kind:** technical
 - **Asked:** 2026-11-20T20:40Z by claude-sonnet, run r-20261120T1831Z-5dd5, task 2.2
