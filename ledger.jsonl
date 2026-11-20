@@ -157,3 +157,5 @@
 {"at":"2026-11-20T20:52:36Z","run":"r-20261120T2052Z-e527","type":"unit.dispatched","unit":"openspec:add-run-inputs-form"}
 {"at":"2026-11-20T22:53:48Z","attempt":1,"cost_usd":9.151189,"runs":3,"type":"plan.charged","unit":"openspec:add-run-inputs-form"}
 {"at":"2026-11-20T22:53:48Z","run":"r-20261120T2253Z-dedd","type":"unit.dispatched","unit":"openspec:add-run-inputs-form"}
+{"at":"2026-11-20T23:16:07Z","attempt":1,"cost_usd":9.671363,"runs":3,"type":"plan.charged","unit":"openspec:add-run-inputs-form"}
+{"at":"2026-11-20T23:16:07Z","detail":"task 3.3: max_task_attempts (3) reached in green; last failure: the task's browser tests do not pass: test_m6b_run_inputs::test_answer_rows_write_the_mocks_and_the_fakes[chromium], test_m6b_run_inputs::test_the_form_and_the_input_json_stay_in_step[chromium]","reason":"unit_halted","type":"plan.stopped","unit":"openspec:add-run-inputs-form"}
