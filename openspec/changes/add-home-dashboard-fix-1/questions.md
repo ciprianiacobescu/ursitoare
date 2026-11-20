@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1 | ambiguous | Task 1.1 is blocked |
-| Q-002 | open | 1.2 | ambiguous | Task 1.2 is blocked |
+| Q-002 | answered | 1.2 | ambiguous | Task 1.2 is blocked |
 <!-- l4:index:end -->
 
 ---
@@ -36,7 +36,7 @@ The collection error is fixed by the person's commit 566ade37 on this branch: e2
 
 ## Q-002: Task 1.2 is blocked
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The gate failure is a defect in the test file itself: e2e/test_m6b_home.py line 12 reads `HASH = "sha256:" + "ab".repeat(32)`, and Python str has no repeat method (it should be `"ab" * 32`), so the module raises AttributeError on import and collects no test. The question comes from a fix task, and t
 - **Blocking tasks:** 1.2
 - **Kind:** ambiguous
@@ -47,3 +47,4 @@ No change made. F-c17c0f0a concerns e2e/test_m6b_home.py running no test. A fix 
 
 ### Answer
 <!-- write below this line -->
+Fixed by the person's commit 566ade37 on this branch: e2e/test_m6b_home.py:12 read HASH = "sha256:" + "ab".repeat(32), which is JavaScript; Python raised AttributeError at import, so the file collected no test. It now reads "sha256:" + "ab" * 32 and collects its 4 tests. Nothing else is needed for F-c17c0f0a; do not edit the test file. The remaining e2e failures are the engine-health defect described in the answer to Q-001 (task 1.1).
