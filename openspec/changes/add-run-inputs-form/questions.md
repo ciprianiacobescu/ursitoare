@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 2.2 | technical | Allow writing web/src/runs/mock-rows-sync.test.ts? |
-| Q-002 | open | 3.3 | technical | e2e/test_m6b_run_inputs.py line 235-236: names are read before the rows exist |
+| Q-002 | accepted | 3.3 | technical | e2e/test_m6b_run_inputs.py line 235-236: names are read before the rows exist |
 <!-- l4:index:end -->
 
 ---
@@ -40,7 +40,8 @@ No permission change is needed: retry the step. The implementer session already 
 
 ## Q-002: e2e/test_m6b_run_inputs.py line 235-236: names are read before the rows exist
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.3
 - **Kind:** technical
 - **Asked:** 2026-11-20T22:50Z by claude-sonnet, run r-20261120T2052Z-e527, task 3.3
