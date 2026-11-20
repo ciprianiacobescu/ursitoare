@@ -149,3 +149,5 @@
 {"at":"2026-11-20T18:30:07Z","revision":"31ae513e15487d5d6ea3076df8217d945d8bb038","type":"unit.integrated","unit":"openspec:add-flow-workspace"}
 {"at":"2026-11-20T18:30:07Z","attempt":1,"cost_usd":10.040994,"runs":5,"type":"plan.charged","unit":"openspec:add-flow-workspace"}
 {"at":"2026-11-20T18:32:06Z","branch":"l4/archive/openspec/add-flow-workspace","head":"07b879df56523f338a63584ca8f3e9fbc682dde9","type":"unit.branch_deleted","unit":"openspec:add-flow-workspace"}
+{"at":"2026-11-20T18:32:08Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-run-inputs-form"}
+{"at":"2026-11-20T18:32:08Z","run":"r-20261120T1831Z-5dd5","type":"unit.dispatched","unit":"openspec:add-run-inputs-form"}
