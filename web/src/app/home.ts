@@ -37,8 +37,14 @@ export type HomeView =
   | { kind: "public" }
   | { kind: "dashboard"; capabilities: ReadonlySet<string>; userId: string; displayName: string };
 
-export function homeView(_session: CapabilityState | null): HomeView {
-  return { kind: "public" };
+export function homeView(session: CapabilityState | null): HomeView {
+  if (session === null || session.status !== "ready") return { kind: "public" };
+  return {
+    kind: "dashboard",
+    capabilities: session.me.capabilities,
+    userId: session.me.user.id,
+    displayName: session.me.user.displayName,
+  };
 }
 
 export function recentRunLinkName(_run: { id: string; flowId: string }): string {

@@ -2,7 +2,7 @@ Paths without a directory are in `web/src/app/`. No frozen test changes. Each No
 
 ## 1. Rows
 
-- [ ] 1.1 Write `home-rows.test.ts` with the test "homeView shows the dashboard only for a ready session" (scenario "The view follows the session state", test-plan.md T1) first, then implement `homeView` in `home.ts`, implementing requirement "Only a ready session gets the dashboard" (logic half)
+- [x] 1.1 Write `home-rows.test.ts` with the test "homeView shows the dashboard only for a ready session" (scenario "The view follows the session state", test-plan.md T1) first, then implement `homeView` in `home.ts`, implementing requirement "Only a ready session gets the dashboard" (logic half)
 - [ ] 1.2 Append the test "the recent runs rows keep five runs with their badge, time, duration and name" (scenario "Seven runs give five rows with distinct link names", T2) first, then implement `recentRunLinkName` and `runRows` (`formatAgo`, `formatInstant`, `formatDuration`, `runStateTone` of `web/src/ui/`), implementing requirement "Recent runs show at most five runs with state, flow, time, duration and name"
 - [ ] 1.3 Append the test "the recent flows rows are the five most recently changed" (scenario "Seven flows in name order give five by recency", T3) first, then implement `recentFlows` and `flowRows` (`versionStateTone`), implementing requirement "Recent flows are the five changed last"
 
