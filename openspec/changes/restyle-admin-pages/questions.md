@@ -30,7 +30,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-017 | answered | none | verdict | Hold H-16db4d27: UI criterion C-403c66db has no end-to-end test; see the generated UI tests table |
 | Q-018 | answered | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
 | Q-019 | answered | none | verdict | Hold H-0fde35a8: UI criterion C-e96ac1a6 has no end-to-end test; see the generated UI tests table |
-| Q-020 | open | none | verdict | Hold H-c33b0d83: UI criterion C-3802bfd0 has no end-to-end test; see the generated UI tests table |
+| Q-020 | answered | none | verdict | Hold H-c33b0d83: UI criterion C-3802bfd0 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -569,7 +569,7 @@ accept The hold can be waived. The criterion says the hint A role, for example a
 
 ## Q-020: Hold H-c33b0d83: UI criterion C-3802bfd0 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The criterion is pixel geometry in a browser: in six regions the heading must be on one line and every other child must start at the heading's left edge within 1 px and at or below its bottom. The repository holds the rule meant to give that, theme.css:237 spans every non-title child of .ui-section
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -589,3 +589,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The generated test is wrong, not the code. It opens /grants, /roles, /mappings, /audit and /servers, but the pages are at /admin/grants, /admin/roles-and-teams, /admin/group-mappings, /admin/audit and /admin/tool-servers, and it mocks no /api/v1/me, so no heading ever appears: run locally at 13f109d9, all six cases end in a TimeoutError in wait_for. I checked the criterion in a browser instead, with the same check (the heading is less than twice its font size tall; every other child of the region starts within 1 px of the heading's left edge and at or below its bottom edge) run on every section.ui-section inside the 8 tests of e2e/test_m6b_admin.py, at 1366 by 860 (Create team also at 1100), on the pages and data those tests mock, including the Grants rows and its error state. At the head 13f109d9 all six regions pass: each heading is 30 px tall at a 20 px font and every body starts below it, flush left; the 8 tests pass. At 80f78a59, before fix 2, all six fail: the New grant heading is 388 and 638 px tall, Map a group 355, Create team and Filter the audit log 160, Chain verification 88, and the Surface body starts 350 px right of its heading and 30 px above its bottom. Screenshots at the head show the same by eye, and the Role or user hint is shown. The fix is the kit rule at web/src/kit/theme.css:237.
