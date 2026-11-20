@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-93e49184: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-903f2410: UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-a3cd42da: UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-a3cd42da: UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -285,7 +285,7 @@ accept The criterion has an end-to-end test at the head: test_tab_from_the_edito
 
 ## Q-010: Hold H-a3cd42da: UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The deterministic part holds in the sources: FlowsPage.tsx reads useMyTeams, passes the teams to ownerTeamSuggestions, renders a datalist of the options under the Owner team text input and prefills the field once when the teams arrive and the field is empty, and loadMyTeams does a GET on /me/teams that the test's route answers with one team, so the value is finance, one option exists and fill keeps ops. But the scenario also requires assert_layout and assert_accessible (an axe run over the whole Flows page including the kit's form, table and shell) to pass, which I cannot check without a browser, and the verifier's generated test for this criterion failed at the head twice for a reason I cannot read. The criterion itself (Q-004) is already with a person for the same reason; the hold needs the same test-results.
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -305,6 +305,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-5368fc63 has a discriminating end-to-end test: e2e/test_m6b_workspace.py::test_owner_team_is_prefilled_from_my_teams, tagged with the criterion id, passes at head 55576665 and fails with web/src at the base e8e2660d (Owner team "" instead of finance), checked by the owner's delegate on a private e2e stack; see Q-004. The generated test mocks /api/v1/me in the wrong shape, so the page never loads the person; it is wrong in setup and says nothing about the code.
 ---
 
 ## Q-011: Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table
