@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-effeb70f (web-admin › The Audit log keeps actor ids and reads its times on one line › One audit row keeps its ids and its time on one line): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-68a6b8c2 (web-tools › The tool server detail names who registered the server outside the Surface region › Registered by Carol Example sits outside the region and the row text is unchanged) |
 | Q-006 | open | none | verdict | Criterion C-3c7c4fbe (web-tools › The Grants page keeps its errors, options and subject ids and shows status badges › Grants in the error state and with rows): accept as satisfied? |
-| Q-007 | open | none | verdict | Criterion C-403c66db (web-tools › The Policies page keeps one editor, bounded to the form width › Policies with no deployed policy): accept as satisfied? |
+| Q-007 | answered | none | verdict | Criterion C-403c66db (web-tools › The Policies page keeps one editor, bounded to the form width › Policies with no deployed policy): accept as satisfied? |
 | Q-008 | open | none | verdict | Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-84f9c6e9: UI criterion C-1baa1083 has no end-to-end test; see the generated UI tests table |
@@ -231,7 +231,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-007: Criterion C-403c66db (web-tools › The Policies page keeps one editor, bounded to the form width › Policies with no deployed policy): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -258,6 +259,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The Policies page satisfies the scenario as written. Its root is cn(tools-page, PAGE_WIDTHS.form), that is max-w-3xl or 768 px, and the editor sits in a Card with padding inside it with a textarea of width 100 percent, so the Hand-written Cedar editor is at most 768 px wide. Once loaded the PageHeader meta holds currentText and pendingText, which for a null current policy and one pending grant are No policy deployed. and 1 grant change is not deployed. as two paragraphs. Deploy carries data-tone primary, and the kit paints that tone with the accent token #1d4ed8, which is rgb(29, 78, 216). The only status on the page is the LoadingState while the policy loads, and an idle action renders no message, so status has count 0 once loaded; the page imports nothing from people. The browser test test_policies_page_has_no_status_once_loaded_and_a_bounded_editor asserts each of these points at 1366 by 860.
 ---
 
 ## Q-008: Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table
