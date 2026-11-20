@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Hold H-1dd17d4f: UI criterion C-5d8c406e has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-ddba32f9: UI criterion C-effeb70f has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table |
-| Q-015 | open | none | verdict | Hold H-48b9bece: UI criterion C-68a6b8c2 has no end-to-end test; see the generated UI tests table |
+| Q-015 | answered | none | verdict | Hold H-48b9bece: UI criterion C-68a6b8c2 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-16db4d27: UI criterion C-403c66db has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -439,7 +439,8 @@ accept The hold can be waived. Criterion C-e553aba2 is a source-reading scenario
 
 ## Q-015: Hold H-48b9bece: UI criterion C-68a6b8c2 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -458,6 +459,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The unit carries a browser test for C-68a6b8c2, test_tool_servers_show_who_registered_outside_the_surface_region in e2e/test_m6b_admin.py, tagged with the criterion, which asserts every clause of the scenario: the region Surface containing acme · https://tools.fake.test · pending with one badge pending of tone warning, the text Registered by Carol Example visible and absent inside the region, the /people queries exactly ids=u_carol, the hidden caption of Tool servers, Approve surface with the accent background, the dialog heading Approve surface 0123456789ab? with a primary confirm of the same colour, assert_layout, assert_accessible and an empty CSP list. The sources make each clause true: the Tool servers page renders the Registered by paragraph with personLabel after the servers table and before the Surface Section, calls useDisplayNames with the one registeredBy id, renders the Surface line as serverRowText with its trailing state in a Badge of tone serverStateTone which maps pending to warning, hides the servers caption through captionDisplayFor, gives Approve surface data-tone primary, and passes no destructive to its ConfirmDialog so the confirm keeps data-tone primary; the primary tone paints the accent token #1d4ed8, which is rgb(29, 78, 216).
 ---
 
 ## Q-016: Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table
