@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | open | none | verdict | Criterion C-c8aaa647 (web-shell › The dashboard renders each list and step from its own state › A failing list fails alone and Try again reads it again): accept as satisfied? |
 | Q-005 | answered | none | verdict | Hold H-08110025: UI criterion C-48588514 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-cea9172c: UI criterion C-9517e900 has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-cee9c0fd: UI criterion C-f82b7f78 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-cee9c0fd: UI criterion C-f82b7f78 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-5c823df8: UI criterion C-d8b03242 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-26953a7c: UI criterion C-d54270f7 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-4faceff9: UI criterion C-1818ac9b has no end-to-end test; see the generated UI tests table |
@@ -214,7 +214,8 @@ accept Criterion C-9517e900 is the signed-out home scenario and the code gives e
 
 ## Q-007: Hold H-cee9c0fd: UI criterion C-f82b7f78 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -233,6 +234,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-f82b7f78 is the runRows and recentRunLinkName scenario, which the specification itself frames as a direct call from home-rows.test.ts with a fixed nowMs, meId and name map. These are pure functions of home.ts with no browser surface of their own, so an end-to-end test cannot drive them and the Node test is the right trace. That test exists, is named with the criterion id, feeds the seven T2 runs and asserts the five expected rows, the empty result and the three link names. I traced the implementation against each expected value: the slice to five, the last eight characters of the id, runStateTone, formatAgo, formatInstant, formatDuration with the dash for a null startedAt, by you for the signed-in id, by name for a non-blank name and null for an unknown or blank one. The hold can be waived.
 ---
 
 ## Q-008: Hold H-5c823df8: UI criterion C-d8b03242 has no end-to-end test; see the generated UI tests table
