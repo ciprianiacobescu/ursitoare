@@ -209,6 +209,7 @@ accept The criterion ownerTeamSuggestions sorts, drops and prefills is a Node-te
 ## Q-007: Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The hold concerns end-to-end coverage of the layout scenario, whose assertions are rendered measurements (page height at most 2,600 px, matching region tops, the Diagnostics heading, drawing and Save version button inside the first 860 px) plus an axe run and the banner-height check. The unit's own browser test in e2e/test_m6b_workspace.py asserts exactly these numbers and the sources hold the two xl:grid-cols-2 grids, the Section ids and the clamp() editor height, but I cannot run a browser, the numbers depend on fonts, paddings and the graph's rendered size, and the verifier's generated test for this criterion failed at the head twice for a reason I cannot read. The criterion itself (Q-001) is already with a person for the same reason; the hold needs the same test-results.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
