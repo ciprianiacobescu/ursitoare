@@ -2,9 +2,11 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
+import type { FlowRow } from "../flows/flows.ts";
+import type { VersionRow } from "../flows/versions.ts";
 import type { CapabilityState } from "../kit/capabilities.ts";
 import type { RunView } from "../runs/types.ts";
-import { homeView, recentRunLinkName, runRows } from "./home.ts";
+import { flowRows, homeView, recentFlows, recentRunLinkName, runRows } from "./home.ts";
 
 const NOW = Date.UTC(2026, 10, 18, 12, 0, 0);
 const HASH = "sha256:" + "ab".repeat(32);
@@ -102,4 +104,70 @@ test("C-48588514 homeView shows the dashboard only for a ready session", () => {
     assert.equal(view.userId, "usr_me");
     assert.equal(view.displayName, "Alice Example");
   }
+});
+
+function flow(flowId: string, createdAt: string, latest: FlowRow["latest"]): FlowRow {
+  return { flowId, ownerTeam: "finance", createdBy: "usr_me", createdAt, versionCount: latest ? latest.number : 0, latest };
+}
+
+function version(flowId: string, number: number, state: VersionRow["state"], validationOk: boolean | null, createdAt: string): VersionRow {
+  return {
+    flowId,
+    number,
+    hash: HASH,
+    state,
+    surface: "yaml",
+    author: "usr_me",
+    requestedBy: null,
+    createdAt,
+    validatedAt: null,
+    validationOk,
+  };
+}
+
+const F1 = flow("alpha-flow", "2026-11-14T12:00:00Z", version("alpha-flow", 1, "draft", false, "2026-11-14T12:00:00Z"));
+const F2 = flow("beta-flow", "2026-11-10T12:00:00Z", version("beta-flow", 1, "draft", null, "2026-11-10T12:00:00Z"));
+const F3 = flow("demo-draft", "2026-11-18T11:55:00Z", null);
+const F4 = flow("demo-pay", "2026-11-14T08:00:00Z", version("demo-pay", 2, "validated", true, "2026-11-18T11:00:00Z"));
+const F5 = flow("gone", "2026-09-01T00:00:00Z", null);
+const F6 = flow("old-one", "2026-09-01T00:00:00Z", version("old-one", 3, "published", true, "2026-10-01T00:00:00Z"));
+const F7 = flow("zeta-flow", "2026-11-10T12:00:00Z", null);
+
+test("C-d8b03242 the recent flows rows are the five most recently changed", () => {
+  assert.equal(typeof recentFlows, "function");
+  assert.equal(typeof flowRows, "function");
+  const all = [F1, F2, F3, F4, F5, F6, F7];
+  assert.deepEqual(
+    recentFlows(all).map((f) => f.flowId),
+    ["demo-draft", "demo-pay", "alpha-flow", "beta-flow", "zeta-flow"],
+  );
+  assert.deepEqual(recentFlows([]), []);
+  const rows = flowRows(all, NOW);
+  assert.deepEqual(
+    rows.map((r) => [r.flowId, r.version, r.tone, r.changed, r.exact]),
+    [
+      ["demo-draft", "No version yet", "neutral", "5 min ago", "2026-11-18 11:55 UTC"],
+      ["demo-pay", "v2 · validated", "success", "1 h ago", "2026-11-18 11:00 UTC"],
+      ["alpha-flow", "v1 · has errors", "danger", "4 d ago", "2026-11-14 12:00 UTC"],
+      ["beta-flow", "v1 · draft", "neutral", "8 d ago", "2026-11-10 12:00 UTC"],
+      ["zeta-flow", "No version yet", "neutral", "8 d ago", "2026-11-10 12:00 UTC"],
+    ],
+  );
+  assert.equal(rows[0]?.href, "/flows/demo-draft");
+  assert.equal(rows[0]?.ownerTeam, "finance");
+  assert.equal(rows[1]?.changedIso, "2026-11-18T11:00:00.000000Z");
+  const extra = flowRows(
+    [
+      flow("p-one", "2026-11-18T11:30:00Z", version("p-one", 4, "published", true, "2026-11-18T11:30:00Z")),
+      flow("t-one", "2026-11-18T11:20:00Z", version("t-one", 2, "tested", true, "2026-11-18T11:20:00Z")),
+    ],
+    NOW,
+  );
+  assert.deepEqual(
+    extra.map((r) => [r.version, r.tone]),
+    [
+      ["v4 · published", "info"],
+      ["v2 · tested", "success"],
+    ],
+  );
 });
