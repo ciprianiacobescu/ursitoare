@@ -6,6 +6,7 @@ import { schemaToFields } from "../kit/data/schema-fields.ts";
 import type { SchemaField, SchemaFields } from "../kit/data/schema-fields.ts";
 import { initialValues, validateValues } from "../kit/data/schema-values.ts";
 import type { RawValues } from "../kit/data/schema-values.ts";
+import { parseTestInputs } from "./test-run.ts";
 
 export type InputFormModel = { kind: "form"; fields: SchemaFields } | { kind: "json"; reason: string };
 
@@ -161,20 +162,59 @@ export interface InputSyncView {
   blocked: boolean;
 }
 
-export function inputSyncStart(_model: InputFormModel | null, text: string): InputSync {
-  return { text, raw: {}, touched: [], attempted: false, source: "json" };
+const KEPT_HINT = "Kept in step with the fields above.";
+const MISMATCH_HINT = "The JSON no longer matches the form; it is used as written.";
+
+function formOf(model: InputFormModel | null): Extract<InputFormModel, { kind: "form" }> | null {
+  return model !== null && model.kind === "form" ? model : null;
+}
+
+export function inputSyncStart(model: InputFormModel | null, text: string): InputSync {
+  const form = formOf(model);
+  if (form === null) return { text, raw: {}, touched: [], attempted: false, source: "json" };
+  const raw = formFromInputJson(form, text) ?? initialValues(form.fields);
+  return { text, raw, touched: [], attempted: false, source: "json" };
 }
 
 export function inputSyncStep(
-  _model: InputFormModel | null,
+  model: InputFormModel | null,
   sync: InputSync,
-  _event: InputSyncEvent,
+  event: InputSyncEvent,
 ): InputSync {
-  return sync;
+  const form = formOf(model);
+  switch (event.type) {
+    case "attempt":
+      return { ...sync, attempted: true };
+    case "text": {
+      const raw = form === null ? sync.raw : (formFromInputJson(form, event.text) ?? sync.raw);
+      return { text: event.text, raw, touched: [], attempted: false, source: "json" };
+    }
+    case "field": {
+      if (form === null) return sync;
+      const raw: RawValues = { ...sync.raw, [event.name]: event.value };
+      const touched = sync.touched.includes(event.name) ? sync.touched : [...sync.touched, event.name];
+      const text = JSON.stringify(validateValues(form.fields, raw).value, null, 2);
+      return { ...sync, text, raw, touched, source: "form" };
+    }
+  }
 }
 
-export function inputSyncView(_model: InputFormModel | null, _sync: InputSync): InputSyncView {
-  return { fieldErrors: {}, jsonError: null, hint: null, blocked: false };
+export function inputSyncView(model: InputFormModel | null, sync: InputSync): InputSyncView {
+  const form = formOf(model);
+  if (form === null) return { fieldErrors: {}, jsonError: null, hint: null, blocked: false };
+  const errors = validateValues(form.fields, sync.raw).errors;
+  const fieldErrors: Record<string, string> = {};
+  for (const [name, message] of Object.entries(errors)) {
+    if (sync.attempted || sync.touched.includes(name)) fieldErrors[name] = message;
+  }
+  const parsed = parseTestInputs(sync.text, "{}");
+  const jsonError = parsed.ok ? null : (parsed.errors["input"] ?? null);
+  return {
+    fieldErrors,
+    jsonError,
+    hint: formFromInputJson(form, sync.text) === null ? MISMATCH_HINT : KEPT_HINT,
+    blocked: sync.source === "form" && Object.keys(errors).length > 0,
+  };
 }
 
 export type RunDocument =
