@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | answered | none | verdict | Hold H-84f9c6e9: UI criterion C-1baa1083 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-85d419d4: UI criterion C-23f3a934 has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-1dd17d4f: UI criterion C-5d8c406e has no end-to-end test; see the generated UI tests table |
-| Q-013 | open | none | verdict | Hold H-ddba32f9: UI criterion C-effeb70f has no end-to-end test; see the generated UI tests table |
+| Q-013 | answered | none | verdict | Hold H-ddba32f9: UI criterion C-effeb70f has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-48b9bece: UI criterion C-68a6b8c2 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
@@ -389,7 +389,8 @@ accept The hold can be waived. The unit carries a browser test for C-5d8c406e, t
 
 ## Q-013: Hold H-ddba32f9: UI criterion C-effeb70f has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -408,6 +409,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The unit carries a browser test for C-effeb70f, test_audit_page_keeps_actor_ids_and_one_line_times in e2e/test_m6b_admin.py, tagged with the criterion, which asserts every clause of the scenario: the status Audit chain verified inside the region Chain verification, the row text user: u_carol and not Carol Example, an empty /people hit list, the Time cell text at most 24 px tall, scrollWidth at most clientWidth on the table wrapper, the two regions with tops within 1 px and the first ending at or before the second's left edge, assert_layout, assert_accessible and an empty CSP list. The sources make each clause true: the Audit log page places the Chain verification and Filter the audit log Sections in a grid with lg:grid-cols-2 and lg:items-start with the table after it, the verification paragraph has role status with the headline Audit chain verified for an ok result, auditCells renders the actor as kind: id and the time as the sliced UTC string, the page imports nothing from people, the Time cell is whitespace-nowrap, and the Details cell is block min-w-48 max-w-sm break-all so the long issuer and the hash do not widen the table.
 ---
 
 ## Q-014: Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table
