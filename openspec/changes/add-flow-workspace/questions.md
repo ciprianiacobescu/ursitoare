@@ -29,6 +29,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: Criterion C-592f8050 (web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The scenario is made of rendered measurements (page height at most 2,600 px, the Graph and Edit the flow tops within 8 px, the Diagnostics heading bottom and the Save version bottom at most 860, the drawing top under 860) plus an axe run and a banner-height check. The source does hold the two xl:grid-cols-2 grids, the Section ids and the clamp() editor height, and e2e/test_m6b_workspace.py asserts exactly these numbers, but I cannot run a browser and the heights depend on fonts, paddings and the graph's rendered size. The verifier's own generated test for this criterion failed at the head twice and I cannot read its screenshot or trace. A person with the e2e stack should look at test-results for C-592f8050 before this is accepted.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
