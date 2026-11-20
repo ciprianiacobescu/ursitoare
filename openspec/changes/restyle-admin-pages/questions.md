@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-1baa1083 (web-admin › A destructive confirm is red and a state is a badge › Disable user opens red and the table keeps its name): accept as satisfied? |
 | Q-002 | answered | none | verdict | Criterion C-23f3a934 (web-admin › A form sits beside the tables from 1280 px and above them below › The team form is beside the tables at 1366 and above them at 1100): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-5d8c406e (web-admin › Reviewer names replace ids only when a person is found › Group mappings show Carol Example, keep operator:e2e-seed and fall back on a failure): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-5d8c406e (web-admin › Reviewer names replace ids only when a person is found › Group mappings show Carol Example, keep operator:e2e-seed and fall back on a failure): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-effeb70f (web-admin › The Audit log keeps actor ids and reads its times on one line › One audit row keeps its ids and its time on one line): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-68a6b8c2 (web-tools › The tool server detail names who registered the server outside the Surface region › Registered by Carol Example sits outside the region and the row text is unchanged) |
 | Q-006 | open | none | verdict | Criterion C-3c7c4fbe (web-tools › The Grants page keeps its errors, options and subject ids and shows status badges › Grants in the error state and with rows): accept as satisfied? |
@@ -100,7 +100,8 @@ accept The Roles and teams page satisfies the scenario. The Create team Section 
 
 ## Q-003: Criterion C-5d8c406e (web-admin › Reviewer names replace ids only when a person is found › Group mappings show Carol Example, keep operator:e2e-seed and fall back on a failure): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -127,6 +128,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The Group mappings page satisfies the scenario. It collects the distinct reviewedBy values from the list, passes them once to useDisplayNames and renders the cell as clip(personLabel(names, mapping.reviewedBy)). The name cache requests only ids matching ^[A-Za-z0-9_-]{1,64}$, so operator:e2e-seed is never requested and shown as it is, and the one request for the first page carries ids=u_carol. A failed batch is caught and resolves without names, so after a 500 personLabel returns u_carol and no retry is made. The main table hides its caption, the Map a group Section precedes the table in a column layout, the Group, Grants and Reviewed by cells and the Remove buttons are whitespace-nowrap and the Issuer is break-all, which keeps the buttons one line high and the two measured cells one line tall. The browser test asserts the two pages, the request list and the measurements.
 ---
 
 ## Q-004: Criterion C-effeb70f (web-admin › The Audit log keeps actor ids and reads its times on one line › One audit row keeps its ids and its time on one line): accept as satisfied?
