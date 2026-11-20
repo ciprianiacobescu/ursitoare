@@ -1,14 +1,23 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
+import { ApiRequestError } from "../api/client.ts";
 import type { ApiClient } from "../api/client.ts";
+import { parseAccount } from "../admin/users.ts";
+import { flowListFetcher } from "../flows/flows.ts";
 import type { FlowRow } from "../flows/flows.ts";
 import type { CapabilityState } from "../kit/capabilities.ts";
+import { parseCursorPage } from "../kit/data/page-fetcher.ts";
+import { runListFetcher } from "../runs/runs-source.ts";
 import type { RunView } from "../runs/types.ts";
+import { parsePolicyView } from "../tools/policies.ts";
+import { parseToolServer } from "../tools/servers.ts";
+import { formatAgo, formatDuration, formatInstant } from "../ui/format.ts";
+import { runStateTone, versionStateTone } from "../ui/tones.ts";
 import type { Tone } from "../ui/tones.ts";
 
-export const HOME_LIMIT: number = 0;
+export const HOME_LIMIT = 5;
 
-export const HOME_PAGE_SIZE: number = 0;
+export const HOME_PAGE_SIZE = 200;
 
 export interface NextStep {
   id: string;
@@ -37,12 +46,30 @@ export type HomeView =
   | { kind: "public" }
   | { kind: "dashboard"; capabilities: ReadonlySet<string>; userId: string; displayName: string };
 
-export function homeView(_session: CapabilityState | null): HomeView {
-  return { kind: "public" };
+export function homeView(session: CapabilityState | null): HomeView {
+  if (session === null || session.status !== "ready") return { kind: "public" };
+  return {
+    kind: "dashboard",
+    capabilities: session.me.capabilities,
+    userId: session.me.user.id,
+    displayName: session.me.user.displayName,
+  };
 }
 
-export function recentRunLinkName(_run: { id: string; flowId: string }): string {
-  throw new Error("not implemented");
+const SHORT_ID_LENGTH = 8;
+
+function shortRunId(id: string): string {
+  return id.length > SHORT_ID_LENGTH ? id.slice(-SHORT_ID_LENGTH) : id;
+}
+
+function isoWithMicros(iso: string): string {
+  const match = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,9}))?Z$/.exec(iso);
+  if (match === null) return iso;
+  return `${match[1] ?? ""}.${(match[2] ?? "").slice(0, 6).padEnd(6, "0")}Z`;
+}
+
+export function recentRunLinkName(run: { id: string; flowId: string }): string {
+  return `Run ${shortRunId(run.id)} of ${run.flowId}`;
 }
 
 export interface RunRowView {
@@ -60,14 +87,50 @@ export interface RunRowView {
 }
 
 export function runRows(
-  _runs: readonly RunView[],
-  _ctx: { nowMs: number; meId: string; names: ReadonlyMap<string, string> },
+  runs: readonly RunView[],
+  ctx: { nowMs: number; meId: string; names: ReadonlyMap<string, string> },
 ): RunRowView[] {
-  return [];
+  return runs.slice(0, HOME_LIMIT).map((run) => {
+    const at = run.startedAt ?? run.createdAt;
+    const userId = run.principal.userId;
+    const name = ctx.names.get(userId)?.trim() ?? "";
+    let by: string | null = null;
+    if (userId === ctx.meId) by = "by you";
+    else if (name !== "") by = `by ${name}`;
+    return {
+      id: run.id,
+      href: `/runs/${run.id}`,
+      shortId: shortRunId(run.id),
+      flowId: run.flowId,
+      state: run.state,
+      tone: runStateTone(run.state),
+      started: formatAgo(at, ctx.nowMs),
+      startedIso: isoWithMicros(at),
+      exact: formatInstant(at),
+      duration:
+        run.startedAt === null ? "—" : formatDuration(run.startedAt, run.endedAt, ctx.nowMs),
+      by,
+    };
+  });
 }
 
-export function recentFlows(_flows: readonly FlowRow[]): FlowRow[] {
-  return [];
+function changedAt(flow: FlowRow): string {
+  return flow.latest?.createdAt ?? flow.createdAt;
+}
+
+function changedMs(flow: FlowRow): number {
+  const ms = Date.parse(changedAt(flow));
+  return Number.isFinite(ms) ? ms : 0;
+}
+
+function byRecency(a: FlowRow, b: FlowRow): number {
+  const diff = changedMs(b) - changedMs(a);
+  if (diff !== 0) return diff;
+  return a.flowId < b.flowId ? -1 : a.flowId > b.flowId ? 1 : 0;
+}
+
+export function recentFlows(flows: readonly FlowRow[]): FlowRow[] {
+  return [...flows].sort(byRecency).slice(0, HOME_LIMIT);
 }
 
 export interface FlowRowView {
@@ -81,48 +144,245 @@ export interface FlowRowView {
   exact: string;
 }
 
-export function flowRows(_flows: readonly FlowRow[], _nowMs: number): FlowRowView[] {
-  return [];
+export function flowRows(flows: readonly FlowRow[], nowMs: number): FlowRowView[] {
+  return recentFlows(flows).map((flow) => {
+    const at = changedAt(flow);
+    const latest = flow.latest;
+    let version = "No version yet";
+    let tone: Tone = "neutral";
+    if (latest !== null) {
+      if (latest.validationOk === false) {
+        version = `v${latest.number} · has errors`;
+        tone = "danger";
+      } else {
+        version = `v${latest.number} · ${latest.state}`;
+        tone = versionStateTone(latest.state);
+      }
+    }
+    return {
+      flowId: flow.flowId,
+      href: `/flows/${flow.flowId}`,
+      ownerTeam: flow.ownerTeam,
+      version,
+      tone,
+      changed: formatAgo(at, nowMs),
+      changedIso: isoWithMicros(at),
+      exact: formatInstant(at),
+    };
+  });
+}
+
+function flowSteps(capabilities: ReadonlySet<string>, facts: HomeFacts): NextStep[] {
+  if (!capabilities.has("test_flow") || facts.flows.kind !== "known") return [];
+  const items = facts.flows.value.items;
+  if (items.length === 0) {
+    return [
+      {
+        id: "create-first-flow",
+        label: "Create your first flow",
+        href: "/flows",
+        description:
+          "No flow of your teams exists yet. Name one, write it in YAML and validate it.",
+        badge: null,
+      },
+    ];
+  }
+  const sorted = [...items].sort(byRecency);
+  const validated = sorted.find(
+    (flow) => flow.latest !== null && flow.latest.validationOk === true,
+  );
+  if (validated !== undefined && validated.latest !== null) {
+    return [
+      {
+        id: "start-test-run",
+        label: "Start a test run",
+        href: `/flows/${validated.flowId}`,
+        description: `${validated.flowId} has a validated version ${validated.latest.number}. Run it with mocked tools.`,
+        badge: null,
+      },
+    ];
+  }
+  const last = sorted[0];
+  if (last === undefined) return [];
+  return [
+    {
+      id: "open-a-flow",
+      label: "Open a flow",
+      href: `/flows/${last.flowId}`,
+      description: `None of your flows has a validated version yet. Open ${last.flowId} to write and validate one.`,
+      badge: null,
+    },
+  ];
+}
+
+function failedRunSteps(capabilities: ReadonlySet<string>, facts: HomeFacts): NextStep[] {
+  if (!capabilities.has("read_run") || facts.runs.kind !== "known") return [];
+  const failed = facts.runs.value
+    .slice(0, HOME_LIMIT)
+    .find((run) => run.state === "failed");
+  if (failed === undefined) return [];
+  return [
+    {
+      id: "review-failed-run",
+      label: "Review a failed run",
+      href: `/runs/${failed.id}`,
+      description: `Run ${shortRunId(failed.id)} of ${failed.flowId} failed. Open it to see which step stopped and why.`,
+      badge: null,
+    },
+  ];
+}
+
+function countBadge(count: number, complete: boolean): string {
+  return complete ? String(count) : `${count}+`;
+}
+
+function assignRolesStep(capabilities: ReadonlySet<string>, facts: HomeFacts): NextStep[] {
+  if (!capabilities.has("manage_users_roles") || facts.unassigned.kind !== "known") return [];
+  const { count, complete } = facts.unassigned.value;
+  if (count <= 0) return [];
+  const prefix = complete ? "" : "At least ";
+  const person = count === 1 ? "person has" : "people have";
+  return [
+    {
+      id: "assign-roles",
+      label: "Give people a role",
+      href: "/admin/users",
+      description: `${prefix}${count} active ${person} no role yet. Assign a role, or map an identity-provider group.`,
+      badge: countBadge(count, complete),
+    },
+  ];
+}
+
+function pendingServerSteps(capabilities: ReadonlySet<string>, facts: HomeFacts): NextStep[] {
+  if (!capabilities.has("register_tool_server") || facts.servers.kind !== "known") return [];
+  const { count, complete } = facts.servers.value;
+  if (count <= 0) return [];
+  const prefix = complete ? "" : "At least ";
+  const noun = count === 1 ? "tool server waits for its surface" : "tool servers wait for their surfaces";
+  return [
+    {
+      id: "review-pending-tool-servers",
+      label: "Review pending tool servers",
+      href: "/admin/tool-servers",
+      description: `${prefix}${count} ${noun} to be approved before flows can call their tools.`,
+      badge: countBadge(count, complete),
+    },
+  ];
+}
+
+function grantSteps(capabilities: ReadonlySet<string>, facts: HomeFacts): NextStep[] {
+  if (!capabilities.has("deploy_policy") || facts.policy.kind !== "known") return [];
+  const { pendingGrants } = facts.policy.value;
+  if (pendingGrants <= 0) return [];
+  const noun = pendingGrants === 1 ? "grant change is" : "grant changes are";
+  const pronoun = pendingGrants === 1 ? "it is" : "they are";
+  return [
+    {
+      id: "deploy-grant-changes",
+      label: "Deploy grant changes",
+      href: "/admin/policies",
+      description: `${pendingGrants} ${noun} not deployed, so ${pronoun} not in force yet.`,
+      badge: String(pendingGrants),
+    },
+  ];
 }
 
 export function nextSteps(
-  _capabilities: ReadonlySet<string>,
-  _facts: HomeFacts,
+  capabilities: ReadonlySet<string>,
+  facts: HomeFacts,
 ): { steps: NextStep[]; settled: boolean } {
-  return { steps: [], settled: false };
+  const steps = [
+    ...flowSteps(capabilities, facts),
+    ...failedRunSteps(capabilities, facts),
+    ...assignRolesStep(capabilities, facts),
+    ...pendingServerSteps(capabilities, facts),
+    ...grantSteps(capabilities, facts),
+  ];
+  const asked: Fact<unknown>[] = [];
+  if (capabilities.has("test_flow")) asked.push(facts.flows);
+  if (capabilities.has("read_run")) asked.push(facts.runs);
+  if (capabilities.has("manage_users_roles")) asked.push(facts.unassigned);
+  if (capabilities.has("register_tool_server")) asked.push(facts.servers);
+  if (capabilities.has("deploy_policy")) asked.push(facts.policy);
+  const settled = asked.length > 0 && asked.every((fact) => fact.kind === "known");
+  return { steps, settled };
+}
+
+function invalidPage(): ApiRequestError {
+  return new ApiRequestError(200, "INVALID_RESPONSE", "Invalid page");
 }
 
 export async function loadRecentRuns(
-  _client: Pick<ApiClient, "get">,
-  _signal: AbortSignal,
+  client: Pick<ApiClient, "get">,
+  signal: AbortSignal,
 ): Promise<readonly RunView[]> {
-  return [];
+  const page = await runListFetcher(client)({ cursor: null, limit: HOME_LIMIT, signal });
+  return page.items;
 }
 
 export async function loadFlowSet(
-  _client: Pick<ApiClient, "get">,
-  _signal: AbortSignal,
+  client: Pick<ApiClient, "get">,
+  signal: AbortSignal,
 ): Promise<{ items: readonly FlowRow[]; complete: boolean }> {
-  return { items: [], complete: false };
+  const page = await flowListFetcher(client)({
+    cursor: null,
+    limit: HOME_PAGE_SIZE,
+    signal,
+  });
+  return { items: page.items, complete: page.next_cursor === null };
 }
 
 export async function loadPendingServers(
-  _client: Pick<ApiClient, "get">,
-  _signal: AbortSignal,
+  client: Pick<ApiClient, "get">,
+  signal: AbortSignal,
 ): Promise<Counted> {
-  return { count: 0, complete: false };
+  const body: unknown = await client.get<unknown>("/tool-servers", {
+    query: { limit: HOME_PAGE_SIZE },
+    signal,
+  });
+  const page = parseCursorPage(body);
+  if (page === null) throw invalidPage();
+  let count = 0;
+  for (const raw of page.items) {
+    const server = parseToolServer(raw);
+    if (server === null) throw invalidPage();
+    if (server.state === "pending") count += 1;
+  }
+  return { count, complete: page.next_cursor === null };
 }
 
 export async function loadUnassigned(
-  _client: Pick<ApiClient, "get">,
-  _signal: AbortSignal,
+  client: Pick<ApiClient, "get">,
+  signal: AbortSignal,
 ): Promise<Counted> {
-  return { count: 0, complete: false };
+  const body: unknown = await client.get<unknown>("/users", {
+    query: { limit: HOME_PAGE_SIZE },
+    signal,
+  });
+  const page = parseCursorPage(body);
+  if (page === null) throw invalidPage();
+  let count = 0;
+  for (const raw of page.items) {
+    const account = parseAccount(raw);
+    if (account === null) throw invalidPage();
+    if (
+      account.kind === "human" &&
+      account.state === "active" &&
+      account.roles.length === 0 &&
+      account.localRoles.length === 0
+    ) {
+      count += 1;
+    }
+  }
+  return { count, complete: page.next_cursor === null };
 }
 
 export async function loadPolicyFact(
-  _client: Pick<ApiClient, "get">,
-  _signal: AbortSignal,
+  client: Pick<ApiClient, "get">,
+  signal: AbortSignal,
 ): Promise<{ deployed: boolean; pendingGrants: number }> {
-  return { deployed: false, pendingGrants: 0 };
+  const body: unknown = await client.get<unknown>("/policies", { signal });
+  const policy = parsePolicyView(body);
+  if (policy === null) throw new ApiRequestError(200, "INVALID_RESPONSE", "Invalid policy");
+  return { deployed: policy.version !== null, pendingGrants: policy.pendingGrants };
 }
