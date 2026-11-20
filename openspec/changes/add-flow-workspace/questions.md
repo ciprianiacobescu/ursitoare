@@ -283,6 +283,7 @@ accept The criterion has an end-to-end test at the head: test_tab_from_the_edito
 ## Q-010: Hold H-a3cd42da: UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The deterministic part holds in the sources: FlowsPage.tsx reads useMyTeams, passes the teams to ownerTeamSuggestions, renders a datalist of the options under the Owner team text input and prefills the field once when the teams arrive and the field is empty, and loadMyTeams does a GET on /me/teams that the test's route answers with one team, so the value is finance, one option exists and fill keeps ops. But the scenario also requires assert_layout and assert_accessible (an axe run over the whole Flows page including the kit's form, table and shell) to pass, which I cannot check without a browser, and the verifier's generated test for this criterion failed at the head twice for a reason I cannot read. The criterion itself (Q-004) is already with a person for the same reason; the hold needs the same test-results.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
