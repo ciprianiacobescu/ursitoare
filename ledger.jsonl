@@ -107,3 +107,5 @@
 {"at":"2026-11-20T03:17:59Z","branch":"l4/archive/openspec/restyle-admin-pages","head":"36414c8654556cf4a593734ec69b009f815b415a","type":"unit.branch_deleted","unit":"openspec:restyle-admin-pages"}
 {"at":"2026-11-20T03:18:00Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-home-dashboard"}
 {"at":"2026-11-20T03:18:00Z","run":"r-20261120T0317Z-19c1","type":"unit.dispatched","unit":"openspec:add-home-dashboard"}
+{"at":"2026-11-20T05:46:55Z","attempt":1,"cost_usd":1.743503,"runs":2,"type":"plan.charged","unit":"openspec:add-home-dashboard"}
+{"at":"2026-11-20T05:46:55Z","run":"r-20261120T0546Z-4db6","type":"unit.dispatched","unit":"openspec:add-home-dashboard"}
