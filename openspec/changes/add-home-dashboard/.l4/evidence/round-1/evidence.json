@@ -1,0 +1,163 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "web/src/features/10-home.tsx",
+      "src/registry/policy",
+      "src/interpreter/policy/flow-testing.cedar:5-6",
+      "src/registry/flows/flows.ts",
+      "src/runs/store/run-repository.ts",
+      "web/src/auth/session-fetch.ts:47-70",
+      "test/arch/web-routes.test.ts",
+      "docs/decisions/0002",
+      "e2e/test_m6b_home.py",
+      "e2e/conftest.py",
+      "web/src/app",
+      "node:assert/strict",
+      "web/src/ui",
+      "web/src/admin",
+      "e2e",
+      "e2e/test_m0_skeleton.py",
+      "**/test_l4_c_87996887.py",
+      "**/p.engine-health[role=status][tabindex=-1]",
+      "**/test_l4_c_f6d2569a.py",
+      "**/[aria-live=\"polite\"]",
+      "**/[aria-live]",
+      "**/test_l4_c_e3de8f9e.py",
+      "**/test_l4_c_acc8eaf4.py",
+      "**/[]",
+      "**/Shell.tsx",
+      "**/[",
+      "**/home.ts",
+      "**/pages.ts",
+      "**/HomePage.tsx",
+      "**/test_m1_sign_in.py",
+      "**/test_m1_web_kit.py",
+      "**/test_l4_c_*",
+      "module docs",
+      "module e2e",
+      "module interpreter",
+      "module node:assert",
+      "module registry",
+      "module runs",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m6b_home.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-home-dashboard/.l4/ledger/r-20261120T0317Z-19c1.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-home-dashboard/.l4/ledger/r-20261120T0546Z-4db6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-home-dashboard/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/app/HomePage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/app/home-load.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/app/home-rows.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/app/home-sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/app/home-steps.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/app/home.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/features/10-home.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/app/HomePage.tsx, web/src/app/home.ts, web/src/features/10-home.tsx",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/app/HomePage.tsx",
+      "web/src/app/home.ts",
+      "web/src/features/10-home.tsx"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 2589,
+      "passed": 2589,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 17,
+      "new_passed": 17,
+      "skipped_unchanged": []
+    },
+    "findings": [
+      {
+        "severity": "blocker",
+        "title": "new test file ran no test",
+        "detail": "e2e/test_m6b_home.py"
+      }
+    ]
+  }
+}
