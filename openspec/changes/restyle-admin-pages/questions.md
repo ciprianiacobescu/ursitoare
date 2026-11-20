@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-013 | answered | none | verdict | Hold H-ddba32f9: UI criterion C-effeb70f has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-48b9bece: UI criterion C-68a6b8c2 has no end-to-end test; see the generated UI tests table |
-| Q-016 | open | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
+| Q-016 | answered | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-16db4d27: UI criterion C-403c66db has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -464,7 +464,8 @@ accept The hold can be waived. The unit carries a browser test for C-68a6b8c2, t
 
 ## Q-016: Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -483,6 +484,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+reject The scenario's own clauses hold in the sources, and the unit's browser tests test_grants_error_state_has_two_alerts_and_one_option and test_grants_rows_keep_subject_ids_and_show_status_badges_beside_the_form assert them: two alerts from the tool ErrorPanel and the table's ErrorPanel, the single option Choose a tool, Create grant with aria-disabled true, the grant text with its status in a Badge of grantStatusTone, the hidden Grants caption, the New grant Section left of the table in the xl grid and no people import. But the requirement this criterion belongs to also says the Grants page SHALL show the hint A role, for example author, or a user id from the Users page. under Role or user, and that hint is nowhere in the code: the subject Field in GrantsPage passes no hint, the kit's Field renders one only when given, and no Node or browser test checks it. I cannot tell why the verifier's generated test fails at the head, since its file is not in the tree. The unit should not go on with a SHALL clause of its own specification unmet and unchecked. WHEN the Grants page renders the Role or user field THEN the hint A role, for example author, or a user id from the Users page. is shown under that field, with the rows, badges, alerts, options, subject ids and layout of the scenario unchanged.
 ---
 
 ## Q-017: Hold H-16db4d27: UI criterion C-403c66db has no end-to-end test; see the generated UI tests table
