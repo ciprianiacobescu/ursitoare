@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | ambiguous | Task 1.1 is blocked |
+| Q-001 | answered | 1.1 | ambiguous | Task 1.1 is blocked |
 | Q-002 | open | 1.2 | ambiguous | Task 1.2 is blocked |
 <!-- l4:index:end -->
 
@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Task 1.1 is blocked
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The e2e gate failure is a Python error in the test file itself, not in production code. e2e/test_m6b_home.py:12 reads HASH = "sha256:" + "ab".repeat(32); Python strings have no repeat method (that is JavaScript), so the module raises AttributeError at import, pytest collects nothing and exits 2, whi
 - **Blocking tasks:** 1.1
 - **Kind:** ambiguous
@@ -30,6 +30,7 @@ I changed nothing. The e2e gate failed with exit code 2 and the new file `e2e/te
 
 ### Answer
 <!-- write below this line -->
+The collection error is fixed by the person's commit 566ade37 on this branch: e2e/test_m6b_home.py:12 now builds HASH as "sha256:" + "ab" * 32 (Python; "ab".repeat(32) raised AttributeError at import). Do not edit that file. The e2e gate still fails on a real defect in production code, which this task must fix. In web/src/app/HomePage.tsx, HomePage creates its client with createApiClient(), whose base is /api/v1, and passes it to loadEngineHealth. So the page requests /api/v1/health, which is 404, and shows "Engine unavailable". The server's health route is /health, and main's web/src/features/10-home.tsx used createApiClient({ baseUrl: "" }) for the health check. Give loadEngineHealth a client with baseUrl "" (keep the /api/v1 client for runs, flows, people, users, tool servers and policies). This defect fails test_a_failing_list_fails_alone_and_try_again_reads_it_again and test_the_signed_out_home_is_unchanged in e2e/test_m6b_home.py, both tests in e2e/test_m0_skeleton.py that expect "Engine healthy", and e2e/test_l4_c_1542e67b.py. Checked on a private e2e stack at 7642eae7 plus the test fix: with only that change, all 14 tests of those four files pass; without it, 5 fail.
 
 ---
 
