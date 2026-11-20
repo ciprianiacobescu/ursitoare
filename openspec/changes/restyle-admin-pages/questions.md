@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-5d8c406e (web-admin › Reviewer names replace ids only when a person is found › Group mappings show Carol Example, keep operator:e2e-seed and fall back on a failure): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-effeb70f (web-admin › The Audit log keeps actor ids and reads its times on one line › One audit row keeps its ids and its time on one line): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-68a6b8c2 (web-tools › The tool server detail names who registered the server outside the Surface region › Registered by Carol Example sits outside the region and the row text is unchanged) |
-| Q-006 | open | none | verdict | Criterion C-3c7c4fbe (web-tools › The Grants page keeps its errors, options and subject ids and shows status badges › Grants in the error state and with rows): accept as satisfied? |
+| Q-006 | answered | none | verdict | Criterion C-3c7c4fbe (web-tools › The Grants page keeps its errors, options and subject ids and shows status badges › Grants in the error state and with rows): accept as satisfied? |
 | Q-007 | answered | none | verdict | Criterion C-403c66db (web-tools › The Policies page keeps one editor, bounded to the form width › Policies with no deployed policy): accept as satisfied? |
 | Q-008 | answered | none | verdict | Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table |
@@ -199,7 +199,7 @@ accept The Tool servers page satisfies the scenario. With a server selected it r
 
 ## Q-006: Criterion C-3c7c4fbe (web-tools › The Grants page keeps its errors, options and subject ids and shows status badges › Grants in the error state and with rows): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: the reply has 24 checked entries: the limit is 20
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -227,6 +227,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject: checked as the owner's delegate. The scenario's THEN clauses hold. Both Grants e2e tests match them point by point and pass at head 3eebb70a (e2e/test_m6b_admin.py 8/8 on a private stack, twice). The rows test fails at base e62be04a; the error-state test guards kept behaviour and passes at base by design. But the criterion is not met as its requirement stands. (1) The hint "A role, for example author, or a user id from the Users page." under "Role or user" appears in no source file (grep), as Q-016 found. (2) The "New grant" card's heading is squeezed beside the form ("New / grant" on two lines). In the error state it is drawn over "Subject" and the "Role" radio (screenshots at 1366 by 860). Cause: the kit's .ui-section is a grid with grid-template-columns minmax(0, 1fr) auto, and nothing spans the body, so a Section without actions puts its first child in the auto column beside the heading. The same defect crushes "Chain verification" (its status box covers the heading), "Create team", "Map a group" and "Surface". One added rule fixes all six; I tried it locally: .ui-section > :not(.ui-section-title, .ui-section-actions) { grid-column: 1 / -1; }. With it, the 8 admin e2e tests and web/src/kit/theme-restyle.test.ts still pass. WHEN the Grants page is open at 1366 by 860 with the rows and with the error state of its two e2e tests, and the Roles and teams, Group mappings, Audit log and Tool servers pages are open as in their tests in e2e/test_m6b_admin.py THEN in each of the regions "New grant", "Create team", "Map a group", "Chain verification", "Filter the audit log" and "Surface" the heading is on one line (its height is less than twice its font size) and every other child of the region starts at the heading's left edge within 1 px and at or below the heading's bottom edge.
 ---
 
 ## Q-007: Criterion C-403c66db (web-tools › The Policies page keeps one editor, bounded to the form width › Policies with no deployed policy): accept as satisfied?
