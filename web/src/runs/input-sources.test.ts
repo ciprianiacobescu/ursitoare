@@ -65,6 +65,37 @@ test("C-b538162f: TestRunPanel.tsx keeps its link and status and calls the hook 
   assert.ok(source.includes("rowSyncStep("), "calls rowSyncStep");
 });
 
+test("C-b538162f: DryRunPanel.tsx keeps its seven strings and one code element and calls the hook and both sync steps", () => {
+  const source = readSource("DryRunPanel.tsx");
+  assert.ok(source.length > 0, "DryRunPanel.tsx exists");
+  assert.deepEqual(findInlineStyleUse(source), [], "no inline style");
+  assert.deepEqual(findPaletteUtilities(source), [], "no palette utility");
+  assert.deepEqual(findCssImports(source), [], "no stylesheet import");
+  assert.ok(!source.includes("dangerouslySetInnerHTML"), "no raw html");
+  for (const text of [
+    "Dry run inputs",
+    "Start dry run",
+    "Input (JSON)",
+    "Fakes (JSON)",
+    "Started dry run ",
+    "Read steps call the real tools through the broker.",
+    "<code>",
+  ]) {
+    assert.ok(source.includes(text), `keeps ${text}`);
+  }
+  assert.equal(source.split("<code").length - 1, 1, "one code element");
+  assert.ok(source.includes("<Form"), "keeps Form");
+  assert.ok(source.includes("useRunDocument("), "calls useRunDocument");
+  assert.ok(source.includes("inputSyncStep("), "calls inputSyncStep");
+  assert.ok(source.includes("rowSyncStep("), "calls rowSyncStep");
+  assert.ok(
+    source.includes(
+      "Each write, send or pay step needs at least one answer, returned instead of the real call; leave a read step's row empty.",
+    ),
+    "has the intro line",
+  );
+});
+
 test("C-b538162f: use-run-document.ts reads the version with loadRunDocument and follows the source rules", () => {
   const source = readSource("use-run-document.ts");
   assertPlain("use-run-document.ts", source);
