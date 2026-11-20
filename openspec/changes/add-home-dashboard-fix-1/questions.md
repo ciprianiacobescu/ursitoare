@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | open | 1.1 | ambiguous | Task 1.1 is blocked |
+| Q-002 | open | 1.2 | ambiguous | Task 1.2 is blocked |
 <!-- l4:index:end -->
 
 ---
@@ -26,6 +27,21 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ### Context
 I changed nothing. The e2e gate failed with exit code 2 and the new file `e2e/test_m6b_home.py` ran no test. That is a collection or test-file problem, and a fix task may not change test files. I could only run the Node gate here, not pytest, so I could not see the actual collection error.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: Task 1.2 is blocked
+
+- **Status:** open
+- **Blocking tasks:** 1.2
+- **Kind:** ambiguous
+- **Asked:** 2026-11-20T09:05Z by claude-sonnet, run r-20261120T0856Z-d6a7, task 1.2
+
+### Context
+No change made. F-c17c0f0a concerns e2e/test_m6b_home.py running no test. A fix task may not change test files, and the harness reverts any edit to that file. A person must commit the fix on the unit branch.
 
 ### Answer
 <!-- write below this line -->
