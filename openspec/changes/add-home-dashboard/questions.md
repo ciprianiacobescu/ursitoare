@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-013 | answered | none | verdict | Hold H-c77bd28c: UI criterion C-d63e4803 has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-157de455: UI criterion C-c3d0d88f has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-5c39e94a: UI criterion C-7837c9f9 has no end-to-end test; see the generated UI tests table |
-| Q-016 | open | none | verdict | Hold H-48d2a201: UI criterion C-c8aaa647 has no end-to-end test; see the generated UI tests table |
+| Q-016 | answered | none | verdict | Hold H-48d2a201: UI criterion C-c8aaa647 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -439,7 +439,8 @@ accept Criterion C-7837c9f9 is the scenario in which carol sees setup steps from
 
 ## Q-016: Hold H-48d2a201: UI criterion C-c8aaa647 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -458,3 +459,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-c8aaa647 is the scenario in which a failing list fails alone and Try again reads it again. The unit ships its own browser test for it, test_a_failing_list_fails_alone_and_try_again_reads_it_again, tagged with the criterion id, and it asserts every row of the scenario: both could-not-be-loaded lines, zero alerts, one status reading Engine healthy, no Next steps region, the click on Try again in Recent runs followed by No runs yet and the link Choose a flow to test to /flows while the flows line stays, two hits on the runs route, axe and CSP, and on a second page a 401 giving Your session has ended, a Sign in again link to the sign-in URL, no Try again and one /me request. I traced the code against those texts. The lists use the plain createApiClient, which turns a 500 envelope into an ApiRequestError and makes no session redirect. A 500 or a body without an items array rejects the loader, so each list renders its own failure paragraph with a Try again button and no alert. Try again bumps the loader's attempt counter and runs only that loader again; an empty page then renders the EmptyState No runs yet and, since alice has test_flow, the link Choose a flow to test to /flows, while the flows loader's state is untouched. With the runs and flows facts unknown, nextSteps returns no step and settled false, so the Next steps section is not rendered. A 401 with code UNAUTHENTICATED renders Your session has ended and a Sign in again link to /sign-in?error=SESSION_ENDED&return_to=%2F without a Try again button. The health pill is the only status. The generated test that fails at the head is not in the repository, so its failure could not be read, and the gate excerpt shows another generated test that could not even be imported. The hold can be waived.
