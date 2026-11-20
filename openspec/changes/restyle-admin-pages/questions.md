@@ -28,7 +28,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-015 | answered | none | verdict | Hold H-48b9bece: UI criterion C-68a6b8c2 has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-16db4d27: UI criterion C-403c66db has no end-to-end test; see the generated UI tests table |
-| Q-018 | open | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
+| Q-018 | answered | none | verdict | Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table |
 | Q-019 | open | none | verdict | Hold H-0fde35a8: UI criterion C-e96ac1a6 has no end-to-end test; see the generated UI tests table |
 | Q-020 | open | none | verdict | Hold H-c33b0d83: UI criterion C-3802bfd0 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -519,7 +519,8 @@ accept The hold can be waived. The unit carries a browser test for C-403c66db, t
 
 ## Q-018: Hold H-5a571db9: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 4, verifier
@@ -538,6 +539,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The generated test errors at the merge base, which proves nothing, and the unit carries two browser tests tagged with C-3c7c4fbe, test_grants_error_state_has_two_alerts_and_one_option and test_grants_rows_keep_subject_ids_and_show_status_badges_beside_the_form, which assert every clause of the scenario: two alerts, the single option Choose a tool, Create grant with aria-disabled true, the two row texts with a success and a warning badge, the visible Revoke and Confirm buttons, the hidden Grants caption, the New grant region left of the table and an empty people hit list. The sources make each clause true: the tools ErrorPanel and the table's ErrorPanel each render role alert, the select has the one option, the Form writes aria-disabled while the tools are not ready, the grant text ends in a Badge of grantStatusTone, the Section and table sit in the xl grid, and the page imports nothing from people. The two reasons the criterion was rejected before are now met in the code: the subject Field passes the hint A role, for example author, or a user id from the Users page. and the kit gives every child of a section but its title and actions the full grid row, so the heading is no longer squeezed beside the form.
 ---
 
 ## Q-019: Hold H-0fde35a8: UI criterion C-e96ac1a6 has no end-to-end test; see the generated UI tests table
