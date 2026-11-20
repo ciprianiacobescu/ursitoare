@@ -225,14 +225,78 @@ function failedRunSteps(capabilities: ReadonlySet<string>, facts: HomeFacts): Ne
   ];
 }
 
+function countBadge(count: number, complete: boolean): string {
+  return complete ? String(count) : `${count}+`;
+}
+
+function assignRolesStep(capabilities: ReadonlySet<string>, facts: HomeFacts): NextStep[] {
+  if (!capabilities.has("manage_users_roles") || facts.unassigned.kind !== "known") return [];
+  const { count, complete } = facts.unassigned.value;
+  if (count <= 0) return [];
+  const prefix = complete ? "" : "At least ";
+  const person = count === 1 ? "person has" : "people have";
+  return [
+    {
+      id: "assign-roles",
+      label: "Give people a role",
+      href: "/admin/users",
+      description: `${prefix}${count} active ${person} no role yet. Assign a role, or map an identity-provider group.`,
+      badge: countBadge(count, complete),
+    },
+  ];
+}
+
+function pendingServerSteps(capabilities: ReadonlySet<string>, facts: HomeFacts): NextStep[] {
+  if (!capabilities.has("register_tool_server") || facts.servers.kind !== "known") return [];
+  const { count, complete } = facts.servers.value;
+  if (count <= 0) return [];
+  const prefix = complete ? "" : "At least ";
+  const noun = count === 1 ? "tool server waits for its surface" : "tool servers wait for their surfaces";
+  return [
+    {
+      id: "review-pending-tool-servers",
+      label: "Review pending tool servers",
+      href: "/admin/tool-servers",
+      description: `${prefix}${count} ${noun} to be approved before flows can call their tools.`,
+      badge: countBadge(count, complete),
+    },
+  ];
+}
+
+function grantSteps(capabilities: ReadonlySet<string>, facts: HomeFacts): NextStep[] {
+  if (!capabilities.has("deploy_policy") || facts.policy.kind !== "known") return [];
+  const { pendingGrants } = facts.policy.value;
+  if (pendingGrants <= 0) return [];
+  const noun = pendingGrants === 1 ? "grant change is" : "grant changes are";
+  const pronoun = pendingGrants === 1 ? "it is" : "they are";
+  return [
+    {
+      id: "deploy-grant-changes",
+      label: "Deploy grant changes",
+      href: "/admin/policies",
+      description: `${pendingGrants} ${noun} not deployed, so ${pronoun} not in force yet.`,
+      badge: String(pendingGrants),
+    },
+  ];
+}
+
 export function nextSteps(
   capabilities: ReadonlySet<string>,
   facts: HomeFacts,
 ): { steps: NextStep[]; settled: boolean } {
-  const steps = [...flowSteps(capabilities, facts), ...failedRunSteps(capabilities, facts)];
+  const steps = [
+    ...flowSteps(capabilities, facts),
+    ...failedRunSteps(capabilities, facts),
+    ...assignRolesStep(capabilities, facts),
+    ...pendingServerSteps(capabilities, facts),
+    ...grantSteps(capabilities, facts),
+  ];
   const asked: Fact<unknown>[] = [];
   if (capabilities.has("test_flow")) asked.push(facts.flows);
   if (capabilities.has("read_run")) asked.push(facts.runs);
+  if (capabilities.has("manage_users_roles")) asked.push(facts.unassigned);
+  if (capabilities.has("register_tool_server")) asked.push(facts.servers);
+  if (capabilities.has("deploy_policy")) asked.push(facts.policy);
   const settled = asked.length > 0 && asked.every((fact) => fact.kind === "known");
   return { steps, settled };
 }
