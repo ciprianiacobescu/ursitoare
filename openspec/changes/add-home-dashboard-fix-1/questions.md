@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: Task 1.1 is blocked
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The e2e gate failure is a Python error in the test file itself, not in production code. e2e/test_m6b_home.py:12 reads HASH = "sha256:" + "ab".repeat(32); Python strings have no repeat method (that is JavaScript), so the module raises AttributeError at import, pytest collects nothing and exits 2, whi
 - **Blocking tasks:** 1.1
 - **Kind:** ambiguous
 - **Asked:** 2026-11-20T08:53Z by claude-sonnet, run r-20261120T0807Z-a5b2, task 1.1
