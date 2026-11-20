@@ -1,4 +1,4 @@
-# Verification: openspec:restyle-admin-pages: NEEDS_HUMAN (round 2)
+# Verification: openspec:restyle-admin-pages: FAIL (round 3)
 
 traceability: 8/10 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 8/10 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base main@e62be04a70 contained |
-| 1 | integrity | ok | 258.6 | 11 sub-checks; scope: 26 changed file(s) |
-| 2 | build | ok | 32.6 |  |
-| 3 | tests | ok | 373.7 |  |
-| 4 | traceability | ok | 0.2 | 8/10 criteria covered |
-| 4a | audit sampling | ok | 449.8 | 2 rejected, 1 skipped; support files at the base: 4 |
-| 5 | ui test generation | ok | 1595.0 | 1 base_error, 6 fails_at_head, 3 not_testable |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/admin/AuditPage.tsx, web/src/admin/MappingsPage.tsx, web/src/admin/TeamsPage.tsx, web/src/admin/UsersPage.tsx, web/src/tools/GrantsPage.tsx and 2 more |
-| 8 | s1 judge | ok | 0.6 | 9/10 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 71.2 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
+| 4a | audit sampling | reused | 0.0 | reused (round 2) |
+| 5 | ui test generation | reused | 0.0 | reused (round 2) |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -162,20 +162,40 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - C-5d8c406e: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_5d8c406e_r2.py
 - C-b824c627: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_b824c627_r2.py
 
+## Answers to verdict questions
+
+- Q-001 accept C-1baa1083 by the delegate (claude-fable-5-1 via claude-code): The Users page satisfies the scenario as written. It passes destructive to its ConfirmDialog, and the kit writes data-tone danger on the confirm button and puts the first focus on Cancel when destructive is true; the danger token is #b42318, which is rgb(180, 35, 24). The state cell is a Badge with ...
+- Q-002 accept C-23f3a934 by the delegate (claude-fable-5-1 via claude-code): The Roles and teams page satisfies the scenario. The Create team Section and the two tables sit in a grid with xl:grid-cols-[20rem_minmax(0,1fr)] and the Section first in DOM order, and the stylesheet entry overrides no Tailwind breakpoint, so the xl breakpoint is 1280 px: at 1366 the form is a 20 r...
+- Q-003 accept C-5d8c406e by the delegate (claude-fable-5-1 via claude-code): The Group mappings page satisfies the scenario. It collects the distinct reviewedBy values from the list, passes them once to useDisplayNames and renders the cell as clip(personLabel(names, mapping.reviewedBy)). The name cache requests only ids matching ^[A-Za-z0-9_-]{1,64}$, so operator:e2e-seed is...
+- Q-004 accept C-effeb70f by the delegate (claude-fable-5-1 via claude-code): The Audit log page satisfies the scenario. The Chain verification and Filter the audit log Sections sit in a grid with lg:grid-cols-2 and lg:items-start, so at 1366 their tops align and the first ends at the second's left edge, and the table follows below. The verification status paragraph has role ...
+- Q-005 accept C-68a6b8c2 by the delegate (claude-fable-5-1 via claude-code): The Tool servers page satisfies the scenario. With a server selected it renders the paragraph Registered by followed by personLabel of registeredBy after the servers table and before the Surface Section, so the text is visible and absent from the region, and useDisplayNames is called with that one i...
+- Q-006 reject C-3c7c4fbe by agent (CLAUDECODE): checked as the owner's delegate. The scenario's THEN clauses hold. Both Grants e2e tests match them point by point and pass at head 3eebb70a (e2e/test_m6b_admin.py 8/8 on a private stack, twice). The rows test fails at base e62be04a; the error-state test guards kept behaviour and passes at base by d...
+- Q-007 accept C-403c66db by the delegate (claude-fable-5-1 via claude-code): The Policies page satisfies the scenario as written. Its root is cn(tools-page, PAGE_WIDTHS.form), that is max-w-3xl or 768 px, and the editor sits in a Card with padding inside it with a textarea of width 100 percent, so the Hand-written Cedar editor is at most 768 px wide. Once loaded the PageHead...
+- Q-016 reject H-5a571db9 by the delegate (claude-fable-5-1 via claude-code): The scenario's own clauses hold in the sources, and the unit's browser tests test_grants_error_state_has_two_alerts_and_one_option and test_grants_rows_keep_subject_ids_and_show_status_badges_beside_the_form assert them: two alerts from the tool ErrorPanel and the table's ErrorPanel, the single opti...
+- Q-008 accept H-91a276d8 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-b824c627 is a source-reading scenario by its own text: it is satisfied WHEN admin-pages-restyle.test.ts reads the four page sources, admin.css and tokens.css and finds the pinned substrings, counts and checker results. That is exactly what the two passing Node tes...
+- Q-009 accept H-6e8dbf95 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-e4e27fab is satisfied WHEN captions-by-page.test.ts calls captionDisplayFor with the eight caption and heading pairs and reads the page sources for the captionDisplay marker. The passing Node test does exactly that: the hidden set is Users, Group mappings, Tool se...
+- Q-010 accept H-84f9c6e9 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The unit already carries a browser test for this criterion, test_users_page_hides_its_caption_toned_badge_and_red_disable_confirm in e2e/test_m6b_admin.py, tagged with C-1baa1083, which asserts every clause of the scenario: one heading Users, the caption class ui-table-captio...
+- Q-011 accept H-85d419d4 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The unit carries a browser test for C-23f3a934, test_teams_form_sits_beside_the_tables_at_1366_and_above_them_at_1100 in e2e/test_m6b_admin.py, tagged with the criterion, which asserts every clause of the scenario: the right edge of the region Create team at most the left edg...
+- Q-012 accept H-1dd17d4f by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The unit carries a browser test for C-5d8c406e, test_mappings_show_the_reviewer_name_and_keep_ids_that_are_not_people in e2e/test_m6b_admin.py, tagged with the criterion, which asserts every clause of the scenario across two pages: Carol Example shown and u_carol absent in th...
+- Q-013 accept H-ddba32f9 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The unit carries a browser test for C-effeb70f, test_audit_page_keeps_actor_ids_and_one_line_times in e2e/test_m6b_admin.py, tagged with the criterion, which asserts every clause of the scenario: the status Audit chain verified inside the region Chain verification, the row te...
+- Q-014 accept H-73dee3af by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-e553aba2 is a source-reading scenario by its own text: it is satisfied WHEN tools-pages-restyle.test.ts reads the three page sources and tools.css with tokens.css and finds the pinned substrings, counts, token pairs and checker results, including three mutated sou...
+- Q-015 accept H-48b9bece by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The unit carries a browser test for C-68a6b8c2, test_tool_servers_show_who_registered_outside_the_surface_region in e2e/test_m6b_admin.py, tagged with the criterion, which asserts every clause of the scenario: the region Surface containing acme · https://tools.fake.test · pen...
+- Q-017 accept H-16db4d27 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The unit carries a browser test for C-403c66db, test_policies_page_has_no_status_once_loaded_and_a_bounded_editor, tagged with the criterion, which asserts every clause of the scenario: the texts No policy deployed. and 1 grant change is not deployed. visible with exact match...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
 | C-b824c627 | web-admin › The four admin pages are built from PageHeader, Section and the list width › The admin sources use the layout parts and keep their pins | pass | pass | the judge passed it and a discriminating test passes |
 | C-e4e27fab | web-admin › A table caption that repeats its page heading is hidden, and only four are › Exactly four captions are hidden | pass | pass | the judge passed it and a discriminating test passes |
-| C-1baa1083 | web-admin › A destructive confirm is red and a state is a badge › Disable user opens red and the table keeps its name | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
-| C-23f3a934 | web-admin › A form sits beside the tables from 1280 px and above them below › The team form is beside the tables at 1366 and above them at 1100 | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-5d8c406e | web-admin › Reviewer names replace ids only when a person is found › Group mappings show Carol Example, keep operator:e2e-seed and fall back on a failure | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
-| C-effeb70f | web-admin › The Audit log keeps actor ids and reads its times on one line › One audit row keeps its ids and its time on one line | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-1baa1083 | web-admin › A destructive confirm is red and a state is a badge › Disable user opens red and the table keeps its name | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The Users page satisfies the scenario as written. It passes destructive to its ConfirmDialog, and the kit writes data-tone danger on the confirm button and puts the first focus on Cancel when destructive is true; the danger token is #b4231... |
+| C-23f3a934 | web-admin › A form sits beside the tables from 1280 px and above them below › The team form is beside the tables at 1366 and above them at 1100 | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The Roles and teams page satisfies the scenario. The Create team Section and the two tables sit in a grid with xl:grid-cols-[20rem_minmax(0,1fr)] and the Section first in DOM order, and the stylesheet entry overrides no Tailwind breakpoint... |
+| C-5d8c406e | web-admin › Reviewer names replace ids only when a person is found › Group mappings show Carol Example, keep operator:e2e-seed and fall back on a failure | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The Group mappings page satisfies the scenario. It collects the distinct reviewedBy values from the list, passes them once to useDisplayNames and renders the cell as clip(personLabel(names, mapping.reviewedBy)). The name cache requests onl... |
+| C-effeb70f | web-admin › The Audit log keeps actor ids and reads its times on one line › One audit row keeps its ids and its time on one line | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The Audit log page satisfies the scenario. The Chain verification and Filter the audit log Sections sit in a grid with lg:grid-cols-2 and lg:items-start, so at 1366 their tops align and the first ends at the second's left edge, and the tab... |
 | C-e553aba2 | web-tools › The three tool pages are built from PageHeader, Section and the page widths › The tool sources use the layout parts and keep their pins | pass | pass | the judge passed it and a discriminating test passes |
-| C-68a6b8c2 | web-tools › The tool server detail names who registered the server outside the Surface region › Registered by Carol Example sits outside the region and the row text is unchanged | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
-| C-3c7c4fbe | web-tools › The Grants page keeps its errors, options and subject ids and shows status badges › Grants in the error state and with rows | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
-| C-403c66db | web-tools › The Policies page keeps one editor, bounded to the form width › Policies with no deployed policy | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-68a6b8c2 | web-tools › The tool server detail names who registered the server outside the Surface region › Registered by Carol Example sits outside the region and the row text is unchanged | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The Tool servers page satisfies the scenario. With a server selected it renders the paragraph Registered by followed by personLabel of registeredBy after the servers table and before the Surface Section, so the text is visible and absent f... |
+| C-3c7c4fbe | web-tools › The Grants page keeps its errors, options and subject ids and shows status badges › Grants in the error state and with rows | pass | fail | rejected by agent (CLAUDECODE): checked as the owner's delegate. The scenario's THEN clauses hold. Both Grants e2e tests match them point by point and pass at head 3eebb70a (e2e/test_m6b_admin.py 8/8 on a private stack, twice). The rows test fails at base e62be04a; the error-state test guards kept b... |
+| C-403c66db | web-tools › The Policies page keeps one editor, bounded to the form width › Policies with no deployed policy | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The Policies page satisfies the scenario as written. Its root is cn(tools-page, PAGE_WIDTHS.form), that is max-w-3xl or 768 px, and the editor sits in a Card with padding inside it with a textarea of width 100 percent, so the Hand-written ... |
 
 ## Findings
 
@@ -208,19 +228,13 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] the judge called a test inadequate (criterion C-68a6b8c2): web.src.tools.tools-pages-restyle.test.ts::C-68a6b8c2 the Servers page names who registered the server and badges the state
 - [minor, judge] the judge called a test inadequate (criterion C-3c7c4fbe): web.src.tools.tools-pages-restyle.test.ts::C-3c7c4fbe the Grants page badges the status and keeps subject ids
 - [minor, judge] the judge called a test inadequate (criterion C-403c66db): web.src.tools.tools-pages-restyle.test.ts::C-403c66db the Policies page puts its status in the header and bounds one editor
+- [major, deterministic] Rejected hold: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table: Change the behaviour the hold names as the human's reason says; the reason ends with the scenario to pin. Hold: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table [rejected by the delegate (claude-fable-5-1 via claude-code) (The scenario's own clauses hold in the sources, and the unit's browser tests test_grants_error_state_has_two_alerts_and_one_option and test_grants_rows_keep_subject_ids_and_show_status_badges_beside_the_form assert them: two alerts from the tool ErrorPanel and the table's ErrorPanel, the single option Choose a tool, Create grant with aria-disa...
 
-## Needs a human
+## Fix unit
 
-- UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table
-- UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table
-- UI criterion C-1baa1083 has no end-to-end test; see the generated UI tests table
-- UI criterion C-23f3a934 has no end-to-end test; see the generated UI tests table
-- UI criterion C-5d8c406e has no end-to-end test; see the generated UI tests table
-- UI criterion C-effeb70f has no end-to-end test; see the generated UI tests table
-- UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table
-- UI criterion C-68a6b8c2 has no end-to-end test; see the generated UI tests table
-- UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table
-- UI criterion C-403c66db has no end-to-end test; see the generated UI tests table
+Fix unit 2 is created for these tasks:
+- H-5a571db9 Rejected hold: UI criterion C-3c7c4fbe has no end-to-end test; see the generated UI tests table
+- F-cccc238e Criterion web-tools › The Grants page keeps its errors, options and subject ids and shows status...
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
