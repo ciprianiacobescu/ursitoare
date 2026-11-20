@@ -1,0 +1,202 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "e2e",
+      "…/scratchpad/m6b-add-flow-workspace/shots-v3",
+      "docs/decisions/0002",
+      "e2e/test_m6b_workspace.py",
+      "e2e/conftest.py",
+      "web/src/flows",
+      "flow-graph/FlowGraphView.tsx",
+      "node:assert/strict",
+      "features/75-flow-graph.tsx",
+      "flow-graph/pages.test.ts",
+      "flow-graph/FlowGraphPage.tsx",
+      "flow-graph/view-sources.test.ts",
+      "runs/dry-run-sources.test.ts",
+      "test/arch/web-routes.test.ts",
+      "**/FlowEditorPage.tsx",
+      "**/flows.css",
+      "**/p[role=status]",
+      "**/FlowGraphPage.tsx",
+      "**/EditorPanel.placement?",
+      "**/[]",
+      "**/^[a-z][a-z0-9-]{0,39}$",
+      "**/FlowGraphView.tsx",
+      "**/TestRunPanel.tsx",
+      "**/DryRunPanel.tsx",
+      "flows/*.tsx",
+      "**/FlowsPage.tsx",
+      "**/pages.ts",
+      "**/placement?",
+      "**/[",
+      "**/workspace.test.ts",
+      "**/workspace.ts",
+      "**/flows.ts",
+      "**/flows.test.ts",
+      "**/test_m3_authoring.py",
+      "**/test_m3_flow_editor.py",
+      "**/test_m4_runs.py",
+      "**/test_m5_code_hooks.py",
+      "**/test_m6_grants.py",
+      "module docs",
+      "module e2e",
+      "module features",
+      "module flow-graph",
+      "module node:assert",
+      "module runs",
+      "module test",
+      "module web",
+      "module …"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m6b_workspace.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-flow-workspace/.l4/ledger/r-20261120T1157Z-061f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-flow-workspace/.l4/ledger/r-20261120T1435Z-6545.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-flow-workspace/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/features/75-flow-graph.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `web` is named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/FlowGraphPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flow-graph/flow-graph.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "module `web` is named in the spec"
+      },
+      {
+        "path": "web/src/flows/FlowEditorPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/FlowsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/editor-panels.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/flows-page-sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/flows.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/flows/panel-placement.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/workspace-sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/workspace.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/flows/workspace.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/features/75-flow-graph.tsx, web/src/flow-graph/FlowGraphPage.tsx, web/src/flows/FlowEditorPage.tsx, web/src/flows/FlowsPage.tsx, web/src/flows/editor-panels.ts and 1 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/features/75-flow-graph.tsx",
+      "web/src/flow-graph/FlowGraphPage.tsx",
+      "web/src/flows/FlowEditorPage.tsx",
+      "web/src/flows/FlowsPage.tsx",
+      "web/src/flows/editor-panels.ts",
+      "web/src/flows/workspace.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2699,
+      "passed": 2699,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 12,
+      "new_passed": 12,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

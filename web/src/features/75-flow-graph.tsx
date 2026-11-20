@@ -7,6 +7,7 @@ import { GRAPH_PANEL } from "../flow-graph/pages.ts";
 registerEditorPanel({
   id: GRAPH_PANEL.id,
   title: GRAPH_PANEL.title,
+  placement: "side",
   render: (context) => <GraphPanel context={context} />,
 });
 

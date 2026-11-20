@@ -1,0 +1,333 @@
+# Questions — add-flow-workspace
+
+<!-- l4:questions v1
+How to answer: write under "### Answer" and set **Status** to `answered`.
+To accept the clarifier's suggestion as-is, set **Status** to `accepted`.
+Status values: open · answered · accepted · answered-by-clarifier · dismissed · superseded
+Kind values: technical · product · ambiguous · verdict · harness. For a `verdict` question, start the answer with `accept` or
+`reject`, then give your reason; for a `harness` question, with `accept` or `retry`.
+Do not change question IDs. Commit and push to the l4/… branch to resume the run. -->
+
+<!-- l4:index:start -->
+| ID | Status | Blocking | Kind | Question |
+|----|--------|----------|------|----------|
+| Q-001 | answered | none | verdict | Criterion C-592f8050 (web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-c88ddf4d (web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times): |
+| Q-004 | answered | none | verdict | Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie |
+| Q-005 | answered | none | verdict | Hold H-c9eda519: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-f1cd4626: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-93e49184: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-903f2410: UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-a3cd42da: UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table |
+<!-- l4:index:end -->
+
+---
+
+## Q-001: Criterion C-592f8050 (web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860): accept as satisfied?
+
+- **Status:** answered
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The scenario is made of rendered measurements (page height at most 2,600 px, the Graph and Edit the flow tops within 8 px, the Diagnostics heading bottom and the Save version bottom at most 860, the drawing top under 860) plus an axe run and a banner-height check. The source does hold the two xl:grid-cols-2 grids, the Section ids and the clamp() editor height, and e2e/test_m6b_workspace.py asserts exactly these numbers, but I cannot run a browser and the heights depend on fonts, paddings and the graph's rendered size. The verifier's own generated test for this criterion failed at the head twice and I cannot read its screenshot or trace. A person with the e2e stack should look at test-results for C-592f8050 before this is accepted.
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-592f8050 (web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860)
+
+### Context
+Criterion C-592f8050 (web-flow-editor › The flow page is a two-column workspace with every panel visible › The workspace is two columns, short and fully visible at 1366 by 860) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `test_workspace_is_two_columns_with_every_panel_visible` opens `/flows/demo-pay` with the mocked answers of test-plan-browser.md (one saved, validated version) at 1366 by 860 after `watch_csp(page)`
+\- **THEN** the regions "Edit the flow", "Diagnostics", "Graph", "Test run" and "Dry run" are visible; the top of "Graph" is within 8 px of the top of "Edit the flow" (both 239 measured), the tops of "Test run" and "Dry run" are within 8 px of each other (1,393 measured), the page is at most 2,600 px tall (2,275 measured), the bottom of the "Diagnostics" heading is at most 860 (790), the drawing's top is under 860 (387), the bottom of "Save version" is at most 860 (697); `assert_layout(page, max_banner_px=72)` and `assert_accessible(page)` pass and the `watch_csp` list is `[]`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_workspace::test_workspace_is_two_columns_with_every_panel_visible[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+accept Checked by the owner's delegate in a real browser on a private e2e stack, at head 55576665 (web code identical to the verified d8b6abcf). The unit's own test e2e/test_m6b_workspace.py::test_workspace_is_two_columns_with_every_panel_visible asserts this scenario line by line and passes at the head; with web/src reset to the base e8e2660d it fails on its first region assertion (line 119), so it discriminates. Measured at 1366 by 860: the page is 2,282 px tall (limit 2,600; it was 4,634 before this unit), Edit the flow and Graph both start at 218, Test run and Dry run both at 1,377, no two regions overlap and nothing scrolls sideways; at 1920, 1024 and 390 px wide there is also no overlap and no sideways scroll. I looked at the screenshots: editor and diagnostics on the left, graph on the right, versions full width, the two run panels side by side. The generated test test_l4_c_592f8050 fails at the head only because it never mocks /api/v1/me, so the page shows "Sign in required" (SESSION_ENDED); that is a setup error in the generated test, not the code.
+---
+
+## Q-002: Criterion C-c88ddf4d (web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view): accept as satisfied?
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-c88ddf4d (web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view)
+
+### Context
+Criterion C-c88ddf4d (web-flow-editor › The flow page is a two-column workspace with every panel visible › The section index links reach their panels and stays in view) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `test_jump_links_reach_their_panels_and_the_bar_sticks` opens the same page, reads the list named "On this page", counts `navigation` landmarks, then clicks the link "Dry run panel"
+\- **THEN** the list has exactly 6 links, in order `Editor #flow-editor`, `Diagnostics #flow-diagnostics`, `Graph #flow-panel-graph`, `Versions #flow-versions`, `Test run panel #flow-panel-test-run`, `Dry run panel #flow-panel-dry-run` (inner text and `href` attribute), `page.locator(href).count()` is 1 for each, the page has exactly one `navigation`, the URL ends `/flows/demo-pay#flow-panel-dry-run`, the list's top is 0 and `#flow-panel-dry-run`'s top is at least the list's height minus 1 (64 measured), and the `watch_csp` list is `[]`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_workspace::test_jump_links_reach_their_panels_and_the_bar_sticks[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+accept Every assertion of the scenario follows from the sources at the head. jumpLinks builds the six links in page order from the graph side panel and the two below panels of 80-runs.tsx, each href pointing at a Section id that FlowEditorPage.tsx renders exactly once (flow-editor, flow-diagnostics, flow-versions and flow-panel-<id>). The index is a ul with aria-label On this page and the utilities sticky top-0, so after a hash jump it sits at the top of the viewport, and every Section carries scroll-mt-16, which puts the target 64 px down, above the bar's height of about 33 px. The links are plain anchors, so the URL ends with the fragment. The shell renders one nav (inline or sidebar, never both) and the page adds none. No inline style is added, so the CSP list stays empty. The browser test test_jump_links_reach_their_panels_and_the_bar_sticks asserts precisely this scenario.
+---
+
+## Q-003: Criterion C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times):
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times)
+
+### Context
+Criterion C-a1593e86 (web-flow-editor › The flow page is a two-column workspace with every panel visible › Tab leaves the editor for Save version and the Versions table shows names, badges and times) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `test_tab_from_the_editor_names_authors_and_keeps_the_scroller` opens the same page with `/people` answering "Alice Example" for `user-1`, focuses the textbox "Flow text" and presses Tab
+\- **THEN** the button "Save version" is focused, the first `.cm-scroller` has `overflow-x` `auto`, the table "Versions" holds the cells "Alice Example", "validated" and "2026-11-17 10:00 UTC" (exact names), its `time` element has `datetime` `2026-11-17T10:00:00.000000Z`, and the `watch_csp` list is `[]`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_workspace::test_tab_from_the_editor_names_authors_and_keeps_the_scroller[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+accept The scenario follows from the sources at the head. The editor host is followed directly by the Save version button inside the Edit the flow section, and the editor keymap binds only the default and history keys, so Tab leaves the editor for Save version, as the frozen m3e pin already relies on. The editor theme keeps overflow-x auto on .cm-scroller. The Versions table takes its rows from the cursor list, resolves authors with useDisplayNames through GET /people with an ids query, which the test's /people route answers with Alice Example, and renders personLabel, a Badge around the state and a time element whose dateTime is the raw createdAt and whose text is formatInstant's YYYY-MM-DD HH:mm UTC. The caption is Versions and is hidden visually only, so the table keeps its name. No inline style is added, so the CSP list stays empty. The browser test test_tab_from_the_editor_names_authors_and_keeps_the_scroller asserts exactly this.
+---
+
+## Q-004: Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one): accept as satisfie
+
+- **Status:** answered
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The deterministic part holds in the sources: FlowsPage.tsx reads useMyTeams, passes the teams to ownerTeamSuggestions, renders a datalist of the options under the Owner team text input and prefills the field once when the teams arrive and the field is empty; loadMyTeams does a GET on /me/teams, which the test's route answers with one team, so the value is finance and one option exists, and fill keeps ops. But the scenario also requires assert_accessible (an axe run over the whole Flows page, including the kit's form, table and shell) and assert_layout to pass, and I cannot run a browser to check them. The verifier's generated test for this criterion failed at the head twice and I cannot see why. A person should run or inspect test-results for C-5368fc63 before accepting.
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one)
+
+### Context
+Criterion C-5368fc63 (web-flow-editor › The Flows page offers the person's teams as owner-team suggestions › Owner team is prefilled from the only team and still takes a typed one) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `test_owner_team_is_prefilled_from_my_teams` opens `/flows` with mocked `/api/v1/me`, `/api/v1/flows` (no flows) and `/api/v1/me/teams` answering `{"items":[{"id":"finance"}],"next_cursor":null}` at 1366 by 860, then fills "Owner team" with `ops`
+\- **THEN** "Owner team" has value `finance` before the fill and `ops` after it, the page holds 1 `datalist option`, `assert_layout(page, max_banner_px=72)` and `assert_accessible(page)` pass, and the `watch_csp` list is `[]`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_workspace::test_owner_team_is_prefilled_from_my_teams[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+accept Checked by the owner's delegate in a real browser on a private e2e stack, at head 55576665. The unit's own test e2e/test_m6b_workspace.py::test_owner_team_is_prefilled_from_my_teams asserts this scenario line by line (value finance before the fill, ops after it, one datalist option, assert_layout, assert_accessible with axe, empty CSP list) and passes at the head; with web/src reset to the base e8e2660d it fails with Owner team value "" instead of finance (line 188), so it discriminates. A probe with two teams left the field empty and offered both as suggestions, as the only-team rule says. The generated test test_l4_c_5368fc63 fails at the head because it mocks /api/v1/me as {"id","displayName"} instead of the {user, tenant, capabilities, csrfToken} reply the app reads, so the shell reports that permissions could not be loaded and the page asks to sign in; that is a setup error in the generated test, not the code.
+---
+
+## Q-005: Hold H-c9eda519: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-48e39912 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-48e39912: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_48e39912::test_jump_links_list_index_in_page_order[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept The criterion jumpLinks lists the index in page order is a Node-tested scenario of the pure function jumpLinks, not a browser scenario: the specification names workspace.test.ts and test-plan T2, and that test exists at the head with the full assertion of the six links, the three-link empty case and the nav-label exclusion. The implementation in workspace.ts returns exactly those values, so no end-to-end test is needed for this criterion; the verifier's generated browser test is for a scenario the specification never asks a browser to check, and its failure does not reflect on the criterion. The unit can go on.
+---
+
+## Q-006: Hold H-f1cd4626: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-2aa2aa19 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-2aa2aa19: writer_failed after 2 attempt(s); structured output missing: the reply holds no JSON object.
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept The criterion ownerTeamSuggestions sorts, drops and prefills is a Node-tested scenario of the pure function ownerTeamSuggestions, not a browser scenario: the specification names workspace.test.ts and test-plan T3, and that test exists at the head under the criterion id with every row of the scenario (the empty list, the single team that prefills, the duplicate, the mixed list that keeps the 64-letter team, finance and ops, the code-unit order a-b, a_b, ab, and the capitalised team that is dropped). The implementation in workspace.ts passes each entry through checkOwnerTeam, which trims and applies the owner-team pattern, keeps the valid values in a set, sorts by code unit and prefills only when exactly one option remains, so it gives those values by construction. No end-to-end test is required for this criterion; the verifier's writer failed to produce a browser test for a scenario the specification never asks a browser to check. The unit can go on.
+---
+
+## Q-007: Hold H-09acf823: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The hold concerns end-to-end coverage of the layout scenario, whose assertions are rendered measurements (page height at most 2,600 px, matching region tops, the Diagnostics heading, drawing and Save version button inside the first 860 px) plus an axe run and the banner-height check. The unit's own browser test in e2e/test_m6b_workspace.py asserts exactly these numbers and the sources hold the two xl:grid-cols-2 grids, the Section ids and the clamp() editor height, but I cannot run a browser, the numbers depend on fonts, paddings and the graph's rendered size, and the verifier's generated test for this criterion failed at the head twice for a reason I cannot read. The criterion itself (Q-001) is already with a person for the same reason; the hold needs the same test-results.
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-592f8050 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-592f8050: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_592f8050::test_workspace_is_two_columns_with_every_panel_visible[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-592f8050 has a discriminating end-to-end test: e2e/test_m6b_workspace.py::test_workspace_is_two_columns_with_every_panel_visible, tagged with the criterion id, passes at head 55576665 and fails with web/src at the base e8e2660d (checked by the owner's delegate on a private e2e stack; see Q-001 for the numbers and the screenshots). The generated test fails at the head only because it never mocks /api/v1/me and lands on "Sign in required"; it is wrong in setup and says nothing about the code.
+---
+
+## Q-008: Hold H-93e49184: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-c88ddf4d has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-c88ddf4d: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_c88ddf4d::test_jump_links_reach_their_panels_and_the_bar_sticks[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept The criterion has an end-to-end test at the head: test_jump_links_reach_their_panels_and_the_bar_sticks in e2e/test_m6b_workspace.py, tagged with the criterion id, asserts the six links with their texts and hrefs in order, one target per href, one navigation landmark, the URL fragment after the click, the bar's top at 0 and the target's top at least the bar's height minus 1, and an empty CSP list, which is the scenario line by line. Every one of those facts follows from the sources: jumpLinks builds Editor, Diagnostics, the side panel Graph, Versions, then the below panels with the label title plus panel, from the graph panel registered with placement side and the two run panels registered without placement; FlowEditorPage.tsx renders the Section ids flow-editor, flow-diagnostics, flow-versions and flow-panel-<id> once each, the index as a ul with aria-label On this page and the utilities sticky top-0, and scroll-mt-16 on every Section; the shell renders one nav and the page adds none. The generated test's failure at the head is unexplained and does not change what the sources show. The unit can go on.
+---
+
+## Q-009: Hold H-903f2410: UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-a1593e86 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-a1593e86: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_a1593e86::test_tab_from_the_editor_names_authors_and_keeps_the_scroller[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept The criterion has an end-to-end test at the head: test_tab_from_the_editor_names_authors_and_keeps_the_scroller in e2e/test_m6b_workspace.py, tagged with the criterion id, focuses the textbox Flow text, presses Tab, expects Save version focused, reads overflow-x of the first .cm-scroller, finds the cells Alice Example, validated and 2026-11-17 10:00 UTC in the table Versions, checks the time element's datetime and asserts an empty CSP list, which is the scenario line by line. Each fact follows from the sources: the editor host is followed directly by the Save version button inside the Edit the flow section and the editor keymap binds only the default and history keys, so Tab leaves the editor; the theme keeps overflow-x auto on .cm-scroller; the page resolves the rows' authors with useDisplayNames, which fetches /people with an ids query that the test's route answers with Alice Example, and renders personLabel, a Badge around the state and a time element whose dateTime is the raw createdAt and whose text is formatInstant's YYYY-MM-DD HH:mm UTC; the caption Versions is only visually hidden, so the table keeps its name. The generated test's failure at the head is unexplained and does not change what the sources show. The unit can go on.
+---
+
+## Q-010: Hold H-a3cd42da: UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The deterministic part holds in the sources: FlowsPage.tsx reads useMyTeams, passes the teams to ownerTeamSuggestions, renders a datalist of the options under the Owner team text input and prefills the field once when the teams arrive and the field is empty, and loadMyTeams does a GET on /me/teams that the test's route answers with one team, so the value is finance, one option exists and fill keeps ops. But the scenario also requires assert_layout and assert_accessible (an axe run over the whole Flows page including the kit's form, table and shell) to pass, which I cannot check without a browser, and the verifier's generated test for this criterion failed at the head twice for a reason I cannot read. The criterion itself (Q-004) is already with a person for the same reason; the hold needs the same test-results.
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-5368fc63 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-5368fc63: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_5368fc63::test_owner_team_is_prefilled_from_my_teams[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept C-5368fc63 has a discriminating end-to-end test: e2e/test_m6b_workspace.py::test_owner_team_is_prefilled_from_my_teams, tagged with the criterion id, passes at head 55576665 and fails with web/src at the base e8e2660d (Owner team "" instead of finance), checked by the owner's delegate on a private e2e stack; see Q-004. The generated test mocks /api/v1/me in the wrong shape, so the page never loads the person; it is wrong in setup and says nothing about the code.
+---
+
+## Q-011: Hold H-bbd88603: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table
+
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-159129bd has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-159129bd: not_testable after 2 attempt(s); createEditorPanelRegistry() is an internal TypeScript module not exposed through the base URL; E2E can only observe browser UI, and listEditorPanels() source ordering plus EditorPanelError codes are not observable user outcomes..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+accept The criterion The panel registry is a Node-tested scenario of createEditorPanelRegistry plus a source check of FlowEditorPage.tsx, not a browser scenario: its scenario names only registry calls, EditorPanelError codes, the immutability of list() and the position of listEditorPanels( after function FlowEditorPage( in the page source, and the specification itself says the frozen editor-panels.test.ts for this criterion stays green. Those frozen tests exist at the head and assert every row (valid registration, EDITOR_PANEL_DUPLICATE, EDITOR_PANEL_INVALID for the bad ids, titles and render, the copied list, registration order), and editor-sources.test.ts asserts the source ordering. The registry at the head throws exactly those codes and returns a copy, and the page calls listEditorPanels inside FlowEditorPage. Nothing in the scenario is a browser outcome, so no end-to-end test is needed and the unit can go on.
