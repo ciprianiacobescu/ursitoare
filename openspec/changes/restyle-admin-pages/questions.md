@@ -200,6 +200,7 @@ accept The Tool servers page satisfies the scenario. With a server selected it r
 ## Q-006: Criterion C-3c7c4fbe (web-tools › The Grants page keeps its errors, options and subject ids and shows status badges › Grants in the error state and with rows): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: the reply has 24 checked entries: the limit is 20
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
