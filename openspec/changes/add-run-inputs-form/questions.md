@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 2.2 | technical | Allow writing web/src/runs/mock-rows-sync.test.ts? |
+| Q-001 | answered | 2.2 | technical | Allow writing web/src/runs/mock-rows-sync.test.ts? |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Allow writing web/src/runs/mock-rows-sync.test.ts?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The question asks for a change to the implementer session's tool permissions (Write/Edit denied) or for a person to create the red test file by hand. The repository confirms web/src/runs/mock-rows-sync.test.ts does not exist yet, but nothing in the repository, specification or steering settles a harness permission problem, and I cannot grant permissions, verify the denial, or create files myself. Only a person or the harness operator can resolve this.
 - **Blocking tasks:** 2.2
 - **Kind:** technical
@@ -33,3 +33,4 @@ The Write tool is denied in this session, and Bash is limited to the test gate, 
 
 ### Answer
 <!-- write below this line -->
+No permission change is needed: retry the step. The implementer session already allows Write and Edit for every path inside the worktree (L4 passes the rule Edit(./**), which covers Write, with --tools Read,Edit,Write,Glob,Grep,Bash). In this same run the red steps of 1.2, 1.3, 1.4 and 2.1 created the new files input-form-text.test.ts, input-sync.test.ts, run-document.test.ts and mock-rows.test.ts with Write and no denial. The one denied Write in 2.2 red was therefore a path outside the worktree. Create the file with Write at the repo-relative path web/src/runs/mock-rows-sync.test.ts (no absolute path, nothing under /tmp or a home directory, no other checkout), write test-plan.md T6 rows R1 to R8 as the task says, then run pnpm run test web/src/runs/mock-rows-sync.test.ts. No person writes this file: the red test is the task's own work.
