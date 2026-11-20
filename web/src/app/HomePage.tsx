@@ -301,6 +301,7 @@ function Dashboard(props: { view: DashboardView; health: HealthState }): ReactNo
         meta={
           <span
             role="status"
+            tabIndex={-1}
             className="inline-flex items-center rounded-(--ui-radius) bg-quiet-surface px-2 py-0.5 text-sm font-medium text-quiet-text"
           >
             {healthText}
@@ -381,7 +382,7 @@ function PublicHome(props: {
 export function HomePage(): ReactNode {
   const session = useSession();
   const view = homeView(session);
-  const client = useMemo(() => createApiClient(), []);
+  const client = useMemo(() => createApiClient({ baseUrl: "" }), []);
   const [health, setHealth] = useState<HealthState>("loading");
   const [rechecking, setRechecking] = useState(false);
   const [attempt, setAttempt] = useState(0);
