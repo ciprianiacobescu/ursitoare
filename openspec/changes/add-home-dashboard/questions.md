@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-08110025: UI criterion C-48588514 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-cea9172c: UI criterion C-9517e900 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-cee9c0fd: UI criterion C-f82b7f78 has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-5c823df8: UI criterion C-d8b03242 has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-5c823df8: UI criterion C-d8b03242 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-26953a7c: UI criterion C-d54270f7 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-4faceff9: UI criterion C-1818ac9b has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-8d0fd794: UI criterion C-9de28eec has no end-to-end test; see the generated UI tests table |
@@ -239,7 +239,8 @@ accept Criterion C-f82b7f78 is the runRows and recentRunLinkName scenario, which
 
 ## Q-008: Hold H-5c823df8: UI criterion C-d8b03242 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -258,6 +259,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-d8b03242 is the recentFlows and flowRows scenario, which the specification frames as a direct call from home-rows.test.ts with the seven T3 flows and a fixed nowMs. These are pure functions of home.ts, so the Node test is the proper trace and there is no browser surface to drive them with injected flows and a frozen clock. The test exists, is named with the criterion id, and asserts the recency order demo-draft, demo-pay, alpha-flow, beta-flow, zeta-flow, the exclusion of gone and old-one, the empty result, every version label and tone of T3, and that a published version reads v4 · published with info. I traced the implementation: the change instant is Date.parse of the latest version's createdAt else the flow's createdAt, ties go to the smaller flow id, the list is cut to five, validationOk false gives has errors with danger, no latest gives No version yet, and versionStateTone maps validated to success and published to info. The hold can be waived.
 ---
 
 ## Q-009: Hold H-26953a7c: UI criterion C-d54270f7 has no end-to-end test; see the generated UI tests table
