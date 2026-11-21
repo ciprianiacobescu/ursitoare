@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
 | Q-002 | answered | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
-| Q-003 | open | none | verdict | Criterion C-54891f4b (web-design-system › Every page is photographed only when loaded, with a clean check › Every page leaves a loaded screenshot and no CSP message): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-54891f4b (web-design-system › Every page is photographed only when loaded, with a clean check › Every page leaves a loaded screenshot and no CSP message): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-0462bba1 (web-design-system › The flow workspace is beside, complete and at most 3,000 px tall › The workspace of demo-ui is two columns and at most 3,000 px tall): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-1beceb27 (web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work): accept as satisfied? |
@@ -317,7 +317,8 @@ accept: verified by the owner's delegate. The held patch is test-only (e2e/test_
 
 ## Q-003: Criterion C-54891f4b (web-design-system › Every page is photographed only when loaded, with a clean check › Every page leaves a loaded screenshot and no CSP message): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -344,6 +345,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied by the journey itself, which is the test the unit's documents say the verifier runs. Its three tests ran in the verifier's e2e gate and passed with no failure or skip. Each capture goes through the same check: the banner must hold the account name (or the Main navigation when signed out), the page's own ready element must be visible, no visible text in main may start with Loading or Checking, the toast list must reach zero, layout and axe must pass, the page is scrolled to the top and the full-page file is asserted to exist, to be non-empty and to be at least scrollHeight minus one pixel tall. The three tests assert 3, 8 and 10 shots, which are the 21 files, and each ends with an empty CSP list. The default directory is .l4-out/visual when E2E_VISUAL_DIR is unset. The exact heights in the scenario are measurements, not requirements, and the only bound, 3,000 px for the flow page, is asserted. The verifier marked this criterion not testable by a generated browser test because it describes the run of the suite itself, which is the case the design foresaw and said to accept on the journey's passing run.
 ---
 
 ## Q-004: Criterion C-0462bba1 (web-design-system › The flow workspace is beside, complete and at most 3,000 px tall › The workspace of demo-ui is two columns and at most 3,000 px tall): accept as satisfied?
