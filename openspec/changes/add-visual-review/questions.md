@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-54891f4b (web-design-system › Every page is photographed only when loaded, with a clean check › Every page leaves a loaded screenshot and no CSP message): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-0462bba1 (web-design-system › The flow workspace is beside, complete and at most 3,000 px tall › The workspace of demo-ui is two columns and at most 3,000 px tall): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-1beceb27 (web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run): accept as satisfied? |
-| Q-006 | open | none | verdict | Criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work): accept as satisfied? |
+| Q-006 | answered | none | verdict | Criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work): accept as satisfied? |
 | Q-007 | open | none | verdict | Hold H-527bcb10: UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-5c490932: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-0de5f245: UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table |
@@ -416,7 +416,8 @@ accept The criterion is satisfied. Alice's journey test fills Vendor name (requi
 
 ## Q-006: Criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -443,6 +444,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. After the run, alice's journey test opens Runs and asserts the row with demo-ui contains completed, Alice Example and <1 s, then photographs alice-runs.png. It opens Home and asserts Recent runs contains Run followed by the last eight characters of the id and of demo-ui, that the link demo-ui is in Recent flows, and that Next steps contains Start a test run, then photographs alice-home.png. It goes to the graph page, asserts the level 1 heading Graph of demo-ui, and photographs alice-flows-demo-ui-graph.png. Each photograph is asserted to exist, be non-empty and be as tall as its page. The graph page renders its header title as Graph of the flow id. The test ran in the verifier's e2e gate and passed. The verifier could not generate a separate browser test because the scenario needs the run created earlier in the same journey, which is the case the design foresaw and said to accept on the journey's passing run.
 ---
 
 ## Q-007: Hold H-527bcb10: UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table
