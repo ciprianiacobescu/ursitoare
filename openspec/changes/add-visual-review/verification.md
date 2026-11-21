@@ -1,4 +1,4 @@
-# Verification: openspec:add-visual-review: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-visual-review: PASS (round 2)
 
 traceability: 4/8 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 4/8 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base main@212635177c contained |
-| 1 | integrity | ok | 260.4 | 11 sub-checks; scope: 7 changed file(s) |
-| 2 | build | ok | 33.0 |  |
-| 3 | tests | ok | 409.3 |  |
-| 4 | traceability | ok | 0.1 | 1/8 criteria covered |
-| 4a | audit sampling | ok | 6.2 | 1 not_testable; support files at the base: 2 |
-| 5 | ui test generation | ok | 559.4 | 3 accepted, 2 fails_at_head, 3 not_testable; e2e support files shown to the writer: 1 |
-| 6 | quality | ok | 0.0 | 100.0% of the changed executable lines ran |
-| 8 | s1 judge | ok | 0.4 | 8/8 criteria judged by jev |
-| 9 | judge | ok | 825.5 | 4 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 4a | audit sampling | reused | 0.0 | reused (round 1) |
+| 5 | ui test generation | reused | 0.0 | reused (round 1) |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -129,16 +129,28 @@ Nothing needs attention.
 |---|---|---|---|---|
 | C-8ac052fa | not_testable | - | - | The criterion is about a Node/TypeScript test (web/src/visual-pages.test.ts); no Python interface is shown for a pytest to call. |
 
+## Answers to verdict questions
+
+- Q-003 accept C-54891f4b by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied by the journey itself, which is the test the unit's documents say the verifier runs. Its three tests ran in the verifier's e2e gate and passed with no failure or skip. Each capture goes through the same check: the banner must hold the account name (or the Main navigation w...
+- Q-004 accept C-0462bba1 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. Alice's journey test asserts every clause of the scenario in the named state: Owner team has the value finance, the title is Flow demo-ui · Ursitoare, Diagnostics contains Valid. 0 errors, the tops of the regions Graph and Edit the flow differ by at most 8, the tops of Te...
+- Q-005 accept C-1beceb27 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. Alice's journey test fills Vendor name (required) with ACME and Amount (required) with 12.5, opens both answer rows by name, fills the lookup and pay outputs, photographs the filled panel as alice-flows-demo-ui-answers.png, clicks Start test run, asserts the panel holds e...
+- Q-006 accept C-de5dc745 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. After the run, alice's journey test opens Runs and asserts the row with demo-ui contains completed, Alice Example and <1 s, then photographs alice-runs.png. It opens Home and asserts Recent runs contains Run followed by the last eight characters of the id and of demo-ui, ...
+- Q-007 accept H-527bcb10 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Criterion C-8ac052fa is the unit's one Node-runnable criterion: its scenario is that the Node test reads the journey file and the four page tables and runs the four mutation rows, which has no browser-observable outcome, so a Playwright test cannot check it and the verifier's...
+- Q-008 accept H-5c490932 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion describes the run of the journey itself, so no separate generated browser test can check it, and the verifier's not testable result is correct; the unit's design says to expect exactly this hold for each criterion and to accept it on the journey's passing run. T...
+- Q-009 accept H-0de5f245 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The criterion is asserted in full by alice's journey test, in the named state: after Validate, before any answer row opens or field is filled, it asserts Owner team has the value finance, the title is Flow demo-ui · Ursitoare, Diagnostics contains Valid. 0 errors, the tops of...
+- Q-010 accept H-0bc13fcf by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. Alice's journey test asserts the whole scenario: it fills Vendor name (required) with ACME and Amount (required) with 12.5, opens Answers for lookup and Answers for pay by name and fills their first outputs, photographs the filled panel as alice-flows-demo-ui-answers.png, cli...
+- Q-011 accept H-02e09269 by the delegate (claude-fable-5-1 via claude-code): The hold can be waived. The scenario needs the run alice created earlier in the same journey, so a stand-alone generated test cannot reproduce it, and the verifier's not testable result is correct. Alice's journey test asserts the scenario after the run: it opens Runs and asserts the row with demo-u...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
 | C-8ac052fa | web-design-system › The journey lists every page of every role › The journey lists every page of every role and keeps its checks | pass | pass | the judge passed it and a discriminating test passes |
-| C-54891f4b | web-design-system › Every page is photographed only when loaded, with a clean check › Every page leaves a loaded screenshot and no CSP message | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-54891f4b | web-design-system › Every page is photographed only when loaded, with a clean check › Every page leaves a loaded screenshot and no CSP message | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied by the journey itself, which is the test the unit's documents say the verifier runs. Its three tests ran in the verifier's e2e gate and passed with no failure or skip. Each capture goes through the same check: th... |
 | C-f417704e | web-design-system › Signed-out pages are styled in the shell › Signed-out pages are checked and photographed | pass | pass | the judge passed it and a discriminating test passes |
-| C-0462bba1 | web-design-system › The flow workspace is beside, complete and at most 3,000 px tall › The workspace of demo-ui is two columns and at most 3,000 px tall | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-1beceb27 | web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-de5dc745 | web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-0462bba1 | web-design-system › The flow workspace is beside, complete and at most 3,000 px tall › The workspace of demo-ui is two columns and at most 3,000 px tall | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. Alice's journey test asserts every clause of the scenario in the named state: Owner team has the value finance, the title is Flow demo-ui · Ursitoare, Diagnostics contains Valid. 0 errors, the tops of the region... |
+| C-1beceb27 | web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. Alice's journey test fills Vendor name (required) with ACME and Amount (required) with 12.5, opens both answer rows by name, fills the lookup and pay outputs, photographs the filled panel as alice-flows-demo-ui-... |
+| C-de5dc745 | web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. After the run, alice's journey test opens Runs and asserts the row with demo-ui contains completed, Alice Example and <1 s, then photographs alice-runs.png. It opens Home and asserts Recent runs contains Run fol... |
 | C-b744f8ee | web-design-system › Carol reaches the seven admin pages and the tool server page › Carol's pages are checked and photographed | pass | pass | the judge passed it and a discriminating test passes |
 | C-eca83679 | web-design-system › Below 1024 px the menu opens above the page › The narrow menu reveals the navigation | pass | pass | the judge passed it and a discriminating test passes |
 
@@ -159,14 +171,6 @@ Nothing needs attention.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-de5dc745): The end-to-end test test_m6b_ui::test_alice_builds_tests_and_reads_a_flow[chromium] traces criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-b744f8ee): The end-to-end test test_m6b_ui::test_carol_reads_every_admin_page_and_the_narrow_menu[chromium] traces criterion C-b744f8ee (web-design-system › Carol reaches the seven admin pages and the tool server page › Carol's pages are checked and photographed), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-eca83679): The end-to-end test test_m6b_ui::test_carol_reads_every_admin_page_and_the_narrow_menu[chromium] traces criterion C-eca83679 (web-design-system › Below 1024 px the menu opens above the page › The narrow menu reveals the navigation), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
-
-## Needs a human
-
-- UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table
-- UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table
-- UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table
-- UI criterion C-1beceb27 has no end-to-end test; see the generated UI tests table
-- UI criterion C-de5dc745 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
