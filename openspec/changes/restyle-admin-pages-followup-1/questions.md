@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1 | harness | Task 1.1: the test chore discrimination check could not decide |
 | Q-002 | answered | none | verdict | Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table |
-| Q-003 | open | none | verdict | Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table |
+| Q-003 | answered | none | verdict | Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -154,7 +154,7 @@ accept. Checked by the owner's delegate in round 2's verdict.json and verificati
 
 ## Q-003: Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -173,6 +173,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept. Checked by the owner's delegate. C-e4e27fab has result pass in round 2's verdict.json (judge pass, confidence 0.84) and is traced by web/src/admin/captions-by-page.test.ts "exactly four captions are hidden", which passes; the scenario itself is a function-and-source check (captionDisplayFor over the eight pairs, and which page sources pass captionDisplay). I also checked the behaviour in a browser against a local stack built from this code with the mocks of e2e/test_m6b_admin.py: the captions "Users", "Group mappings", "Tool servers" and "Grants" carry ui-visually-hidden (position absolute, clip rect(0, 0, 0, 0)) and "Roles", "Teams" and "Tools" do not; the audit page screenshot shows "Audit events" visible. That is the scenario's hidden and visible sets. A clip-hidden caption keeps a 32 by 16 px box, which Playwright counts as visible, so a generated test that expects those captions to be hidden fails on correct pages; the generated test is not on the branch, so this cause is inferred, but the observed behaviour matches the spec.
 ---
 
 ## Q-004: Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table
