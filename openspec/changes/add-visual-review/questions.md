@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
 | Q-003 | answered | none | verdict | Criterion C-54891f4b (web-design-system › Every page is photographed only when loaded, with a clean check › Every page leaves a loaded screenshot and no CSP message): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-0462bba1 (web-design-system › The flow workspace is beside, complete and at most 3,000 px tall › The workspace of demo-ui is two columns and at most 3,000 px tall): accept as satisfied? |
-| Q-005 | open | none | verdict | Criterion C-1beceb27 (web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run): accept as satisfied? |
+| Q-005 | answered | none | verdict | Criterion C-1beceb27 (web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work): accept as satisfied? |
 | Q-007 | open | none | verdict | Hold H-527bcb10: UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-5c490932: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table |
@@ -383,7 +383,8 @@ accept The criterion is satisfied. Alice's journey test asserts every clause of 
 
 ## Q-005: Criterion C-1beceb27 (web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -410,6 +411,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. Alice's journey test fills Vendor name (required) with ACME and Amount (required) with 12.5, opens both answer rows by name, fills the lookup and pay outputs, photographs the filled panel as alice-flows-demo-ui-answers.png, clicks Start test run, asserts the panel holds exactly one link whose name matches Open run followed by the id, and opens it. On the run page it asserts the status named Run state reads State: completed within 20,000 ms with data-tone success, that Started by Alice Example is visible, that the three p.runs-preview elements parse to the three expected values, that after focusing the Started time the tooltip text matches the YYYY-MM-DD HH:MM UTC pattern, runs axe through settle with the tooltip open, presses Escape and writes alice-runs-run-id.png. The run page renders the status with aria-label Run state and data-tone, and the previews as p.runs-preview. The test ran in the verifier's e2e gate and passed. The generated test that failed at head also failed at base, so it is not evidence against the page; the journey asserts the full scenario against the same stack and passed.
 ---
 
 ## Q-006: Criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work): accept as satisfied?
