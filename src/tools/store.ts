@@ -63,11 +63,11 @@ export async function assertTenant(tx: TenantTx, ctx: TenantContext): Promise<vo
   }
 }
 
-function invalid(field: string, reason: string): ToolsError {
+export function invalid(field: string, reason: string): ToolsError {
   return new ToolsError("TOOLS_INVALID", "tool server is invalid", { field, reason });
 }
 
-function checkId(value: unknown): string {
+export function checkId(value: unknown): string {
   if (typeof value !== "string" || !SERVER_ID_PATTERN.test(value)) {
     throw invalid("id", "bad_value");
   }
@@ -258,7 +258,24 @@ export async function registerToolServerTx(
   const adapter = checkAdapter(input.adapter);
   const origin = checkOrigin(input);
   const surface = checkSurface(input.surface);
-  const digest = surfaceDigest(surface);
+  return insertServerTx(tx, ctx, { id, adapter, origin, local: input.local, surface }, actor, opts);
+}
+
+// Module-internal: exported from this file, not from index.ts.
+export async function insertServerTx(
+  tx: TenantTx,
+  ctx: TenantContext,
+  input: {
+    id: string;
+    adapter: ToolAdapter;
+    origin: string;
+    local: boolean;
+    surface: ToolSurface | null;
+  },
+  actor: AuditEventInput["actor"],
+  opts?: { clock?: Clock },
+): Promise<ToolServerRecord> {
+  const { id, adapter, origin, surface } = input;
   const clock = opts?.clock ?? systemClock;
   const now = clock.now();
 
@@ -279,13 +296,15 @@ export async function registerToolServerTx(
     throw error;
   }
 
-  await tx.query(
-    `INSERT INTO ursitoare.tool_surface
-       (tenant_id, tool_server_id, surface_digest, surface, submitted_by, submitted_at,
-        approved_by, approved_at, self_approved)
-     VALUES ($1, $2, $3, $4::jsonb, $5, $6, NULL, NULL, NULL)`,
-    [ctx.tenantId, id, digest, JSON.stringify(surface), actor.id, now],
-  );
+  if (surface !== null) {
+    await tx.query(
+      `INSERT INTO ursitoare.tool_surface
+         (tenant_id, tool_server_id, surface_digest, surface, submitted_by, submitted_at,
+          approved_by, approved_at, self_approved)
+       VALUES ($1, $2, $3, $4::jsonb, $5, $6, NULL, NULL, NULL)`,
+      [ctx.tenantId, id, surfaceDigest(surface), JSON.stringify(surface), actor.id, now],
+    );
+  }
 
   await appendAudit(
     tx,
