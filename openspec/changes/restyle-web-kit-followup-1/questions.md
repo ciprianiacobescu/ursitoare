@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-6027f26f (web-data-kit › Page header meta: a wrapping row below the title, with gaps between items — feedback FB-001 › Page header meta: a wrapping row below the title, with gaps between i |
+| Q-001 | answered | none | verdict | Criterion C-6027f26f (web-data-kit › Page header meta: a wrapping row below the title, with gaps between items — feedback FB-001 › Page header meta: a wrapping row below the title, with gaps between i |
 | Q-002 | open | none | verdict | Hold H-09735f2a: UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table |
 | Q-003 | open | none | verdict | Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table |
@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-6027f26f (web-data-kit › Page header meta: a wrapping row below the title, with gaps between items — feedback FB-001 › Page header meta: a wrapping row below the title, with gaps between i
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -52,6 +52,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied, and the delegate verified it by hand. Ignored test e2e/test_run_header_meta.py::test_page_header_meta_wraps_below_the_title_with_gaps does discriminate. On the offline e2e stack with web built at the unit head 563f4585 it passes at 1366 and 390. With web/src/kit/theme.css put back to main's and web rebuilt, it fails: AssertionError, at 1366px meta item 0 starts at or below the title's bottom edge: 80 vs 116. It asserts the scenario as written: the status and the five items below the h1, the first within 1 px of the h1's left edge, items whose tops are within 4 px at least 8 px apart, the h1 on one line, and assert_layout at both widths. The CSS change (.ui-page-header-meta spanning the grid as a wrapping flex row with a gap; actions at row 1, column 2) is identical to the fix I tried on main 36dd7cce, where all 118 e2e tests and the 17 Node tests that read theme.css passed and the Home, Flow and Policies headers still read well.
 ---
 
 ## Q-002: Hold H-09735f2a: UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table
