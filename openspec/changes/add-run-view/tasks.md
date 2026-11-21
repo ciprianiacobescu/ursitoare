@@ -10,7 +10,7 @@ Paths are in `web/src/runs/` unless they start with `e2e/`. Each task is one red
 
 ## 3. The preview queue
 
-- [ ] 3.1 Write `preview-queue.test.ts` (scenario "Four in flight, each ref once, a rejection swallowed", test-plan.md T4 rows Q1 to Q6; deferred promises, no timers beyond `setTimeout(0)`) first, then implement `createPreviewQueue` in `run-view.ts`, implementing requirement "Previews load through one queue of at most four requests". Run `pnpm run test web/src/runs/preview-queue.test.ts`
+- [x] 3.1 Write `preview-queue.test.ts` (scenario "Four in flight, each ref once, a rejection swallowed", test-plan.md T4 rows Q1 to Q6; deferred promises, no timers beyond `setTimeout(0)`) first, then implement `createPreviewQueue` in `run-view.ts`, implementing requirement "Previews load through one queue of at most four requests". Run `pnpm run test web/src/runs/preview-queue.test.ts`
 
 ## 4. Styles and the run page
 

@@ -120,11 +120,38 @@ export interface PreviewQueue {
 }
 
 export function createPreviewQueue(
-  _work: (ref: string) => Promise<void>,
-  _limit?: number,
+  work: (ref: string) => Promise<void>,
+  limit: number = PREVIEW_CONCURRENCY,
 ): PreviewQueue {
+  const seen = new Set<string>();
+  const waiting: string[] = [];
+  let inFlight = 0;
+  const pump = (): void => {
+    while (inFlight < limit && waiting.length > 0) {
+      const ref = waiting.shift() as string;
+      inFlight += 1;
+      let started: Promise<void>;
+      try {
+        started = work(ref);
+      } catch {
+        started = Promise.resolve();
+      }
+      const settle = (): void => {
+        inFlight -= 1;
+        pump();
+      };
+      started.then(settle, settle);
+    }
+  };
   return {
-    enqueue(_refs: readonly string[]): void {},
+    enqueue(refs: readonly string[]): void {
+      for (const ref of refs) {
+        if (seen.has(ref)) continue;
+        seen.add(ref);
+        waiting.push(ref);
+      }
+      pump();
+    },
   };
 }
 
