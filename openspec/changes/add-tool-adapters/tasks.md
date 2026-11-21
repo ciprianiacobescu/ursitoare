@@ -4,7 +4,7 @@ Values: `test-plan.md`. Each task writes its tests first (red), then the code (g
 
 - [x] 1.1 Write `src/tools/names.test.ts` first (scenario "Name vectors"), then implement `toolNameOf` in `src/tools/names.ts`
 - [x] 1.2 Write `src/tools/adapter-surface.test.ts` first (scenario "Each adapter's surface is accepted or refused with a field and a reason"), then implement `checkAdapterSurface` and the constants in `src/tools/adapter-surface.ts`, the types in `src/tools/calls.ts`, optional `http` and `call` on `SurfaceTool` in `src/tools/types.ts` (the typecheck then forces two edits here: `normalizeTool` in `src/tools/surface.ts` emits `http` only when the tool has one and handles no `call` (task 1.3 adds it), and `createToolDirectory` in `src/tools/directory.ts` answers `null` for an approved tool without `http`, none being stored before task 2.1; `tool.http!` fails lint), `kitSurface` in `test/support/adapter-kit.ts` (row in `test/support/README.md`) and the export lines of `src/tools/index.ts`
-- [ ] 1.3 Write `src/tools/adapter-digest.test.ts` first (scenario "Each call member changes the digest and the M6 vector is kept"), then edit `normalizeTool` in `src/tools/surface.ts`; `src/tools/surface.test.ts` stays green
+- [x] 1.3 Write `src/tools/adapter-digest.test.ts` first (scenario "Each call member changes the digest and the M6 vector is kept"), then edit `normalizeTool` in `src/tools/surface.ts`; `src/tools/surface.test.ts` stays green
 
 ## 2. Store and directory
 
