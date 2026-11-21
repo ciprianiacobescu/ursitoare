@@ -324,6 +324,7 @@ accept Criterion C-fe487857 is the scenario "Add, answer, remove, a bad answer a
 ## Q-011: Hold H-58477fd9: UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): C-92bb8bdc is a browser criterion of the requirement "The panels show the form and the rows in a browser". The repository holds a tagged browser test, test_the_form_and_the_input_json_stay_in_step in e2e/test_m6b_run_inputs.py, but the verifier says it was never proved to fail without the change and that a generated test of the same name fails at the head. I cannot run the browser suite, so I cannot tell whether that failure is a real defect in the panels or an environment or test-writing problem, and reading the components cannot settle how the page behaves in a browser. The sibling browser criteria of this requirement were already escalated for the same reason, and a wrong accept here would pass unverified UI behaviour.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
