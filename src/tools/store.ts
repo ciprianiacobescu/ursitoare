@@ -63,11 +63,11 @@ export async function assertTenant(tx: TenantTx, ctx: TenantContext): Promise<vo
   }
 }
 
-function invalid(field: string, reason: string): ToolsError {
+export function invalid(field: string, reason: string): ToolsError {
   return new ToolsError("TOOLS_INVALID", "tool server is invalid", { field, reason });
 }
 
-function checkId(value: unknown): string {
+export function checkId(value: unknown): string {
   if (typeof value !== "string" || !SERVER_ID_PATTERN.test(value)) {
     throw invalid("id", "bad_value");
   }
@@ -258,7 +258,24 @@ export async function registerToolServerTx(
   const adapter = checkAdapter(input.adapter);
   const origin = checkOrigin(input);
   const surface = checkSurface(input.surface);
-  const digest = surfaceDigest(surface);
+  return insertServerTx(tx, ctx, { id, adapter, origin, local: input.local, surface }, actor, opts);
+}
+
+// Module-internal: exported from this file, not from index.ts.
+export async function insertServerTx(
+  tx: TenantTx,
+  ctx: TenantContext,
+  input: {
+    id: string;
+    adapter: ToolAdapter;
+    origin: string;
+    local: boolean;
+    surface: ToolSurface | null;
+  },
+  actor: AuditEventInput["actor"],
+  opts?: { clock?: Clock },
+): Promise<ToolServerRecord> {
+  const { id, adapter, origin, surface } = input;
   const clock = opts?.clock ?? systemClock;
   const now = clock.now();
 
@@ -279,13 +296,15 @@ export async function registerToolServerTx(
     throw error;
   }
 
-  await tx.query(
-    `INSERT INTO ursitoare.tool_surface
-       (tenant_id, tool_server_id, surface_digest, surface, submitted_by, submitted_at,
-        approved_by, approved_at, self_approved)
-     VALUES ($1, $2, $3, $4::jsonb, $5, $6, NULL, NULL, NULL)`,
-    [ctx.tenantId, id, digest, JSON.stringify(surface), actor.id, now],
-  );
+  if (surface !== null) {
+    await tx.query(
+      `INSERT INTO ursitoare.tool_surface
+         (tenant_id, tool_server_id, surface_digest, surface, submitted_by, submitted_at,
+          approved_by, approved_at, self_approved)
+       VALUES ($1, $2, $3, $4::jsonb, $5, $6, NULL, NULL, NULL)`,
+      [ctx.tenantId, id, surfaceDigest(surface), JSON.stringify(surface), actor.id, now],
+    );
+  }
 
   await appendAudit(
     tx,
@@ -304,6 +323,92 @@ export async function registerToolServerTx(
   return toRecord(tx, ctx, row);
 }
 
+// Module-internal: exported from this file, not from index.ts.
+export async function submitLockedTx(
+  tx: TenantTx,
+  ctx: TenantContext,
+  serverId: string,
+  actor: AuditEventInput["actor"],
+  check: (adapter: ToolAdapter) => ToolSurface,
+  opts?: { clock?: Clock },
+): Promise<ToolServerRecord> {
+  const locked = await tx.query<ServerRow>(
+    `SELECT ${SERVER_COLUMNS} FROM ursitoare.tool_server
+     WHERE tenant_id = $1 AND tool_server_id = $2 FOR UPDATE`,
+    [ctx.tenantId, serverId],
+  );
+  const row = locked.rows[0];
+  if (row === undefined) {
+    throw new ToolsError("TOOLS_NOT_FOUND", "tool server not found", { id: serverId });
+  }
+
+  const checked = check(row.adapter);
+  const digest = surfaceDigest(checked);
+  const newest = await newestSurface(tx, ctx, serverId);
+
+  if (digest === row.approved_digest) {
+    return toRecord(tx, ctx, row);
+  }
+  if (
+    newest !== null &&
+    newest.approved_by === null &&
+    newest.surface_digest === digest
+  ) {
+    return toRecord(tx, ctx, row);
+  }
+  const stored = await approvedSurface(tx, ctx, serverId, digest);
+  if (stored !== null) {
+    throw refused("surface_known");
+  }
+
+  const clock = opts?.clock ?? systemClock;
+  const now = clock.now();
+  const drift = row.approved_digest !== null;
+
+  await tx.query(
+    `INSERT INTO ursitoare.tool_surface
+       (tenant_id, tool_server_id, surface_digest, surface, submitted_by, submitted_at,
+        approved_by, approved_at, self_approved)
+     VALUES ($1, $2, $3, $4::jsonb, $5,
+       GREATEST(
+         $6::timestamptz,
+         (SELECT submitted_at + interval '1 microsecond'
+            FROM ursitoare.tool_surface
+           WHERE tenant_id = $1 AND tool_server_id = $2
+           ORDER BY submitted_at DESC, surface_digest DESC
+           LIMIT 1)
+       ),
+       NULL, NULL, NULL)`,
+    [ctx.tenantId, serverId, digest, JSON.stringify(checked), actor.id, now],
+  );
+
+  if (row.state === "approved") {
+    await tx.query(
+      `UPDATE ursitoare.tool_server SET state = 'drifted'
+       WHERE tenant_id = $1 AND tool_server_id = $2`,
+      [ctx.tenantId, serverId],
+    );
+  }
+
+  await appendAudit(
+    tx,
+    ctx,
+    {
+      eventType: "tools.surface_submitted",
+      actor,
+      target: { kind: "tool_server", id: serverId },
+      payload: { digest, drift },
+    },
+    opts,
+  );
+
+  const updated = await loadServer(tx, ctx, serverId);
+  if (updated === null) {
+    throw new ToolsError("TOOLS_NOT_FOUND", "tool server not found", { id: serverId });
+  }
+  return toRecord(tx, ctx, updated);
+}
+
 export async function submitSurface(
   pool: TenantPool,
   ctx: TenantContext,
@@ -313,85 +418,23 @@ export async function submitSurface(
   opts?: { clock?: Clock },
 ): Promise<ToolServerRecord> {
   const checked = checkSurface(surface);
-  return withTenantTx(pool, ctx, async (tx) => {
-    const locked = await tx.query<ServerRow>(
-      `SELECT ${SERVER_COLUMNS} FROM ursitoare.tool_server
-       WHERE tenant_id = $1 AND tool_server_id = $2 FOR UPDATE`,
-      [ctx.tenantId, serverId],
-    );
-    const row = locked.rows[0];
-    if (row === undefined) {
-      throw new ToolsError("TOOLS_NOT_FOUND", "tool server not found", { id: serverId });
-    }
-
-    const digest = surfaceDigest(checked);
-    const newest = await newestSurface(tx, ctx, serverId);
-
-    if (digest === row.approved_digest) {
-      return toRecord(tx, ctx, row);
-    }
-    if (
-      newest !== null &&
-      newest.approved_by === null &&
-      newest.surface_digest === digest
-    ) {
-      return toRecord(tx, ctx, row);
-    }
-    const stored = await approvedSurface(tx, ctx, serverId, digest);
-    if (stored !== null) {
-      throw refused("surface_known");
-    }
-
-    const clock = opts?.clock ?? systemClock;
-    const now = clock.now();
-    const drift = row.approved_digest !== null;
-
-    await tx.query(
-      `INSERT INTO ursitoare.tool_surface
-         (tenant_id, tool_server_id, surface_digest, surface, submitted_by, submitted_at,
-          approved_by, approved_at, self_approved)
-       VALUES ($1, $2, $3, $4::jsonb, $5,
-         GREATEST(
-           $6::timestamptz,
-           (SELECT submitted_at + interval '1 microsecond'
-              FROM ursitoare.tool_surface
-             WHERE tenant_id = $1 AND tool_server_id = $2
-             ORDER BY submitted_at DESC, surface_digest DESC
-             LIMIT 1)
-         ),
-         NULL, NULL, NULL)`,
-      [ctx.tenantId, serverId, digest, JSON.stringify(checked), actor.id, now],
-    );
-
-    if (row.state === "approved") {
-      await tx.query(
-        `UPDATE ursitoare.tool_server SET state = 'drifted'
-         WHERE tenant_id = $1 AND tool_server_id = $2`,
-        [ctx.tenantId, serverId],
-      );
-    }
-
-    await appendAudit(
+  return withTenantTx(pool, ctx, (tx) =>
+    submitLockedTx(
       tx,
       ctx,
-      {
-        eventType: "tools.surface_submitted",
-        actor,
-        target: { kind: "tool_server", id: serverId },
-        payload: { digest, drift },
+      serverId,
+      actor,
+      (adapter) => {
+        if (adapter !== "fixture") throw refused("adapter_mismatch");
+        return checked;
       },
       opts,
-    );
-
-    const updated = await loadServer(tx, ctx, serverId);
-    if (updated === null) {
-      throw new ToolsError("TOOLS_NOT_FOUND", "tool server not found", { id: serverId });
-    }
-    return toRecord(tx, ctx, updated);
-  });
+    ),
+  );
 }
 
-function refused(reason: string): ToolsError {
+// Module-internal: exported from this file, not from index.ts.
+export function refused(reason: string): ToolsError {
   return new ToolsError("TOOLS_REFUSED", "tool server request refused", { reason });
 }
 

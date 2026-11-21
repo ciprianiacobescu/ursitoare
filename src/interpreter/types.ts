@@ -61,7 +61,7 @@ export interface StepContext {
 
 export interface CallAuthorization {
   readonly decisionId: string;
-  readonly permit: Permit;
+  readonly permit: Permit | null;
 }
 
 export interface ToolInvoker {

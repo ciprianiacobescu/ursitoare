@@ -2,6 +2,8 @@
 
 import type { BlockImport } from "../registry/index.ts";
 
+import type { ToolCallSpec } from "./calls.ts";
+
 export type Effect = BlockImport["effect"];
 export type JsonSchema = BlockImport["input"];
 
@@ -19,7 +21,8 @@ export interface SurfaceTool {
   untrusted_result?: boolean;
   unsafe_to_retry?: boolean;
   data_class?: "public" | "private";
-  http: { method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"; path: string };
+  http?: { method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"; path: string };
+  call?: ToolCallSpec;
 }
 
 export interface ToolSurface {
@@ -48,7 +51,8 @@ export interface ToolBinding {
   ref: string;
   tool: string;
   effect: Effect;
-  http: { method: string; path: string };
+  http?: { method: string; path: string };
+  call?: ToolCallSpec;
   untrustedResult: boolean;
   unsafeToRetry: boolean;
 }

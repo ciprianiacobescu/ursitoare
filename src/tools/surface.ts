@@ -5,6 +5,7 @@ import { canonicalize } from "../audit/index.ts";
 import { RegistryError, normalizeBlockImport } from "../registry/index.ts";
 import type { BlockImport } from "../registry/index.ts";
 
+import type { ToolCallSpec } from "./calls.ts";
 import { ToolsError } from "./types.ts";
 import type { SurfaceTool, ToolSurface } from "./types.ts";
 
@@ -19,8 +20,35 @@ function normalizeTool(tool: SurfaceTool): unknown {
     untrusted_result: tool.untrusted_result ?? true,
     unsafe_to_retry: tool.unsafe_to_retry ?? false,
     data_class: tool.data_class ?? null,
-    http: { method: tool.http.method, path: tool.http.path },
+    ...(tool.http === undefined
+      ? {}
+      : { http: { method: tool.http.method, path: tool.http.path } }),
+    ...(tool.call === undefined ? {} : { call: normalizeCall(tool.call) }),
   };
+}
+
+function normalizeCall(call: ToolCallSpec): unknown {
+  switch (call.kind) {
+    case "http":
+      return {
+        kind: call.kind,
+        method: call.method,
+        path: call.path,
+        params: call.params.map((param) => ({ name: param.name, in: param.in })),
+        body: call.body,
+      };
+    case "mcp":
+      return {
+        kind: call.kind,
+        endpoint: call.endpoint,
+        name: call.name,
+        protocolVersion: call.protocolVersion,
+        output: call.output,
+        ...(call.hints === undefined ? {} : { hints: call.hints }),
+      };
+    case "code":
+      return { kind: call.kind, source: call.source };
+  }
 }
 
 export function surfaceDigest(surface: ToolSurface): string {

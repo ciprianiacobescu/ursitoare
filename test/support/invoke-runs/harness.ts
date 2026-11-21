@@ -96,7 +96,10 @@ export type HarnessWrap = {
   [K in "policy" | "tools" | "services" | "principals" | "loadVersion" | "catalogueFor"]?: (
     real: InvokePathDeps[K],
   ) => InvokePathDeps[K];
-} & { gateway?: (real: Gateway, egress: FakeEgress) => Gateway };
+} & { gateway?: (real: Gateway, egress: FakeEgress) => Gateway } & {
+  calls?: InvokePathDeps["calls"];
+  code?: InvokePathDeps["code"];
+};
 
 export interface InvokeHarness {
   ctx: TenantContext;
@@ -360,6 +363,8 @@ export async function invokeHarness(wrap?: HarnessWrap): Promise<InvokeHarness> 
       principals: wrap?.principals?.(real.principals) ?? real.principals,
       loadVersion: wrap?.loadVersion?.(real.loadVersion) ?? real.loadVersion,
       catalogueFor: wrap?.catalogueFor?.(real.catalogueFor) ?? real.catalogueFor,
+      ...(wrap?.calls === undefined ? {} : { calls: wrap.calls }),
+      ...(wrap?.code === undefined ? {} : { code: wrap.code }),
     };
     const path = createInvokePath(deps);
 

@@ -50,4 +50,9 @@ export interface CallAdapter<S extends HttpCallSpec | McpCallSpec> {
   answer(call: S, response: ToolHttpResponse): CallAnswer;
 }
 
-export const MCP_TEXT_OUTPUT_SCHEMA: Readonly<{ [key: string]: ToolJson }> = {};
+export const MCP_TEXT_OUTPUT_SCHEMA: Readonly<{ [key: string]: ToolJson }> = {
+  type: "object",
+  properties: { text: { type: "string" } },
+  required: ["text"],
+  additionalProperties: false,
+};
