@@ -177,3 +177,5 @@
 {"at":"2026-11-21T01:56:23Z","branch":"l4/archive/openspec/add-run-inputs-form","head":"386e6b6d120740c1a544083e1f72ff5eca050035","type":"unit.branch_deleted","unit":"openspec:add-run-inputs-form"}
 {"at":"2026-11-21T01:56:24Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-run-view"}
 {"at":"2026-11-21T01:56:24Z","run":"r-20261121T0156Z-a065","type":"unit.dispatched","unit":"openspec:add-run-view"}
+{"at":"2026-11-21T04:24:33Z","attempt":1,"cost_usd":0.566786,"runs":2,"type":"plan.charged","unit":"openspec:add-run-view"}
+{"at":"2026-11-21T04:24:33Z","run":"r-20261121T0424Z-1491","type":"unit.dispatched","unit":"openspec:add-run-view"}
