@@ -9,3 +9,5 @@
 {"at":"2026-11-21T18:20:45Z","run":"r-20261121T1820Z-9ba9","type":"unit.dispatched","unit":"openspec:add-tool-adapters"}
 {"at":"2026-11-21T20:43:38Z","attempt":1,"cost_usd":0.992809,"runs":2,"type":"plan.charged","unit":"openspec:add-tool-adapters"}
 {"at":"2026-11-21T20:43:38Z","run":"r-20261121T2043Z-ef00","type":"unit.dispatched","unit":"openspec:add-tool-adapters"}
+{"at":"2026-11-21T21:09:22Z","attempt":1,"cost_usd":2.791649,"runs":3,"type":"plan.charged","unit":"openspec:add-tool-adapters"}
+{"at":"2026-11-21T21:09:22Z","run":"r-20261121T2109Z-0d73","type":"unit.dispatched","unit":"openspec:add-tool-adapters"}
