@@ -197,3 +197,4 @@
 {"at":"2026-11-21T09:08:52Z","attempt":1,"cost_usd":1.446912,"runs":2,"type":"plan.charged","unit":"openspec:add-visual-review"}
 {"at":"2026-11-21T09:08:52Z","run":"r-20261121T0908Z-8d27","type":"unit.dispatched","unit":"openspec:add-visual-review"}
 {"at":"2026-11-21T09:54:14Z","detail":"awaiting_human: no new answers (open: Q-002) (harness check inconclusive: Q-002)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-visual-review"}
+{"at":"2026-11-21T10:02:28Z","by":"harness","reason":"the cause is gone: openspec:add-visual-review is awaiting_human","type":"plan.resumed"}
