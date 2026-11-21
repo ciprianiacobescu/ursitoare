@@ -13,6 +13,19 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 2.2 | technical | Allow writing web/src/runs/mock-rows-sync.test.ts? |
 | Q-002 | accepted | 3.3 | technical | e2e/test_m6b_run_inputs.py line 235-236: names are read before the rows exist |
+| Q-003 | open | none | verdict | Criterion C-92bb8bdc (web-runs › The panels show the form and the rows in a browser › Form and JSON stay in step and the text is used as written): accept as satisfied? |
+| Q-004 | open | none | verdict | Criterion C-e9b281b6 (web-runs › The panels show the form and the rows in a browser › A missing required field holds the start and names the field): accept as satisfied? |
+| Q-005 | open | none | verdict | Criterion C-6bc1b603 (web-runs › The panels show the form and the rows in a browser › Answer rows write the mocks and the fakes): accept as satisfied? |
+| Q-006 | open | none | verdict | Criterion C-eba3df1e (web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON): accept as satisfied? |
+| Q-007 | open | none | verdict | Criterion C-41245171 (web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before): accept as satisfied? |
+| Q-008 | open | none | verdict | Hold H-9e3a60bf: UI criterion C-2e06c4e6 has no end-to-end test; see the generated UI tests table |
+| Q-009 | open | none | verdict | Hold H-481e50f9: UI criterion C-3695054c has no end-to-end test; see the generated UI tests table |
+| Q-010 | open | none | verdict | Hold H-d93a7037: UI criterion C-fe487857 has no end-to-end test; see the generated UI tests table |
+| Q-011 | open | none | verdict | Hold H-58477fd9: UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table |
+| Q-012 | open | none | verdict | Hold H-88dcd857: UI criterion C-e9b281b6 has no end-to-end test; see the generated UI tests table |
+| Q-013 | open | none | verdict | Hold H-66b31620: UI criterion C-6bc1b603 has no end-to-end test; see the generated UI tests table |
+| Q-014 | open | none | verdict | Hold H-5b4b4c98: UI criterion C-eba3df1e has no end-to-end test; see the generated UI tests table |
+| Q-015 | open | none | verdict | Hold H-4054053e: UI criterion C-41245171 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -67,6 +80,346 @@ e2e/test_m6b_run_inputs.py:236
 
 ### Clarifier suggestion
 Edit `e2e/test_m6b_run_inputs.py`: before `names = ...`, insert `expect(test_run.get_by_role("button", name="Answers for lookup", exact=True)).to_be_visible()`
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-003: Criterion C-92bb8bdc (web-runs › The panels show the form and the rows in a browser › Form and JSON stay in step and the text is used as written): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-92bb8bdc (web-runs › The panels show the form and the rows in a browser › Form and JSON stay in step and the text is used as written)
+
+### Context
+Criterion C-92bb8bdc (web-runs › The panels show the form and the rows in a browser › Form and JSON stay in step and the text is used as written) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `test_the_form_and_the_input_json_stay_in_step` of test-plan-browser.md runs
+\- **THEN** typing `ACME` and `12.5` makes "Input (JSON)" hold `{\n  "vendor_name": "ACME",\n  "amount": 12.5\n}`; a compact fill refills the fields; a broken text and `{"foo":1}` show the error and the mismatch hint once each; the one POST body is `{ input: { foo: 1 }, mocks: {} }`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_run_inputs::test_the_form_and_the_input_json_stay_in_step[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Criterion C-e9b281b6 (web-runs › The panels show the form and the rows in a browser › A missing required field holds the start and names the field): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-e9b281b6 (web-runs › The panels show the form and the rows in a browser › A missing required field holds the start and names the field)
+
+### Context
+Criterion C-e9b281b6 (web-runs › The panels show the form and the rows in a browser › A missing required field holds the start and names the field) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `test_a_missing_required_field_blocks_the_start` runs
+\- **THEN** no POST follows the first start, "Amount (required)" is focused with the description `Error: Required`, and after `12.5` the one POST has `input` `{ vendor_name: "ACME", amount: 12.5 }`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_run_inputs::test_a_missing_required_field_blocks_the_start[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Criterion C-6bc1b603 (web-runs › The panels show the form and the rows in a browser › Answer rows write the mocks and the fakes): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-6bc1b603 (web-runs › The panels show the form and the rows in a browser › Answer rows write the mocks and the fakes)
+
+### Context
+Criterion C-6bc1b603 (web-runs › The panels show the form and the rows in a browser › Answer rows write the mocks and the fakes) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `test_answer_rows_write_the_mocks_and_the_fakes` runs
+\- **THEN** the rows read "Answers for lookup" then "Answers for pay"; a typed output writes "Mocks (JSON)"; a bad second answer blocks the start with the one alert of T6 R5; an `{ error }` mock is posted as written; the Dry run panel posts `fakes` `{ pay: [{ output: { payment_id: "P-1" } }] }`; a dry run refused for `lookup` (`not_an_effect`) opens "Answers for lookup" with that text
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_run_inputs::test_answer_rows_write_the_mocks_and_the_fakes[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-006: Criterion C-eba3df1e (web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-eba3df1e (web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON)
+
+### Context
+Criterion C-eba3df1e (web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `test_validate_makes_the_panels_read_the_document` runs
+\- **THEN** "Amount (required)" appears only after "Validate" (the editor's `canonical` is `null` then); with a `oneOf` property each region shows the "cannot show" note once and no group "Inputs"
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_run_inputs::test_validate_makes_the_panels_read_the_document[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-007: Criterion C-41245171 (web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-41245171 (web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before)
+
+### Context
+Criterion C-41245171 (web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before) is needs human after round 1.
+
+Scenario:
+\- **WHEN** `test_the_panels_fit_the_screen` runs at 1366 by 860 (the workspace, panels 531 px wide), 1024 by 860 (one column) and 390 by 800, and the journeys `test_m4_runs.py`, `test_m5_code_hooks.py` and `test_m6_grants.py` run unchanged
+\- **THEN** at 1366 and 390 the fields are stacked (left edges equal within 1 px, group at most 260 px tall); at 1024 they share a row (tops equal within 1 px, group at most 160 px tall); `scrollWidth <= innerWidth` and `assert_accessible` pass at each; the journeys pass (green on arrival)
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_run_inputs::test_the_panels_fit_the_screen[chromium-1024-860] (no proof that it discriminates (no red, audit or generated record)); test_m6b_run_inputs::test_the_panels_fit_the_screen[chromium-1366-860] (no proof that it discriminates (no red, audit or generated record)); test_m6b_run_inputs::test_the_panels_fit_the_screen[chromium-390-800] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-008: Hold H-9e3a60bf: UI criterion C-2e06c4e6 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-2e06c4e6 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-2e06c4e6: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_2e06c4e6::test_form_json_sync[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-009: Hold H-481e50f9: UI criterion C-3695054c has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-3695054c has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-3695054c: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_3695054c::test_form_text_sync[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-010: Hold H-d93a7037: UI criterion C-fe487857 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-fe487857 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-fe487857: writer_failed after 2 attempt(s); structured output missing: the reply holds no JSON object.
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-011: Hold H-58477fd9: UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-92bb8bdc: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_92bb8bdc::test_the_form_and_the_input_json_stay_in_step[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-012: Hold H-88dcd857: UI criterion C-e9b281b6 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-e9b281b6 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-e9b281b6: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_e9b281b6::test_a_missing_required_field_blocks_the_start[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-013: Hold H-66b31620: UI criterion C-6bc1b603 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-6bc1b603 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-6bc1b603: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_6bc1b603::test_answer_rows_write_the_mocks_and_the_fakes[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-014: Hold H-5b4b4c98: UI criterion C-eba3df1e has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-eba3df1e has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-eba3df1e: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_eba3df1e::test_validate_makes_the_panels_read_the_document[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-015: Hold H-4054053e: UI criterion C-41245171 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-41245171 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-41245171: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_41245171::test_the_panels_fit_the_screen[chromium-1024-860], test_l4_c_41245171::test_the_panels_fit_the_screen[chromium-1366-860], test_l4_c_41245171::test_the_panels_fit_the_screen[chromium-390-800].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
 
 ### Answer
 <!-- write below this line -->
