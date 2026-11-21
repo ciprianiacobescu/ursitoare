@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 5.1 | technical | e2e/test_m6b_run_view.py:59-76: step() mock lacks fields that parseStepView requires |
-| Q-002 | open | none | verdict | Criterion C-b43a5bfb (web-runs › The run page shows a readable header, previews and two columns › A mocked run shows its header, previews and columns at 1366 by 860): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-b43a5bfb (web-runs › The run page shows a readable header, previews and two columns › A mocked run shows its header, previews and columns at 1366 by 860): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-2836a3bc (web-runs › The run page shows a readable header, previews and two columns › Sixty steps preview 50, four at a time, each once): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-6bfd6320 (web-runs › The runs list shows badges, durations and names › A mocked list shows tones, durations and one name request): accept as satisfied? |
 | Q-005 | open | none | verdict | Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table |
@@ -66,7 +66,8 @@ Edit `e2e/test_m6b_run_view.py`: in `step()` add the keys `"effectSeq": seq, "at
 
 ## Q-002: Criterion C-b43a5bfb (web-runs › The run page shows a readable header, previews and two columns › A mocked run shows its header, previews and columns at 1366 by 860): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -93,6 +94,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The unit's browser test test_run_page_header_previews_and_columns encodes the scenario line by line: the status text and tone, the two header texts, the four Steps buttons, the three preview texts, the three then four payload digests each once, the Started time and datetime of the clicked step, the two region boxes within 8 px and side by side, the tooltip on focus, one status and zero alerts, and the layout, axe and CSP checks. The page source gives each of those: the status p carries data-tone from runHeaderView, each step row renders its preview in p.runs-preview, requestPayload answers a repeated ref without a second request, the Started and Ended cells render through detailCell as a time element, the header time sits in a Tooltip with the formatted instant, and runs.css puts the layout in two equal columns from 80rem. The only gap the verifier found is procedural: the test had no red record because a red step cannot run the e2e gate, as the project's own rules require.
 ---
 
 ## Q-003: Criterion C-2836a3bc (web-runs › The run page shows a readable header, previews and two columns › Sixty steps preview 50, four at a time, each once): accept as satisfied?
