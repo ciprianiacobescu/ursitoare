@@ -4,10 +4,14 @@ import type { JsonValue } from "../../src/authoring/index.ts";
 import type { CodeRunner } from "../../src/runtimes/index.ts";
 import type {
   CallAdapter,
+  CallAnswer,
+  CallBuild,
   HttpCallSpec,
   McpCallSpec,
   ToolBinding,
   ToolCallSpec,
+  ToolHttpResponse,
+  ToolJson,
   ToolSurface,
 } from "../../src/tools/index.ts";
 import type { SurfaceTool } from "../../src/tools/index.ts";
@@ -134,27 +138,71 @@ export function kitBinding(kind: ToolCallSpec["kind"], over?: Partial<ToolBindin
   return { ...base, ...over };
 }
 
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
+
+function sorted(value: ToolJson): ToolJson {
+  if (Array.isArray(value)) return value.map((item) => sorted(item));
+  if (value === null || typeof value !== "object") return value;
+  const out: { [key: string]: ToolJson } = {};
+  for (const key of Object.keys(value).sort()) out[key] = sorted(value[key] as ToolJson);
+  return out;
+}
+
+// The stub adapters steer on `args.mode`: "refuse" and "text" refuse the build, "throw" throws.
+function kitBuild(path: string, args: ToolJson, idemKey: string | null): CallBuild {
+  const mode =
+    args !== null && typeof args === "object" && !Array.isArray(args) ? args["mode"] : undefined;
+  if (mode === "refuse") return { ok: false, reason: "refused_args" };
+  if (mode === "text") return { ok: false, reason: "Bad Reason secret_text" };
+  if (mode === "throw") throw new Error("secret_text");
+  const headers: Record<string, string> = { "content-type": "application/json" };
+  if (idemKey !== null) headers["idempotency-key"] = idemKey;
+  return {
+    ok: true,
+    request: {
+      method: "POST",
+      path,
+      headers,
+      body: encoder.encode(JSON.stringify(sorted(args))),
+    },
+  };
+}
+
+function kitAnswer(response: ToolHttpResponse): CallAnswer {
+  if (response.status < 200 || response.status > 299) {
+    return { ok: false, stage: "upstream", reason: "status", status: response.status };
+  }
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(decoder.decode(response.body));
+  } catch {
+    return { ok: false, stage: "response", reason: "not_json", status: null };
+  }
+  if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
+    return { ok: false, stage: "response", reason: "not_json", status: null };
+  }
+  return { ok: true, output: parsed as { [key: string]: ToolJson } };
+}
+
 export const kitHttpAdapter: CallAdapter<HttpCallSpec> = {
-  build() {
-    throw new Error("not implemented");
-  },
-  answer() {
-    throw new Error("not implemented");
-  },
+  build: (call, args, idemKey) => kitBuild(call.path, args, idemKey),
+  answer: (_call, response) => kitAnswer(response),
 };
 
 export const kitMcpAdapter: CallAdapter<McpCallSpec> = {
-  build() {
-    throw new Error("not implemented");
-  },
-  answer() {
-    throw new Error("not implemented");
-  },
+  build: (call, args, idemKey) => kitBuild(call.endpoint, args, idemKey),
+  answer: (_call, response) => kitAnswer(response),
 };
 
 export function kitCodeRunner(): {
   run: CodeRunner;
   calls: { source: string; args: JsonValue; nodeId: string }[];
 } {
-  throw new Error("not implemented");
+  const calls: { source: string; args: JsonValue; nodeId: string }[] = [];
+  const run: CodeRunner = async (call, args, ctx) => {
+    calls.push({ source: call.source, args, nodeId: ctx.nodeId });
+    return { output: { words: 3 } };
+  };
+  return { run, calls };
 }

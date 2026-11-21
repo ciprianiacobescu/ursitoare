@@ -12,17 +12,17 @@ import type {
   ToolResult,
 } from "../../interpreter/index.ts";
 import { recordDecisionOwnTx } from "../../pdp/index.ts";
-import type { Decision, PrincipalEntity } from "../../pdp/index.ts";
+import type { Decision, Egress, PrincipalEntity } from "../../pdp/index.ts";
 import type { RunRecord } from "../../runs/index.ts";
-import type { ToolBinding } from "../../tools/index.ts";
-import { pdpApprovals, invokeToolRequest, toolRequest } from "./request.ts";
+import type { CallAdapter, CallBuild, ToolBinding } from "../../tools/index.ts";
+import { callRequest, pdpApprovals, invokeToolRequest, toolRequest } from "./request.ts";
 import type { InvokePath, InvokePathDeps } from "./types.ts";
 
 type Authorization = Awaited<ReturnType<NonNullable<ToolInvoker["authorize"]>>>;
 
 interface Authorised {
   binding: ToolBinding;
-  target: ServiceTarget;
+  target: ServiceTarget | null;
   args: ToolCall["args"];
 }
 
@@ -32,6 +32,7 @@ interface Loaded {
 }
 
 const ERROR_CODE = /^[A-Z][A-Z0-9_]{0,63}$/;
+const ADAPTER_REASON = /^[a-z][a-z0-9_]{0,63}$/;
 
 function denied(
   call: ToolCall,
@@ -98,8 +99,18 @@ export function createInvokePath(deps: InvokePathDeps): InvokePath {
       if (binding.state === "pending") throw denied(call, ctx, "tool_unapproved");
       if (binding.state === "drifted") throw denied(call, ctx, "surface_drift");
 
-      const target = await look(deps.services.resolve(ctx.tenant, binding.serverId));
-      if (target === null) throw denied(call, ctx, "credential_missing");
+      const spec = binding.call;
+      const adapter =
+        spec === undefined || spec.kind === "code" ? undefined : deps.calls?.[spec.kind];
+      if (spec !== undefined && (spec.kind === "code" ? deps.code === undefined : adapter === undefined)) {
+        throw denied(call, ctx, "adapter_unavailable");
+      }
+
+      let target: ServiceTarget | null = null;
+      if (spec?.kind !== "code") {
+        target = await look(deps.services.resolve(ctx.tenant, binding.serverId));
+        if (target === null) throw denied(call, ctx, "credential_missing");
+      }
 
       const approvals = (ctx as StepContext & { approvals?: readonly Approval[] }).approvals ?? [];
       const approverIds = new Set<string>();
@@ -132,7 +143,25 @@ export function createInvokePath(deps: InvokePathDeps): InvokePath {
         throw denied(call, ctx, "fingerprint_unavailable");
       }
 
-      const sent = toolRequest(binding, target, call.args, null);
+      let egress: Egress | null = null;
+      if (spec === undefined) {
+        egress = toolRequest(binding, target as ServiceTarget, call.args, null).egress;
+      } else if (spec.kind !== "code") {
+        let built: CallBuild;
+        try {
+          // the adapter kind matches the call kind (checked above), whatever the union says
+          built = (adapter as CallAdapter<typeof spec>).build(spec, call.args, null);
+        } catch {
+          throw failed(call, { stage: "request", reason: "adapter_error" });
+        }
+        if (!built.ok) {
+          throw failed(call, {
+            stage: "request",
+            reason: ADAPTER_REASON.test(built.reason) ? built.reason : "adapter_reason",
+          });
+        }
+        egress = callRequest(target as ServiceTarget, built.request).egress;
+      }
       const req = invokeToolRequest({
         ctx,
         principal: initiator,
@@ -141,7 +170,7 @@ export function createInvokePath(deps: InvokePathDeps): InvokePath {
         args: cedar.args,
         fingerprint,
         approvals: pdpApprovals(approvals, rolesOf, tenantId),
-        egress: sent.egress,
+        egress,
       });
 
       let decision: Decision;
@@ -170,10 +199,13 @@ export function createInvokePath(deps: InvokePathDeps): InvokePath {
           errorCount: String(decision.errors.length),
         });
       }
-      if (decision.decision !== "allow" || permit === undefined) {
+      if (decision.decision !== "allow") {
         throw denied(call, ctx, "policy", { decisionId: decision.decisionId });
       }
-      const authorization: Authorization = { decisionId: decision.decisionId, permit };
+      if (permit === undefined && spec?.kind !== "code") {
+        throw denied(call, ctx, "permit_missing", { decisionId: decision.decisionId });
+      }
+      const authorization: Authorization = { decisionId: decision.decisionId, permit: permit ?? null };
       authorised.set(authorization, { binding, target, args: call.args });
       return authorization;
     }
@@ -186,6 +218,20 @@ export function createInvokePath(deps: InvokePathDeps): InvokePath {
       }
       authorised.delete(authorization);
 
+      if (known.binding.call?.kind === "code") {
+        if (deps.code === undefined) throw denied(call, ctx, "adapter_unavailable");
+        try {
+          return await deps.code(known.binding.call, known.args, ctx);
+        } catch (error) {
+          if (error instanceof InterpreterError) throw error;
+          throw failed(call, { stage: "code", reason: "runner" });
+        }
+      }
+      const permit = authorization.permit;
+      if (permit === null) {
+        throw denied(call, ctx, "permit_missing", { decisionId: authorization.decisionId });
+      }
+
       const tag: CallTag = {
         tenantId: ctx.tenant.tenantId,
         runId: ctx.runId,
@@ -195,18 +241,18 @@ export function createInvokePath(deps: InvokePathDeps): InvokePath {
             : `${call.nodeId}:${ctx.hook.phase}:${ctx.hook.label}`,
         attempt: ctx.attempt,
       };
-      const sent = toolRequest(known.binding, known.target, known.args, ctx.idemKey);
+      const sent = toolRequest(known.binding, known.target as ServiceTarget, known.args, ctx.idemKey);
 
       let token: BrokerToken;
       try {
-        token = await deps.gateway.requestToken(authorization.permit, tag);
+        token = await deps.gateway.requestToken(permit, tag);
       } catch {
         throw failed(call, { stage: "token" });
       }
 
       let response: GatewayResponse;
       try {
-        response = await deps.gateway.send(authorization.permit, sent.request, token, tag);
+        response = await deps.gateway.send(permit,sent.request, token, tag);
       } catch {
         throw failed(call, { stage: "send" });
       }

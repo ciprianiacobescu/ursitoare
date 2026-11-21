@@ -9,7 +9,13 @@ import type { StepContext, ToolInvoker, ToolResult, VersionLoader } from "../../
 import type { Logger } from "../../observability/index.ts";
 import type { Egress, PrincipalEntity } from "../../pdp/index.ts";
 import type { RunRecord, TenantContext, TenantPool } from "../../runs/index.ts";
-import type { CodeCallSpec, ToolDirectory } from "../../tools/index.ts";
+import type {
+  CallAdapter,
+  CodeCallSpec,
+  HttpCallSpec,
+  McpCallSpec,
+  ToolDirectory,
+} from "../../tools/index.ts";
 
 export type PrincipalLoader = (
   ctx: TenantContext,
@@ -27,6 +33,8 @@ export interface InvokePathDeps {
   catalogueFor: (ctx: TenantContext) => Promise<Catalogue>;
   clock: Clock;
   logger: Logger;
+  calls?: { readonly http?: CallAdapter<HttpCallSpec>; readonly mcp?: CallAdapter<McpCallSpec> };
+  code?: CodeRunner;
 }
 
 export interface InvokePath {
