@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-1db9756c: UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-2dab7e00: UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-6bc82384: UI criterion C-ab3cdbf6 has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-a317ca0a: UI criterion C-dac61932 has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-a317ca0a: UI criterion C-dac61932 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -201,7 +201,7 @@ accept The hold can be waived. C-ab3cdbf6 is one of the parent unit restyle-web-
 
 ## Q-008: Hold H-a317ca0a: UI criterion C-dac61932 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -220,3 +220,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. C-dac61932 is one of the parent unit restyle-web-kit's source criteria: its scenario reads source files or pure helpers through a Node test, and nothing about it can be observed in a browser. So step 5's not_testable result is correct, and no browser test can be written for it. In this round's verdict.json the criterion's own result is pass ('the judge passed it and a discriminating test passes'), with its Node test traced by id. This follow-up changes only web/src/kit/theme.css (one new rule block) and adds tests, and that test still passes.
