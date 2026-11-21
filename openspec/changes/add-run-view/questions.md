@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-b43a5bfb (web-runs › The run page shows a readable header, previews and two columns › A mocked run shows its header, previews and columns at 1366 by 860): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-2836a3bc (web-runs › The run page shows a readable header, previews and two columns › Sixty steps preview 50, four at a time, each once): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-6bfd6320 (web-runs › The runs list shows badges, durations and names › A mocked list shows tones, durations and one name request): accept as satisfied? |
-| Q-005 | open | none | verdict | Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-bcb55e31: UI criterion C-01ce6552 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-e730fe4b: UI criterion C-b43a5bfb has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-eabaff7f: UI criterion C-2836a3bc has no end-to-end test; see the generated UI tests table |
@@ -165,7 +165,8 @@ accept The criterion is satisfied as it stands. The unit's browser test test_run
 
 ## Q-005: Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -184,6 +185,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. Criterion C-56e16a37 is a scenario over the pure functions runHeaderView and runRowView on the rows of test-plan.md T1, not a browser behaviour, and two Node tests named with its id assert every row of the scenario: H1 to H5 for the header and RR1 to RR3 for the row view, including the tones, the 2.5 s, 1 min 5 s and 30.0 s durations, the dash for an unended failed run, the id for an unknown user, and the ages 4 min ago, 1 h ago and just now. The implementation in run-view.ts matches, and both pages call these functions, so the browser tests of the unit exercise their output too. A generated browser test is not the right instrument for a function scenario, and its failure at both base and head says nothing about this code.
 ---
 
 ## Q-006: Hold H-bcb55e31: UI criterion C-01ce6552 has no end-to-end test; see the generated UI tests table
