@@ -1,0 +1,17 @@
+{
+  "schema": "l4/followup@1",
+  "parent": "openspec:restyle-admin-pages",
+  "items": [
+    {
+      "id": "FB-001",
+      "sha256": "cb9cac73d0300a8abffea7f2f8e9716356764903852a9a89f535864c0f74f0bb"
+    }
+  ],
+  "chores": [
+    "F-369be651"
+  ],
+  "test_chores": [
+    "F-369be651"
+  ],
+  "refactors": []
+}
