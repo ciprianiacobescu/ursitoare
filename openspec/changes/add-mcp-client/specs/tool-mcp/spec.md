@@ -1,6 +1,6 @@
 ## Purpose
 
-The MCP client of the tool registry.
+The MCP client of the tool registry: discovery, surfaces and `mcp` calls.
 
 ## ADDED Requirements
 
