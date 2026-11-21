@@ -153,6 +153,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-005: Criterion C-6bc1b603 (web-runs › The panels show the form and the rows in a browser › Answer rows write the mocks and the fakes): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The scenario is browser behaviour over Radix Collapsible (aria-expanded, remount with defaultOpen after a refused dry run) and real POST bodies. e2e/test_m6b_run_inputs.py lines 232-314 assert every clause and MockRows.tsx and DryRunPanel.tsx (fakeNotes, openIds, keyed Collapsible) implement the opening of the named row with its note. I cannot run the test, the harness-generated browser test for this criterion fails at head and is not in the repository, and no e2e report is available to me, so I cannot settle whether the existing test passes at head. Escalating to a person who can see the run.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
