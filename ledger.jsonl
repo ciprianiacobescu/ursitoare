@@ -17,3 +17,4 @@
 {"at":"2026-11-21T23:46:32Z","run":"r-20261121T2346Z-af9e","type":"unit.dispatched","unit":"openspec:add-tool-adapters"}
 {"at":"2026-11-21T23:57:25Z","head":"3cbda4b9905d21aa464bd96f841aa73f20248dc5","pr":156,"target_before":"a8d10fdad04a39f328aa7a42014f7e5a576404ed","type":"unit.merge_requested","unit":"openspec:add-tool-adapters"}
 {"at":"2026-11-21T23:57:31Z","ci":"not_run","head":"3cbda4b9905d21aa464bd96f841aa73f20248dc5","merge_commit":"56be9698ab28240f06f98454e842700a1deae7a3","method":"squash","pr":156,"raced":false,"type":"unit.merged","unit":"openspec:add-tool-adapters"}
+{"at":"2026-11-21T23:57:37Z","branch":"l4/openspec/add-tool-adapters","head":"3cbda4b9905d21aa464bd96f841aa73f20248dc5","type":"unit.branch_deleted","unit":"openspec:add-tool-adapters"}
