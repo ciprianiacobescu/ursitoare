@@ -6,7 +6,7 @@ Paths are in `web/src/runs/` unless they start with `e2e/`. Each task is one red
 
 ## 2. Step rows and previews
 
-- [ ] 2.1 Extend `run-view.test.ts` (scenarios "Rows, interrupted and live steps, and the 51st step" and "Preview texts, the cut, and the refs", test-plan.md T2 rows R1 to R4 and T3 rows P1 to P6, F1, F2) first, then implement `stepRowViews`, `outputPreview` and `previewRefs` in `run-view.ts`, implementing requirements "Step rows add a state, a duration and a preview to the timeline text" and "Output previews are one bounded line, chosen from the first 50 steps". Run `pnpm run test web/src/runs/run-view.test.ts`
+- [x] 2.1 Extend `run-view.test.ts` (scenarios "Rows, interrupted and live steps, and the 51st step" and "Preview texts, the cut, and the refs", test-plan.md T2 rows R1 to R4 and T3 rows P1 to P6, F1, F2) first, then implement `stepRowViews`, `outputPreview` and `previewRefs` in `run-view.ts`, implementing requirements "Step rows add a state, a duration and a preview to the timeline text" and "Output previews are one bounded line, chosen from the first 50 steps". Run `pnpm run test web/src/runs/run-view.test.ts`
 
 ## 3. The preview queue
 
