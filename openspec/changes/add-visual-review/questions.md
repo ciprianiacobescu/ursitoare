@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-0462bba1 (web-design-system › The flow workspace is beside, complete and at most 3,000 px tall › The workspace of demo-ui is two columns and at most 3,000 px tall): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-1beceb27 (web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work): accept as satisfied? |
-| Q-007 | open | none | verdict | Hold H-527bcb10: UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-527bcb10: UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-5c490932: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-0de5f245: UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-0bc13fcf: UI criterion C-1beceb27 has no end-to-end test; see the generated UI tests table |
@@ -449,7 +449,8 @@ accept The criterion is satisfied. After the run, alice's journey test opens Run
 
 ## Q-007: Hold H-527bcb10: UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -468,6 +469,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Criterion C-8ac052fa is the unit's one Node-runnable criterion: its scenario is that the Node test reads the journey file and the four page tables and runs the four mutation rows, which has no browser-observable outcome, so a Playwright test cannot check it and the verifier's not testable result is correct. The criterion is already covered by its own discriminating Node test, named with its id, which asserts the journey exists, the signed-out list and 13 required paths, an empty problem list for the real file and exactly one problem for each of the three mutated copies. That test passed in the latest run and the verifier's own criteria table marks the criterion pass with a discriminating test. The unit's documents say every criterion was expected to draw one such hold and that it is answered accept.
 ---
 
 ## Q-008: Hold H-5c490932: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table
