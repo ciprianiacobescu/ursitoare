@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
-| Q-002 | open | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
+| Q-002 | answered | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
@@ -164,7 +164,7 @@ accept: The inconclusive result is the one the unit's own documents predicted, a
 
 ## Q-002: Task 1.1: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** 1.1
 - **Kind:** harness
 - **Asked:** 2026-11-21T09:50Z by deepseek-free, run r-20261121T0908Z-8d27, task 1.1
@@ -302,3 +302,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: verified by the owner's delegate. The held patch is test-only (e2e/test_m6b_ui.py, web/src/visual-pages.test.ts), so the base run passing is expected. Applied on main 21263517: typecheck, eslint, py_compile pass; visual-pages.test.ts 1/1. The journey against a local e2e stack built at main passed 3/3 twice and wrote all 21 screenshots. It fixes both failures of Q-001's replay (the previews now wait for each JSON text before json.loads; the signed-out home asserts the status, the main-text detail stays covered by frozen test_m6b_home.py:439). Checks kept: Approve surface, Start a test run, Recent runs and flows; 92 expect/assert lines vs 85 before.
