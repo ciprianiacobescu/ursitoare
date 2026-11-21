@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-bcb55e31: UI criterion C-01ce6552 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-e730fe4b: UI criterion C-b43a5bfb has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-eabaff7f: UI criterion C-2836a3bc has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-eabaff7f: UI criterion C-2836a3bc has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-14b82d26: UI criterion C-6bfd6320 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -240,7 +240,8 @@ accept The unit can go on as it stands. Criterion C-b43a5bfb is traced by the un
 
 ## Q-008: Hold H-eabaff7f: UI criterion C-2836a3bc has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -259,6 +260,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. Criterion C-2836a3bc is traced by the unit's own browser test test_previews_stop_at_fifty_and_run_four_at_a_time in e2e/test_m6b_run_view.py, which loads 60 steps with 60 distinct output digests behind a fetch wrapper that delays each payload read by 150 ms and counts requests in flight, then asserts 50 p.runs-preview with the first {"n":100} and the last {"n":149}, 50 distinct URLs, a maximum in flight of at most 4, 60 Steps buttons, the Output text "n": 150 after a click on the 51st, still 50 previews and an empty CSP list. The code gives each of those: previewRefs takes the first 50 steps in seq order, stepRowViews previews only the first 50 steps with an output, createPreviewQueue starts at most limit refs with the default PREVIEW_CONCURRENCY of 4, and the queue effect is keyed on the joined refs. Node tests named with the unit's ids also assert the 51st and 60th previews are null and that at most four requests are in flight. No generated test exists for this criterion because its writer ran out of output, and the missing red record is procedural: a red step runs only the Node gate and leaves browser-only criteria to the verifier.
 ---
 
 ## Q-009: Hold H-14b82d26: UI criterion C-6bfd6320 has no end-to-end test; see the generated UI tests table
