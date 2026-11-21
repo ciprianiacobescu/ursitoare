@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.2 | technical | src/tools/adapter-submit.db.test.ts:134 compares JSON text of a jsonb payload |
 | Q-002 | answered | none | verdict | Criterion C-f287b385 (tool-invocation › Authorization is recorded before anything is sent › A granted read is authorised): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-8b5cbc41 (tool-invocation › Authorization is recorded before anything is sent › Policy errors and an unrecorded decision deny with fixed reasons): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-8b5cbc41 (tool-invocation › Authorization is recorded before anything is sent › Policy errors and an unrecorded decision deny with fixed reasons): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-c28f570f (tool-invocation › A refusal before the policy point records and sends nothing › Each refusal reason, in order): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-17a3e8b7 (tool-invocation › invoke sends only what was authorised › A call through the fakes, and each failure): accept as satisfied? |
 <!-- l4:index:end -->
@@ -79,7 +79,8 @@ accept The frozen test of the base unit runs the exact scenario: it grants G_LOO
 
 ## Q-003: Criterion C-8b5cbc41 (tool-invocation › Authorization is recorded before anything is sent › Policy errors and an unrecorded decision deny with fixed reasons): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -106,6 +107,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The frozen test runs rows E1 to E5 and E7 on one harness whose policy wrapper takes the check answer from the row: E1 to E3 throw policy_error with decisionId and errorCount and leave deny rows with their errors and no permit, E4 and E5 throw policy_unavailable with code ECONNREFUSED and UNKNOWN and add no row, E7 answers once and then throws decision_unrecorded leaving the first row; it asserts 0 gateway calls, 0 intents and that no error text contains POLICY_SET_UNAVAILABLE, PDP_EVALUATION_ERROR or db down. The production code throws those reasons with those details.
 ---
 
 ## Q-004: Criterion C-c28f570f (tool-invocation › A refusal before the policy point records and sends nothing › Each refusal reason, in order): accept as satisfied?
