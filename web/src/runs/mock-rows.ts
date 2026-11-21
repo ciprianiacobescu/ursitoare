@@ -151,7 +151,8 @@ export function rowSyncStep(nodes: readonly MockNode[], sync: RowSync, event: Ro
       const rows = sync.rows.map((row) => {
         if (row.nodeId !== event.nodeId) return row;
         if (event.type === "answer") {
-          return { ...row, answers: row.answers.map((a, i) => (i === event.index ? event.value : a)) };
+          const shown = row.answers.length === 0 ? [""] : row.answers;
+          return { ...row, answers: shown.map((a, i) => (i === event.index ? event.value : a)) };
         }
         if (event.type === "add") {
           return { ...row, answers: row.answers.length === 0 ? ["", ""] : [...row.answers, ""] };

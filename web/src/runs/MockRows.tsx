@@ -10,6 +10,7 @@ export interface MockRowsProps {
   rows: readonly MockRow[];
   answerErrors: Readonly<Record<string, string>>;
   openIds?: readonly string[];
+  notes?: Readonly<Record<string, string>>;
   onAnswer: (nodeId: string, index: number, value: string) => void;
   onAdd: (nodeId: string) => void;
   onRemove: (nodeId: string, index: number) => void;
@@ -24,7 +25,7 @@ export function MockRows(props: MockRowsProps): ReactNode {
         const shown = answers.length === 0 ? [""] : answers;
         return (
           <Collapsible
-            key={node.nodeId}
+            key={`${node.nodeId}:${props.openIds?.includes(node.nodeId) === true}`}
             {...(props.openIds?.includes(node.nodeId) ? { defaultOpen: true } : {})}
             className="rounded-md border border-border"
           >
@@ -36,6 +37,9 @@ export function MockRows(props: MockRowsProps): ReactNode {
               </span>
             </div>
             <CollapsibleContent className="px-3 pb-3">
+              {props.notes?.[node.nodeId] === undefined ? null : (
+                <p className="ui-field-error">{props.notes[node.nodeId]}</p>
+              )}
               {shown.map((answer, index) => {
                 const label = answerLabel(node.nodeId, index);
                 const error = props.answerErrors[label] ?? null;
