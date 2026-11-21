@@ -1,4 +1,4 @@
-# Verification: openspec:add-run-view: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-run-view: PASS (round 2)
 
 traceability: 6/9 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 6/9 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base main@386e6b6d12 contained |
-| 1 | integrity | ok | 260.2 | 11 sub-checks (+1 unfrozen by human answers); scope: 13 changed file(s) |
-| 2 | build | ok | 32.7 |  |
-| 3 | tests | ok | 398.2 |  |
-| 4 | traceability | ok | 0.2 | 6/9 criteria covered |
-| 4a | audit sampling | ok | 358.1 | 2 rejected; support files at the base: 4 |
-| 5 | ui test generation | ok | 1880.3 | 4 fails_at_head, 4 not_testable, 1 writer_failed; 4 not_testable covered by step 4: notes, no hold (L4-VER-067); e2e support files shown to the writer: 1 |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/runs/RunPage.tsx, web/src/runs/RunsPage.tsx, web/src/runs/run-view.ts |
-| 8 | s1 judge | ok | 0.5 | 9/9 criteria judged by jev |
-| 9 | judge | ok | 335.9 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 4a | audit sampling | reused | 0.0 | reused (round 1) |
+| 5 | ui test generation | reused | 0.0 | reused (round 1) |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -149,6 +149,17 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - C-56e16a37: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_56e16a37_r1.py
 - C-aeec17be: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_aeec17be_r1.py
 
+## Answers to verdict questions
+
+- Q-002 accept C-b43a5bfb by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The unit's browser test test_run_page_header_previews_and_columns encodes the scenario line by line: the status text and tone, the two header texts, the four Steps buttons, the three preview texts, the three then four payload digests each once, the Started ti...
+- Q-003 accept C-2836a3bc by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The unit's browser test test_previews_stop_at_fifty_and_run_four_at_a_time loads 60 steps with distinct output digests behind a fetch wrapper that delays each payload read and counts requests in flight, then asserts 50 p.runs-preview with the first {"n":100} ...
+- Q-004 accept C-6bfd6320 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The unit's browser test test_runs_list_shows_badges_duration_and_names mocks /runs with run_a and run_b and /people answering only user-1, then asserts the seven column headers in order, Alice Example, 2.5 s and a success badge in the run_a row, usr_9, 1 min ...
+- Q-005 accept H-51c57b0f by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. Criterion C-56e16a37 is a scenario over the pure functions runHeaderView and runRowView on the rows of test-plan.md T1, not a browser behaviour, and two Node tests named with its id assert every row of the scenario: H1 to H5 for the header and RR1 to RR3 for the row ...
+- Q-006 accept H-bcb55e31 by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. Criterion C-01ce6552 is a scenario over the pure function detailCell on rows DC1 to DC4 plus the unchanged frozen timeline tests, and a Node test named with its id asserts all four rows: the Started row gives the formatted instant with the raw iso, and the not ended,...
+- Q-007 accept H-e730fe4b by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. Criterion C-b43a5bfb is traced by the unit's own browser test test_run_page_header_previews_and_columns in e2e/test_m6b_run_view.py, which asserts every clause of the scenario: the status text State: completed with data-tone success, Started by Alice Example and Dura...
+- Q-008 accept H-eabaff7f by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. Criterion C-2836a3bc is traced by the unit's own browser test test_previews_stop_at_fifty_and_run_four_at_a_time in e2e/test_m6b_run_view.py, which loads 60 steps with 60 distinct output digests behind a fetch wrapper that delays each payload read by 150 ms and count...
+- Q-009 accept H-14b82d26 by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. Criterion C-6bfd6320 is traced by the unit's own browser test test_runs_list_shows_badges_duration_and_names in e2e/test_m6b_run_view.py, which mocks /runs with run_a and run_b and /people answering only user-1, then asserts the seven column headers in order, Alice E...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -159,9 +170,9 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-aeec17be | web-runs › Previews load through one queue of at most four requests › Four in flight, each ref once, a rejection swallowed | pass | pass | the judge passed it and a discriminating test passes |
 | C-f21e5186 | web-runs › The run page and the runs list keep their pinned markup and take the new layout › The sources keep the pins and hold the new parts | pass | pass | the judge passed it and a discriminating test passes |
 | C-01ce6552 | web-runs › Step detail times read as instants › Started and Ended read as instants and the pinned rows stay raw | pass | pass | the judge passed it and a discriminating test passes |
-| C-b43a5bfb | web-runs › The run page shows a readable header, previews and two columns › A mocked run shows its header, previews and columns at 1366 by 860 | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-2836a3bc | web-runs › The run page shows a readable header, previews and two columns › Sixty steps preview 50, four at a time, each once | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-6bfd6320 | web-runs › The runs list shows badges, durations and names › A mocked list shows tones, durations and one name request | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-b43a5bfb | web-runs › The run page shows a readable header, previews and two columns › A mocked run shows its header, previews and columns at 1366 by 860 | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The unit's browser test test_run_page_header_previews_and_columns encodes the scenario line by line: the status text and tone, the two header texts, the four Steps buttons, the three preview texts, ... |
+| C-2836a3bc | web-runs › The run page shows a readable header, previews and two columns › Sixty steps preview 50, four at a time, each once | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The unit's browser test test_previews_stop_at_fifty_and_run_four_at_a_time loads 60 steps with distinct output digests behind a fetch wrapper that delays each payload read and counts requests in fli... |
+| C-6bfd6320 | web-runs › The runs list shows badges, durations and names › A mocked list shows tones, durations and one name request | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The unit's browser test test_runs_list_shows_badges_duration_and_names mocks /runs with run_a and run_b and /people answering only user-1, then asserts the seven column headers in order, Alice Examp... |
 
 ## Findings
 
@@ -179,14 +190,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-b43a5bfb): The end-to-end test test_m6b_run_view::test_run_page_header_previews_and_columns[chromium] traces criterion C-b43a5bfb (web-runs › The run page shows a readable header, previews and two columns › A mocked run shows its header, previews and columns at 1366 by 860), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-2836a3bc): The end-to-end test test_m6b_run_view::test_previews_stop_at_fifty_and_run_four_at_a_time[chromium] traces criterion C-2836a3bc (web-runs › The run page shows a readable header, previews and two columns › Sixty steps preview 50, four at a time, each once), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-6bfd6320): The end-to-end test test_m6b_run_view::test_runs_list_shows_badges_duration_and_names[chromium] traces criterion C-6bfd6320 (web-runs › The runs list shows badges, durations and names › A mocked list shows tones, durations and one name request), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
-
-## Needs a human
-
-- UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table
-- UI criterion C-01ce6552 has no end-to-end test; see the generated UI tests table
-- UI criterion C-b43a5bfb has no end-to-end test; see the generated UI tests table
-- UI criterion C-2836a3bc has no end-to-end test; see the generated UI tests table
-- UI criterion C-6bfd6320 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
