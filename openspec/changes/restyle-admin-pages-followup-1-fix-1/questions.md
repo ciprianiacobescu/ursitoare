@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | technical | Person must add watch_csp to e2e/test_m6b_section_layout.py |
+| Q-001 | answered | 1.1 | technical | Person must add watch_csp to e2e/test_m6b_section_layout.py |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Person must add watch_csp to e2e/test_m6b_section_layout.py
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** 1.1
 - **Kind:** technical
 - **Asked:** 2026-11-21T15:32Z by claude-sonnet, run r-20261121T1349Z-a93b, task 1.1
@@ -34,3 +34,4 @@ AssertionError [ERR_ASSERTION]: the watchdog message names the limit and the def
 
 ### Answer
 <!-- write below this line -->
+Done by the owner's delegate in aa29f359 on the unit branch (person-only test commit). Each of the six tests in e2e/test_m6b_section_layout.py now keeps the list that open_page returns (open_page of test_m6b_admin.py calls watch_csp before page.goto and returns the live list of CSP violations) and ends with assert csp == [], the pattern of test_m6b_admin.py; the module docstring names watch_csp. Assertions are only added; measurements, mocks and viewport are unchanged; no production code. Checked: the six tests pass against a local e2e stack. Nothing is left for task 1.1 to change in production code: F-6267b553 is about the test file only.
