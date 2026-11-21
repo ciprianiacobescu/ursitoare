@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Hold H-88dcd857: UI criterion C-e9b281b6 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-66b31620: UI criterion C-6bc1b603 has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-5b4b4c98: UI criterion C-eba3df1e has no end-to-end test; see the generated UI tests table |
-| Q-015 | open | none | verdict | Hold H-4054053e: UI criterion C-41245171 has no end-to-end test; see the generated UI tests table |
+| Q-015 | answered | none | verdict | Hold H-4054053e: UI criterion C-41245171 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -428,7 +428,7 @@ accept C-eba3df1e has a discriminating end-to-end test: e2e/test_m6b_run_inputs.
 
 ## Q-015: Hold H-4054053e: UI criterion C-41245171 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): e2e/test_m6b_run_inputs.py tags test_the_panels_fit_the_screen with @pytest.mark.l4("C-41245171") over the three viewports of the spec, and InputForm.tsx uses a @container grid with @xl:grid-cols-2 as design.md decision 8 describes. The verifier reports all three parametrized runs fail at the head after two attempts. The criterion asserts layout measurements (stacked or side by side fields, group height, scrollWidth <= innerWidth) and an axe-core result at 1366, 1024 and 390, none of which I can check from source: whether the 36 rem container query trips at 1024 depends on the workspace widths of add-flow-workspace and add-app-shell, and an axe violation is invisible in a file read. The criterion is still open as Q-007. A person who can run the browser suite must decide whether the failure is real.
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -448,3 +448,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-41245171 has a discriminating end-to-end test: e2e/test_m6b_run_inputs.py::test_the_panels_fit_the_screen (1366, 1024 and 390 px), tagged with the criterion id, passes at head 9754a32c (CI e2e gate and locally) and fails with web/src at the base 07b879df (at the base all three runs fail at line 340 (no group Inputs)); checked by the owner's delegate on a private e2e stack, see the matching satisfied question for the details. The generated test fails at the head only because of its setup: it signs in to the stack and looks for a flow demo-pay with vendor_name and amount inputs, but the stack has no flows (the page shows "No flows yet"), so it fails at the base and the head alike and says nothing about the code.
