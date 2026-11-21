@@ -290,3 +290,49 @@ test("C-f21e5186 run page steps hold one named button and the scanners stay clea
     assert.deepEqual(findBannedImports(sourceText), [], `${name} imports no banned package`);
   }
 });
+
+const RUNS_PAGE_URL = new URL("./RunsPage.tsx", import.meta.url);
+
+const RUNS_PAGE_MUST_CONTAIN = [
+  "<PageHeader",
+  'captionDisplayFor("Runs", "Runs")',
+  "useSyncExternalStore(list.subscribe, list.getState)",
+  "useDisplayNames(",
+  "runRowView(",
+  "runPath(",
+  "<Badge tone={view.tone}>",
+  "<time dateTime=",
+] as const;
+
+const RUNS_PAGE_MUST_NOT_CONTAIN = ['role="alert"', '.css"', "disabled"] as const;
+
+test("C-f21e5186 runs page holds the seven headers and the new calls", () => {
+  const source = readSource(RUNS_PAGE_URL);
+
+  for (const text of RUNS_PAGE_MUST_CONTAIN) {
+    assert.ok(source.includes(text), `RunsPage.tsx contains ${text}`);
+  }
+  for (const text of RUNS_PAGE_MUST_NOT_CONTAIN) {
+    assert.equal(source.includes(text), false, `RunsPage.tsx does not contain ${text}`);
+  }
+
+  const headers = [...source.matchAll(/header: "([^"]+)"/g)].map((match) => match[1]);
+  assert.deepEqual(headers, [
+    "Run",
+    "Flow",
+    "Mode",
+    "State",
+    "Started",
+    "Duration",
+    "Started by",
+  ]);
+});
+
+test("C-f21e5186 runs page scanners stay clean", () => {
+  const source = readSource(RUNS_PAGE_URL);
+  assert.ok(source.includes("useDisplayNames("), "RunsPage.tsx asks for display names");
+  assert.deepEqual(findInlineStyleUse(source), [], "RunsPage.tsx uses no inline style");
+  assert.deepEqual(findPaletteUtilities(source), [], "RunsPage.tsx uses no palette utility");
+  assert.deepEqual(findCssImports(source), [], "RunsPage.tsx imports no stylesheet");
+  assert.deepEqual(findBannedImports(source), [], "RunsPage.tsx imports no banned package");
+});
