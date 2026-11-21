@@ -19,7 +19,9 @@ function normalizeTool(tool: SurfaceTool): unknown {
     untrusted_result: tool.untrusted_result ?? true,
     unsafe_to_retry: tool.unsafe_to_retry ?? false,
     data_class: tool.data_class ?? null,
-    http: { method: tool.http.method, path: tool.http.path },
+    ...(tool.http === undefined
+      ? {}
+      : { http: { method: tool.http.method, path: tool.http.path } }),
   };
 }
 

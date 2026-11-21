@@ -82,6 +82,8 @@ export function createToolDirectory(pool: TenantPool): ToolDirectory {
 
         const tool = surface.tools.find((candidate) => candidate.name === toolName);
         if (tool === undefined) return null;
+        const http = tool.http;
+        if (http === undefined) return null;
         if (toolHash(serverId, tool) !== version.contentHash) return null;
 
         return {
@@ -92,7 +94,7 @@ export function createToolDirectory(pool: TenantPool): ToolDirectory {
           ref,
           tool: toolName,
           effect: tool.effect,
-          http: { method: tool.http.method, path: tool.http.path },
+          http: { method: http.method, path: http.path },
           untrustedResult: tool.untrusted_result ?? true,
           unsafeToRetry: tool.unsafe_to_retry ?? false,
         };
