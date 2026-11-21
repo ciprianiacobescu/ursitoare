@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Hold H-bcb55e31: UI criterion C-01ce6552 has no end-to-end test; see the generated UI tests table |
 | Q-007 | answered | none | verdict | Hold H-e730fe4b: UI criterion C-b43a5bfb has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-eabaff7f: UI criterion C-2836a3bc has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-14b82d26: UI criterion C-6bfd6320 has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-14b82d26: UI criterion C-6bfd6320 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -265,7 +265,8 @@ accept The unit can go on as it stands. Criterion C-2836a3bc is traced by the un
 
 ## Q-009: Hold H-14b82d26: UI criterion C-6bfd6320 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -284,3 +285,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. Criterion C-6bfd6320 is traced by the unit's own browser test test_runs_list_shows_badges_duration_and_names in e2e/test_m6b_run_view.py, which mocks /runs with run_a and run_b and /people answering only user-1, then asserts the seven column headers in order, Alice Example, 2.5 s and a success badge in the run_a row, usr_9, 1 min 5 s and a failed badge with data-tone danger in the run_b row, the visible link Open run run_a, the caption class ui-table-caption ui-visually-hidden, one heading Runs, one /people request ending in ids=user-1%2Cusr_9, and the layout, axe and CSP checks. The code gives each of those: RunsPage declares the seven columns, renders the state as a Badge with data-slot badge and data-tone, hides the caption through captionDisplayFor and calls useDisplayNames once over the distinct user ids, which the name cache sends as one comma-joined ids query; personLabel falls back to the id and formatDuration gives 1 min 5 s. The hold exists only because a browser test has no red record, which the project's rules make unavoidable. The generated test that failed at head mocked a runs path without the /api/v1 prefix, answered /people with a shape the client's parser rejects (no items array) and called a Playwright method that does not exist, so its failure says nothing about this code.
