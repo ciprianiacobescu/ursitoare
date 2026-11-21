@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-6bfd6320 (web-runs › The runs list shows badges, durations and names › A mocked list shows tones, durations and one name request): accept as satisfied? |
 | Q-005 | answered | none | verdict | Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-bcb55e31: UI criterion C-01ce6552 has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-e730fe4b: UI criterion C-b43a5bfb has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-e730fe4b: UI criterion C-b43a5bfb has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-eabaff7f: UI criterion C-2836a3bc has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-14b82d26: UI criterion C-6bfd6320 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -215,7 +215,8 @@ accept The unit can go on as it stands. Criterion C-01ce6552 is a scenario over 
 
 ## Q-007: Hold H-e730fe4b: UI criterion C-b43a5bfb has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -234,6 +235,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. Criterion C-b43a5bfb is traced by the unit's own browser test test_run_page_header_previews_and_columns in e2e/test_m6b_run_view.py, which asserts every clause of the scenario: the status text State: completed with data-tone success, Started by Alice Example and Duration 2.5 s visible, the Steps buttons lookup, route, pay, done, the three preview texts, exactly the three output digests read and then four each once after the click on lookup, the Started time and datetime of the clicked step, the Step details box within 8 px of the Timeline box and to its right, the tooltip 2026-11-17 10:00 UTC on focus, one status and zero alerts, and the layout, axe and CSP checks. The page source gives each of those: the status p carries data-tone from runHeaderView, a shared requestPayload answers a repeated ref without a second request, each step row renders its preview in p.runs-preview, Started and Ended cells with an iso render as a time element with dateTime and title, and runs.css puts the layout in two equal columns from 80rem. The hold exists only because a browser test has no red record, which the project's rules make unavoidable since a red step runs only the Node gate and leaves browser-only criteria to the verifier. The generated test that failed at head was written against routes and response shapes the app does not use (a single snapshot route, non-digest refs, a payload path without the run id, a people answer without items), so its failure says nothing about this code; the unit's own test mocks the real routes /runs/run_1, /runs/run_1/steps and /runs/run_1/payloads/<sha256> with 64-hex digests.
 ---
 
 ## Q-008: Hold H-eabaff7f: UI criterion C-2836a3bc has no end-to-end test; see the generated UI tests table
