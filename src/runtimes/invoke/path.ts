@@ -14,7 +14,7 @@ import type {
 import { recordDecisionOwnTx } from "../../pdp/index.ts";
 import type { Decision, Egress, PrincipalEntity } from "../../pdp/index.ts";
 import type { RunRecord } from "../../runs/index.ts";
-import type { CallAdapter, CallBuild, ToolBinding } from "../../tools/index.ts";
+import type { CallAdapter, CallAnswer, CallBuild, ToolBinding, ToolCallSpec } from "../../tools/index.ts";
 import { callRequest, pdpApprovals, invokeToolRequest, toolRequest } from "./request.ts";
 import type { InvokePath, InvokePathDeps } from "./types.ts";
 
@@ -241,7 +241,28 @@ export function createInvokePath(deps: InvokePathDeps): InvokePath {
             : `${call.nodeId}:${ctx.hook.phase}:${ctx.hook.label}`,
         attempt: ctx.attempt,
       };
-      const sent = toolRequest(known.binding, known.target as ServiceTarget, known.args, ctx.idemKey);
+      const spec = known.binding.call as ToolCallSpec | undefined;
+      const adapter =
+        spec === undefined || spec.kind === "code" ? undefined : deps.calls?.[spec.kind];
+      if (spec !== undefined && adapter === undefined) throw denied(call, ctx, "adapter_unavailable");
+      let sent: ReturnType<typeof callRequest>;
+      if (spec === undefined || spec.kind === "code") {
+        sent = toolRequest(known.binding, known.target as ServiceTarget, known.args, ctx.idemKey);
+      } else {
+        let built: CallBuild;
+        try {
+          built = (adapter as CallAdapter<typeof spec>).build(spec, known.args, ctx.idemKey);
+        } catch {
+          throw failed(call, { stage: "request", reason: "adapter_error" });
+        }
+        if (!built.ok) {
+          throw failed(call, {
+            stage: "request",
+            reason: ADAPTER_REASON.test(built.reason) ? built.reason : "adapter_reason",
+          });
+        }
+        sent = callRequest(known.target as ServiceTarget, built.request);
+      }
 
       let token: BrokerToken;
       try {
@@ -255,6 +276,24 @@ export function createInvokePath(deps: InvokePathDeps): InvokePath {
         response = await deps.gateway.send(permit,sent.request, token, tag);
       } catch {
         throw failed(call, { stage: "send" });
+      }
+
+      if (spec !== undefined && spec.kind !== "code") {
+        let answered: CallAnswer;
+        try {
+          answered = (adapter as CallAdapter<typeof spec>).answer(spec, response);
+        } catch {
+          throw failed(call, { stage: "response", reason: "adapter_error" });
+        }
+        if (answered.ok) return { output: answered.output as Record<string, JsonValue> };
+        const details: Record<string, string> = {
+          stage: answered.stage,
+          reason: ADAPTER_REASON.test(answered.reason) ? answered.reason : "adapter_reason",
+        };
+        if (answered.status !== null && Number.isInteger(answered.status)) {
+          details["status"] = String(answered.status);
+        }
+        throw failed(call, details);
       }
 
       if (response.status < 200 || response.status > 299) {

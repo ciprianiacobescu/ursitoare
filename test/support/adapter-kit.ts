@@ -1,6 +1,7 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
 import type { JsonValue } from "../../src/authoring/index.ts";
+import { InterpreterError } from "../../src/interpreter/index.ts";
 import type { CodeRunner } from "../../src/runtimes/index.ts";
 import type {
   CallAdapter,
@@ -182,6 +183,7 @@ function kitAnswer(response: ToolHttpResponse): CallAnswer {
   if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
     return { ok: false, stage: "response", reason: "not_json", status: null };
   }
+  if ((parsed as { throw?: unknown }).throw === true) throw new Error("secret_text");
   return { ok: true, output: parsed as { [key: string]: ToolJson } };
 }
 
@@ -202,6 +204,15 @@ export function kitCodeRunner(): {
   const calls: { source: string; args: JsonValue; nodeId: string }[] = [];
   const run: CodeRunner = async (call, args, ctx) => {
     calls.push({ source: call.source, args, nodeId: ctx.nodeId });
+    const mode =
+      args !== null && typeof args === "object" && !Array.isArray(args) ? args["mode"] : undefined;
+    if (mode === "interp") {
+      throw new InterpreterError("INTERPRETER_TOOL_FAILED", "node execution failed", ctx.nodeId, {
+        stage: "code",
+        reason: "timeout",
+      });
+    }
+    if (mode === "throw") throw new Error("secret_text");
     return { output: { words: 3 } };
   };
   return { run, calls };
