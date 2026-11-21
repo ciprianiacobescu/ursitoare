@@ -1,4 +1,4 @@
-# Verification: openspec:add-tool-adapters: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-tool-adapters: PASS (round 2)
 
 traceability: 12/16 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 12/16 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base main@a8d10fdad0 contained |
-| 1 | integrity | ok | 251.4 | 11 sub-checks (+1 unfrozen by human answers); scope: 32 changed file(s) |
-| 2 | build | ok | 32.0 |  |
-| 3 | tests | ok | 421.2 |  |
-| 4 | traceability | ok | 0.2 | 12/16 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/interpreter/types.ts, src/runtimes/index.ts, src/runtimes/invoke/path.ts, src/runtimes/invoke/request.ts, src/runtimes/invoke/types.ts and 11 more |
-| 8 | s1 judge | ok | 0.8 | 15/16 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 180.8 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -189,17 +189,24 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-39c2ae60 | ok | 0.920 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-06d6192c | ok | 0.780 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-002 accept C-f287b385 by the delegate (claude-fable-5-1 via claude-code): The frozen test of the base unit runs the exact scenario: it grants G_LOOKUP, deploys, starts live run r_1, calls authorize for LOOKUP on the live invoker and asserts the V1 permit, isIssuedPermit true, one decision row with action invoke_tool, principal User tenant_a/alice, resource Block tenant_a/...
+- Q-003 accept C-8b5cbc41 by the delegate (claude-fable-5-1 via claude-code): The frozen test runs rows E1 to E5 and E7 on one harness whose policy wrapper takes the check answer from the row: E1 to E3 throw policy_error with decisionId and errorCount and leave deny rows with their errors and no permit, E4 and E5 throw policy_unavailable with code ECONNREFUSED and UNKNOWN and...
+- Q-004 accept C-c28f570f by the delegate (claude-fable-5-1 via claude-code): The four frozen tests cover rows R1 to R15: the rig test checks each refusal reason and details in order with node and no decisionId, the hook row adding hook pay:post:notify, and asserts check and connect counts 1 only for R9 and gateway 0 in every row; the R11 test asserts INTERPRETER_TOOL_FAILED ...
+- Q-005 accept C-17a3e8b7 by the delegate (claude-fable-5-1 via claude-code): The seven frozen tests cover rows C1 to C10: C1 asserts the output, one issued token with serviceId S, agent ursitoare-engine and TTL 60 and one fake tools call with callHeader r_1:lookup:1, host, path and body digest D_LV; C2 and C3 assert upstream with status and that logs hold neither brokerServi...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
 | C-0834e2d4 | tool-invocation › Authorization is recorded before anything is sent › A decision is recorded in a transaction of its own | pass | pass | the judge passed it and a discriminating test passes |
-| C-f287b385 | tool-invocation › Authorization is recorded before anything is sent › A granted read is authorised | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-8b5cbc41 | tool-invocation › Authorization is recorded before anything is sent › Policy errors and an unrecorded decision deny with fixed reasons | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-f287b385 | tool-invocation › Authorization is recorded before anything is sent › A granted read is authorised | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The frozen test of the base unit runs the exact scenario: it grants G_LOOKUP, deploys, starts live run r_1, calls authorize for LOOKUP on the live invoker and asserts the V1 permit, isIssuedPermit true, one decision row with action invoke_... |
+| C-8b5cbc41 | tool-invocation › Authorization is recorded before anything is sent › Policy errors and an unrecorded decision deny with fixed reasons | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The frozen test runs rows E1 to E5 and E7 on one harness whose policy wrapper takes the check answer from the row: E1 to E3 throw policy_error with decisionId and errorCount and leave deny rows with their errors and no permit, E4 and E5 th... |
 | C-a5498805 | tool-invocation › Authorization is recorded before anything is sent › A code call is authorised without a permit and no other call may be | pass | pass | the judge passed it and a discriminating test passes |
-| C-c28f570f | tool-invocation › A refusal before the policy point records and sends nothing › Each refusal reason, in order | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-c28f570f | tool-invocation › A refusal before the policy point records and sends nothing › Each refusal reason, in order | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The four frozen tests cover rows R1 to R15: the rig test checks each refusal reason and details in order with node and no decisionId, the hook row adding hook pay:post:notify, and asserts check and connect counts 1 only for R9 and gateway ... |
 | C-40162b00 | tool-invocation › A refusal before the policy point records and sends nothing › A call binding without its adapter is refused and a build failure sends nothing | pass | pass | the judge passed it and a discriminating test passes |
-| C-17a3e8b7 | tool-invocation › invoke sends only what was authorised › A call through the fakes, and each failure | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-17a3e8b7 | tool-invocation › invoke sends only what was authorised › A call through the fakes, and each failure | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The seven frozen tests cover rows C1 to C10: C1 asserts the output, one issued token with serviceId S, agent ursitoare-engine and TTL 60 and one fake tools call with callHeader r_1:lookup:1, host, path and body digest D_LV; C2 and C3 asser... |
 | C-bac67254 | tool-invocation › invoke sends only what was authorised › An adapter answer maps to a result or a failure and a code call runs with no token | pass | pass | the judge passed it and a discriminating test passes |
 | C-bbe52fdc | tool-invocation › callRequest builds the one request of an adapter call and its egress › Request vectors and a binding without http | pass | pass | the judge passed it and a discriminating test passes |
 | C-fcf2be72 | tool-registry › An adapter surface carries one call per tool and is checked per adapter › Each adapter's surface is accepted or refused with a field and a reason | pass | pass | the judge passed it and a discriminating test passes |
