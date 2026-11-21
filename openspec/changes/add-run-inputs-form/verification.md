@@ -1,4 +1,4 @@
-# Verification: openspec:add-run-inputs-form: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-run-inputs-form: PASS (round 2)
 
 traceability: 7/12 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 7/12 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base main@07b879df56 contained |
-| 1 | integrity | ok | 259.8 | 11 sub-checks (+1 unfrozen by human answers); scope: 22 changed file(s) |
-| 2 | build | ok | 32.6 |  |
-| 3 | tests | ok | 388.9 |  |
-| 4 | traceability | ok | 0.2 | 7/12 criteria covered |
-| 4a | audit sampling | ok | 506.7 | 1 not_testable, 1 rejected, 1 skipped; support files at the base: 8 |
-| 5 | ui test generation | ok | 2710.2 | 7 fails_at_head, 4 not_testable, 1 writer_failed; 4 not_testable covered by step 4: notes, no hold (L4-VER-067); e2e support files shown to the writer: 1 |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/runs/DryRunPanel.tsx, web/src/runs/InputForm.tsx, web/src/runs/MockRows.tsx, web/src/runs/TestRunPanel.tsx, web/src/runs/input-form.ts and 2 more |
-| 8 | s1 judge | ok | 0.5 | 9/12 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 137.5 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 4a | audit sampling | reused | 0.0 | reused (round 1) |
+| 5 | ui test generation | reused | 0.0 | reused (round 1) |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -168,6 +168,22 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 
 - C-2e06c4e6: the test command `pnpm run test` does not collect the audit test file e2e/test_l4_audit_c_2e06c4e6_r1.py
 
+## Answers to verdict questions
+
+- Q-003 accept C-92bb8bdc by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack (Playwright 1.63.0, the CI pin) at head 9754a32c, the verified head; base 07b879df. The CI e2e gate at that head ran and passed all seven tests of e2e/test_m6b_run_inputs.py and the M4, M5 and M6 journeys (test_m4_runs, test_m5...
+- Q-004 accept C-e9b281b6 by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack (Playwright 1.63.0, the CI pin) at head 9754a32c, the verified head; base 07b879df. The CI e2e gate at that head ran and passed all seven tests of e2e/test_m6b_run_inputs.py and the M4, M5 and M6 journeys (test_m4_runs, test_m5...
+- Q-005 accept C-6bc1b603 by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack (Playwright 1.63.0, the CI pin) at head 9754a32c, the verified head; base 07b879df. The CI e2e gate at that head ran and passed all seven tests of e2e/test_m6b_run_inputs.py and the M4, M5 and M6 journeys (test_m4_runs, test_m5...
+- Q-006 accept C-eba3df1e by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack (Playwright 1.63.0, the CI pin) at head 9754a32c, the verified head; base 07b879df. The CI e2e gate at that head ran and passed all seven tests of e2e/test_m6b_run_inputs.py and the M4, M5 and M6 journeys (test_m4_runs, test_m5...
+- Q-007 accept C-41245171 by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack (Playwright 1.63.0, the CI pin) at head 9754a32c, the verified head; base 07b879df. The CI e2e gate at that head ran and passed all seven tests of e2e/test_m6b_run_inputs.py and the M4, M5 and M6 journeys (test_m4_runs, test_m5...
+- Q-008 accept H-9e3a60bf by the delegate (claude-fable-5-1 via claude-code): Criterion C-2e06c4e6 is the scenario "The form writes with two-space indent and the text reads field by field" of requirement "A form's values become the input JSON and an input JSON becomes form values, by fixed rules". That scenario is written against the pure functions inputJsonFromForm and formF...
+- Q-009 accept H-481e50f9 by the delegate (claude-fable-5-1 via claude-code): Criterion C-3695054c is the scenario "A form edit writes, a text edit refills, and a bad text leaves the form alone" of requirement "One text is the truth...". Its WHEN runs the steps S1 to S9, T3b, T3c and the non-form cases of test-plan.md T3 on the pure state functions inputSyncStart, inputSyncSt...
+- Q-010 accept H-d93a7037 by the delegate (claude-fable-5-1 via claude-code): Criterion C-fe487857 is the scenario "Add, answer, remove, a bad answer and a text edit" of requirement "Answer rows and the mocks or fakes text stay in step by the same rules". Its WHEN runs the steps R1 to R8 and the arrival cases of test-plan.md T6 on the pure functions rowSyncStart, rowSyncStep ...
+- Q-011 accept H-58477fd9 by agent (CLAUDECODE): C-92bb8bdc has a discriminating end-to-end test: e2e/test_m6b_run_inputs.py::test_the_form_and_the_input_json_stay_in_step, tagged with the criterion id, passes at head 9754a32c (CI e2e gate and locally) and fails with web/src at the base 07b879df (at the base it fails at its first check (line 184, ...
+- Q-012 accept H-88dcd857 by agent (CLAUDECODE): C-e9b281b6 has a discriminating end-to-end test: e2e/test_m6b_run_inputs.py::test_a_missing_required_field_blocks_the_start, tagged with the criterion id, passes at head 9754a32c (CI e2e gate and locally) and fails with web/src at the base 07b879df (at the base it fails at line 214 because the field...
+- Q-013 accept H-66b31620 by agent (CLAUDECODE): C-6bc1b603 has a discriminating end-to-end test: e2e/test_m6b_run_inputs.py::test_answer_rows_write_the_mocks_and_the_fakes, tagged with the criterion id, passes at head 9754a32c (CI e2e gate and locally) and fails with web/src at the base 07b879df (at the base it fails at line 236 (no button Answer...
+- Q-014 accept H-5b4b4c98 by agent (CLAUDECODE): C-eba3df1e has a discriminating end-to-end test: e2e/test_m6b_run_inputs.py::test_validate_makes_the_panels_read_the_document, tagged with the criterion id, passes at head 9754a32c (CI e2e gate and locally) and fails with web/src at the base 07b879df (at the base it fails at line 321 (no Vendor name...
+- Q-015 accept H-4054053e by agent (CLAUDECODE): C-41245171 has a discriminating end-to-end test: e2e/test_m6b_run_inputs.py::test_the_panels_fit_the_screen (1366, 1024 and 390 px), tagged with the criterion id, passes at head 9754a32c (CI e2e gate and locally) and fails with web/src at the base 07b879df (at the base all three runs fail at line 34...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -179,11 +195,11 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-c8c4677c | web-runs › Answer rows list the block nodes and read and write the answers › Block nodes, labels and the text of the answers | pass | pass | the judge passed it and a discriminating test passes |
 | C-fe487857 | web-runs › Answer rows and the mocks or fakes text stay in step by the same rules › Add, answer, remove, a bad answer and a text edit | pass | pass | the judge passed it and a discriminating test passes |
 | C-b538162f | web-runs › The form and row components follow the source rules › The input sources read as the rules say | pass | pass | the judge passed it and a discriminating test passes |
-| C-92bb8bdc | web-runs › The panels show the form and the rows in a browser › Form and JSON stay in step and the text is used as written | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-e9b281b6 | web-runs › The panels show the form and the rows in a browser › A missing required field holds the start and names the field | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-6bc1b603 | web-runs › The panels show the form and the rows in a browser › Answer rows write the mocks and the fakes | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-eba3df1e | web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-41245171 | web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-92bb8bdc | web-runs › The panels show the form and the rows in a browser › Form and JSON stay in step and the text is used as written | pass | pass | accepted by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack (Playwright 1.63.0, the CI pin) at head 9754a32c, the verified head; base 07b879df. The CI e2e gate at that head ran and passed all seven tests of e2e/test_m6b_run_inputs.py and the M4, M5 and M6... |
+| C-e9b281b6 | web-runs › The panels show the form and the rows in a browser › A missing required field holds the start and names the field | pass | pass | accepted by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack (Playwright 1.63.0, the CI pin) at head 9754a32c, the verified head; base 07b879df. The CI e2e gate at that head ran and passed all seven tests of e2e/test_m6b_run_inputs.py and the M4, M5 and M6... |
+| C-6bc1b603 | web-runs › The panels show the form and the rows in a browser › Answer rows write the mocks and the fakes | pass | pass | accepted by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack (Playwright 1.63.0, the CI pin) at head 9754a32c, the verified head; base 07b879df. The CI e2e gate at that head ran and passed all seven tests of e2e/test_m6b_run_inputs.py and the M4, M5 and M6... |
+| C-eba3df1e | web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON | pass | pass | accepted by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack (Playwright 1.63.0, the CI pin) at head 9754a32c, the verified head; base 07b879df. The CI e2e gate at that head ran and passed all seven tests of e2e/test_m6b_run_inputs.py and the M4, M5 and M6... |
+| C-41245171 | web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before | pass | pass | accepted by agent (CLAUDECODE): Checked by the owner's delegate in a real browser on a private e2e stack (Playwright 1.63.0, the CI pin) at head 9754a32c, the verified head; base 07b879df. The CI e2e gate at that head ran and passed all seven tests of e2e/test_m6b_run_inputs.py and the M4, M5 and M6... |
 
 ## Findings
 
@@ -209,17 +225,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-41245171): The end-to-end test test_m6b_run_inputs::test_the_panels_fit_the_screen[chromium-1024-860], test_m6b_run_inputs::test_the_panels_fit_the_screen[chromium-1366-860], test_m6b_run_inputs::test_the_panels_fit_the_screen[chromium-390-800] traces criterion C-41245171 (web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, judge] input sync of a non-object JSON text is not pinned by any scenario (spec gap) (criterion C-3695054c): When inputSyncStart or a text event receives valid JSON that is not an object (e.g. a number or array), the committed code keeps the text byte-for-byte, sets raw to initial blank values, source to json, and shows the mismatch hint with a jsonError from parseTestInputs. No criterion scenario exercises this input, and a reasonable implementation could instead clear the text or reject the event.
 - [minor, judge] mock rows of a known node whose value is null is not pinned by any scenario (spec gap) (criterion C-c8c4677c): When mockRowsFromText receives a JSON object where a known node's value is null instead of a list, the committed code returns null. No scenario pins this exact input, and a reasonable implementation could instead treat it as an empty list.
-
-## Needs a human
-
-- UI criterion C-2e06c4e6 has no end-to-end test; see the generated UI tests table
-- UI criterion C-3695054c has no end-to-end test; see the generated UI tests table
-- UI criterion C-fe487857 has no end-to-end test; see the generated UI tests table
-- UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table
-- UI criterion C-e9b281b6 has no end-to-end test; see the generated UI tests table
-- UI criterion C-6bc1b603 has no end-to-end test; see the generated UI tests table
-- UI criterion C-eba3df1e has no end-to-end test; see the generated UI tests table
-- UI criterion C-41245171 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
