@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.2 | technical | src/tools/adapter-submit.db.test.ts:134 compares JSON text of a jsonb payload |
-| Q-002 | open | none | verdict | Criterion C-f287b385 (tool-invocation › Authorization is recorded before anything is sent › A granted read is authorised): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-f287b385 (tool-invocation › Authorization is recorded before anything is sent › A granted read is authorised): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-8b5cbc41 (tool-invocation › Authorization is recorded before anything is sent › Policy errors and an unrecorded decision deny with fixed reasons): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-c28f570f (tool-invocation › A refusal before the policy point records and sends nothing › Each refusal reason, in order): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-17a3e8b7 (tool-invocation › invoke sends only what was authorised › A call through the fakes, and each failure): accept as satisfied? |
@@ -46,7 +46,8 @@ Edit `src/tools/adapter-submit.db.test.ts`: at line 134 compare with `assert.dee
 
 ## Q-002: Criterion C-f287b385 (tool-invocation › Authorization is recorded before anything is sent › A granted read is authorised): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -73,6 +74,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The frozen test of the base unit runs the exact scenario: it grants G_LOOKUP, deploys, starts live run r_1, calls authorize for LOOKUP on the live invoker and asserts the V1 permit, isIssuedPermit true, one decision row with action invoke_tool, principal User tenant_a/alice, resource Block tenant_a/read-then-pay/lookup, node lookup, allow, one reason, that permit, 0 gateway calls and 0 effect_intent rows. The production authorize still records the decision through recordDecisionOwnTx before answering and answers the decision's permit for a fixture binding. The verifier ignored the test only because it predates this unit and has no red record, and the proposal states that rows R1 to R15 and C1 to C10 stay unchanged.
 ---
 
 ## Q-003: Criterion C-8b5cbc41 (tool-invocation › Authorization is recorded before anything is sent › Policy errors and an unrecorded decision deny with fixed reasons): accept as satisfied?
