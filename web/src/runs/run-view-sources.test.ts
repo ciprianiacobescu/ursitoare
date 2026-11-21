@@ -5,13 +5,56 @@ import { test } from "node:test";
 
 import type { StringMap } from "../kit/contrast.ts";
 import { findInlineStyleUse, findRawColours, parseTokens } from "../kit/contrast.ts";
+import { findBannedImports, findCssImports, findPaletteUtilities } from "../ui/rules.ts";
 
 assert.equal(typeof findRawColours, "function");
 assert.equal(typeof findInlineStyleUse, "function");
 assert.equal(typeof parseTokens, "function");
+assert.equal(typeof findBannedImports, "function");
+assert.equal(typeof findCssImports, "function");
+assert.equal(typeof findPaletteUtilities, "function");
 
 const RUNS_CSS_URL = new URL("./runs.css", import.meta.url);
 const TOKENS_CSS_URL = new URL("../kit/tokens.css", import.meta.url);
+const RUN_PAGE_URL = new URL("./RunPage.tsx", import.meta.url);
+const RUN_VIEW_URL = new URL("./run-view.ts", import.meta.url);
+
+const RUN_PAGE_MUST_CONTAIN = [
+  "aria-expanded",
+  "aria-controls",
+  'aria-label="Policy decisions"',
+  "Try again",
+  '<p role="status" aria-label="Run state" data-tone={header.tone}',
+  "<PageHeader",
+  '<Section title="Timeline"',
+  '<Section title="Step details"',
+  '<Section title="Policy decisions"',
+  '<Section title="Input"',
+  '<Section title="Output"',
+  '<Section title="Hooks"',
+  "createPreviewQueue(",
+  "previewRefs(",
+  "useDisplayNames(",
+  "runHeaderView(",
+  "stepRowViews(",
+  "detailCell(",
+  '<p className="runs-preview">',
+  "<Tooltip content={header.started}>",
+  "dateTime={header.startedIso}",
+  "<time dateTime={cell.iso} title={cell.iso}>",
+] as const;
+
+const RUN_PAGE_MUST_NOT_CONTAIN = [
+  'role="alert"',
+  '.css"',
+  "dangerouslySetInnerHTML",
+  "style=",
+  "disabled",
+] as const;
+
+function count(text: string, needle: string): number {
+  return text.split(needle).length - 1;
+}
 
 interface Rule {
   readonly selector: string;
@@ -210,4 +253,40 @@ test("C-f21e5186 runs css uses only kit tokens and the three mutated copies fail
     [],
     "the success rule with the info surface fails the check",
   );
+});
+
+test("C-f21e5186 run page keeps its pins and holds the new parts", () => {
+  const source = readSource(RUN_PAGE_URL);
+
+  for (const text of RUN_PAGE_MUST_CONTAIN) {
+    assert.ok(source.includes(text), `RunPage.tsx contains ${text}`);
+  }
+
+  for (const text of RUN_PAGE_MUST_NOT_CONTAIN) {
+    assert.equal(source.includes(text), false, `RunPage.tsx does not contain ${text}`);
+  }
+});
+
+test("C-f21e5186 run page steps hold one named button and the scanners stay clean", () => {
+  const source = readSource(RUN_PAGE_URL);
+
+  const open = source.indexOf('<ol className="runs-steps"');
+  assert.ok(open >= 0, "RunPage.tsx holds the Steps list");
+  const close = source.indexOf("</ol>", open);
+  assert.ok(close > open, "the Steps list is closed");
+  const steps = source.slice(open, close);
+  assert.equal(count(steps, "<button"), 1, "the Steps list holds one button");
+  assert.match(steps, /\{row\.nodeId\}\s*<\/button>/, "the node button is named by row nodeId");
+  assert.equal(count(source, "<button"), 3, "the run page holds three buttons");
+
+  const runView = readSource(RUN_VIEW_URL);
+  for (const [name, sourceText] of [
+    ["RunPage.tsx", source],
+    ["run-view.ts", runView],
+  ] as const) {
+    assert.deepEqual(findInlineStyleUse(sourceText), [], `${name} uses no inline style`);
+    assert.deepEqual(findPaletteUtilities(sourceText), [], `${name} uses no palette utility`);
+    assert.deepEqual(findCssImports(sourceText), [], `${name} imports no stylesheet`);
+    assert.deepEqual(findBannedImports(sourceText), [], `${name} imports no banned package`);
+  }
 });
