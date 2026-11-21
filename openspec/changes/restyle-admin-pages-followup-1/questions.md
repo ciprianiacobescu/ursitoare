@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | harness | Task 1.1: the test chore discrimination check could not decide |
+| Q-001 | answered | 1.1 | harness | Task 1.1: the test chore discrimination check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 1.1: the test chore discrimination check could not decide
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** 1.1
 - **Kind:** harness
 - **Asked:** 2026-11-21T12:55Z by claude-sonnet, run r-20261121T1135Z-2172, task 1.1
@@ -121,3 +121,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: verified by the delegate. The test-chore discrimination check could not run because its zero-value and base runs vary only Python production files, and this unit adds only tests. So I ran the discrimination by hand. I applied the held patch on main 9afc868e: py_compile, eslint and typecheck pass, and the Node test passes 1/1. e2e/test_m6b_section_layout.py against the offline e2e stack, with web built at head: 6 of 6 pass. With the kit rule '.ui-section > :not(.ui-section-title, .ui-section-actions) { grid-column: 1 / -1; }' removed from web/src/kit/theme.css and web rebuilt: 6 of 6 fail. So the browser test discriminates C-3802bfd0's region geometry in all six regions (New grant twice, Create team, Map a group, Chain verification, Filter the audit log, Surface). Replay the held patch.
