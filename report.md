@@ -1,12 +1,12 @@
 # Delivery plan m6b
 
-- Status: stopped
+- Status: completed
 - Repository: https://github.com/ciprianiacobescu/ursitoare
-- Target: main at 07b879df56523f338a63584ca8f3e9fbc682dde9
+- Target: main at 36dd7cceae53c8d224ccdbfea72f48c7941a3008
 - Merge: auto
 - No promotion target is set. Promotion was not performed.
-- Written: 2026-11-20T23:16:07Z
-- Stopped: unit_halted (openspec:add-run-inputs-form): task 3.3: max_task_attempts (3) reached in green; last failure: the task's browser tests do not pass: test_m6b_run_inputs::test_answer_rows_write_the_mocks_and_the_fakes[chromium], test_m6b_run_inputs::test_the_form_and_the_input_json_stay_in_step[chromium]
+- Written: 2026-11-21T11:26:04Z
+- Completed at: 36dd7cceae53c8d224ccdbfea72f48c7941a3008
 
 ## Units
 
@@ -60,34 +60,31 @@
 - Usage: $10.04, 5 run(s), 1 attempt(s)
 
 ### openspec:add-run-inputs-form
-- Result: not integrated
-- Pull request: <forge>/ciprianiacobescu/ursitoare/pull/146
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $9.67, 3 run(s), 1 attempt(s)
-- Delegate decisions:
-  - Q-002 (technical): accept by the delegate (claude-fable-5-1 via claude-code), $1.38
-  - Q-001 (technical): escalated by the delegate (claude-fable-5-1 via claude-code), $0.60: The question asks for a change to the implementer session's tool permissions (Write/Edit denied) or for a person to create the red test file by hand. The repository confirms web/src/runs/mock-rows-sync.test.ts does not exist yet, but nothing in the repository, specification or steering settles a har
+- Result: integrated at 62c19eea71a6caa4e4c31409ce91a5ffd81100c4
+- Pull request: 146
+- Merge commit: 62c19eea71a6caa4e4c31409ce91a5ffd81100c4
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $16.66, 6 run(s), 1 attempt(s)
 
 ### openspec:add-run-view
-- Result: not integrated
-- Pull request: none
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Result: integrated at 0bb31e133e18c84c72a91f8763ef4cf4f7196512
+- Pull request: 148
+- Merge commit: 0bb31e133e18c84c72a91f8763ef4cf4f7196512
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $10.45, 5 run(s), 1 attempt(s)
 
 ### openspec:add-visual-review
-- Result: not integrated
-- Pull request: none
-- Merge commit: none
-- Post-merge check: not run
-- Usage: $0.00, 0 run(s), 1 attempt(s)
+- Result: integrated at 9bfba3710ee40ef5673c41bc5da926ae09ebda33
+- Pull request: 150
+- Merge commit: 9bfba3710ee40ef5673c41bc5da926ae09ebda33
+- Post-merge check: pass with profile all (6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e)
+- Usage: $7.97, 5 run(s), 1 attempt(s)
 
 ## Batches
 
-- m6b-ui (profile none): not checked
+- m6b-ui (profile none): accepted at 36dd7cceae53c8d224ccdbfea72f48c7941a3008
 
 ## Usage
 
-- Cost: $107.77
-- Runs that dispatched a unit: 43
+- Cost: $133.19
+- Runs that dispatched a unit: 56
