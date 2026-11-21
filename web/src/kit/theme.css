@@ -223,6 +223,24 @@ textarea,
   overflow-wrap: anywhere;
 }
 
+.ui-page-header-meta {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-space-2) var(--ui-space-4);
+}
+
+.ui-page-header-meta > * {
+  margin: 0;
+}
+
+.ui-page-header-actions {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+
 .ui-section {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

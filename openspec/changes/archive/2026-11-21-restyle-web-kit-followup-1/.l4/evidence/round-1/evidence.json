@@ -1,0 +1,112 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [],
+    "skipped": true,
+    "note": "the spec names no path or module in backticks: nothing to compare against",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_run_header_meta.py",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "openspec/changes/archive/2026-11-19-restyle-web-kit/feedback.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/restyle-web-kit-followup-1/.l4/followup.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/restyle-web-kit-followup-1/.l4/ledger/r-20261121T1135Z-ac39.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/restyle-web-kit-followup-1/.l4/ledger/r-20261121T1256Z-d12f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/restyle-web-kit-followup-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/restyle-web-kit-followup-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/restyle-web-kit-followup-1/specs/web-data-kit/spec.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/restyle-web-kit-followup-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/kit/page-header-meta.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "web/src/kit/theme.css",
+        "module": "web",
+        "kind": "code",
+        "label": null,
+        "reason": "the spec declares no scope"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "ok",
+    "reason": "",
+    "percent": 100.0,
+    "unmeasured_files": [],
+    "other_files": [],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 2788,
+      "passed": 2787,
+      "failed": 1,
+      "errored": 0,
+      "skipped": 0,
+      "new": 2,
+      "new_passed": 2,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
