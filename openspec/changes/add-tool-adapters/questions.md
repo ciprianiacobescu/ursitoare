@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 2.2 | technical | src/tools/adapter-submit.db.test.ts:134 compares JSON text of a jsonb payload |
+| Q-001 | accepted | 2.2 | technical | src/tools/adapter-submit.db.test.ts:134 compares JSON text of a jsonb payload |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/tools/adapter-submit.db.test.ts:134 compares JSON text of a jsonb payload
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 2.2
 - **Kind:** technical
 - **Asked:** 2026-11-21T21:06Z by claude-sonnet, run r-20261121T2043Z-ef00, task 2.2
