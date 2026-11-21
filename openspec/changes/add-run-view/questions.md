@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 5.1 | technical | e2e/test_m6b_run_view.py:59-76: step() mock lacks fields that parseStepView requires |
 | Q-002 | answered | none | verdict | Criterion C-b43a5bfb (web-runs › The run page shows a readable header, previews and two columns › A mocked run shows its header, previews and columns at 1366 by 860): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-2836a3bc (web-runs › The run page shows a readable header, previews and two columns › Sixty steps preview 50, four at a time, each once): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-2836a3bc (web-runs › The run page shows a readable header, previews and two columns › Sixty steps preview 50, four at a time, each once): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-6bfd6320 (web-runs › The runs list shows badges, durations and names › A mocked list shows tones, durations and one name request): accept as satisfied? |
 | Q-005 | open | none | verdict | Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-bcb55e31: UI criterion C-01ce6552 has no end-to-end test; see the generated UI tests table |
@@ -99,7 +99,8 @@ accept The criterion is satisfied as it stands. The unit's browser test test_run
 
 ## Q-003: Criterion C-2836a3bc (web-runs › The run page shows a readable header, previews and two columns › Sixty steps preview 50, four at a time, each once): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -126,6 +127,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The unit's browser test test_previews_stop_at_fifty_and_run_four_at_a_time loads 60 steps with distinct output digests behind a fetch wrapper that delays each payload read and counts requests in flight, then asserts 50 p.runs-preview with the first {"n":100} and the last {"n":149}, 50 distinct URLs, a maximum in flight of at most 4, 60 buttons, the Output text "n": 150 after a click on the 51st, still 50 previews and an empty CSP list. The code gives each of those: previewRefs takes the first 50 steps in seq order, stepRowViews previews only the first 50 steps with an output, createPreviewQueue starts at most limit refs with the default PREVIEW_CONCURRENCY of 4, and the queue effect is keyed on the joined refs. The only gap is the missing red record, which the project's rules make unavoidable for a browser test, and the generated test for this criterion never existed because its writer ran out of output.
 ---
 
 ## Q-004: Criterion C-6bfd6320 (web-runs › The runs list shows badges, durations and names › A mocked list shows tones, durations and one name request): accept as satisfied?
