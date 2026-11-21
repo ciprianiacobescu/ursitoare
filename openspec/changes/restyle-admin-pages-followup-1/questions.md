@@ -12,6 +12,9 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1 | harness | Task 1.1: the test chore discrimination check could not decide |
+| Q-002 | open | none | verdict | Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table |
+| Q-003 | open | none | verdict | Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table |
+| Q-004 | open | none | verdict | Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -122,3 +125,73 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: verified by the delegate. The test-chore discrimination check could not run because its zero-value and base runs vary only Python production files, and this unit adds only tests. So I ran the discrimination by hand. I applied the held patch on main 9afc868e: py_compile, eslint and typecheck pass, and the Node test passes 1/1. e2e/test_m6b_section_layout.py against the offline e2e stack, with web built at head: 6 of 6 pass. With the kit rule '.ui-section > :not(.ui-section-title, .ui-section-actions) { grid-column: 1 / -1; }' removed from web/src/kit/theme.css and web rebuilt: 6 of 6 fail. So the browser test discriminates C-3802bfd0's region geometry in all six regions (New grant twice, Create team, Map a group, Chain verification, Filter the audit log, Surface). Replay the held patch.
+
+---
+
+## Q-002: Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-b824c627: not_testable after 1 attempt(s); The criterion is a static source-code inspection (a Node test reading four page TSX sources plus admin.css/tokens.css with custom find helpers such as findInlineStyleUse and findCssImports); none of those source-level properties are observable through the rendered page at the origin, so they cann....
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-003: Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-e4e27fab: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_e4e27fab::test_exactly_four_captions_hidden[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-e553aba2: not_testable after 1 attempt(s); This criterion statically analyzes page sources and CSS (imports, inline styles, raw colours, data-tone/destructive props, grid classes); none of it is user-observable through the page's public interface, so a browser E2E test cannot check it..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
