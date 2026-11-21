@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 5.1 | technical | e2e/test_m6b_run_view.py:59-76: step() mock lacks fields that parseStepView requires |
 | Q-002 | answered | none | verdict | Criterion C-b43a5bfb (web-runs › The run page shows a readable header, previews and two columns › A mocked run shows its header, previews and columns at 1366 by 860): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-2836a3bc (web-runs › The run page shows a readable header, previews and two columns › Sixty steps preview 50, four at a time, each once): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-6bfd6320 (web-runs › The runs list shows badges, durations and names › A mocked list shows tones, durations and one name request): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-6bfd6320 (web-runs › The runs list shows badges, durations and names › A mocked list shows tones, durations and one name request): accept as satisfied? |
 | Q-005 | open | none | verdict | Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-bcb55e31: UI criterion C-01ce6552 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-e730fe4b: UI criterion C-b43a5bfb has no end-to-end test; see the generated UI tests table |
@@ -132,7 +132,8 @@ accept The criterion is satisfied as it stands. The unit's browser test test_pre
 
 ## Q-004: Criterion C-6bfd6320 (web-runs › The runs list shows badges, durations and names › A mocked list shows tones, durations and one name request): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -159,6 +160,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The unit's browser test test_runs_list_shows_badges_duration_and_names mocks /runs with run_a and run_b and /people answering only user-1, then asserts the seven column headers in order, Alice Example, 2.5 s and a success badge in the run_a row, usr_9, 1 min 5 s and a failed badge with data-tone danger in the run_b row, the visible link Open run run_a, the caption class ui-table-caption ui-visually-hidden, one heading Runs, one /people request ending in ids=user-1%2Cusr_9, and the layout, axe and CSP checks. The code gives each of those: RunsPage declares the seven columns, renders the state as a Badge with data-tone, the link through runLinkName, the caption hidden through captionDisplayFor, and calls useDisplayNames once over the distinct user ids, which the name cache sends as one comma-joined ids query; personLabel falls back to the id. The only gap is the missing red record, which the project's rules make unavoidable for a browser test.
 ---
 
 ## Q-005: Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table
