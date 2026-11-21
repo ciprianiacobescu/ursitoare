@@ -1,0 +1,100 @@
+{
+  "schema": "l4/delivery-plan@1",
+  "plan_id": "m7",
+  "target": "main",
+  "merge": "auto",
+  "limits": {
+    "max_cost_usd": 300,
+    "max_unit_attempts": 3,
+    "max_runs": 100
+  },
+  "external_dependencies": [],
+  "exclude": [],
+  "batches": [
+    {
+      "id": "m7-tools",
+      "acceptance_profile": "none",
+      "depends_on": [],
+      "units": [
+        {
+          "id": "openspec:add-tool-adapters",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-cli-sandbox",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-validator-version",
+          "depends_on": [
+            "openspec:add-tool-adapters"
+          ]
+        },
+        {
+          "id": "openspec:add-fake-mcp",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-http-openapi-tools",
+          "depends_on": [
+            "openspec:add-tool-adapters",
+            "openspec:add-validator-version"
+          ]
+        },
+        {
+          "id": "openspec:add-mcp-client",
+          "depends_on": [
+            "openspec:add-tool-adapters",
+            "openspec:add-fake-mcp",
+            "openspec:add-http-openapi-tools"
+          ]
+        },
+        {
+          "id": "openspec:add-code-block-tools",
+          "depends_on": [
+            "openspec:add-tool-adapters",
+            "openspec:add-validator-version",
+            "openspec:add-http-openapi-tools",
+            "openspec:add-mcp-client"
+          ]
+        },
+        {
+          "id": "openspec:add-web-tools",
+          "depends_on": [
+            "openspec:add-tool-adapters",
+            "openspec:add-validator-version",
+            "openspec:add-http-openapi-tools",
+            "openspec:add-mcp-client",
+            "openspec:add-code-block-tools"
+          ]
+        },
+        {
+          "id": "openspec:add-web-tool-review",
+          "depends_on": [
+            "openspec:add-tool-adapters",
+            "openspec:add-cli-sandbox",
+            "openspec:add-validator-version",
+            "openspec:add-fake-mcp",
+            "openspec:add-http-openapi-tools",
+            "openspec:add-mcp-client",
+            "openspec:add-code-block-tools",
+            "openspec:add-web-tools"
+          ]
+        },
+        {
+          "id": "openspec:add-web-tool-journeys",
+          "depends_on": [
+            "openspec:add-tool-adapters",
+            "openspec:add-validator-version",
+            "openspec:add-fake-mcp",
+            "openspec:add-http-openapi-tools",
+            "openspec:add-mcp-client",
+            "openspec:add-code-block-tools",
+            "openspec:add-web-tools",
+            "openspec:add-web-tool-review"
+          ]
+        }
+      ]
+    }
+  ]
+}

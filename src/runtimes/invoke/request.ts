@@ -14,7 +14,7 @@ import type {
   PrincipalEntity,
   ToolArgs,
 } from "../../pdp/index.ts";
-import type { ToolBinding } from "../../tools/index.ts";
+import type { ToolBinding, ToolHttpRequest } from "../../tools/index.ts";
 import { INVOKE_LIMITS } from "./types.ts";
 import type { ToolRequest } from "./types.ts";
 
@@ -170,4 +170,8 @@ export function invokeToolRequest(input: {
     entities,
     egress: input.egress,
   };
+}
+
+export function callRequest(_target: ServiceTarget, _request: ToolHttpRequest): ToolRequest {
+  throw new Error("not implemented");
 }

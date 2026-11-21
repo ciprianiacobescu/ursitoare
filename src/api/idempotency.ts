@@ -257,3 +257,12 @@ export async function respondIdempotent(
   reply.code(result.status).send(result.body);
   return reply;
 }
+
+export async function storedIdempotentReply(
+  _ctx: { pool: TenantPool; tenant: TenantContext; clock: Clock },
+  _principal: { userId: string },
+  _key: string,
+  _requestDigest: string,
+): Promise<IdempotentResponse | null> {
+  throw new Error("not implemented");
+}

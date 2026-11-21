@@ -194,3 +194,12 @@ export async function confirmGrantById(client: Api<"post">, id: string): Promise
   checkGrantId(id);
   readGrantId(await client.post<unknown>(`/grants/${id}/confirm`, {}));
 }
+
+export interface ToolRefs {
+  refs: string[];
+  complete: boolean;
+}
+
+export function toolListNote(_list: ToolRefs): string | null {
+  throw new Error("not implemented");
+}

@@ -29,3 +29,14 @@ export {
 
 export type { ToolDirectory } from "./directory.ts";
 export { createToolDirectory } from "./directory.ts";
+
+export type {
+  CallAdapter,
+  CodeCallSpec,
+  HttpCallSpec,
+  McpCallSpec,
+  ToolCallSpec,
+  ToolHttpRequest,
+} from "./calls.ts";
+export type { OpenApiOverlay } from "./openapi/types.ts";
+export type { ServiceLookup } from "./mcp/discover.ts";
