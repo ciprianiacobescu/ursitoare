@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | open | none | verdict | Criterion C-6bc1b603 (web-runs › The panels show the form and the rows in a browser › Answer rows write the mocks and the fakes): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-eba3df1e (web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-41245171 (web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before): accept as satisfied? |
-| Q-008 | open | none | verdict | Hold H-9e3a60bf: UI criterion C-2e06c4e6 has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-9e3a60bf: UI criterion C-2e06c4e6 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-481e50f9: UI criterion C-3695054c has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-d93a7037: UI criterion C-fe487857 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-58477fd9: UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table |
@@ -248,7 +248,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-008: Hold H-9e3a60bf: UI criterion C-2e06c4e6 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -267,6 +268,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-2e06c4e6 is the scenario "The form writes with two-space indent and the text reads field by field" of requirement "A form's values become the input JSON and an input JSON becomes form values, by fixed rules". That scenario is written against the pure functions inputJsonFromForm and formFromInputJson and the rows W1 to W4 and R1 to R14 of test-plan.md T2, not against a browser. The unit's test plan puts T2 in a Node test and the project's conventions reserve browser tests for the criteria of test-plan-browser.md; the browser behaviour of the form is the separate requirement "The panels show the form and the rows in a browser", whose criteria are held on their own. The repository's Node test input-form-text.test.ts asserts every row of T2 (W1 to W4, R1 to R14) against a non-stub implementation in input-form.ts, so the lack of an end-to-end test for this criterion is not a gap the spec asks to be filled, and the hold may be waived.
 ---
 
 ## Q-009: Hold H-481e50f9: UI criterion C-3695054c has no end-to-end test; see the generated UI tests table
