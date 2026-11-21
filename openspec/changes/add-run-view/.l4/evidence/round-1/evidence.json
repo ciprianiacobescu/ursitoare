@@ -1,0 +1,164 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/api/run-routes.ts",
+      "src/api/decision.ts",
+      "src/pdp/log.ts",
+      "src/api/run-decisions.ts",
+      "src/runs/store/envelope-store.ts",
+      "src/api/run-views.ts:35-52",
+      "web/src/runs/types.ts:63-80",
+      "web/src/ui",
+      "docs/decisions/0002",
+      "web/src/runs/run-view.ts",
+      "e2e/test_m6b_run_view.py",
+      "web/src/runs",
+      "e2e",
+      "e2e/test_m4_runs.py",
+      "**/RunPage.tsx",
+      "**/RunsPage.tsx",
+      "**/--ui-space-*",
+      "**/[data-tone]",
+      "**/decision.ts",
+      "**/.runs-step*",
+      "**/hooks.css",
+      "**/[]",
+      "**/timeline.test.ts",
+      "**/format*",
+      "**/test_m5_code_hooks.py",
+      "**/test_m6_grants.py",
+      "**/test_m6_run_decisions.py",
+      "module api",
+      "module docs",
+      "module e2e",
+      "module pdp",
+      "module runs",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m6b_run_view.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-run-view/.l4/ledger/r-20261121T0156Z-a065.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view/.l4/ledger/r-20261121T0424Z-1491.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view/.l4/ledger/r-20261121T0642Z-056f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/runs/RunPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/RunsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/preview-queue.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/run-view-sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/run-view.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/run-view.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/runs.css",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/runs/RunPage.tsx, web/src/runs/RunsPage.tsx, web/src/runs/run-view.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/runs/RunPage.tsx",
+      "web/src/runs/RunsPage.tsx",
+      "web/src/runs/run-view.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2779,
+      "passed": 2779,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 17,
+      "new_passed": 17,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
