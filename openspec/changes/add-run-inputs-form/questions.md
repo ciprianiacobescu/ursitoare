@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-9e3a60bf: UI criterion C-2e06c4e6 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-481e50f9: UI criterion C-3695054c has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-d93a7037: UI criterion C-fe487857 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-58477fd9: UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-58477fd9: UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-88dcd857: UI criterion C-e9b281b6 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-66b31620: UI criterion C-6bc1b603 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-5b4b4c98: UI criterion C-eba3df1e has no end-to-end test; see the generated UI tests table |
@@ -328,7 +328,7 @@ accept Criterion C-fe487857 is the scenario "Add, answer, remove, a bad answer a
 
 ## Q-011: Hold H-58477fd9: UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): C-92bb8bdc is a browser criterion of the requirement "The panels show the form and the rows in a browser". The repository holds a tagged browser test, test_the_form_and_the_input_json_stay_in_step in e2e/test_m6b_run_inputs.py, but the verifier says it was never proved to fail without the change and that a generated test of the same name fails at the head. I cannot run the browser suite, so I cannot tell whether that failure is a real defect in the panels or an environment or test-writing problem, and reading the components cannot settle how the page behaves in a browser. The sibling browser criteria of this requirement were already escalated for the same reason, and a wrong accept here would pass unverified UI behaviour.
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -348,6 +348,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-92bb8bdc has a discriminating end-to-end test: e2e/test_m6b_run_inputs.py::test_the_form_and_the_input_json_stay_in_step, tagged with the criterion id, passes at head 9754a32c (CI e2e gate and locally) and fails with web/src at the base 07b879df (at the base it fails at its first check (line 184, the group Inputs has no two textboxes)); checked by the owner's delegate on a private e2e stack, see the matching satisfied question for the details. The generated test fails at the head only because of its setup: it signs in to the stack and looks for a flow demo-pay with vendor_name and amount inputs, but the stack has no flows (the page shows "No flows yet"), so it fails at the base and the head alike and says nothing about the code.
 ---
 
 ## Q-012: Hold H-88dcd857: UI criterion C-e9b281b6 has no end-to-end test; see the generated UI tests table
