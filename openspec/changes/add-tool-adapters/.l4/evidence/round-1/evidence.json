@@ -1,0 +1,319 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "test/support/invoke-runs/harness.ts",
+      "src/tools/index.ts",
+      "src/runtimes/index.ts",
+      "src/interpreter/types.ts",
+      "web/src/tools/servers.ts",
+      "src/tools/names.test.ts",
+      "src/tools/names.ts",
+      "src/tools/adapter-surface.test.ts",
+      "src/tools/adapter-surface.ts",
+      "src/tools/calls.ts",
+      "src/tools/types.ts",
+      "src/tools/surface.ts",
+      "src/tools/directory.ts",
+      "test/support/adapter-kit.ts",
+      "test/support/README.md",
+      "src/tools/adapter-digest.test.ts",
+      "src/tools/surface.test.ts",
+      "src/tools/adapter-register.db.test.ts",
+      "src/tools/adapter-store.ts",
+      "src/tools/store.ts",
+      "src/tools/adapter-submit.db.test.ts",
+      "src/tools/submit-same-instant.test.ts",
+      "src/tools/adapter-directory.db.test.ts",
+      "src/runtimes/invoke/request.ts",
+      "src/runtimes/invoke/call-request.test.ts",
+      "src/runtimes/invoke/types.ts",
+      "src/runtimes/invoke/adapter-authorize.test.ts",
+      "src/runtimes/invoke/path.ts",
+      "src/runtimes/invoke/authorize.db.test.ts",
+      "src/runtimes/invoke/adapter-invoke.db.test.ts",
+      "src/runtimes/invoke/invoke.db.test.ts",
+      "**/store.ts",
+      "**/index.ts",
+      "**/request.ts",
+      "**/^[a-z][a-z0-9_]{0,63}$",
+      "**/calls?",
+      "**/code?",
+      "module interpreter",
+      "module runtimes",
+      "module test",
+      "module tools",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-tool-adapters/.l4/ledger/r-20261121T1820Z-9ba9.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-adapters/.l4/ledger/r-20261121T2043Z-ef00.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-adapters/.l4/ledger/r-20261121T2109Z-0d73.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-adapters/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tool-adapters/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/interpreter/types.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runtimes/index.ts",
+        "module": "runtimes",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runtimes/invoke/adapter-authorize.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runtimes/invoke/adapter-authorize.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runtimes/invoke/adapter-invoke.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runtimes/invoke/call-request.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runtimes/invoke/path.ts",
+        "module": "runtimes",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runtimes/invoke/request.ts",
+        "module": "runtimes",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runtimes/invoke/types.ts",
+        "module": "runtimes",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/adapter-digest.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/adapter-directory.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/adapter-register.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/adapter-store.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/adapter-submit.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/adapter-surface.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/adapter-surface.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/calls.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/directory.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/index.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/names.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/names.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/store.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/surface.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/types.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/README.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/adapter-kit.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/invoke-runs/harness.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/interpreter/types.ts, src/runtimes/index.ts, src/runtimes/invoke/path.ts, src/runtimes/invoke/request.ts, src/runtimes/invoke/types.ts and 11 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/interpreter/types.ts",
+      "src/runtimes/index.ts",
+      "src/runtimes/invoke/path.ts",
+      "src/runtimes/invoke/request.ts",
+      "src/runtimes/invoke/types.ts",
+      "src/tools/adapter-store.ts",
+      "src/tools/adapter-surface.ts",
+      "src/tools/calls.ts",
+      "src/tools/directory.ts",
+      "src/tools/index.ts",
+      "src/tools/names.ts",
+      "src/tools/store.ts",
+      "src/tools/surface.ts",
+      "src/tools/types.ts",
+      "test/support/adapter-kit.ts",
+      "test/support/invoke-runs/harness.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2824,
+      "passed": 2824,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 29,
+      "new_passed": 29,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
