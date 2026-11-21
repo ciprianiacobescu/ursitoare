@@ -1,0 +1,226 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "features/75-flow-graph.tsx",
+      "test/arch",
+      "web",
+      "docs/decisions/0002",
+      "web/src/runs",
+      "web/src/kit/contrast.test.ts",
+      "node:assert/strict",
+      "web/src/flow-graph/layout.ts",
+      "e2e/test_m6b_run_inputs.py",
+      "e2e",
+      "e2e/test_m4_runs.py",
+      "**/InputForm.tsx",
+      "**/DryRunPanel.tsx",
+      "**/[]",
+      "**/*SyncStart",
+      "**/*SyncStep",
+      "**/MockRows.tsx",
+      "**/Collapsible*",
+      "**/[",
+      "**/TestRunPanel.tsx",
+      "**/test_m5_code_hooks.py",
+      "**/test_m6_grants.py",
+      "module docs",
+      "module e2e",
+      "module features",
+      "module node:assert",
+      "module test",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m6b_run_inputs.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-run-inputs-form/.l4/ledger/r-20261120T1831Z-5dd5.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-inputs-form/.l4/ledger/r-20261120T2052Z-e527.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-inputs-form/.l4/ledger/r-20261120T2253Z-dedd.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-inputs-form/.l4/ledger/r-20261120T2322Z-37f5.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-inputs-form/.l4/ledger/r-20261120T2324Z-a10b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-inputs-form/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-inputs-form/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/runs/DryRunPanel.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/InputForm.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/MockRows.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/TestRunPanel.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/input-form-model.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/input-form-text.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/input-form.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/input-sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/input-sync.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/mock-rows-sync.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/mock-rows.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/mock-rows.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/run-document.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/use-run-document.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/runs/DryRunPanel.tsx, web/src/runs/InputForm.tsx, web/src/runs/MockRows.tsx, web/src/runs/TestRunPanel.tsx, web/src/runs/input-form.ts and 2 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/runs/DryRunPanel.tsx",
+      "web/src/runs/InputForm.tsx",
+      "web/src/runs/MockRows.tsx",
+      "web/src/runs/TestRunPanel.tsx",
+      "web/src/runs/input-form.ts",
+      "web/src/runs/mock-rows.ts",
+      "web/src/runs/use-run-document.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2762,
+      "passed": 2762,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 63,
+      "new_passed": 63,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
