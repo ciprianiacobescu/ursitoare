@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-2836a3bc (web-runs › The run page shows a readable header, previews and two columns › Sixty steps preview 50, four at a time, each once): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-6bfd6320 (web-runs › The runs list shows badges, durations and names › A mocked list shows tones, durations and one name request): accept as satisfied? |
 | Q-005 | answered | none | verdict | Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table |
-| Q-006 | open | none | verdict | Hold H-bcb55e31: UI criterion C-01ce6552 has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-bcb55e31: UI criterion C-01ce6552 has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-e730fe4b: UI criterion C-b43a5bfb has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-eabaff7f: UI criterion C-2836a3bc has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-14b82d26: UI criterion C-6bfd6320 has no end-to-end test; see the generated UI tests table |
@@ -190,7 +190,8 @@ accept The unit can go on as it stands. Criterion C-56e16a37 is a scenario over 
 
 ## Q-006: Hold H-bcb55e31: UI criterion C-01ce6552 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -209,6 +210,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. Criterion C-01ce6552 is a scenario over the pure function detailCell on rows DC1 to DC4 plus the unchanged frozen timeline tests, and a Node test named with its id asserts all four rows: the Started row gives the formatted instant with the raw iso, and the not ended, Node and junk rows keep their value with a null iso. The implementation in run-view.ts matches, stepDetailRows is unedited and still gives the raw time and not ended, and the run page renders a cell with an iso as a time element with the raw value in datetime and title, which the unit's browser test checks on the clicked step. A generated browser test is not the right instrument for a function scenario, and its failure at both base and head says nothing about this code.
 ---
 
 ## Q-007: Hold H-e730fe4b: UI criterion C-b43a5bfb has no end-to-end test; see the generated UI tests table
