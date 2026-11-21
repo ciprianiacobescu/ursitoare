@@ -10,14 +10,14 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | submitted | tests |  | A browser test for the Section layout of the six admin regions (C-3802bfd0) |
+| FB-001 | taken | tests |  | A browser test for the Section layout of the six admin regions (C-3802bfd0) |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: A browser test for the Section layout of the six admin regions (C-3802bfd0)
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** tests
 - **Lesson:** no
 - **By:** CiprianSpot, 2026-11-21T11:33:40Z
@@ -27,3 +27,4 @@ The Section layout of criterion C-3802bfd0 (restyle-admin-pages-fix-2, web-tools
 
 ### Outcome
 <!-- written by the harness -->
+Taken into restyle-admin-pages-followup-1
