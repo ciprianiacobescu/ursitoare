@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-21T11:22:42Z",
+  "integrated_revision": "9bfba3710ee40ef5673c41bc5da926ae09ebda33",
+  "merge_commit": "9bfba3710ee40ef5673c41bc5da926ae09ebda33",
+  "plan_digest": "03b7600f239a655c",
+  "plan_id": "m6b",
+  "postcheck": "pass",
+  "pr": 150,
+  "receipt_id": "m6b/openspec:add-visual-review/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "07d850239162d7c1aa5765878156465fb9951ba9",
+  "spec_digest": "3fd0d71213476dac",
+  "target": "main",
+  "unit_id": "openspec:add-visual-review"
+}
