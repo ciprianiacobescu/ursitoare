@@ -396,6 +396,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ## Q-014: Hold H-5b4b4c98: UI criterion C-eba3df1e has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): e2e/test_m6b_run_inputs.py tags test_validate_makes_the_panels_read_the_document with @pytest.mark.l4("C-eba3df1e") and matches test-plan-browser.md, and use-run-document.ts re-reads the version when the editor's canonical is null and TestRunPanel.tsx restarts the sync from the current text on arrival, as design.md decision 4 requires. Yet the verifier reports that a test of exactly that name fails at the head after two attempts. The scenario depends on the editor clearing canonical after Validate, on the second mocked GET answering a different document, and on the oneOf note rendering once per region: all browser behaviour I cannot run or observe. The criterion is still open as Q-006. I cannot separate a real defect from a step 5 environment failure, so a person must decide.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
