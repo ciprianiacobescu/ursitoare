@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | accepted | 3.3 | technical | e2e/test_m6b_run_inputs.py line 235-236: names are read before the rows exist |
 | Q-003 | answered | none | verdict | Criterion C-92bb8bdc (web-runs › The panels show the form and the rows in a browser › Form and JSON stay in step and the text is used as written): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-e9b281b6 (web-runs › The panels show the form and the rows in a browser › A missing required field holds the start and names the field): accept as satisfied? |
-| Q-005 | open | none | verdict | Criterion C-6bc1b603 (web-runs › The panels show the form and the rows in a browser › Answer rows write the mocks and the fakes): accept as satisfied? |
+| Q-005 | answered | none | verdict | Criterion C-6bc1b603 (web-runs › The panels show the form and the rows in a browser › Answer rows write the mocks and the fakes): accept as satisfied? |
 | Q-006 | open | none | verdict | Criterion C-eba3df1e (web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-41245171 (web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before): accept as satisfied? |
 | Q-008 | answered | none | verdict | Hold H-9e3a60bf: UI criterion C-2e06c4e6 has no end-to-end test; see the generated UI tests table |
@@ -154,7 +154,7 @@ accept Checked by the owner's delegate in a real browser on a private e2e stack 
 
 ## Q-005: Criterion C-6bc1b603 (web-runs › The panels show the form and the rows in a browser › Answer rows write the mocks and the fakes): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The scenario is browser behaviour over Radix Collapsible (aria-expanded, remount with defaultOpen after a refused dry run) and real POST bodies. e2e/test_m6b_run_inputs.py lines 232-314 assert every clause and MockRows.tsx and DryRunPanel.tsx (fakeNotes, openIds, keyed Collapsible) implement the opening of the named row with its note. I cannot run the test, the harness-generated browser test for this criterion fails at head and is not in the repository, and no e2e report is available to me, so I cannot settle whether the existing test passes at head. Escalating to a person who can see the run.
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -182,6 +182,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Checked by the owner's delegate in a real browser on a private e2e stack (Playwright 1.63.0, the CI pin) at head 9754a32c, the verified head; base 07b879df. The CI e2e gate at that head ran and passed all seven tests of e2e/test_m6b_run_inputs.py and the M4, M5 and M6 journeys (test_m4_runs, test_m5_code_hooks, test_m6_grants). Locally the file passes 7 of 7 at the head and fails 7 of 7 with web/src reset to the base, so it discriminates. The test for C-6bc1b603 is e2e/test_m6b_run_inputs.py::test_answer_rows_write_the_mocks_and_the_fakes, tagged with the criterion id; it asserts the scenario and passes at the head; at the base it fails at line 236 (no button Answers for lookup). I looked at both panels: rows Answers for lookup and Answers for pay (none for the switch route), and filling Output 1 for pay rewrites Mocks (JSON) with the indented pay output. The generated test e2e/test_l4_c_6bc1b603.py cannot even be collected: its code is cut off at line 97 (SyntaxError: unterminated string literal), so it says nothing about the code.
 ---
 
 ## Q-006: Criterion C-eba3df1e (web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON): accept as satisfied?
