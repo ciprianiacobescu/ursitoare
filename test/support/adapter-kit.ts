@@ -11,6 +11,7 @@ import type {
   ToolSurface,
 } from "../../src/tools/index.ts";
 import type { SurfaceTool } from "../../src/tools/index.ts";
+import { CODE_BLOCK_ORIGIN } from "../../src/tools/index.ts";
 
 function inputV(): SurfaceTool["input"] {  return {
     type: "object",
@@ -113,8 +114,24 @@ export function kitSurface(kind: ToolCallSpec["kind"], variant?: "b" | "c"): Too
   return { tools: [tool] };
 }
 
-export function kitBinding(_kind: ToolCallSpec["kind"], _over?: Partial<ToolBinding>): ToolBinding {
-  throw new Error("not implemented");
+export function kitBinding(kind: ToolCallSpec["kind"], over?: Partial<ToolBinding>): ToolBinding {
+  const tool = kitSurface(kind).tools[0];
+  if (tool === undefined || tool.call === undefined) {
+    throw new RangeError(`kitBinding: ${String(kind)} tool has no call`);
+  }
+  const base: ToolBinding = {
+    serverId: "acme",
+    origin: kind === "code" ? CODE_BLOCK_ORIGIN : "https://tools.fake.test",
+    local: false,
+    state: "approved",
+    ref: "acme.lookup_vendor@1",
+    tool: tool.name,
+    effect: tool.effect,
+    call: tool.call,
+    untrustedResult: tool.untrusted_result ?? false,
+    unsafeToRetry: tool.unsafe_to_retry ?? false,
+  };
+  return { ...base, ...over };
 }
 
 export const kitHttpAdapter: CallAdapter<HttpCallSpec> = {
