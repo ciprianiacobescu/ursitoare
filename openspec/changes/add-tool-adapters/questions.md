@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-f287b385 (tool-invocation › Authorization is recorded before anything is sent › A granted read is authorised): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-8b5cbc41 (tool-invocation › Authorization is recorded before anything is sent › Policy errors and an unrecorded decision deny with fixed reasons): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-c28f570f (tool-invocation › A refusal before the policy point records and sends nothing › Each refusal reason, in order): accept as satisfied? |
-| Q-005 | open | none | verdict | Criterion C-17a3e8b7 (tool-invocation › invoke sends only what was authorised › A call through the fakes, and each failure): accept as satisfied? |
+| Q-005 | answered | none | verdict | Criterion C-17a3e8b7 (tool-invocation › invoke sends only what was authorised › A call through the fakes, and each failure): accept as satisfied? |
 <!-- l4:index:end -->
 
 ---
@@ -145,7 +145,8 @@ accept The four frozen tests cover rows R1 to R15: the rig test checks each refu
 
 ## Q-005: Criterion C-17a3e8b7 (tool-invocation › invoke sends only what was authorised › A call through the fakes, and each failure): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -172,3 +173,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The seven frozen tests cover rows C1 to C10: C1 asserts the output, one issued token with serviceId S, agent ursitoare-engine and TTL 60 and one fake tools call with callHeader r_1:lookup:1, host, path and body digest D_LV; C2 and C3 assert upstream with status and that logs hold neither brokerServiceToken nor injected_failure; C4 to C6 assert the redirect is not followed and non-JSON bodies fail not_json with one request each at the local upstream; C7 and C8 use their own harness and assert token and send stages; C9 asserts unauthorized twice with no new token and C10 asserts one answer then unauthorized with one token and one send. The production invoke consumes the authorization on entry, rebuilds the request, requests one token, sends, and maps each failure as the requirement states.
