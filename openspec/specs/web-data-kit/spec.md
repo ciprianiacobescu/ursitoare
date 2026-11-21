@@ -206,3 +206,10 @@ The stacked `Field` SHALL render its label, then the control, then the hint, the
 #### Scenario: The Flows form is bounded, toned and keeps its prefix and focus ring
 - **WHEN** `test_flows_form_is_bounded_and_keeps_its_focus_ring` opens `/flows` with mocked `/api/v1/me` and `/api/v1/flows` (one flow) at 1366 by 860 after `watch_csp(page)`, focuses "Create flow" and clicks it with `force=True` (test-plan-browser.md)
 - **THEN** "Flow name" is at most 640 px wide; the table "Flows" is visible; "Create flow" has `outlineWidth` at least 2, `backgroundColor` `rgb(29, 78, 216)` and `color` `rgb(255, 255, 255)`; the first `.ui-field-error` has `textContent` exactly `Error: Enter a flow name.`, its hidden span has `position` `absolute` and width 1, and the children of the first `.ui-field` are, in order, `LABEL.ui-field-label`, `INPUT.ui-input`, `P.ui-field-hint`, `P.ui-field-error`; `assert_layout(page, max_banner_px=300)` and `assert_accessible(page)` pass and the `watch_csp` list is `[]`
+
+### Requirement: Page header meta: a wrapping row below the title, with gaps between items — feedback FB-001
+The behaviour pinned by the scenarios below SHALL hold.
+
+#### Scenario: Page header meta: a wrapping row below the title, with gaps between items
+- **WHEN** a person opens the run page of a completed run, mocked as e2e/test_m6b_run_view.py mocks it, at 1366 by 860 and again at 390 by 860
+- **THEN** the status "Run state" and the five items Flow, Mode, Started by, Started and Duration of the header's meta each start at or below the bottom edge of the h1 "Run run_1"; the first starts within 1 px of the h1's left edge; any two of them whose tops are within 4 px are at least 8 px apart horizont...
