@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work): accept as satisfied? |
 | Q-007 | answered | none | verdict | Hold H-527bcb10: UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-5c490932: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-0de5f245: UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-0de5f245: UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-0bc13fcf: UI criterion C-1beceb27 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-02e09269: UI criterion C-de5dc745 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -499,7 +499,8 @@ accept The hold can be waived. The criterion describes the run of the journey it
 
 ## Q-009: Hold H-0de5f245: UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -518,6 +519,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion is asserted in full by alice's journey test, in the named state: after Validate, before any answer row opens or field is filled, it asserts Owner team has the value finance, the title is Flow demo-ui · Ursitoare, Diagnostics contains Valid. 0 errors, the tops of the regions Graph and Edit the flow differ by at most 8, the tops of Test run and Dry run differ by at most 8, and document.documentElement.scrollHeight is at most 3,000, then writes alice-flows-demo-ui.png and asserts it exists and is as tall as the page. That test passed in the latest e2e gate against the same offline stack. The generated test failed at the base as well as at the head, so it discriminates nothing and its failure says nothing about the page; the journey that asserts the scenario's own bounds passed. The flow editor page renders the regions and title the test locates. The unit's design foresaw this hold for every criterion and says to accept it on the journey's passing run.
 ---
 
 ## Q-010: Hold H-0bc13fcf: UI criterion C-1beceb27 has no end-to-end test; see the generated UI tests table
