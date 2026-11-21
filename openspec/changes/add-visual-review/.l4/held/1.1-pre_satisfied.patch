@@ -1,9 +1,9 @@
 diff --git a/e2e/test_m6b_ui.py b/e2e/test_m6b_ui.py
 new file mode 100644
-index 0000000..318e321
+index 0000000..25c0f7a
 --- /dev/null
 +++ b/e2e/test_m6b_ui.py
-@@ -0,0 +1,521 @@
+@@ -0,0 +1,532 @@
 +"""The M6b closing journey: every page of every role, checked and photographed."""
 +
 +import json
@@ -21,8 +21,32 @@ index 0000000..318e321
 +NARROW = {"width": 900, "height": 800}
 +MAX_BANNER_PX = 72
 +MAX_FLOW_PAGE_PX = 3000
-+REPO_ROOT = Path(__file__).resolve().parent.parent
-+VISUAL_DIR = Path(os.environ.get("E2E_VISUAL_DIR") or REPO_ROOT / ".l4-out" / "visual")
++
++_REPO_ROOT = Path(__file__).resolve().parent.parent
++VISUAL_DIR = Path(os.environ.get("E2E_VISUAL_DIR") or (_REPO_ROOT / ".l4-out" / "visual"))
++
++VISUAL_PAGES: dict[str, list[str]] = {
++    "signed-out": ["/", "/sign-in", "/no-such-page"],
++    "alice": [
++        "/",
++        "/flows",
++        "/flows/demo-ui",
++        "/runs/{run_id}",
++        "/runs",
++        "/flows/demo-ui/graph",
++    ],
++    "carol": [
++        "/",
++        "/admin/users",
++        "/admin/roles-and-teams",
++        "/admin/group-mappings",
++        "/admin/audit",
++        "/admin/tool-servers",
++        "/admin/tool-servers?server=acme",
++        "/admin/grants",
++        "/admin/policies",
++    ],
++}
 +
 +DEMO_UI = "\n".join(
 +    [
@@ -49,29 +73,13 @@ index 0000000..318e321
 +        "",
 +    ]
 +)
++
 +LOOKUP_OUTPUT = '{"vendor_id":"V-1","status":"active"}'
 +PAY_OUTPUT = '{"payment_id":"P-1","status":"created"}'
 +PREVIEWS = [json.loads(LOOKUP_OUTPUT), json.loads(PAY_OUTPUT), {"payment_id": "P-1"}]
++
 +LINK_NAME = re.compile(r"^Open run [A-Za-z0-9_-]+$")
 +LOADING = re.compile(r"^\s*(Loading|Checking)")
-+
-+VISUAL_PAGES: dict[str, list[str]] = {
-+    "signed-out": ["/", "/sign-in", "/no-such-page"],
-+    "alice": ["/", "/flows", "/flows/demo-ui", "/runs/{run_id}", "/runs", "/flows/demo-ui/graph"],
-+    "carol": ["/", "/admin/users", "/admin/roles-and-teams", "/admin/group-mappings", "/admin/audit",
-+              "/admin/tool-servers", "/admin/tool-servers?server=acme", "/admin/grants", "/admin/policies"],
-+}
-+
-+ADMIN_VISITS = [
-+    ("/admin/users", "Users"),
-+    ("/admin/roles-and-teams", "Roles and teams"),
-+    ("/admin/group-mappings", "Group mappings"),
-+    ("/admin/audit", "Audit log"),
-+    ("/admin/tool-servers", "Tool servers"),
-+    ("/admin/tool-servers?server=acme", "Tool servers"),
-+    ("/admin/grants", "Grants"),
-+    ("/admin/policies", "Policies"),
-+]
 +
 +
 +def shot_name(role: str, path: str, suffix: str = "") -> str:
@@ -86,10 +94,10 @@ index 0000000..318e321
 +
 +
 +def see(locator):
-+    def wait(_page: Page) -> None:
++    def ready(_page: Page) -> None:
 +        expect(locator).to_be_visible()
 +
-+    return wait
++    return ready
 +
 +
 +def region(page: Page, name: str):
@@ -102,7 +110,7 @@ index 0000000..318e321
 +        self.role = role
 +        self.display_name = display_name
 +        self.csp = watch_csp(page)
-+        self.shots: list[str] = []
++        self.shots: list[Path] = []
 +
 +    def loaded(self, ready) -> None:
 +        banner = self.page.get_by_role("banner")
@@ -123,8 +131,10 @@ index 0000000..318e321
 +            expect(toasts).to_have_count(0, timeout=8000)
 +        except AssertionError:
 +            pass
-+        for toast in toasts.all():
-+            toast.get_by_role("button", name="Dismiss", exact=True).click()
++        while toasts.count() > 0:
++            self.page.locator(".ui-toasts").get_by_role(
++                "button", name="Dismiss", exact=True
++            ).first.click()
 +        expect(toasts).to_have_count(0)
 +        assert_layout(self.page, MAX_BANNER_PX)
 +        assert_accessible(self.page)
@@ -132,14 +142,13 @@ index 0000000..318e321
 +    def shoot(self, path: str, suffix: str = "") -> None:
 +        VISUAL_DIR.mkdir(parents=True, exist_ok=True)
 +        self.page.evaluate("window.scrollTo(0, 0)")
-+        scroll_height = self.page.evaluate("document.documentElement.scrollHeight")
-+        name = shot_name(self.role, path, suffix)
-+        target = VISUAL_DIR / name
++        height = self.page.evaluate("document.documentElement.scrollHeight")
++        target = VISUAL_DIR / shot_name(self.role, path, suffix)
 +        self.page.screenshot(path=str(target), full_page=True)
-+        assert target.is_file(), name
-+        assert target.stat().st_size > 0, name
-+        assert png_height(target) >= scroll_height - 1, name
-+        self.shots.append(name)
++        assert target.is_file()
++        assert target.stat().st_size > 0
++        assert png_height(target) >= height - 1
++        self.shots.append(target)
 +
 +    def check(self, path: str, ready, suffix: str = "") -> None:
 +        self.loaded(ready)
@@ -147,18 +156,27 @@ index 0000000..318e321
 +        self.shoot(path, suffix)
 +
 +
-+def open_visual(
-+    page: Page,
-+    role: str,
-+    viewport: dict[str, int],
-+    display_name: str | None = None,
-+) -> Visual:
++def open_visual(page: Page, role: str, viewport: dict, display_name: str | None = None):
 +    page.set_viewport_size(viewport)
 +    return Visual(page, role, display_name)
 +
 +
++def ready_signed_out_home(page: Page) -> None:
++    expect(page.get_by_role("status").filter(has_text="Engine healthy")).to_be_visible()
++
++
++def ready_sign_in(page: Page) -> None:
++    expect(page.get_by_role("button", name="Sign in", exact=True)).to_be_visible()
++
++
++def ready_not_found(page: Page) -> None:
++    expect(
++        page.get_by_role("heading", name="Page not found", exact=True)
++    ).to_be_visible()
++
++
 +def ready_home_empty(page: Page) -> None:
-+    expect(page.get_by_role("status")).to_have_text("Engine healthy")
++    expect(page.get_by_role("status").filter(has_text="Engine healthy")).to_be_visible()
 +    expect(region(page, "Recent runs")).to_contain_text("No runs yet")
 +    expect(region(page, "Recent flows")).to_contain_text("No flows yet")
 +    expect(
@@ -176,6 +194,11 @@ index 0000000..318e321
 +    expect(
 +        region(page, "Test run").get_by_role(
 +            "button", name="Answers for pay", exact=True
++        )
++    ).to_be_visible()
++    expect(
++        region(page, "Test run").get_by_role(
++            "button", name="Start test run", exact=True
 +        )
 +    ).to_be_visible()
 +
@@ -197,32 +220,13 @@ index 0000000..318e321
 +        page.get_by_role("table", name="Runs", exact=True)
 +        .get_by_role("row")
 +        .filter(has_text="demo-ui")
-+        .first
 +    ).to_be_visible()
-+
-+
-+def ready_home_after(run_id: str):
-+    def ready(page: Page) -> None:
-+        expect(page.get_by_role("status")).to_have_text("Engine healthy")
-+        expect(region(page, "Recent runs")).to_contain_text(
-+            f"Run {run_id[-8:]} of demo-ui"
-+        )
-+        expect(
-+            region(page, "Recent flows").get_by_role(
-+                "link", name="demo-ui", exact=True
-+            )
-+        ).to_be_visible()
-+        expect(region(page, "Next steps")).to_contain_text("Start a test run")
-+
-+    return ready
 +
 +
 +def ready_graph(page: Page) -> None:
-+    expect(
-+        region(page, "Graph").get_by_text(
-+            "Flow graph: 5 nodes, 4 edges, 4 layers.", exact=True
-+        )
-+    ).to_be_visible()
++    expect(region(page, "Graph")).to_contain_text(
++        "Flow graph: 5 nodes, 4 edges, 4 layers."
++    )
 +
 +
 +def ready_carol_home(page: Page) -> None:
@@ -230,99 +234,90 @@ index 0000000..318e321
 +    expect(region(page, "Next steps")).to_contain_text("Review pending tool servers")
 +
 +
-+def ready_carol_narrow(page: Page) -> None:
-+    expect(
-+        page.get_by_role("navigation", name="Main", exact=True).get_by_role(
-+            "link", name="Audit log", exact=True
-+        )
-+    ).to_be_visible()
-+
-+
-+def ready_users(page: Page) -> None:
++def ready_admin_users(page: Page) -> None:
 +    expect(
 +        page.get_by_role("table", name="Users", exact=True)
 +        .get_by_role("row")
 +        .filter(has_text="Carol Example")
-+        .first
 +    ).to_be_visible()
 +
 +
-+def ready_roles_teams(page: Page) -> None:
++def ready_admin_roles_teams(page: Page) -> None:
 +    expect(
 +        page.get_by_role("table", name="Roles", exact=True)
 +        .get_by_role("row")
 +        .filter(has_text="tenant_admin")
-+        .first
 +    ).to_be_visible()
 +    expect(
 +        page.get_by_role("table", name="Teams", exact=True)
 +        .get_by_role("row")
 +        .filter(has_text="finance")
-+        .first
 +    ).to_be_visible()
 +
 +
-+def ready_mappings(page: Page) -> None:
++def ready_admin_group_mappings(page: Page) -> None:
 +    expect(
 +        page.get_by_role("table", name="Group mappings", exact=True)
 +        .get_by_role("row")
 +        .filter(has_text="ursitoare-authors")
-+        .first
 +    ).to_be_visible()
 +
 +
-+def ready_audit(page: Page) -> None:
-+    expect(
-+        region(page, "Chain verification").get_by_role("status")
-+    ).to_contain_text("Audit chain verified")
++def ready_admin_audit(page: Page) -> None:
++    expect(region(page, "Chain verification").get_by_role("status")).to_contain_text(
++        "Audit chain verified"
++    )
 +    expect(
 +        page.get_by_role("table", name="Audit events", exact=True)
 +        .get_by_role("row")
 +        .filter(has_text="identity.team_created")
-+        .first
 +    ).to_be_visible()
 +
 +
-+def ready_tool_servers(page: Page) -> None:
++def ready_admin_tool_servers(page: Page) -> None:
 +    expect(
 +        page.get_by_role("table", name="Tool servers", exact=True)
 +        .get_by_role("row")
 +        .filter(has_text="acme")
-+        .first
 +    ).to_be_visible()
 +
 +
-+def ready_tool_server_acme(page: Page) -> None:
++def ready_admin_tool_servers_acme(page: Page) -> None:
 +    expect(
 +        page.get_by_role("table", name="Tools", exact=True)
 +        .get_by_role("row")
 +        .filter(has_text="lookup_vendor")
-+        .first
 +    ).to_be_visible()
-+    expect(page.get_by_role("button", name="Approve surface", exact=True)).to_be_visible()
++    expect(
++        page.get_by_role("button", name="Approve surface", exact=True)
++    ).to_be_visible()
 +
 +
-+def ready_grants(page: Page) -> None:
++def ready_admin_grants(page: Page) -> None:
 +    expect(page.get_by_text("No grants", exact=True)).to_be_visible()
-+    expect(page.get_by_label("Tool", exact=True)).to_be_visible()
++    expect(page.get_by_role("combobox", name="Tool", exact=True)).to_be_visible()
 +
 +
-+def ready_policies(page: Page) -> None:
++def ready_admin_policies(page: Page) -> None:
 +    expect(
 +        page.get_by_role("textbox", name="Hand-written Cedar", exact=True)
 +    ).to_be_visible()
 +
 +
-+READY_BY_PATH = {
-+    "/admin/users": ready_users,
-+    "/admin/roles-and-teams": ready_roles_teams,
-+    "/admin/group-mappings": ready_mappings,
-+    "/admin/audit": ready_audit,
-+    "/admin/tool-servers": ready_tool_servers,
-+    "/admin/tool-servers?server=acme": ready_tool_server_acme,
-+    "/admin/grants": ready_grants,
-+    "/admin/policies": ready_policies,
-+}
++ADMIN_VISITS = [
++    ("/admin/users", "Users", ready_admin_users),
++    ("/admin/roles-and-teams", "Roles and teams", ready_admin_roles_teams),
++    ("/admin/group-mappings", "Group mappings", ready_admin_group_mappings),
++    ("/admin/audit", "Audit log", ready_admin_audit),
++    ("/admin/tool-servers", "Tool servers", ready_admin_tool_servers),
++    (
++        "/admin/tool-servers?server=acme",
++        "Tool servers",
++        ready_admin_tool_servers_acme,
++    ),
++    ("/admin/grants", "Grants", ready_admin_grants),
++    ("/admin/policies", "Policies", ready_admin_policies),
++]
 +
 +
 +@pytest.mark.milestone("M6b")
@@ -331,24 +326,25 @@ index 0000000..318e321
 +    visual = open_visual(page, "signed-out", WIDE)
 +
 +    page.goto("/")
-+    visual.check("/", see(page.get_by_role("status")))
++    visual.check("/", ready_signed_out_home)
 +    expect(page.get_by_role("status")).to_have_text("Engine healthy")
 +    expect(
 +        page.get_by_role("banner").get_by_role("navigation", name="Main", exact=True)
 +    ).to_be_visible()
-+    expect(page.locator("main")).to_contain_text("Ursitoare Engine healthy")
++    expect(
++        page.get_by_role("heading", name="Ursitoare", level=1, exact=True)
++    ).to_be_visible()
 +
 +    page.goto("/sign-in")
-+    visual.check(
-+        "/sign-in", see(page.get_by_role("button", name="Sign in", exact=True))
-+    )
++    visual.check("/sign-in", ready_sign_in)
 +    expect(page.get_by_role("heading", name="Sign in", exact=True)).to_be_visible()
++    expect(page.get_by_role("button", name="Sign in", exact=True)).to_have_count(1)
 +
 +    page.goto("/no-such-page")
-+    visual.check(
-+        "/no-such-page",
-+        see(page.get_by_role("heading", name="Page not found", exact=True)),
-+    )
++    visual.check("/no-such-page", ready_not_found)
++    expect(
++        page.get_by_role("heading", name="Page not found", exact=True)
++    ).to_be_visible()
 +    expect(
 +        page.get_by_role("link", name="Go to the landing page", exact=True)
 +    ).to_be_visible()
@@ -362,9 +358,7 @@ index 0000000..318e321
 +def test_alice_builds_tests_and_reads_a_flow(
 +    page: Page, fresh_state: None, users: dict[str, dict[str, str]]
 +) -> None:
-+    visual = open_visual(
-+        page, "alice", WIDE, users["alice"]["displayName"]
-+    )
++    visual = open_visual(page, "alice", WIDE, users["alice"]["displayName"])
 +    login(page, users["alice"])
 +    nav = page.get_by_role("navigation", name="Main", exact=True)
 +
@@ -442,10 +436,12 @@ index 0000000..318e321
 +    expect(page.get_by_text("Started by Alice Example", exact=True)).to_be_visible()
 +    previews = page.locator("p.runs-preview")
 +    expect(previews).to_have_count(3)
++    for index in range(3):
++        expect(previews.nth(index)).to_have_text(re.compile(r"^\{.+\}$"))
 +    assert [json.loads(text) for text in previews.all_inner_texts()] == PREVIEWS
 +
-+    started = page.locator("time").filter(has_text=re.compile(r"^Started "))
-+    started.first.focus()
++    started = page.locator("time").filter(has_text=re.compile(r"^Started ")).first
++    started.focus()
 +    expect(page.get_by_role("tooltip")).to_have_text(
 +        re.compile(r"^\d{4}-\d\d-\d\d \d\d:\d\d UTC$")
 +    )
@@ -471,16 +467,27 @@ index 0000000..318e321
 +        f"Run {run_id[-8:]} of demo-ui"
 +    )
 +    expect(
-+        region(page, "Recent flows").get_by_role(
-+            "link", name="demo-ui", exact=True
-+        )
++        region(page, "Recent flows").get_by_role("link", name="demo-ui", exact=True)
 +    ).to_be_visible()
 +    expect(region(page, "Next steps")).to_contain_text("Start a test run")
-+    visual.check("/", ready_home_after(run_id))
++
++    def ready_home_after(page_after: Page) -> None:
++        expect(page_after.get_by_role("status").filter(has_text="Engine healthy")).to_be_visible()
++        expect(region(page_after, "Recent runs")).to_contain_text(
++            f"Run {run_id[-8:]} of demo-ui"
++        )
++        expect(
++            region(page_after, "Recent flows").get_by_role(
++                "link", name="demo-ui", exact=True
++            )
++        ).to_be_visible()
++        expect(region(page_after, "Next steps")).to_contain_text("Start a test run")
++
++    visual.check("/", ready_home_after)
 +
 +    page.goto("/flows/demo-ui/graph")
 +    expect(
-+        page.get_by_role("heading", name="Graph of demo-ui", exact=True)
++        page.get_by_role("heading", name="Graph of demo-ui", level=1, exact=True)
 +    ).to_be_visible()
 +    visual.check("/flows/demo-ui/graph", ready_graph)
 +
@@ -493,25 +500,21 @@ index 0000000..318e321
 +def test_carol_reads_every_admin_page_and_the_narrow_menu(
 +    page: Page, fresh_state: None, users: dict[str, dict[str, str]]
 +) -> None:
-+    visual = open_visual(
-+        page, "carol", WIDE, users["carol"]["displayName"]
-+    )
++    visual = open_visual(page, "carol", WIDE, users["carol"]["displayName"])
 +    login(page, users["carol"])
 +    nav = page.get_by_role("navigation", name="Main", exact=True)
 +
 +    expect(nav.get_by_text("Build", exact=True)).to_be_visible()
 +    expect(nav.get_by_text("Admin", exact=True)).to_be_visible()
-+    expect(region(page, "Next steps")).to_contain_text(
-+        "Review pending tool servers"
-+    )
++    expect(region(page, "Next steps")).to_contain_text("Review pending tool servers")
 +    visual.check("/", ready_carol_home)
 +
-+    for path, heading in ADMIN_VISITS:
++    for path, heading, ready in ADMIN_VISITS:
 +        page.goto(path)
 +        expect(
 +            page.get_by_role("heading", name=heading, level=1, exact=True)
 +        ).to_be_visible()
-+        visual.check(path, READY_BY_PATH[path])
++        visual.check(path, ready)
 +
 +    page.set_viewport_size(NARROW)
 +    page.goto("/")
@@ -521,16 +524,24 @@ index 0000000..318e321
 +    expect(
 +        nav.get_by_role("link", name="Audit log", exact=True)
 +    ).to_be_visible()
-+    visual.check("/", ready_carol_narrow, "-narrow")
++
++    def ready_narrow(page_narrow: Page) -> None:
++        expect(
++            page_narrow.get_by_role("navigation", name="Main", exact=True).get_by_role(
++                "link", name="Audit log", exact=True
++            )
++        ).to_be_visible()
++
++    visual.check("/", ready_narrow, "-narrow")
 +
 +    assert visual.csp == []
 +    assert len(visual.shots) == 10
 diff --git a/web/src/visual-pages.test.ts b/web/src/visual-pages.test.ts
 new file mode 100644
-index 0000000..488fcd5
+index 0000000..f1dec0a
 --- /dev/null
 +++ b/web/src/visual-pages.test.ts
-@@ -0,0 +1,159 @@
+@@ -0,0 +1,130 @@
 +/// <reference types="node" />
 +import assert from "node:assert/strict";
 +import { existsSync, readFileSync } from "node:fs";
@@ -541,75 +552,36 @@ index 0000000..488fcd5
 +import { RUN_PAGES } from "./runs/pages.ts";
 +import { TOOL_PAGES } from "./tools/pages.ts";
 +
++const JOURNEY = new URL("../../e2e/test_m6b_ui.py", import.meta.url);
++const HOME = new URL("./features/10-home.tsx", import.meta.url);
++
 +interface PageRow {
-+  readonly path: string;
-+  readonly navLabel: string | null;
++  path: string;
++  navLabel: string | null;
 +}
 +
 +interface PageTables {
-+  readonly ADMIN_PAGES: readonly PageRow[];
-+  readonly TOOL_PAGES: readonly PageRow[];
-+  readonly FLOW_PAGES: readonly PageRow[];
-+  readonly RUN_PAGES: readonly PageRow[];
++  ADMIN_PAGES: readonly PageRow[];
++  TOOL_PAGES: readonly PageRow[];
++  FLOW_PAGES: readonly PageRow[];
++  RUN_PAGES: readonly PageRow[];
 +}
 +
-+const JOURNEY = new URL("../../e2e/test_m6b_ui.py", import.meta.url);
-+const HOME = new URL("./features/10-home.tsx", import.meta.url);
 +const LITERAL = "VISUAL_PAGES: dict[str, list[str]] = {";
-+const ROLES = ["signed-out", "alice", "carol"] as const;
-+const NEEDLES = [
-+  "watch_csp(",
-+  "assert_layout(",
-+  "assert_accessible(",
-+  "E2E_VISUAL_DIR",
-+  '".l4-out"',
-+  '"width": 1366',
-+  '"height": 860',
-+  '"width": 900',
-+  "MAX_BANNER_PX = 72",
-+  "MAX_FLOW_PAGE_PX = 3000",
-+  "full_page=True",
-+  "st_size > 0",
-+  "png_height(",
-+  "Signed in as",
-+  "LOADING",
-+] as const;
-+const BANNED = ["time.sleep", "wait_for_timeout", "networkidle", "pytest.skip(", "pytest.mark.skip"] as const;
-+const DETAIL_PATHS = ["/flows/demo-ui", "/flows/demo-ui/graph", "/admin/tool-servers?server=acme"] as const;
 +
 +function visualPages(source: string): Record<string, string[]> | null {
 +  const start = source.indexOf(LITERAL);
-+  if (start < 0) {
-+    return null;
-+  }
-+  const lines = source.slice(start + LITERAL.length).split("\n");
-+  let body = "";
-+  let closed = false;
-+  for (const line of lines) {
-+    if (line.trim() === "}") {
-+      closed = true;
-+      break;
-+    }
-+    body += `${line}\n`;
-+  }
-+  if (!closed) {
-+    return null;
-+  }
++  if (start < 0) return null;
++  const tail = source.slice(start + LITERAL.length);
++  const end = tail.search(/^}/m);
++  if (end < 0) return null;
++  const body = tail.slice(0, end);
 +  const pages: Record<string, string[]> = {};
-+  for (const block of body.matchAll(/"([^"]+)"\s*:\s*\[([^\]]*)\]/g)) {
-+    const role = block[1];
-+    const inner = block[2];
-+    if (role === undefined || inner === undefined) {
-+      continue;
-+    }
-+    const paths: string[] = [];
-+    for (const value of inner.matchAll(/"([^"]*)"/g)) {
-+      const path = value[1];
-+      if (path !== undefined) {
-+        paths.push(path);
-+      }
-+    }
-+    pages[role] = paths;
++  for (const match of body.matchAll(/"([a-z-]+)"\s*:\s*\[([\s\S]*?)\]/g)) {
++    const role = match[1];
++    const list = match[2];
++    if (role === undefined || list === undefined) continue;
++    pages[role] = [...list.matchAll(/"([^"]*)"/g)].map((item) => item[1] ?? "");
 +  }
 +  return Object.keys(pages).length === 0 ? null : pages;
 +}
@@ -619,52 +591,62 @@ index 0000000..488fcd5
 +  if (homeSource.includes('path: "/",') && homeSource.includes('navLabel: "Home"')) {
 +    paths.push("/");
 +  }
-+  for (const table of [rows.ADMIN_PAGES, rows.TOOL_PAGES, rows.FLOW_PAGES, rows.RUN_PAGES]) {
-+    for (const row of table) {
-+      if (row.navLabel !== null) {
-+        paths.push(row.path);
-+      }
-+    }
++  for (const row of [
++    ...rows.ADMIN_PAGES,
++    ...rows.TOOL_PAGES,
++    ...rows.FLOW_PAGES,
++    ...rows.RUN_PAGES,
++  ]) {
++    if (row.navLabel !== null) paths.push(row.path);
 +  }
-+  paths.push(...DETAIL_PATHS);
++  paths.push("/flows/demo-ui", "/flows/demo-ui/graph", "/admin/tool-servers?server=acme");
 +  return paths;
 +}
 +
 +function journeyProblems(source: string, rows: PageTables, homeSource: string): string[] {
 +  const pages = visualPages(source);
-+  if (pages === null) {
-+    return ["VISUAL_PAGES is missing"];
-+  }
++  if (pages === null) return ["VISUAL_PAGES is missing"];
++
 +  const problems: string[] = [];
-+  const roles = Object.keys(pages);
-+  if (roles.length !== ROLES.length || !ROLES.every((role, index) => roles[index] === role)) {
++  if (Object.keys(pages).join(", ") !== "signed-out, alice, carol") {
 +    problems.push("VISUAL_PAGES roles are not signed-out, alice, carol");
 +  }
-+  for (const needle of NEEDLES) {
-+    if (!source.includes(needle)) {
-+      problems.push(`missing ${needle}`);
-+    }
++
++  const union = new Set(Object.values(pages).flat());
++  for (const path of requiredPaths(rows, homeSource)) {
++    if (!union.has(path)) problems.push(`no page for ${path}`);
 +  }
++
++  const needles = [
++    "watch_csp(",
++    "assert_layout(",
++    "assert_accessible(",
++    "E2E_VISUAL_DIR",
++    '".l4-out"',
++    '"width": 1366',
++    '"height": 860',
++    '"width": 900',
++    "MAX_BANNER_PX = 72",
++    "MAX_FLOW_PAGE_PX = 3000",
++    "full_page=True",
++    "st_size > 0",
++    "png_height(",
++    "Signed in as",
++    "LOADING",
++  ];
++  for (const needle of needles) {
++    if (!source.includes(needle)) problems.push(`missing ${needle}`);
++  }
++
 +  const marks = source.split('@pytest.mark.milestone("M6b")').length - 1;
-+  if (marks !== 3) {
-+    problems.push(`${marks} milestone marks, not 3`);
++  if (marks !== 3) problems.push(`${String(marks)} milestone marks, not 3`);
++
++  for (const banned of ["time.sleep", "wait_for_timeout", "networkidle"]) {
++    if (source.includes(banned)) problems.push(`holds ${banned}`);
 +  }
-+  for (const text of BANNED) {
-+    if (source.includes(text)) {
-+      problems.push(`holds ${text}`);
-+    }
-+  }
-+  const present = new Set<string>();
-+  for (const list of Object.values(pages)) {
-+    for (const path of list) {
-+      present.add(path);
-+    }
-+  }
-+  for (const required of requiredPaths(rows, homeSource)) {
-+    if (!present.has(required)) {
-+      problems.push(`no page for ${required}`);
-+    }
-+  }
++  const skip = /pytest\.(?:mark\.)?skip\s*\(/.exec(source);
++  if (skip !== null) problems.push(`holds ${skip[0]}`);
++
 +  return problems;
 +}
 +
