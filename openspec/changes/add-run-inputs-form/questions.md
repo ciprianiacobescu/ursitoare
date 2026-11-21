@@ -372,6 +372,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ## Q-013: Hold H-66b31620: UI criterion C-6bc1b603 has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The repository does hold a browser test for C-6bc1b603: e2e/test_m6b_run_inputs.py tags test_answer_rows_write_the_mocks_and_the_fakes with @pytest.mark.l4("C-6bc1b603") and follows test-plan-browser.md step by step, and TestRunPanel.tsx, DryRunPanel.tsx and MockRows.tsx wire the rows as design.md says. But the verifier reports that a test of exactly that name fails at the head after two attempts, and this scenario is browser-only (Collapsible rows, aria-expanded, the alert, the opened row after a 422). I cannot run pytest-playwright or the composed build, so I cannot tell whether the failure is a real defect in the panels or an environment problem of step 5, and the Node test report says nothing about it. The same criterion was already escalated as Q-005 and is still open. Accepting on code reading alone could waive a real regression, so a person who can run the e2e suite must decide.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
