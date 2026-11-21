@@ -1,0 +1,13 @@
+{
+  "schema": "l4/followup@1",
+  "parent": "openspec:restyle-web-kit",
+  "items": [
+    {
+      "id": "FB-001",
+      "sha256": "be0a69ecd7867511c21e1dec3f0634f53d9f2d8ac141b864bcac899d95bee11f"
+    }
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": []
+}

@@ -10,14 +10,14 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | submitted | behaviour | web/src/kit/theme.css:205 | Page header meta: a wrapping row below the title, with gaps between items |
+| FB-001 | taken | behaviour | web/src/kit/theme.css:205 | Page header meta: a wrapping row below the title, with gaps between items |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: Page header meta: a wrapping row below the title, with gaps between items
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** behaviour
 - **Where:** `web/src/kit/theme.css:205-225`
 - **Where:** `web/src/runs/RunPage.tsx:224-247`
@@ -85,3 +85,4 @@ The kit's PageHeader renders meta in a div .ui-page-header-meta that has no CSS 
 
 ### Outcome
 <!-- written by the harness -->
+Taken into restyle-web-kit-followup-1
