@@ -1,0 +1,107 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "e2e/conftest.py",
+      "specs/web-design-system/spec.md",
+      "docs",
+      "node:assert/strict",
+      "web/src/visual-pages.test.ts",
+      "e2e/test_m6b_ui.py",
+      "e2e",
+      ".l4-out/visual",
+      "**/?server=acme",
+      "**/ToastRegion.tsx",
+      "**/toast.ts",
+      "e2e/**",
+      "**/test_*.*",
+      "**/*.test.*",
+      "**/test_m4_runs.py",
+      "**/FlowsPage.tsx",
+      "**/[",
+      "module .l4-out",
+      "module e2e",
+      "module node:assert",
+      "module specs",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m6b_ui.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-visual-review/.l4/ledger/r-20261121T0829Z-500c.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-visual-review/.l4/ledger/r-20261121T0908Z-8d27.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-visual-review/.l4/ledger/r-20261121T1002Z-6d2a.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-visual-review/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-visual-review/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/visual-pages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "ok",
+    "reason": "",
+    "percent": 100.0,
+    "unmeasured_files": [],
+    "other_files": [],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2783,
+      "passed": 2783,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 4,
+      "new_passed": 4,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
