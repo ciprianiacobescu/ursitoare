@@ -32,7 +32,7 @@ architecture v0.1-r5 (§13 Phase-1 plan and exit tests 1–23). Owner decisions:
 | M5 | Flows with pure `code` nodes and pre/post hooks run durably; hook routes into effect nodes are rejected | U38–U44, U42b | `test_m5_code_hooks.py` | — |
 | M6 | Admins register tool servers and grant tools per role and step; an attended dry run reads through the broker with a one-step token and shows each effect's permit while stubbing it | U45–U52, U40b, U49b, U52b | `test_m6_grants.py` | — |
 | M6b | The web app is restyled on Tailwind CSS v4 and Radix primitives: grouped sidebar, home of recent work, flow workspace, schema-built run inputs, a readable run view and people's names; zero CSP violations | U15c, U18b, U15d, U07b, U21b, U07c, U28b, U37b, U37c, U52c | `test_m6b_ui.py` | the orchestrator's screenshot review |
-| M7 | An admin adds an HTTP/OpenAPI, MCP or code-block tool, approves its surface and stores its credential; a flow calls it (F9) | U53–U56 | `test_m7_tools.py` | — |
+| M7 | An admin adds an HTTP/OpenAPI, MCP or code-block tool, approves its surface and stores its credential; a flow calls it (F9) | U53–U56, U47b, U35c, U27b, U54b, U56b, U56c | `test_m7_tools.py` | — |
 | M8 | `docker compose up` runs the six-container hobbyist stack; every journey so far passes against real Keycloak and Mintkey | U57–U61 | all so far | **first stack run**: journeys, contract suites against the real services, exit tests 10 (runtime), 12, 19 |
 | M9 | The RF-1 core flow runs with LLM extract and decide nodes, every call journaled and costed; a `pay` whose amount an LLM extracted is refused when no approval is on the path, with the reason shown | U62–U70 | `test_m9_llm.py` | stack run; exit 11 at the concurrency the broker allows |
 | M10 | An author describes a flow and the LLM author drafts it with a capped repair loop; approved-fact context reaches LLM nodes | U71–U73 | `test_m10_assist.py` | stack run |
@@ -113,8 +113,16 @@ order of their edges, one at a time.
   addresses; never loopback, link-local or metadata addresses, nor the stack's own service names (broker, vault,
   postgres, keycloak, engine). Fakes are reached by names under the reserved `fake.test` domain: fake-egress maps them
   to loopback upstreams, and the stack's fakes container carries them as network aliases.
-- **Capabilities:** a unit that extends a capability another change created writes ADDED requirements only (never
-  MODIFIED or REMOVED) and does not contradict the earlier requirements.
+- **Tool registration (from M7):** registration of non-fixture tool servers goes through
+  `/api/v1/tool-registrations/<kind>` (`openapi`, `mcp`, `code`: U53, U54, U55); the generic `POST /api/v1/tool-servers`
+  stays fixture-only.
+- **Validator version (from M7):** a stricter validator change bumps `VALIDATOR_VERSION` (U27b, `src/authoring`) in its
+  own unit; a non-draft version stamped with an older value is refused at run start (cause `validation_stale`) until it is
+  validated again.
+- **Capabilities:** a unit that extends a capability another change created writes ADDED requirements, never REMOVED,
+  and does not contradict the earlier requirements. From M5, a unit may MODIFY an accepted requirement only by restating
+  the whole requirement with its name and scenario names unchanged, as the one owner of that requirement in its
+  milestone, with one new test that traces it.
 - **Journeys seed through fixtures:** every journey uses `fresh_state` and the seed fixtures of `e2e/conftest.py`, never
   inline seeding, so the stack profile (U61b) changes the fixtures, not the journeys.
 - **Migrations:** each unit that changes the schema adds one file `src/db/migrations/NNNN_<topic>.sql`. U02 owns
@@ -247,12 +255,18 @@ The owner's review of the live offline stack (2026-11-17) found the web app unus
 
 | U | Change id | Cap | Module | Scope | Depends on | Exit | Seed | Status |
 |---|---|---|---|---|---|---|---|---|
-| U53 | `add-http-openapi-tools` | `tool-http` | `tools` | Uploaded (never fetched) OpenAPI documents with remote `$ref` off, operations to tools with an admin-set `effect`, bindings to method and path template, `url_host` from the WHATWG URL parser | U47, U48, U50 | 13 | — | planned |
-| U54 | `add-mcp-client` | `tool-mcp` | `tools` | MCP client (2026-07-28 and the older handshake), `tools/list` to a surface digest, tool namespacing with collisions refused, `tools/call` through the gateway, results untrusted; `test/support/fake-mcp/`, its proxy route and e2e part `parts/55-mcp.ts` | U06, U45, U47, U48, U50 | 6 | — | planned |
-| U55 | `add-code-block-tools` | `tool-code` | `tools`, `runtimes` | `code_block` tool servers: blocks implemented as pure sandboxed code, surface digest over the source | U38, U39, U47, U50 | — | — | planned |
-| U56 | `add-web-tools` | `web-tools` | `web` | Register an MCP URL, an OpenAPI upload or a code block; review and approve the surface with a drift diff; write-only credential entry; journey `test_m7_tools.py` (F9 through a dry run). **Closing** | U52b, U53, U54, U55 | — | — | planned |
+| U47b | `add-tool-adapters` | `tool-registry`, `tool-invocation` (ADDED, MODIFIED ×3) | `tools`, `runtimes`, `interpreter` | The one owner of the adapter seam (split from U53 to U55, M7 decision D1): `ToolCallSpec`, `CallAdapter` and `checkAdapterSurface`, call tools in the surface digest, store and directory, invoke dispatch to injected `calls` and `code` adapters, and `code` calls authorised with `permit: null` and sent nowhere (an `http` or `mcp` call without a permit is refused `permit_missing` before any token request); no route, migration or part | U03, U08, U11, U22, U26, U31, U33, U34, U46, U47, U48, U49b, U50, U51 | 13 | — | planned |
+| U35c | `add-cli-sandbox` | `architecture-rules` (MODIFIED ×1), `ops-cli` | `cli` | `ursitoare flow test` runs `code` nodes and code hooks in a one-worker sandbox pool (carry-forward D5 of M5); the module graph row `cli` gains `sandbox` | U04, U20, U33, U35, U35b, U38, U39, U42 | — | — | planned |
+| U27b | `add-validator-version` | `flow-validation`, `flow-format`, `flow-registry`, `interpreter`, `grants` | `authoring`, `registry`, `interpreter`, `api` | `validator_version` stored with each passing validation (migration `0275`); a non-draft version validated by an older validator is refused at run start with cause `validation_stale` (refuse, not re-validate); `VALIDATOR_VERSION`; the node id bound of 128 characters in L1, references, the grants API and the format document, as the first stricter validator change (carry-forward: stale validation) | U22, U25, U27, U33, U35, U47b, U49, U51 | — | — | planned |
+| U54b | `add-fake-mcp` | `test-fake-mcp` | — | `test/support/fake-mcp/` (split from U54, M7 decision D2): a loopback fake MCP server for the 2026-07-28 and the legacy `initialize` eras (with and without `Mcp-Session-Id`), `FAKE_MCP_TOOLS`, request recording, failure and surface knobs, a contract suite for any base URL, and e2e part `parts/55-mcp.ts` routing `mcp.fake.test` through the fake egress | U06, U09, U32, U45, U46 | — | — | planned |
+| U53 | `add-http-openapi-tools` | `tool-http` | `tools`, `api` | Uploaded (never fetched) OpenAPI 3.0 and 3.1 JSON documents with remote `$ref` off, operations to tools with an effect set only by an admin overlay (an operation the overlay does not name is not a tool), bindings to method and path template; routes `POST /api/v1/tool-registrations/openapi/preview`, `POST /api/v1/tool-registrations/openapi` and `PUT /api/v1/tool-servers/{id}/openapi`; the `http` adapter on U47b's seam | U08, U13, U14, U22, U26, U27b, U45, U46, U47, U47b, U48, U50 | 13 | — | planned |
+| U54 | `add-mcp-client` | `tool-mcp`, `tool-invocation` (MODIFIED ×1) | `tools`, `api` | MCP client spoken by hand (2026-07-28 and the older `initialize` handshake; a server that needs a session is refused at discovery), discovery through the gateway under a recorded policy decision per request, `tools/list` to a surface digest, tool namespacing with collisions refused, a server's annotations never decide an effect, tools left out are reported, `tools/call` through the gateway, results untrusted; table `mcp_server` (migration `0540`); routes `POST /api/v1/tool-registrations/mcp` and `POST /api/v1/tool-servers/{id}/discover`; the fake and part `parts/55-mcp.ts` are U54b's | U03, U08, U11, U13, U14, U22, U26, U45, U46, U47, U47b, U48, U49b, U50, U53, U54b | 6 (part), 13 | — | planned |
+| U55 | `add-code-block-tools` | `tool-code`, `credentials` (ADDED ×2, MODIFIED ×1) | `tools`, `runtimes`, `authoring`, `credentials`, `api` | `code_block` tool servers: blocks implemented as pure sandboxed code (effect `read`, origin `sandbox`, a source of at most 65,536 characters checked with `acorn`), surface digest over the source, run by `createCodeRunner` with `permit: null` and no token; routes `POST /api/v1/tool-registrations/code` and `PUT /api/v1/tool-servers/{id}/code`; a credential for a code-block server is refused (`no_credential_needed`); credential rotation takes an optional `authScheme` and `headerName` (migration `0550`) | U13, U14, U22, U25, U27b, U38, U39, U47, U47b, U48, U49, U49b, U50, U51, U53, U54 | — | — | planned |
+| U56 | `add-web-tools` | `web-tools` (ADDED, MODIFIED ×1), `web-runs` | `web` | Register an MCP URL, an OpenAPI upload or a code block from the web; replace an OpenAPI document or edit a code block on the server detail; write-only credential entry and rotation (a code-block server has no credential form); grant-form hardening (a step id of at most 128 characters); the stale-validation refusal worded in the test-run and dry-run panels | U07, U07b, U15, U15b, U15c, U15d, U16, U18b, U21b, U27b, U37b, U47, U47b, U48, U49, U52, U52b, U53, U54, U55 | — | — | planned |
+| U56b | `add-web-tool-review` | `web-tools` | `web` | MCP discovery from the web ("Discover tools", with a tool name and a skip option per tool), the surface review with a drift diff ("Changes": the first approval and each added tool show their descriptions in full, a changed description shows both texts), the "Calls" view with each tool's effect, retry, result and the server's hints; browser test `e2e/test_m7_tool_review.py` on mocked answers | U07, U07b, U15, U15b, U15c, U15d, U16, U21b, U27b, U28, U35c, U36, U37, U37b, U45, U45b, U46, U47b, U51, U52, U52b, U53, U54, U54b, U55, U56 | — | — | planned |
+| U56c | `add-web-tool-journeys` | `web-tools` | — | Journey `test_m7_tools.py` in a browser, and a Node journey `test/journeys/m7-tools.test.ts` on the real e2e stack with at least one live call through `main`'s wiring for each adapter kind (F9 through a dry run); a source test of both journeys (split from U56b, M7 ruling S1). **Closing** | U06, U07, U07b, U07c, U15c, U15d, U16, U21b, U27b, U28, U28b, U36, U37, U37b, U37c, U45, U45b, U46, U47b, U51, U52, U52b, U53, U54, U54b, U55, U56, U56b | — | — | planned |
 
-Re-based on M6b's delivered web shapes before activation (U56, U56b, U56c).
+Re-based on M6b's delivered web shapes on 2026-11-21 (U56, U56b, U56c).
 
 ### M8 Hobbyist stack
 
@@ -357,7 +371,7 @@ Re-based on M6b's delivered web shapes before activation (U56, U56b, U56c).
 | 10 | U59 (static), U61c (runtime count), U100 | person, Linux host, M15 |
 | 11 | U62, U63, U64 | stack run at the broker's allowed concurrency (M9+) |
 | 12 | U46, U48, U57, U61c | stack run (M8) |
-| 13 | U45, U46, U50, U53 | — |
+| 13 | U45, U46, U47b, U50, U53, U54 | — |
 | 14 | U74b (attended), U78 (unattended) | — |
 | 15 | U38, U39 | — |
 | 16 | U49, U49b, U50, U65, U67, U76, U77, U91 | — |
@@ -398,9 +412,10 @@ Each unit's spec defines its interfaces in full; this table fixes the names so t
 | Web ui | `web/src/ui/`: `cn`, `Button`, `Badge`, `Card`, `Tooltip`, `Collapsible`, `Skeleton`, `Tone` (and its state mappers), `format*` (`formatDuration`, `formatInstant`, `formatAgo`) | U15c |
 | Catalogue | `Catalogue { block(ref); modelProfile(ref); role(name); delegateTarget(target, workflow); flow(ref, major): { input; output } \| undefined }` | U22 (interface); filled by U24, U26 (block, role), U67 (modelProfile), U82 (flow), U84 (delegateTarget) |
 | Taint | `Taint` labels, `joinTaint(a, b)`, `flowCapabilities(flow, catalogue)` | U23 |
-| Node runtimes | `registerNodeRuntime(kind, runtime: NodeRuntime)`; `ToolInvoker { invoke(call: ToolCall, ctx: StepContext): Promise<ToolResult>; authorize?(call: ToolCall, ctx: StepContext): Promise<CallAuthorization> }`; `ToolCall { tool; args; nodeId; effectSeq; phase?: "pre" \| "post"; hookId? }`; `EffectMode = "live" \| "mock" \| "stub"` | U33 (`authorize?`: U50) |
+| Node runtimes | `registerNodeRuntime(kind, runtime: NodeRuntime)`; `ToolInvoker { invoke(call: ToolCall, ctx: StepContext): Promise<ToolResult>; authorize?(call: ToolCall, ctx: StepContext): Promise<CallAuthorization> }`; `ToolCall { tool; args; nodeId; effectSeq; phase?: "pre" \| "post"; hookId? }`; `EffectMode = "live" \| "mock" \| "stub"`; from M7 `CallAuthorization.permit: Permit \| null` (`null` only for a `code` call) | U33 (`authorize?`: U50; `permit: Permit \| null`: U47b) |
 | Hooks | `approvalsOnPath(steps): Approval[]` | U42b |
 | Gateway | `requestToken(permit, tag)`, `send(permit, request, token, tag)`; `validateOrigin(url, { local })` (U47, in `src/tools`); `ServiceResolver { resolve(ctx, toolServerId): Promise<ServiceTarget \| null> }` (U48) | U46, U47, U48 |
+| Tools | `ToolCallSpec = HttpCallSpec \| McpCallSpec \| CodeCallSpec` (`kind` `http`, `mcp`, `code`); `CallAdapter<S> { build(call, args, idemKey): CallBuild; answer(call, response): CallAnswer }`; `checkAdapterSurface(adapter, surface): ToolSurface` | U47b |
 | Grants | `reconfirmationsFor(pool, ctx, oldHash, newHash, deps)`, `nodeFingerprint(flow, nodeId, catalogue)` | U49 |
 | Authority | `diffAuthority(oldVersion, newVersion): AuthorityDiff` (`widens_*` flags) | U65 |
 | CLI | `registerCommand(name, command)` under `ursitoare admin`, `ursitoare flow` and top level; a unit adding commands edits its group's index (`src/cli/<group>/index.ts`), or `src/cli/builtin.ts` for a new group, in a named task (`registry.registerCommand(name, command)`), and two such units in one milestone need a depends_on edge | U20 |
@@ -427,19 +442,19 @@ sub-directories are internal, and other modules import only its `index.ts`. `src
 | `audit` | `core`, `db`, `tenancy`, `observability` | — | U08, U19, U60 |
 | `identity` | `core`, `config`, `db`, `tenancy`, `audit`, `observability` | `oidc` | U10, U12, U17, U18, U79 |
 | `pdp` | `core`, `db`, `tenancy`, `observability` | — | U11, U11b, U19, U46, U49b, U50, U69 |
-| `authoring` | `core` | — | U22, U23, U25, U40b, U41 |
+| `authoring` | `core` | — | U22, U23, U25, U27b, U40b, U41, U55 |
 | `authority` | `core`, `authoring`, `grants` | — | U65, U91 |
-| `registry` | `core`, `db`, `tenancy`, `audit`, `authoring`, `pdp`, `identity` | — | U26, U27, U71 |
+| `registry` | `core`, `db`, `tenancy`, `audit`, `authoring`, `pdp`, `identity` | — | U26, U27, U27b, U71 |
 | `grants` | `core`, `db`, `tenancy`, `audit`, `pdp`, `registry`, `authoring` | — | U49, U49b |
 | `durable` | `core`, `config`, `db`, `observability` | — | U30 |
 | `runs` | `core`, `db`, `tenancy`, `durable` | — | U31, U34, U36, U42b, U92 |
 | `sandbox` | `core`, `config` | — | U38 |
 | `gateway` | `core`, `config`, `observability`, `pdp` | `tools` | U46, U48 |
-| `tools` | `core`, `db`, `tenancy`, `audit`, `registry`, `gateway`, `pdp` | — | U47, U53, U54, U55 |
-| `credentials` | `core`, `db`, `tenancy`, `audit`, `gateway`, `tools` | — | U48 |
+| `tools` | `core`, `db`, `tenancy`, `audit`, `registry`, `gateway`, `pdp` | — | U47, U47b, U53, U54, U55 |
+| `credentials` | `core`, `db`, `tenancy`, `audit`, `gateway`, `tools` | — | U48, U55 |
 | `llm` | `core`, `db`, `tenancy`, `gateway`, `pdp`, `credentials`, `registry`, `tools`, `observability` | — | U63, U64, U66, U67 |
-| `interpreter` | `core`, `durable`, `runs`, `registry`, `authoring`, `pdp`, `observability`, `sandbox` | — | U33, U35, U39, U40, U42, U42b, U43, U50, U51, U92 |
-| `runtimes` | `core`, `interpreter`, `runs`, `registry`, `grants`, `pdp`, `gateway`, `sandbox`, `llm`, `tools`, `credentials`, `authoring`, `tasks`, `observability` | — | U50, U51, U55, U68, U69, U71, U74b, U82, U83, U84, U88 |
+| `interpreter` | `core`, `durable`, `runs`, `registry`, `authoring`, `pdp`, `observability`, `sandbox` | — | U27b, U33, U35, U39, U40, U42, U42b, U43, U47b, U50, U51, U92 |
+| `runtimes` | `core`, `interpreter`, `runs`, `registry`, `grants`, `pdp`, `gateway`, `sandbox`, `llm`, `tools`, `credentials`, `authoring`, `tasks`, `observability` | — | U47b, U50, U51, U55, U68, U69, U71, U74b, U82, U83, U84, U88 |
 | `tasks` | `core`, `db`, `tenancy`, `audit`, `durable`, `runs`, `pdp` | — | U74, U74b |
 | `publish` | `core`, `db`, `tenancy`, `audit`, `registry`, `grants`, `authority`, `tasks`, `pdp`, `runs`, `durable`, `identity` | — | U76, U77 |
 | `triggers` | `core`, `db`, `tenancy`, `audit`, `durable`, `runs`, `registry`, `pdp`, `publish` | — | U78 |
@@ -447,8 +462,8 @@ sub-directories are internal, and other modules import only its `index.ts`. `src
 | `eval` | `core`, `db`, `tenancy`, `durable`, `interpreter`, `runs`, `registry` | — | U93 |
 | `mcp` | `core`, `identity`, `pdp`, `registry`, `runs`, `interpreter`, `publish` | — | U89 |
 | `templates` | `authoring` | — | U81 |
-| `api` | every module except `sandbox`, `runtimes` and `cli` | — | U01, U07, U13, U14, U17, U18, U19, U35, U36, U42b, U47, U48, U49, U49b, U51, U60, U67, U77, U84, U91 |
-| `cli` | every module `api` may import, plus `db` owner access | — | U20, U25, U35, U57, U97 |
+| `api` | every module except `sandbox`, `runtimes` and `cli` | — | U01, U07, U13, U14, U17, U18, U19, U27b, U35, U36, U42b, U47, U48, U49, U49b, U51, U53, U54, U55, U60, U67, U77, U84, U91 |
+| `cli` | every module `api` may import, plus `sandbox` and `db` owner access | — | U20, U25, U35, U35c, U57, U97 |
 
 ## Deferred to Phase 2 (architecture §13)
 

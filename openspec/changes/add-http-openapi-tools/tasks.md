@@ -1,0 +1,23 @@
+Every test file starts with `assert.equal(typeof <function under test>, "function")`, wraps a call that reaches a scaffold stub (sync: `try`/`catch`; async: `p.then((v) => v, (e: unknown) => e)`) so a stub's throw fails by assertion, closes what it opens in `finally` and has no `.`, `[` or `::` in test names. Red tests import the names under test from the file Interfaces given names; each task also reads the index names it adds through `import * as` (a missing export is then `undefined` and fails by assertion, not at link time). Values: `test-plan.md`, `test-plan-runs.md`. Each export line is added in the task that implements the module, because the route file (task 4.1) must import these values through `src/tools/index.ts` (`checkModuleGraph` refuses a deep import). A task runs `pnpm run test <path>` for the files it names. No frozen test is edited.
+
+## 1. Translating, reading and importing a document
+
+- [ ] 1.1 Write `src/tools/openapi/schema.test.ts` (scenario "Translation vectors", rows T1 to T16; `checkSchema` of `src/interpreter/schema.ts` for T1 and T6; the namespace of `src/tools/index.ts` for `translateSchema`) first, then implement `translateSchema` in `src/tools/openapi/schema.ts` (design 1 and 2; no import of `authoring`) and add its export line and the type-only lines of the five types of `src/tools/openapi/types.ts` to `src/tools/index.ts`
+- [ ] 1.2 Write `src/tools/openapi/read.test.ts` (scenarios "Versions, base paths and document refusals" and "Each exclusion, in order", rows B1 to B9, X1 to X12, K1; `fetch` stubbed to throw; the namespace for `readOpenApi`) first, then fill in `SHOP_ORIGIN`, `SHOP_DOC` and `docOf` of `test/support/openapi-kit.ts`, implement `readOpenApi` in `read.ts` and add its export line to `src/tools/index.ts`
+- [ ] 1.3 Write `src/tools/openapi/import.test.ts` (scenarios "A tool per overlay entry" and "Each overlay and size refusal", rows M1 to M5, O1 to O7, S1; the namespace for `importOpenApi` and `HTTP_EMPTY_OUTPUT`) first, then fill in `SHOP_OVERLAY`, implement `importOpenApi` in `src/tools/openapi/read.ts` (with `HTTP_EMPTY_OUTPUT` in `src/tools/http/adapter.ts`; `build` and `answer` are task 2.1) and add both export lines to `src/tools/index.ts`
+
+## 2. The call adapter
+
+- [ ] 2.1 Write `src/tools/http/adapter-build.test.ts` and `src/tools/http/adapter-answer.test.ts` (scenarios "Request vectors, refusals and the length bound" and "Answer vectors"; the namespace for `httpCallAdapter`) first, then implement `httpCallAdapter` in `src/tools/http/adapter.ts` (no import of `gateway`: `test/arch/egress-sites.test.ts::C-76ead8ea` stays green) and add its export line to `src/tools/index.ts`
+
+## 3. Registering and replacing
+
+- [ ] 3.1 Write `src/tools/openapi/register.db.test.ts` (scenario "Registering, replacing and each refusal", rows G1, F1 to F6, H1 to H6; the namespace for the two functions) and `src/tools/http/exit13.db.test.ts` (scenario "A templated GET, a POST with a body, a url argument and a refused path", rows E1 to E5; it takes `httpCallAdapter` from `adapter.ts` and `registerOpenApiServerTx` from `register.ts`, so its stub throw fails by assertion) first, then implement `registerOpenApiServerTx` and `submitOpenApiTx` in `src/tools/openapi/register.ts` through `registerAdapterServerTx` and `submitAdapterSurfaceTx` and add their export lines to `src/tools/index.ts`
+
+## 4. The routes
+
+- [ ] 4.1 Write `src/api/openapi-tool-routes.test.ts` (scenarios "Preview, register, replay and replace" and "Route refusals", rows P1 to P4; the harness of `src/api/tool-server-routes.test.ts` copied into it; the namespace of `src/api/index.ts` for `registerOpenApiToolRoutes`) first, then implement `registerOpenApiToolRoutes` in `src/api/openapi-tool-routes.ts` (design 6), importing `readOpenApi`, `registerOpenApiServerTx` and `submitOpenApiTx` through `src/tools/index.ts`, and add its export line and the type-only line of `OpenApiToolApiDeps` to `src/api/index.ts`
+
+## 5. Wiring and the document
+
+- [ ] 5.1 Write `src/main.openapi-tools.test.ts` (scenario "The document and main": the three operations in `servedOpenApiText()` of `test/support/openapi-docs.ts` and in the committed `docs/api/openapi.json`, and the `calls` regex row of `src/main.ts`; only this task makes them true, since main registers the routes and passes the adapter) first, then edit `src/main.ts` (a `calls` object with `http: httpCallAdapter` in `createInvokePath`, `registerOpenApiToolRoutes` after `registerToolServerRoutes`) and regenerate the document with `pnpm run test test/support/openapi-docs.ts`; `src/main.conventions.test.ts::C-d150bfa4` stays green

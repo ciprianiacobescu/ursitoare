@@ -1,0 +1,28 @@
+Every test file starts with `assert.equal(typeof <function under test>, "function")`, wraps a call that reaches a scaffold stub (async: `p.then((v) => v, (e: unknown) => e)`) so a stub's throw fails by assertion, closes its fakes in `finally` and uses `node:assert/strict` and `node:http` (builders and rows: `test-plan.md` § Constants). Red tests import from the file that declares a name, never through a re-export line. No frozen test changes; nothing in `src/`. Each task ends with `pnpm run test <paths>` for the files it names. Rows (D, L, C, H, N, T, G, X, E, S, Q, K, A, P) are in the two test plans.
+
+## 1. The wire helper
+
+- [ ] 1.1 Proves the `decodeMcpName` half of scenario "Header and version mismatches and unknown methods are refused". Write `test/support/fake-mcp/wire.test.ts` first (the Wire rows), then implement `decodeMcpName` in `test/support/fake-mcp/wire.ts` (plain value as is; `=?base64?...?=` decoded when the base64 is canonical and the bytes are UTF-8, else `null`).
+
+## 2. The modern era
+
+- [ ] 2.1 Proves scenarios "Discovery and paged listing carry the fixtures U54 needs" and "Calls answer both tools, errors and structured content". Write `test/support/fake-mcp/discover.test.ts` (D1, D2, L1 to L3) and `test/support/fake-mcp/calls.test.ts` (C1 to C8) first, then implement `FAKE_MCP_HOST`, `FAKE_MCP_ORIGIN`, `FAKE_MCP_TOOLS` and `startFakeMcp` in `test/support/fake-mcp/index.ts` (listener opened last, `close()`, the options `tools`, `pageSize` and `era` for `supportedVersions` only; `requests`, `failNext`, `setTools`, `reset` keep throwing) and create `test/support/fake-mcp/server.ts` for the modern happy path only (design.md § Decisions 4 and 12; every answer 200 JSON; no `Host`, path, method, key or header check, no record).
+- [ ] 2.2 Proves scenarios "Header and version mismatches and unknown methods are refused" and "Host, path, method, key and body refusals". Write `test/support/fake-mcp/modern-refusals.test.ts` (H1 to H10, N1, N2) and `test/support/fake-mcp/transport.test.ts` (T1 to T10) first (after 2.1 no check exists, so each row fails by assertion), then add to `server.ts` the pipeline of design.md § Decisions 2 and 3.
+
+## 3. The legacy eras and SSE
+
+- [ ] 3.1 Proves scenarios "A legacy handshake without a session, and the stateless calls" and "Sessions, and each era answers the other" (row X5 of the latter needs `reset()` and is proved in 4.2). Write `test/support/fake-mcp/legacy.test.ts` (G1 to G7) and `test/support/fake-mcp/sessions.test.ts` (X1 to X4, X6, E1, E2; X5 needs `reset()`, task 4.2) first (after 2.2 a legacy body gets no legacy answer and `era` is ignored), then add the legacy pipeline (design.md § Decisions 5 and 6) and the `era` option to `server.ts`.
+- [ ] 3.2 Proves scenario "SSE answers and the answers that stay JSON" (its `failNext` step completes in 4.2). Write `test/support/fake-mcp/sse.test.ts` (S1, S3, S4 and the 401, `-32020` and 202 steps of S5; its `failNext` step is in 4.2) first, then add the `sse` option to `server.ts`.
+
+## 4. Records, knobs, reset and close
+
+- [ ] 4.1 Proves scenario "Records hold the facts and none of the secrets". Write `test/support/fake-mcp/records.test.ts` (Q1 to Q6, the filters, the copy, the secret scan, the session record) first (after 3.2 `requests()` still throws the scaffold's error), then record every request in `server.ts` and implement `requests()` in `index.ts` (design.md § Decisions 7).
+- [ ] 4.2 Proves scenario "Failure and surface knobs, reset, close and argument checks", the `failNext` step of "SSE answers and the answers that stay JSON" and row X5 of "Sessions, and each era answers the other". Write `test/support/fake-mcp/knobs.test.ts` (K1 to K5, A1 to A15, S5's `failNext` step and row X5 of `test-plan-legacy.md` § Session rows, the session part of scenario "Sessions, and each era answers the other" that `reset()` serves; `failNext`, `setTools` and `reset` throw at red, so each test first calls the one it needs with valid arguments inside `try`/`catch` and asserts that no error came back) first, then implement `failNext`, `setTools`, `reset` and the option checks of `startFakeMcp` (A1 to A7, before the listener opens) in `index.ts` and the failure step in `server.ts` (design.md § Decisions 8).
+
+## 5. The contract suite
+
+- [ ] 5.1 Proves scenario "The suite passes on the fake and fails on the broken targets". Write `test/support/fake-mcp/contract.test.ts` first (the names array, one `test(check.name, check.run)` per check on the dual fake, the modern-only, legacy-only and keyless fakes, mutant M1 as a `node:http` forwarding server closed in `finally`, the closed port), then implement `fakeMcpContract` in `test/support/fake-mcp/contract.ts` (imports `type ContractCheck` from `../fake-oidc/index.ts`; design.md § Decisions 9) and add `export * from "./contract.ts"` to `test/support/fake-mcp/index.ts`.
+
+## 6. The part and the README
+
+- [ ] 6.1 Proves scenario "A credentialed service reaches the fake, reset, crash cluster and README". Write `test/support/e2e-stack/mcp-part.test.ts` (P1 to P4; P4 reads `parts/55-mcp.ts`, missing at red, and orders it only against `52-tool-servers.ts`), `test/support/e2e-stack/mcp-part.cluster.test.ts` (P5) and `test/support/fake-mcp/readme.test.ts` (the README row) first, then implement `test/support/e2e-stack/mcp-part.ts` (design.md § Decisions 10), create `test/support/e2e-stack/parts/55-mcp.ts` with `export { mcpPart as part } from "../mcp-part.ts";` in this same task (while `mcpPart` is a stub a discovered file would break every crash-cluster and stack test), and edit `test/support/README.md` (replace the line that starts `` | `fake-mcp/` | `add-mcp-client` | `` with the row of `test-plan-legacy.md` § README row).

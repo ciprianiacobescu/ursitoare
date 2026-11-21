@@ -291,3 +291,13 @@ export const flowTestCommand: CliCommand = {
     return runFlow(call, flow, catalogue, checked.mocks, input);
   },
 };
+
+export interface FlowTestDeps {
+  createSandbox?: (opts: never) => unknown;
+}
+
+export function createFlowTestCommand(_deps?: FlowTestDeps): CliCommand {
+  throw new Error("not implemented");
+}
+
+export const FLOW_TEST_POOL: Readonly<{ size?: number }> = Object.freeze({});

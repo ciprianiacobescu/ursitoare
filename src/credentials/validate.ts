@@ -68,3 +68,7 @@ export function checkProvision(input: {
     throw invalid("serviceId", "bad_value");
   }
 }
+
+export function checkScheme(_authScheme: unknown, _headerName: unknown): void {
+  throw new Error("not implemented");
+}

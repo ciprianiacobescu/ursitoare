@@ -48,6 +48,11 @@ function toRecord(row: CredentialRow): CredentialRecord {
   };
 }
 
+export interface CredentialChange {
+  authScheme?: VaultAuthScheme;
+  headerName?: string;
+}
+
 export async function rotateCredential(
   deps: CredentialDeps,
   ctx: TenantContext,
