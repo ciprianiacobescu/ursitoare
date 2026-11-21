@@ -1,4 +1,4 @@
-# Verification: openspec:restyle-web-kit-followup-1: NEEDS_HUMAN (round 1)
+# Verification: openspec:restyle-web-kit-followup-1: PASS (round 2)
 
 traceability: 11/11 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 11/11 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.2 | base merged: main@f5fc93e501 as fcfd99ddce (5 commits) |
-| 1 | integrity | ok | 250.9 | 11 sub-checks; scope: 11 changed file(s) |
-| 2 | build | ok | 29.0 |  |
-| 3 | tests | ok | 486.0 |  |
-| 4 | traceability | ok | 0.2 | 11/11 criteria covered |
-| 4a | audit sampling | ok | 7.5 | 1 not_testable; support files at the base: 2 |
-| 5 | ui test generation | ok | 28.4 | 8 not_testable; 1 not_testable covered by step 4: notes, no hold (L4-VER-067); e2e support files shown to the writer: 1 |
-| 6 | quality | ok | 0.0 | 100.0% of the changed executable lines ran |
-| 8 | s1 judge | ok | 1.0 | 11/11 criteria judged by jev |
-| 9 | judge | ok | 59.0 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 4a | audit sampling | reused | 0.0 | reused (round 1) |
+| 5 | ui test generation | reused | 0.0 | reused (round 1) |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -127,11 +127,22 @@ Scope not judged: the spec names no path or module in backticks: nothing to comp
 |---|---|---|---|---|
 | C-6027f26f | not_testable | - | - | Browser layout check at two viewport sizes on a mocked page; no importable Python module or shown e2e mock helper to build a self-contained test. |
 
+## Answers to verdict questions
+
+- Q-001 accept C-6027f26f by agent (CLAUDECODE): The criterion is satisfied, and the delegate verified it by hand. Ignored test e2e/test_run_header_meta.py::test_page_header_meta_wraps_below_the_title_with_gaps does discriminate. On the offline e2e stack with web built at the unit head 563f4585 it passes at 1366 and 390. With web/src/kit/theme.css...
+- Q-002 accept H-09735f2a by agent (CLAUDECODE): The hold can be waived. C-97684e64 is one of the parent unit restyle-web-kit's source criteria: its scenario reads source files or pure helpers through a Node test, and nothing about it can be observed in a browser. So step 5's not_testable result is correct, and no browser test can be written for i...
+- Q-003 accept H-b35898ab by agent (CLAUDECODE): The hold can be waived. C-66cb6cb0 is one of the parent unit restyle-web-kit's source criteria: its scenario reads source files or pure helpers through a Node test, and nothing about it can be observed in a browser. So step 5's not_testable result is correct, and no browser test can be written for i...
+- Q-004 accept H-7415271d by agent (CLAUDECODE): The hold can be waived. C-23da30c9 is one of the parent unit restyle-web-kit's source criteria: its scenario reads source files or pure helpers through a Node test, and nothing about it can be observed in a browser. So step 5's not_testable result is correct, and no browser test can be written for i...
+- Q-005 accept H-1db9756c by agent (CLAUDECODE): The hold can be waived. C-3192e29f is one of the parent unit restyle-web-kit's source criteria: its scenario reads source files or pure helpers through a Node test, and nothing about it can be observed in a browser. So step 5's not_testable result is correct, and no browser test can be written for i...
+- Q-006 accept H-2dab7e00 by agent (CLAUDECODE): The hold can be waived. C-2c488542 is one of the parent unit restyle-web-kit's source criteria: its scenario reads source files or pure helpers through a Node test, and nothing about it can be observed in a browser. So step 5's not_testable result is correct, and no browser test can be written for i...
+- Q-007 accept H-6bc82384 by agent (CLAUDECODE): The hold can be waived. C-ab3cdbf6 is one of the parent unit restyle-web-kit's source criteria: its scenario reads source files or pure helpers through a Node test, and nothing about it can be observed in a browser. So step 5's not_testable result is correct, and no browser test can be written for i...
+- Q-008 accept H-a317ca0a by agent (CLAUDECODE): The hold can be waived. C-dac61932 is one of the parent unit restyle-web-kit's source criteria: its scenario reads source files or pure helpers through a Node test, and nothing about it can be observed in a browser. So step 5's not_testable result is correct, and no browser test can be written for i...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
-| C-6027f26f | web-data-kit › Page header meta: a wrapping row below the title, with gaps between items — feedback FB-001 › Page header meta: a wrapping row below the title, with gaps between items | pass | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-6027f26f | web-data-kit › Page header meta: a wrapping row below the title, with gaps between items — feedback FB-001 › Page header meta: a wrapping row below the title, with gaps between items | pass | pass | accepted by agent (CLAUDECODE): The criterion is satisfied, and the delegate verified it by hand. Ignored test e2e/test_run_header_meta.py::test_page_header_meta_wraps_below_the_title_with_gaps does discriminate. On the offline e2e stack with web built at the unit head 563f4585 it passes at 1366 and... |
 | C-97684e64 | web-data-kit › A table caption can be hidden and still names the table › captionClass and the DataTable wiring | pass | pass | the judge passed it and a discriminating test passes |
 | C-66cb6cb0 | web-data-kit › data.css makes tables cards and bounds fields without breaking a pinned rule › data.css keeps every pinned rule and adds the new declarations | pass | pass | the judge passed it and a discriminating test passes |
 | C-859c63d2 | web-data-kit › data.css makes tables cards and bounds fields without breaking a pinned rule › A table is a card with a header row and a hover row | pass | pass | the judge passed it and a discriminating test passes |
@@ -158,17 +169,7 @@ Scope not judged: the spec names no path or module in backticks: nothing to comp
 
 ## Feedback
 
-- FB-001: judged addressed, pending a PASS round: web/src/kit/theme.css (added .ui-page-header-meta, .ui-page-header-meta > *, and .ui-page-header-actions rules)
-
-## Needs a human
-
-- UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table
-- UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table
-- UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table
-- UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table
-- UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table
-- UI criterion C-ab3cdbf6 has no end-to-end test; see the generated UI tests table
-- UI criterion C-dac61932 has no end-to-end test; see the generated UI tests table
+- FB-001: addressed at fcfd99ddce: web/src/kit/theme.css (added .ui-page-header-meta, .ui-page-header-meta > *, and .ui-page-header-actions rules)
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
