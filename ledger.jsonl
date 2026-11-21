@@ -181,3 +181,5 @@
 {"at":"2026-11-21T04:24:33Z","run":"r-20261121T0424Z-1491","type":"unit.dispatched","unit":"openspec:add-run-view"}
 {"at":"2026-11-21T06:42:12Z","attempt":1,"cost_usd":3.634934,"runs":3,"type":"plan.charged","unit":"openspec:add-run-view"}
 {"at":"2026-11-21T06:42:12Z","run":"r-20261121T0642Z-056f","type":"unit.dispatched","unit":"openspec:add-run-view"}
+{"at":"2026-11-21T08:06:01Z","attempt":1,"cost_usd":7.202736,"runs":4,"type":"plan.charged","unit":"openspec:add-run-view"}
+{"at":"2026-11-21T08:06:01Z","run":"r-20261121T0805Z-2be7","type":"unit.dispatched","unit":"openspec:add-run-view"}
