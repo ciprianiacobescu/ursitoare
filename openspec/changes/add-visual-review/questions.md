@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-527bcb10: UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-5c490932: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-0de5f245: UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-0bc13fcf: UI criterion C-1beceb27 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-0bc13fcf: UI criterion C-1beceb27 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-02e09269: UI criterion C-de5dc745 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -524,7 +524,8 @@ accept The hold can be waived. The criterion is asserted in full by alice's jour
 
 ## Q-010: Hold H-0bc13fcf: UI criterion C-1beceb27 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -543,6 +544,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. Alice's journey test asserts the whole scenario: it fills Vendor name (required) with ACME and Amount (required) with 12.5, opens Answers for lookup and Answers for pay by name and fills their first outputs, photographs the filled panel as alice-flows-demo-ui-answers.png, clicks Start test run, asserts the panel holds exactly one link named Open run followed by the id and opens it. On the run page it asserts the status named Run state reads State: completed within 20,000 ms with data-tone success, that Started by Alice Example is visible, that the three p.runs-preview elements parse to the lookup, pay and done values, that focusing the Started time opens a tooltip matching YYYY-MM-DD HH:MM UTC, runs axe with the tooltip open, presses Escape and writes alice-runs-run-id.png. The run page renders exactly those elements: the status with aria-label Run state and data-tone, the Started by line, the focusable time inside a Tooltip, and the previews as p.runs-preview. The journey test passed in the latest e2e gate. The generated test failed at base and head alike, so it discriminates nothing and is not evidence against the page. The design foresaw this hold and says to accept it on the journey's passing run.
 ---
 
 ## Q-011: Hold H-02e09269: UI criterion C-de5dc745 has no end-to-end test; see the generated UI tests table
