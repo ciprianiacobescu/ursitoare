@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-5c490932: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-0de5f245: UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-0bc13fcf: UI criterion C-1beceb27 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-02e09269: UI criterion C-de5dc745 has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-02e09269: UI criterion C-de5dc745 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -549,7 +549,8 @@ accept The hold can be waived. Alice's journey test asserts the whole scenario: 
 
 ## Q-011: Hold H-02e09269: UI criterion C-de5dc745 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -568,3 +569,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The scenario needs the run alice created earlier in the same journey, so a stand-alone generated test cannot reproduce it, and the verifier's not testable result is correct. Alice's journey test asserts the scenario after the run: it opens Runs and asserts the row with demo-ui contains completed, Alice Example and <1 s, then photographs alice-runs.png; it opens Home and asserts Recent runs contains Run followed by the last eight characters of the id and of demo-ui, that the link demo-ui is in Recent flows and that Next steps contains Start a test run, then photographs alice-home.png; it opens the graph page, asserts the level 1 heading Graph of demo-ui, and photographs alice-flows-demo-ui-graph.png. Each file is asserted to exist, be non-empty and be as tall as the page. The home page renders the Recent runs, Recent flows and Next steps sections and the Start a test run step, and the graph page renders the Graph of <id> title. The journey test passed in the latest e2e gate. The design foresaw this hold for every criterion and says to accept it on the journey's passing run.
