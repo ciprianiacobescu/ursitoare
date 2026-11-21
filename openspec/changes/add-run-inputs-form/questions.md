@@ -420,6 +420,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ## Q-015: Hold H-4054053e: UI criterion C-41245171 has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): e2e/test_m6b_run_inputs.py tags test_the_panels_fit_the_screen with @pytest.mark.l4("C-41245171") over the three viewports of the spec, and InputForm.tsx uses a @container grid with @xl:grid-cols-2 as design.md decision 8 describes. The verifier reports all three parametrized runs fail at the head after two attempts. The criterion asserts layout measurements (stacked or side by side fields, group height, scrollWidth <= innerWidth) and an axe-core result at 1366, 1024 and 390, none of which I can check from source: whether the 36 rem container query trips at 1024 depends on the workspace widths of add-flow-workspace and add-app-shell, and an axe violation is invisible in a file read. The criterion is still open as Q-007. A person who can run the browser suite must decide whether the failure is real.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
