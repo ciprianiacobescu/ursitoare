@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | answered | none | verdict | Hold H-58477fd9: UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table |
 | Q-012 | answered | none | verdict | Hold H-88dcd857: UI criterion C-e9b281b6 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-66b31620: UI criterion C-6bc1b603 has no end-to-end test; see the generated UI tests table |
-| Q-014 | open | none | verdict | Hold H-5b4b4c98: UI criterion C-eba3df1e has no end-to-end test; see the generated UI tests table |
+| Q-014 | answered | none | verdict | Hold H-5b4b4c98: UI criterion C-eba3df1e has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-4054053e: UI criterion C-41245171 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -403,7 +403,7 @@ accept C-6bc1b603 has a discriminating end-to-end test: e2e/test_m6b_run_inputs.
 
 ## Q-014: Hold H-5b4b4c98: UI criterion C-eba3df1e has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): e2e/test_m6b_run_inputs.py tags test_validate_makes_the_panels_read_the_document with @pytest.mark.l4("C-eba3df1e") and matches test-plan-browser.md, and use-run-document.ts re-reads the version when the editor's canonical is null and TestRunPanel.tsx restarts the sync from the current text on arrival, as design.md decision 4 requires. Yet the verifier reports that a test of exactly that name fails at the head after two attempts. The scenario depends on the editor clearing canonical after Validate, on the second mocked GET answering a different document, and on the oneOf note rendering once per region: all browser behaviour I cannot run or observe. The criterion is still open as Q-006. I cannot separate a real defect from a step 5 environment failure, so a person must decide.
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -423,6 +423,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept C-eba3df1e has a discriminating end-to-end test: e2e/test_m6b_run_inputs.py::test_validate_makes_the_panels_read_the_document, tagged with the criterion id, passes at head 9754a32c (CI e2e gate and locally) and fails with web/src at the base 07b879df (at the base it fails at line 321 (no Vendor name (required) field)); checked by the owner's delegate on a private e2e stack, see the matching satisfied question for the details. The generated test fails at the head only because of its setup: it signs in to the stack and looks for a flow demo-pay with vendor_name and amount inputs, but the stack has no flows (the page shows "No flows yet"), so it fails at the base and the head alike and says nothing about the code.
 ---
 
 ## Q-015: Hold H-4054053e: UI criterion C-41245171 has no end-to-end test; see the generated UI tests table
