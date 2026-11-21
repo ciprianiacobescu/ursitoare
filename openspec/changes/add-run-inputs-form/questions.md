@@ -217,6 +217,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-007: Criterion C-41245171 (web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): This criterion is layout and accessibility measured in a browser (field positions within 1 px, group heights of 160 and 260 px, scrollWidth, axe) plus the unchanged M4, M5 and M6 journeys passing. None of that can be checked by reading; InputForm.tsx uses a @container grid with @xl:grid-cols-2 as designed, and e2e/test_m6b_run_inputs.py lines 334-356 assert the measurements, but I have no e2e run result, and the harness-generated browser test for this criterion fails at head and is not in the repository. A person who can see the browser runs must decide.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
