@@ -348,6 +348,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ## Q-012: Hold H-88dcd857: UI criterion C-e9b281b6 has no end-to-end test; see the generated UI tests table
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): C-e9b281b6 is a browser criterion of the requirement "The panels show the form and the rows in a browser". The repository holds a tagged browser test, test_a_missing_required_field_blocks_the_start in e2e/test_m6b_run_inputs.py, but the verifier says it was never proved to fail without the change and that a generated test of the same name fails at the head. I cannot run the browser suite, so I cannot tell whether the focus, aria-invalid, description and refused POST behave as the scenario says, nor whether the head failure is a real defect or an environment problem. The sibling browser criteria were already escalated, and a person must decide this one too.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
