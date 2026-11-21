@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-6027f26f (web-data-kit › Page header meta: a wrapping row below the title, with gaps between items — feedback FB-001 › Page header meta: a wrapping row below the title, with gaps between i |
 | Q-002 | answered | none | verdict | Hold H-09735f2a: UI criterion C-97684e64 has no end-to-end test; see the generated UI tests table |
-| Q-003 | open | none | verdict | Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table |
+| Q-003 | answered | none | verdict | Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-1db9756c: UI criterion C-3192e29f has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-2dab7e00: UI criterion C-2c488542 has no end-to-end test; see the generated UI tests table |
@@ -81,7 +81,7 @@ accept The hold can be waived. C-97684e64 is one of the parent unit restyle-web-
 
 ## Q-003: Hold H-b35898ab: UI criterion C-66cb6cb0 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -100,6 +100,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. C-66cb6cb0 is one of the parent unit restyle-web-kit's source criteria: its scenario reads source files or pure helpers through a Node test, and nothing about it can be observed in a browser. So step 5's not_testable result is correct, and no browser test can be written for it. In this round's verdict.json the criterion's own result is pass ('the judge passed it and a discriminating test passes'), with its Node test traced by id. This follow-up changes only web/src/kit/theme.css (one new rule block) and adds tests, and that test still passes.
 ---
 
 ## Q-004: Hold H-7415271d: UI criterion C-23da30c9 has no end-to-end test; see the generated UI tests table
