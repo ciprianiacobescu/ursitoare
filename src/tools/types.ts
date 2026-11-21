@@ -51,7 +51,8 @@ export interface ToolBinding {
   ref: string;
   tool: string;
   effect: Effect;
-  http: { method: string; path: string };
+  http?: { method: string; path: string };
+  call?: ToolCallSpec;
   untrustedResult: boolean;
   unsafeToRetry: boolean;
 }

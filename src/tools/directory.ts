@@ -1,6 +1,7 @@
 import { getBlockVersion } from "../registry/index.ts";
 import { withTenantTx } from "../tenancy/index.ts";
 import type { TenantContext, TenantPool, TenantTx } from "../tenancy/index.ts";
+import type { ToolCallSpec } from "./calls.ts";
 import { toolHash } from "./surface.ts";
 import type { ToolBinding, ToolServerState, ToolSurface } from "./types.ts";
 
@@ -18,6 +19,30 @@ interface ServerRow {
 
 interface SurfaceRow {
   surface: ToolSurface;
+}
+
+function copyCall(call: ToolCallSpec): ToolCallSpec {
+  switch (call.kind) {
+    case "http":
+      return {
+        kind: call.kind,
+        method: call.method,
+        path: call.path,
+        params: call.params.map((param) => ({ name: param.name, in: param.in })),
+        body: call.body,
+      };
+    case "mcp":
+      return {
+        kind: call.kind,
+        endpoint: call.endpoint,
+        name: call.name,
+        protocolVersion: call.protocolVersion,
+        output: call.output,
+        ...(call.hints === undefined ? {} : { hints: { ...call.hints } }),
+      };
+    case "code":
+      return { kind: call.kind, source: call.source };
+  }
 }
 
 function bindingOf(value: unknown): { server: string; tool: string } | null {
@@ -82,11 +107,9 @@ export function createToolDirectory(pool: TenantPool): ToolDirectory {
 
         const tool = surface.tools.find((candidate) => candidate.name === toolName);
         if (tool === undefined) return null;
-        const http = tool.http;
-        if (http === undefined) return null;
         if (toolHash(serverId, tool) !== version.contentHash) return null;
 
-        return {
+        const bindingBase = {
           serverId,
           origin: server.origin,
           local: server.local,
@@ -94,10 +117,14 @@ export function createToolDirectory(pool: TenantPool): ToolDirectory {
           ref,
           tool: toolName,
           effect: tool.effect,
-          http: { method: http.method, path: http.path },
           untrustedResult: tool.untrusted_result ?? true,
           unsafeToRetry: tool.unsafe_to_retry ?? false,
         };
+        if (tool.call !== undefined) return { ...bindingBase, call: copyCall(tool.call) };
+        if (tool.http !== undefined) {
+          return { ...bindingBase, http: { method: tool.http.method, path: tool.http.path } };
+        }
+        return null;
       });
     },
   };

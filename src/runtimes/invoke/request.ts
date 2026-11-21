@@ -38,7 +38,9 @@ export function toolRequest(
   args: JsonValue,
   idemKey: string | null,
 ): ToolRequest {
-  const method = binding.http.method;
+  const http = binding.http;
+  if (http === undefined) throw new RangeError("toolRequest: binding has no http");
+  const method = http.method;
   const body = BODY_LESS_METHODS.has(method) ? null : encoder.encode(JSON.stringify(sortedCopy(args)));
   const headers: Record<string, string> = {};
   if (body !== null) headers["content-type"] = "application/json";
@@ -47,14 +49,14 @@ export function toolRequest(
     request: {
       method,
       origin: target.origin,
-      path: binding.http.path,
+      path: http.path,
       headers,
       body,
     },
     egress: {
       method,
       host: new URL(target.origin).host,
-      path: binding.http.path,
+      path: http.path,
       bodyDigest: bodyDigest(body),
       serviceId: target.serviceId,
       ttlSeconds: 60,
