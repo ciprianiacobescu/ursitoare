@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
+| Q-001 | answered | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 1.1: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 1.1
 - **Kind:** harness
 - **Asked:** 2026-11-21T09:05Z by deepseek-free, run r-20261121T0829Z-500c, task 1.1
@@ -156,3 +157,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: The inconclusive result is the one the unit's own documents predicted, and the real run is enough evidence. Both files of task 1.1 match the test globs of the repository's L4 configuration, so the unit changes no production file and the zero-value run has nothing to vary; the base run passing is what tasks.md and design.md say must happen for a unit made only of tests. The Node test discriminates on its own through the T3 mutation rows: J0 checks the real journey against the real page tables, which give exactly 13 required paths from the home feature, four admin pages, three tool pages, the flows and runs list pages and the three detail routes; J1 renames every quoted /admin/grants in the journey text and expects exactly one missing-page problem, J2 renames the only watch_csp( call and expects exactly one missing-needle problem, and J3 feeds empty text and expects the literal to be reported missing. I read the saved patch and confirmed that the journey holds every needle, the three milestone marks, no banned wait or skip, and the roles in the required order, so the real run is a real check and not a vacuous pass. Count the held test on the evidence of the real run; the three browser tests stay with the verifier, as the unit's documents say.
