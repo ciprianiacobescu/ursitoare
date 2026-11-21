@@ -63,9 +63,14 @@ def step(seq: int, node: str, kind: str, out: int | None) -> dict:
         "kind": kind,
         "state": "completed",
         "outcome": None,
+        "effectSeq": seq,
+        "attempt": 1,
         "inputRef": f"{1000 + seq:064x}",
         "outputRef": None if out is None else f"{out:064x}",
         "error": None,
+        "idemKey": None,
+        "policyDecisionId": None,
+        "taint": [],
         "hooks": [],
         "startedAt": f"2026-11-17T10:00:0{seq + 1}.000000Z"
         if seq < 9
