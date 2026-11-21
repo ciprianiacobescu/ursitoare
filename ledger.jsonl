@@ -211,3 +211,4 @@
 {"at":"2026-11-21T11:22:42Z","revision":"9bfba3710ee40ef5673c41bc5da926ae09ebda33","type":"unit.integrated","unit":"openspec:add-visual-review"}
 {"at":"2026-11-21T11:22:42Z","attempt":1,"cost_usd":7.974498,"runs":5,"type":"plan.charged","unit":"openspec:add-visual-review"}
 {"at":"2026-11-21T11:24:30Z","branch":"l4/archive/openspec/add-visual-review","head":"36dd7cceae53c8d224ccdbfea72f48c7941a3008","type":"unit.branch_deleted","unit":"openspec:add-visual-review"}
+{"at":"2026-11-21T11:24:31Z","batch":"m6b-ui","profile":"none","revision":"36dd7cceae53c8d224ccdbfea72f48c7941a3008","type":"batch.accepted"}
