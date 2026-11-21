@@ -13,6 +13,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
 | Q-002 | answered | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
+| Q-003 | open | none | verdict | Criterion C-54891f4b (web-design-system › Every page is photographed only when loaded, with a clean check › Every page leaves a loaded screenshot and no CSP message): accept as satisfied? |
+| Q-004 | open | none | verdict | Criterion C-0462bba1 (web-design-system › The flow workspace is beside, complete and at most 3,000 px tall › The workspace of demo-ui is two columns and at most 3,000 px tall): accept as satisfied? |
+| Q-005 | open | none | verdict | Criterion C-1beceb27 (web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run): accept as satisfied? |
+| Q-006 | open | none | verdict | Criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work): accept as satisfied? |
+| Q-007 | open | none | verdict | Hold H-527bcb10: UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table |
+| Q-008 | open | none | verdict | Hold H-5c490932: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table |
+| Q-009 | open | none | verdict | Hold H-0de5f245: UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table |
+| Q-010 | open | none | verdict | Hold H-0bc13fcf: UI criterion C-1beceb27 has no end-to-end test; see the generated UI tests table |
+| Q-011 | open | none | verdict | Hold H-02e09269: UI criterion C-de5dc745 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -303,3 +312,243 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: verified by the owner's delegate. The held patch is test-only (e2e/test_m6b_ui.py, web/src/visual-pages.test.ts), so the base run passing is expected. Applied on main 21263517: typecheck, eslint, py_compile pass; visual-pages.test.ts 1/1. The journey against a local e2e stack built at main passed 3/3 twice and wrote all 21 screenshots. It fixes both failures of Q-001's replay (the previews now wait for each JSON text before json.loads; the signed-out home asserts the status, the main-text detail stays covered by frozen test_m6b_home.py:439). Checks kept: Approve surface, Start a test run, Recent runs and flows; 92 expect/assert lines vs 85 before.
+
+---
+
+## Q-003: Criterion C-54891f4b (web-design-system › Every page is photographed only when loaded, with a clean check › Every page leaves a loaded screenshot and no CSP message): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-54891f4b (web-design-system › Every page is photographed only when loaded, with a clean check › Every page leaves a loaded screenshot and no CSP message)
+
+### Context
+Criterion C-54891f4b (web-design-system › Every page is photographed only when loaded, with a clean check › Every page leaves a loaded screenshot and no CSP message) is needs human after round 1.
+
+Scenario:
+\- **WHEN** the three tests of test-plan-browser.md run against the offline stack with `E2E_VISUAL_DIR` unset
+\- **THEN** `.l4-out/visual/` holds the 21 files of test-plan.md T1 (3 signed-out, 8 alice, 10 carol), each at least as tall as its page (measured 860 px for the pages that fit the window; 2,706 for `alice-flows-demo-ui.png`, 2,978 for `alice-flows-demo-ui-answers.png`, 1,415 for the graph page, 1,016 for Group mappings, 4,117 for the audit log, 1,417 for `carol-home-narrow.png` at 900 wide); no file shows "Loading" or "Checking" text or a sidebar without the account banner; no toast is in any picture; each test ends with `visual.csp == []`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_ui::test_signed_out_pages_are_styled[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Criterion C-0462bba1 (web-design-system › The flow workspace is beside, complete and at most 3,000 px tall › The workspace of demo-ui is two columns and at most 3,000 px tall): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-0462bba1 (web-design-system › The flow workspace is beside, complete and at most 3,000 px tall › The workspace of demo-ui is two columns and at most 3,000 px tall)
+
+### Context
+Criterion C-0462bba1 (web-design-system › The flow workspace is beside, complete and at most 3,000 px tall › The workspace of demo-ui is two columns and at most 3,000 px tall) is needs human after round 1.
+
+Scenario:
+\- **WHEN** alice (team `finance`) opens "Flows", sees "Owner team" prefilled, creates `demo-ui`, saves and validates the text of test-plan-browser.md, and the page is measured before any row opens
+\- **THEN** "Owner team" has value `finance`; the title is `Flow demo-ui · Ursitoare`; "Diagnostics" contains `Valid. 0 errors`; the tops of "Graph" and "Edit the flow" differ by at most 8 (measured 239 and 239); the tops of "Test run" and "Dry run" differ by at most 8 (measured 1,573 and 1,573); the height is at most 3,000 (measured 2,706); `alice-flows-demo-ui.png` exists
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_ui::test_alice_builds_tests_and_reads_a_flow[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Criterion C-1beceb27 (web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-1beceb27 (web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run)
+
+### Context
+Criterion C-1beceb27 (web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run) is needs human after round 1.
+
+Scenario:
+\- **WHEN** alice fills the two fields, opens both answer rows, fills `{"vendor_id":"V-1","status":"active"}` for `lookup` and `{"payment_id":"P-1","status":"created"}` for `pay`, clicks "Start test run", opens the one link of the panel and focuses the `time` that starts with "Started "
+\- **THEN** the panel holds one link named `Open run <id>`; the status "Run state" reads `State: completed` with `data-tone` `success` (within 20,000 ms); "Started by Alice Example" is visible; three `p.runs-preview` parse to `{"vendor_id":"V-1","status":"active"}`, `{"payment_id":"P-1","status":"created"}` and `{"payment_id":"P-1"}`; the tooltip text matches `YYYY-MM-DD HH:MM UTC`; axe passes with it open; `alice-flows-demo-ui-answers.png` and `alice-runs-run-id.png` exist
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_ui::test_alice_builds_tests_and_reads_a_flow[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-006: Criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work)
+
+### Context
+Criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work) is needs human after round 1.
+
+Scenario:
+\- **WHEN** alice opens "Runs", then "Home", then `/flows/demo-ui/graph`
+\- **THEN** the row of `demo-ui` contains `completed`, `Alice Example` and the duration `<1 s`; "Recent runs" contains `Run <last 8> of demo-ui`; the link `demo-ui` is under "Recent flows"; "Next steps" contains "Start a test run"; the heading is "Graph of demo-ui"; `alice-runs.png`, `alice-home.png` and `alice-flows-demo-ui-graph.png` exist
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m6b_ui::test_alice_builds_tests_and_reads_a_flow[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-007: Hold H-527bcb10: UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-8ac052fa: not_testable after 1 attempt(s); The criterion checks a node:test unit test (web/src/visual-pages.test.ts) reading source files and page tables; it has no browser-observable outcome for a Playwright test..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-008: Hold H-5c490932: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-54891f4b: not_testable after 1 attempt(s); Criterion is about running the three journey tests and inspecting 21 screenshot files on disk (.l4-out/visual), a meta-run of the suite itself, not a user-observable behavior of one page..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-009: Hold H-0de5f245: UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-0462bba1: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_0462bba1::test_demo_ui_workspace_is_two_columns_and_short[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-010: Hold H-0bc13fcf: UI criterion C-1beceb27 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-1beceb27 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-1beceb27: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_1beceb27::test_alice_starts_run_from_form_and_reads_it[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-011: Hold H-02e09269: UI criterion C-de5dc745 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-de5dc745 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-de5dc745: not_testable after 1 attempt(s); Needs alice's completed demo-ui run, created by earlier journey steps through UI flows not shown; seed state unknown, and screenshots are artifacts of the journey itself..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
