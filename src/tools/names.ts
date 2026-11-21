@@ -1,5 +1,8 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
-export function toolNameOf(_external: string): string | null {
-  throw new Error("not implemented");
+export function toolNameOf(external: string): string | null {
+  const separated = external.replace(/([a-z0-9])([A-Z])/g, "$1_$2");
+  const replaced = separated.toLowerCase().replace(/[^a-z0-9_]/g, "_");
+  const collapsed = replaced.replace(/_+/g, "_").replace(/^_+|_+$/g, "");
+  if (collapsed.length === 0) return null;
+  const prefixed = /^[a-z]/.test(collapsed) ? collapsed : `t_${collapsed}`;
+  return prefixed.slice(0, 64);
 }
