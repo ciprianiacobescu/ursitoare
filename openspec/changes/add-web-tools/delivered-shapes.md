@@ -1,0 +1,35 @@
+Shapes of main@386e6b6d (`export` omitted; logic files unchanged since 3daa5c35), then the sibling answers, then the M6b kit and pages.
+
+```ts
+// web/src/api/client.ts:13-31, :36-50 (base "/api/v1"); web/src/admin/shared.ts:13
+class ApiRequestError extends Error { status: number; code: string; details: unknown; constructor(status: number, code: string, message: string, opts?: { details?: unknown; … }) }
+type Api<K extends keyof ApiClient> = Pick<ApiClient, K>   // get(path, { query?, headers?, signal? }), post(path, body?, opts?), put(path, body?, opts?)
+// web/src/kit/data/form-errors.ts:4, :7, :58-110
+const FORM_ERROR_KEY = "$form"; type FormErrors = Readonly<Record<string, string>>
+function mapEnvelopeErrors(error: unknown, fields: readonly string[]): FormErrors   // a 400 field "body/<name>[/…]" with <name> in fields gets its message; others join "$form" after the VALIDATION_FAILED text as "<field>: <message>"
+// web/src/kit/data/Form.tsx:7-53 (FormSpec in form.ts:6-12); Field.tsx:6-59 (FieldSpec in field.ts:3-10); page-fetcher.ts:29-64
+function Form(props: { label; submitLabel; fields: readonly string[]; errors: FormErrors; busy?: boolean; onSubmit; children? }): ReactNode   // busy: submit aria-disabled, onSubmit not called; errors["$form"] is a `div role="alert"` (`Form.tsx:40-44`); a Field error is `<p class="ui-field-error">` with a hidden "Error: " prefix (`Field.tsx:29-34`); a `required` field's label gets " (required)"
+function cursorPageFetcher<T>(client: Pick<ApiClient, "get">, path: string, opts: { parseItem: (raw: unknown) => T | null }): FetchPage<T>   // a null item is ApiRequestError(200, "INVALID_RESPONSE", "Invalid page")
+// web/src/app/features.ts:14-20, :157-190; web/src/admin/pages.ts:110-133
+function featureLiterals(source: string): { id; path; navLabel; capability } | null   // null without a navLabel literal; nav() skips a feature without navLabel
+// web/src/tools/servers.ts:7-24, :70-76, :103-130, :226, :311; messages.ts:36
+function parseToolServer(raw: unknown): ToolServerView | null   // parseHttp: absent or null gives null; a non-record, or a method or path that is not a string, is malformed; unknown members are ignored
+function toolRows(s: ToolServerView): { …; call: string }[]   // call "<method> <path>" or "—"; serverLink(id) is "/admin/tool-servers?server=<id>"
+function toolsErrorMessage(error: unknown): string   // the text of one of 13 reasons of a 422 OPERATION_REFUSED, else the kit text; a 403 appends " Decision id: <id>"
+// web/src/tools/grants.ts:19, :52, :103, :145-172
+const NODE = /^[a-z][a-z0-9_]*$/   // matched with max 1024 in parseGrant and grantBody
+function loadToolRefs(client: Api<"get">, signal?: AbortSignal): Promise<string[]>   // REF_PAGES = 10 pages of limit 100; the refs read, no sign of a cut
+// web/src/runs/test-run.ts:155-183; dry-run.ts:103
+function refusedTest(details: Record<string, unknown>): FormErrors | null   // kind_unsupported; version_not_runnable with cause block_missing; else null
+function testRunFormErrors(error: unknown): FormErrors   // a 422 OPERATION_REFUSED goes to refusedTest, else { $form: runErrorMessage(error) }; dryRunFormErrors hands it every non-400 error
+```
+
+**Credential routes** (`src/api/credential-routes.ts`; header and value rules `src/credentials/validate.ts:5-22`). `POST /api/v1/credentials` (`:208`, `manage_credentials`, `Idempotency-Key` optional): body `{ toolServerId, authScheme, headerName?, value }` (`:71`; `value` 1 to 4096, `writeOnly` `:44-49`), 201 the record `{ id, toolServerId, serviceId, authScheme, headerName, targetOrigin, keyVersion, provisionedBy, provisionedAt, rotatedAt }` ; a second credential for a server is 409 `ALREADY_EXISTS`, a vault failure 503 `EGRESS_UNAVAILABLE` . `POST /api/v1/credentials/:id/rotate` (`:273`): body `{ value }`, 200 the record. `GET /api/v1/credentials` (`:302`): `{ items, next_cursor }`, `limit` 1 to 200 (`src/api/pagination.ts:8`).
+
+**Sibling answers** (U53 to U55). `PUT /api/v1/tool-servers/{id}/openapi` takes `{ document, overlay }` (U53), `PUT …/code` takes `{ tools }` (U55); each answers 200 the server record. `GET /api/v1/tool-servers/{id}` adds `approvedSurface` and `pendingSurface` (`{ tools }` or null; a code tool holds `description?`, `input`, `output`, `call: { kind: "code", source }`). U55's rotate route takes optional `authScheme` and `headerName` besides `value` (U55 `specs/credentials/spec.md:24`). Preview: 200 `{ version, basePath, operations: [{ operationId, method, path, name, excluded }] }`; register: 201 the flat server record (`/mcp`: `{ server, endpoint }`); refusals 400 `VALIDATION_FAILED` with `fields` at `body/<member>[/…]`, 409 `ALREADY_EXISTS`. A stale version's start is 422 `OPERATION_REFUSED` with `details` `{ reason: "version_not_runnable", cause: "validation_stale" }` (U27b).
+
+**Kit and pages on main** (M6b; JSX only, the logic files above are unchanged). `PageHeaderProps { title; description?; meta?; actions?; headingRef? }` (`web/src/kit/layout/PageHeader.tsx:3-9`); `SectionProps { title; headingLevel?: 2 | 3; actions?; className?; id?; children? }` (`Section.tsx:6-13`, role `region` named by its `h2`); `PAGE_WIDTHS { form: "max-w-3xl"; list: "max-w-6xl"; wide: "max-w-none" }` (`layout.ts:13-17`); `Button` = `ComponentProps<"button"> & { tone?: "primary" | "secondary" | "danger" | "ghost"; size?; asChild? }`, default `type="button"`, spreads `aria-disabled`, sets no `disabled` (`web/src/ui/button.tsx:9-32`); `Card` a `div` (`ui/card.tsx:5-16`); `findCssImports`, `findPaletteUtilities` (`ui/rules.ts:94-100`; `ui/rules-tree.test.ts:44-56` lets only `main.tsx` import CSS), `findInlineStyleUse` (`kit/contrast.ts:166`).
+
+`ServersPage.tsx:213-297`: root `cn("tools-page", PAGE_WIDTHS.list)`; one `PageHeader` with a `description`, no `actions` (`:215-218`); the servers table; `Registered by <name>` (`:232-234`); with `?server=` the `<Section title={TOOL_NAMES["surfaceHeading"] ?? "Surface"}>` (`:235-294`; one `data-tone="primary"` `:272`, one `<ConfirmDialog` `:285`). `GrantsPage.tsx`: `<Section title={label("grantForm")}>` ("New grant", no `Card`) holds the `Form` (`:242-395`); the "Tool" `Field` `:298-322`, then `LoadingState` `:323`; the refs state is `RegionLoad<readonly string[]>` (`:83`, `:123`). Pins `tools/tools-pages-restyle.test.ts:33-99`: ServersPage has one each of `<PageHeader`, `className="tools-feedback"`, `data-tone="primary"`, `<ConfirmDialog`; GrantsPage has no `ConfirmDialog`, `data-tone="primary"` or `people/`.
+
+**Browser-test inputs.** `/api/v1/me` is read by `parseMe` (`web/src/kit/capabilities.ts:43-73`). `/api/v1/people?ids=…` is `{ items: [{ userId, displayName, kind: "human" | "service" }] }` (`people/people.ts:28-44`), asked only by `useDisplayNames` (`ServersPage.tsx:127`) through a client with no session-end hook (`people.ts:209`): a failure raises nothing. The run panels keep `Form` with `errors` and show `testRunFormErrors(error)` (`runs/TestRunPanel.tsx:52-58`, `:112`, `:128-135`) or `dryRunFormErrors(error)` (`DryRunPanel.tsx:72-77`, `:147`, `:174-178`) as the form alert.
