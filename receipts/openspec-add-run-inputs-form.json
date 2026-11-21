@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-21T01:54:49Z",
+  "integrated_revision": "62c19eea71a6caa4e4c31409ce91a5ffd81100c4",
+  "merge_commit": "62c19eea71a6caa4e4c31409ce91a5ffd81100c4",
+  "plan_digest": "03b7600f239a655c",
+  "plan_id": "m6b",
+  "postcheck": "pass",
+  "pr": 146,
+  "receipt_id": "m6b/openspec:add-run-inputs-form/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "403148662b41e63f73ddcf6515345c8f661f4d24",
+  "spec_digest": "ae9ac251a6c807ad",
+  "target": "main",
+  "unit_id": "openspec:add-run-inputs-form"
+}
