@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 2.2 | technical | src/tools/adapter-submit.db.test.ts:134 compares JSON text of a jsonb payload |
 | Q-002 | answered | none | verdict | Criterion C-f287b385 (tool-invocation › Authorization is recorded before anything is sent › A granted read is authorised): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-8b5cbc41 (tool-invocation › Authorization is recorded before anything is sent › Policy errors and an unrecorded decision deny with fixed reasons): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-c28f570f (tool-invocation › A refusal before the policy point records and sends nothing › Each refusal reason, in order): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-c28f570f (tool-invocation › A refusal before the policy point records and sends nothing › Each refusal reason, in order): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-17a3e8b7 (tool-invocation › invoke sends only what was authorised › A call through the fakes, and each failure): accept as satisfied? |
 <!-- l4:index:end -->
 
@@ -112,7 +112,8 @@ accept The frozen test runs rows E1 to E5 and E7 on one harness whose policy wra
 
 ## Q-004: Criterion C-c28f570f (tool-invocation › A refusal before the policy point records and sends nothing › Each refusal reason, in order): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -139,6 +140,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The four frozen tests cover rows R1 to R15: the rig test checks each refusal reason and details in order with node and no decisionId, the hook row adding hook pay:post:notify, and asserts check and connect counts 1 only for R9 and gateway 0 in every row; the R11 test asserts INTERPRETER_TOOL_FAILED with stage authorize and no db down text for each rejecting dependency; R12 and R15 on the harness check the initiator is reloaded per authorize, the version and catalogue once, and that a rejected or null approver is not loaded. The production authorize implements this order, with the new adapter_unavailable step inserted after surface_drift as the modified requirement states and checked by this unit's own tests.
 ---
 
 ## Q-005: Criterion C-17a3e8b7 (tool-invocation › invoke sends only what was authorised › A call through the fakes, and each failure): accept as satisfied?
