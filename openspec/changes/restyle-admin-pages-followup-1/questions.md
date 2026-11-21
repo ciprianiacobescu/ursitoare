@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1 | harness | Task 1.1: the test chore discrimination check could not decide |
-| Q-002 | open | none | verdict | Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table |
+| Q-002 | answered | none | verdict | Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table |
 | Q-003 | open | none | verdict | Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-73dee3af: UI criterion C-e553aba2 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -130,7 +130,7 @@ accept: verified by the delegate. The test-chore discrimination check could not 
 
 ## Q-002: Hold H-91a276d8: UI criterion C-b824c627 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -149,6 +149,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept. Checked by the owner's delegate in round 2's verdict.json and verification.md: C-b824c627 has result pass (judge pass, confidence 0.91) and is traced by two Node tests in web/src/admin/admin-pages-restyle.test.ts that pass, one of them discriminating by mutation ("the checker fails three altered Users sources"). The scenario is a source rule (the four admin pages use PageHeader and the list width with no h1, no inline style and no CSS import; their class pins; no raw colour in admin.css), which a browser cannot observe, so step 5's not_testable is right. This unit adds only a browser test and a Node test and changes no source this rule reads.
 ---
 
 ## Q-003: Hold H-6e8dbf95: UI criterion C-e4e27fab has no end-to-end test; see the generated UI tests table
