@@ -121,6 +121,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-004: Criterion C-e9b281b6 (web-runs › The panels show the form and the rows in a browser › A missing required field holds the start and names the field): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): I cannot run the browser. e2e/test_m6b_run_inputs.py lines 206-229 assert the scenario (no POST after the first start, Amount focused with aria-invalid and description Error: Required, Enter a number for abc, the one POST with vendor_name ACME and amount 12.5), and the code path exists: TestRunPanel.tsx submit sends attempt events and returns when blocked, field names precede input and mocks in Form fields, Form.tsx focuses the first erroneous field via attemptFocus, Field.tsx renders the hidden Error: span. But focus and accessible-description behaviour at runtime, and the fact that a harness-generated browser test for this criterion fails at head (not in the repository, so unreadable), cannot be checked by reading. A person with the e2e run output must decide.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
