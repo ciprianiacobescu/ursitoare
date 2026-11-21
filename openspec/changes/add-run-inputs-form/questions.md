@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | open | none | verdict | Criterion C-41245171 (web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before): accept as satisfied? |
 | Q-008 | answered | none | verdict | Hold H-9e3a60bf: UI criterion C-2e06c4e6 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-481e50f9: UI criterion C-3695054c has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-d93a7037: UI criterion C-fe487857 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-d93a7037: UI criterion C-fe487857 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-58477fd9: UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-88dcd857: UI criterion C-e9b281b6 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-66b31620: UI criterion C-6bc1b603 has no end-to-end test; see the generated UI tests table |
@@ -298,7 +298,8 @@ accept Criterion C-3695054c is the scenario "A form edit writes, a text edit ref
 
 ## Q-010: Hold H-d93a7037: UI criterion C-fe487857 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -317,6 +318,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-fe487857 is the scenario "Add, answer, remove, a bad answer and a text edit" of requirement "Answer rows and the mocks or fakes text stay in step by the same rules". Its WHEN runs the steps R1 to R8 and the arrival cases of test-plan.md T6 on the pure functions rowSyncStart, rowSyncStep and rowSyncView; it is not a browser scenario. The test plan assigns T6 to the Node test mock-rows-sync.test.ts, which asserts R1 to R8, the arrival cases and the no-nodes case with the texts, hints, answer errors and form error of T6 against the real implementation in mock-rows.ts. The browser-visible rows belong to the separate requirement "The panels show the form and the rows in a browser", whose criteria are held on their own, so the missing end-to-end test for this criterion may be waived. The step 5 writer failed to produce any test here, so no failing generated test speaks against the criterion.
 ---
 
 ## Q-011: Hold H-58477fd9: UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table
