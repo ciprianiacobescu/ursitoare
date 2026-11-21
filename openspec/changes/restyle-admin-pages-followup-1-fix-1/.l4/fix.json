@@ -1,0 +1,19 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:restyle-admin-pages-followup-1",
+  "round": 1,
+  "findings": [
+    "F-6267b553"
+  ],
+  "chores": [
+    "F-6267b553"
+  ],
+  "test_chores": [
+    "F-6267b553"
+  ],
+  "refactors": [],
+  "retakes": [
+    "F-6267b553"
+  ],
+  "repairs": []
+}

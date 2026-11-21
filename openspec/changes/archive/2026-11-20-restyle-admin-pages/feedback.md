@@ -27,4 +27,4 @@ The Section layout of criterion C-3802bfd0 (restyle-admin-pages-fix-2, web-tools
 
 ### Outcome
 <!-- written by the harness -->
-Taken into restyle-admin-pages-followup-1
+Taken in round 1 into restyle-admin-pages-followup-1-fix-1
