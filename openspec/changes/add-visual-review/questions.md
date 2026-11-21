@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Criterion C-1beceb27 (web-design-system › A test run from the form reaches a readable run page › Alice starts a test run from the form and reads the run): accept as satisfied? |
 | Q-006 | answered | none | verdict | Criterion C-de5dc745 (web-design-system › The lists and the home page show the finished run › Runs, home and the graph page show alice's work): accept as satisfied? |
 | Q-007 | answered | none | verdict | Hold H-527bcb10: UI criterion C-8ac052fa has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-5c490932: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-5c490932: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-0de5f245: UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-0bc13fcf: UI criterion C-1beceb27 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-02e09269: UI criterion C-de5dc745 has no end-to-end test; see the generated UI tests table |
@@ -474,7 +474,8 @@ accept The hold can be waived. Criterion C-8ac052fa is the unit's one Node-runna
 
 ## Q-008: Hold H-5c490932: UI criterion C-54891f4b has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -493,6 +494,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold can be waived. The criterion describes the run of the journey itself, so no separate generated browser test can check it, and the verifier's not testable result is correct; the unit's design says to expect exactly this hold for each criterion and to accept it on the journey's passing run. The journey holds the check the criterion names: for every visit, loaded waits for the account banner or the Main navigation, the page's own ready element and no visible Loading or Checking text in main; settle waits for the toast list to reach zero, dismisses only what is left, and runs assert_layout with 72 and axe; shoot scrolls to the top, writes the full-page file under E2E_VISUAL_DIR or .l4-out/visual by default, and asserts it exists, is not empty and is at least scrollHeight minus one pixel tall. The three tests assert 3, 8 and 10 shots, which are the 21 files, and each ends by asserting the CSP list is empty. All three journey tests passed in the latest e2e gate with no failure or skip. The heights in the scenario are measurements, and the only bound, 3,000 px, is asserted.
 ---
 
 ## Q-009: Hold H-0de5f245: UI criterion C-0462bba1 has no end-to-end test; see the generated UI tests table
