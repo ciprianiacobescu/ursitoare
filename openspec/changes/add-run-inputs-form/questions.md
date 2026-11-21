@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-92bb8bdc (web-runs › The panels show the form and the rows in a browser › Form and JSON stay in step and the text is used as written): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-e9b281b6 (web-runs › The panels show the form and the rows in a browser › A missing required field holds the start and names the field): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-6bc1b603 (web-runs › The panels show the form and the rows in a browser › Answer rows write the mocks and the fakes): accept as satisfied? |
-| Q-006 | open | none | verdict | Criterion C-eba3df1e (web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON): accept as satisfied? |
+| Q-006 | answered | none | verdict | Criterion C-eba3df1e (web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-41245171 (web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before): accept as satisfied? |
 | Q-008 | answered | none | verdict | Hold H-9e3a60bf: UI criterion C-2e06c4e6 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-481e50f9: UI criterion C-3695054c has no end-to-end test; see the generated UI tests table |
@@ -187,7 +187,7 @@ accept Checked by the owner's delegate in a real browser on a private e2e stack 
 
 ## Q-006: Criterion C-eba3df1e (web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): e2e/test_m6b_run_inputs.py lines 317-331 assert the scenario (Amount appears only after Validate, the cannot-show note once per region and no group Inputs for a oneOf property), and use-run-document.ts re-reads the version when canonical is null while TestRunPanel.tsx and DryRunPanel.tsx render model.reason once. Whether the editor really sets canonical to null after Validate, whether the re-read resolves in the browser and whether the note appears exactly once per region are runtime facts I cannot verify by reading; the harness-generated browser test for this criterion fails at head and is not in the repository. A person with the e2e run must decide.
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -215,6 +215,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Checked by the owner's delegate in a real browser on a private e2e stack (Playwright 1.63.0, the CI pin) at head 9754a32c, the verified head; base 07b879df. The CI e2e gate at that head ran and passed all seven tests of e2e/test_m6b_run_inputs.py and the M4, M5 and M6 journeys (test_m4_runs, test_m5_code_hooks, test_m6_grants). Locally the file passes 7 of 7 at the head and fails 7 of 7 with web/src reset to the base, so it discriminates. The test for C-eba3df1e is e2e/test_m6b_run_inputs.py::test_validate_makes_the_panels_read_the_document, tagged with the criterion id; it asserts the scenario and passes at the head; at the base it fails at line 321 (no Vendor name (required) field). The test checks that Amount appears only after Validate and that a oneOf schema shows the cannot-show note once per region and no group Inputs. The generated test fails at the head only because of its setup: it signs in to the stack and looks for a flow demo-pay with vendor_name and amount inputs, but the stack has no flows (the page shows "No flows yet"), so it fails at the base and the head alike and says nothing about the code.
 ---
 
 ## Q-007: Criterion C-41245171 (web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before): accept as satisfied?
