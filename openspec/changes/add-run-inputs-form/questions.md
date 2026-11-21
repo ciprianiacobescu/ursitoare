@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | open | none | verdict | Criterion C-eba3df1e (web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-41245171 (web-runs › The panels show the form and the rows in a browser › The panels fit the screen and the journeys fill the JSON as before): accept as satisfied? |
 | Q-008 | answered | none | verdict | Hold H-9e3a60bf: UI criterion C-2e06c4e6 has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-481e50f9: UI criterion C-3695054c has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-481e50f9: UI criterion C-3695054c has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-d93a7037: UI criterion C-fe487857 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-58477fd9: UI criterion C-92bb8bdc has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-88dcd857: UI criterion C-e9b281b6 has no end-to-end test; see the generated UI tests table |
@@ -273,7 +273,8 @@ accept Criterion C-2e06c4e6 is the scenario "The form writes with two-space inde
 
 ## Q-009: Hold H-481e50f9: UI criterion C-3695054c has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -292,6 +293,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Criterion C-3695054c is the scenario "A form edit writes, a text edit refills, and a bad text leaves the form alone" of requirement "One text is the truth...". Its WHEN runs the steps S1 to S9, T3b, T3c and the non-form cases of test-plan.md T3 on the pure state functions inputSyncStart, inputSyncStep and inputSyncView; it is not a browser scenario. The test plan assigns T3 to the Node test input-sync.test.ts, and that file asserts each step, the T3b sequence, both T3c arrival cases and the non-form cases against the real implementation in input-form.ts. The browser-visible form behaviour belongs to the separate requirement "The panels show the form and the rows in a browser", whose criteria are held on their own, so the missing end-to-end test for this criterion may be waived.
 ---
 
 ## Q-010: Hold H-d93a7037: UI criterion C-fe487857 has no end-to-end test; see the generated UI tests table
