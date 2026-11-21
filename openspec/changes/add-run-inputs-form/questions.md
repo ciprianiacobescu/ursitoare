@@ -89,6 +89,7 @@ Edit `e2e/test_m6b_run_inputs.py`: before `names = ...`, insert `expect(test_run
 ## Q-003: Criterion C-92bb8bdc (web-runs › The panels show the form and the rows in a browser › Form and JSON stay in step and the text is used as written): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The criterion is browser behaviour that I cannot run. e2e/test_m6b_run_inputs.py lines 176-203 assert exactly the scenario (two textboxes in the group, the indented text after ACME and 12.5, the compact refill, one BAD_JSON and one MISMATCH text, the one POST {input:{foo:1},mocks:{}}), and TestRunPanel.tsx wires inputSyncStep, the jsonError, the hint and the attempt-then-blocked refusal as the design says. But the verifier reports that a harness-generated browser test for this criterion fails at head, that generated test is not in the repository, and no e2e run result is available to me as evidence; I cannot tell whether the generated test or the panel is wrong. Whether the existing browser test passed at head needs a person who can see the e2e run.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
