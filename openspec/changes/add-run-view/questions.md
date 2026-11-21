@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 5.1 | technical | e2e/test_m6b_run_view.py:59-76: step() mock lacks fields that parseStepView requires |
+| Q-001 | accepted | 5.1 | technical | e2e/test_m6b_run_view.py:59-76: step() mock lacks fields that parseStepView requires |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: e2e/test_m6b_run_view.py:59-76: step() mock lacks fields that parseStepView requires
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.1
 - **Kind:** technical
 - **Asked:** 2026-11-21T06:38Z by claude-sonnet, run r-20261121T0424Z-1491, task 5.1
