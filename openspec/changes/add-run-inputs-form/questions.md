@@ -185,6 +185,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-006: Criterion C-eba3df1e (web-runs › The panels show the form and the rows in a browser › Validate reads the document, and an unsupported schema shows only the JSON): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): e2e/test_m6b_run_inputs.py lines 317-331 assert the scenario (Amount appears only after Validate, the cannot-show note once per region and no group Inputs for a oneOf property), and use-run-document.ts re-reads the version when canonical is null while TestRunPanel.tsx and DryRunPanel.tsx render model.reason once. Whether the editor really sets canonical to null after Validate, whether the re-read resolves in the browser and whether the note appears exactly once per region are runtime facts I cannot verify by reading; the harness-generated browser test for this criterion fails at head and is not in the repository. A person with the e2e run must decide.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
