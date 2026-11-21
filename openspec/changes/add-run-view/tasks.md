@@ -2,7 +2,7 @@ Paths are in `web/src/runs/` unless they start with `e2e/`. Each task is one red
 
 ## 1. Header and row views
 
-- [ ] 1.1 Write `run-view.test.ts` (scenario "Header and row views for completed, running, queued, unended and unknown-user runs", test-plan.md T1 rows H1 to H5, RR1 to RR3 and the detail cells DC1 to DC4; it imports `runHeaderView`, `runRowView` and `detailCell` from `run-view.ts`) first, then implement `runHeaderView`, `runRowView` and `detailCell` in `run-view.ts`, implementing requirements "A run header view and a run row view read as fixed texts" and "Step detail times read as instants"; `timeline.test.ts` and `timeline-taint.test.ts` stay green unchanged. Run `pnpm run test web/src/runs/run-view.test.ts`
+- [x] 1.1 Write `run-view.test.ts` (scenario "Header and row views for completed, running, queued, unended and unknown-user runs", test-plan.md T1 rows H1 to H5, RR1 to RR3 and the detail cells DC1 to DC4; it imports `runHeaderView`, `runRowView` and `detailCell` from `run-view.ts`) first, then implement `runHeaderView`, `runRowView` and `detailCell` in `run-view.ts`, implementing requirements "A run header view and a run row view read as fixed texts" and "Step detail times read as instants"; `timeline.test.ts` and `timeline-taint.test.ts` stay green unchanged. Run `pnpm run test web/src/runs/run-view.test.ts`
 
 ## 2. Step rows and previews
 

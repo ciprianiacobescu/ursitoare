@@ -1,8 +1,21 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
+import { personLabel } from "../people/people.ts";
+import { formatAgo, formatDuration, formatInstant } from "../ui/format.ts";
+import { runStateTone } from "../ui/tones.ts";
 import type { Tone } from "../ui/tones.ts";
+import { runLinkName } from "./pages.ts";
 import type { PayloadLoad } from "./timeline.ts";
 import type { RunState, RunView, StepView } from "./types.ts";
+
+const DASH = "—";
+
+const FINISHED_RUN_STATES: readonly RunState[] = ["completed", "failed", "cancelled"];
+
+function runDuration(run: RunView, startedIso: string, nowMs: number): string {
+  if (run.endedAt === null && FINISHED_RUN_STATES.includes(run.state)) return DASH;
+  return formatDuration(startedIso, run.endedAt, nowMs);
+}
 
 export interface RunHeaderView {
   stateText: string;
@@ -16,19 +29,20 @@ export interface RunHeaderView {
 }
 
 export function runHeaderView(
-  _run: RunView,
-  _names: ReadonlyMap<string, string>,
-  _nowMs: number,
+  run: RunView,
+  names: ReadonlyMap<string, string>,
+  nowMs: number,
 ): RunHeaderView {
+  const startedIso = run.startedAt ?? run.createdAt;
   return {
-    stateText: "",
-    tone: "neutral",
-    flowId: "",
-    mode: "",
-    startedBy: "",
-    started: "",
-    startedIso: "",
-    duration: "",
+    stateText: `State: ${run.state}`,
+    tone: runStateTone(run.state),
+    flowId: run.flowId,
+    mode: run.mode,
+    startedBy: personLabel(names, run.principal.userId),
+    started: formatInstant(startedIso),
+    startedIso,
+    duration: runDuration(run, startedIso, nowMs),
   };
 }
 
@@ -89,20 +103,21 @@ export interface RunRowView {
 }
 
 export function runRowView(
-  _run: RunView,
-  _names: ReadonlyMap<string, string>,
-  _nowMs: number,
+  run: RunView,
+  names: ReadonlyMap<string, string>,
+  nowMs: number,
 ): RunRowView {
+  const startedIso = run.startedAt ?? run.createdAt;
   return {
-    id: "",
-    linkName: "",
-    flowId: "",
-    mode: "",
-    state: "",
-    tone: "neutral",
-    started: "",
-    duration: "",
-    startedBy: "",
+    id: run.id,
+    linkName: runLinkName(run.id),
+    flowId: run.flowId,
+    mode: run.mode,
+    state: run.state,
+    tone: runStateTone(run.state),
+    started: formatAgo(startedIso, nowMs),
+    duration: runDuration(run, startedIso, nowMs),
+    startedBy: personLabel(names, run.principal.userId),
   };
 }
 
@@ -111,6 +126,10 @@ export interface DetailCell {
   iso: string | null;
 }
 
-export function detailCell(_row: { term: string; value: string }): DetailCell {
-  return { text: "", iso: null };
+export function detailCell(row: { term: string; value: string }): DetailCell {
+  if (row.term === "Started" || row.term === "Ended") {
+    const ms = Date.parse(row.value);
+    if (Number.isFinite(ms)) return { text: formatInstant(row.value), iso: row.value };
+  }
+  return { text: row.value, iso: null };
 }
