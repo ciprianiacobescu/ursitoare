@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { isDeepStrictEqual } from "node:util";
 
 import { fixedClock } from "../core/index.ts";
 import { withTenantTx } from "../tenancy/index.ts";
@@ -131,7 +132,7 @@ test("C-900c62ad: an adapter surface follows the submit rules and the newest win
     assert.equal(h3?.state, "drifted");
     assert.equal(h3?.approvedDigest, D_HTTP);
     assert.equal(h3?.pendingDigest, dC);
-    assert.ok((await submitted(db.appPool, team, "shop")).some((p) => JSON.stringify(p) === JSON.stringify({ digest: dC, drift: true })));
+    assert.ok((await submitted(db.appPool, team, "shop")).some((p) => isDeepStrictEqual(p, { digest: dC, drift: true })));
 
     // H4: the first surface of a surfaceless mcp server
     let h4: Awaited<ReturnType<typeof submit>> | undefined;
