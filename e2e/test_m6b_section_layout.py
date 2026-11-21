@@ -1,4 +1,8 @@
-"""The Section layout of the admin regions, measured in the browser (C-3802bfd0): a heading sits above its body."""
+"""The Section layout of the admin regions, measured in the browser (C-3802bfd0): a heading sits above its body.
+
+Each test opens its page with open_page of test_m6b_admin.py, which calls watch_csp before the first goto and returns
+the live list of CSP violations; each test asserts that list empty at its end.
+"""
 
 import pytest
 from playwright.sync_api import Page, expect
@@ -62,8 +66,9 @@ def test_grants_regions_put_the_body_below_the_heading_with_rows(
         "/grants",
         listing(grant_item("grant_2", {"kind": "user", "userId": "u_bob"}, {"kind": "any_step"}, "active")),
     )
-    open_page(page, "/admin/grants")
+    csp = open_page(page, "/admin/grants")
     assert_section_layout(page, "New grant")
+    assert csp == []
 
 
 @pytest.mark.milestone("M6b")
@@ -73,8 +78,9 @@ def test_grants_region_puts_the_body_below_the_heading_in_the_error_state(
 ) -> None:
     answer(page, "/blocks", FORBIDDEN, 403)
     answer(page, "/grants", FORBIDDEN, 403)
-    open_page(page, "/admin/grants")
+    csp = open_page(page, "/admin/grants")
     assert_section_layout(page, "New grant")
+    assert csp == []
 
 
 @pytest.mark.milestone("M6b")
@@ -82,8 +88,9 @@ def test_grants_region_puts_the_body_below_the_heading_in_the_error_state(
 def test_teams_region_puts_the_body_below_the_heading(page: Page, base_url: str) -> None:
     answer(page, "/roles", listing({"roleId": "author"}, {"roleId": "tenant_admin"}))
     answer(page, "/teams", listing({"teamId": "finance"}))
-    open_page(page, "/admin/roles-and-teams")
+    csp = open_page(page, "/admin/roles-and-teams")
     assert_section_layout(page, "Create team")
+    assert csp == []
 
 
 @pytest.mark.milestone("M6b")
@@ -105,8 +112,9 @@ def test_mappings_region_puts_the_body_below_the_heading(page: Page, base_url: s
         ),
     )
     answer(page, "/people", CAROL)
-    open_page(page, "/admin/group-mappings")
+    csp = open_page(page, "/admin/group-mappings")
     assert_section_layout(page, "Map a group")
+    assert csp == []
 
 
 @pytest.mark.milestone("M6b")
@@ -124,9 +132,10 @@ def test_audit_regions_put_the_body_below_the_heading(page: Page, base_url: str)
     answer(page, "/people", CAROL)
     answer(page, "/audit/verify", verify)
     answer(page, "/audit", listing())
-    open_page(page, "/admin/audit")
+    csp = open_page(page, "/admin/audit")
     assert_section_layout(page, "Chain verification")
     assert_section_layout(page, "Filter the audit log")
+    assert csp == []
 
 
 @pytest.mark.milestone("M6b")
@@ -135,5 +144,6 @@ def test_surface_region_puts_the_body_below_the_heading(page: Page, base_url: st
     answer(page, "/people", CAROL)
     answer(page, "/tool-servers", listing(LISTITEM))
     answer(page, "/tool-servers/acme", SERVER)
-    open_page(page, "/admin/tool-servers?server=acme")
+    csp = open_page(page, "/admin/tool-servers?server=acme")
     assert_section_layout(page, "Surface")
+    assert csp == []
