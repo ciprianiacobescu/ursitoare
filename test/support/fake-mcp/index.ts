@@ -98,8 +98,12 @@ export async function startFakeMcp(opts: FakeMcpOptions = {}): Promise<FakeMcp> 
   const server = await startMcpServer({ ...opts, tools: opts.tools ?? FAKE_MCP_TOOLS });
   return {
     origin: server.origin,
-    requests(_filter?: { method?: string }): FakeMcpRequest[] {
-      throw new Error("not implemented");
+    requests(filter?: { method?: string }): FakeMcpRequest[] {
+      const all = server.requests();
+      if (filter?.method === undefined) {
+        return all;
+      }
+      return all.filter((request) => request.method === filter.method);
     },
     failNext(_method: string, _status: number, _times?: number): void {
       throw new Error("not implemented");

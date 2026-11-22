@@ -16,7 +16,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 4. Records, knobs, reset and close
 
-- [ ] 4.1 Proves scenario "Records hold the facts and none of the secrets". Write `test/support/fake-mcp/records.test.ts` (Q1 to Q6, the filters, the copy, the secret scan, the session record) first (after 3.2 `requests()` still throws the scaffold's error), then record every request in `server.ts` and implement `requests()` in `index.ts` (design.md § Decisions 7).
+- [x] 4.1 Proves scenario "Records hold the facts and none of the secrets". Write `test/support/fake-mcp/records.test.ts` (Q1 to Q6, the filters, the copy, the secret scan, the session record) first (after 3.2 `requests()` still throws the scaffold's error), then record every request in `server.ts` and implement `requests()` in `index.ts` (design.md § Decisions 7).
 - [ ] 4.2 Proves scenario "Failure and surface knobs, reset, close and argument checks", the `failNext` step of "SSE answers and the answers that stay JSON" and row X5 of "Sessions, and each era answers the other". Write `test/support/fake-mcp/knobs.test.ts` (K1 to K5, A1 to A15, S5's `failNext` step and row X5 of `test-plan-legacy.md` § Session rows, the session part of scenario "Sessions, and each era answers the other" that `reset()` serves; `failNext`, `setTools` and `reset` throw at red, so each test first calls the one it needs with valid arguments inside `try`/`catch` and asserts that no error came back) first, then implement `failNext`, `setTools`, `reset` and the option checks of `startFakeMcp` (A1 to A7, before the listener opens) in `index.ts` and the failure step in `server.ts` (design.md § Decisions 8).
 
 ## 5. The contract suite

@@ -1,8 +1,9 @@
+import { createHash } from "node:crypto";
 import http from "node:http";
-import type { IncomingMessage, ServerResponse } from "node:http";
+import type { IncomingHttpHeaders, IncomingMessage, ServerResponse } from "node:http";
 import type { Socket } from "node:net";
 
-import type { FakeMcpEra, FakeMcpOptions, FakeMcpTool } from "./index.ts";
+import type { FakeMcpEra, FakeMcpOptions, FakeMcpRequest, FakeMcpTool } from "./index.ts";
 import { decodeMcpName } from "./wire.ts";
 
 const MODERN_VERSION = "2026-07-28";
@@ -18,7 +19,37 @@ const KNOWN_METHODS = new Set(["server/discover", "tools/list", "tools/call"]);
 
 export interface McpHttpServer {
   readonly origin: string;
+  requests(): FakeMcpRequest[];
   close(): Promise<void>;
+}
+
+function headerText(value: string | string[] | undefined): string | null {
+  if (value === undefined) {
+    return null;
+  }
+  return Array.isArray(value) ? value.join(", ") : value;
+}
+
+function recordHeaders(raw: IncomingHttpHeaders, keyHeader: string | null): Record<string, string> {
+  const credential = new Set(["authorization", "cookie", "proxy-authorization"]);
+  if (keyHeader !== null) {
+    credential.add(keyHeader);
+  }
+  const headers: Record<string, string> = {};
+  for (const [name, value] of Object.entries(raw)) {
+    if (value === undefined) {
+      continue;
+    }
+    const text = Array.isArray(value) ? value.join(", ") : value;
+    if (name === "mcp-session-id") {
+      headers[name] = "[session]";
+    } else if (credential.has(name)) {
+      headers[name] = "[credential]";
+    } else {
+      headers[name] = text;
+    }
+  }
+  return headers;
 }
 
 interface Pagination {
@@ -196,7 +227,9 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
   const keyHeader = opts.keyHeader === undefined ? "authorization" : opts.keyHeader?.toLowerCase() ?? null;
   const sockets = new Set<Socket>();
   const sessions = new Set<string>();
+  const records: FakeMcpRequest[] = [];
   let sessionCount = 0;
+  let seq = 0;
   let port = 0;
 
   async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> {
@@ -212,64 +245,107 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
       return;
     }
 
+    let message: unknown;
+    try {
+      message = JSON.parse(body.toString("utf8"));
+    } catch {
+      message = undefined;
+    }
+    const msg =
+      message !== undefined &&
+      typeof message === "object" &&
+      message !== null &&
+      !Array.isArray(message) &&
+      typeof (message as Record<string, unknown>)["method"] === "string"
+        ? (message as { id?: unknown; method: string; params?: unknown })
+        : undefined;
+    const params =
+      msg !== undefined &&
+      typeof msg.params === "object" &&
+      msg.params !== null &&
+      !Array.isArray(msg.params)
+        ? (msg.params as Record<string, unknown>)
+        : {};
+    const meta = params["_meta"];
+    const requested =
+      typeof meta === "object" && meta !== null ? (meta as Record<string, unknown>)[META_VERSION] : undefined;
+    const requestEra: "modern" | "legacy" | null =
+      msg === undefined ? null : typeof requested === "string" ? "modern" : "legacy";
+
     const host = (req.headers.host ?? "").toLowerCase();
+    const path = (req.url ?? "").split("?")[0] ?? "";
+    const headers = recordHeaders(req.headers, keyHeader);
+    const bodySha256 = createHash("sha256").update(body).digest("hex");
+    const callHeader = headerText(req.headers["x-ursitoare-call"]);
+    const toolName =
+      msg !== undefined && msg.method === "tools/call" && typeof params["name"] === "string"
+        ? (params["name"] as string)
+        : null;
+
+    seq += 1;
+    const currentSeq = seq;
+    const record = (status: number): void => {
+      records.push({
+        seq: currentSeq,
+        method: msg === undefined ? "" : msg.method,
+        era: requestEra,
+        host,
+        path,
+        headers,
+        bodySha256,
+        status,
+        callHeader,
+        toolName,
+      });
+    };
+    const finish = (status: number, payload: unknown): void => {
+      record(status);
+      respond(res, status, payload);
+    };
+    const finishEmpty = (status: number, extra?: http.OutgoingHttpHeaders): void => {
+      record(status);
+      res.writeHead(status, extra ?? {});
+      res.end();
+    };
+
     if (host !== FAKE_HOST && host !== `127.0.0.1:${port}`) {
-      respond(res, 421, { error: "misdirected_request" });
+      finish(421, { error: "misdirected_request" });
       return;
     }
-    const path = (req.url ?? "").split("?")[0];
     if (path !== (opts.path ?? "/mcp")) {
-      respond(res, 404, { error: "not_found" });
+      finish(404, { error: "not_found" });
       return;
     }
     if (req.method !== "POST") {
       res.setHeader("allow", "POST");
-      respond(res, 405, { error: "method_not_allowed" });
+      finish(405, { error: "method_not_allowed" });
       return;
     }
     if (keyHeader !== null) {
       const key = req.headers[keyHeader];
       if (key === undefined || key === "") {
-        respond(res, 401, { error: "unauthorized" });
+        finish(401, { error: "unauthorized" });
         return;
       }
     }
 
-    let message: unknown;
-    try {
-      message = JSON.parse(body.toString("utf8"));
-    } catch {
-      respond(res, 400, failure(null, -32700, "Parse error"));
+    if (message === undefined) {
+      finish(400, failure(null, -32700, "Parse error"));
       return;
     }
-    if (
-      typeof message !== "object" ||
-      message === null ||
-      Array.isArray(message) ||
-      typeof (message as Record<string, unknown>)["method"] !== "string"
-    ) {
-      respond(res, 400, failure(null, -32600, "Invalid Request"));
+    if (msg === undefined) {
+      finish(400, failure(null, -32600, "Invalid Request"));
       return;
     }
 
-    const msg = message as { id?: unknown; method: string; params?: unknown };
     const id = msg.id ?? null;
-    const params =
-      typeof msg.params === "object" && msg.params !== null && !Array.isArray(msg.params)
-        ? (msg.params as Record<string, unknown>)
-        : {};
-
-    const meta = params["_meta"];
-    const requested =
-      typeof meta === "object" && meta !== null ? (meta as Record<string, unknown>)[META_VERSION] : undefined;
     if (typeof requested === "string") {
       if (era === "legacy") {
-        res.writeHead(400, { "content-length": "0" });
-        res.end();
+        finishEmpty(400, { "content-length": "0" });
         return;
       }
       const mismatch = (text: string): void => {
-        respond(res, 400, failure(id, -32020, `Header mismatch: ${text}`));
+        finish(400, failure(id, -32020, `Header mismatch: ${text}`));
       };
       const check = (header: string, label: string, expected: string, decode: boolean): boolean => {
         const raw = req.headers[header];
@@ -297,7 +373,7 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
         }
       }
       if (requested !== MODERN_VERSION) {
-        respond(res, 400, {
+        finish(400, {
           jsonrpc: "2.0",
           id,
           error: {
@@ -309,20 +385,18 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
         return;
       }
       if (msg.id === undefined) {
-        res.writeHead(202);
-        res.end();
+        finishEmpty(202);
         return;
       }
       if (!KNOWN_METHODS.has(msg.method)) {
-        respond(res, 404, failure(id, -32601, `Method not found: ${msg.method}`));
+        finish(404, failure(id, -32601, `Method not found: ${msg.method}`));
         return;
       }
     }
 
     if (typeof requested !== "string") {
       if (era === "modern") {
-        respond(
-          res,
+        finish(
           400,
           failure(
             id,
@@ -341,8 +415,7 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
           sessions.add(`fake-mcp-session-${sessionCount}`);
           res.setHeader("mcp-session-id", `fake-mcp-session-${sessionCount}`);
         }
-        respond(
-          res,
+        finish(
           200,
           result(id, {
             protocolVersion: version,
@@ -354,23 +427,22 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
       }
       const header = req.headers["mcp-protocol-version"];
       if (typeof header !== "string" || !LEGACY_VERSIONS.has(header)) {
-        respond(res, 400, failure(id, -32600, "Missing or unsupported MCP-Protocol-Version header"));
+        finish(400, failure(id, -32600, "Missing or unsupported MCP-Protocol-Version header"));
         return;
       }
       if (opts.session === true) {
         const session = req.headers["mcp-session-id"];
         if (typeof session !== "string" || session === "") {
-          respond(res, 400, failure(id, -32600, "Missing Mcp-Session-Id header"));
+          finish(400, failure(id, -32600, "Missing Mcp-Session-Id header"));
           return;
         }
         if (!sessions.has(session)) {
-          respond(res, 404, failure(id, -32600, "Unknown session"));
+          finish(404, failure(id, -32600, "Unknown session"));
           return;
         }
       }
       if (msg.id === undefined) {
-        res.writeHead(202);
-        res.end();
+        finishEmpty(202);
         return;
       }
       let value: unknown;
@@ -379,38 +451,38 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
       } else if (msg.method === "tools/call") {
         value = call(tools, params);
       } else {
-        respond(res, 200, failure(id, -32601, `Method not found: ${msg.method}`));
+        finish(200, failure(id, -32601, `Method not found: ${msg.method}`));
         return;
       }
       if (isFailure(value)) {
-        respond(res, 200, failure(id, value.code, value.message));
+        finish(200, failure(id, value.code, value.message));
         return;
       }
       const legacy = { ...(value as Record<string, unknown>) };
       delete legacy["resultType"];
       delete legacy["ttlMs"];
       delete legacy["cacheScope"];
-      respond(res, 200, result(id, legacy));
+      finish(200, result(id, legacy));
       return;
     }
 
     switch (msg.method) {
       case "server/discover": {
-        respond(res, 200, result(id, discover(era)));
+        finish(200, result(id, discover(era)));
         return;
       }
       case "tools/list": {
         const value = list(tools, params, pageSize);
-        respond(res, 200, isFailure(value) ? failure(id, value.code, value.message) : result(id, value));
+        finish(200, isFailure(value) ? failure(id, value.code, value.message) : result(id, value));
         return;
       }
       case "tools/call": {
         const value = call(tools, params);
-        respond(res, 200, isFailure(value) ? failure(id, value.code, value.message) : result(id, value));
+        finish(200, isFailure(value) ? failure(id, value.code, value.message) : result(id, value));
         return;
       }
       default: {
-        respond(res, 200, failure(id, -32600, "Invalid Request"));
+        finish(200, failure(id, -32600, "Invalid Request"));
       }
     }
   }
@@ -444,6 +516,9 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
   let closing: Promise<void> | undefined;
   return {
     origin: `http://127.0.0.1:${address.port}`,
+    requests(): FakeMcpRequest[] {
+      return structuredClone(records);
+    },
     close(): Promise<void> {
       closing ??= new Promise<void>((resolve) => {
         server.close(() => resolve());

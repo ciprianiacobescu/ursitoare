@@ -53,10 +53,11 @@ function bm(method: string, params: Record<string, unknown>, id = 1): string {
 }
 
 function bl(method: string, params: Record<string, unknown> | undefined, id: number | null = 1): string {
-  const message: Record<string, unknown> = { jsonrpc: "2.0", method };
+  const message: Record<string, unknown> = { jsonrpc: "2.0" };
   if (id !== null) {
     message["id"] = id;
   }
+  message["method"] = method;
   if (params !== undefined) {
     message["params"] = params;
   }
