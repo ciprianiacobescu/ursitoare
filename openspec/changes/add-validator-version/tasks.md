@@ -22,7 +22,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 6. The loader and the routes
 
-- [ ] 6.1 Write `src/api/test-run-loader-stale.test.ts` (scenario "The loader marks NULL and older rows, and only those", rows L1 to L9), `src/api/stale-round-trip.test.ts` (scenario "Stale versions are refused by both routes until the author validates again", rows R0 to R6) and `src/api/stale-failing-validation.test.ts` (scenario "A tested version that fails validation is still refused, and a passing validation releases it", rows H0 to H4) first, then change `registryVersionLoader` in `src/api/test-run-routes.ts` to read `validatorVersionOf` in the loader's transaction (the `withTenantTx` that runs `getVersion`) and spread `stale: true` into the record only when `isValidationStale` says so (the test-run and dry-run routes already map the refusal through `mapStartRunError`; no route edit)
+- [x] 6.1 Write `src/api/test-run-loader-stale.test.ts` (scenario "The loader marks NULL and older rows, and only those", rows L1 to L9), `src/api/stale-round-trip.test.ts` (scenario "Stale versions are refused by both routes until the author validates again", rows R0 to R6) and `src/api/stale-failing-validation.test.ts` (scenario "A tested version that fails validation is still refused, and a passing validation releases it", rows H0 to H4) first, then change `registryVersionLoader` in `src/api/test-run-routes.ts` to read `validatorVersionOf` in the loader's transaction (the `withTenantTx` that runs `getVersion`) and spread `stale: true` into the record only when `isValidationStale` says so (the test-run and dry-run routes already map the refusal through `mapStartRunError`; no route edit)
 
 ## 7. The grants bound and the OpenAPI document
 

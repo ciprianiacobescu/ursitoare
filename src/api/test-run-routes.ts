@@ -5,7 +5,12 @@ import type { Clock, IdSource } from "../core/index.ts";
 import { entityRef, scopedId } from "../pdp/index.ts";
 import type { InterpreterDeps, VersionLoader } from "../interpreter/index.ts";
 import { checkMocks, InterpreterError, startRun } from "../interpreter/index.ts";
-import { flowOwnerTeam, getVersion } from "../registry/index.ts";
+import {
+  flowOwnerTeam,
+  getVersion,
+  isValidationStale,
+  validatorVersionOf,
+} from "../registry/index.ts";
 import { RunDataError } from "../runs/index.ts";
 import type { RunRecord, TenantPool } from "../runs/index.ts";
 import type { TenantContext } from "../tenancy/index.ts";
@@ -119,13 +124,17 @@ export function registryVersionLoader(pool: TenantPool): VersionLoader {
       if (ownerTeam === null) {
         return null;
       }
-      return {
+      const validatorVersion = await validatorVersionOf(tx, ctx, flowId, hash);
+      const loaded = {
         flowId,
         hash,
         state: version.state,
         ownerTeam,
         flow: version.canonical as Flow,
       };
+      return isValidationStale(version.state, validatorVersion)
+        ? { ...loaded, stale: true as const }
+        : loaded;
     });
 }
 
