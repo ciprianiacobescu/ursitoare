@@ -89,3 +89,4 @@
 {"at":"2026-11-22T19:00:58Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"aa3f08286a01efb5c3f773a18c21f78edf4ba555","status":"pass","type":"unit.postcheck","unit":"openspec:add-fake-mcp"}
 {"at":"2026-11-22T19:00:58Z","revision":"aa3f08286a01efb5c3f773a18c21f78edf4ba555","type":"unit.integrated","unit":"openspec:add-fake-mcp"}
 {"at":"2026-11-22T19:00:58Z","attempt":1,"cost_usd":5.174008,"runs":4,"type":"plan.charged","unit":"openspec:add-fake-mcp"}
+{"at":"2026-11-22T19:02:16Z","branch":"l4/archive/openspec/add-fake-mcp","head":"8caa74279e57f25afc61587e6d82582571f20077","type":"unit.branch_deleted","unit":"openspec:add-fake-mcp"}
