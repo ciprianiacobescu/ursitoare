@@ -2,11 +2,11 @@
 
 - Status: stopped
 - Repository: https://github.com/ciprianiacobescu/ursitoare
-- Target: main at 51d5e14ef4c47a6324e3a0573a16d616f39fbe35
+- Target: main at a43f1ad325fb3c72c014eb54e5e920eb4da4a1c7
 - Merge: auto
 - No promotion target is set. Promotion was not performed.
-- Written: 2026-11-22T02:23:00Z
-- Stopped: unit_escalated (openspec:add-cli-sandbox): round 2 failed the same way as round 1: finding F-2813828d
+- Written: 2026-11-22T02:36:20Z
+- Stopped: inputs_changed (openspec:add-cli-sandbox): the spec of openspec:add-cli-sandbox changed after the activation: spec digest 4df41785 frozen at the activation, b88fe5f5 now on its branch l4/openspec/add-cli-sandbox (6311776); changed: openspec/changes/add-cli-sandbox/tasks.md
 
 ## Units
 
