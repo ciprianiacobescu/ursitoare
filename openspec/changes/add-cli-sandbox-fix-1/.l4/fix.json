@@ -1,0 +1,15 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-cli-sandbox",
+  "round": 1,
+  "findings": [
+    "F-2813828d"
+  ],
+  "chores": [
+    "F-2813828d"
+  ],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": [],
+  "repairs": []
+}
