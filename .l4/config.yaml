@@ -225,6 +225,10 @@ roles:
   # 11/11 READY at c636547e). Kiro is skipped under its 10% credit floor until 2026-12-01.
   # 2026-11-21: order restored for m7 unit verification (the readiness review was recorded by beam alone, 3 rounds,
   # 10/10 READY at f3527461). Kiro is skipped under its 10% credit floor until 2026-12-01.
+  # 2026-11-22: order restored for m7 unit verification after the re-review that the add-cli-sandbox [test-infra] tag
+  # (ee7bfb84) required: beam 5 rounds of wording fixes (87ef9a4b..cb4430f6), then nemotron-judge alone judged the
+  # batch and add-web-tool-journeys (beam twice misread the sorted plan entry as self-dependencies): 10/10 + batch
+  # READY at 6dff8a9e. Kiro is skipped under its 10% credit floor until 2026-12-01.
   - kiro-judge
   - nemotron-judge
   - beam-judge
