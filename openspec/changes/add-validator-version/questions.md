@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 3.1 | technical | src/registry/flows/validator-version-schema.test.ts:47-55 owner UPDATEs match no rows under FORCE RLS |
+| Q-001 | accepted | 3.1 | technical | src/registry/flows/validator-version-schema.test.ts:47-55 owner UPDATEs match no rows under FORCE RLS |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/registry/flows/validator-version-schema.test.ts:47-55 owner UPDATEs match no rows under FORCE RLS
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.1
 - **Kind:** technical
 - **Asked:** 2026-11-22T08:03Z by claude-sonnet, run r-20261122T0644Z-8be4, task 3.1
