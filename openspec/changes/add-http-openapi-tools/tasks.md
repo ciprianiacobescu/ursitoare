@@ -16,7 +16,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 4. The routes
 
-- [ ] 4.1 Write `src/api/openapi-tool-routes.test.ts` (scenarios "Preview, register, replay and replace" and "Route refusals", rows P1 to P4; the harness of `src/api/tool-server-routes.test.ts` copied into it; the namespace of `src/api/index.ts` for `registerOpenApiToolRoutes`) first, then implement `registerOpenApiToolRoutes` in `src/api/openapi-tool-routes.ts` (design 6), importing `readOpenApi`, `registerOpenApiServerTx` and `submitOpenApiTx` through `src/tools/index.ts`, and add its export line and the type-only line of `OpenApiToolApiDeps` to `src/api/index.ts`
+- [x] 4.1 Write `src/api/openapi-tool-routes.test.ts` (scenarios "Preview, register, replay and replace" and "Route refusals", rows P1 to P4; the harness of `src/api/tool-server-routes.test.ts` copied into it; the namespace of `src/api/index.ts` for `registerOpenApiToolRoutes`) first, then implement `registerOpenApiToolRoutes` in `src/api/openapi-tool-routes.ts` (design 6), importing `readOpenApi`, `registerOpenApiServerTx` and `submitOpenApiTx` through `src/tools/index.ts`, and add its export line and the type-only line of `OpenApiToolApiDeps` to `src/api/index.ts`
 
 ## 5. Wiring and the document
 

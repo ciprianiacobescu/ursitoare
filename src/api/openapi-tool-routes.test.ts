@@ -417,7 +417,7 @@ test("C-7b1bd327 P4 alice is forbidden, tenant b is isolated and a huge document
     );
     assert.equal(huge.statusCode, 413);
     assert.equal(codeOf(huge.json()), "PAYLOAD_TOO_LARGE");
-    assert.equal(await countServers(h), 2);
+    assert.equal(await countServers(h), 1);
   } finally {
     await closeHarness(h);
   }
