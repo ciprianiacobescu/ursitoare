@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-22T11:58:03Z",
+  "integrated_revision": "4e15f8ef7dd36364400be9dd9ca2b934532724a2",
+  "merge_commit": "4e15f8ef7dd36364400be9dd9ca2b934532724a2",
+  "plan_digest": "34aab8fa5ef378c7",
+  "plan_id": "m7",
+  "postcheck": "pass",
+  "pr": 160,
+  "receipt_id": "m7/openspec:add-validator-version/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "9ab87368af5377e5f19d476b8af50a55ce0f2744",
+  "spec_digest": "a54714fdd2dfa948",
+  "target": "main",
+  "unit_id": "openspec:add-validator-version"
+}
