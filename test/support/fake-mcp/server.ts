@@ -26,7 +26,7 @@ interface Pagination {
   nextCursor?: string;
 }
 
-function respond(res: ServerResponse, status: number, body: unknown): void {
+function respondJson(res: ServerResponse, status: number, body: unknown): void {
   if (res.destroyed || res.writableEnded) {
     return;
   }
@@ -36,6 +36,24 @@ function respond(res: ServerResponse, status: number, body: unknown): void {
     "content-length": String(Buffer.byteLength(text)),
   });
   res.end(text);
+}
+
+const PROGRESS = {
+  jsonrpc: "2.0",
+  method: "notifications/progress",
+  params: { progressToken: "fake-progress", progress: 1, total: 1 },
+};
+
+function event(body: unknown): string {
+  return `event: message\ndata: ${JSON.stringify(body)}\n\n`;
+}
+
+function respondStream(res: ServerResponse, body: unknown): void {
+  if (res.destroyed || res.writableEnded) {
+    return;
+  }
+  res.writeHead(200, { "content-type": "text/event-stream", "cache-control": "no-cache" });
+  res.end(event(PROGRESS) + event(body));
 }
 
 function result(id: unknown, value: unknown): unknown {
@@ -182,6 +200,13 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
   let port = 0;
 
   async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> {
+    const respond = (target: ServerResponse, status: number, payload: unknown): void => {
+      if (status === 200 && opts.sse === true) {
+        respondStream(target, payload);
+        return;
+      }
+      respondJson(target, status, payload);
+    };
     const body = await readBody(req);
     if (body === null) {
       return;
@@ -393,7 +418,7 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
   const server = http.createServer((req, res) => {
     handle(req, res).catch(() => {
       if (!res.headersSent) {
-        respond(res, 500, { error: "internal" });
+        respondJson(res, 500, { error: "internal" });
       } else {
         res.destroy();
       }
