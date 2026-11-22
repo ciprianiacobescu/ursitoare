@@ -98,3 +98,5 @@
 {"at":"2026-11-22T19:05:54Z","run":"r-20261122T1905Z-4eb5","type":"unit.dispatched","unit":"openspec:add-http-openapi-tools"}
 {"at":"2026-11-22T19:07:58Z","attempt":1,"cost_usd":0.0,"runs":4,"type":"plan.charged","unit":"openspec:add-http-openapi-tools"}
 {"at":"2026-11-22T19:07:58Z","run":"r-20261122T1907Z-de06","type":"unit.dispatched","unit":"openspec:add-http-openapi-tools"}
+{"at":"2026-11-22T19:09:58Z","attempt":1,"cost_usd":0.0,"runs":5,"type":"plan.charged","unit":"openspec:add-http-openapi-tools"}
+{"at":"2026-11-22T19:09:58Z","run":"r-20261122T1909Z-585c","type":"unit.dispatched","unit":"openspec:add-http-openapi-tools"}
