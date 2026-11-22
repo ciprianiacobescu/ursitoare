@@ -308,7 +308,15 @@ async function runFlowTest(
   }
 
   const sandbox = createSandbox(FLOW_TEST_POOL);
-  return runFlow(call, flow, catalogue, checked.mocks, input, sandbox);
+  try {
+    return await runFlow(call, flow, catalogue, checked.mocks, input, sandbox);
+  } finally {
+    try {
+      await sandbox.close();
+    } catch {
+      // a failing close changes neither the output nor the exit code
+    }
+  }
 }
 
 export const flowTestCommand: CliCommand = createFlowTestCommand();
