@@ -69,3 +69,4 @@
 {"at":"2026-11-22T09:42:31Z","attempt":1,"cost_usd":6.905072,"runs":3,"type":"plan.charged","unit":"openspec:add-validator-version"}
 {"at":"2026-11-22T09:42:31Z","run":"r-20261122T0942Z-883f","type":"unit.dispatched","unit":"openspec:add-validator-version"}
 {"at":"2026-11-22T11:52:53Z","head":"9ab87368af5377e5f19d476b8af50a55ce0f2744","pr":160,"target_before":"f1aa79e4a67f663f2ea1c360d105686834c50ea8","type":"unit.merge_requested","unit":"openspec:add-validator-version"}
+{"at":"2026-11-22T11:52:58Z","ci":"not_run","head":"9ab87368af5377e5f19d476b8af50a55ce0f2744","merge_commit":"4e15f8ef7dd36364400be9dd9ca2b934532724a2","method":"squash","pr":160,"raced":false,"type":"unit.merged","unit":"openspec:add-validator-version"}
