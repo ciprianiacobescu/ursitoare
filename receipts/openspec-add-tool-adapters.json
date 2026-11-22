@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-22T00:02:17Z",
+  "integrated_revision": "56be9698ab28240f06f98454e842700a1deae7a3",
+  "merge_commit": "56be9698ab28240f06f98454e842700a1deae7a3",
+  "plan_digest": "34aab8fa5ef378c7",
+  "plan_id": "m7",
+  "postcheck": "pass",
+  "pr": 156,
+  "receipt_id": "m7/openspec:add-tool-adapters/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "3cbda4b9905d21aa464bd96f841aa73f20248dc5",
+  "spec_digest": "8ed3c608f7f0f6c3",
+  "target": "main",
+  "unit_id": "openspec:add-tool-adapters"
+}
