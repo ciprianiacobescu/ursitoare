@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-22T19:00:58Z",
+  "integrated_revision": "aa3f08286a01efb5c3f773a18c21f78edf4ba555",
+  "merge_commit": "aa3f08286a01efb5c3f773a18c21f78edf4ba555",
+  "plan_digest": "34aab8fa5ef378c7",
+  "plan_id": "m7",
+  "postcheck": "pass",
+  "pr": 162,
+  "receipt_id": "m7/openspec:add-fake-mcp/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "3013a75b0c8c03cbfbdf7cf8c577317ed9d32167",
+  "spec_digest": "25dc876931227904",
+  "target": "main",
+  "unit_id": "openspec:add-fake-mcp"
+}

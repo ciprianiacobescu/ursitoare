@@ -86,3 +86,6 @@
 {"at":"2026-11-22T18:55:48Z","head":"3013a75b0c8c03cbfbdf7cf8c577317ed9d32167","pr":162,"target_before":"bb7ecc65f9bef8738f32bb6da5b1e61017a44b4a","type":"unit.merge_requested","unit":"openspec:add-fake-mcp"}
 {"at":"2026-11-22T18:55:52Z","ci":"not_run","head":"3013a75b0c8c03cbfbdf7cf8c577317ed9d32167","merge_commit":"aa3f08286a01efb5c3f773a18c21f78edf4ba555","method":"squash","pr":162,"raced":false,"type":"unit.merged","unit":"openspec:add-fake-mcp"}
 {"at":"2026-11-22T18:55:56Z","branch":"l4/openspec/add-fake-mcp","head":"3013a75b0c8c03cbfbdf7cf8c577317ed9d32167","type":"unit.branch_deleted","unit":"openspec:add-fake-mcp"}
+{"at":"2026-11-22T19:00:58Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"aa3f08286a01efb5c3f773a18c21f78edf4ba555","status":"pass","type":"unit.postcheck","unit":"openspec:add-fake-mcp"}
+{"at":"2026-11-22T19:00:58Z","revision":"aa3f08286a01efb5c3f773a18c21f78edf4ba555","type":"unit.integrated","unit":"openspec:add-fake-mcp"}
+{"at":"2026-11-22T19:00:58Z","attempt":1,"cost_usd":5.174008,"runs":4,"type":"plan.charged","unit":"openspec:add-fake-mcp"}
