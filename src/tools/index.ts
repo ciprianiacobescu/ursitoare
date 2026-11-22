@@ -53,5 +53,12 @@ export type {
   ToolJson,
 } from "./calls.ts";
 export { MCP_TEXT_OUTPUT_SCHEMA } from "./calls.ts";
-export type { OpenApiOverlay } from "./openapi/types.ts";
+export type {
+  OpenApiExclusion,
+  OpenApiOperation,
+  OpenApiOverlay,
+  OpenApiOverlayEntry,
+  OpenApiPreview,
+} from "./openapi/types.ts";
+export { translateSchema } from "./openapi/schema.ts";
 export type { ServiceLookup } from "./mcp/discover.ts";
