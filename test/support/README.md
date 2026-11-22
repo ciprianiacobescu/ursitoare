@@ -25,7 +25,7 @@ service in the stack tier (`docs/testing.md`).
 | `run-wait.ts` | `add-interpreter-core` | `waitForRun`: polls a run until it reaches one of the given states or a deadline |
 | `fake-egress/` | `add-fake-egress-proxy` | Broker, proxy and vault contract with per-service upstream routing |
 | `fake-tools/` | `add-fake-tools` | The 20 test-catalogue blocks as loopback tool handlers (recorded calls, idempotent effects, delay and failure knobs), reached through the fake proxy as `tools.fake.test`; e2e part `50-tools` |
-| `fake-mcp/` | `add-mcp-client` | An MCP server for the tool adapter tests |
+| `fake-mcp/` | `add-fake-mcp` | An MCP server (2026-07-28 and the older handshake, with or without a session; recorded requests, failure and surface knobs, JSON or SSE answers), reached through the fake proxy as `mcp.fake.test`; e2e part `55-mcp` |
 | `fake-llm/` | `add-fake-llm-provider` | Anthropic, OpenAI and Ollama shapes with cassettes |
 | `fake-n8n/` | `add-delegate-n8n` | n8n webhook in, signed callback out |
 | `sandbox-escape.ts` | `add-code-sandbox` | The 42 escape cases as shared data and their verdict helper |
