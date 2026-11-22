@@ -3,6 +3,7 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Socket } from "node:net";
 
 import type { FakeMcpEra, FakeMcpOptions, FakeMcpTool } from "./index.ts";
+import { decodeMcpName } from "./wire.ts";
 
 const MODERN_VERSION = "2026-07-28";
 const LEGACY_VERSION = "2025-11-25";
@@ -10,6 +11,9 @@ const TTL_MS = 60000;
 const CACHE_SCOPE = "private";
 const CURSOR = /^page-(0|[1-9][0-9]*)$/;
 const DEFAULT_PAGE_SIZE = 50;
+const FAKE_HOST = "mcp.fake.test";
+const META_VERSION = "io.modelcontextprotocol/protocolVersion";
+const KNOWN_METHODS = new Set(["server/discover", "tools/list", "tools/call"]);
 
 export interface McpHttpServer {
   readonly origin: string;
@@ -170,7 +174,9 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
   const era = opts.era ?? "dual";
   const pageSize = opts.pageSize ?? DEFAULT_PAGE_SIZE;
   const tools = opts.tools ?? [];
+  const keyHeader = opts.keyHeader === undefined ? "authorization" : opts.keyHeader?.toLowerCase() ?? null;
   const sockets = new Set<Socket>();
+  let port = 0;
 
   async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> {
     const body = await readBody(req);
@@ -178,11 +184,34 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
       return;
     }
 
+    const host = (req.headers.host ?? "").toLowerCase();
+    if (host !== FAKE_HOST && host !== `127.0.0.1:${port}`) {
+      respond(res, 421, { error: "misdirected_request" });
+      return;
+    }
+    const path = (req.url ?? "").split("?")[0];
+    if (path !== (opts.path ?? "/mcp")) {
+      respond(res, 404, { error: "not_found" });
+      return;
+    }
+    if (req.method !== "POST") {
+      res.setHeader("allow", "POST");
+      respond(res, 405, { error: "method_not_allowed" });
+      return;
+    }
+    if (keyHeader !== null) {
+      const key = req.headers[keyHeader];
+      if (key === undefined || key === "") {
+        respond(res, 401, { error: "unauthorized" });
+        return;
+      }
+    }
+
     let message: unknown;
     try {
       message = JSON.parse(body.toString("utf8"));
     } catch {
-      respond(res, 200, failure(null, -32600, "Invalid Request"));
+      respond(res, 400, failure(null, -32700, "Parse error"));
       return;
     }
     if (
@@ -191,7 +220,7 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
       Array.isArray(message) ||
       typeof (message as Record<string, unknown>)["method"] !== "string"
     ) {
-      respond(res, 200, failure(null, -32600, "Invalid Request"));
+      respond(res, 400, failure(null, -32600, "Invalid Request"));
       return;
     }
 
@@ -201,6 +230,61 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
       typeof msg.params === "object" && msg.params !== null && !Array.isArray(msg.params)
         ? (msg.params as Record<string, unknown>)
         : {};
+
+    const meta = params["_meta"];
+    const requested =
+      typeof meta === "object" && meta !== null ? (meta as Record<string, unknown>)[META_VERSION] : undefined;
+    if (typeof requested === "string") {
+      const mismatch = (text: string): void => {
+        respond(res, 400, failure(id, -32020, `Header mismatch: ${text}`));
+      };
+      const check = (header: string, label: string, expected: string, decode: boolean): boolean => {
+        const raw = req.headers[header];
+        if (typeof raw !== "string") {
+          mismatch(`${label} header is missing`);
+          return false;
+        }
+        const value = decode ? decodeMcpName(raw) : raw;
+        if (value !== expected) {
+          mismatch(`${label} header value '${raw}' does not match body value '${expected}'`);
+          return false;
+        }
+        return true;
+      };
+      if (!check("mcp-protocol-version", "MCP-Protocol-Version", requested, false)) {
+        return;
+      }
+      if (!check("mcp-method", "Mcp-Method", msg.method, false)) {
+        return;
+      }
+      if (msg.method === "tools/call") {
+        const name = params["name"];
+        if (!check("mcp-name", "Mcp-Name", typeof name === "string" ? name : "", true)) {
+          return;
+        }
+      }
+      if (requested !== MODERN_VERSION) {
+        respond(res, 400, {
+          jsonrpc: "2.0",
+          id,
+          error: {
+            code: -32022,
+            message: "Unsupported protocol version",
+            data: { supported: supportedVersions(era), requested },
+          },
+        });
+        return;
+      }
+      if (msg.id === undefined) {
+        res.writeHead(202);
+        res.end();
+        return;
+      }
+      if (!KNOWN_METHODS.has(msg.method)) {
+        respond(res, 404, failure(id, -32601, `Method not found: ${msg.method}`));
+        return;
+      }
+    }
 
     switch (msg.method) {
       case "server/discover": {
@@ -246,6 +330,8 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
     server.close();
     throw new Error("fake mcp listener has no port");
   }
+
+  port = address.port;
 
   let closing: Promise<void> | undefined;
   return {
