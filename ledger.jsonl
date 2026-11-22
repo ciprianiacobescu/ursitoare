@@ -79,3 +79,5 @@
 {"at":"2026-11-22T12:00:05Z","run":"r-20261122T1159Z-230b","type":"unit.dispatched","unit":"openspec:add-fake-mcp"}
 {"at":"2026-11-22T14:23:50Z","attempt":1,"cost_usd":0.0,"runs":2,"type":"plan.charged","unit":"openspec:add-fake-mcp"}
 {"at":"2026-11-22T14:23:50Z","run":"r-20261122T1423Z-2592","type":"unit.dispatched","unit":"openspec:add-fake-mcp"}
+{"at":"2026-11-22T15:58:03Z","attempt":1,"cost_usd":3.816288,"runs":3,"type":"plan.charged","unit":"openspec:add-fake-mcp"}
+{"at":"2026-11-22T15:58:03Z","run":"r-20261122T1557Z-b7c0","type":"unit.dispatched","unit":"openspec:add-fake-mcp"}
