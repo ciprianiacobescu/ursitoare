@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-22T06:43:35Z",
+  "integrated_revision": "47bec6062d86f64fb412c56fdc5648fc6823d72c",
+  "merge_commit": "47bec6062d86f64fb412c56fdc5648fc6823d72c",
+  "plan_digest": "34aab8fa5ef378c7",
+  "plan_id": "m7",
+  "postcheck": "pass",
+  "pr": 158,
+  "receipt_id": "m7/openspec:add-cli-sandbox/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "6b5acef3723041a013885a2df7051d9bb889bb4b",
+  "spec_digest": "b88fe5f56ba7d909",
+  "target": "main",
+  "unit_id": "openspec:add-cli-sandbox"
+}

@@ -58,3 +58,6 @@
 {"at":"2026-11-22T06:38:38Z","head":"6b5acef3723041a013885a2df7051d9bb889bb4b","pr":158,"target_before":"bd71d72531b6996ca86b68f2b31e7aef2c3fd101","type":"unit.merge_requested","unit":"openspec:add-cli-sandbox"}
 {"at":"2026-11-22T06:38:42Z","ci":"not_run","head":"6b5acef3723041a013885a2df7051d9bb889bb4b","merge_commit":"47bec6062d86f64fb412c56fdc5648fc6823d72c","method":"squash","pr":158,"raced":false,"type":"unit.merged","unit":"openspec:add-cli-sandbox"}
 {"at":"2026-11-22T06:38:46Z","branch":"l4/openspec/add-cli-sandbox","head":"6b5acef3723041a013885a2df7051d9bb889bb4b","type":"unit.branch_deleted","unit":"openspec:add-cli-sandbox"}
+{"at":"2026-11-22T06:43:35Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"47bec6062d86f64fb412c56fdc5648fc6823d72c","status":"pass","type":"unit.postcheck","unit":"openspec:add-cli-sandbox"}
+{"at":"2026-11-22T06:43:35Z","revision":"47bec6062d86f64fb412c56fdc5648fc6823d72c","type":"unit.integrated","unit":"openspec:add-cli-sandbox"}
+{"at":"2026-11-22T06:43:35Z","attempt":1,"cost_usd":3.206812,"runs":2,"type":"plan.charged","unit":"openspec:add-cli-sandbox"}
