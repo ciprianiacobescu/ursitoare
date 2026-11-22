@@ -3,6 +3,8 @@
  * and the v0.2 members (`expose`, `hooks`, `tags`, `pre`, `post`, LLM tuning) accepted by shape only.
  */
 
+import { MAX_NODE_ID_LENGTH } from "./version.ts";
+
 type Schema = Record<string, unknown>;
 
 const ref = (name: string): Schema => ({ $ref: `#/$defs/${name}` });
@@ -89,7 +91,7 @@ export const FLOW_SCHEMA: Schema = {
     hooks: objectArray,
   },
   $defs: {
-    nodeId: { type: "string", pattern: "^[a-z][a-z0-9_]*$" },
+    nodeId: { type: "string", pattern: `^[a-z][a-z0-9_]{0,${MAX_NODE_ID_LENGTH - 1}}$` },
     identifier: { type: "string", pattern: "^[A-Za-z_][A-Za-z0-9_]*$" },
     blockRef: { type: "string", pattern: "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+@[0-9]+$" },
     flowRef: { type: "string", pattern: "^[a-z][a-z0-9]*(-[a-z0-9]+)*@[0-9]+$" },
