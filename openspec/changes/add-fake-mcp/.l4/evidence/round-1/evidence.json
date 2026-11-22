@@ -1,0 +1,275 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "tools/call",
+      ".../basic/versioning",
+      ".../server/tools",
+      "tools/list",
+      "server/discover",
+      "notifications/progress",
+      "parts/55-mcp.ts",
+      "docs/decisions/0002",
+      "test/support/README.md",
+      "fake-mcp",
+      "node:assert/strict",
+      "src",
+      "test/support/fake-mcp/wire.test.ts",
+      "test/support/fake-mcp/wire.ts",
+      "test/support/fake-mcp/discover.test.ts",
+      "test/support/fake-mcp/calls.test.ts",
+      "test/support/fake-mcp/index.ts",
+      "test/support/fake-mcp/server.ts",
+      "test/support/fake-mcp/modern-refusals.test.ts",
+      "test/support/fake-mcp/transport.test.ts",
+      "test/support/fake-mcp/legacy.test.ts",
+      "test/support/fake-mcp/sessions.test.ts",
+      "test/support/fake-mcp/sse.test.ts",
+      "test/support/fake-mcp/records.test.ts",
+      "test/support/fake-mcp/knobs.test.ts",
+      "test/support/fake-mcp/contract.test.ts",
+      "test/support/fake-mcp/contract.ts",
+      "test/support/e2e-stack/mcp-part.test.ts",
+      "test/support/e2e-stack/mcp-part.cluster.test.ts",
+      "test/support/fake-mcp/readme.test.ts",
+      "test/support/e2e-stack/mcp-part.ts",
+      "test/support/e2e-stack/parts/55-mcp.ts",
+      "_meta[\"io.modelcontextprotocol/protocolVersion\"]",
+      "**/=?base64?...?=",
+      "**/Mcp-*",
+      "**/index.ts",
+      "**/contract.ts",
+      "**/server.ts",
+      "**/wire.ts",
+      "**/Mcp-Param-*",
+      "**/[credential]",
+      "**/[session]",
+      "module ...",
+      "module docs",
+      "module node:assert",
+      "module notifications",
+      "module parts",
+      "module server",
+      "module test",
+      "module tools"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-fake-mcp/.l4/ledger/r-20261122T1159Z-230b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-mcp/.l4/ledger/r-20261122T1423Z-2592.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-mcp/.l4/ledger/r-20261122T1557Z-b7c0.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-mcp/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-fake-mcp/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/README.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/support/e2e-stack/mcp-part.cluster.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/mcp-part.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/e2e-stack/mcp-part.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/e2e-stack/parts/55-mcp.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-mcp/calls.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-mcp/contract.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-mcp/contract.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-mcp/discover.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-mcp/index.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-mcp/knobs.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-mcp/legacy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-mcp/modern-refusals.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-mcp/readme.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-mcp/records.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-mcp/server.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/fake-mcp/sessions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-mcp/sse.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-mcp/transport.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-mcp/wire.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/support/fake-mcp/wire.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: test/support/e2e-stack/mcp-part.ts, test/support/e2e-stack/parts/55-mcp.ts, test/support/fake-mcp/contract.ts, test/support/fake-mcp/index.ts, test/support/fake-mcp/server.ts and 1 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "test/support/e2e-stack/mcp-part.ts",
+      "test/support/e2e-stack/parts/55-mcp.ts",
+      "test/support/fake-mcp/contract.ts",
+      "test/support/fake-mcp/index.ts",
+      "test/support/fake-mcp/server.ts",
+      "test/support/fake-mcp/wire.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2927,
+      "passed": 2927,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 71,
+      "new_passed": 71,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
