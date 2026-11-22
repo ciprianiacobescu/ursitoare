@@ -77,3 +77,5 @@
 {"at":"2026-11-22T12:00:03Z","branch":"l4/archive/openspec/add-validator-version","head":"bb7ecc65f9bef8738f32bb6da5b1e61017a44b4a","type":"unit.branch_deleted","unit":"openspec:add-validator-version"}
 {"at":"2026-11-22T12:00:05Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-fake-mcp"}
 {"at":"2026-11-22T12:00:05Z","run":"r-20261122T1159Z-230b","type":"unit.dispatched","unit":"openspec:add-fake-mcp"}
+{"at":"2026-11-22T14:23:50Z","attempt":1,"cost_usd":0.0,"runs":2,"type":"plan.charged","unit":"openspec:add-fake-mcp"}
+{"at":"2026-11-22T14:23:50Z","run":"r-20261122T1423Z-2592","type":"unit.dispatched","unit":"openspec:add-fake-mcp"}
