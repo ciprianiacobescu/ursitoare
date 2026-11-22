@@ -14,7 +14,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 4. The stored validator version
 
-- [ ] 4.1 Write `src/registry/flows/validator-version.test.ts` (scenario "The staleness table") and `src/registry/flows/validator-stamp.test.ts` (scenario "validateVersion stamps a passing validation and keeps the stamp on a failing one", rows V1 to V7) first, then implement `validatorVersionOf` and `isValidationStale` in `src/registry/flows/validator-version.ts`, add their export line to `src/registry/index.ts`, and write `validator_version = VALIDATOR_VERSION` in the `UPDATE` of `validateVersion` in `src/registry/flows/validate.ts` only when `result.ok` is true, leaving the column as it was otherwise (design decision 4)
+- [x] 4.1 Write `src/registry/flows/validator-version.test.ts` (scenario "The staleness table") and `src/registry/flows/validator-stamp.test.ts` (scenario "validateVersion stamps a passing validation and keeps the stamp on a failing one", rows V1 to V7) first, then implement `validatorVersionOf` and `isValidationStale` in `src/registry/flows/validator-version.ts`, add their export line to `src/registry/index.ts`, and write `validator_version = VALIDATOR_VERSION` in the `UPDATE` of `validateVersion` in `src/registry/flows/validate.ts` only when `result.ok` is true, leaving the column as it was otherwise (design decision 4)
 
 ## 5. The refusal at run start
 

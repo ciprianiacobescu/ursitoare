@@ -1,17 +1,21 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
+import { VALIDATOR_VERSION } from "../../authoring/index.ts";
 import type { TenantContext, TenantTx } from "../../tenancy/index.ts";
 import type { VersionState } from "./flows.ts";
 
 export async function validatorVersionOf(
-  _tx: TenantTx,
-  _ctx: TenantContext,
-  _flowId: string,
-  _hash: string,
+  tx: TenantTx,
+  ctx: TenantContext,
+  flowId: string,
+  hash: string,
 ): Promise<number | null> {
-  throw new Error("not implemented");
+  const res = await tx.query<{ validator_version: number | null }>(
+    `SELECT validator_version FROM ursitoare.flow_version
+     WHERE tenant_id = $1 AND flow_id = $2 AND content_hash = $3`,
+    [ctx.tenantId, flowId, hash],
+  );
+  return res.rows[0]?.validator_version ?? null;
 }
 
-export function isValidationStale(_state: VersionState, _validatorVersion: number | null): boolean {
-  throw new Error("not implemented");
+export function isValidationStale(state: VersionState, validatorVersion: number | null): boolean {
+  return state !== "draft" && (validatorVersion === null || validatorVersion < VALIDATOR_VERSION);
 }
