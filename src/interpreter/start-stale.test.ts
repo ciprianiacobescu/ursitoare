@@ -21,13 +21,62 @@ interface Enqueued {
   workflowId: string;
 }
 
+function supportedFlow(): Flow {
+  return {
+    ursitoare: "0.1",
+    flow: "pay-once",
+    version: "1.0.0",
+    inputs: {
+      type: "object",
+      properties: {
+        vendor: { type: "string" },
+        invoice: { type: "string" },
+        amount: { type: "number" },
+      },
+      required: ["vendor", "invoice", "amount"],
+    },
+    start: "lookup",
+    nodes: {
+      lookup: {
+        kind: "block",
+        uses: "erp.lookup_vendor@1",
+        with: { vendor_name: "${{ inputs.vendor }}" },
+        next: "route",
+      },
+      route: {
+        kind: "switch",
+        on: "${{ nodes.lookup.output.status }}",
+        cases: { active: "pay" },
+        default: "rejected",
+      },
+      pay: {
+        kind: "block",
+        uses: "erp.create_payment@1",
+        with: {
+          vendor_id: "${{ nodes.lookup.output.vendor_id }}",
+          amount: "${{ inputs.amount }}",
+          currency: "EUR",
+          reference: "${{ inputs.invoice }}",
+        },
+        next: "done",
+      },
+      done: {
+        kind: "end",
+        status: "completed",
+        output: { payment_id: "${{ nodes.pay.output.payment_id }}" },
+      },
+      rejected: { kind: "end", status: "failed" },
+    },
+  };
+}
+
 function record(over: Record<string, unknown>): LoadedVersion {
   return {
     flowId: "pay-once",
     hash: HASH,
     state: "validated",
     ownerTeam: "finance",
-    flow: loadTestFlow("rf-1-core"),
+    flow: supportedFlow(),
     ...over,
   } as LoadedVersion;
 }
@@ -132,7 +181,7 @@ test("C-ccc4a2fb S4: a version without stale starts and is enqueued once", async
 
 test("C-ccc4a2fb S5 and S6: staleness is reported before input and node-kind checks", async () => {
   const r = rig();
-  r.load(record({ stale: true }));
+  r.load(record({ stale: true, flow: loadTestFlow("rf-1-core") }));
   assertStale(await failure(startRun(r.deps, TENANT, request("r_s5", { vendor: "Acme" }))), "S5");
   const base = loadTestFlow("rf-1-core") as Flow;
   const agent = {

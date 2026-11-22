@@ -114,6 +114,7 @@ export interface LoadedVersion {
   state: VersionState;
   ownerTeam: string;
   flow: Flow;
+  readonly stale?: true;
 }
 
 export type VersionLoader = (

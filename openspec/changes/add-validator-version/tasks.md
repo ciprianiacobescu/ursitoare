@@ -18,7 +18,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 5. The refusal at run start
 
-- [ ] 5.1 Write `src/interpreter/start-stale.test.ts` (scenario "startRun refuses a stale version and starts a current one", rows S1 to S6) first, then re-read `src/interpreter/types.ts` (U47b edits `CallAuthorization.permit` before this unit) and add only `readonly stale?: true` to `LoadedVersion`, and add the refusal to `startRun` in `src/interpreter/start.ts` right after the draft check, with the message and `details` of the requirement; do not change `registryVersionLoader` here (the loader is task 6.1)
+- [x] 5.1 Write `src/interpreter/start-stale.test.ts` (scenario "startRun refuses a stale version and starts a current one", rows S1 to S6) first, then re-read `src/interpreter/types.ts` (U47b edits `CallAuthorization.permit` before this unit) and add only `readonly stale?: true` to `LoadedVersion`, and add the refusal to `startRun` in `src/interpreter/start.ts` right after the draft check, with the message and `details` of the requirement; do not change `registryVersionLoader` here (the loader is task 6.1)
 
 ## 6. The loader and the routes
 
