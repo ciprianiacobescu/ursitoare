@@ -12,7 +12,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 3. Registering and replacing
 
-- [ ] 3.1 Write `src/tools/openapi/register.db.test.ts` (scenario "Registering, replacing and each refusal", rows G1, F1 to F6, H1 to H6; the namespace for the two functions) and `src/tools/http/exit13.db.test.ts` (scenario "A templated GET, a POST with a body, a url argument and a refused path", rows E1 to E5; it takes `httpCallAdapter` from `adapter.ts` and `registerOpenApiServerTx` from `register.ts`, so its stub throw fails by assertion) first, then implement `registerOpenApiServerTx` and `submitOpenApiTx` in `src/tools/openapi/register.ts` through `registerAdapterServerTx` and `submitAdapterSurfaceTx` and add their export lines to `src/tools/index.ts`
+- [x] 3.1 Write `src/tools/openapi/register.db.test.ts` (scenario "Registering, replacing and each refusal", rows G1, F1 to F6, H1 to H6; the namespace for the two functions) and `src/tools/http/exit13.db.test.ts` (scenario "A templated GET, a POST with a body, a url argument and a refused path", rows E1 to E5; it takes `httpCallAdapter` from `adapter.ts` and `registerOpenApiServerTx` from `register.ts`, so its stub throw fails by assertion) first, then implement `registerOpenApiServerTx` and `submitOpenApiTx` in `src/tools/openapi/register.ts` through `registerAdapterServerTx` and `submitAdapterSurfaceTx` and add their export lines to `src/tools/index.ts`
 
 ## 4. The routes
 
