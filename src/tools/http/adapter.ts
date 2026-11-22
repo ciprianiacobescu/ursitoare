@@ -11,7 +11,5 @@ export const httpCallAdapter: CallAdapter<HttpCallSpec> = {
   },
 };
 
-export const HTTP_EMPTY_OUTPUT: Readonly<{ type: "object"; additionalProperties: false }> = {} as unknown as Readonly<{
-  type: "object";
-  additionalProperties: false;
-}>;
+export const HTTP_EMPTY_OUTPUT: Readonly<{ type: "object"; additionalProperties: false }> =
+  Object.freeze({ type: "object", additionalProperties: false });

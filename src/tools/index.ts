@@ -61,5 +61,6 @@ export type {
   OpenApiPreview,
 } from "./openapi/types.ts";
 export { translateSchema } from "./openapi/schema.ts";
-export { readOpenApi } from "./openapi/read.ts";
+export { importOpenApi, readOpenApi } from "./openapi/read.ts";
+export { HTTP_EMPTY_OUTPUT } from "./http/adapter.ts";
 export type { ServiceLookup } from "./mcp/discover.ts";
