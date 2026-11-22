@@ -228,7 +228,12 @@ roles:
   # 2026-11-22 (delegate): beam ONLY again for the m7 re-review that the add-cli-sandbox [test-infra] tag (ee7bfb84)
   # requires (inputs_changed). Same reason as 2026-11-21. RESTORE kiro, nemotron, beam, mimo, glm, claude in the push
   # before m7 is activated again.
-  - beam-judge
+  # 2026-11-22 05:40Z (delegate): ONE review round without beam. Beam gave the same false blocking batch finding twice
+  # (F-ecd90e, F-ed1acf: units "list themselves in depends_on"; none does). A second reader tells a beam misread from
+  # a defect in how the plan entry is shown. Free Zen judges only (owner rule); a failed call falls to the next.
+  - nemotron-judge
+  - glm-judge
+  - mimo-judge
   s1_judge:
   - jev
   - laya
