@@ -1,5 +1,5 @@
 import { appendAudit } from "../../audit/index.ts";
-import { canonicalizeFlow, validateFlow } from "../../authoring/index.ts";
+import { VALIDATOR_VERSION, canonicalizeFlow, validateFlow } from "../../authoring/index.ts";
 import type { Catalogue, ValidationResult } from "../../authoring/index.ts";
 import { systemClock } from "../../core/index.ts";
 import type { TenantContext, TenantTx } from "../../tenancy/index.ts";
@@ -43,9 +43,10 @@ export async function validateVersion(
     state = result.ok ? "validated" : "draft";
   }
   await tx.query(
-    `UPDATE ursitoare.flow_version SET state = $4, validation = $5::jsonb, validated_at = $6
+    `UPDATE ursitoare.flow_version SET state = $4, validation = $5::jsonb, validated_at = $6,
+       validator_version = CASE WHEN $7::boolean THEN $8::integer ELSE validator_version END
      WHERE tenant_id = $1 AND flow_id = $2 AND content_hash = $3`,
-    [ctx.tenantId, flowId, input.hash, state, JSON.stringify(result), now],
+    [ctx.tenantId, flowId, input.hash, state, JSON.stringify(result), now, result.ok, VALIDATOR_VERSION],
   );
   await appendAudit(
     tx,

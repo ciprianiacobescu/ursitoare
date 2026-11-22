@@ -9,6 +9,7 @@
  * Any other string containing at least one reference is a template (always a string).
  */
 
+import { MAX_NODE_ID_LENGTH } from "../validate/version.ts";
 import type { HookScope } from "./types.ts";
 
 export type Ref =
@@ -22,7 +23,7 @@ export type Seg =
   | { type: "ref"; raw: string; ref?: Ref; error?: string };
 
 const SEG = /^[A-Za-z0-9_]+$/;
-const NODE_ID = /^[a-z][a-z0-9_]*$/;
+const NODE_ID = new RegExp(`^[a-z][a-z0-9_]{0,${MAX_NODE_ID_LENGTH - 1}}$`);
 const HOOK_SCOPES: readonly HookScope[] = ["input", "output", "node", "next", "from"];
 
 export function parseRef(content: string): { ref?: Ref; error?: string } {

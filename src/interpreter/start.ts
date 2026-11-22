@@ -50,6 +50,14 @@ export async function startRun(
       { reason: "draft" },
     );
   }
+  if (version.stale === true) {
+    throw new InterpreterError(
+      "INTERPRETER_VERSION_NOT_RUNNABLE",
+      `flow "${req.flowId}" version "${req.hash}" was validated by an older validator; validate it again`,
+      null,
+      { reason: "validation_stale" },
+    );
+  }
   const kinds = unsupportedKinds(version.flow);
   if (kinds.length > 0) {
     throw new InterpreterError(

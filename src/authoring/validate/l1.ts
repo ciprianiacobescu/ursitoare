@@ -8,6 +8,7 @@ import type { AnySchema, ErrorObject, ValidateFunction } from "ajv";
 import { Ajv2020 } from "ajv/dist/2020.js";
 
 import { escapePointer, scanTemplate, suspiciousInterpolation, valueFields, walkStrings } from "../format/index.ts";
+import { MAX_NODE_ID_LENGTH } from "./version.ts";
 import { jsonSchemaProblem, isObj } from "./jsonschema.ts";
 import { FLOW_SCHEMA } from "./schema.ts";
 import type { Sink } from "./sink.ts";
@@ -173,7 +174,11 @@ function schemaErrors(errors: ErrorObject[], s: Sink): void {
         seen.add(k);
         const what = e.instancePath === "/nodes" ? "node id" : "name";
         const rule = what === "node id" ? "ids are snake_case and match [a-z][a-z0-9_]*" : "name does not match the required pattern";
-        s.err("L1", "L1_PATTERN", nodeOfPath(p), p, `${what} "${name}" is invalid: ${rule}`);
+        const tooLong = what === "node id" && name.length > MAX_NODE_ID_LENGTH && /^[a-z][a-z0-9_]*$/.test(name);
+        const message = tooLong
+          ? `node id "${name.slice(0, 32)}…" is too long: at most ${MAX_NODE_ID_LENGTH} characters`
+          : `${what} "${name}" is invalid: ${rule}`;
+        s.err("L1", "L1_PATTERN", nodeOfPath(p), p, message);
       }
       continue;
     }
