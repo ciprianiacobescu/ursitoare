@@ -2,7 +2,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 1. The wire helper
 
-- [ ] 1.1 Proves the `decodeMcpName` half of scenario "Header and version mismatches and unknown methods are refused". Write `test/support/fake-mcp/wire.test.ts` first (the Wire rows), then implement `decodeMcpName` in `test/support/fake-mcp/wire.ts` (plain value as is; `=?base64?...?=` decoded when the base64 is canonical and the bytes are UTF-8, else `null`).
+- [x] 1.1 Proves the `decodeMcpName` half of scenario "Header and version mismatches and unknown methods are refused". Write `test/support/fake-mcp/wire.test.ts` first (the Wire rows), then implement `decodeMcpName` in `test/support/fake-mcp/wire.ts` (plain value as is; `=?base64?...?=` decoded when the base64 is canonical and the bytes are UTF-8, else `null`).
 
 ## 2. The modern era
 
