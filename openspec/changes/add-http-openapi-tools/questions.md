@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 4.1 | technical | src/api/openapi-tool-routes.test.ts:420 expects 2 tool servers in tenant a, but only 1 can exist |
+| Q-001 | accepted | 4.1 | technical | src/api/openapi-tool-routes.test.ts:420 expects 2 tool servers in tenant a, but only 1 can exist |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/api/openapi-tool-routes.test.ts:420 expects 2 tool servers in tenant a, but only 1 can exist
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 4.1
 - **Kind:** technical
 - **Asked:** 2026-11-22T23:27Z by claude-sonnet, run r-20261122T2129Z-a20e, task 4.1
