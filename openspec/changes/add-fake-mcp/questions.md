@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 4.1 | technical | test/support/fake-mcp/records.test.ts:55-64: bl() builds the body with the wrong key order, so the Q6 digest cannot match |
+| Q-001 | accepted | 4.1 | technical | test/support/fake-mcp/records.test.ts:55-64: bl() builds the body with the wrong key order, so the Q6 digest cannot match |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: test/support/fake-mcp/records.test.ts:55-64: bl() builds the body with the wrong key order, so the Q6 digest cannot match
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 4.1
 - **Kind:** technical
 - **Asked:** 2026-11-22T15:55Z by claude-sonnet, run r-20261122T1423Z-2592, task 4.1
