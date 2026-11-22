@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 3.1 | technical | src/registry/flows/validator-version-schema.test.ts:47-55 owner UPDATEs match no rows under FORCE RLS |
-| Q-002 | open | 5.1 | technical | src/interpreter/start-stale.test.ts:121 S4 uses a flow startRun refuses |
+| Q-002 | accepted | 5.1 | technical | src/interpreter/start-stale.test.ts:121 S4 uses a flow startRun refuses |
 <!-- l4:index:end -->
 
 ---
@@ -43,7 +43,8 @@ Edit `src/registry/flows/validator-version-schema.test.ts`: run the owner UPDATE
 
 ## Q-002: src/interpreter/start-stale.test.ts:121 S4 uses a flow startRun refuses
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.1
 - **Kind:** technical
 - **Asked:** 2026-11-22T09:39Z by claude-sonnet, run r-20261122T0806Z-7c8c, task 5.1
