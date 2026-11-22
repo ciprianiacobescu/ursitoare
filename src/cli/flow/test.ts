@@ -22,6 +22,8 @@ import {
 import type { InterpreterDeps } from "../../interpreter/index.ts";
 import { createMemoryRunStore } from "../../runs/index.ts";
 import type { RunRecord, RunStore, StepRecord, TenantContext } from "../../runs/index.ts";
+import { createWorkerSandbox } from "../../sandbox/index.ts";
+import type { WorkerSandbox, WorkerSandboxOptions } from "../../sandbox/index.ts";
 import { CliError } from "../errors.ts";
 import { safeJson, safeText } from "../output.ts";
 import type { CliCall, CliCommand, CliOption } from "../registry.ts";
@@ -139,6 +141,7 @@ async function runFlow(
   catalogue: Catalogue,
   mocks: unknown,
   input: JsonValue,
+  sandbox: WorkerSandbox,
 ): Promise<number> {
   const store = createMemoryRunStore();
   const tenant: TenantContext = { tenantId: "local", reviewProfile: "solo" };
@@ -156,6 +159,7 @@ async function runFlow(
     catalogueFor: async () => catalogue,
     invokerFor: testRunInvokers(store),
     effects: NO_EFFECT_GATE,
+    sandbox,
     clock: call.clock,
     ids: call.ids,
   };
@@ -225,79 +229,86 @@ async function runFlow(
   return record.state === "completed" ? 0 : 1;
 }
 
-export const flowTestCommand: CliCommand = {
-  summary: "run a flow offline against mocks",
-  options: OPTIONS,
-  database: false,
-  async run(call: CliCall): Promise<number> {
-    const file = call.args.file;
-    if (typeof file !== "string") {
-      throw new CliError("CLI_USAGE", "missing required option --file");
-    }
-    const mocksPath = call.args.mocks;
-    if (typeof mocksPath !== "string") {
-      throw new CliError("CLI_USAGE", "missing required option --mocks");
-    }
-    const catalogueArg = call.args.catalogue;
-    const cataloguePath = typeof catalogueArg === "string" ? catalogueArg : undefined;
-    const inputArg = call.args.input;
-    const inputPath = typeof inputArg === "string" ? inputArg : undefined;
-
-    const text = readText(file, "--file");
-    const catalogue = loadCatalogue(cataloguePath);
-    const format = formatOf(file);
-    const result = validateFlowText(text, format, catalogue);
-
-    if (!result.ok) {
-      const lines = [safeText(`INVALID ${file}: ${result.errors.length} error(s)`)];
-      for (const issue of result.errors) {
-        lines.push(issueLine(issue));
-      }
-      if (cataloguePath === undefined) {
-        lines.push("  hint: no --catalogue given, so every block is unknown");
-      }
-      call.stdout.write(`${lines.join("\n")}\n`);
-      return 1;
-    }
-
-    const parsed = parseFlowText(text, format);
-    if (!parsed.ok) {
-      call.stdout.write(`${safeText(`INVALID ${file}: 1 error(s)`)}\n`);
-      return 1;
-    }
-    const flow = parsed.doc as Flow;
-
-    const mocks = parseJson(readText(mocksPath, "--mocks"), "--mocks");
-    const checked = checkMocks(flow, catalogue, mocks);
-    if (checked.problems.length > 0) {
-      const lines = [`MOCKS ${checked.problems.length} problem(s)`];
-      for (const problem of checked.problems) {
-        const index = problem.index === null ? "" : `[${problem.index}]`;
-        lines.push(safeText(`  ${problem.nodeId}${index} ${problem.reason}: ${problem.detail}`));
-      }
-      call.stdout.write(`${lines.join("\n")}\n`);
-      return 1;
-    }
-
-    let input: JsonValue = {};
-    if (inputPath !== undefined) {
-      const parsedInput = parseJson(readText(inputPath, "--input"), "--input");
-      if (!isPlainObject(parsedInput)) {
-        throw new CliError("CLI_USAGE", "--input must be a JSON object");
-      }
-      input = parsedInput as JsonValue;
-    }
-
-    return runFlow(call, flow, catalogue, checked.mocks, input);
-  },
-};
-
 export interface FlowTestDeps {
-  createSandbox?: (opts: never) => unknown;
+  createSandbox?: (opts: WorkerSandboxOptions) => WorkerSandbox;
 }
 
-export function createFlowTestCommand(_deps?: FlowTestDeps): CliCommand {
-  throw new Error("not implemented");
+export const FLOW_TEST_POOL: Readonly<WorkerSandboxOptions> = Object.freeze({ size: 1 });
+
+export function createFlowTestCommand(deps: FlowTestDeps = {}): CliCommand {
+  const createSandbox = deps.createSandbox ?? createWorkerSandbox;
+  return {
+    summary: "run a flow offline against mocks",
+    options: OPTIONS,
+    database: false,
+    run: (call: CliCall): Promise<number> => runFlowTest(call, createSandbox),
+  };
 }
 
-export const FLOW_TEST_POOL: Readonly<{ size?: number }> = Object.freeze({});
+async function runFlowTest(
+  call: CliCall,
+  createSandbox: (opts: WorkerSandboxOptions) => WorkerSandbox,
+): Promise<number> {
+  const file = call.args.file;
+  if (typeof file !== "string") {
+    throw new CliError("CLI_USAGE", "missing required option --file");
+  }
+  const mocksPath = call.args.mocks;
+  if (typeof mocksPath !== "string") {
+    throw new CliError("CLI_USAGE", "missing required option --mocks");
+  }
+  const catalogueArg = call.args.catalogue;
+  const cataloguePath = typeof catalogueArg === "string" ? catalogueArg : undefined;
+  const inputArg = call.args.input;
+  const inputPath = typeof inputArg === "string" ? inputArg : undefined;
+
+  const text = readText(file, "--file");
+  const catalogue = loadCatalogue(cataloguePath);
+  const format = formatOf(file);
+  const result = validateFlowText(text, format, catalogue);
+
+  if (!result.ok) {
+    const lines = [safeText(`INVALID ${file}: ${result.errors.length} error(s)`)];
+    for (const issue of result.errors) {
+      lines.push(issueLine(issue));
+    }
+    if (cataloguePath === undefined) {
+      lines.push("  hint: no --catalogue given, so every block is unknown");
+    }
+    call.stdout.write(`${lines.join("\n")}\n`);
+    return 1;
+  }
+
+  const parsed = parseFlowText(text, format);
+  if (!parsed.ok) {
+    call.stdout.write(`${safeText(`INVALID ${file}: 1 error(s)`)}\n`);
+    return 1;
+  }
+  const flow = parsed.doc as Flow;
+
+  const mocks = parseJson(readText(mocksPath, "--mocks"), "--mocks");
+  const checked = checkMocks(flow, catalogue, mocks);
+  if (checked.problems.length > 0) {
+    const lines = [`MOCKS ${checked.problems.length} problem(s)`];
+    for (const problem of checked.problems) {
+      const index = problem.index === null ? "" : `[${problem.index}]`;
+      lines.push(safeText(`  ${problem.nodeId}${index} ${problem.reason}: ${problem.detail}`));
+    }
+    call.stdout.write(`${lines.join("\n")}\n`);
+    return 1;
+  }
+
+  let input: JsonValue = {};
+  if (inputPath !== undefined) {
+    const parsedInput = parseJson(readText(inputPath, "--input"), "--input");
+    if (!isPlainObject(parsedInput)) {
+      throw new CliError("CLI_USAGE", "--input must be a JSON object");
+    }
+    input = parsedInput as JsonValue;
+  }
+
+  const sandbox = createSandbox(FLOW_TEST_POOL);
+  return runFlow(call, flow, catalogue, checked.mocks, input, sandbox);
+}
+
+export const flowTestCommand: CliCommand = createFlowTestCommand();
