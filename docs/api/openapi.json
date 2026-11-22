@@ -3276,7 +3276,7 @@
                                     "type": "string"
                                   },
                                   "nodeId": {
-                                    "pattern": "^[a-z][a-z0-9_]*$",
+                                    "pattern": "^[a-z][a-z0-9_]{0,127}$",
                                     "type": "string"
                                   }
                                 },
@@ -3486,7 +3486,7 @@
                         "type": "string"
                       },
                       "nodeId": {
-                        "pattern": "^[a-z][a-z0-9_]*$",
+                        "pattern": "^[a-z][a-z0-9_]{0,127}$",
                         "type": "string"
                       }
                     },
@@ -3618,7 +3618,7 @@
                           "type": "string"
                         },
                         "nodeId": {
-                          "pattern": "^[a-z][a-z0-9_]*$",
+                          "pattern": "^[a-z][a-z0-9_]{0,127}$",
                           "type": "string"
                         }
                       },
@@ -3993,7 +3993,7 @@
                           "type": "string"
                         },
                         "nodeId": {
-                          "pattern": "^[a-z][a-z0-9_]*$",
+                          "pattern": "^[a-z][a-z0-9_]{0,127}$",
                           "type": "string"
                         }
                       },
@@ -4227,7 +4227,7 @@
                           "type": "string"
                         },
                         "nodeId": {
-                          "pattern": "^[a-z][a-z0-9_]*$",
+                          "pattern": "^[a-z][a-z0-9_]{0,127}$",
                           "type": "string"
                         }
                       },

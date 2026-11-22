@@ -26,4 +26,4 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 7. The grants bound and the OpenAPI document
 
-- [ ] 7.1 Write `src/api/grant-node-bound.test.ts` (scenario "A 128-character node id is granted and a 129-character one is refused", rows G1 to G4) and `src/api/grant-openapi-bound.test.ts` (scenario "The committed document holds the bound five times") first, then set `NODE_PATTERN` in `src/api/grant-routes.ts` to `^[a-z][a-z0-9_]{0,127}$` and regenerate `docs/api/openapi.json` with `pnpm run test test/support/openapi-docs.ts` (the drift test `src/main.conventions.test.ts::C-d150bfa4` then passes)
+- [x] 7.1 Write `src/api/grant-node-bound.test.ts` (scenario "A 128-character node id is granted and a 129-character one is refused", rows G1 to G4) and `src/api/grant-openapi-bound.test.ts` (scenario "The committed document holds the bound five times") first, then set `NODE_PATTERN` in `src/api/grant-routes.ts` to `^[a-z][a-z0-9_]{0,127}$` and regenerate `docs/api/openapi.json` with `pnpm run test test/support/openapi-docs.ts` (the drift test `src/main.conventions.test.ts::C-d150bfa4` then passes)
