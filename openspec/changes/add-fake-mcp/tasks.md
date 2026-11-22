@@ -21,7 +21,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 5. The contract suite
 
-- [ ] 5.1 Proves scenario "The suite passes on the fake and fails on the broken targets". Write `test/support/fake-mcp/contract.test.ts` first (the names array, one `test(check.name, check.run)` per check on the dual fake, the modern-only, legacy-only and keyless fakes, mutant M1 as a `node:http` forwarding server closed in `finally`, the closed port), then implement `fakeMcpContract` in `test/support/fake-mcp/contract.ts` (imports `type ContractCheck` from `../fake-oidc/index.ts`; design.md § Decisions 9) and add `export * from "./contract.ts"` to `test/support/fake-mcp/index.ts`.
+- [x] 5.1 Proves scenario "The suite passes on the fake and fails on the broken targets". Write `test/support/fake-mcp/contract.test.ts` first (the names array, one `test(check.name, check.run)` per check on the dual fake, the modern-only, legacy-only and keyless fakes, mutant M1 as a `node:http` forwarding server closed in `finally`, the closed port), then implement `fakeMcpContract` in `test/support/fake-mcp/contract.ts` (imports `type ContractCheck` from `../fake-oidc/index.ts`; design.md § Decisions 9) and add `export * from "./contract.ts"` to `test/support/fake-mcp/index.ts`.
 
 ## 6. The part and the README
 

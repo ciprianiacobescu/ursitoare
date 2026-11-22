@@ -2,6 +2,8 @@
 
 import { startMcpServer } from "./server.ts";
 
+export * from "./contract.ts";
+
 export type FakeMcpEra = "modern" | "legacy" | "dual";
 
 export interface FakeMcpTool {
