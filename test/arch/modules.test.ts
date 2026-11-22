@@ -3,6 +3,7 @@ import { test } from "node:test";
 
 import { MODULES } from "./modules.ts";
 import { checkGraphIntegrity } from "./rules.ts";
+import { collectImports, readSnapshot } from "./sources.ts";
 import type { ModuleRule, Violation } from "./sources.ts";
 
 const GRAPH_FILE = "test/arch/modules.ts";
@@ -78,7 +79,7 @@ test("C-90199ce0 C-851f3c7c: the graph holds the 30 modules in roadmap order", (
   for (const name of ["sandbox", "runtimes", "api", "cli"]) {
     assert.equal(apiAllowed.includes(name), false, `api must not allow ${name}`);
   }
-  assert.deepEqual(ruleOf(MODULES, "cli").allowed, apiAllowed);
+  assert.deepEqual(ruleOf(MODULES, "cli").allowed, [...apiAllowed, "sandbox"]);
   assert.equal(ruleOf(MODULES, "observability").egress, "otlp");
   assert.equal(ruleOf(MODULES, "identity").egress, "oidc");
   assert.equal(ruleOf(MODULES, "gateway").egress, "tools");
@@ -89,6 +90,14 @@ test("C-90199ce0 C-851f3c7c: the graph holds the 30 modules in roadmap order", (
   expectGraphViolation(
     answer(() => checkGraphIntegrity({ a: { allowed: ["zzz"] } })),
     "zzz",
+  );
+  const testFile = readSnapshot().files.find((file) => file.path === "src/cli/flow/test.ts");
+  assert.ok(testFile !== undefined, "src/cli/flow/test.ts is in the snapshot");
+  assert.ok(
+    collectImports(testFile).some(
+      (ref) => ref.specifier === "../../sandbox/index.ts" && ref.typeOnly === false,
+    ),
+    "src/cli/flow/test.ts imports the sandbox as a value",
   );
 });
 

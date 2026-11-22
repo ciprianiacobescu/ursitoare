@@ -157,6 +157,7 @@ export const MODULES: Record<string, ModuleRule> = {
       "eval",
       "mcp",
       "templates",
+      "sandbox",
     ],
   },
 };
