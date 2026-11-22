@@ -54,7 +54,7 @@ The gateway double answers `requestToken` `{ serviceId: S_ID, expiresAt: 4102444
 | D4 | `LEG`, `INIT("2025-11-25")`, `ACK`, `LIST([T_LOG])` | `legacy`, `2025-11-25`; 4 sends, the fourth W8 without `mcp-method` |
 | D5 | `LEG`, `INIT("2025-06-18")`, 200 empty, `LIST([T_LOG])`; `LEG`, `INIT("2024-11-05")` | `2025-06-18` in the list headers and `call.protocolVersion`; `protocol_unsupported`, 2 sends |
 | D6 | 503; 200 `<html>`; 401; 302; `LEG`+500; `LEG`+`INIT`+500; `LEG`+`INIT`+`ACK`+500; `DISC`+200 `{"jsonrpc":"2.0","id":2,"result":{}}` | `discovery_failed`: `{ stage: "discover", status: "503" }`; `{ stage: "discover" }`; `{ stage: "discover", status: "401" }` (1 send); `{ stage: "discover", status: "302" }`; `{ stage: "initialize", status: "500" }`; `{ stage: "initialized", status: "500" }`; `{ stage: "tools", status: "500" }`; `{ stage: "tools" }` |
-| D7 | `DISC`, then 11 `LIST` with `nextCursor` | `too_many_tools`, 11 sends |
+| D7 | `DISC`, then 11 `LIST` with `nextCursor` (the 11th is never asked for) | `too_many_tools` after the 10th page; 11 sends: `server/discover` and 10 `tools/list` |
 | D8 | `requestToken` rejects `GatewayError("GATEWAY_UNAVAILABLE", ...)`; `GATEWAY_TOKEN_REFUSED`; `send` rejects `GATEWAY_INVALID` | the same error; `{ stage: "token" }`; `{ stage: "send" }` |
 | D9 | `check` answers `deny`; `allow` with errors `["PDP_EVALUATION_ERROR:p1"]`; `allow` without permit; rejects `db down` | `discovery_denied` `{ decisionId }`, 0 sends, one `deny` row (the second with those errors and no permit; the third an `allow` row with no permit, as main's invoke path stores it); `{ stage: "policy" }`, 0 rows |
 | D10 | `services.resolve` null | `credential_missing`; `check` 0, rows 0 |
