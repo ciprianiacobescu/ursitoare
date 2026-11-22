@@ -18,7 +18,8 @@ Every flow has the top-level fields `ursitoare`, `flow`, `version`, `description
 - `description` is free text and is left untouched by canonicalisation.
 - `inputs` is a JSON Schema object describing the flow inputs.
 - `start` names the entry node id.
-- `nodes` maps node ids to node objects.
+- `nodes` maps node ids to node objects. A node id is lower-case snake_case,
+  at most 128 characters, and starts with a letter.
 - `hooks` is an optional list of hook rules.
 - `expose` is optional; its only v0 value is `"mcp"`.
 
@@ -43,8 +44,8 @@ Value-holding fields differ per kind: `with` for `block`, `subflow` and
 
 ## Hooks
 
-A `hooks` entry is a hook rule with an `id`, a `match` selector and optional
-`pre` and `post` hook definitions. A selector may filter by `kind`, `effect`,
+A `hooks` entry is a hook rule with an `id`, an optional `match` selector (an absent one selects every node)
+and optional `pre` and `post` hook definitions. A selector may filter by `kind`, `effect`,
 `nodes` or `tags`. The `effect` values are `read`, `write`, `send`, `pay`,
 `human` and `none`. A rule may also constrain the previous edge with `when`,
 whose `from` and `next` selectors and `outcome` list narrow when it applies.

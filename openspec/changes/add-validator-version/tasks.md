@@ -6,7 +6,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. The format document
 
-- [ ] 2.1 Write `src/authoring/format/format-doc-bound.test.ts` (scenario "format.md reads both phrases", § Document rows) first, then edit `docs/authoring/format.md`: the `nodes` entry reads "`nodes` maps node ids to node objects. A node id is lower-case snake_case, at most 128 characters, and starts with a letter." and the Hooks sentence reads "A `hooks` entry is a hook rule with an `id`, an optional `match` selector (an absent one selects every node) and optional `pre` and `post` hook definitions." (the line breaks are free; the test collapses whitespace)
+- [x] 2.1 Write `src/authoring/format/format-doc-bound.test.ts` (scenario "format.md reads both phrases", § Document rows) first, then edit `docs/authoring/format.md`: the `nodes` entry reads "`nodes` maps node ids to node objects. A node id is lower-case snake_case, at most 128 characters, and starts with a letter." and the Hooks sentence reads "A `hooks` entry is a hook rule with an `id`, an optional `match` selector (an absent one selects every node) and optional `pre` and `post` hook definitions." (the line breaks are free; the test collapses whitespace)
 
 ## 3. Migration 0275
 
