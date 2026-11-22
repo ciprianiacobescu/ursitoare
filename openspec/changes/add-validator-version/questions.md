@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 3.1 | technical | src/registry/flows/validator-version-schema.test.ts:47-55 owner UPDATEs match no rows under FORCE RLS |
+| Q-002 | open | 5.1 | technical | src/interpreter/start-stale.test.ts:121 S4 uses a flow startRun refuses |
 <!-- l4:index:end -->
 
 ---
@@ -34,6 +35,29 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/registry/flows/validator-version-schema.test.ts`: run the owner UPDATEs at lines 47-55 and 74 inside `withTenantTx(db.ownerPool, a, async (tx) => { ... })`, with the 0 update's rejection asserted around that call, importing withTenantTx from ../../tenancy/index.ts
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: src/interpreter/start-stale.test.ts:121 S4 uses a flow startRun refuses
+
+- **Status:** open
+- **Blocking tasks:** 5.1
+- **Kind:** technical
+- **Asked:** 2026-11-22T09:39Z by claude-sonnet, run r-20261122T0806Z-7c8c, task 5.1
+
+### Context
+S4 expects startRun to return a queued run and enqueue once for a record without `stale`. The record's flow is `loadTestFlow("rf-1-core")` (`record()` at lines 24-33). That flow has llm.decide and llm.extract nodes. After the stale check, startRun throws INTERPRETER_KIND_UNSUPPORTED for it (`start.ts` kinds check). The spec says a version without `stale` starts as before, so the test needs a flow whose kinds startRun supports. Supporting those kinds in production is outside task 5.1.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/interpreter/start-stale.test.ts`, `src/interpreter/start.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-validator-version`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/interpreter/start-stale.test.ts`: make `record()` use a flow whose node kinds startRun supports (no llm.* nodes) for S4, for example the flow that `src/interpreter/start.test.ts` starts successfully, and keep the S5/S6 rows on their current flows.
+
+### Clarifier suggestion
+Edit `src/interpreter/start-stale.test.ts`: make `record()` use a flow whose node kinds startRun supports (no llm.* nodes) for S4, for example the flow that `src/interpreter/start.test.ts` starts successfully, and keep the S5/S6 rows on their current flows.
 
 ### Answer
 <!-- write below this line -->
