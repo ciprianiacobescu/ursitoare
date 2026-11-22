@@ -10,7 +10,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 3. Migration 0275
 
-- [ ] 3.1 Write `src/registry/flows/validator-version-schema.test.ts` (scenario "Ledger, column, check and column privilege", rows M1 to M6) first, then add `src/db/migrations/0275_validator_version.sql` with the `ALTER TABLE … ADD COLUMN validator_version integer CHECK (…)` and `GRANT UPDATE (validator_version)` statements of design decision 6
+- [x] 3.1 Write `src/registry/flows/validator-version-schema.test.ts` (scenario "Ledger, column, check and column privilege", rows M1 to M6) first, then add `src/db/migrations/0275_validator_version.sql` with the `ALTER TABLE … ADD COLUMN validator_version integer CHECK (…)` and `GRANT UPDATE (validator_version)` statements of design decision 6
 
 ## 4. The stored validator version
 

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { fixedClock } from "../../core/index.ts";
-import { checkTenancyCatalog } from "../../tenancy/index.ts";
+import { checkTenancyCatalog, withTenantTx } from "../../tenancy/index.ts";
 import { seedMockRunFlows } from "../../../test/support/mock-run-seed.ts";
 import { withTestDatabase } from "../../../test/support/pg.ts";
 import { seedTwoTenants } from "../../../test/support/tenants.ts";
@@ -45,12 +45,14 @@ test("C-49dc5e04 migration 0275 adds the validator version column with its own p
       ]);
 
       for (const value of [null, 1, 2]) {
-        await db.ownerPool.query("UPDATE ursitoare.flow_version SET validator_version = $1", [
-          value,
-        ]);
+        await withTenantTx(db.ownerPool, a, async (tx) => {
+          await tx.query("UPDATE ursitoare.flow_version SET validator_version = $1", [value]);
+        });
       }
       await assert.rejects(
-        db.ownerPool.query("UPDATE ursitoare.flow_version SET validator_version = $1", [0]),
+        withTenantTx(db.ownerPool, a, async (tx) => {
+          await tx.query("UPDATE ursitoare.flow_version SET validator_version = $1", [0]);
+        }),
         { code: "23514" },
       );
 
@@ -71,10 +73,14 @@ test("C-49dc5e04 migration 0275 adds the validator version column with its own p
         assert.equal(result.rows[0]?.ok, expected, `update privilege on ${name}`);
       }
 
-      await db.ownerPool.query("UPDATE ursitoare.flow_version SET validator_version = NULL");
-      const draft = await db.ownerPool.query<{ state: string; validator_version: number | null }>(
-        "SELECT state, validator_version FROM ursitoare.flow_version WHERE content_hash = $1",
-        [seed.draft],
+      await withTenantTx(db.ownerPool, a, async (tx) => {
+        await tx.query("UPDATE ursitoare.flow_version SET validator_version = NULL");
+      });
+      const draft = await withTenantTx(db.ownerPool, a, (tx) =>
+        tx.query<{ state: string; validator_version: number | null }>(
+          "SELECT state, validator_version FROM ursitoare.flow_version WHERE content_hash = $1",
+          [seed.draft],
+        ),
       );
       assert.deepEqual(draft.rows, [{ state: "draft", validator_version: null }]);
 
