@@ -24,3 +24,5 @@
 {"at":"2026-11-22T00:03:54Z","branch":"l4/archive/openspec/add-tool-adapters","head":"51d5e14ef4c47a6324e3a0573a16d616f39fbe35","type":"unit.branch_deleted","unit":"openspec:add-tool-adapters"}
 {"at":"2026-11-22T00:03:56Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-cli-sandbox"}
 {"at":"2026-11-22T00:03:56Z","run":"r-20261122T0003Z-5c64","type":"unit.dispatched","unit":"openspec:add-cli-sandbox"}
+{"at":"2026-11-22T02:23:00Z","attempt":1,"cost_usd":3.206812,"runs":1,"type":"plan.charged","unit":"openspec:add-cli-sandbox"}
+{"at":"2026-11-22T02:23:00Z","detail":"round 2 failed the same way as round 1: finding F-2813828d","reason":"unit_escalated","type":"plan.stopped","unit":"openspec:add-cli-sandbox"}
