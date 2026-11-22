@@ -8,7 +8,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. The call adapter
 
-- [ ] 2.1 Write `src/tools/http/adapter-build.test.ts` and `src/tools/http/adapter-answer.test.ts` (scenarios "Request vectors, refusals and the length bound" and "Answer vectors"; the namespace for `httpCallAdapter`) first, then implement `httpCallAdapter` in `src/tools/http/adapter.ts` (no import of `gateway`: `test/arch/egress-sites.test.ts::C-76ead8ea` stays green) and add its export line to `src/tools/index.ts`
+- [x] 2.1 Write `src/tools/http/adapter-build.test.ts` and `src/tools/http/adapter-answer.test.ts` (scenarios "Request vectors, refusals and the length bound" and "Answer vectors"; the namespace for `httpCallAdapter`) first, then implement `httpCallAdapter` in `src/tools/http/adapter.ts` (no import of `gateway`: `test/arch/egress-sites.test.ts::C-76ead8ea` stays green) and add its export line to `src/tools/index.ts`
 
 ## 3. Registering and replacing
 
