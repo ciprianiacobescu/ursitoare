@@ -1,0 +1,349 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "format/refs.ts",
+      "hooks/check.ts:66-73",
+      "src/grants/compile.ts",
+      "src/interpreter/hooks/actions.ts",
+      "web/src/app/features.ts",
+      "web/src",
+      "test/support/fake-tools/refusals.test.ts",
+      "test/arch/repo.test.ts",
+      "src/authoring/index.ts",
+      "validate/index.ts",
+      "docs/decisions/0002",
+      "src/interpreter/types.ts",
+      "src/registry/index.ts",
+      ".l4/plans/m7.json",
+      "src/api/test-run-loader.test.ts",
+      "test/support/flow-cases/invalid/l1-pattern-node-id.yaml",
+      "src/api/grant-routes.test.ts",
+      "src/registry/flows/schema.test.ts",
+      "src/db/migrate.test.ts",
+      "src/authoring/format/doc-terms.test.ts",
+      "src/main.conventions.test.ts",
+      "test/support/invoke-runs/harness.ts",
+      "src/authoring/validate/version.ts",
+      "src/registry/flows/validator-version.ts",
+      "src/authoring/hooks/check.ts",
+      "src/authoring/validate/node-id-bound.test.ts",
+      "src/authoring/format/refs-node-id.test.ts",
+      "src/authoring/validate/schema.ts",
+      "src/authoring/format/refs.ts",
+      "src/authoring/validate/l1.ts",
+      "src/authoring/format/format-doc-bound.test.ts",
+      "docs/authoring/format.md",
+      "src/registry/flows/validator-version-schema.test.ts",
+      "src/db/migrations/0275_validator_version.sql",
+      "src/registry/flows/validator-version.test.ts",
+      "src/registry/flows/validator-stamp.test.ts",
+      "src/registry/flows/validate.ts",
+      "src/interpreter/start-stale.test.ts",
+      "src/interpreter/start.ts",
+      "src/api/test-run-loader-stale.test.ts",
+      "src/api/stale-round-trip.test.ts",
+      "src/api/stale-failing-validation.test.ts",
+      "src/api/test-run-routes.ts",
+      "src/api/grant-node-bound.test.ts",
+      "src/api/grant-openapi-bound.test.ts",
+      "src/api/grant-routes.ts",
+      "docs/api/openapi.json",
+      "**/version.ts",
+      "**/schema.ts",
+      "**/l1.ts",
+      "**/refs.ts",
+      "**/validate.ts",
+      "**/execute.ts",
+      "**/path.ts",
+      "**/^[a-z][a-z0-9_]{0,127}$",
+      "**/check.ts",
+      "**/[a-z][a-z0-9_]{128,}",
+      "**/types.ts",
+      "**/LoadedVersion.stale?",
+      "**/openapi.json",
+      "**/[",
+      "**/index.ts",
+      "module .l4",
+      "module api",
+      "module authoring",
+      "module db",
+      "module docs",
+      "module format",
+      "module grants",
+      "module hooks",
+      "module interpreter",
+      "module main.conventions.test",
+      "module registry",
+      "module test",
+      "module validate",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "docs/authoring/format.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-validator-version/.l4/ledger/r-20261122T0644Z-8be4.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-validator-version/.l4/ledger/r-20261122T0806Z-7c8c.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-validator-version/.l4/ledger/r-20261122T0942Z-883f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-validator-version/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-validator-version/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/grant-node-bound.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/grant-openapi-bound.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/grant-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/stale-failing-validation.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/stale-round-trip.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/test-run-loader-stale.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/test-run-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/format/format-doc-bound.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/format/refs-node-id.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/format/refs.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/index.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/validate/l1.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/validate/node-id-bound.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/validate/schema.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/validate/version.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0275_validator_version.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/start-stale.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/interpreter/start.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/interpreter/types.ts",
+        "module": "interpreter",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/flows/validate.ts",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/flows/validator-stamp.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/registry/flows/validator-version-schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/registry/flows/validator-version.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/registry/flows/validator-version.ts",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/registry/index.ts",
+        "module": "registry",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/grant-routes.ts, src/api/test-run-routes.ts, src/authoring/format/refs.ts, src/authoring/index.ts, src/authoring/validate/l1.ts and 7 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/grant-routes.ts",
+      "src/api/test-run-routes.ts",
+      "src/authoring/format/refs.ts",
+      "src/authoring/index.ts",
+      "src/authoring/validate/l1.ts",
+      "src/authoring/validate/schema.ts",
+      "src/authoring/validate/version.ts",
+      "src/interpreter/start.ts",
+      "src/interpreter/types.ts",
+      "src/registry/flows/validate.ts",
+      "src/registry/flows/validator-version.ts",
+      "src/registry/index.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 2856,
+      "passed": 2856,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 25,
+      "new_passed": 25,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
