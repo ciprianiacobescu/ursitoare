@@ -9,6 +9,7 @@ const MODERN_VERSION = "2026-07-28";
 const LEGACY_VERSION = "2025-11-25";
 const TTL_MS = 60000;
 const CACHE_SCOPE = "private";
+const LEGACY_VERSIONS = new Set(["2025-11-25", "2025-06-18", "2025-03-26"]);
 const CURSOR = /^page-(0|[1-9][0-9]*)$/;
 const DEFAULT_PAGE_SIZE = 50;
 const FAKE_HOST = "mcp.fake.test";
@@ -176,6 +177,8 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
   const tools = opts.tools ?? [];
   const keyHeader = opts.keyHeader === undefined ? "authorization" : opts.keyHeader?.toLowerCase() ?? null;
   const sockets = new Set<Socket>();
+  const sessions = new Set<string>();
+  let sessionCount = 0;
   let port = 0;
 
   async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> {
@@ -235,6 +238,11 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
     const requested =
       typeof meta === "object" && meta !== null ? (meta as Record<string, unknown>)[META_VERSION] : undefined;
     if (typeof requested === "string") {
+      if (era === "legacy") {
+        res.writeHead(400, { "content-length": "0" });
+        res.end();
+        return;
+      }
       const mismatch = (text: string): void => {
         respond(res, 400, failure(id, -32020, `Header mismatch: ${text}`));
       };
@@ -284,6 +292,81 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
         respond(res, 404, failure(id, -32601, `Method not found: ${msg.method}`));
         return;
       }
+    }
+
+    if (typeof requested !== "string") {
+      if (era === "modern") {
+        respond(
+          res,
+          400,
+          failure(
+            id,
+            -32020,
+            `This server speaks MCP ${MODERN_VERSION} only (no initialize handshake); supported versions: ${MODERN_VERSION}`,
+          ),
+        );
+        return;
+      }
+      if (msg.method === "initialize") {
+        const asked = params["protocolVersion"];
+        const version =
+          asked === "2025-06-18" || asked === "2025-03-26" ? asked : LEGACY_VERSION;
+        if (opts.session === true) {
+          sessionCount += 1;
+          sessions.add(`fake-mcp-session-${sessionCount}`);
+          res.setHeader("mcp-session-id", `fake-mcp-session-${sessionCount}`);
+        }
+        respond(
+          res,
+          200,
+          result(id, {
+            protocolVersion: version,
+            capabilities: { tools: {} },
+            serverInfo: { name: "fake-mcp", version: "1.0.0" },
+          }),
+        );
+        return;
+      }
+      const header = req.headers["mcp-protocol-version"];
+      if (typeof header !== "string" || !LEGACY_VERSIONS.has(header)) {
+        respond(res, 400, failure(id, -32600, "Missing or unsupported MCP-Protocol-Version header"));
+        return;
+      }
+      if (opts.session === true) {
+        const session = req.headers["mcp-session-id"];
+        if (typeof session !== "string" || session === "") {
+          respond(res, 400, failure(id, -32600, "Missing Mcp-Session-Id header"));
+          return;
+        }
+        if (!sessions.has(session)) {
+          respond(res, 404, failure(id, -32600, "Unknown session"));
+          return;
+        }
+      }
+      if (msg.id === undefined) {
+        res.writeHead(202);
+        res.end();
+        return;
+      }
+      let value: unknown;
+      if (msg.method === "tools/list") {
+        value = list(tools, params, pageSize);
+      } else if (msg.method === "tools/call") {
+        value = call(tools, params);
+      } else {
+        respond(res, 200, failure(id, -32601, `Method not found: ${msg.method}`));
+        return;
+      }
+      if (isFailure(value)) {
+        respond(res, 200, failure(id, value.code, value.message));
+        return;
+      }
+      const legacy = { ...(value as Record<string, unknown>) };
+      delete legacy["resultType"];
+      delete legacy["ttlMs"];
+      delete legacy["cacheScope"];
+      respond(res, 200, result(id, legacy));
+      return;
     }
 
     switch (msg.method) {

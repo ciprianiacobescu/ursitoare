@@ -11,7 +11,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 3. The legacy eras and SSE
 
-- [ ] 3.1 Proves scenarios "A legacy handshake without a session, and the stateless calls" and "Sessions, and each era answers the other" (row X5 of the latter needs `reset()` and is proved in 4.2). Write `test/support/fake-mcp/legacy.test.ts` (G1 to G7) and `test/support/fake-mcp/sessions.test.ts` (X1 to X4, X6, E1, E2; X5 needs `reset()`, task 4.2) first (after 2.2 a legacy body gets no legacy answer and `era` is ignored), then add the legacy pipeline (design.md § Decisions 5 and 6) and the `era` option to `server.ts`.
+- [x] 3.1 Proves scenarios "A legacy handshake without a session, and the stateless calls" and "Sessions, and each era answers the other" (row X5 of the latter needs `reset()` and is proved in 4.2). Write `test/support/fake-mcp/legacy.test.ts` (G1 to G7) and `test/support/fake-mcp/sessions.test.ts` (X1 to X4, X6, E1, E2; X5 needs `reset()`, task 4.2) first (after 2.2 a legacy body gets no legacy answer and `era` is ignored), then add the legacy pipeline (design.md § Decisions 5 and 6) and the `era` option to `server.ts`.
 - [ ] 3.2 Proves scenario "SSE answers and the answers that stay JSON" (its `failNext` step completes in 4.2). Write `test/support/fake-mcp/sse.test.ts` (S1, S3, S4 and the 401, `-32020` and 202 steps of S5; its `failNext` step is in 4.2) first, then add the `sse` option to `server.ts`.
 
 ## 4. Records, knobs, reset and close
