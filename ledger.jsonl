@@ -22,3 +22,5 @@
 {"at":"2026-11-22T00:02:17Z","revision":"56be9698ab28240f06f98454e842700a1deae7a3","type":"unit.integrated","unit":"openspec:add-tool-adapters"}
 {"at":"2026-11-22T00:02:17Z","attempt":1,"cost_usd":6.760901,"runs":5,"type":"plan.charged","unit":"openspec:add-tool-adapters"}
 {"at":"2026-11-22T00:03:54Z","branch":"l4/archive/openspec/add-tool-adapters","head":"51d5e14ef4c47a6324e3a0573a16d616f39fbe35","type":"unit.branch_deleted","unit":"openspec:add-tool-adapters"}
+{"at":"2026-11-22T00:03:56Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-cli-sandbox"}
+{"at":"2026-11-22T00:03:56Z","run":"r-20261122T0003Z-5c64","type":"unit.dispatched","unit":"openspec:add-cli-sandbox"}
