@@ -62,3 +62,5 @@
 {"at":"2026-11-22T06:43:35Z","revision":"47bec6062d86f64fb412c56fdc5648fc6823d72c","type":"unit.integrated","unit":"openspec:add-cli-sandbox"}
 {"at":"2026-11-22T06:43:35Z","attempt":1,"cost_usd":3.206812,"runs":2,"type":"plan.charged","unit":"openspec:add-cli-sandbox"}
 {"at":"2026-11-22T06:44:58Z","branch":"l4/archive/openspec/add-cli-sandbox","head":"f1aa79e4a67f663f2ea1c360d105686834c50ea8","type":"unit.branch_deleted","unit":"openspec:add-cli-sandbox"}
+{"at":"2026-11-22T06:44:59Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-validator-version"}
+{"at":"2026-11-22T06:44:59Z","run":"r-20261122T0644Z-8be4","type":"unit.dispatched","unit":"openspec:add-validator-version"}
