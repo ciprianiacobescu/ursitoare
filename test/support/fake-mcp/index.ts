@@ -94,7 +94,42 @@ export const FAKE_MCP_TOOLS: readonly FakeMcpTool[] = [
   },
 ];
 
+const ERAS: readonly string[] = ["modern", "legacy", "dual"];
+const HTTP_TOKEN = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
+
+function checkToolNames(tools: readonly FakeMcpTool[]): void {
+  const seen = new Set<string>();
+  for (const tool of tools) {
+    if (typeof tool.name !== "string" || tool.name === "") {
+      throw new RangeError("tool name must be a non-empty string");
+    }
+    if (seen.has(tool.name)) {
+      throw new RangeError(`duplicate tool name: ${tool.name}`);
+    }
+    seen.add(tool.name);
+  }
+}
+
+function checkOptions(opts: FakeMcpOptions): void {
+  if (opts.era !== undefined && !ERAS.includes(opts.era)) {
+    throw new RangeError("era must be modern, legacy or dual");
+  }
+  if (opts.path !== undefined && (!opts.path.startsWith("/") || opts.path.includes("?") || opts.path.includes("#"))) {
+    throw new RangeError("path must start with / and hold no ? or #");
+  }
+  if (opts.keyHeader !== undefined && opts.keyHeader !== null && !HTTP_TOKEN.test(opts.keyHeader)) {
+    throw new RangeError("keyHeader must be an HTTP token or null");
+  }
+  if (opts.pageSize !== undefined && (!Number.isInteger(opts.pageSize) || opts.pageSize <= 0)) {
+    throw new RangeError("pageSize must be a positive integer");
+  }
+  if (opts.tools !== undefined) {
+    checkToolNames(opts.tools);
+  }
+}
+
 export async function startFakeMcp(opts: FakeMcpOptions = {}): Promise<FakeMcp> {
+  checkOptions(opts);
   const server = await startMcpServer({ ...opts, tools: opts.tools ?? FAKE_MCP_TOOLS });
   return {
     origin: server.origin,
@@ -105,14 +140,14 @@ export async function startFakeMcp(opts: FakeMcpOptions = {}): Promise<FakeMcp> 
       }
       return all.filter((request) => request.method === filter.method);
     },
-    failNext(_method: string, _status: number, _times?: number): void {
-      throw new Error("not implemented");
+    failNext(method: string, status: number, times?: number): void {
+      server.failNext(method, status, times);
     },
-    setTools(_tools: readonly FakeMcpTool[]): void {
-      throw new Error("not implemented");
+    setTools(tools: readonly FakeMcpTool[]): void {
+      server.setTools(tools);
     },
     reset(): void {
-      throw new Error("not implemented");
+      server.reset();
     },
     close(): Promise<void> {
       return server.close();

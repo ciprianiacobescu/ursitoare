@@ -20,7 +20,28 @@ const KNOWN_METHODS = new Set(["server/discover", "tools/list", "tools/call"]);
 export interface McpHttpServer {
   readonly origin: string;
   requests(): FakeMcpRequest[];
+  failNext(method: string, status: number, times?: number): void;
+  setTools(tools: readonly FakeMcpTool[]): void;
+  reset(): void;
   close(): Promise<void>;
+}
+
+interface PendingFailure {
+  status: number;
+  times: number;
+}
+
+function checkTools(tools: readonly FakeMcpTool[]): void {
+  const seen = new Set<string>();
+  for (const tool of tools) {
+    if (typeof tool.name !== "string" || tool.name === "") {
+      throw new RangeError("tool name must be a non-empty string");
+    }
+    if (seen.has(tool.name)) {
+      throw new RangeError(`duplicate tool name: ${tool.name}`);
+    }
+    seen.add(tool.name);
+  }
 }
 
 function headerText(value: string | string[] | undefined): string | null {
@@ -223,11 +244,13 @@ function isFailure(value: unknown): value is Failure {
 export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServer> {
   const era = opts.era ?? "dual";
   const pageSize = opts.pageSize ?? DEFAULT_PAGE_SIZE;
-  const tools = opts.tools ?? [];
+  const startTools = opts.tools ?? [];
+  let tools: readonly FakeMcpTool[] = startTools;
   const keyHeader = opts.keyHeader === undefined ? "authorization" : opts.keyHeader?.toLowerCase() ?? null;
   const sockets = new Set<Socket>();
   const sessions = new Set<string>();
   const records: FakeMcpRequest[] = [];
+  const failures = new Map<string, PendingFailure>();
   let sessionCount = 0;
   let seq = 0;
   let port = 0;
@@ -327,6 +350,15 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
         finish(401, { error: "unauthorized" });
         return;
       }
+    }
+    const pending = msg === undefined ? undefined : failures.get(msg.method);
+    if (msg !== undefined && pending !== undefined) {
+      pending.times -= 1;
+      if (pending.times <= 0) {
+        failures.delete(msg.method);
+      }
+      finish(pending.status, { error: "injected_failure", status: pending.status });
+      return;
     }
 
     if (message === undefined) {
@@ -518,6 +550,30 @@ export async function startMcpServer(opts: FakeMcpOptions): Promise<McpHttpServe
     origin: `http://127.0.0.1:${address.port}`,
     requests(): FakeMcpRequest[] {
       return structuredClone(records);
+    },
+    failNext(method: string, status: number, times = 1): void {
+      if (typeof method !== "string" || method === "") {
+        throw new RangeError("method must be a non-empty string");
+      }
+      if (!Number.isInteger(status) || status < 400 || status > 599) {
+        throw new RangeError("status must be an integer from 400 to 599");
+      }
+      if (!Number.isInteger(times) || times < 1 || times > 1000) {
+        throw new RangeError("times must be an integer from 1 to 1000");
+      }
+      failures.set(method, { status, times });
+    },
+    setTools(next: readonly FakeMcpTool[]): void {
+      checkTools(next);
+      tools = next;
+    },
+    reset(): void {
+      records.length = 0;
+      failures.clear();
+      sessions.clear();
+      sessionCount = 0;
+      seq = 0;
+      tools = startTools;
     },
     close(): Promise<void> {
       closing ??= new Promise<void>((resolve) => {
