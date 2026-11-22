@@ -1,9 +1,9 @@
-# Verification: openspec:add-cli-sandbox: FAIL (round 1)
+# Verification: openspec:add-cli-sandbox: FAIL (round 2)
 
 traceability: not checked (an earlier step failed)
 
 - Base: `51d5e14ef4c47a6324e3a0573a16d616f39fbe35`
-- Head: `a6ac0ef52720647dc7f782ceba20023164121d3e`
+- Head: `1dee772dd3ceecdf2acdb450ff7ea5bb9f25918a`
 - Implementer profiles: claude-sonnet
 - Judge: nemotron-judge, 0 call(s), prompt sha256 `-`
 
@@ -11,8 +11,8 @@ traceability: not checked (an earlier step failed)
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base main@51d5e14ef4 contained |
-| 1 | integrity | failed | 984.4 | a pre-existing test fails on the unit's code; scope: 8 changed file(s) |
+| 0 | preconditions | ok | 0.7 | base main@51d5e14ef4 contained |
+| 1 | integrity | failed | 618.7 | a pre-existing test fails on the unit's code; scope: 16 changed file(s) |
 | 2 | build | not_run | 0.0 | an earlier step failed |
 | 3 | tests | not_run | 0.0 | an earlier step failed |
 | 4 | traceability | not_run | 0.0 | an earlier step failed |
@@ -30,14 +30,14 @@ traceability: not checked (an earlier step failed)
 | protected paths | ok | no protected path differs from the base |
 | pre-existing tests | skipped | no Python test file changed; 1 other test file(s) are checked by the run of pre-existing tests |
 | red-green freeze | ok | 2 task(s): red and green compared |
-| test path freeze | ok | 2 harness step commit(s) checked |
+| test path freeze | ok | 3 harness step commit(s) checked |
 | content scan | skipped | not checked: python only; changed files outside it: test/arch/modules.ts |
 | gate configuration | skipped | no gate or runner configuration file changed |
 | test awareness | ok | no production line reacts to the test run |
 | suppressions | skipped | not checked: python only; changed files outside it: src/cli/flow/test-pool.test.ts, src/cli/flow/test-sandbox.test.ts, src/cli/flow/test.ts, test/arch/cli-sandbox.test.ts, test/arch/modules.test.ts (+1 more) |
 | tdd history | ok | 2 task(s); red tests passing at head: step 3 |
 | python encoding | skipped | no Python file added or changed |
-| pre-existing tests still pass | failed | 2698 of 2699 base tests pass on the unit's code with its 5 test and support files at the base (base: base worktree) |
+| pre-existing tests still pass | failed | 2698 of 2699 base tests pass on the unit's code with its 5 test and support files at the base (base: evidence) |
 
 ## Evidence
 
@@ -49,8 +49,16 @@ Nothing needs attention.
 
 | Path | Module | Label | Why |
 |---|---|---|---|
+| `openspec/changes/add-cli-sandbox-fix-1/.l4/fix.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-cli-sandbox-fix-1/.openspec.yaml` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-cli-sandbox-fix-1/proposal.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-cli-sandbox-fix-1/tasks.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-cli-sandbox/.l4/evidence/round-1/evidence.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-cli-sandbox/.l4/evidence/round-1/verdict.json` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-cli-sandbox/.l4/evidence/round-1/verification.md` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-cli-sandbox/.l4/ledger/r-20261122T0003Z-5c64.jsonl` |  | none | exempt: harness, spec or documentation path |
 | `openspec/changes/add-cli-sandbox/tasks.md` |  | none | exempt: harness, spec or documentation path |
+| `openspec/changes/add-cli-sandbox/verification.md` |  | none | exempt: harness, spec or documentation path |
 | `src/cli/flow/test-pool.test.ts` |  | relevant | new test file |
 | `src/cli/flow/test-sandbox.test.ts` |  | relevant | new test file |
 | `src/cli/flow/test.ts` | cli | relevant | named in the spec |
@@ -73,12 +81,10 @@ None judged.
 ## Findings
 
 - [blocker, deterministic] a pre-existing test fails on the unit's code: test.arch.repo.test.ts::C-c0da3179 C-9ded7e99 C-069f346e: the merged tree is clean (AssertionError: Expected values to be strictly deep-equal:)
-- [minor, deterministic] a pre-existing test is flaky on the unit's code: test.support.e2e-stack.main.test.ts::C-23b4de23 the process starts on the default ports 39080 and 39081
 
 ## Fix unit
 
-Fix unit 1 is created for these tasks:
-- F-2813828d a pre-existing test fails on the unit's code
+Escalated: round 2 failed the same way as round 1: finding F-2813828d
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
