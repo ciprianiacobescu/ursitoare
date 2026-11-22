@@ -95,6 +95,29 @@ function resolvePointer(document: Readonly<Record<string, unknown>>, pointer: st
   return current;
 }
 
+export function resolveRefObject(
+  value: unknown,
+  document: Readonly<Record<string, unknown>>,
+): { ok: true; value: unknown } | { ok: false; reason: Reason } {
+  try {
+    let current = value;
+    const seen: string[] = [];
+    while (isRecord(current) && Object.hasOwn(current, "$ref")) {
+      const pointer = current["$ref"];
+      if (typeof pointer !== "string") throw new Refusal("schema_invalid");
+      if (!pointer.startsWith("#/")) throw new Refusal("ref_remote");
+      if (seen.includes(pointer)) throw new Refusal("ref_cycle");
+      if (seen.length >= MAX_REF_DEPTH) throw new Refusal("schema_invalid");
+      seen.push(pointer);
+      current = resolvePointer(document, pointer);
+    }
+    return { ok: true, value: current };
+  } catch (error) {
+    if (error instanceof Refusal) return { ok: false, reason: error.reason };
+    throw error;
+  }
+}
+
 function translateAll(
   root: unknown,
   version: "3.0" | "3.1",
