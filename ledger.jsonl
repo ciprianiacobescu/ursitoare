@@ -138,3 +138,4 @@
 {"at":"2026-11-23T17:00:25Z","attempt":1,"cost_usd":11.373084,"runs":10,"type":"plan.charged","unit":"openspec:add-mcp-client"}
 {"at":"2026-11-23T17:00:25Z","run":"r-20261123T1700Z-c746","type":"unit.dispatched","unit":"openspec:add-mcp-client"}
 {"at":"2026-11-23T17:18:07Z","detail":"awaiting_human: no new answers (open: Q-009) (escalated to a person: Q-009)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-mcp-client"}
+{"at":"2026-11-23T17:26:30Z","by":"harness","reason":"the cause is gone: openspec:add-mcp-client is awaiting_human","type":"plan.resumed"}
