@@ -3,7 +3,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 ## 1. Wire and adapter
 
 - [x] 1.1 Write `src/tools/mcp/wire.test.ts` first (scenario "Body, header and reply vectors"), then implement `src/tools/mcp/wire.ts` and add its export lines to `src/tools/index.ts`
-- [ ] 1.2 Write `src/tools/mcp/adapter.test.ts` first (scenario "A call is one POST with fixed bytes and each answer maps"), then implement `src/tools/mcp/adapter.ts` and its export line in `src/tools/index.ts`
+- [x] 1.2 Write `src/tools/mcp/adapter.test.ts` first (scenario "A call is one POST with fixed bytes and each answer maps"), then implement `src/tools/mcp/adapter.ts` and its export line in `src/tools/index.ts`
 
 ## 2. The surface
 

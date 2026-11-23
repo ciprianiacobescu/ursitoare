@@ -64,6 +64,7 @@ export { translateSchema } from "./openapi/schema.ts";
 export { importOpenApi, readOpenApi } from "./openapi/read.ts";
 export { registerOpenApiServerTx, submitOpenApiTx } from "./openapi/register.ts";
 export { HTTP_EMPTY_OUTPUT, httpCallAdapter } from "./http/adapter.ts";
+export { mcpCallAdapter } from "./mcp/adapter.ts";
 export type { McpReply } from "./mcp/wire.ts";
 export {
   MCP_CLIENT_INFO,
