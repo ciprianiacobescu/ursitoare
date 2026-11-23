@@ -145,3 +145,4 @@
 {"at":"2026-11-23T18:48:37Z","run":"r-20261123T1848Z-ff77","type":"unit.dispatched","unit":"openspec:add-mcp-client"}
 {"at":"2026-11-23T20:45:25Z","head":"17f6194e6249c3708bf30f3b30be3f108646c083","pr":166,"target_before":"280bcad2ae81063ae27d40c73c3467e29f770d4b","type":"unit.merge_requested","unit":"openspec:add-mcp-client"}
 {"at":"2026-11-23T20:45:30Z","ci":"not_run","head":"17f6194e6249c3708bf30f3b30be3f108646c083","merge_commit":"00898e215582d352410a93c1b38fbc613c1458d6","method":"squash","pr":166,"raced":false,"type":"unit.merged","unit":"openspec:add-mcp-client"}
+{"at":"2026-11-23T20:45:34Z","branch":"l4/openspec/add-mcp-client","head":"17f6194e6249c3708bf30f3b30be3f108646c083","type":"unit.branch_deleted","unit":"openspec:add-mcp-client"}
