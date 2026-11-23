@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | accepted | 3.1 | technical | src/tools/mcp/register.db.test.ts:18,58 owner-pool inserts/selects on RLS-forced tables |
 | Q-003 | accepted | 3.1 | technical | src/tools/mcp/register.db.test.ts:137 bad-endpoint loop leaves tool_server rows |
 | Q-004 | accepted | 3.1 | technical | src/tools/mcp/register.db.test.ts:221 two good cases share one generated id |
-| Q-005 | open | 3.1 | technical | src/tools/mcp/register.db.test.ts:191 G4 expects ["/"] after G1 inserted seven endpoints for tenant A |
+| Q-005 | answered | 3.1 | technical | src/tools/mcp/register.db.test.ts:191 G4 expects ["/"] after G1 inserted seven endpoints for tenant A |
 <!-- l4:index:end -->
 
 ---
@@ -119,7 +119,7 @@ Edit `src/tools/mcp/register.db.test.ts`: make the id unique by including item.u
 
 ## Q-005: src/tools/mcp/register.db.test.ts:191 G4 expects ["/"] after G1 inserted seven endpoints for tenant A
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate: delegate answer limit of task 3.1 reached (3)
 - **Blocking tasks:** 3.1
 - **Kind:** technical
@@ -139,3 +139,14 @@ Edit `src/tools/mcp/register.db.test.ts`: change the G4 tenant-A query to `SELEC
 
 ### Answer
 <!-- write below this line -->
+Edit `src/tools/mcp/register.db.test.ts`, G4 only, and take neither option as written.
+
+Option 1 is rejected. With tenant A's query filtered to srv_a and tenant B's to srv_b, neither query can ever return the other tenant's row, so G4 would pass with no row level security at all. It would stop testing isolation, which is what the spec's forced row level security on mcp_server requires.
+
+Option 2 keeps the isolation check, but it hard-codes an ORDER BY order that depends on the test database's collation.
+
+Keep both queries unscoped and compare the rows as a set:
+- Change the tenant-A assertion to `assert.deepEqual(aRows.rows.map((row) => row.endpoint).sort(), ["/", ...good].sort());`. That is srv_a's "/" from G3 plus the seven G1 endpoints, and none of tenant B's.
+- Leave the tenant-B assertion `["/mcp"]` as it is.
+
+Change nothing else in the file.
