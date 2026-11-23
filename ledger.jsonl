@@ -110,3 +110,4 @@
 {"at":"2026-11-23T00:24:14Z","run":"r-20261123T0024Z-5a98","type":"unit.dispatched","unit":"openspec:add-http-openapi-tools"}
 {"at":"2026-11-23T01:23:15Z","head":"631834a1b0a80b71413334902accaf07e4953465","pr":164,"target_before":"8caa74279e57f25afc61587e6d82582571f20077","type":"unit.merge_requested","unit":"openspec:add-http-openapi-tools"}
 {"at":"2026-11-23T01:23:20Z","ci":"not_run","head":"631834a1b0a80b71413334902accaf07e4953465","merge_commit":"7ae0f02698774f19af24132dce3a5270e07279da","method":"squash","pr":164,"raced":false,"type":"unit.merged","unit":"openspec:add-http-openapi-tools"}
+{"at":"2026-11-23T01:23:26Z","branch":"l4/openspec/add-http-openapi-tools","head":"631834a1b0a80b71413334902accaf07e4953465","type":"unit.branch_deleted","unit":"openspec:add-http-openapi-tools"}
