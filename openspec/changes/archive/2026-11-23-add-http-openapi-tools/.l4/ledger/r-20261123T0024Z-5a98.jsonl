@@ -87,3 +87,8 @@
 {"ts": "2026-11-23T01:12:45.428194Z", "run_id": "r-20261123T0024Z-5a98", "unit": "openspec:add-http-openapi-tools", "seq": 87, "type": "step.timed", "phase": "verify", "round": 1, "seconds": 1477.6}
 {"ts": "2026-11-23T01:12:45.428628Z", "run_id": "r-20261123T0024Z-5a98", "unit": "openspec:add-http-openapi-tools", "seq": 88, "type": "phase.changed", "from": "verifying", "to": "verified", "trigger": "verify_pass", "exit_code": null}
 {"ts": "2026-11-23T01:12:48.150910Z", "run_id": "r-20261123T0024Z-5a98", "unit": "openspec:add-http-openapi-tools", "seq": 89, "type": "pr.labels", "number": 164, "labels": ["l4:verified"]}
+{"ts": "2026-11-23T01:12:55.140216Z", "run_id": "r-20261123T0024Z-5a98", "unit": "openspec:add-http-openapi-tools", "seq": 90, "type": "pr.ready", "url": "<forge>/ciprianiacobescu/ursitoare/pull/164", "number": 164, "head": "631834a1b0a80b71413334902accaf07e4953465"}
+{"ts": "2026-11-23T01:12:55.140971Z", "run_id": "r-20261123T0024Z-5a98", "unit": "openspec:add-http-openapi-tools", "seq": 91, "type": "phase.changed", "from": "verified", "to": "in_review", "trigger": "hand_off_pushed", "exit_code": 0}
+{"ts": "2026-11-23T01:12:57.994256Z", "run_id": "r-20261123T0024Z-5a98", "unit": "openspec:add-http-openapi-tools", "seq": 92, "type": "pr.labels", "number": 164, "labels": ["l4:in_review"]}
+{"ts": "2026-11-23T01:12:59.036724Z", "run_id": "r-20261123T0024Z-5a98", "unit": "openspec:add-http-openapi-tools", "seq": 93, "type": "lock.released"}
+{"ts": "2026-11-23T01:12:59.037640Z", "run_id": "r-20261123T0024Z-5a98", "unit": "openspec:add-http-openapi-tools", "seq": 94, "type": "run.finished", "exit_code": 0}
