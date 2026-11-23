@@ -17,6 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | accepted | 3.1 | technical | src/tools/mcp/register.db.test.ts:221 two good cases share one generated id |
 | Q-005 | answered | 3.1 | technical | src/tools/mcp/register.db.test.ts:191 G4 expects ["/"] after G1 inserted seven endpoints for tenant A |
 | Q-006 | accepted | 4.1 | technical | src/tools/mcp/discover.db.test.ts:261-277 rowCount and newRows read policy_decision through ownerPool and always see 0 rows |
+| Q-007 | open | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:386 (T8) contradicts T14 at :482 and the spec |
 <!-- l4:index:end -->
 
 ---
@@ -176,6 +177,33 @@ Harness note: the previous attempt of this task was rejected: the agent step rea
 
 ### Clarifier suggestion
 Edit `src/tools/mcp/discover.db.test.ts`: make `rowCount()` and `newRows()` read through `withTenantTx(d.appPool, CTX, tx => tx.query(...))` (import `withTenantTx` from `../../tenancy/index.ts`) instead of `d.ownerPool.query`, with the same SQL.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-007: src/api/mcp-discover-route.db.test.ts:386 (T8) contradicts T14 at :482 and the spec
+
+- **Status:** open
+- **Blocking tasks:** 5.2
+- **Kind:** technical
+- **Asked:** 2026-11-23T16:57Z by claude-sonnet, run r-20261123T1523Z-e57b, task 5.2
+
+### Context
+T8 builds the harness with `services: null` (the harness passes null through as the route's `services` dep), registers `docs`, and expects 422 OPERATION_REFUSED with reason credential_missing. T14 builds the same harness with `services: null` (and with `policy: null`, `gateway: null`) and expects 503 EGRESS_UNAVAILABLE with reason discovery_not_configured. The spec (requirement 'The routes register a server by URL and discover its tools') says a null `gateway`, `policy` or `services` is 503 `EGRESS_UNAVAILABLE` `{ reason: "discovery_not_configured" }` first, before the unknown-server 404. credential_missing (row T8, D10) comes from a services lookup that resolves null. The only difference between the two tests is that T8 registers `docs` first, and the spec's order makes that irrelevant. T8 was presumably meant to pass `services: { resolve: async () => null }`.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/api/mcp-discover-route.db.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-mcp-client`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/api/mcp-discover-route.db.test.ts`: in test T8 (line 387) replace `createHarness({ services: null })` with `createHarness({ services: { resolve: async () => null } })`
+2. Edit `src/api/mcp-discover-route.db.test.ts`: delete the `services: null` case from T14
+
+### Harness notes
+Harness note: the previous attempt of this task was rejected: the agent step reached its time limit (30m)
+
+### Clarifier suggestion
+Edit `src/api/mcp-discover-route.db.test.ts`: in test T8 (line 387) replace `createHarness({ services: null })` with `createHarness({ services: { resolve: async () => null } })`
 
 ### Answer
 <!-- write below this line -->
