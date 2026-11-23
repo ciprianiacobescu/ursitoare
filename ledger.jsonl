@@ -150,3 +150,5 @@
 {"at":"2026-11-23T20:50:43Z","revision":"00898e215582d352410a93c1b38fbc613c1458d6","type":"unit.integrated","unit":"openspec:add-mcp-client"}
 {"at":"2026-11-23T20:50:43Z","attempt":1,"cost_usd":16.868493,"runs":12,"type":"plan.charged","unit":"openspec:add-mcp-client"}
 {"at":"2026-11-23T20:52:14Z","branch":"l4/archive/openspec/add-mcp-client","head":"e8adf675493685ef3a5bd1f2cdecb2111691a8b3","type":"unit.branch_deleted","unit":"openspec:add-mcp-client"}
+{"at":"2026-11-23T20:52:16Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-code-block-tools"}
+{"at":"2026-11-23T20:52:16Z","run":"r-20261123T2052Z-a278","type":"unit.dispatched","unit":"openspec:add-code-block-tools"}
