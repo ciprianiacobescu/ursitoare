@@ -537,8 +537,8 @@ describe("mcpSurface schemas", () => {
     assert.deepEqual(find.input, findInput());
     assert.equal(Object.hasOwn(find.output, "$id"), false);
     assert.deepEqual(find.output, findOutput());
-    assert.equal(checkSchema(find.output, {}).ok, true);
-    assert.equal(checkSchema(find.output, {}).ok, true);
+    assert.equal(checkSchema(find.output, { vendor_id: "V-ACME", status: "active" }).ok, true);
+    assert.equal(checkSchema(find.output, { vendor_id: "V-ACME", status: "active" }).ok, true);
   });
 
   it("C-8557e582 M13 patternProperties refs dynamic refs and url_host are invalid", () => {

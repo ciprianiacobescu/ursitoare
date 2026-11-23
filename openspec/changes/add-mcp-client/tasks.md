@@ -7,7 +7,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. The surface
 
-- [ ] 2.1 Write `src/tools/mcp/surface.test.ts` first (the three surface scenarios: rows M1 to M17 and M10b; each surface also passes `checkAdapterSurface("mcp", ...)`), then implement `src/tools/mcp/surface.ts` and its export lines in `src/tools/index.ts`
+- [x] 2.1 Write `src/tools/mcp/surface.test.ts` first (the three surface scenarios: rows M1 to M17 and M10b; each surface also passes `checkAdapterSurface("mcp", ...)`), then implement `src/tools/mcp/surface.ts` and its export lines in `src/tools/index.ts`
 
 ## 3. Registration
 
