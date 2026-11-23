@@ -24,6 +24,7 @@ test("C-0c230dcb the credentials module is one inventoried egress site", () => {
       "src/credentials/vault-call.ts",
       "src/main.ts",
       "src/runtimes/invoke/request.ts",
+      "src/tools/mcp/discover.ts",
     ]),
     [],
   );
