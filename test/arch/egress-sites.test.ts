@@ -57,6 +57,7 @@ test("C-76ead8ea the engine's egress sites are exactly the inventory", () => {
         "src/credentials/vault-call.ts",
         "src/main.ts",
         "src/runtimes/invoke/request.ts",
+        "src/tools/mcp/discover.ts",
       ]),
     ),
     [],

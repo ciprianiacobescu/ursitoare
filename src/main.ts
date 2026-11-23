@@ -27,6 +27,7 @@ import {
   registerMeRoute,
   registerOpenApiRoute,
   registerOpenApiToolRoutes,
+  registerMcpToolRoutes,
   registerPeopleRoutes,
   registerPolicyRoutes,
   registerRunDecisionRoutes,
@@ -55,7 +56,7 @@ import { checkEgress, createGateway, createVaultWriter } from "./gateway/index.t
 import { createPolicyRuntime } from "./grants/index.ts";
 import type { PolicyRuntime } from "./grants/index.ts";
 import { createInvokePath, dryRunInvokers } from "./runtimes/index.ts";
-import { createToolDirectory, httpCallAdapter } from "./tools/index.ts";
+import { createToolDirectory, httpCallAdapter, mcpCallAdapter } from "./tools/index.ts";
 import type { LogDestination, Logger } from "./observability/index.ts";
 import { createLogger, noopTracer } from "./observability/index.ts";
 import { defaultSrcDir } from "./pdp/index.ts";
@@ -294,6 +295,15 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     registerBlockRoutes(server, { pool: pep.pool, engineKey: config.engineKey });
     registerToolServerRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
     registerOpenApiToolRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
+    registerMcpToolRoutes(server, {
+      pool: pep.pool,
+      clock: pep.clock,
+      ids: systemIds,
+      engineKey: config.engineKey,
+      policy: runtime?.engine ?? null,
+      gateway: config.egress === undefined ? null : createGateway(config.egress, { clock: systemClock, logger }),
+      services: pep.pool === null ? null : createServiceResolver(pep.pool),
+    });
     const egress =config.egress;
     const vault = egress !== undefined && egress.vault !== null
       ? createVaultWriter(egress.vault, { logger })
@@ -365,7 +375,7 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
           policy: runtime,
           gateway: createGateway(config.egress, { clock: systemClock, logger }),
           tools: createToolDirectory(database.appPool),
-          calls: { http: httpCallAdapter },
+          calls: { http: httpCallAdapter, mcp: mcpCallAdapter },
           services: createServiceResolver(database.appPool),
           principals: createPrincipalLoader(database.appPool),
           loadVersion,

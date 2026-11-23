@@ -259,6 +259,7 @@ test("C-2a04f1cb only request ts is an egress site of runtimes", () => {
       "src/credentials/vault-call.ts",
       "src/main.ts",
       "src/runtimes/invoke/request.ts",
+      "src/tools/mcp/discover.ts",
     ]),
     [],
   );

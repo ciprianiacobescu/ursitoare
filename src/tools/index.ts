@@ -26,6 +26,8 @@ export {
 
 export { surfaceDigest, surfaceRefs } from "./surface.ts";
 
+export { submitAdapterSurfaceTx } from "./adapter-store.ts";
+
 export type { ToolServerDetail } from "./store.ts";
 export {
   approveSurface,
@@ -64,4 +66,19 @@ export { translateSchema } from "./openapi/schema.ts";
 export { importOpenApi, readOpenApi } from "./openapi/read.ts";
 export { registerOpenApiServerTx, submitOpenApiTx } from "./openapi/register.ts";
 export { HTTP_EMPTY_OUTPUT, httpCallAdapter } from "./http/adapter.ts";
-export type { ServiceLookup } from "./mcp/discover.ts";
+export { mcpCallAdapter } from "./mcp/adapter.ts";
+export { registerMcpServerTx, mcpEndpointOf } from "./mcp/register.ts";
+export type { McpExclusion, McpOverlay, McpOverlayEntry } from "./mcp/surface.ts";
+export { mcpSurface } from "./mcp/surface.ts";
+export type { McpReply } from "./mcp/wire.ts";
+export {
+  MCP_CLIENT_INFO,
+  MCP_LEGACY_VERSIONS,
+  MCP_MODERN_VERSION,
+  mcpBody,
+  mcpHeaders,
+  mcpNameHeader,
+  readMcpReply,
+} from "./mcp/wire.ts";
+export type { McpDiscovery, McpDiscoveryDeps, ServiceLookup } from "./mcp/discover.ts";
+export { discoverMcp, discoveryRequest } from "./mcp/discover.ts";

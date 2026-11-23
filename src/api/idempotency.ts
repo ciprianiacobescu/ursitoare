@@ -258,11 +258,58 @@ export async function respondIdempotent(
   return reply;
 }
 
+interface StoredRow extends QueryResultRow {
+  state: string;
+  request_digest: string;
+  response_status: number | null;
+  response_body: unknown;
+  created_at: Date;
+}
+
+const STORED_SQL =
+  "SELECT request_digest, state, response_status, response_body, created_at FROM ursitoare.idempotency_key WHERE tenant_id = $1 AND principal_id = $2 AND key = $3";
+
 export async function storedIdempotentReply(
-  _ctx: { pool: TenantPool; tenant: TenantContext; clock: Clock },
-  _principal: { userId: string },
-  _key: string,
-  _requestDigest: string,
+  ctx: { pool: TenantPool; tenant: TenantContext; clock: Clock },
+  principal: { userId: string },
+  key: string,
+  requestDigest: string,
 ): Promise<IdempotentResponse | null> {
-  throw new Error("not implemented");
+  assertIdempotencyKey(key);
+  if (typeof requestDigest !== "string" || !DIGEST_PATTERN.test(requestDigest)) {
+    throw new RangeError("request digest must be 64 lowercase hex characters");
+  }
+  if (
+    typeof principal?.userId !== "string" ||
+    principal.userId.length < 1 ||
+    principal.userId.length > 200
+  ) {
+    throw new RangeError("principal user id must be 1 to 200 characters");
+  }
+
+  const cutoff = new Date(ctx.clock.now().getTime() - MILLIS_PER_DAY);
+  const row = await withTenantTx(ctx.pool, ctx.tenant, async (tx) => {
+    const result = await tx.query<StoredRow>(STORED_SQL, [
+      ctx.tenant.tenantId,
+      principal.userId,
+      key,
+    ]);
+    return result.rows[0] ?? null;
+  });
+  if (row === null) {
+    return null;
+  }
+  if (row.created_at.getTime() <= cutoff.getTime()) {
+    return null;
+  }
+  if (row.request_digest !== requestDigest) {
+    throw new ApiError(422, "IDEMPOTENCY_KEY_REUSED", KEY_REUSED_MESSAGE);
+  }
+  if (row.state !== "done" || row.response_status === null) {
+    return null;
+  }
+  return {
+    status: row.response_status,
+    body: JSON.parse(JSON.stringify(row.response_body)),
+  };
 }
