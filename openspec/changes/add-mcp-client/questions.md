@@ -18,6 +18,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | 3.1 | technical | src/tools/mcp/register.db.test.ts:191 G4 expects ["/"] after G1 inserted seven endpoints for tenant A |
 | Q-006 | accepted | 4.1 | technical | src/tools/mcp/discover.db.test.ts:261-277 rowCount and newRows read policy_decision through ownerPool and always see 0 rows |
 | Q-007 | accepted | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:386 (T8) contradicts T14 at :482 and the spec |
+| Q-008 | open | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:326 T6 pendingDigest regex rejects the sha256: prefix |
+| Q-009 | open | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:539 T15 absolute policy_decision count of 2 ignores PEP decisions |
 <!-- l4:index:end -->
 
 ---
@@ -205,6 +207,51 @@ Harness note: the previous attempt of this task was rejected: the agent step rea
 
 ### Clarifier suggestion
 Edit `src/api/mcp-discover-route.db.test.ts`: in test T8 (line 387) replace `createHarness({ services: null })` with `createHarness({ services: { resolve: async () => null } })`
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-008: src/api/mcp-discover-route.db.test.ts:326 T6 pendingDigest regex rejects the sha256: prefix
+
+- **Status:** open
+- **Blocking tasks:** 5.2
+- **Kind:** technical
+- **Asked:** 2026-11-23T17:11Z by claude-sonnet, run r-20261123T1700Z-c746, task 5.2
+
+### Context
+T6 asserts firstBody.server.pendingDigest matches /^[0-9a-f]{64}$/. surfaceDigest, and every ToolServerRecord already on main, gives 'sha256:<64 hex>'. The approve route takes this exact value as `digest`, so the route cannot return bare hex without breaking approval.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/api/mcp-discover-route.db.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-mcp-client`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/api/mcp-discover-route.db.test.ts`: at line 326 change the regex to /^sha256:[0-9a-f]{64}$/
+
+### Clarifier suggestion
+Edit `src/api/mcp-discover-route.db.test.ts`: at line 326 change the regex to /^sha256:[0-9a-f]{64}$/
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-009: src/api/mcp-discover-route.db.test.ts:539 T15 absolute policy_decision count of 2 ignores PEP decisions
+
+- **Status:** open
+- **Blocking tasks:** 5.2
+- **Kind:** technical
+- **Asked:** 2026-11-23T17:11Z by claude-sonnet, run r-20261123T1700Z-c746, task 5.2
+
+### Context
+T15 asserts countPolicyDecisions(h) === 2 after register, discover and a replayed discover. countPolicyDecisions counts every policy_decision row of tenant A. The PEP records one decision per API call (3 here) plus 2 discovery decisions, so the observed count is 5 even though the replay sends and records nothing (the fake MCP stays at 2 requests).
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/api/mcp-discover-route.db.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-mcp-client`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/api/mcp-discover-route.db.test.ts`: in T15 read countPolicyDecisions before the replay and assert it is unchanged after it, in place of the literal 2 at line 539
+
+### Clarifier suggestion
+Edit `src/api/mcp-discover-route.db.test.ts`: in T15 read countPolicyDecisions before the replay and assert it is unchanged after it, in place of the literal 2 at line 539
 
 ### Answer
 <!-- write below this line -->
