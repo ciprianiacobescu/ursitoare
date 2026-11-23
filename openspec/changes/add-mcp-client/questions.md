@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | accepted | 4.1 | technical | src/tools/mcp/discover.db.test.ts:261-277 rowCount and newRows read policy_decision through ownerPool and always see 0 rows |
 | Q-007 | accepted | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:386 (T8) contradicts T14 at :482 and the spec |
 | Q-008 | accepted | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:326 T6 pendingDigest regex rejects the sha256: prefix |
-| Q-009 | open | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:539 T15 absolute policy_decision count of 2 ignores PEP decisions |
+| Q-009 | answered | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:539 T15 absolute policy_decision count of 2 ignores PEP decisions |
 <!-- l4:index:end -->
 
 ---
@@ -238,7 +238,7 @@ Edit `src/api/mcp-discover-route.db.test.ts`: at line 326 change the regex to /^
 
 ## Q-009: src/api/mcp-discover-route.db.test.ts:539 T15 absolute policy_decision count of 2 ignores PEP decisions
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path src/api/mcp-discover-route.db.test.ts of task 5.2; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 5.2
 - **Kind:** technical
@@ -257,3 +257,16 @@ Edit `src/api/mcp-discover-route.db.test.ts`: in T15 read countPolicyDecisions b
 
 ### Answer
 <!-- write below this line -->
+Edit `src/api/mcp-discover-route.db.test.ts`, test T15 (line 539). Do not take the clarifier option as written. It would also fail, because the replayed request records its own PEP row.
+
+Why the literal 2 is wrong:
+- Every routed call is authorized by `decisionPreHandler` (src/api/pep.ts:52-78). It calls `enforce`, which records one `policy_decision` row (src/api/decision.ts:67-70).
+- Register, discover and the replay each add one PEP row, and discovery adds 2. So tenant A has 4 rows before the replay and 5 after it.
+- The spec's "no new decision" on a replay (scenario "Discover, refuse and replay", row T15) means discovery does not run again. The request's own PEP row is the base authorization rule, not a discovery decision.
+
+What to assert instead. Keep every other T15 assertion as it is.
+1. Next to `countPolicyDecisions`, add a helper `countDiscoveryDecisions(h)`. Use the same query with `AND permit IS NOT NULL` added. Discovery decisions carry the egress permit, because only a request with `egress` gets one (src/pdp/check.ts:109-110). PEP rows have `permit` null, because `buildPolicyRequest` sets no egress (src/api/decision.ts:19-36).
+2. After `first` answers 200 and before the replay, read `const decisionsBefore = await countPolicyDecisions(h);`. Then assert `assert.equal(await countDiscoveryDecisions(h), 2);`.
+3. Replace `assert.equal(await countPolicyDecisions(h), 2);` with two assertions:
+   - `assert.equal(await countPolicyDecisions(h), decisionsBefore + 1);`: the replayed request's own PEP row, and nothing else.
+   - `assert.equal(await countDiscoveryDecisions(h), 2);`: the replay recorded no discovery decision.
