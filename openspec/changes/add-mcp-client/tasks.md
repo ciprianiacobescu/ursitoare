@@ -20,7 +20,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 5. Routes and main
 
-- [ ] 5.0 Write `src/api/idempotency-stored.db.test.ts` first (scenario "The stored reply is read, not run": rows S1 to S7), then implement `storedIdempotentReply` in `src/api/idempotency.ts`; `src/api/idempotency.test.ts` stays green
+- [x] 5.0 Write `src/api/idempotency-stored.db.test.ts` first (scenario "The stored reply is read, not run": rows S1 to S7), then implement `storedIdempotentReply` in `src/api/idempotency.ts`; `src/api/idempotency.test.ts` stays green
 
 - [ ] 5.1 Write `src/api/mcp-register-route.db.test.ts` first (scenario "Register by URL": rows T1 to T5), then implement the register route in `src/api/mcp-tool-routes.ts` and add its export lines to `src/api/index.ts`; `POST /api/v1/tool-servers/:id/discover` stays undefined in this task (5.2 adds it, so 5.2's red cannot pass early)
 - [ ] 5.2 Write `src/api/mcp-discover-route.db.test.ts` first (scenario "Discover, refuse and replay": rows T6 to T15 with T14b; T15 calls `storedIdempotentReply` first), then implement the discover route in `src/api/mcp-tool-routes.ts`, calling `storedIdempotentReply` before `discoverMcp`
