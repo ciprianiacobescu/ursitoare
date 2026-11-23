@@ -15,6 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | accepted | 3.1 | technical | src/tools/mcp/register.db.test.ts:18,58 owner-pool inserts/selects on RLS-forced tables |
 | Q-003 | accepted | 3.1 | technical | src/tools/mcp/register.db.test.ts:137 bad-endpoint loop leaves tool_server rows |
 | Q-004 | accepted | 3.1 | technical | src/tools/mcp/register.db.test.ts:221 two good cases share one generated id |
+| Q-005 | open | 3.1 | technical | src/tools/mcp/register.db.test.ts:191 G4 expects ["/"] after G1 inserted seven endpoints for tenant A |
 <!-- l4:index:end -->
 
 ---
@@ -110,6 +111,30 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/tools/mcp/register.db.test.ts`: make the id unique by including item.url (or the loop index) in the template
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-005: src/tools/mcp/register.db.test.ts:191 G4 expects ["/"] after G1 inserted seven endpoints for tenant A
+
+- **Status:** open
+- **Blocking tasks:** 3.1
+- **Kind:** technical
+- **Asked:** 2026-11-23T07:06Z by deepseek-free, run r-20261123T0636Z-f199, task 3.1
+
+### Context
+G1 inserts the good endpoints "/", "/mcp", "/a/b%20c", "/" + 1023 x, "/a\\b", "/~" and "/!" for tenant A (each under srv_good_i via insertEndpoint(db.appPool, a, ...)) and never deletes them; G4 then runs SELECT endpoint FROM ursitoare.mcp_server (no WHERE) as tenant A and expects exactly ["/"]. No conforming implementation can both accept those inserts (they are wrapped in assert.doesNotReject) and hide the committed rows from a tenant-scoped SELECT, so the assertion cannot pass for any correct mcp_server table. The tenant-isolation intent is preserved by scoping each query to the server it seeds.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/tools/mcp/register.db.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-mcp-client`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/tools/mcp/register.db.test.ts`: change the G4 tenant-A query to `SELECT endpoint FROM ursitoare.mcp_server WHERE tool_server_id = 'srv_a' ORDER BY endpoint` (still expects ["/"]) and the tenant-B query to `SELECT endpoint FROM ursitoare.mcp_server WHERE tool_server_id = 'srv_b' ORDER BY endpoint` (still expects ["/mcp"])
+2. Edit `src/tools/mcp/register.db.test.ts`: change the G4 tenant-A expectation to ["/", "/", "/!", "/a/b%20c", "/a\\b", "/mcp", "/" + "x".repeat(1023), "/~"] and leave the tenant-B expectation ["/mcp"]
+
+### Clarifier suggestion
+Edit `src/tools/mcp/register.db.test.ts`: change the G4 tenant-A query to `SELECT endpoint FROM ursitoare.mcp_server WHERE tool_server_id = 'srv_a' ORDER BY endpoint` (still expects ["/"]) and the tenant-B query to `SELECT endpoint FROM ursitoare.mcp_server WHERE tool_server_id = 'srv_b' ORDER BY endpoint` (still expects ["/mcp"])
 
 ### Answer
 <!-- write below this line -->
