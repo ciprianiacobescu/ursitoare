@@ -117,3 +117,5 @@
 {"at":"2026-11-23T01:31:12Z","branch":"l4/archive/openspec/add-http-openapi-tools","head":"49841591d9e51bef5e557aca064cf0429d76621a","type":"unit.branch_deleted","unit":"openspec:add-http-openapi-tools"}
 {"at":"2026-11-23T01:31:13Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-mcp-client"}
 {"at":"2026-11-23T01:31:13Z","run":"r-20261123T0131Z-0c2d","type":"unit.dispatched","unit":"openspec:add-mcp-client"}
+{"at":"2026-11-23T03:46:16Z","attempt":1,"cost_usd":0.0,"runs":2,"type":"plan.charged","unit":"openspec:add-mcp-client"}
+{"at":"2026-11-23T03:46:16Z","run":"r-20261123T0346Z-0270","type":"unit.dispatched","unit":"openspec:add-mcp-client"}
