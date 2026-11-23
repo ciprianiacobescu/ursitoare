@@ -2,7 +2,7 @@ Values: `test-plan.md` and, for task 4, `test-plan-credentials.md`. Each scenari
 
 ## 1. The source check
 
-- [ ] 1.1 Write `src/authoring/validate/code-source.test.ts` first (scenario "The problems equal L1's and a quoted bad character is made well-formed": rows P1 to P12), then implement `codeSourceProblems` in `src/authoring/validate/code-source.ts` (design 3; `l1.ts` is not edited) and add its export line to `src/authoring/index.ts`. Run `pnpm run test src/authoring/validate/code-source.test.ts`
+- [x] 1.1 Write `src/authoring/validate/code-source.test.ts` first (scenario "The problems equal L1's and a quoted bad character is made well-formed": rows P1 to P12), then implement `codeSourceProblems` in `src/authoring/validate/code-source.ts` (design 3; `l1.ts` is not edited) and add its export line to `src/authoring/index.ts`. Run `pnpm run test src/authoring/validate/code-source.test.ts`
 
 ## 2. The surface and the registration
 

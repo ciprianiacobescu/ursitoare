@@ -4,6 +4,7 @@ export * from "./format/index.ts";
 export * from "./taint/index.ts";
 export * from "./validate/index.ts";
 export { MAX_NODE_ID_LENGTH, VALIDATOR_VERSION } from "./validate/version.ts";
+export { codeSourceProblems } from "./validate/code-source.ts";
 
 // Type-only re-exports for the M5 signature scaffold: interpreter stubs need these types and may import authoring only
 // through this index. add-taint-runtime and add-hook-checker add their full export lines; these may then be dropped.
