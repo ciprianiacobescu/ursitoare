@@ -52,7 +52,7 @@ test("C-fb2cd0d1 the committed OpenAPI document describes both people routes", a
 
   const document = JSON.parse(served) as OperationDocument;
   const paths = document.paths;
-  assert.equal(Object.keys(paths).length, 50, "the document lists 50 paths");
+  assert.equal(Object.keys(paths).length, 53, "the document lists 53 paths");
 
   const people = operationOf(document, "/api/v1/people");
   assert.deepEqual(people["x-ursitoare-errors"], [
