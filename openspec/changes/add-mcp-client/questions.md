@@ -120,6 +120,7 @@ Edit `src/tools/mcp/register.db.test.ts`: make the id unique by including item.u
 ## Q-005: src/tools/mcp/register.db.test.ts:191 G4 expects ["/"] after G1 inserted seven endpoints for tenant A
 
 - **Status:** open
+- **Escalated by:** the delegate: delegate answer limit of task 3.1 reached (3)
 - **Blocking tasks:** 3.1
 - **Kind:** technical
 - **Asked:** 2026-11-23T07:06Z by deepseek-free, run r-20261123T0636Z-f199, task 3.1
