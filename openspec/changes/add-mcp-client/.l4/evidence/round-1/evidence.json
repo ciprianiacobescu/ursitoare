@@ -1,0 +1,400 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "#",
+      "server/discover",
+      "notifications/initialized",
+      "tools/list",
+      "tools/call",
+      "src/api/idempotency.ts",
+      "src/tools/mcp/discover.ts",
+      "src/tools/index.ts",
+      "src/api/index.ts",
+      "src/main.ts",
+      "docs/api/openapi.json",
+      "test/arch/egress-sites.test.ts",
+      "src/credentials/egress-site.test.ts",
+      "src/runtimes/invoke/request.test.ts",
+      "src/tools/mcp/egress-site.test.ts",
+      "src/tools/mcp/wire.test.ts",
+      "src/tools/mcp/wire.ts",
+      "src/tools/mcp/adapter.test.ts",
+      "src/tools/mcp/adapter.ts",
+      "src/tools/mcp/surface.test.ts",
+      "src/tools/mcp/surface.ts",
+      "src/tools/mcp/register.db.test.ts",
+      "src/db/migrations/0540_mcp_servers.sql",
+      "src/tools/mcp/register.ts",
+      "src/tools/mcp/discover.db.test.ts",
+      "src/runtimes",
+      "src/tools/mcp/discover-fakes.db.test.ts",
+      "src/api/idempotency-stored.db.test.ts",
+      "src/api/idempotency.test.ts",
+      "src/api/mcp-register-route.db.test.ts",
+      "src/api/mcp-tool-routes.ts",
+      "src/api/mcp-discover-route.db.test.ts",
+      "src/main.mcp.test.ts",
+      "src/main.conventions.test.ts",
+      "src/main.openapi-tools.test.ts",
+      "**/unevaluated*",
+      "**/excluded[].name",
+      "**/?",
+      "**/wire.ts",
+      "**/adapter.ts",
+      "**/surface.ts",
+      "**/discover.ts",
+      "**/Mcp-*",
+      "**/[",
+      "**/index.ts",
+      "**/[]",
+      "module api",
+      "module credentials",
+      "module db",
+      "module docs",
+      "module main",
+      "module main.conventions.test",
+      "module main.mcp.test",
+      "module main.openapi-tools.test",
+      "module notifications",
+      "module runtimes",
+      "module server",
+      "module test",
+      "module tools"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/.l4/ledger/r-20261123T0131Z-0c2d.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/.l4/ledger/r-20261123T0346Z-0270.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/.l4/ledger/r-20261123T0509Z-33fe.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/.l4/ledger/r-20261123T0636Z-f199.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/.l4/ledger/r-20261123T0717Z-6989.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/.l4/ledger/r-20261123T0928Z-3bb6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/.l4/ledger/r-20261123T1043Z-0357.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/.l4/ledger/r-20261123T1314Z-846d.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/.l4/ledger/r-20261123T1523Z-e57b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/.l4/ledger/r-20261123T1700Z-c746.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/.l4/ledger/r-20261123T1726Z-c688.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/.l4/ledger/r-20261123T1848Z-ff77.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-mcp-client/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/idempotency-stored.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/idempotency.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/mcp-discover-route.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/mcp-register-route.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/mcp-tool-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/people-openapi.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "imports no module of the repository"
+      },
+      {
+        "path": "src/credentials/egress-site.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0540_mcp_servers.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.conventions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.mcp.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runtimes/invoke/request.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/index.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/mcp/adapter.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/mcp/adapter.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/mcp/discover-fakes.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/mcp/discover.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/mcp/discover.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/mcp/egress-site.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/mcp/register.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/mcp/register.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/mcp/surface.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/mcp/surface.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/mcp/wire.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/mcp/wire.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/arch/egress-sites.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/idempotency.ts, src/api/index.ts, src/api/mcp-tool-routes.ts, src/main.ts, src/tools/index.ts and 5 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/idempotency.ts",
+      "src/api/index.ts",
+      "src/api/mcp-tool-routes.ts",
+      "src/main.ts",
+      "src/tools/index.ts",
+      "src/tools/mcp/adapter.ts",
+      "src/tools/mcp/discover.ts",
+      "src/tools/mcp/register.ts",
+      "src/tools/mcp/surface.ts",
+      "src/tools/mcp/wire.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 3101,
+      "passed": 3101,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 87,
+      "new_passed": 87,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
