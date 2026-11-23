@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 2.1 | technical | src/tools/mcp/surface.test.ts:540 asserts checkSchema(find.output, {}).ok is true, but the schema requires vendor_id and status |
 | Q-002 | accepted | 3.1 | technical | src/tools/mcp/register.db.test.ts:18,58 owner-pool inserts/selects on RLS-forced tables |
 | Q-003 | accepted | 3.1 | technical | src/tools/mcp/register.db.test.ts:137 bad-endpoint loop leaves tool_server rows |
-| Q-004 | open | 3.1 | technical | src/tools/mcp/register.db.test.ts:221 two good cases share one generated id |
+| Q-004 | accepted | 3.1 | technical | src/tools/mcp/register.db.test.ts:221 two good cases share one generated id |
 <!-- l4:index:end -->
 
 ---
@@ -93,7 +93,8 @@ Edit `src/tools/mcp/register.db.test.ts`: add DELETE FROM ursitoare.tool_server 
 
 ## Q-004: src/tools/mcp/register.db.test.ts:221 two good cases share one generated id
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 3.1
 - **Kind:** technical
 - **Asked:** 2026-11-23T06:31Z by beam, run r-20261123T0509Z-33fe, task 3.1
