@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | 3.1 | technical | src/tools/mcp/register.db.test.ts:191 G4 expects ["/"] after G1 inserted seven endpoints for tenant A |
 | Q-006 | accepted | 4.1 | technical | src/tools/mcp/discover.db.test.ts:261-277 rowCount and newRows read policy_decision through ownerPool and always see 0 rows |
 | Q-007 | accepted | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:386 (T8) contradicts T14 at :482 and the spec |
-| Q-008 | open | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:326 T6 pendingDigest regex rejects the sha256: prefix |
+| Q-008 | accepted | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:326 T6 pendingDigest regex rejects the sha256: prefix |
 | Q-009 | open | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:539 T15 absolute policy_decision count of 2 ignores PEP decisions |
 <!-- l4:index:end -->
 
@@ -215,7 +215,8 @@ Edit `src/api/mcp-discover-route.db.test.ts`: in test T8 (line 387) replace `cre
 
 ## Q-008: src/api/mcp-discover-route.db.test.ts:326 T6 pendingDigest regex rejects the sha256: prefix
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.2
 - **Kind:** technical
 - **Asked:** 2026-11-23T17:11Z by claude-sonnet, run r-20261123T1700Z-c746, task 5.2
