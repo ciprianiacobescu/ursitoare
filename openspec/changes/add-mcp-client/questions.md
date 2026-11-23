@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 2.1 | technical | src/tools/mcp/surface.test.ts:540 asserts checkSchema(find.output, {}).ok is true, but the schema requires vendor_id and status |
+| Q-001 | accepted | 2.1 | technical | src/tools/mcp/surface.test.ts:540 asserts checkSchema(find.output, {}).ok is true, but the schema requires vendor_id and status |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/tools/mcp/surface.test.ts:540 asserts checkSchema(find.output, {}).ok is true, but the schema requires vendor_id and status
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 2.1
 - **Kind:** technical
 - **Asked:** 2026-11-23T05:07Z by claude-sonnet, run r-20261123T0346Z-0270, task 2.1
