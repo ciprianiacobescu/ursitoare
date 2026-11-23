@@ -20,6 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | accepted | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:386 (T8) contradicts T14 at :482 and the spec |
 | Q-008 | accepted | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:326 T6 pendingDigest regex rejects the sha256: prefix |
 | Q-009 | answered | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:539 T15 absolute policy_decision count of 2 ignores PEP decisions |
+| Q-010 | open | 5.3 | technical | src/api/people-openapi.test.ts:55 asserts 53 OpenAPI paths but this task makes 55 |
 <!-- l4:index:end -->
 
 ---
@@ -270,3 +271,26 @@ What to assert instead. Keep every other T15 assertion as it is.
 3. Replace `assert.equal(await countPolicyDecisions(h), 2);` with two assertions:
    - `assert.equal(await countPolicyDecisions(h), decisionsBefore + 1);`: the replayed request's own PEP row, and nothing else.
    - `assert.equal(await countDiscoveryDecisions(h), 2);`: the replay recorded no discovery decision.
+
+---
+
+## Q-010: src/api/people-openapi.test.ts:55 asserts 53 OpenAPI paths but this task makes 55
+
+- **Status:** open
+- **Blocking tasks:** 5.3
+- **Kind:** technical
+- **Asked:** 2026-11-23T18:45Z by deepseek-free, run r-20261123T1726Z-c688, task 5.3
+
+### Context
+The frozen test at src/api/people-openapi.test.ts:55 asserts `Object.keys(paths).length === 53`, while the red step updated src/main.conventions.test.ts C-d150bfa4 to 55 and the spec requires main to add POST /api/v1/tool-registrations/mcp and POST /api/v1/tool-servers/{id}/discover to the committed document. Both cannot pass with the same document: the gate currently fails only this one assertion (55 !== 53). I did not edit the frozen test.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/api/people-openapi.test.ts`, `src/main.conventions.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-mcp-client`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/api/people-openapi.test.ts`: change `assert.equal(Object.keys(paths).length, 53, "the document lists 53 paths");` to `assert.equal(Object.keys(paths).length, 55, "the document lists 55 paths");`
+
+### Clarifier suggestion
+Edit `src/api/people-openapi.test.ts`: change `assert.equal(Object.keys(paths).length, 53, "the document lists 53 paths");` to `assert.equal(Object.keys(paths).length, 55, "the document lists 55 paths");`
+
+### Answer
+<!-- write below this line -->
