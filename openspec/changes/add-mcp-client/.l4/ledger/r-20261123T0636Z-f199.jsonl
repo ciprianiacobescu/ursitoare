@@ -30,3 +30,6 @@
 {"ts": "2026-11-23T07:06:13.742711Z", "run_id": "r-20261123T0636Z-f199", "unit": "openspec:add-mcp-client", "seq": 30, "type": "phase.changed", "from": "implementing", "to": "awaiting_human", "trigger": "questions_blocking", "exit_code": 11, "questions": ["Q-005"], "task": "3.1"}
 {"ts": "2026-11-23T07:06:16.280923Z", "run_id": "r-20261123T0636Z-f199", "unit": "openspec:add-mcp-client", "seq": 31, "type": "pr.labels", "number": 166, "labels": ["l4:awaiting_human", "l4:needs-answers"]}
 {"ts": "2026-11-23T07:06:18.639436Z", "run_id": "r-20261123T0636Z-f199", "unit": "openspec:add-mcp-client", "seq": 32, "type": "delegate.result", "question": "Q-005", "id": "Q-005", "status": "escalated", "reason": "delegate answer limit of task 3.1 reached (3)", "called": false, "tasks": ["3.1"], "target": null, "kind": "technical"}
+{"ts": "2026-11-23T07:06:18.670852Z", "run_id": "r-20261123T0636Z-f199", "unit": "openspec:add-mcp-client", "seq": 33, "type": "delegate.pass", "bound": "none_due", "delegate_only": false, "calls": 0}
+{"ts": "2026-11-23T07:06:18.684250Z", "run_id": "r-20261123T0636Z-f199", "unit": "openspec:add-mcp-client", "seq": 34, "type": "lock.released"}
+{"ts": "2026-11-23T07:06:18.684727Z", "run_id": "r-20261123T0636Z-f199", "unit": "openspec:add-mcp-client", "seq": 35, "type": "run.finished", "exit_code": 11}
