@@ -1,0 +1,280 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/tools/http/adapter.ts",
+      "src/authoring/validate/jsonschema.ts",
+      "src/api/tool-server-routes.ts",
+      "src/runtimes/invoke/invoke.db.test.ts",
+      "src/main.ts",
+      "src/tools/index.ts",
+      "src/api/index.ts",
+      "docs/api/openapi.json",
+      "src/tools/openapi/schema.test.ts",
+      "src/interpreter/schema.ts",
+      "src/tools/openapi/schema.ts",
+      "src/tools/openapi/types.ts",
+      "src/tools/openapi/read.test.ts",
+      "test/support/openapi-kit.ts",
+      "src/tools/openapi/import.test.ts",
+      "src/tools/openapi/read.ts",
+      "src/tools/http/adapter-build.test.ts",
+      "src/tools/http/adapter-answer.test.ts",
+      "test/arch/egress-sites.test.ts",
+      "src/tools/openapi/register.db.test.ts",
+      "src/tools/http/exit13.db.test.ts",
+      "src/tools/openapi/register.ts",
+      "src/api/openapi-tool-routes.test.ts",
+      "src/api/tool-server-routes.test.ts",
+      "src/api/openapi-tool-routes.ts",
+      "src/main.openapi-tools.test.ts",
+      "test/support/openapi-docs.ts",
+      "src/main.conventions.test.ts",
+      "**/x-*",
+      "**/^[A-Za-z0-9_.-]{1,64}$",
+      "**/^[a-z][a-z0-9_]{0,63}$",
+      "**/[",
+      "**/read.ts",
+      "**/adapter.ts",
+      "**/register.ts",
+      "module api",
+      "module authoring",
+      "module docs",
+      "module interpreter",
+      "module main",
+      "module main.conventions.test",
+      "module main.openapi-tools.test",
+      "module runtimes",
+      "module test",
+      "module tools"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-http-openapi-tools/.l4/ledger/r-20261122T1911Z-73bc.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-http-openapi-tools/.l4/ledger/r-20261122T2129Z-a20e.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-http-openapi-tools/.l4/ledger/r-20261122T2330Z-2571.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-http-openapi-tools/.l4/ledger/r-20261123T0024Z-5a98.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-http-openapi-tools/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-http-openapi-tools/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/openapi-tool-routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/openapi-tool-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/people-openapi.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "imports no module of the repository"
+      },
+      {
+        "path": "src/main.conventions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.openapi-tools.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/http/adapter-answer.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/http/adapter-build.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/http/adapter.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/http/exit13.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/index.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/openapi/import.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/openapi/read.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/openapi/read.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/openapi/register.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/openapi/register.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/openapi/schema.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/openapi/schema.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "test/support/openapi-kit.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/index.ts, src/api/openapi-tool-routes.ts, src/main.ts, src/tools/http/adapter.ts, src/tools/index.ts and 4 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/index.ts",
+      "src/api/openapi-tool-routes.ts",
+      "src/main.ts",
+      "src/tools/http/adapter.ts",
+      "src/tools/index.ts",
+      "src/tools/openapi/read.ts",
+      "src/tools/openapi/register.ts",
+      "src/tools/openapi/schema.ts",
+      "test/support/openapi-kit.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 3014,
+      "passed": 3014,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 87,
+      "new_passed": 87,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
