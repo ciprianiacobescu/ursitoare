@@ -146,3 +146,6 @@
 {"at":"2026-11-23T20:45:25Z","head":"17f6194e6249c3708bf30f3b30be3f108646c083","pr":166,"target_before":"280bcad2ae81063ae27d40c73c3467e29f770d4b","type":"unit.merge_requested","unit":"openspec:add-mcp-client"}
 {"at":"2026-11-23T20:45:30Z","ci":"not_run","head":"17f6194e6249c3708bf30f3b30be3f108646c083","merge_commit":"00898e215582d352410a93c1b38fbc613c1458d6","method":"squash","pr":166,"raced":false,"type":"unit.merged","unit":"openspec:add-mcp-client"}
 {"at":"2026-11-23T20:45:34Z","branch":"l4/openspec/add-mcp-client","head":"17f6194e6249c3708bf30f3b30be3f108646c083","type":"unit.branch_deleted","unit":"openspec:add-mcp-client"}
+{"at":"2026-11-23T20:50:43Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"00898e215582d352410a93c1b38fbc613c1458d6","status":"pass","type":"unit.postcheck","unit":"openspec:add-mcp-client"}
+{"at":"2026-11-23T20:50:43Z","revision":"00898e215582d352410a93c1b38fbc613c1458d6","type":"unit.integrated","unit":"openspec:add-mcp-client"}
+{"at":"2026-11-23T20:50:43Z","attempt":1,"cost_usd":16.868493,"runs":12,"type":"plan.charged","unit":"openspec:add-mcp-client"}

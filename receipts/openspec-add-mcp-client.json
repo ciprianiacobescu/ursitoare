@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-23T20:50:43Z",
+  "integrated_revision": "00898e215582d352410a93c1b38fbc613c1458d6",
+  "merge_commit": "00898e215582d352410a93c1b38fbc613c1458d6",
+  "plan_digest": "34aab8fa5ef378c7",
+  "plan_id": "m7",
+  "postcheck": "pass",
+  "pr": 166,
+  "receipt_id": "m7/openspec:add-mcp-client/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "17f6194e6249c3708bf30f3b30be3f108646c083",
+  "spec_digest": "b2ee40def4896c70",
+  "target": "main",
+  "unit_id": "openspec:add-mcp-client"
+}
