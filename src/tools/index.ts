@@ -78,4 +78,5 @@ export {
   mcpNameHeader,
   readMcpReply,
 } from "./mcp/wire.ts";
-export type { ServiceLookup } from "./mcp/discover.ts";
+export type { McpDiscovery, McpDiscoveryDeps, ServiceLookup } from "./mcp/discover.ts";
+export { discoverMcp, discoveryRequest } from "./mcp/discover.ts";

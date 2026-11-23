@@ -8,6 +8,7 @@ import type { BrokerToken, CallTag, Gateway, GatewayResponse, OutboundRequest } 
 import { createLogger } from "../../observability/index.ts";
 import { createPolicyEngine, defaultSrcDir, tenantEntity, userEntity } from "../../pdp/index.ts";
 import type { Decision, Egress, PolicyRequest, PrincipalEntity } from "../../pdp/index.ts";
+import { withTenantTx } from "../../tenancy/index.ts";
 import type { TenantContext } from "../../tenancy/index.ts";
 import { withTestDatabase } from "../../../test/support/pg.ts";
 import type { TestDatabase } from "../../../test/support/pg.ts";
@@ -260,18 +261,22 @@ async function refusal(r: Rig, code = "TOOLS_REFUSED"): Promise<Record<string, u
 
 async function rowCount(): Promise<number> {
   const d = await database();
-  const r = await d.ownerPool.query<{ n: number }>(
-    "SELECT count(*)::int AS n FROM ursitoare.policy_decision WHERE tenant_id = 'tenant_a'",
+  const r = await withTenantTx(d.appPool, CTX, (tx) =>
+    tx.query<{ n: number }>(
+      "SELECT count(*)::int AS n FROM ursitoare.policy_decision WHERE tenant_id = 'tenant_a'",
+    ),
   );
   return r.rows[0]?.n ?? -1;
 }
 
 async function newRows(before: number): Promise<{ decision: string; errors: string[]; permit: unknown }[]> {
   const d = await database();
-  const r = await d.ownerPool.query<{ decision: string; errors: string[]; permit: unknown }>(
-    `SELECT decision, errors, permit FROM ursitoare.policy_decision
+  const r = await withTenantTx(d.appPool, CTX, (tx) =>
+    tx.query<{ decision: string; errors: string[]; permit: unknown }>(
+      `SELECT decision, errors, permit FROM ursitoare.policy_decision
       WHERE tenant_id = 'tenant_a' ORDER BY decided_at, decision_id OFFSET $1`,
-    [before],
+      [before],
+    ),
   );
   return r.rows;
 }
