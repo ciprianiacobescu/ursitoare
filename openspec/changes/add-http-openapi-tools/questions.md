@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.1 | technical | src/api/openapi-tool-routes.test.ts:420 expects 2 tool servers in tenant a, but only 1 can exist |
-| Q-002 | open | 5.1 | technical | src/main.conventions.test.ts:126 and src/api/people-openapi.test.ts:55 hard-code 50 paths |
+| Q-002 | accepted | 5.1 | technical | src/main.conventions.test.ts:126 and src/api/people-openapi.test.ts:55 hard-code 50 paths |
 <!-- l4:index:end -->
 
 ---
@@ -43,7 +43,8 @@ Edit `src/api/openapi-tool-routes.test.ts`: on line 420 change `assert.equal(awa
 
 ## Q-002: src/main.conventions.test.ts:126 and src/api/people-openapi.test.ts:55 hard-code 50 paths
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.1
 - **Kind:** technical
 - **Asked:** 2026-11-23T00:20Z by claude-sonnet, run r-20261122T2330Z-2571, task 5.1
