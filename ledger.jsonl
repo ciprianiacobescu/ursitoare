@@ -127,3 +127,5 @@
 {"at":"2026-11-23T07:17:12Z","by":"harness","reason":"the cause is gone: openspec:add-mcp-client is awaiting_human","type":"plan.resumed"}
 {"at":"2026-11-23T07:17:14Z","attempt":1,"cost_usd":4.391345,"runs":5,"type":"plan.charged","unit":"openspec:add-mcp-client"}
 {"at":"2026-11-23T07:17:14Z","run":"r-20261123T0717Z-6989","type":"unit.dispatched","unit":"openspec:add-mcp-client"}
+{"at":"2026-11-23T09:28:08Z","attempt":1,"cost_usd":5.378751,"runs":6,"type":"plan.charged","unit":"openspec:add-mcp-client"}
+{"at":"2026-11-23T09:28:08Z","run":"r-20261123T0928Z-3bb6","type":"unit.dispatched","unit":"openspec:add-mcp-client"}
