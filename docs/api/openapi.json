@@ -8706,6 +8706,228 @@
         ]
       }
     },
+    "/api/v1/tool-registrations/mcp": {
+      "post": {
+        "operationId": "post_api_v1_tool_registrations_mcp",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "idempotency-key",
+            "required": false,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[!-~]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "local": {
+                    "type": "boolean"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "url"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "endpoint": {
+                      "type": "string"
+                    },
+                    "server": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "adapter": {
+                          "type": "string"
+                        },
+                        "approvedDigest": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "local": {
+                          "type": "boolean"
+                        },
+                        "origin": {
+                          "type": "string"
+                        },
+                        "pendingDigest": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "pendingSubmittedBy": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "registeredAt": {
+                          "type": "string"
+                        },
+                        "registeredBy": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string"
+                        },
+                        "tools": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "effect": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "ref": {
+                                "type": [
+                                  "null",
+                                  "string"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "effect",
+                              "ref"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "adapter",
+                        "origin",
+                        "local",
+                        "state",
+                        "registeredBy",
+                        "registeredAt",
+                        "approvedDigest",
+                        "pendingDigest",
+                        "pendingSubmittedBy",
+                        "tools"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "server",
+                    "endpoint"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CSRF_INVALID, FORBIDDEN"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: ALREADY_EXISTS, IDEMPOTENCY_IN_PROGRESS"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: IDEMPOTENCY_KEY_REUSED"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "register_tool_server",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "ALREADY_EXISTS",
+          "AUTHZ_UNAVAILABLE",
+          "CSRF_INVALID",
+          "FORBIDDEN",
+          "IDEMPOTENCY_IN_PROGRESS",
+          "IDEMPOTENCY_KEY_REUSED",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
     "/api/v1/tool-registrations/openapi": {
       "post": {
         "operationId": "post_api_v1_tool_registrations_openapi",
@@ -9668,6 +9890,263 @@
           "AUTHZ_UNAVAILABLE",
           "FORBIDDEN",
           "NOT_FOUND",
+          "UNAUTHENTICATED",
+          "VALIDATION_FAILED"
+        ]
+      }
+    },
+    "/api/v1/tool-servers/{id}/discover": {
+      "post": {
+        "operationId": "post_api_v1_tool_servers_id_discover",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "pattern": "^[a-z][a-z0-9_]{0,31}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "idempotency-key",
+            "required": false,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[!-~]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "tools": {
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "era": {
+                      "type": "string"
+                    },
+                    "excluded": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "protocolVersion": {
+                      "type": "string"
+                    },
+                    "server": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "adapter": {
+                          "type": "string"
+                        },
+                        "approvedDigest": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "local": {
+                          "type": "boolean"
+                        },
+                        "origin": {
+                          "type": "string"
+                        },
+                        "pendingDigest": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "pendingSubmittedBy": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        },
+                        "registeredAt": {
+                          "type": "string"
+                        },
+                        "registeredBy": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string"
+                        },
+                        "tools": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "effect": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "ref": {
+                                "type": [
+                                  "null",
+                                  "string"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "effect",
+                              "ref"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "adapter",
+                        "origin",
+                        "local",
+                        "state",
+                        "registeredBy",
+                        "registeredAt",
+                        "approvedDigest",
+                        "pendingDigest",
+                        "pendingSubmittedBy",
+                        "tools"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "server",
+                    "era",
+                    "protocolVersion",
+                    "excluded"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: VALIDATION_FAILED"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: UNAUTHENTICATED"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: CSRF_INVALID, FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: NOT_FOUND"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: IDEMPOTENCY_IN_PROGRESS"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: IDEMPOTENCY_KEY_REUSED, OPERATION_REFUSED"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Error codes: AUTHZ_UNAVAILABLE, EGRESS_UNAVAILABLE"
+          }
+        },
+        "x-ursitoare-action": "register_tool_server",
+        "x-ursitoare-auth": "session",
+        "x-ursitoare-errors": [
+          "AUTHZ_UNAVAILABLE",
+          "CSRF_INVALID",
+          "EGRESS_UNAVAILABLE",
+          "FORBIDDEN",
+          "IDEMPOTENCY_IN_PROGRESS",
+          "IDEMPOTENCY_KEY_REUSED",
+          "NOT_FOUND",
+          "OPERATION_REFUSED",
           "UNAUTHENTICATED",
           "VALIDATION_FAILED"
         ]
