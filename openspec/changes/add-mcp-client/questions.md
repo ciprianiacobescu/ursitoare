@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | accepted | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:386 (T8) contradicts T14 at :482 and the spec |
 | Q-008 | accepted | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:326 T6 pendingDigest regex rejects the sha256: prefix |
 | Q-009 | answered | 5.2 | technical | src/api/mcp-discover-route.db.test.ts:539 T15 absolute policy_decision count of 2 ignores PEP decisions |
-| Q-010 | open | 5.3 | technical | src/api/people-openapi.test.ts:55 asserts 53 OpenAPI paths but this task makes 55 |
+| Q-010 | accepted | 5.3 | technical | src/api/people-openapi.test.ts:55 asserts 53 OpenAPI paths but this task makes 55 |
 <!-- l4:index:end -->
 
 ---
@@ -276,7 +276,8 @@ What to assert instead. Keep every other T15 assertion as it is.
 
 ## Q-010: src/api/people-openapi.test.ts:55 asserts 53 OpenAPI paths but this task makes 55
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 5.3
 - **Kind:** technical
 - **Asked:** 2026-11-23T18:45Z by deepseek-free, run r-20261123T1726Z-c688, task 5.3
