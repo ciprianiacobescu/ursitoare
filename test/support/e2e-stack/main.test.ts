@@ -328,28 +328,71 @@ test("C-23b4de23 the process prints one ready line, serves the database health a
   }
 });
 
-test("C-23b4de23 the process starts on the default ports 39080 and 39081", async () => {
-  const { dataDir, tmpDir } = workspace();
-  const run = spawnMain({ E2E_DATA_DIR: dataDir, TMPDIR: tmpDir });
+// 39080 and 39081 sit inside the Linux ephemeral range (32768-60999), so a socket of another test file running
+// at the same time (a listen(0) server, or a client source port that then lingers in TIME_WAIT for about 60 s)
+// can hold one of them. Only EADDRINUSE on these two ports is retried, and the retries are bounded by time.
+const DEFAULT_PORT_RETRY_WINDOW_MS = 100_000;
+const DEFAULT_PORT_BUSY = /EADDRINUSE[^\n]*\b3908[01]\b/;
 
-  try {
-    const firstLine = await withTimeout(
-      run.firstLine(),
-      90_000,
-      "the default-port ready line did not arrive within 90 s",
-    );
-    assert.equal(
-      firstLine,
-      "e2e stack ready on http://127.0.0.1:39080 control http://127.0.0.1:39081",
-      "the ready line names the default engine and control ports",
-    );
-    await run.stop();
-    const exit = await run.exited;
-    assert.equal(exit.code, 0, "SIGTERM exits the default-port process with code 0");
-  } finally {
-    await run.stop().catch(() => undefined);
-  }
-});
+type Startup = { kind: "line"; line: string } | { kind: "exit"; exit: RunResult };
+
+test(
+  "C-23b4de23 the process starts on the default ports 39080 and 39081",
+  { timeout: 300_000 },
+  async (t) => {
+    const firstSpawn = Date.now();
+    for (let attempt = 1; ; attempt += 1) {
+      const { dataDir, tmpDir } = workspace();
+      const run = spawnMain({ E2E_DATA_DIR: dataDir, TMPDIR: tmpDir });
+
+      try {
+        const startup = await withTimeout(
+          Promise.race<Startup>([
+            run.firstLine().then((line): Startup => ({ kind: "line", line })),
+            run.exited.then((exit): Startup => ({ kind: "exit", exit })),
+          ]),
+          90_000,
+          "the default-port ready line did not arrive within 90 s",
+        ).catch((error: unknown) =>
+          assert.fail(
+            `${error instanceof Error ? error.message : String(error)} (child exited: ${run.hasExited()}; stderr tail: ${JSON.stringify(run.stderr().slice(-2000))})`,
+          ),
+        );
+
+        if (startup.kind === "exit") {
+          const stderr = run.stderr();
+          const elapsed = (Date.now() - firstSpawn) / 1000;
+          if (!DEFAULT_PORT_BUSY.test(stderr)) {
+            assert.fail(
+              `the default-port process exited before its ready line (code ${startup.exit.code}, signal ${startup.exit.signal}); stderr tail: ${JSON.stringify(stderr.slice(-2000))}`,
+            );
+          }
+          t.diagnostic(
+            `attempt ${attempt} after ${elapsed.toFixed(1)} s: a default port is busy: ${stderr.split("\n").find((line) => DEFAULT_PORT_BUSY.test(line))}`,
+          );
+          await delay(2_000);
+          assert.ok(
+            Date.now() - firstSpawn < DEFAULT_PORT_RETRY_WINDOW_MS,
+            `a default port stayed busy for ${((Date.now() - firstSpawn) / 1000).toFixed(1)} s over ${attempt} attempts; last stderr: ${JSON.stringify(stderr.slice(-2000))}`,
+          );
+          continue;
+        }
+
+        assert.equal(
+          startup.line,
+          "e2e stack ready on http://127.0.0.1:39080 control http://127.0.0.1:39081",
+          "the ready line names the default engine and control ports",
+        );
+        await run.stop();
+        const exit = await run.exited;
+        assert.equal(exit.code, 0, "SIGTERM exits the default-port process with code 0");
+        return;
+      } finally {
+        await run.stop().catch(() => undefined);
+      }
+    }
+  },
+);
 
 test("C-5f32b081 a signal during the start closes the stack without a ready line", async () => {
   const { dataDir, tmpDir } = workspace();
