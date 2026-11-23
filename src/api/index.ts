@@ -17,6 +17,8 @@ export type { ToolServerApiDeps } from "./tool-server-routes.ts";
 export { registerToolServerRoutes } from "./tool-server-routes.ts";
 export type { OpenApiToolApiDeps } from "./openapi-tool-routes.ts";
 export { registerOpenApiToolRoutes } from "./openapi-tool-routes.ts";
+export type { McpToolApiDeps } from "./mcp-tool-routes.ts";
+export { registerMcpToolRoutes } from "./mcp-tool-routes.ts";
 export type { CredentialApiDeps } from "./credential-routes.ts";
 export { registerCredentialRoutes } from "./credential-routes.ts";
 export type { FlowApiDeps } from "./flow-routes.ts";

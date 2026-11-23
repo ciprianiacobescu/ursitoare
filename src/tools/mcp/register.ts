@@ -11,7 +11,11 @@ import { type ToolServerRecord, ToolsError } from "../types.ts";
 type FirstArg = TenantTx | TenantPool;
 
 function isPool(value: FirstArg): value is TenantPool {
-  return typeof (value as TenantPool).connect === "function";
+  // a transaction handle is a pooled client: it has connect and release, a pool has no release
+  return (
+    typeof (value as TenantPool).connect === "function" &&
+    typeof (value as { release?: unknown }).release !== "function"
+  );
 }
 
 async function implement(
