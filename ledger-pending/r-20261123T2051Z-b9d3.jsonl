@@ -2,3 +2,4 @@
 {"ts": "2026-11-23T20:51:58.569309Z", "run_id": "r-20261123T2051Z-b9d3", "unit": "openspec:add-mcp-client", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 166, "merge_commit": "00898e215582d352410a93c1b38fbc613c1458d6"}
 {"ts": "2026-11-23T20:52:03.968085Z", "run_id": "r-20261123T2051Z-b9d3", "unit": "openspec:add-mcp-client", "seq": 3, "type": "archive.opened", "number": 167, "url": "<forge>/ciprianiacobescu/ursitoare/pull/167", "branch": "l4/archive/openspec/add-mcp-client", "head": "e8adf675493685ef3a5bd1f2cdecb2111691a8b3"}
 {"ts": "2026-11-23T20:52:05.231491Z", "run_id": "r-20261123T2051Z-b9d3", "unit": "openspec:add-mcp-client", "seq": 4, "type": "archive.merged", "head": "e8adf675493685ef3a5bd1f2cdecb2111691a8b3", "number": 167}
+{"ts": "2026-11-23T20:52:06.684895Z", "run_id": "r-20261123T2051Z-b9d3", "unit": "openspec:add-mcp-client", "seq": 5, "type": "run.finished", "exit_code": 0}
