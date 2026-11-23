@@ -302,6 +302,16 @@ async function countPolicyDecisions(h: Harness): Promise<number> {
   return Number(result.rows[0]?.n ?? "-1");
 }
 
+async function countDiscoveryDecisions(h: Harness): Promise<number> {
+  const result = await withTenantTx(h.db.appPool, h.a, (tx) =>
+    tx.query<{ n: string }>(
+      "SELECT count(*)::text AS n FROM ursitoare.policy_decision WHERE tenant_id = $1 AND permit IS NOT NULL",
+      [h.a.tenantId],
+    ),
+  );
+  return Number(result.rows[0]?.n ?? "-1");
+}
+
 assert.equal(typeof registerMcpToolRoutes, "function");
 assert.equal(typeof storedIdempotentReply, "function");
 
@@ -323,7 +333,7 @@ test("C-df36af10 T6 discover returns a modern surface and a second overlay chang
     assert.equal(firstBody.protocolVersion, "2026-07-28");
     assert.deepEqual(firstBody.excluded, []);
     assert.equal(firstBody.server.state, "pending");
-    assert.match(firstBody.server.pendingDigest, /^[0-9a-f]{64}$/);
+    assert.match(firstBody.server.pendingDigest, /^sha256:[0-9a-f]{64}$/);
     assert.deepEqual(
       firstBody.server.tools.map((tool) => ({ name: tool.name, effect: tool.effect, ref: tool.ref })),
       [
@@ -384,7 +394,7 @@ test("C-df36af10 T7 a non-mcp server is refused as adapter_mismatch", async () =
 });
 
 test("C-df36af10 T8 a missing service is credential_missing", async () => {
-  const h = await createHarness({ services: null });
+  const h = await createHarness({ services: { resolve: async () => null } });
   try {
     const reg = await registerDocs(h);
     assert.equal(reg.statusCode, 201);
@@ -530,13 +540,16 @@ test("C-df36af10 T15 an idempotent replay reads the stored body", async () => {
 
     const first = await send(h, "POST", DISCOVER_URL("docs"), h.carol, {}, "k1");
     assert.equal(first.statusCode, 200);
+    const decisionsBefore = await countPolicyDecisions(h);
+    assert.equal(await countDiscoveryDecisions(h), 2);
     const replay = await send(h, "POST", DISCOVER_URL("docs"), h.carol, {}, "k1");
     assert.equal(replay.statusCode, 200);
     assert.deepEqual(replay.json(), first.json());
     assert.equal(replay.headers["idempotent-replayed"], "true");
     assert.equal(h.mcp.requests().length, 2);
     assert.equal(await countToolSurfaces(h), 1);
-    assert.equal(await countPolicyDecisions(h), 2);
+    assert.equal(await countPolicyDecisions(h), decisionsBefore + 1);
+    assert.equal(await countDiscoveryDecisions(h), 2);
 
     const reused = await send(h, "POST", DISCOVER_URL("docs"), h.carol, {
       tools: { find_vendor: { effect: "read" } },

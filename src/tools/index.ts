@@ -26,6 +26,8 @@ export {
 
 export { surfaceDigest, surfaceRefs } from "./surface.ts";
 
+export { submitAdapterSurfaceTx } from "./adapter-store.ts";
+
 export type { ToolServerDetail } from "./store.ts";
 export {
   approveSurface,
