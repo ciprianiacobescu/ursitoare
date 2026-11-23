@@ -239,6 +239,7 @@ Edit `src/api/mcp-discover-route.db.test.ts`: at line 326 change the regex to /^
 ## Q-009: src/api/mcp-discover-route.db.test.ts:539 T15 absolute policy_decision count of 2 ignores PEP decisions
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path src/api/mcp-discover-route.db.test.ts of task 5.2; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 5.2
 - **Kind:** technical
 - **Asked:** 2026-11-23T17:11Z by claude-sonnet, run r-20261123T1700Z-c746, task 5.2
