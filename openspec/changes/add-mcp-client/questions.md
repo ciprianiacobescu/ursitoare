@@ -16,6 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | accepted | 3.1 | technical | src/tools/mcp/register.db.test.ts:137 bad-endpoint loop leaves tool_server rows |
 | Q-004 | accepted | 3.1 | technical | src/tools/mcp/register.db.test.ts:221 two good cases share one generated id |
 | Q-005 | answered | 3.1 | technical | src/tools/mcp/register.db.test.ts:191 G4 expects ["/"] after G1 inserted seven endpoints for tenant A |
+| Q-006 | open | 4.1 | technical | src/tools/mcp/discover.db.test.ts:261-277 rowCount and newRows read policy_decision through ownerPool and always see 0 rows |
 <!-- l4:index:end -->
 
 ---
@@ -150,3 +151,30 @@ Keep both queries unscoped and compare the rows as a set:
 - Leave the tenant-B assertion `["/mcp"]` as it is.
 
 Change nothing else in the file.
+
+---
+
+## Q-006: src/tools/mcp/discover.db.test.ts:261-277 rowCount and newRows read policy_decision through ownerPool and always see 0 rows
+
+- **Status:** open
+- **Blocking tasks:** 4.1
+- **Kind:** technical
+- **Asked:** 2026-11-23T10:41Z by claude-sonnet, run r-20261123T0928Z-3bb6, task 4.1
+
+### Context
+The `policy_decision` table has FORCE ROW LEVEL SECURITY with USING `tenant_id = current_setting('app.tenant_id', true)` (migration 0110). `ownerPool` is the NOBYPASSRLS role `ursitoare_owner`, and the plain query sets no `app.tenant_id`, so it sees no rows. `rowCount()` is always 0 and `newRows(before)` is always empty. D1 asserts 3 new rows, D9 asserts the deny and allow rows, D11 asserts 2 new rows. All three fail although the code records the decisions: `recordDecisionOwnTx` returns true and the stage `decision` is not raised. The spec for C-85421c4d expects the decision rows to be readable.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/tools/mcp/discover.db.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-mcp-client`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/tools/mcp/discover.db.test.ts`: make `rowCount()` and `newRows()` read through `withTenantTx(d.appPool, CTX, tx => tx.query(...))` (import `withTenantTx` from `../../tenancy/index.ts`) instead of `d.ownerPool.query`, with the same SQL.
+2. Edit `test/support/pg.ts`: give the owner pool a session that bypasses RLS for reads. Not recommended, because it changes shared test support.
+
+### Harness notes
+Harness note: the previous attempt of this task was rejected: the agent step reached its time limit (30m)
+
+### Clarifier suggestion
+Edit `src/tools/mcp/discover.db.test.ts`: make `rowCount()` and `newRows()` read through `withTenantTx(d.appPool, CTX, tx => tx.query(...))` (import `withTenantTx` from `../../tenancy/index.ts`) instead of `d.ownerPool.query`, with the same SQL.
+
+### Answer
+<!-- write below this line -->
