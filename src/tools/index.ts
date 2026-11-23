@@ -65,6 +65,7 @@ export { importOpenApi, readOpenApi } from "./openapi/read.ts";
 export { registerOpenApiServerTx, submitOpenApiTx } from "./openapi/register.ts";
 export { HTTP_EMPTY_OUTPUT, httpCallAdapter } from "./http/adapter.ts";
 export { mcpCallAdapter } from "./mcp/adapter.ts";
+export { registerMcpServerTx, mcpEndpointOf } from "./mcp/register.ts";
 export type { McpExclusion, McpOverlay, McpOverlayEntry } from "./mcp/surface.ts";
 export { mcpSurface } from "./mcp/surface.ts";
 export type { McpReply } from "./mcp/wire.ts";

@@ -20,13 +20,15 @@ async function seedToolServer(
   tenantId: string,
   serverId: string,
 ): Promise<void> {
-  await pool.query(
-    `INSERT INTO ursitoare.tool_server
-       (tenant_id, tool_server_id, adapter, origin, local, state, approved_digest,
-        registered_by, registered_at)
-     VALUES ($1, $2, 'mcp', $3, false, 'pending', NULL, $4, $5::timestamptz)`,
-    [tenantId, serverId, ORIGIN, "u_alice", "2026-11-06T10:00:00Z"],
-  );
+  await withTenantTx(pool, { tenantId, reviewProfile: "solo" }, async (tx) => {
+    await tx.query(
+      `INSERT INTO ursitoare.tool_server
+         (tenant_id, tool_server_id, adapter, origin, local, state, approved_digest,
+          registered_by, registered_at)
+       VALUES ($1, $2, 'mcp', $3, false, 'pending', NULL, $4, $5::timestamptz)`,
+      [tenantId, serverId, ORIGIN, "u_alice", "2026-11-06T10:00:00Z"],
+    );
+  });
 }
 
 async function insertEndpoint(
@@ -55,8 +57,10 @@ async function attempt<T>(run: () => Promise<T>): Promise<{ code?: unknown; deta
   return {};
 }
 
-async function countRows(pool: pg.Pool, table: string): Promise<number> {
-  const r = await pool.query<{ n: number }>(`SELECT count(*)::int AS n FROM ursitoare.${table}`);
+async function countRows(pool: pg.Pool, ctx: TenantContext, table: string): Promise<number> {
+  const r = await withTenantTx(pool, ctx, async (tx) => {
+    return tx.query<{ n: number }>(`SELECT count(*)::int AS n FROM ursitoare.${table}`);
+  });
   return r.rows[0]?.n ?? -1;
 }
 
@@ -133,14 +137,26 @@ test("C-900c01f8: migration 0540 stores mcp_server per tenant and applies the en
     ];
     for (const endpoint of bad) {
       await seedToolServer(db.ownerPool, a.tenantId, "srv_bad_check");
-      await db.ownerPool.query(
-        "DELETE FROM ursitoare.mcp_server WHERE tenant_id = $1 AND tool_server_id = $2",
-        [a.tenantId, "srv_bad_check"],
-      );
+      await withTenantTx(db.ownerPool, a, async (tx) => {
+        await tx.query(
+          "DELETE FROM ursitoare.mcp_server WHERE tenant_id = $1 AND tool_server_id = $2",
+          [a.tenantId, "srv_bad_check"],
+        );
+      });
       const result = await attempt(async () => {
         await insertEndpoint(db.appPool, a, "srv_bad_check", endpoint);
       });
       assert.equal(result.code, "23514", endpoint);
+      await withTenantTx(db.ownerPool, a, async (tx) => {
+        await tx.query(
+          "DELETE FROM ursitoare.mcp_server WHERE tenant_id = $1 AND tool_server_id = $2",
+          [a.tenantId, "srv_bad_check"],
+        );
+        await tx.query(
+          "DELETE FROM ursitoare.tool_server WHERE tenant_id = $1 AND tool_server_id = $2",
+          [a.tenantId, "srv_bad_check"],
+        );
+      });
     }
 
     // G3: a second row for the same server, an unknown server, and a cross-tenant row.
@@ -187,8 +203,8 @@ test("C-900c01f8: migration 0540 stores mcp_server per tenant and applies the en
       tx.query<{ endpoint: string }>("SELECT endpoint FROM ursitoare.mcp_server ORDER BY endpoint"),
     );
     assert.deepEqual(
-      aRows.rows.map((row) => row.endpoint),
-      ["/"],
+      aRows.rows.map((row) => row.endpoint).sort(),
+      ["/", ...good].sort(),
     );
     assert.deepEqual(
       bRows.rows.map((row) => row.endpoint),
@@ -217,8 +233,9 @@ test("C-900c01f8: registerMcpServerTx turns a URL into an origin and endpoint, r
       { url: "http://10.0.0.5:8080/mcp", local: true, origin: "http://10.0.0.5:8080", endpoint: "/mcp" },
     ];
 
-    for (const item of cases) {
-      const id = `docs_${item.endpoint.replace(/[^a-z0-9]/g, "_") || "root"}`.toLowerCase().slice(0, 32);
+    for (let ci = 0; ci < cases.length; ci += 1) {
+      const item = cases[ci] as (typeof cases)[number];
+      const id = `docs_${ci}_${item.endpoint.replace(/[^a-z0-9]/g, "_") || "root"}`.toLowerCase().slice(0, 32);
       let result: { server: { origin: string; state: string; pendingDigest: string | null }; endpoint: string } | undefined;
       await assert.doesNotReject(async () => {
         result = await registerMcpServerTx(db.appPool, a, { id, url: item.url, local: item.local }, ALICE, { clock: CLOCK });
@@ -241,12 +258,12 @@ test("C-900c01f8: registerMcpServerTx turns a URL into an origin and endpoint, r
       { url: "https://[::1]/mcp", local: false, reason: "loopback" },
     ];
     for (const item of refusals) {
-      const before = await countRows(db.ownerPool, "mcp_server");
+      const before = await countRows(db.appPool, a, "mcp_server");
       const result = await attempt(async () => {
         await registerMcpServerTx(db.appPool, a, { id: "refused", url: item.url, local: item.local }, ALICE, { clock: CLOCK });
       });
       assert.deepEqual(result, { code: "TOOLS_INVALID", details: { field: "url", reason: item.reason } }, item.url);
-      assert.equal(await countRows(db.ownerPool, "mcp_server"), before, item.url);
+      assert.equal(await countRows(db.appPool, a, "mcp_server"), before, item.url);
     }
 
     const longOk = "/" + "x".repeat(1023);
@@ -267,13 +284,13 @@ test("C-900c01f8: registerMcpServerTx turns a URL into an origin and endpoint, r
     assert.equal(portResult.endpoint, "/mcp");
 
     // A taken id is TOOLS_EXISTS and leaves one mcp_server row.
-    const takenBefore = await countRows(db.ownerPool, "mcp_server");
+    const takenBefore = await countRows(db.appPool, a, "mcp_server");
     await registerMcpServerTx(db.appPool, a, { id: "docs_root", url: ORIGIN, local: false }, ALICE, { clock: CLOCK }).catch(() => undefined);
     const takenAgain = await attempt(async () => {
       await registerMcpServerTx(db.appPool, a, { id: "docs_root", url: ORIGIN, local: false }, ALICE, { clock: CLOCK });
     });
     assert.equal(takenAgain.code, "TOOLS_EXISTS");
-    assert.equal(await countRows(db.ownerPool, "mcp_server"), takenBefore + 1);
+    assert.equal(await countRows(db.appPool, a, "mcp_server"), takenBefore + 1);
 
     // Tenant B cannot see A's endpoint.
     const endpoint = await withTenantTx(db.appPool, b, (tx) => mcpEndpointOf(tx, b, "docs_root"));

@@ -11,7 +11,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 3. Registration
 
-- [ ] 3.1 Write `src/tools/mcp/register.db.test.ts` first (scenario "The endpoint is immutable and a URL becomes an origin and an endpoint": rows G1 to G4 and U1 to U14; G1 starts with `assert.ok` on ledger row 540, so the missing table fails by assertion, not by an error), then create `src/db/migrations/0540_mcp_servers.sql` (design 3), implement `src/tools/mcp/register.ts` and add its export lines to `src/tools/index.ts`
+- [x] 3.1 Write `src/tools/mcp/register.db.test.ts` first (scenario "The endpoint is immutable and a URL becomes an origin and an endpoint": rows G1 to G4 and U1 to U14; G1 starts with `assert.ok` on ledger row 540, so the missing table fails by assertion, not by an error), then create `src/db/migrations/0540_mcp_servers.sql` (design 3), implement `src/tools/mcp/register.ts` and add its export lines to `src/tools/index.ts`
 
 ## 4. Discovery
 
