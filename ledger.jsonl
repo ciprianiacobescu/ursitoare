@@ -143,3 +143,4 @@
 {"at":"2026-11-23T17:26:33Z","run":"r-20261123T1726Z-c688","type":"unit.dispatched","unit":"openspec:add-mcp-client"}
 {"at":"2026-11-23T18:48:37Z","attempt":1,"cost_usd":16.868493,"runs":12,"type":"plan.charged","unit":"openspec:add-mcp-client"}
 {"at":"2026-11-23T18:48:37Z","run":"r-20261123T1848Z-ff77","type":"unit.dispatched","unit":"openspec:add-mcp-client"}
+{"at":"2026-11-23T20:45:25Z","head":"17f6194e6249c3708bf30f3b30be3f108646c083","pr":166,"target_before":"280bcad2ae81063ae27d40c73c3467e29f770d4b","type":"unit.merge_requested","unit":"openspec:add-mcp-client"}
