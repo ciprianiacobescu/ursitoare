@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.1 | technical | src/api/openapi-tool-routes.test.ts:420 expects 2 tool servers in tenant a, but only 1 can exist |
+| Q-002 | open | 5.1 | technical | src/main.conventions.test.ts:126 and src/api/people-openapi.test.ts:55 hard-code 50 paths |
 <!-- l4:index:end -->
 
 ---
@@ -34,6 +35,30 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/api/openapi-tool-routes.test.ts`: on line 420 change `assert.equal(await countServers(h), 2);` to `assert.equal(await countServers(h), 1);`
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: src/main.conventions.test.ts:126 and src/api/people-openapi.test.ts:55 hard-code 50 paths
+
+- **Status:** open
+- **Blocking tasks:** 5.1
+- **Kind:** technical
+- **Asked:** 2026-11-23T00:20Z by claude-sonnet, run r-20261122T2330Z-2571, task 5.1
+
+### Context
+Both frozen tests assert the committed and served OpenAPI document lists exactly 50 paths. The three routes this unit must document (/api/v1/tool-registrations/openapi, /api/v1/tool-registrations/openapi/preview, /api/v1/tool-servers/{id}/openapi) are three new paths, so the document now holds 53. The spec requires those three operations in the document, and task 5.1 says C-d150bfa4 stays green, which is impossible while it asserts 50.
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `src/api/people-openapi.test.ts`, `src/main.conventions.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-http-openapi-tools`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `src/main.conventions.test.ts`: change `paths.length, 50` and the message `lists 50 paths` to 53; and edit `src/api/people-openapi.test.ts`: change the expected path count at line 55 from 50 to 53.
+2. Make the count assertion relative (at least 50) in both files.
+
+### Clarifier suggestion
+Edit `src/main.conventions.test.ts`: change `paths.length, 50` and the message `lists 50 paths` to 53; and edit `src/api/people-openapi.test.ts`: change the expected path count at line 55 from 50 to 53.
 
 ### Answer
 <!-- write below this line -->
