@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf |
 | Q-004 | answered | none | verdict | Criterion C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fi |
-| Q-006 | open | none | verdict | Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body): accept as satisfie |
+| Q-006 | answered | none | verdict | Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body): accept as satisfie |
 | Q-007 | open | none | verdict | Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused): accept as satisfied? |
 | Q-008 | open | none | verdict | Criterion C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list): accept as satisfied? |
 | Q-009 | open | none | verdict | Criterion C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file): accept as s |
@@ -351,7 +351,8 @@ accept The criterion is satisfied. credentials.test.ts asserts parseCredential g
 
 ## Q-006: Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body): accept as satisfie
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -378,6 +379,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. credentials-calls.test.ts runs L1, L2, S1 and S2 against a recording fake: L1 resolves CV() over two GET /credentials requests with limit 200 and then the cursor c1, and asserts neither the view nor the records hold s3cr3t; L2 resolves null after one request, rejects INVALID_RESPONSE for an unreadable item and after exactly 50 requests of an endless list, rethrows the 403 and rejects a bad id with RangeError and no records; S1 posts the body under Idempotency-Key k-1, rejects a blank key and a non-object body before a call and an unreadable answer with INVALID_RESPONSE; S2 rotates with the value, scheme and header name and no header option, omits headerName for a bearer token, rejects a bad id, a reserved header and bad values with RangeError whose message holds no value, and rejects an unreadable answer. The implementation matches each assertion. All four tests passed by assertion.
 ---
 
 ## Q-007: Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused): accept as satisfied?
