@@ -126,9 +126,6 @@ test("C-548b8f7f: registerCodeBlockServerTx registers snips pending, rows R1 to 
     const submitted = await events(db.appPool, a, "tools.surface_submitted", "snips");
     assert.deepEqual(submitted[submitted.length - 1], { payload: { digest: `sha256:${D_WC2}`, drift: true } });
 
-    const approved2 = await approveSurface(db.appPool, a, "snips", { digest: `sha256:${D_WC2}`, selfApproval: true }, CAROL_USER, { clock: CLOCK });
-    assert.deepEqual(approved2.blocks, ["snips.word_count@1"]);
-
     // R4 again no new event
     const beforeEvents = (await events(db.appPool, a, "tools.surface_submitted", "snips")).length;
     let r4: unknown;
@@ -138,6 +135,9 @@ test("C-548b8f7f: registerCodeBlockServerTx registers snips pending, rows R1 to 
     const afterEvents = (await events(db.appPool, a, "tools.surface_submitted", "snips")).length;
     assert.equal(afterEvents, beforeEvents);
     assert.deepEqual(r4, r3);
+
+    const approved2 = await approveSurface(db.appPool, a, "snips", { digest: `sha256:${D_WC2}`, selfApproval: true }, CAROL_USER, { clock: CLOCK });
+    assert.deepEqual(approved2.blocks, ["snips.word_count@1"]);
   } finally {
     await db.close();
   }

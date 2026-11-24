@@ -6,7 +6,7 @@ Values: `test-plan.md` and, for task 4, `test-plan-credentials.md`. Each scenari
 
 ## 2. The surface and the registration
 
-- [ ] 2.1 Write `src/tools/code/register.test.ts` (scenario "The builder fixes the flags and the digest covers the source": rows B1 to B6) and `src/tools/code/register.db.test.ts` (scenario "A server registers pending, a changed source drifts it and each refusal writes nothing": rows R1 to R4, F1 to F8, G1 to G3) first, then implement `src/tools/code/register.ts` and add the export lines (`CodeBlockToolInput` type-only, `codeBlockSurface`, `registerCodeBlockServerTx`, `submitCodeBlocksTx`) to `src/tools/index.ts`. Run `pnpm run test src/tools/code/register.test.ts` and `pnpm run test src/tools/code/register.db.test.ts`
+- [x] 2.1 Write `src/tools/code/register.test.ts` (scenario "The builder fixes the flags and the digest covers the source": rows B1 to B6) and `src/tools/code/register.db.test.ts` (scenario "A server registers pending, a changed source drifts it and each refusal writes nothing": rows R1 to R4, F1 to F8, G1 to G3) first, then implement `src/tools/code/register.ts` and add the export lines (`CodeBlockToolInput` type-only, `codeBlockSurface`, `registerCodeBlockServerTx`, `submitCodeBlocksTx`) to `src/tools/index.ts`. Run `pnpm run test src/tools/code/register.test.ts` and `pnpm run test src/tools/code/register.db.test.ts`
 
 ## 3. The runner and the live proof
 
