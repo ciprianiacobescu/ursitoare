@@ -937,7 +937,7 @@
                 }
               }
             },
-            "description": "Error codes: IDEMPOTENCY_KEY_REUSED"
+            "description": "Error codes: IDEMPOTENCY_KEY_REUSED, OPERATION_REFUSED"
           },
           "503": {
             "content": {
@@ -961,6 +961,7 @@
           "IDEMPOTENCY_IN_PROGRESS",
           "IDEMPOTENCY_KEY_REUSED",
           "NOT_FOUND",
+          "OPERATION_REFUSED",
           "UNAUTHENTICATED",
           "VALIDATION_FAILED"
         ]

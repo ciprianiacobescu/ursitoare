@@ -30,7 +30,8 @@ export type CredentialsErrorCode =
   | "CREDENTIALS_INVALID"
   | "CREDENTIALS_NOT_FOUND"
   | "CREDENTIALS_EXISTS"
-  | "CREDENTIALS_VAULT";
+  | "CREDENTIALS_VAULT"
+  | "CREDENTIALS_REFUSED";
 
 export class CredentialsError extends Error {
   readonly code: CredentialsErrorCode;

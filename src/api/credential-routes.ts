@@ -144,6 +144,8 @@ function apiErrorOf(error: unknown): unknown {
         "The egress broker or vault is unavailable",
         { reason: details["reason"] ?? "unavailable" },
       );
+    case "CREDENTIALS_REFUSED":
+      return new ApiError(422, "OPERATION_REFUSED", "Operation is refused", { ...details });
   }
 }
 
@@ -219,6 +221,7 @@ export function registerCredentialRoutes(server: FastifyInstance, deps: Credenti
       "IDEMPOTENCY_IN_PROGRESS",
       "IDEMPOTENCY_KEY_REUSED",
       "NOT_FOUND",
+      "OPERATION_REFUSED",
       "VALIDATION_FAILED",
     ],
     handler: async (request, reply) => {

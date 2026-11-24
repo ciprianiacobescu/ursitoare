@@ -61,14 +61,19 @@ export async function provisionCredentialTx(
   actor: AuditEventInput["actor"],
 ): Promise<CredentialRecord> {
   checkProvision(input);
-  const server = await tx.query<{ origin: string }>(
-    "SELECT origin FROM ursitoare.tool_server WHERE tenant_id = $1 AND tool_server_id = $2",
+  const server = await tx.query<{ origin: string; adapter: string }>(
+    "SELECT origin, adapter FROM ursitoare.tool_server WHERE tenant_id = $1 AND tool_server_id = $2",
     [ctx.tenantId, input.toolServerId],
   );
   const origin = server.rows[0]?.origin;
   if (origin === undefined) {
     throw new CredentialsError("CREDENTIALS_NOT_FOUND", "tool server not found", {
       toolServerId: input.toolServerId,
+    });
+  }
+  if (server.rows[0]?.adapter === "code_block") {
+    throw new CredentialsError("CREDENTIALS_REFUSED", "credential is not needed", {
+      reason: "no_credential_needed",
     });
   }
   const byServer = await tx.query(
