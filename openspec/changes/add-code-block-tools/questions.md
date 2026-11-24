@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.1 | technical | src/tools/code/register.db.test.ts:140 asserts r4 deepEquals r3 after approval |
-| Q-002 | open | 6.1 | technical | src/main.conventions.test.ts:126 and src/api/people-openapi.test.ts:55 hard-code 55 document paths |
+| Q-002 | accepted | 6.1 | technical | src/main.conventions.test.ts:126 and src/api/people-openapi.test.ts:55 hard-code 55 document paths |
 <!-- l4:index:end -->
 
 ---
@@ -44,7 +44,8 @@ Edit `src/tools/code/register.db.test.ts`: move the block from `// R4 again no n
 
 ## Q-002: src/main.conventions.test.ts:126 and src/api/people-openapi.test.ts:55 hard-code 55 document paths
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 6.1
 - **Kind:** technical
 - **Asked:** 2026-11-24T07:18Z by claude-sonnet, run r-20261124T0634Z-0e03, task 6.1
