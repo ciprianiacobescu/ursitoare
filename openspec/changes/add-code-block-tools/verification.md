@@ -1,4 +1,4 @@
-# Verification: openspec:add-code-block-tools: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-code-block-tools: PASS (round 2)
 
 traceability: 13/14 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 13/14 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base main@e8adf67549 contained |
-| 1 | integrity | ok | 323.3 | 11 sub-checks (+1 unfrozen by human answers); scope: 38 changed file(s) |
-| 2 | build | ok | 38.8 |  |
-| 3 | tests | ok | 501.0 |  |
-| 4 | traceability | ok | 0.2 | 13/14 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/api/code-block-routes.ts, src/api/credential-routes.ts, src/api/index.ts, src/authoring/index.ts, src/authoring/validate/code-source.ts and 9 more |
-| 8 | s1 judge | ok | 1.2 | 13/14 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 475.7 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -195,11 +195,15 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-043a8b91 | ok | 0.820 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-46d522e4 | ok | 0.950 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-003 accept C-aebcc921 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The scenario "Migration 0480 stores references and no value" is the unchanged first scenario of a MODIFIED requirement, and the frozen test of the archived change add-credentials, named with this criterion's id, asserts each of its rows: the ledger holds vers...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
-| C-aebcc921 | credentials › Credential references are stored per tenant and hold no value › Migration 0480 stores references and no value | insufficient_evidence | needs_human | uncovered: no adequate discriminating test traces it |
+| C-aebcc921 | credentials › Credential references are stored per tenant and hold no value › Migration 0480 stores references and no value | insufficient_evidence | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The scenario "Migration 0480 stores references and no value" is the unchanged first scenario of a MODIFIED requirement, and the frozen test of the archived change add-credentials, named with this cr... |
 | C-bc2e752b | credentials › Credential references are stored per tenant and hold no value › Migration 0550 lets the app role change the scheme and header and nothing else | pass | pass | the judge passed it and a discriminating test passes |
 | C-bf4aafd0 | credentials › A code-block server takes no credential › Provisioning for a code-block server is refused before the vault and a fixture server still provisions | pass | pass | the judge passed it and a discriminating test passes |
 | C-4450f7f8 | credentials › A rotation can change the scheme and the header name, and records them without the value › A rotation changes the scheme and header, refuses a bad pair and a value-only rotation is as before | pass | pass | the judge passed it and a discriminating test passes |
