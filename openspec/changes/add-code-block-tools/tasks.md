@@ -19,7 +19,7 @@ Values: `test-plan.md` and, for task 4, `test-plan-credentials.md`. Each scenari
 
 ## 5. The routes
 
-- [ ] 5.1 Write `src/api/code-block-routes.test.ts` first (scenarios "Carol registers and updates, a replay follows its key and each bad body has one fixed field" and "Who may use the routes, and each refusal of an existing server": rows H1, H2, X1 to X10, U1 to U6, Z1), then implement `registerCodeBlockRoutes` in `src/api/code-block-routes.ts` (design 5) and add the export lines (`CodeBlockApiDeps` type-only, `registerCodeBlockRoutes`) to `src/api/index.ts`. Run `pnpm run test src/api/code-block-routes.test.ts` and `pnpm run test src/api/tool-server-routes.test.ts`
+- [x] 5.1 Write `src/api/code-block-routes.test.ts` first (scenarios "Carol registers and updates, a replay follows its key and each bad body has one fixed field" and "Who may use the routes, and each refusal of an existing server": rows H1, H2, X1 to X10, U1 to U6, Z1), then implement `registerCodeBlockRoutes` in `src/api/code-block-routes.ts` (design 5) and add the export lines (`CodeBlockApiDeps` type-only, `registerCodeBlockRoutes`) to `src/api/index.ts`. Run `pnpm run test src/api/code-block-routes.test.ts` and `pnpm run test src/api/tool-server-routes.test.ts`
 
 ## 6. main and the document
 
