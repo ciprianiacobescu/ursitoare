@@ -13,6 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.1 | technical | src/tools/code/register.db.test.ts:140 asserts r4 deepEquals r3 after approval |
 | Q-002 | accepted | 6.1 | technical | src/main.conventions.test.ts:126 and src/api/people-openapi.test.ts:55 hard-code 55 document paths |
+| Q-003 | open | none | verdict | Criterion C-aebcc921 (credentials › Credential references are stored per tenant and hold no value › Migration 0480 stores references and no value): accept as satisfied? |
 <!-- l4:index:end -->
 
 ---
@@ -60,6 +61,38 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `src/main.conventions.test.ts`: change the expected path count 55 to 57 (line 126) and its message to match, and edit `src/api/people-openapi.test.ts`: change the expected path count 55 to 57 (line 55)
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-003: Criterion C-aebcc921 (credentials › Credential references are stored per tenant and hold no value › Migration 0480 stores references and no value): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-aebcc921 (credentials › Credential references are stored per tenant and hold no value › Migration 0480 stores references and no value)
+
+### Context
+Criterion C-aebcc921 (credentials › Credential references are stored per tenant and hold no value › Migration 0480 stores references and no value) is needs human after round 1.
+
+Scenario:
+\- **WHEN** the migrations run and the 21 rows of test-plan.md § Migration rows (of the archived change `add-credentials`) run in order
+\- **THEN** `schema_migration` holds version 480 named `credentials`, `checkTenancyCatalog` returns `[]`, the columns are exactly the eleven of design.md § The table, each row ends with its listed outcome and constraint (`23505` rows 2-4, `23503` row 5, `23514` rows 6-14, `42501` rows 16-20) and `tenant_b` sees 0 rows where `tenant_a` sees 1
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: insufficient_evidence
+Tracing tests: none
+Ignored tests: src.credentials.schema.test.ts::C-aebcc921 migration 0480 stores references and no value (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
 
 ### Answer
 <!-- write below this line -->
