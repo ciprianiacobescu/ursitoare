@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-24T08:42:23Z",
+  "integrated_revision": "822ba8ff96732ca0052e3821f97c88b6febb927d",
+  "merge_commit": "822ba8ff96732ca0052e3821f97c88b6febb927d",
+  "plan_digest": "34aab8fa5ef378c7",
+  "plan_id": "m7",
+  "postcheck": "pass",
+  "pr": 168,
+  "receipt_id": "m7/openspec:add-code-block-tools/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "60fa42235f5227575c7969008faed4b40279b628",
+  "spec_digest": "113269d514b77670",
+  "target": "main",
+  "unit_id": "openspec:add-code-block-tools"
+}
