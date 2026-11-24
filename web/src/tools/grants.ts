@@ -49,7 +49,7 @@ export function parseGrant(raw: unknown): GrantView | null {
   } else if (
     scope["kind"] === "node" &&
     matches(scope["flowId"], FLOW, 64) &&
-    matches(scope["nodeId"], NODE, 1024)
+    matches(scope["nodeId"], NODE, 128)
   ) {
     where = `${scope["flowId"]} / ${scope["nodeId"]}`;
   } else {
@@ -100,7 +100,7 @@ export function grantBody(
       );
     }
     if (nodeId === "") return refuse("nodeId", "Enter the step.");
-    if (!matches(nodeId, NODE, 1024)) {
+    if (!matches(nodeId, NODE, 128)) {
       return refuse(
         "nodeId",
         "A step id is lowercase letters, digits and underscores, starting with a letter.",
