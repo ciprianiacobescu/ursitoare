@@ -14,10 +14,13 @@ import { PAGE_WIDTHS, captionDisplayFor } from "../kit/layout/layout.ts";
 import { personLabel } from "../people/people.ts";
 import { useDisplayNames } from "../people/use-names.ts";
 import { Badge } from "../ui/badge.tsx";
+import { Button } from "../ui/button.tsx";
 import { cn } from "../ui/cn.ts";
 import { serverStateTone } from "../ui/tones.ts";
 import { createCursorList } from "../kit/data/cursor-list.ts";
 import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
+import { CredentialSection } from "./CredentialSection.tsx";
+import { ReplaceSection } from "./ReplaceSection.tsx";
 import { TOOL_NAMES, TOOL_TABLES, TOOL_TITLES, actionState, regionState } from "./pages.ts";
 import type { ActionPhase, RegionLoad } from "./pages.ts";
 import {
@@ -215,6 +218,11 @@ export function ServersPage(): ReactNode {
       <PageHeader
         title={PAGE_HEADING}
         description="Servers whose tools flows can call. A surface must be approved before its tools can be used."
+        actions={
+          <Button asChild tone="secondary">
+            <Link to="/admin/tool-servers/new">Register a tool server</Link>
+          </Button>
+        }
       />
       <DataTable
         caption={TOOL_TABLES.servers.caption}
@@ -292,6 +300,16 @@ export function ServersPage(): ReactNode {
             />
           )}
         </Section>
+      )}
+      {serverId === null || view === null ? null : (
+        <CredentialSection serverId={serverId} adapter={view.adapter} />
+      )}
+      {serverId === null ? null : (
+        <ReplaceSection
+          serverId={serverId}
+          server={view}
+          onSaved={() => setReloadKey((current) => current + 1)}
+        />
       )}
     </div>
   );

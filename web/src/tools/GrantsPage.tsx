@@ -29,6 +29,7 @@ import {
   loadToolRefs,
   parseGrant,
   postGrant,
+  toolListNote,
   revokeGrantById,
 } from "./grants.ts";
 import type { GrantView, ToolRefs } from "./grants.ts";
@@ -121,6 +122,7 @@ export function GrantsPage(): ReactNode {
   const busy = action.phase === "busy";
   const toolBusy = toolRegion.view !== "ready";
   const refs = tools.phase === "ready" ? tools.value.refs : [];
+  const listNote = tools.phase === "ready" ? toolListNote(tools.value) : null;
 
   const resetDraft = (): void => {
     setSubjectKind("role");
@@ -320,6 +322,7 @@ export function GrantsPage(): ReactNode {
               </select>
             )}
           </Field>
+          {listNote === null ? null : <p>{listNote}</p>}
           {toolRegion.view === "loading" ? <LoadingState label="Loading tools" /> : null}
           {tools.phase === "error" ? <ErrorPanel error={tools.error} /> : null}
           <fieldset className="tools-fieldset">

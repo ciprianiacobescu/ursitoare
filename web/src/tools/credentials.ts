@@ -210,7 +210,19 @@ export async function rotateServerCredential(
   return view;
 }
 
-export const CREDENTIAL_NAMES: Readonly<Record<string, string>> = {};
+export const CREDENTIAL_NAMES: Readonly<Record<string, string>> = {
+  credential: "Credential",
+  scheme: "Scheme",
+  apiKeyHeader: "API key header",
+  bearerToken: "Bearer token",
+  headerName: "Header name",
+  secretValue: "Secret value",
+  storeCredential: "Store credential",
+  rotateCredential: "Rotate credential",
+  credentialStored: "Credential stored.",
+  credentialRotated: "Credential rotated.",
+  needsValue: "A server that needs no key still needs a value here: enter any text.",
+};
 
 export function credentialErrors(error: unknown): FormErrors {
   if (error instanceof ApiRequestError) {

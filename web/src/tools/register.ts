@@ -440,9 +440,45 @@ export const REGISTER_PAGE: Readonly<{
   path: string;
   capability: string;
   title: string;
-}> = { id: "", file: "", path: "", capability: "", title: "" };
+}> = {
+  id: "admin-tool-register",
+  file: "67-admin-tool-register.tsx",
+  path: "/admin/tool-servers/new",
+  capability: "register_tool_server",
+  title: "Register a tool server · Ursitoare",
+};
 
-export const REGISTER_NAMES: Readonly<Record<string, string>> = {};
+export const REGISTER_NAMES: Readonly<Record<string, string>> = {
+  registerToolServer: "Register a tool server",
+  newToolServer: "New tool server",
+  kind: "Kind",
+  mcpServer: "MCP server",
+  openApiDocument: "OpenAPI document",
+  codeBlock: "Code block",
+  serverId: "Server id",
+  mcpUrl: "MCP URL",
+  origin: "Origin",
+  localNetworkServer: "Local network server",
+  openApiDocumentJson: "OpenAPI document (JSON)",
+  previewOperations: "Preview operations",
+  operations: "Operations",
+  skip: "Skip",
+  effectOf: "Effect of ",
+  toolName: "Tool name",
+  description: "Description",
+  inputSchema: "Input schema (JSON)",
+  outputSchema: "Output schema (JSON)",
+  source: "Source",
+  registerServer: "Register server",
+  changeRegistration: "Change registration",
+  replaceDocument: "Replace document",
+  editCode: "Edit code",
+  saveChanges: "Save changes",
+  documentReplaced: "Document replaced.",
+  codeSaved: "Code saved.",
+  mcpUrlHint: "Do not paste a URL that holds a key; store the key as a credential.",
+  severalTools: "This server has several tools; edit it through the API.",
+};
 
 export const REGISTER_REASONS: Readonly<Record<string, string>> = {
   path: "Remove the query, fragment or text after the path.",
