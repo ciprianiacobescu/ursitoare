@@ -12,3 +12,4 @@ export {
   invokeToolRequest,
 } from "./invoke/request.ts";
 export type { CodeRunner } from "./invoke/types.ts";
+export { createCodeRunner } from "./invoke/code.ts";

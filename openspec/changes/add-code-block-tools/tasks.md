@@ -10,7 +10,7 @@ Values: `test-plan.md` and, for task 4, `test-plan-credentials.md`. Each scenari
 
 ## 3. The runner and the live proof
 
-- [ ] 3.1 Write `src/runtimes/invoke/code.test.ts` (scenario "The output, the seed and the clock are the step's, and every failure has fixed details": rows O1, O2, E1 to E6, N1, N2) and `src/runtimes/invoke/code-block.db.test.ts` (scenarios "A granted code block runs in a dry run and nothing leaves the engine", "An ungranted code block is denied before its code runs" and "An untrusted input gives an untrusted output at runtime": the `Live` setup and rows V1, V3, V4, V5, through `invokeHarness({ code })` and `dryHarness`) first, then implement `createCodeRunner` in `src/runtimes/invoke/code.ts` (design 4) and add its export line to `src/runtimes/index.ts`. Run `pnpm run test src/runtimes/invoke/code.test.ts` and `pnpm run test src/runtimes/invoke/code-block.db.test.ts`
+- [x] 3.1 Write `src/runtimes/invoke/code.test.ts` (scenario "The output, the seed and the clock are the step's, and every failure has fixed details": rows O1, O2, E1 to E6, N1, N2) and `src/runtimes/invoke/code-block.db.test.ts` (scenarios "A granted code block runs in a dry run and nothing leaves the engine", "An ungranted code block is denied before its code runs" and "An untrusted input gives an untrusted output at runtime": the `Live` setup and rows V1, V3, V4, V5, through `invokeHarness({ code })` and `dryHarness`) first, then implement `createCodeRunner` in `src/runtimes/invoke/code.ts` (design 4) and add its export line to `src/runtimes/index.ts`. Run `pnpm run test src/runtimes/invoke/code.test.ts` and `pnpm run test src/runtimes/invoke/code-block.db.test.ts`
 
 ## 4. The credential refusal
 
