@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 2.1 | technical | src/tools/code/register.db.test.ts:140 asserts r4 deepEquals r3 after approval |
 | Q-002 | accepted | 6.1 | technical | src/main.conventions.test.ts:126 and src/api/people-openapi.test.ts:55 hard-code 55 document paths |
-| Q-003 | open | none | verdict | Criterion C-aebcc921 (credentials › Credential references are stored per tenant and hold no value › Migration 0480 stores references and no value): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-aebcc921 (credentials › Credential references are stored per tenant and hold no value › Migration 0480 stores references and no value): accept as satisfied? |
 <!-- l4:index:end -->
 
 ---
@@ -69,7 +69,8 @@ Edit `src/main.conventions.test.ts`: change the expected path count 55 to 57 (li
 
 ## Q-003: Criterion C-aebcc921 (credentials › Credential references are stored per tenant and hold no value › Migration 0480 stores references and no value): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -96,3 +97,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The scenario "Migration 0480 stores references and no value" is the unchanged first scenario of a MODIFIED requirement, and the frozen test of the archived change add-credentials, named with this criterion's id, asserts each of its rows: the ledger holds version 480 named credentials, checkTenancyCatalog returns an empty array, the columns are exactly the eleven of the design, rows 2 to 4 fail 23505 with their constraint names, row 5 fails 23503 on the foreign key, rows 6 to 14 fail 23514, the app role updates key_version and rotated_at, rows 16 to 20 fail 42501 (target_origin, mintkey_service_id, provisioned_by, DELETE and a cross-tenant insert), and tenant_b sees 0 rows where tenant_a sees 1. The judge ignored it only because it has no red record in this unit, which is expected for a test written by an earlier unit. This unit's only migration, 0550_credential_scheme.sql, grants UPDATE on auth_scheme and header_name alone, so none of the refusals the frozen test asserts for rows 16 to 20 is loosened and the 0480 scenario still holds on the migrated database.
