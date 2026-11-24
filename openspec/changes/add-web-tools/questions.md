@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 2.2 | harness | Task 2.2: the pre-satisfied check could not decide |
-| Q-002 | open | none | verdict | Criterion C-a7a348b2 (web-runs › A stale validation has its own text in the test-run and dry-run panels › A stale version reads as one message in both panels): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-a7a348b2 (web-runs › A stale validation has its own text in the test-run and dry-run panels › A stale version reads as one message in both panels): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf |
 | Q-004 | open | none | verdict | Criterion C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fi |
@@ -219,7 +219,8 @@ accept: The three servers-call tests pin behaviour the base parser already has, 
 
 ## Q-002: Criterion C-a7a348b2 (web-runs › A stale validation has its own text in the test-run and dry-run panels › A stale version reads as one message in both panels): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -246,6 +247,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. staleVersionText returns the stale text only when reason is version_not_runnable and cause is validation_stale and null otherwise; refusedTest in test-run.ts calls it before the block_missing branch and returns { $form: text }; dryRunFormErrors hands every non-400 error to testRunFormErrors. The three tracing tests assert exactly the rows of test-plan.md § Stale: the text and three nulls, and { $form: STALE } and the existing blocks text from both form-error functions for a 422 OPERATION_REFUSED. All passed by assertion. The judge simply gave no verdict; nothing is missing.
 ---
 
 ## Q-003: Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf
