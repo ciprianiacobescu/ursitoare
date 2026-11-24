@@ -19,6 +19,7 @@ import {
   registerAdminRoutes,
   registerAuditRoutes,
   registerBlockRoutes,
+  registerCodeBlockRoutes,
   createPrincipalLoader,
   registerCredentialRoutes,
   registerDryRunRoutes,
@@ -55,7 +56,7 @@ import { createServiceResolver } from "./credentials/index.ts";
 import { checkEgress, createGateway, createVaultWriter } from "./gateway/index.ts";
 import { createPolicyRuntime } from "./grants/index.ts";
 import type { PolicyRuntime } from "./grants/index.ts";
-import { createInvokePath, dryRunInvokers } from "./runtimes/index.ts";
+import { createCodeRunner, createInvokePath, dryRunInvokers } from "./runtimes/index.ts";
 import { createToolDirectory, httpCallAdapter, mcpCallAdapter } from "./tools/index.ts";
 import type { LogDestination, Logger } from "./observability/index.ts";
 import { createLogger, noopTracer } from "./observability/index.ts";
@@ -294,6 +295,7 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
     });
     registerBlockRoutes(server, { pool: pep.pool, engineKey: config.engineKey });
     registerToolServerRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
+    registerCodeBlockRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
     registerOpenApiToolRoutes(server, { pool: pep.pool, clock: pep.clock, engineKey: config.engineKey });
     registerMcpToolRoutes(server, {
       pool: pep.pool,
@@ -376,8 +378,9 @@ export async function main(deps: Partial<MainDeps> = {}): Promise<RunningServer 
           gateway: createGateway(config.egress, { clock: systemClock, logger }),
           tools: createToolDirectory(database.appPool),
           calls: { http: httpCallAdapter, mcp: mcpCallAdapter },
-          services: createServiceResolver(database.appPool),
-          principals: createPrincipalLoader(database.appPool),
+           services: createServiceResolver(database.appPool),
+           principals: createPrincipalLoader(database.appPool),
+           code: createCodeRunner(() => sandbox),
           loadVersion,
           catalogueFor,
           clock: systemClock,

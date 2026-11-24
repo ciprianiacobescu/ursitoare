@@ -123,7 +123,7 @@ test("C-d150bfa4 the committed OpenAPI document equals the text the real engine 
 
   const document = JSON.parse(served) as { paths?: Record<string, unknown> };
   const paths = Object.keys(document.paths ?? {});
-  assert.equal(paths.length, 55, `the document lists 55 paths: ${JSON.stringify(paths)}`);
+   assert.equal(paths.length, 57, `the document lists 57 paths: ${JSON.stringify(paths)}`);
   for (const path of [
     "/api/v1/people",
     "/api/v1/me/teams",
