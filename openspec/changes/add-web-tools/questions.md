@@ -12,6 +12,27 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 2.2 | harness | Task 2.2: the pre-satisfied check could not decide |
+| Q-002 | open | none | verdict | Criterion C-a7a348b2 (web-runs › A stale validation has its own text in the test-run and dry-run panels › A stale version reads as one message in both panels): accept as satisfied? |
+| Q-003 | open | none | verdict | Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf |
+| Q-004 | open | none | verdict | Criterion C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals): accept as satisfied? |
+| Q-005 | open | none | verdict | Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fi |
+| Q-006 | open | none | verdict | Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body): accept as satisfie |
+| Q-007 | open | none | verdict | Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused): accept as satisfied? |
+| Q-008 | open | none | verdict | Criterion C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list): accept as satisfied? |
+| Q-009 | open | none | verdict | Criterion C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file): accept as s |
+| Q-010 | open | none | verdict | Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form): accept as  |
+| Q-011 | open | none | verdict | Criterion C-0a8c70b3 (web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered): accept as satisfied? |
+| Q-012 | open | none | verdict | Criterion C-62f4785e (web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows): accept as satisfied? |
+| Q-013 | open | none | verdict | Criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail): accept as satisfied? |
+| Q-014 | open | none | verdict | Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied? |
+| Q-015 | open | none | verdict | Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off): accept as satisfied |
+| Q-016 | open | none | verdict | Hold H-ecf0d557: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table |
+| Q-017 | open | none | verdict | Hold H-5a58c421: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table |
+| Q-018 | open | none | verdict | Hold H-4adb729f: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table |
+| Q-019 | open | none | verdict | Hold H-b2d28b5d: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table |
+| Q-020 | open | none | verdict | Hold H-6a1a6ad5: UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table |
+| Q-021 | open | none | verdict | Hold H-21f75d66: UI criterion C-5d82c84b has no end-to-end test; see the generated UI tests table |
+| Q-022 | open | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
 <!-- l4:index:end -->
 
 ---
@@ -193,3 +214,596 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: The three servers-call tests pin behaviour the base parser already has, which is what the unit intends: design decision 2 says the servers parser needs no change because parseHttp(undefined) is null and unknown members such as call are ignored, and task 2.2 says servers-call.test.ts is green on arrival and that the resulting pre_satisfied question for C-0f038efb is to be accepted once the tests assert the rows. They do: the two parseToolServer tests build S_MCP and S_CODE as test-plan.md § Servers gives them, assert the exact tool records with http null and their own flags, the "—" Call of toolRows, and null for the surface tool whose http is { method: "POST" }; the cursorPageFetcher test reads the page [S_FIX, S_MCP, S_CODE] and asserts the ids acme, crm, snips with next_cursor null. The other test file of the patch, grant-node-bound.test.ts, is not held because grants.ts still carries the two 1024 limits, so its tests fail against the base as the task requires. Count these on the evidence of the real run.
+
+---
+
+## Q-002: Criterion C-a7a348b2 (web-runs › A stale validation has its own text in the test-run and dry-run panels › A stale version reads as one message in both panels): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-a7a348b2 (web-runs › A stale validation has its own text in the test-run and dry-run panels › A stale version reads as one message in both panels)
+
+### Context
+Criterion C-a7a348b2 (web-runs › A stale validation has its own text in the test-run and dry-run panels › A stale version reads as one message in both panels) is needs human after round 2.
+
+Scenario:
+\- **WHEN** `staleVersionText`, `testRunFormErrors` and `dryRunFormErrors` run on the rows of test-plan.md § Stale
+\- **THEN** the stale details give the text and the other values `null`; both form-error functions give `{ $form: STALE }` for the stale refusal and the existing blocks text for the `block_missing` one
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: web.src.runs.stale.test.ts::C-a7a348b2 dryRunFormErrors reads a stale refusal as one message (passed, red_assertion); web.src.runs.stale.test.ts::C-a7a348b2 staleVersionText gives the text for a stale version and null otherwise (passed, red_assertion); web.src.runs.stale.test.ts::C-a7a348b2 testRunFormErrors reads a stale refusal as one message (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-003: Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix)
+
+### Context
+Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix) is needs human after round 2.
+
+Scenario:
+\- **WHEN** the rows M1 to M3, P1 to P3, O1, O2, C1 to C3, R1 and R2 of test-plan.md § Drafts run
+\- **THEN** M1 gives its body from a padded draft, P1 the origin `https://tools.fake.test` from `https://Tools.Fake.Test/`, O1 an overlay of two entries from three effects, C1 one tool without `description` and C3 with it; R1 and R2 the bodies of the PUT routes; every other row gives its `field` and text; the first failing field wins (P3, O2); no draft is changed
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: web.src.tools.register.test.ts::C-3ad08589 codeRegistration builds one tool without a description and one with it (passed, red_assertion); web.src.tools.register.test.ts::C-3ad08589 codeRegistration refuses the input before the output schema (passed, red_assertion); web.src.tools.register.test.ts::C-3ad08589 codeReplacement checks the schemas and refuses a server id off the pattern (passed, red_assertion); web.src.tools.register.test.ts::C-3ad08589 mcpRegistration builds the trimmed MCP body and refuses the id before the url (passed, red_assertion); web.src.tools.register.test.ts::C-3ad08589 mcpRegistration keeps a local http address as typed (passed, red_assertion); web.src.tools.register.test.ts::C-3ad08589 no builder changes the draft it is given (passed, red_assertion); web.src.tools.register.test.ts::C-3ad08589 openApiRegistration builds the overlay of the chosen effects and refuses the first failing field (passed, red_assertion); web.src.tools.register.test.ts::C-3ad08589 openApiReplacement checks the document and overlay and ignores the origin (passed, red_assertion); web.src.tools.register.test.ts::C-3ad08589 previewRequest sends the origin it parses and the document, refusing origin first (passed, red_assertion); web.src.tools.register.test.ts::C-3ad08589 the replacement builders build the PUT bodies and refuse a bad server id (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Criterion C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals)
+
+### Context
+Criterion C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals) is needs human after round 2.
+
+Scenario:
+\- **WHEN** `parsePreview` gets `PV` and the 8 malformed values, and rows K1 to K6 and E1 to E4 of test-plan.md § Preview, calls and answers run
+\- **THEN** `PV` gives three rows with their `name`, without `version`, and stays unchanged, each malformed value `null`; K1 to K6 give the plan's records, ids (K2 `{ id: "crm" }` from the MCP answer's `server`), effects, drafts, `RangeError`s and `INVALID_RESPONSE` rejections; E1 to E4 give the plan's form errors (E2 `source` and `name` from `body/tools/<i>/<k>`, E4 the sentence of each of the 14 reasons, an unknown one unchanged, the 413 text)
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: web.src.tools.register-calls.test.ts::C-a4971512 codeDraftOf reads one code tool and refuses any other surface (passed, red_assertion); web.src.tools.register-calls.test.ts::C-a4971512 loadCodeDraft reads the server and prefers the pending surface (passed, red_assertion); web.src.tools.register-calls.test.ts::C-a4971512 parsePreview reads the operations without the version and refuses malformed previews (passed, red_assertion); web.src.tools.register-calls.test.ts::C-a4971512 prefillEffects maps each non-excluded operation to its tool effect (passed, red_assertion); web.src.tools.register-calls.test.ts::C-a4971512 previewOperations posts the preview and refuses another path and an unreadable answer (passed, red_assertion); web.src.tools.register-calls.test.ts::C-a4971512 registerServer posts under the key and reads the id from the server for MCP (passed, red_assertion); web.src.tools.register-calls.test.ts::C-a4971512 registerServer refuses unreadable answers a blank key and another path (passed, red_assertion); web.src.tools.register-calls.test.ts::C-a4971512 registrationFormErrors maps the conflict and the named validation fields (passed, red_assertion); web.src.tools.register-calls.test.ts::C-a4971512 registrationFormErrors puts an unknown field and a forbidden answer on the form (passed, red_assertion); web.src.tools.register-calls.test.ts::C-a4971512 registrationFormErrors reads every engine reason and the payload text (passed, red_assertion); web.src.tools.register-calls.test.ts::C-a4971512 replaceServer puts a replacement and refuses an unreadable answer and a registration request (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fi
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fixed)
+
+### Context
+Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fixed) is needs human after round 2.
+
+Scenario:
+\- **WHEN** `parseCredential` gets `CREC()`, the hostile record with `value` and `secret` and the 8 malformed values, and rows B1, B2, T1 and T2 of test-plan.md § Credentials run
+\- **THEN** the views are `CV()`, `CV()` (its `JSON.stringify` has no `s3cr3t`) and `null`; B1 and B2 give the plan's bodies, refusals (`VAL_T` never holding `s3`) and `RangeError`; T1 and T2 give the plan's texts, among them "Code blocks need no credential." for a code-block server whatever is stored
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: web.src.tools.credentials.test.ts::C-9153e19d credentialBody builds the bearer and API key bodies (passed, red_assertion); web.src.tools.credentials.test.ts::C-9153e19d credentialBody refuses the header before the value and a bad server id (passed, red_assertion); web.src.tools.credentials.test.ts::C-9153e19d credentialErrors maps the conflict, the code-block refusal, the vault and the fields (passed, red_assertion); web.src.tools.credentials.test.ts::C-9153e19d credentialText says when a credential is missing or stored and a code block needs none (passed, red_assertion); web.src.tools.credentials.test.ts::C-9153e19d parseCredential reads the five members and never a secret (passed, red_assertion); web.src.tools.credentials.test.ts::C-9153e19d parseCredential refuses the malformed records (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-006: Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body): accept as satisfie
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body)
+
+### Context
+Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body) is needs human after round 2.
+
+Scenario:
+\- **WHEN** rows L1, L2, S1 and S2 of test-plan.md § Credentials run against a recording fake (S2 rotates with the scheme)
+\- **THEN** L1 resolves `CV()` over two requests; L2, S1 and S2 give the plan's results, records and rejections (`INVALID_RESPONSE` also after exactly 50 requests); no record or message holds a secret except the bodies of S1 and S2
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: web.src.tools.credentials-calls.test.ts::C-29e43442 loadServerCredential pages the list and resolves the first credential of the server (passed, red_assertion); web.src.tools.credentials-calls.test.ts::C-29e43442 loadServerCredential resolves null and refuses unreadable pages, a forbidden list and a bad id (passed, red_assertion); web.src.tools.credentials-calls.test.ts::C-29e43442 rotateServerCredential sends the value and scheme and refuses a bad id, a bad value and an unreadable answer (passed, red_assertion); web.src.tools.credentials-calls.test.ts::C-29e43442 storeCredential posts the body under the key and refuses a blank key, a non-object body and an unreadable answer (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-007: Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused)
+
+### Context
+Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused) is needs human after round 2.
+
+Scenario:
+\- **WHEN** `parseGrant` and `grantBody` run on the rows of test-plan.md § Step ids
+\- **THEN** `ID128` gives its scope and body (also with spaces around it); `ID129` and `ID1024` give `null` and `{ ok: false, field: "nodeId", … }`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: web.src.tools.grant-node-bound.test.ts::C-a714f000 grantBody accepts a step id of 128 characters and refuses 129 and 1024 (passed, red_assertion); web.src.tools.grant-node-bound.test.ts::C-a714f000 parseGrant accepts a step id of 128 characters and refuses 129 and 1024 (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-008: Criterion C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list)
+
+### Context
+Criterion C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list) is needs human after round 2.
+
+Scenario:
+\- **WHEN** `parseToolServer` runs on `S_MCP`, `S_CODE` and the malformed `S_MCP` of test-plan.md § Servers, and `cursorPageFetcher` reads the page `[S_FIX, S_MCP, S_CODE]`
+\- **THEN** the tools of `S_MCP` and `S_CODE` have `http: null`, their own flags and a "—" Call, the malformed one is `null`, and the page holds `acme`, `crm`, `snips` with `next_cursor` null
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: web.src.tools.servers-call.test.ts::C-0f038efb cursorPageFetcher lists servers of every adapter (passed, pre_satisfied, accepted by the delegate (claude-fable-5-1 via claude-code) through Q-001: the check was inconclusive); web.src.tools.servers-call.test.ts::C-0f038efb parseToolServer reads a tool with a call and no http as http null (passed, pre_satisfied, accepted by the delegate (claude-fable-5-1 via claude-code) through Q-001: the check was inconclusive); web.src.tools.servers-call.test.ts::C-0f038efb parseToolServer refuses a present http that is not a method and path (passed, pre_satisfied, accepted by the delegate (claude-fable-5-1 via claude-code) through Q-001: the check was inconclusive)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-009: Criterion C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file): accept as s
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file)
+
+### Context
+Criterion C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file) is needs human after round 2.
+
+Scenario:
+\- **WHEN** `tools/register-pages.test.ts` reads the constants, the feature file, a registry holding `TOOL_PAGES` and `REGISTER_PAGE`, and the sources of § Names
+\- **THEN** the constants are those of design § Messages (29 and 11 values), `featureLiterals` of the feature file is `null`, `visibleNav` for carol lists "Tool servers", "Grants", "Policies", every required token is present and no banned one
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: web.src.tools.register-pages.test.ts::C-2ec0cc21 the feature file has no navLabel and the nav lists the three tool pages (passed, red_assertion); web.src.tools.register-pages.test.ts::C-2ec0cc21 the new pages use the kit and keep the secret field a password (passed, red_assertion); web.src.tools.register-pages.test.ts::C-2ec0cc21 the registration constants hold the fixed names (passed, red_assertion); web.src.tools.register-pages.test.ts::C-2ec0cc21 the servers and grants pages carry the link, the sections and the note (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-010: Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form): accept as 
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form)
+
+### Context
+Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form) is needs human after round 2.
+
+Scenario:
+\- **WHEN** the steps of test-plan-browser.md § Register 1 run (an `http:` URL refused locally, the engine's 400 and 409 on the MCP form, a 201 for a changed URL, the detail of a code-block server)
+\- **THEN** the local refusal posts nothing; the 400 and 409 are field errors under one `Idempotency-Key` and the changed URL has another; the success lands on `?server=crm` ("No credential stored."); a code-block server's detail reads "Code blocks need no credential." with no form and no credential request
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: no verdict
+Tracing tests: none
+Ignored tests: test_m7_tool_registration::test_register_mcp_server_and_code_block_detail[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-011: Criterion C-0a8c70b3 (web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-0a8c70b3 (web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered)
+
+### Context
+Criterion C-0a8c70b3 (web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered) is needs human after round 2.
+
+Scenario:
+\- **WHEN** the steps of § Register 2 run (a 500 and then a preview of five operations, no effect, two effects and a 400 on the origin, then a 201)
+\- **THEN** the table "Operations" holds three rows with a combobox and two with "Excluded: …"; no effect posts nothing; the 400 shows under "Origin" with the overlay of two entries; the retry's 201 lands on `?server=ledger`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: no verdict
+Tracing tests: none
+Ignored tests: test_m7_tool_registration::test_register_openapi_preview_effects_and_retry[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-012: Criterion C-62f4785e (web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-62f4785e (web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows)
+
+### Context
+Criterion C-62f4785e (web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows) is needs human after round 2.
+
+Scenario:
+\- **WHEN** the steps of § Credential run on `crm` (the list 500, then two pages; a store refused 409 and accepted 201 echoing a `value`; a rotation 200)
+\- **THEN** nothing posts while the list failed; the 409 is an alert; the stored credential reads "Credential stored (key version 1)." with "Rotate credential" and the scheme controls pre-filled, then "(key version 2)" after a rotation that sends the scheme; after every answer the field is empty, page text and console never hold a secret, the store requests carry different keys and the rotation none
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: no verdict
+Tracing tests: none
+Ignored tests: test_m7_tool_registration::test_credential_stored_rotated_secret_never_shows[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-013: Criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail)
+
+### Context
+Criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail) is needs human after round 2.
+
+Scenario:
+\- **WHEN** the steps of § Replace run (an approved OpenAPI server: "Replace document", a pasted document and a preview, "Save changes"; an approved code-block server: "Edit code", a changed source, "Save changes")
+\- **THEN** `createPayment` is `pay` after the preview; the PUT bodies are the plan's; each save reads "Document replaced." or "Code saved." and the detail then reads "drifted"
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: no verdict
+Tracing tests: none
+Ignored tests: test_m7_tool_registration::test_replace_document_and_edit_code_from_detail[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-014: Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages)
+
+### Context
+Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages) is needs human after round 2.
+
+Scenario:
+\- **WHEN** the nine calls run against a recording fake as the frozen `calls.test.ts` runs them, and `loadToolRefs` runs on rows T1 and T2 of test-plan.md § Tool list
+\- **THEN** the records, results and rejections are those the frozen tests assert; T1 resolves `{ refs: ["acme.lookup_vendor@1", "acme.create_payment@1"], complete: true }` over two requests, and for a cursor that is never null T2 makes 100 requests and resolves `acme.t1@1` to `acme.t100@1` with `complete: false`
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: web.src.tools.calls.test.ts::C-78ea404d loadToolRefs returns the bound refs over two requests (passed, red_assertion); web.src.tools.calls.test.ts::C-78ea404d loadToolRefs stops after ten pages without failing (passed, red_assertion)
+Ignored tests: web.src.tools.calls.test.ts::C-78ea404d approveToolSurface posts the digest and reads the server (no proof that it discriminates (no red, audit or generated record)); web.src.tools.calls.test.ts::C-78ea404d approveToolSurface refuses an answer without a server and a bad id (no proof that it discriminates (no red, audit or generated record)); web.src.tools.calls.test.ts::C-78ea404d confirmGrantById posts an empty body and resolves with nothing (no proof that it discriminates (no red, audit or generated record)); web.src.tools.calls.test.ts::C-78ea404d deployPolicy posts the source under the key and returns the version (no proof that it discriminates (no red, audit or generated record)); web.src.tools.calls.test.ts::C-78ea404d loadPolicy gets the view and refuses an unreadable answer (no proof that it discriminates (no red, audit or generated record)); web.src.tools.calls.test.ts::C-78ea404d loadToolRefs refuses an unreadable item (no proof that it discriminates (no red, audit or generated record)); web.src.tools.calls.test.ts::C-78ea404d loadToolServer gets the server and reads the view (no proof that it discriminates (no red, audit or generated record)); web.src.tools.calls.test.ts::C-78ea404d loadToolServer passes the signal and refuses what it cannot read (no proof that it discriminates (no red, audit or generated record)); web.src.tools.calls.test.ts::C-78ea404d postGrant posts the body under the key and returns the id (no proof that it discriminates (no red, audit or generated record)); web.src.tools.calls.test.ts::C-78ea404d postGrant refuses a bad draft, a blank key and unreadable answers (no proof that it discriminates (no red, audit or generated record)); web.src.tools.calls.test.ts::C-78ea404d revokeGrantById deletes the grant and resolves with nothing (no proof that it discriminates (no red, audit or generated record)); web.src.tools.calls.test.ts::C-78ea404d validatePolicy posts the source and returns ok and problems (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-015: Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off): accept as satisfied
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off)
+
+### Context
+Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off) is needs human after round 2.
+
+Scenario:
+\- **WHEN** `loadToolRefs` and `toolListNote` run on rows T3 and T4 of test-plan.md § Tool list
+\- **THEN** T3 (the 100th page ends the list) is `complete: true` after 100 requests; T4 gives `{ refs: [], complete: true }`, the note and `null` of `toolListNote`, `INVALID_RESPONSE` for an unreadable item and the rethrown 500
+
+Why: the judge gave no verdict for this criterion
+Judge: no verdict
+Tracing tests: web.src.tools.refs.test.ts::C-5d82c84b an empty tool list is complete and only a cut list carries the note (passed, red_assertion); web.src.tools.refs.test.ts::C-5d82c84b loadToolRefs is complete when the hundredth page ends the list and refuses unreadable answers (passed, red_assertion)
+Ignored tests: none
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-016: Hold H-ecf0d557: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-0f038efb: not_testable after 2 attempt(s); The criterion’s decisive assertions are internal `parseToolServer`/`cursorPageFetcher` results (`http: null`, per-adapter flags, a "—" Call, malformed server `null`) not exposed through any named public page or endpoint; no route is given for the page holding `acme`, `crm`, `snips`, so the page f....
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-017: Hold H-5a58c421: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-e3ab2add: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_e3ab2add::test_mcp_registration_and_code_block_credential[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-018: Hold H-4adb729f: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-0a8c70b3: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_0a8c70b3::test_openapi_document_preview_effects_and_register[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-019: Hold H-b2d28b5d: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-62f4785e: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_62f4785e::test_credential_stored_rotated_secret_never_shows[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-020: Hold H-6a1a6ad5: UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-c3420a43: not_testable after 1 attempt(s); Cannot drive the WHEN steps: no route, server-list/detail page markup, or seed-approved-server fixture is provided to reach a server's replace page, and ReplaceSection.tsx source is truncated, so the save/preview flow and detail state cannot be addressed through a known public interface..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-021: Hold H-21f75d66: UI criterion C-5d82c84b has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-5d82c84b has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-5d82c84b: writer_failed after 1 attempt(s); no answer within 600s.
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-022: Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s)
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s)
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
