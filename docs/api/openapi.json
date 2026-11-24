@@ -988,6 +988,18 @@
               "schema": {
                 "additionalProperties": false,
                 "properties": {
+                  "authScheme": {
+                    "enum": [
+                      "API_KEY_HEADER",
+                      "BEARER_TOKEN"
+                    ],
+                    "type": "string"
+                  },
+                  "headerName": {
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "type": "string"
+                  },
                   "value": {
                     "maxLength": 4096,
                     "minLength": 1,

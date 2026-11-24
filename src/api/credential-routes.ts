@@ -91,7 +91,11 @@ const ROTATE_BODY = {
   type: "object",
   additionalProperties: false,
   required: ["value"],
-  properties: { value: VALUE },
+  properties: {
+    value: VALUE,
+    authScheme: { type: "string", enum: ["API_KEY_HEADER", "BEARER_TOKEN"] },
+    headerName: { type: "string", minLength: 1, maxLength: 64 },
+  },
 };
 
 const QUERY_SCHEMA = {
@@ -287,7 +291,18 @@ export function registerCredentialRoutes(server: FastifyInstance, deps: Credenti
       const vault = deps.vault;
       if (vault === null) throw vaultNotConfigured();
       const { id } = request.params as { id: string };
-      const body = request.body as { value: string };
+      const body = request.body as {
+        value: string;
+        authScheme?: VaultAuthScheme;
+        headerName?: string;
+      };
+      const change =
+        body.authScheme === undefined && body.headerName === undefined
+          ? undefined
+          : {
+              ...(body.authScheme === undefined ? {} : { authScheme: body.authScheme }),
+              ...(body.headerName === undefined ? {} : { headerName: body.headerName }),
+            };
       const domainDeps: CredentialDeps = {
         pool,
         vault,
@@ -295,7 +310,7 @@ export function registerCredentialRoutes(server: FastifyInstance, deps: Credenti
         clock: deps.clock,
       };
       return mapped(() =>
-        rotateCredential(domainDeps, tenant, id, body.value, actorOf(principal)),
+        rotateCredential(domainDeps, tenant, id, body.value, actorOf(principal), change),
       );
     },
   });
