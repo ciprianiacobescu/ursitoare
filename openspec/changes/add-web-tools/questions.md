@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 2.2 | harness | Task 2.2: the pre-satisfied check could not decide |
 | Q-002 | answered | none | verdict | Criterion C-a7a348b2 (web-runs › A stale validation has its own text in the test-run and dry-run panels › A stale version reads as one message in both panels): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf |
+| Q-003 | answered | none | verdict | Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf |
 | Q-004 | open | none | verdict | Criterion C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fi |
 | Q-006 | open | none | verdict | Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body): accept as satisfie |
@@ -252,7 +252,8 @@ accept The criterion is satisfied. staleVersionText returns the stale text only 
 
 ## Q-003: Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -279,6 +280,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. register.test.ts runs every row of test-plan.md § Drafts: M1 from the padded draft, M2 and M3, P1 with the lowercased origin, P2 and P3 with the origin failing before the document, O1 with the two-entry overlay, O2 with the id failing first, C1 without description and C3 with it, C2, R1 and R2 with the PUT paths and bodies, the RangeError for Ledger and a/b, and a final test that no builder changes any draft. The implementation checks the fields in the design's order with its texts, drops effects that are empty, omits a blank description and throws RangeError for a replacement id off the pattern. All ten tests passed by assertion.
 ---
 
 ## Q-004: Criterion C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals): accept as satisfied?
