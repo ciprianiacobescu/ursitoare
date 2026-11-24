@@ -301,7 +301,7 @@ export function ServersPage(): ReactNode {
           )}
         </Section>
       )}
-      {serverId === null || view === null ? null : (
+      {serverId === null || view === null || view.adapter === "fixture" ? null : (
         <CredentialSection serverId={serverId} adapter={view.adapter} />
       )}
       {serverId === null ? null : (
