@@ -234,8 +234,11 @@ test("C-78ea404d loadToolRefs returns the bound refs over two requests", async (
           next_cursor: "c1",
         },
   );
-  const refs = await settled(loadToolRefs(client));
-  assert.deepEqual(refs, ["acme.lookup_vendor@1", "acme.create_payment@1"]);
+  const list = await settled(loadToolRefs(client));
+  assert.deepEqual(list, {
+    refs: ["acme.lookup_vendor@1", "acme.create_payment@1"],
+    complete: true,
+  });
   assert.equal(records.length, 2);
   assert.deepEqual(records[0], ["get", "/blocks", undefined, { query: { limit: 100 } }]);
   assert.deepEqual(records[1], [
@@ -252,12 +255,13 @@ test("C-78ea404d loadToolRefs stops after ten pages without failing", async () =
     n += 1;
     return { items: [blk(`acme.t${n}@1`, true)], next_cursor: `c${n}` };
   });
-  const refs = await settled(loadToolRefs(client));
-  assert.equal(records.length, 10);
-  assert.equal(cursorOf(records[9]?.[3]), "c9");
-  assert.equal(refs.length, 10);
-  assert.equal(refs[0], "acme.t1@1");
-  assert.equal(refs[9], "acme.t10@1");
+  const list = await settled(loadToolRefs(client));
+  assert.equal(records.length, 100);
+  assert.equal(cursorOf(records[99]?.[3]), "c99");
+  assert.deepEqual(list, {
+    refs: Array.from({ length: 100 }, (_value, i) => `acme.t${i + 1}@1`),
+    complete: false,
+  });
 });
 
 test("C-78ea404d loadToolRefs refuses an unreadable item", async () => {
