@@ -5,7 +5,7 @@ import { withTenantTx } from "../tenancy/index.ts";
 import type { TenantContext, TenantTx } from "../tenancy/index.ts";
 import { CredentialsError } from "./types.ts";
 import type { CredentialDeps, CredentialRecord } from "./types.ts";
-import { checkValue } from "./validate.ts";
+import { checkScheme, checkValue } from "./validate.ts";
 import { putVerified } from "./vault-call.ts";
 
 interface CredentialRow {
@@ -28,7 +28,7 @@ const SELECT_ROW = `SELECT credential_id, tool_server_id, mintkey_service_id, au
   FOR UPDATE`;
 
 const UPDATE_ROW = `UPDATE ursitoare.credential_ref
-  SET key_version = $3, rotated_at = $4
+  SET key_version = $3, rotated_at = $4, auth_scheme = $5, header_name = $6
   WHERE tenant_id = $1 AND credential_id = $2
   RETURNING credential_id, tool_server_id, mintkey_service_id, auth_scheme, header_name,
     target_origin, key_version, provisioned_by, provisioned_at, rotated_at`;
@@ -59,6 +59,7 @@ export async function rotateCredential(
   credentialId: string,
   value: string,
   actor: AuditEventInput["actor"],
+  change?: CredentialChange,
 ): Promise<CredentialRecord> {
   checkValue(value);
   return withTenantTx(deps.pool, ctx, async (tx: TenantTx) => {
@@ -67,11 +68,19 @@ export async function rotateCredential(
     if (row === undefined) {
       throw new CredentialsError("CREDENTIALS_NOT_FOUND", "credential not found", { credentialId });
     }
+    const authScheme = change?.authScheme ?? row.auth_scheme;
+    const headerName =
+      change?.headerName !== undefined
+        ? change.headerName
+        : authScheme === "API_KEY_HEADER"
+          ? row.header_name
+          : null;
+    checkScheme(authScheme, headerName);
     const { keyVersion } = await putVerified(deps, ctx, {
       serviceId: row.mintkey_service_id,
-      authScheme: row.auth_scheme,
+      authScheme,
       value: new TextEncoder().encode(value),
-      headerName: row.header_name,
+      headerName,
       callerActorId: actor.id,
       targetUrl: row.target_origin,
     });
@@ -81,6 +90,8 @@ export async function rotateCredential(
       credentialId,
       keyVersion,
       rotatedAt,
+      authScheme,
+      headerName,
     ]);
     const rotated = updated.rows[0];
     if (rotated === undefined) throw new Error("credential update returned no row");
@@ -91,7 +102,15 @@ export async function rotateCredential(
         eventType: "credentials.rotated",
         actor,
         target: { kind: "credential", id: credentialId },
-        payload: { serviceId: row.mintkey_service_id, keyVersion },
+        payload:
+          change === undefined
+            ? { serviceId: row.mintkey_service_id, keyVersion }
+            : {
+                serviceId: row.mintkey_service_id,
+                keyVersion,
+                authScheme,
+                headerName,
+              },
       },
       { clock: deps.clock },
     );

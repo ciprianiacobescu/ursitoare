@@ -43,23 +43,7 @@ export function checkProvision(input: {
   if (typeof input.toolServerId !== "string" || !SERVER_ID_PATTERN.test(input.toolServerId)) {
     throw invalid("toolServerId", "bad_value");
   }
-  if (typeof input.authScheme !== "string" || !SCHEMES.includes(input.authScheme)) {
-    throw invalid("authScheme", "bad_value");
-  }
-  const scheme = input.authScheme as VaultAuthScheme;
-  if (scheme === "API_KEY_HEADER") {
-    if (input.headerName === null || input.headerName === undefined) {
-      throw invalid("headerName", "required");
-    }
-    if (typeof input.headerName !== "string" || !HEADER_PATTERN.test(input.headerName)) {
-      throw invalid("headerName", "bad_value");
-    }
-    if (RESERVED_HEADERS.includes(input.headerName.toLowerCase())) {
-      throw invalid("headerName", "reserved");
-    }
-  } else if (input.headerName !== null && input.headerName !== undefined) {
-    throw invalid("headerName", "not_allowed");
-  }
+  checkScheme(input.authScheme, input.headerName);
   checkValue(input.value);
   if (
     input.serviceId !== undefined &&
@@ -69,6 +53,22 @@ export function checkProvision(input: {
   }
 }
 
-export function checkScheme(_authScheme: unknown, _headerName: unknown): void {
-  throw new Error("not implemented");
+export function checkScheme(authScheme: unknown, headerName: unknown): void {
+  if (typeof authScheme !== "string" || !SCHEMES.includes(authScheme)) {
+    throw invalid("authScheme", "bad_value");
+  }
+  const scheme = authScheme as VaultAuthScheme;
+  if (scheme === "API_KEY_HEADER") {
+    if (headerName === null || headerName === undefined) {
+      throw invalid("headerName", "required");
+    }
+    if (typeof headerName !== "string" || !HEADER_PATTERN.test(headerName)) {
+      throw invalid("headerName", "bad_value");
+    }
+    if (RESERVED_HEADERS.includes(headerName.toLowerCase())) {
+      throw invalid("headerName", "reserved");
+    }
+  } else if (headerName !== null && headerName !== undefined) {
+    throw invalid("headerName", "not_allowed");
+  }
 }

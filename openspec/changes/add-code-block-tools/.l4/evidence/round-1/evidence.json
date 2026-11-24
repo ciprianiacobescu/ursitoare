@@ -1,0 +1,374 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "body/tools/<i>/source",
+      "src/main.ts",
+      "src/pdp/platform.ts:8-10",
+      "body/tools/0/effect",
+      "src/tools/index.ts",
+      "src/authoring/index.ts",
+      "src/runtimes/index.ts",
+      "src/api/index.ts",
+      "docs/api/openapi.json",
+      "src/main.credentials.test.ts",
+      "src/main.conventions.test.ts",
+      "src/api/tool-server-routes.test.ts",
+      "src/credentials/schema.test.ts",
+      "src/credentials/rotate.test.ts",
+      "src/credentials/provision.test.ts",
+      "src/authoring/validate/code-source.test.ts",
+      "src/authoring/validate/code-source.ts",
+      "src/tools/code/register.test.ts",
+      "src/tools/code/register.db.test.ts",
+      "src/tools/code/register.ts",
+      "src/runtimes/invoke/code.test.ts",
+      "src/runtimes/invoke/code-block.db.test.ts",
+      "src/runtimes/invoke/code.ts",
+      "src/credentials/provision-code-block.test.ts",
+      "src/api/credential-refusal.test.ts",
+      "src/credentials/types.ts",
+      "src/credentials/provision.ts",
+      "src/api/credential-routes.ts",
+      "src/credentials/rotate-scheme.test.ts",
+      "src/api/credential-rotate-scheme.test.ts",
+      "src/db/migrations/0550_credential_scheme.sql",
+      "src/credentials/validate.ts",
+      "src/credentials/rotate.ts",
+      "src/api/code-block-routes.test.ts",
+      "src/api/code-block-routes.ts",
+      "src/main.codeblocks.test.ts",
+      "**/register.ts",
+      "**/rotate.ts",
+      "**/validate.ts",
+      "**/vault.ts",
+      "**/[",
+      "**/index.ts",
+      "**/l1.ts",
+      "module api",
+      "module authoring",
+      "module body",
+      "module config",
+      "module credentials",
+      "module db",
+      "module docs",
+      "module main",
+      "module main.codeblocks.test",
+      "module main.conventions.test",
+      "module main.credentials.test",
+      "module pdp",
+      "module runtimes",
+      "module tools"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "docs/api/openapi.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-block-tools/.l4/ledger/r-20261123T2052Z-a278.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-block-tools/.l4/ledger/r-20261123T2308Z-9bd2.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-block-tools/.l4/ledger/r-20261123T2332Z-65e6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-block-tools/.l4/ledger/r-20261124T0148Z-a436.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-block-tools/.l4/ledger/r-20261124T0404Z-afe1.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-block-tools/.l4/ledger/r-20261124T0634Z-0e03.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-block-tools/.l4/ledger/r-20261124T0721Z-f179.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-block-tools/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-code-block-tools/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/code-block-routes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/code-block-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/credential-refusal.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/credential-rotate-scheme.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/api/credential-routes.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/index.ts",
+        "module": "api",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/api/people-openapi.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "imports no module of the repository"
+      },
+      {
+        "path": "src/authoring/index.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/authoring/validate/code-source.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/authoring/validate/code-source.ts",
+        "module": "authoring",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/provision-code-block.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/credentials/provision.ts",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/rotate-scheme.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/credentials/rotate.ts",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/types.ts",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/credentials/validate.ts",
+        "module": "credentials",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/db/migrations/0550_credential_scheme.sql",
+        "module": "db",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.codeblocks.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/main.conventions.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/main.ts",
+        "module": "main",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runtimes/index.ts",
+        "module": "runtimes",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/runtimes/invoke/code-block.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runtimes/invoke/code.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/runtimes/invoke/code.ts",
+        "module": "runtimes",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/code/register.db.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/code/register.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tools/code/register.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tools/index.ts",
+        "module": "tools",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/code-block-routes.ts, src/api/credential-routes.ts, src/api/index.ts, src/authoring/index.ts, src/authoring/validate/code-source.ts and 9 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/code-block-routes.ts",
+      "src/api/credential-routes.ts",
+      "src/api/index.ts",
+      "src/authoring/index.ts",
+      "src/authoring/validate/code-source.ts",
+      "src/credentials/provision.ts",
+      "src/credentials/rotate.ts",
+      "src/credentials/types.ts",
+      "src/credentials/validate.ts",
+      "src/main.ts",
+      "src/runtimes/index.ts",
+      "src/runtimes/invoke/code.ts",
+      "src/tools/code/register.ts",
+      "src/tools/index.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 3133,
+      "passed": 3133,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 32,
+      "new_passed": 32,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

@@ -15,6 +15,8 @@ export type { BlockApiDeps } from "./block-routes.ts";
 export { registerBlockRoutes } from "./block-routes.ts";
 export type { ToolServerApiDeps } from "./tool-server-routes.ts";
 export { registerToolServerRoutes } from "./tool-server-routes.ts";
+export type { CodeBlockApiDeps } from "./code-block-routes.ts";
+export { registerCodeBlockRoutes } from "./code-block-routes.ts";
 export type { OpenApiToolApiDeps } from "./openapi-tool-routes.ts";
 export { registerOpenApiToolRoutes } from "./openapi-tool-routes.ts";
 export type { McpToolApiDeps } from "./mcp-tool-routes.ts";
