@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 2.2 | harness | Task 2.2: the pre-satisfied check could not decide |
+| Q-001 | answered | 2.2 | harness | Task 2.2: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 2.2: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 2.2
 - **Kind:** harness
 - **Asked:** 2026-11-24T14:51Z by claude-sonnet, run r-20261124T1311Z-f4b6, task 2.2
@@ -191,3 +192,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: The three servers-call tests pin behaviour the base parser already has, which is what the unit intends: design decision 2 says the servers parser needs no change because parseHttp(undefined) is null and unknown members such as call are ignored, and task 2.2 says servers-call.test.ts is green on arrival and that the resulting pre_satisfied question for C-0f038efb is to be accepted once the tests assert the rows. They do: the two parseToolServer tests build S_MCP and S_CODE as test-plan.md § Servers gives them, assert the exact tool records with http null and their own flags, the "—" Call of toolRows, and null for the surface tool whose http is { method: "POST" }; the cursorPageFetcher test reads the page [S_FIX, S_MCP, S_CODE] and asserts the ids acme, crm, snips with next_cursor null. The other test file of the patch, grant-node-bound.test.ts, is not held because grants.ts still carries the two 1024 limits, so its tests fail against the base as the task requires. Count these on the evidence of the real run.
