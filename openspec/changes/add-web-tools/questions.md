@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | answered | 2.2 | harness | Task 2.2: the pre-satisfied check could not decide |
 | Q-002 | answered | none | verdict | Criterion C-a7a348b2 (web-runs › A stale validation has its own text in the test-run and dry-run panels › A stale version reads as one message in both panels): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf |
-| Q-004 | open | none | verdict | Criterion C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fi |
 | Q-006 | open | none | verdict | Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body): accept as satisfie |
 | Q-007 | open | none | verdict | Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused): accept as satisfied? |
@@ -285,7 +285,8 @@ accept The criterion is satisfied. register.test.ts runs every row of test-plan.
 
 ## Q-004: Criterion C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -312,6 +313,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. register-calls.test.ts parses PV into three rows with their names and no version, checks PV unchanged and the nine malformed values null; runs K1 to K6 with a recording fake and asserts the records, the id crm read from the MCP answer's server, the INVALID_RESPONSE and RangeError rejections with no records, the prefilled effects and the code drafts with the pending surface preferred; and runs E1 to E4, including the source and name fields read from body/tools/<i>/<k>, all 14 REGISTER_REASONS sentences, the unknown reason ipv6 unchanged and the 413 text. The implementation matches each of these. All eleven tests passed by assertion.
 ---
 
 ## Q-005: Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fi
