@@ -1,0 +1,214 @@
+diff --git a/web/src/tools/grant-node-bound.test.ts b/web/src/tools/grant-node-bound.test.ts
+new file mode 100644
+index 0000000..e163cdb
+--- /dev/null
++++ b/web/src/tools/grant-node-bound.test.ts
+@@ -0,0 +1,61 @@
++/// <reference types="node" />
++import assert from "node:assert/strict";
++import { test } from "node:test";
++
++import { grantBody, parseGrant, type GrantDraft } from "./grants.ts";
++
++const ID128 = "a" + "b".repeat(127);
++const ID129 = ID128 + "b";
++const ID1024 = "a" + "b".repeat(1023);
++
++function rec(nodeId: string): Record<string, unknown> {
++  return {
++    grant: {
++      id: "grant_1",
++      subject: { kind: "role", role: "author" },
++      tool: "acme.create_payment@1",
++      scope: { kind: "node", flowId: "pay-run", nodeId },
++      args: [],
++    },
++    status: "active",
++  };
++}
++
++function draft(nodeId: string): GrantDraft {
++  return {
++    subjectKind: "role",
++    subject: "author",
++    tool: "acme.create_payment@1",
++    scopeKind: "node",
++    flowId: "pay-run",
++    nodeId,
++  };
++}
++
++const STEP_TEXT =
++  "A step id is lowercase letters, digits and underscores, starting with a letter.";
++
++function body128(): unknown {
++  return {
++    subject: { kind: "role", role: "author" },
++    tool: "acme.create_payment@1",
++    scope: { kind: "node", flowId: "pay-run", nodeId: ID128 },
++    args: [],
++  };
++}
++
++test("C-a714f000 parseGrant accepts a step id of 128 characters and refuses 129 and 1024", () => {
++  const ok = parseGrant(rec(ID128));
++  assert.ok(ok !== null);
++  assert.equal(ok.scope, `pay-run / ${ID128}`);
++  assert.equal(parseGrant(rec(ID129)), null);
++  assert.equal(parseGrant(rec(ID1024)), null);
++});
++
++test("C-a714f000 grantBody accepts a step id of 128 characters and refuses 129 and 1024", () => {
++  assert.deepEqual(grantBody(draft(ID128)), { ok: true, body: body128() });
++  assert.deepEqual(grantBody(draft(" " + ID128 + " ")), { ok: true, body: body128() });
++  const refusal = { ok: false, field: "nodeId", message: STEP_TEXT };
++  assert.deepEqual(grantBody(draft(ID129)), refusal);
++  assert.deepEqual(grantBody(draft(ID1024)), refusal);
++});
+diff --git a/web/src/tools/servers-call.test.ts b/web/src/tools/servers-call.test.ts
+new file mode 100644
+index 0000000..317a0da
+--- /dev/null
++++ b/web/src/tools/servers-call.test.ts
+@@ -0,0 +1,141 @@
++/// <reference types="node" />
++import assert from "node:assert/strict";
++import { test } from "node:test";
++
++import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
++import { parseToolServer, toolRows } from "./servers.ts";
++
++const IO = { type: "object" };
++
++function server(
++  id: string,
++  adapter: string,
++  origin: string,
++  tool: { name: string; effect: string },
++  pendingSurface?: unknown,
++): Record<string, unknown> {
++  return {
++    id,
++    adapter,
++    origin,
++    local: false,
++    state: "pending",
++    registeredBy: "u_carol",
++    registeredAt: "2026-11-09T10:00:00.000000Z",
++    approvedDigest: null,
++    pendingDigest: "sha256:" + "b".repeat(64),
++    pendingSubmittedBy: "u_carol",
++    tools: [{ name: tool.name, effect: tool.effect, ref: null }],
++    approvedSurface: null,
++    ...(pendingSurface === undefined ? {} : { pendingSurface }),
++  };
++}
++
++function mcpTool(extra: Record<string, unknown> = {}): Record<string, unknown> {
++  return {
++    name: "find_vendor",
++    effect: "write",
++    input: IO,
++    output: IO,
++    untrusted_result: true,
++    unsafe_to_retry: true,
++    call: {
++      kind: "mcp",
++      endpoint: "/mcp",
++      name: "find_vendor",
++      protocolVersion: "2026-07-28",
++      output: "structured",
++      hints: { readOnly: true },
++    },
++    ...extra,
++  };
++}
++
++const S_FIX = server("acme", "fixture", "https://tools.fake.test", {
++  name: "lookup_vendor",
++  effect: "read",
++});
++const S_MCP = server(
++  "crm",
++  "mcp",
++  "https://mcp.fake.test",
++  { name: "find_vendor", effect: "write" },
++  { tools: [mcpTool()] },
++);
++const S_CODE = server(
++  "snips",
++  "code_block",
++  "sandbox",
++  { name: "word_count", effect: "read" },
++  {
++    tools: [
++      {
++        name: "word_count",
++        effect: "read",
++        input: IO,
++        output: IO,
++        untrusted_result: false,
++        unsafe_to_retry: false,
++        call: { kind: "code", source: "return {};" + " ".repeat(65526) },
++      },
++    ],
++  },
++);
++
++test("C-0f038efb parseToolServer reads a tool with a call and no http as http null", () => {
++  const mcp = parseToolServer(S_MCP);
++  assert.ok(mcp !== null);
++  assert.deepEqual(mcp.tools, [
++    {
++      name: "find_vendor",
++      effect: "write",
++      ref: null,
++      untrusted_result: true,
++      unsafe_to_retry: true,
++      http: null,
++    },
++  ]);
++  assert.deepEqual(toolRows(mcp).map((r) => r.call), ["—"]);
++  const code = parseToolServer(S_CODE);
++  assert.ok(code !== null);
++  assert.deepEqual(code.tools, [
++    {
++      name: "word_count",
++      effect: "read",
++      ref: null,
++      untrusted_result: false,
++      unsafe_to_retry: false,
++      http: null,
++    },
++  ]);
++  assert.deepEqual(toolRows(code).map((r) => r.call), ["—"]);
++});
++
++test("C-0f038efb parseToolServer refuses a present http that is not a method and path", () => {
++  const bad = server(
++    "crm",
++    "mcp",
++    "https://mcp.fake.test",
++    { name: "find_vendor", effect: "write" },
++    { tools: [mcpTool({ http: { method: "POST" } })] },
++  );
++  assert.equal(parseToolServer(bad), null);
++});
++
++test("C-0f038efb cursorPageFetcher lists servers of every adapter", async () => {
++  const client = {
++    get: (): Promise<never> =>
++      Promise.resolve({ items: [S_FIX, S_MCP, S_CODE], next_cursor: null } as never),
++  };
++  const fetchPage = cursorPageFetcher(client, "/tool-servers", { parseItem: parseToolServer });
++  const page = await fetchPage({
++    cursor: null,
++    limit: 50,
++    signal: new AbortController().signal,
++  });
++  assert.deepEqual(
++    page.items.map((s) => s.id),
++    ["acme", "crm", "snips"],
++  );
++  assert.equal(page.next_cursor, null);
++});
