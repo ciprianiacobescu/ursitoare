@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Criterion C-a7a348b2 (web-runs › A stale validation has its own text in the test-run and dry-run panels › A stale version reads as one message in both panels): accept as satisfied? |
 | Q-003 | answered | none | verdict | Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf |
 | Q-004 | answered | none | verdict | Criterion C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals): accept as satisfied? |
-| Q-005 | open | none | verdict | Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fi |
+| Q-005 | answered | none | verdict | Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fi |
 | Q-006 | open | none | verdict | Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body): accept as satisfie |
 | Q-007 | open | none | verdict | Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused): accept as satisfied? |
 | Q-008 | open | none | verdict | Criterion C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list): accept as satisfied? |
@@ -318,7 +318,8 @@ accept The criterion is satisfied. register-calls.test.ts parses PV into three r
 
 ## Q-005: Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fi
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -345,6 +346,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. credentials.test.ts asserts parseCredential gives CV() for CREC(), gives CV() for the hostile record with value and secret and that its JSON.stringify holds no s3cr3t, and gives null for the eight malformed values; credentialBody gives the B1 bodies, refuses the header before the value with HDR_T and the reserved text, refuses the three bad values with VAL_T holding no s3, accepts 4096 characters and throws RangeError for Crm; credentialText gives the four T1 texts including the code-block text whatever is stored; credentialErrors gives the T2 form errors. The implementation reads only the five members, checks the header for an API key only, omits headerName for a bearer token and never puts the value in a message. All six tests passed by assertion.
 ---
 
 ## Q-006: Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body): accept as satisfie
