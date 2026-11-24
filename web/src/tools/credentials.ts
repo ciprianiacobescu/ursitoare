@@ -128,28 +128,86 @@ export function credentialText(c: CredentialView | null, adapter: string): strin
   return `Credential stored (key version ${c.keyVersion}).`;
 }
 
+const PAGE_LIMIT = 200;
+const MAX_PAGES = 50;
+
+function invalidResponse(what: string): ApiRequestError {
+  return new ApiRequestError(200, "INVALID_RESPONSE", `Invalid ${what}`);
+}
+
 export async function loadServerCredential(
-  _api: Api<"get">,
-  _serverId: string,
-  _signal?: AbortSignal,
+  api: Api<"get">,
+  serverId: string,
+  signal?: AbortSignal,
 ): Promise<CredentialView | null> {
-  throw new Error("not implemented");
+  if (!SERVER_ID.test(serverId)) throw new RangeError("The server id is not valid.");
+  let cursor: string | undefined;
+  for (let page = 0; page < MAX_PAGES; page += 1) {
+    const query: Record<string, string | number> = { limit: PAGE_LIMIT };
+    if (cursor !== undefined) query["cursor"] = cursor;
+    const answer =
+      signal === undefined
+        ? await api.get<unknown>("/credentials", { query })
+        : await api.get<unknown>("/credentials", { query, signal });
+    if (!isRecord(answer)) throw invalidResponse("credential list");
+    const items = answer["items"];
+    const next = answer["next_cursor"];
+    if (!Array.isArray(items) || (next !== null && typeof next !== "string")) {
+      throw invalidResponse("credential list");
+    }
+    for (const item of items as unknown[]) {
+      const view = parseCredential(item);
+      if (view === null) throw invalidResponse("credential");
+      if (view.toolServerId === serverId) return view;
+    }
+    if (next === null) return null;
+    if (page === MAX_PAGES - 1) throw invalidResponse("credential list");
+    cursor = next;
+  }
+  return null;
 }
 
 export async function storeCredential(
-  _api: Api<"post">,
-  _body: unknown,
-  _key: string,
+  api: Api<"post">,
+  body: unknown,
+  key: string,
 ): Promise<CredentialView> {
-  throw new Error("not implemented");
+  if (!isRecord(body)) throw new RangeError("The credential body is not valid.");
+  if (key.trim() === "") throw new RangeError("The idempotency key is blank.");
+  const answer = await api.post<unknown>("/credentials", body, {
+    headers: { "Idempotency-Key": key },
+  });
+  const view = parseCredential(answer);
+  if (view === null) throw invalidResponse("credential");
+  return view;
 }
 
 export async function rotateServerCredential(
-  _api: Api<"post">,
-  _credentialId: string,
-  _draft: CredentialDraft,
+  api: Api<"post">,
+  credentialId: string,
+  draft: CredentialDraft,
 ): Promise<CredentialView> {
-  throw new Error("not implemented");
+  if (!CREDENTIAL_ID.test(credentialId)) throw new RangeError("The credential id is not valid.");
+  let headerName: string | null = null;
+  if (draft.authScheme === "API_KEY_HEADER") {
+    headerName = draft.headerName.trim();
+    if (headerName === "" || !HEADER_NAME.test(headerName)) {
+      throw new RangeError("The header name is not valid.");
+    }
+    if (RESERVED_HEADERS.includes(headerName.toLowerCase())) {
+      throw new RangeError("That header name is reserved.");
+    }
+  }
+  const value = draft.value;
+  if (value.length < 1 || value.length > MAX_VALUE || !VALUE.test(value)) {
+    throw new RangeError("The secret value is not valid.");
+  }
+  const body: Record<string, unknown> = { value, authScheme: draft.authScheme };
+  if (headerName !== null) body["headerName"] = headerName;
+  const answer = await api.post<unknown>(`/credentials/${credentialId}/rotate`, body);
+  const view = parseCredential(answer);
+  if (view === null) throw invalidResponse("credential");
+  return view;
 }
 
 export const CREDENTIAL_NAMES: Readonly<Record<string, string>> = {};
