@@ -142,11 +142,12 @@ function readGrantId(answer: unknown): string {
   return id;
 }
 
-const REF_PAGES = 10;
+const REF_PAGES = 100;
 
-export async function loadToolRefs(client: Api<"get">, signal?: AbortSignal): Promise<string[]> {
+export async function loadToolRefs(client: Api<"get">, signal?: AbortSignal): Promise<ToolRefs> {
   const refs: string[] = [];
   let cursor: string | undefined;
+  let complete = true;
   for (let page = 0; page < REF_PAGES; page += 1) {
     const query: Record<string, string | number> = { limit: 100 };
     if (cursor !== undefined) query["cursor"] = cursor;
@@ -165,10 +166,16 @@ export async function loadToolRefs(client: Api<"get">, signal?: AbortSignal): Pr
       }
       if (item["bound"]) refs.push(item["ref"]);
     }
-    if (next === null) break;
+    if (next === null) {
+      complete = true;
+      break;
+    }
     cursor = next;
+    if (page === REF_PAGES - 1) {
+      complete = false;
+    }
   }
-  return refs;
+  return { refs, complete };
 }
 
 export async function postGrant(
@@ -200,6 +207,6 @@ export interface ToolRefs {
   complete: boolean;
 }
 
-export function toolListNote(_list: ToolRefs): string | null {
-  throw new Error("not implemented");
+export function toolListNote(list: ToolRefs): string | null {
+  return list.complete ? null : "Only the first 10,000 tools are listed.";
 }
