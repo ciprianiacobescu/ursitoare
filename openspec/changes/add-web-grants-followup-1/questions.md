@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-44e0e2c0 (web-tools › Server list keeps the old state after approve, replace or discovery — feedback FB-002 › Server list keeps the old state after approve, replace or discovery): accept a |
 | Q-002 | answered | none | verdict | Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied? |
-| Q-003 | open | none | verdict | Hold H-ca42fb4d: UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table |
+| Q-003 | answered | none | verdict | Hold H-ca42fb4d: UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-e57e62e0: UI criterion C-464ddcf9 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-cb78452d: UI criterion C-4f5443ee has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-966b3c99: UI criterion C-228ef9c6 has no end-to-end test; see the generated UI tests table |
@@ -93,7 +93,7 @@ accept This follow-up changes only stateNote's branch for a null pendingDigest (
 
 ## Q-003: Hold H-ca42fb4d: UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -112,6 +112,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept This follow-up changes only stateNote's branch for a null pendingDigest (servers.ts, 3 lines, proved by its own Node test and C-02e9d4e8) and the server list's useMemo dependency (ServersPage.tsx, 1 line, proved by the browser evidence for C-44e0e2c0). This criterion is a pure-function or source-file property, which the generator rightly found not testable in a browser. It is covered by its passing Node tests and, apart from stateNote's new branch, is not touched by this diff. The page renders correctly at head in the delegate's browser run.
 ---
 
 ## Q-004: Hold H-e57e62e0: UI criterion C-464ddcf9 has no end-to-end test; see the generated UI tests table
