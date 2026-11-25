@@ -159,3 +159,60 @@ def test_c_19381fcc_carol_creates_and_deletes_a_team(
     ).to_be_visible()
     expect(teams.get_by_role("row").filter(has_text="finance")).to_be_visible()
     assert_accessible(page)
+
+
+@pytest.mark.milestone("M2")
+@pytest.mark.l4("C-8c08d9f5")
+def test_c_8c08d9f5_alice_sees_only_the_not_allowed_panel_on_grants(
+    page: Page, fresh_state: None, users: dict[str, dict[str, str]]
+) -> None:
+    login(page, users["alice"])
+    requested: list[str] = []
+    page.on("request", lambda request: requested.append(request.url))
+
+    page.goto("/admin/grants")
+
+    alert = page.get_by_role("alert").filter(has_text="Not allowed")
+    expect(alert).to_be_visible()
+    expect(page.get_by_role("heading", name="Grants", exact=True)).to_have_count(0)
+    expect(page.get_by_role("region", name="New grant", exact=True)).to_have_count(0)
+    expect(page.get_by_role("table", name="Grants", exact=True)).to_have_count(0)
+    grants_calls = [
+        url
+        for url in requested
+        if "/api/v1/grants" in url or "/api/v1/blocks" in url
+    ]
+    assert grants_calls == [], grants_calls
+    assert_accessible(page)
+
+
+@pytest.mark.milestone("M2")
+@pytest.mark.l4("C-8c08d9f5")
+def test_c_8c08d9f5_carol_still_opens_the_grants_page(
+    page: Page, fresh_state: None, users: dict[str, dict[str, str]]
+) -> None:
+    login(page, users["carol"])
+
+    page.goto("/admin/grants")
+
+    expect(page.get_by_role("heading", name="Grants", exact=True)).to_be_visible()
+    expect(page.get_by_role("region", name="New grant", exact=True)).to_be_visible()
+    expect(page.get_by_role("alert").filter(has_text="Not allowed")).to_have_count(0)
+    assert_accessible(page)
+
+
+@pytest.mark.milestone("M2")
+@pytest.mark.l4("C-8c08d9f5")
+def test_c_8c08d9f5_alice_still_sends_the_users_request(
+    page: Page, fresh_state: None, users: dict[str, dict[str, str]]
+) -> None:
+    login(page, users["alice"])
+    requested: list[str] = []
+    page.on("request", lambda request: requested.append(request.url))
+
+    page.goto("/admin/users")
+
+    alert = page.get_by_role("alert").filter(has_text="Not allowed")
+    expect(alert).to_be_visible()
+    expect(alert).to_contain_text("Decision id:")
+    assert any("/api/v1/users" in url for url in requested), requested
