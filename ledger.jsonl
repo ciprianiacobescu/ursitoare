@@ -223,3 +223,5 @@
 {"at":"2026-11-25T12:05:38Z","by":"harness","reason":"the cause is gone: openspec:add-web-tool-journeys is awaiting_human","type":"plan.resumed"}
 {"at":"2026-11-25T12:05:39Z","attempt":1,"cost_usd":2.425876,"runs":2,"type":"plan.charged","unit":"openspec:add-web-tool-journeys"}
 {"at":"2026-11-25T12:05:39Z","run":"r-20261125T1205Z-ae40","type":"unit.dispatched","unit":"openspec:add-web-tool-journeys"}
+{"at":"2026-11-25T12:09:36Z","attempt":1,"cost_usd":3.792604,"runs":3,"type":"plan.charged","unit":"openspec:add-web-tool-journeys"}
+{"at":"2026-11-25T12:09:36Z","run":"r-20261125T1209Z-b177","type":"unit.dispatched","unit":"openspec:add-web-tool-journeys"}
