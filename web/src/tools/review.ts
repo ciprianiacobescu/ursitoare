@@ -1,7 +1,9 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
 import type { Api } from "../admin/shared.ts";
-import type { ToolServerView } from "./servers.ts";
+import { ApiRequestError } from "../api/client.ts";
+import { toolsErrorMessage } from "./messages.ts";
+import { parseToolServer, type ToolServerView } from "./servers.ts";
 
 export interface ReviewTool {
   name: string;
@@ -523,14 +525,39 @@ export function parseDiscovery(raw: unknown): {
   return { protocolVersion: version, era, count: list.length, excluded };
 }
 
+const SERVER_ID_PATTERN = /^[a-z][a-z0-9_]{0,31}$/;
+
+function checkServerId(serverId: string): void {
+  if (!SERVER_ID_PATTERN.test(serverId)) throw new RangeError("Invalid tool server id");
+}
+
+function checkDiscoverBody(body: unknown): void {
+  if (!isRecord(body)) throw new RangeError("Invalid discovery body");
+  if (!Object.hasOwn(body, "tools")) throw new RangeError("Invalid discovery body");
+  const tools = body["tools"];
+  if (!isRecord(tools)) throw new RangeError("Invalid discovery body");
+}
+
 export async function discoverTools(
-  _api: Api<"post">,
-  _serverId: string,
-  _body: unknown,
-  _key: string,
-  _signal?: AbortSignal,
+  api: Api<"post">,
+  serverId: string,
+  body: unknown,
+  key: string,
+  signal?: AbortSignal,
 ): Promise<NonNullable<ReturnType<typeof parseDiscovery>>> {
-  throw new Error("not implemented");
+  checkServerId(serverId);
+  if (key.trim() === "") throw new RangeError("Invalid idempotency key");
+  checkDiscoverBody(body);
+  const options: { headers: Record<string, string>; signal?: AbortSignal } = {
+    headers: { "Idempotency-Key": key },
+  };
+  if (signal !== undefined) options.signal = signal;
+  const answer = await api.post<unknown>(`/tool-servers/${serverId}/discover`, body, options);
+  const parsed = parseDiscovery(answer);
+  if (parsed === null) {
+    throw new ApiRequestError(200, "INVALID_RESPONSE", "Invalid discovery answer");
+  }
+  return parsed;
 }
 
 function leftOutName(name: string): string {
@@ -548,12 +575,91 @@ export function discoveryText(d: NonNullable<ReturnType<typeof parseDiscovery>>)
   return `${base} Left out: ${parts.join(", ")}`;
 }
 
-export function discoveryErrorText(_error: unknown): string {
-  throw new Error("not implemented");
+function excludedParts(v: unknown): string[] {
+  if (!Array.isArray(v)) return [];
+  const parts: string[] = [];
+  for (const item of v as unknown[]) {
+    if (!isRecord(item)) continue;
+    const name = member(item, "name");
+    const reason = member(item, "reason");
+    if (typeof name !== "string" || typeof reason !== "string") continue;
+    const why = reason === "description" ? "description dropped, tool kept" : reason;
+    parts.push(`${leftOutName(name)} (${why})`);
+  }
+  return parts;
 }
 
-export function collidingNames(_error: unknown): string[] {
-  throw new Error("not implemented");
+function detailsOf(error: unknown): Record<string, unknown> | null {
+  if (!(error instanceof ApiRequestError)) return null;
+  return isRecord(error.details) ? error.details : null;
+}
+
+function detailsReason(details: Record<string, unknown> | null): string | null {
+  if (details === null) return null;
+  const reason = details["reason"];
+  return typeof reason === "string" ? reason : null;
+}
+
+export function discoveryErrorText(error: unknown): string {
+  if (error instanceof ApiRequestError && error.status === 422 && error.code === "OPERATION_REFUSED") {
+    const details = detailsOf(error);
+    const reason = detailsReason(details);
+    switch (reason) {
+      case "credential_missing":
+        return "Store a credential for this server first. A server that needs no key still needs one: enter any text.";
+      case "discovery_denied":
+        return "Policy refused the discovery request.";
+      case "discovery_failed": {
+        const status = details === null ? undefined : details["status"];
+        if (status === "401" || status === "403") {
+          return "The server refused the stored credential. Rotate it, then discover again.";
+        }
+        return "The MCP server could not be reached, or it answered with an error.";
+      }
+      case "mcp_session_required":
+        return "The MCP server needs a stateful session, which Ursitoare does not support yet.";
+      case "no_tools": {
+        const base = "The MCP server lists no usable tools.";
+        const parts = excludedParts(details === null ? undefined : details["excluded"]);
+        return parts.length === 0 ? base : `${base} Left out: ${parts.join(", ")}`;
+      }
+      case "name_collision": {
+        const names = collidingNames(error);
+        if (names.length >= 2) {
+          return `Two server tools get the same tool name (${names.join(",")}): give one a tool name.`;
+        }
+        return "Two server tools get the same tool name: give one a tool name.";
+      }
+      default:
+        return toolsErrorMessage(error);
+    }
+  }
+  if (error instanceof ApiRequestError && error.status === 503 && error.code === "EGRESS_UNAVAILABLE") {
+    const reason = detailsReason(detailsOf(error));
+    if (reason === "discovery_not_configured") {
+      return "Discovery is not configured on this engine.";
+    }
+    if (reason === "gateway_unavailable") {
+      return "The egress gateway is unavailable. Try again.";
+    }
+  }
+  return toolsErrorMessage(error);
+}
+
+export function collidingNames(error: unknown): string[] {
+  if (!(error instanceof ApiRequestError) || error.status !== 422 || error.code !== "OPERATION_REFUSED") {
+    return [];
+  }
+  const details = detailsOf(error);
+  if (detailsReason(details) !== "name_collision" || details === null) return [];
+  const names = details["names"];
+  if (typeof names !== "string") return [];
+  const parts = names.split(",");
+  if (parts.length < 2) return [];
+  for (const name of parts) {
+    if (!MCP_NAME_PATTERN.test(name)) return [];
+  }
+  return parts;
 }
 
 export interface ServerReview {
@@ -563,11 +669,22 @@ export interface ServerReview {
 }
 
 export async function loadServerReview(
-  _api: Api<"get">,
-  _serverId: string,
-  _signal?: AbortSignal,
+  api: Api<"get">,
+  serverId: string,
+  signal?: AbortSignal,
 ): Promise<ServerReview> {
-  throw new Error("not implemented");
+  checkServerId(serverId);
+  const path = `/tool-servers/${serverId}`;
+  const answer =
+    signal === undefined ? await api.get<unknown>(path) : await api.get<unknown>(path, { signal });
+  const server = parseToolServer(answer);
+  if (server === null) {
+    throw new ApiRequestError(200, "INVALID_RESPONSE", "Invalid tool server");
+  }
+  const record = isRecord(answer) ? answer : {};
+  const approved = Object.hasOwn(record, "approvedSurface") ? record["approvedSurface"] : null;
+  const pending = Object.hasOwn(record, "pendingSurface") ? record["pendingSurface"] : null;
+  return { server, approved: approved ?? null, pending: pending ?? null };
 }
 
 export function callRows(tools: readonly ReviewTool[]): {
