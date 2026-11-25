@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | none | verdict | Finding F-130c464c: FB-001 browser scroll check still fails |
 | Q-003 | answered | none | verdict | Hold H-37094cb1: UI criterion C-2df1ce97 has no end-to-end test; see the generated UI tests table |
 | Q-004 | answered | none | verdict | Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table |
-| Q-005 | open | none | verdict | Hold H-bdd939da: UI criterion C-39bfdc20 has no end-to-end test; see the generated UI tests table |
+| Q-005 | answered | none | verdict | Hold H-bdd939da: UI criterion C-39bfdc20 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-cd993b33: UI criterion C-6bf9588b has no end-to-end test; see the generated UI tests table |
 | Q-007 | open | none | verdict | Hold H-636fd3aa: UI criterion C-aeec17be has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-3019b859: UI criterion C-f21e5186 has no end-to-end test; see the generated UI tests table |
@@ -131,7 +131,7 @@ accept This follow-up changes only the class of the Input and Output pre element
 
 ## Q-005: Hold H-bdd939da: UI criterion C-39bfdc20 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -150,6 +150,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept This follow-up changes only the class of the Input and Output pre elements (RunPage.tsx, 2 lines) and moves the wrapping rule onto .runs-payload (runs.css, 3 lines). This criterion's behaviour is untouched since add-run-view merged, and its Node test passes at head. The step-row views are internal helpers that are not observable as such in a browser (not_testable).
 ---
 
 ## Q-006: Hold H-cd993b33: UI criterion C-6bf9588b has no end-to-end test; see the generated UI tests table
