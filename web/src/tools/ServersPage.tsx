@@ -21,6 +21,7 @@ import { createCursorList } from "../kit/data/cursor-list.ts";
 import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
 import { CredentialSection } from "./CredentialSection.tsx";
 import { ReplaceSection } from "./ReplaceSection.tsx";
+import { ReviewSections } from "./ReviewSections.tsx";
 import { TOOL_NAMES, TOOL_TABLES, TOOL_TITLES, actionState, regionState } from "./pages.ts";
 import type { ActionPhase, RegionLoad } from "./pages.ts";
 import {
@@ -30,7 +31,6 @@ import {
   approveFailure,
   approveRequest,
   approveToolSurface,
-  loadToolServer,
   ownBoxShown,
   parseToolServer,
   serverIdFromSearch,
@@ -40,6 +40,8 @@ import {
   toolRows,
 } from "./servers.ts";
 import type { ToolServerView } from "./servers.ts";
+import { loadServerReview } from "./review.ts";
+import type { ServerReview } from "./review.ts";
 
 type ToolRow = ReturnType<typeof toolRows>[number];
 
@@ -67,7 +69,7 @@ export function ServersPage(): ReactNode {
   const session = useSession();
   const serverId = serverIdFromSearch(location.search);
 
-  const [detail, setDetail] = useState<RegionLoad<ToolServerView>>({ phase: "loading" });
+  const [detail, setDetail] = useState<RegionLoad<ServerReview>>({ phase: "loading" });
   const [reloadKey, setReloadKey] = useState(0);
   const [ticked, setTicked] = useState(false);
   const [ownSurface, setOwnSurface] = useState(false);
@@ -106,9 +108,9 @@ export function ServersPage(): ReactNode {
     const controller = new AbortController();
     setDetail({ phase: "loading" });
     setTicked(false);
-    void loadToolServer(browserSession.api, serverId, controller.signal).then(
-      (view) => {
-        if (!controller.signal.aborted) setDetail({ phase: "ready", value: view });
+    void loadServerReview(browserSession.api, serverId, controller.signal).then(
+      (review) => {
+        if (!controller.signal.aborted) setDetail({ phase: "ready", value: review });
       },
       (error: unknown) => {
         if (!controller.signal.aborted) setDetail({ phase: "error", error });
@@ -126,7 +128,10 @@ export function ServersPage(): ReactNode {
           reviewProfile: session.me.tenant.reviewProfile,
         }
       : null;
-  const view = detail.phase === "ready" ? detail.value : null;
+  const review = detail.phase === "ready" ? detail.value : null;
+  const view = review === null ? null : review.server;
+  const approvedSurface = review === null ? null : review.approved;
+  const pendingSurface = review === null ? null : review.pending;
   const names = useDisplayNames(view === null ? [] : [view.registeredBy]);
   const region = regionState(detail);
   const actionView = actionState(action);
@@ -309,6 +314,15 @@ export function ServersPage(): ReactNode {
           serverId={serverId}
           server={view}
           onSaved={() => setReloadKey((current) => current + 1)}
+        />
+      )}
+      {serverId === null ? null : (
+        <ReviewSections
+          serverId={serverId}
+          server={view}
+          approved={approvedSurface}
+          pending={pendingSurface}
+          onReload={() => setReloadKey((current) => current + 1)}
         />
       )}
     </div>

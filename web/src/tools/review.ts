@@ -709,4 +709,28 @@ export function readNote(tools: readonly ReviewTool[]): string | null {
   return tools.some((tool) => tool.effect === "read") ? READ_NOTE : null;
 }
 
-export const REVIEW_NAMES: Readonly<Record<string, string>> = {};
+export const REVIEW_NAMES: Readonly<Record<string, string>> = {
+  discovery: "Discovery",
+  discoverTools: "Discover tools",
+  toolSettings: "Tool settings",
+  serverTool: "Server tool",
+  serverHints: "Server hints",
+  toolName: "Tool name",
+  toolNameOf: "Tool name of ",
+  effect: "Effect",
+  proposed: "Proposed",
+  skip: "Skip",
+  effectOf: "Effect of ",
+  discoverAgainWithTheseSettings: "Discover again with these settings",
+  changes: "Changes",
+  noPendingSurfaceToCompare: "No pending surface to compare.",
+  noChanges: "No changes.",
+  surfaceCouldNotBeRead: "The surface could not be read.",
+  calls: "Calls",
+  tool: "Tool",
+  call: "Call",
+  retry: "Retry",
+  readToolsAreCalledForReal: "Read tools are called for real, even in a dry run. Check that each one changes nothing.",
+  result: "Result",
+  noCalls: "No calls",
+};
