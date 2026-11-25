@@ -217,3 +217,5 @@
 {"at":"2026-11-25T08:04:10Z","revision":"4115a87a201998e9e273eb30d53059588b1fe59f","type":"unit.integrated","unit":"openspec:add-web-tool-review"}
 {"at":"2026-11-25T08:04:10Z","attempt":1,"cost_usd":5.789506,"runs":5,"type":"plan.charged","unit":"openspec:add-web-tool-review"}
 {"at":"2026-11-25T08:06:03Z","branch":"l4/archive/openspec/add-web-tool-review","head":"be134e0f4e4ebb76170b578cd44cd4ce94cdc92f","type":"unit.branch_deleted","unit":"openspec:add-web-tool-review"}
+{"at":"2026-11-25T08:06:05Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-web-tool-journeys"}
+{"at":"2026-11-25T08:06:05Z","run":"r-20261125T0805Z-29d6","type":"unit.dispatched","unit":"openspec:add-web-tool-journeys"}
