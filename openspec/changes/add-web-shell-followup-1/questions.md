@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1 | ambiguous | Does the new client page gate supersede the existing server-403 page for every capability-gated feature, including /admin/users? |
 | Q-002 | answered | none | verdict | Criterion C-0daf92cd (web-shell › The shell is accessible and works for deep links › Deep link): accept as satisfied? |
-| Q-003 | open | none | verdict | Hold H-906ac7b8: UI criterion C-8c08d9f5 has no end-to-end test; see the generated UI tests table |
+| Q-003 | answered | none | verdict | Hold H-906ac7b8: UI criterion C-8c08d9f5 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-63c43a31: UI criterion C-ba861867 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-09eadad5: UI criterion C-61225ade has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-1e0bd82b: UI criterion C-383b59d1 has no end-to-end test; see the generated UI tests table |
@@ -95,7 +95,7 @@ accept The scenario text is stale: it names /flows, which became a real page in 
 
 ## Q-003: Hold H-906ac7b8: UI criterion C-8c08d9f5 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -114,6 +114,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Evidence (delegate, 2026-11-26): the unit's browser tests in e2e/test_m2_admin.py ran through the CI e2e build and stack in a node:24 container. At head cce8d752 all 7 passed in two runs. At base 6ef3fbd2, with head's test file, test_c_8c08d9f5_alice_sees_only_the_not_allowed_panel_on_grants FAILED: the Grants heading and the New grant form rendered behind the alert. The two guard tests (carol still opens Grants; alice still sends the /admin/users request) pass on both, as guards should. The head screenshots, looked at by the delegate, show alice on /admin/grants seeing only the Not allowed panel and sending no grants request, while /admin/users still shows the server's FORBIDDEN alert with a decision id and Copy decision id. The generated test for this criterion fails at head for a generator reason; the hand-written test above traces the criterion and discriminates.
 ---
 
 ## Q-004: Hold H-63c43a31: UI criterion C-ba861867 has no end-to-end test; see the generated UI tests table
