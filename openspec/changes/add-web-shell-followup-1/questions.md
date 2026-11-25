@@ -34,7 +34,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-021 | answered | none | verdict | Hold H-588fcaa4: UI criterion C-5752eaaf has no end-to-end test; see the generated UI tests table |
 | Q-022 | answered | none | verdict | Hold H-0dc1e5e8: UI criterion C-34823202 has no end-to-end test; see the generated UI tests table |
 | Q-023 | answered | none | verdict | Hold H-4d9dbae6: UI criterion C-abaa85a3 has no end-to-end test; see the generated UI tests table |
-| Q-024 | open | none | verdict | Hold H-24df25dc: UI criterion C-0daf92cd has no end-to-end test; see the generated UI tests table |
+| Q-024 | answered | none | verdict | Hold H-24df25dc: UI criterion C-0daf92cd has no end-to-end test; see the generated UI tests table |
 | Q-025 | answered | none | verdict | Hold H-696b9b0b: UI criterion C-b5ce03f4 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -599,7 +599,7 @@ accept This follow-up changes only App.tsx, which wraps each feature element in 
 
 ## Q-024: Hold H-24df25dc: UI criterion C-0daf92cd has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -618,6 +618,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept Same as Q-002: the 'Deep link' scenario names /flows (stale since /flows became a real page); the frozen deep-link test opens /no-such-page-deep-link and passes at head. This follow-up changes only App.tsx, which wraps each feature element in FeaturePage: an explicit SERVER_GATED_FEATURES list holds admin-users; the session loading state is shown; a ready session without the feature's capability gets the Not allowed panel. useSession reads the shared capabilityLoader, so no extra /me request is made. The full e2e gate passed at head, so every page's browser tests still pass behind the gate.
 ---
 
 ## Q-025: Hold H-696b9b0b: UI criterion C-b5ce03f4 has no end-to-end test; see the generated UI tests table
