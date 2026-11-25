@@ -23,7 +23,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-010 | open | none | verdict | Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form): accept as  |
 | Q-011 | open | none | verdict | Criterion C-0a8c70b3 (web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered): accept as satisfied? |
 | Q-012 | answered | none | verdict | Criterion C-62f4785e (web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows): accept as satisfied? |
-| Q-013 | open | none | verdict | Criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail): accept as satisfied? |
+| Q-013 | answered | none | verdict | Criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail): accept as satisfied? |
 | Q-014 | open | none | verdict | Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied? |
 | Q-015 | open | none | verdict | Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off): accept as satisfied |
 | Q-016 | open | none | verdict | Hold H-ecf0d557: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table |
@@ -580,7 +580,8 @@ accept The criterion is satisfied. CredentialSection keeps the store button busy
 
 ## Q-013: Criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -607,6 +608,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. ReplaceSection shows "Replace document" for an http_openapi server and "Edit code" for a code_block server in a kit Section named "Change registration". The document form has no Server id field, takes the origin from the server record, and after a preview sets the effects with prefillEffects over the server's tools, so createPayment reads pay from the tool create_payment and listVendors stays Skip. Save builds the PUT /tool-servers/<id>/openapi body with the document and an overlay that drops empty effects, which gives exactly the plan's body, then sets the status "Document replaced." and calls onSaved, which bumps the ServersPage reload key so the detail is read again and shows drifted. The code form loads the draft with loadCodeDraft, preferring the pending surface, and pre-fills the name, description, the two schemas as JSON.stringify(x, null, 2) and the source; Save builds PUT /tool-servers/<id>/code with one tool holding name, description, input, output and source, shows "Code saved." and reloads the detail. ReplaceSection stays mounted while the detail reloads, so the status survives. The repository's browser test implements the plan's § Replace steps and asserts the PUT bodies and the drifted summaries.
 ---
 
 ## Q-014: Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied?
