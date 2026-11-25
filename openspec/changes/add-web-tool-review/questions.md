@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.2 | technical | web/src/tools/review-diff.test.ts:227 expected diff omits removed log_note |
 | Q-002 | accepted | 2.1 | technical | web/src/tools/review-discover.test.ts:268 expected string omits the reason |
-| Q-003 | open | none | verdict | Criterion C-9da14d6e (web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-9da14d6e (web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied? |
 | Q-005 | open | none | verdict | Hold H-63664d16: UI criterion C-9da14d6e has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table |
@@ -72,7 +72,8 @@ Edit `web/src/tools/review-discover.test.ts`: change the expected string on the 
 
 ## Q-003: Criterion C-9da14d6e (web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -99,6 +100,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The page implements every step of the scenario as the browser plan writes it. The detail is read once per load through loadServerReview, and a refusal sets the failed phase, which renders a role alert, without calling onReload, so the first 422 gives one post and no second read. A name_collision refusal stores the colliding names as the settings rows, so the table Tool settings lists both tools. Discover again posts discoverBody of the draft, which gives {"tools": {"Find.Vendor": {"name": "find_vendor_2"}}} after the name is filled and {"tools": {"find_vendor": {"effect": "read"}, "log_note": {"skip": true}}} after the settings read and Skip; a success shows discoveryText as a status and reloads the detail. changesView lists every tool of a first pending surface as added with its description and input description lines, and callRows gives the exact Calls cells. The browser test tagged with this criterion asserts each of these steps; it has only not been run by the harness.
 ---
 
 ## Q-004: Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied?
