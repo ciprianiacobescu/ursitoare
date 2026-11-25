@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-25T13:24:32Z",
+  "integrated_revision": "c7e3f972cc590108c0bc2462804b18f97cb6f93e",
+  "merge_commit": "c7e3f972cc590108c0bc2462804b18f97cb6f93e",
+  "plan_digest": "34aab8fa5ef378c7",
+  "plan_id": "m7",
+  "postcheck": "pass",
+  "pr": 175,
+  "receipt_id": "m7/openspec:add-web-tool-journeys/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "e5258e60193cddd9f5b6aa076082fd43bc2509f3",
+  "spec_digest": "51a7a13fa3f36139",
+  "target": "main",
+  "unit_id": "openspec:add-web-tool-journeys"
+}
