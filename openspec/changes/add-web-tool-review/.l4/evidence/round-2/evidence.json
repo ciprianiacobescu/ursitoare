@@ -1,0 +1,169 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "web/src/tools/review.ts",
+      "web/src/tools/tools-pages-restyle.test.ts:35-46",
+      "web/src/ui/rules-tree.test.ts:44-56",
+      "src",
+      "node:assert/strict",
+      "web/src/tools/review.test.ts",
+      "web/src/tools/review-diff.test.ts",
+      "web/src/tools/review-discover.test.ts",
+      "web/src/tools/review-calls.test.ts",
+      "web/src/tools/review-pages.test.ts",
+      "e2e/test_m7_tool_review.py",
+      "e2e",
+      "web/src/tools/ReviewSections.tsx",
+      "web/src/tools/ServersPage.tsx",
+      "**/ReviewSections.tsx",
+      "**/CredentialSection.tsx",
+      "**/ServersPage.tsx",
+      "**/servers.ts",
+      "**/messages.ts",
+      "**/^[a-z][a-z0-9_]{0,63}$",
+      "**/^[A-Za-z0-9_.-]{1,128}$",
+      "**/review.ts",
+      "**/[",
+      "**/pages.test.ts",
+      "**/states.test.ts",
+      "**/servers.test.ts",
+      "**/approve.test.ts",
+      "module e2e",
+      "module node:assert",
+      "module tools",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m7_tool_review.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-review/.l4/ledger/r-20261125T0140Z-462b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-review/.l4/ledger/r-20261125T0316Z-e642.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-review/.l4/ledger/r-20261125T0441Z-fbdc.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-review/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-review/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/tools/ReviewSections.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/ServersPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/review-calls.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/review-diff.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/review-discover.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/review-pages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/review.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/review.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/tools/ReviewSections.tsx, web/src/tools/ServersPage.tsx, web/src/tools/review.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/tools/ReviewSections.tsx",
+      "web/src/tools/ServersPage.tsx",
+      "web/src/tools/review.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 3229,
+      "passed": 3227,
+      "failed": 2,
+      "errored": 0,
+      "skipped": 0,
+      "new": 47,
+      "new_passed": 47,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
