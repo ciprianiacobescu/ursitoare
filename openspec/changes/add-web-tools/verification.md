@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-tools: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-web-tools: PASS (round 3)
 
 traceability: 10/14 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 10/14 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 1.0 | base main@eefc582758 contained |
-| 1 | integrity | ok | 881.0 | 11 sub-checks; scope: 38 changed file(s) |
-| 2 | build | ok | 52.0 |  |
-| 3 | tests | ok | 654.8 |  |
-| 4 | traceability | ok | 0.3 | 10/14 criteria covered |
-| 4a | audit sampling | ok | 73.7 | 2 not_testable, 1 skipped; support files at the base: 11 |
-| 5 | ui test generation | ok | 3093.8 | 3 fails_at_head, 10 not_testable, 1 writer_failed; 8 not_testable covered by step 4: notes, no hold (L4-VER-067); e2e support files shown to the writer: 1 |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/features/67-admin-tool-register.tsx, web/src/runs/stale.ts, web/src/runs/test-run.ts, web/src/tools/CredentialSection.tsx, web/src/tools/GrantsPage.tsx and 6 more |
-| 8 | s1 judge | ok | 1.1 | 12/14 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | failed | 2402.6 | timeout: no answer within 600s |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
+| 4a | audit sampling | reused | 0.0 | reused (round 2) |
+| 5 | ui test generation | reused | 0.0 | reused (round 2) |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | failed | 0.0 | timeout: no answer within 600s |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -182,24 +182,48 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-0f038efb | not_testable | - | - | The criterion targets TypeScript functions parseToolServer/cursorPageFetcher and fixtures S_MCP/S_CODE/S_FIX from test-plan.md § Servers; no Python module under test or fixture values are provided to import and call, so no automated pytest test can be written from the shown sources. |
 | C-a7a348b2 | not_testable | - | - | The named functions (staleVersionText, testRunFormErrors, dryRunFormErrors) and STALE constant are TypeScript/React panel code described only in design.md (TestRunPanel.tsx, DryRunPanel.tsx); no Python module under test or existing pytest header is provided, so a self-contained pytest test cannot im |
 
+## Answers to verdict questions
+
+- Q-002 accept C-a7a348b2 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. staleVersionText returns the stale text only when reason is version_not_runnable and cause is validation_stale and null otherwise; refusedTest in test-run.ts calls it before the block_missing branch and returns { $form: text }; dryRunFormErrors hands every non-400 error t...
+- Q-003 accept C-3ad08589 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. register.test.ts runs every row of test-plan.md § Drafts: M1 from the padded draft, M2 and M3, P1 with the lowercased origin, P2 and P3 with the origin failing before the document, O1 with the two-entry overlay, O2 with the id failing first, C1 without description and C3 ...
+- Q-004 accept C-a4971512 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. register-calls.test.ts parses PV into three rows with their names and no version, checks PV unchanged and the nine malformed values null; runs K1 to K6 with a recording fake and asserts the records, the id crm read from the MCP answer's server, the INVALID_RESPONSE and Ra...
+- Q-005 accept C-9153e19d by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. credentials.test.ts asserts parseCredential gives CV() for CREC(), gives CV() for the hostile record with value and secret and that its JSON.stringify holds no s3cr3t, and gives null for the eight malformed values; credentialBody gives the B1 bodies, refuses the header be...
+- Q-006 accept C-29e43442 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. credentials-calls.test.ts runs L1, L2, S1 and S2 against a recording fake: L1 resolves CV() over two GET /credentials requests with limit 200 and then the cursor c1, and asserts neither the view nor the records hold s3cr3t; L2 resolves null after one request, rejects INVA...
+- Q-007 accept C-a714f000 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. grants.ts bounds the node id at 128 characters in both places: parseGrant refuses a node scope whose nodeId fails matches(nodeId, NODE, 128) and gives null, and grantBody trims the step and refuses one over 128 with the field nodeId and the unchanged step-id text. The two...
+- Q-008 accept C-0f038efb by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. parseHttp in servers.ts gives null for an absent http and undefined for a present http that is not { method, path } of strings, which makes parseSurfaceTools and so parseToolServer return null; the call member is never read, so a surface tool with a call and no http parse...
+- Q-009 accept C-2ec0cc21 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. REGISTER_PAGE holds the id, file, path, capability and title of the plan; REGISTER_NAMES holds exactly 29 values and CREDENTIAL_NAMES 11, those of design § Messages (Names). The feature file exports feature with the literals of REGISTER_PAGE, no navLabel, and calls regist...
+- Q-010 accept C-e3ab2add by agent (CLAUDECODE): The criterion is satisfied, and the missing proof that the test discriminates now exists. e2e/test_m7_tool_registration.py::test_register_mcp_server_and_code_block_detail follows the six steps of test-plan-browser.md § Register 1 assertion by assertion: the http URL refused locally with no POST, the...
+- Q-011 accept C-0a8c70b3 by agent (CLAUDECODE): The criterion is satisfied, and the missing proof that the test discriminates now exists. e2e/test_m7_tool_registration.py::test_register_openapi_preview_effects_and_retry follows the five steps of test-plan-browser.md § Register 2 assertion by assertion: the preview 500 shows the engine's alert and...
+- Q-012 accept C-62f4785e by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. CredentialSection keeps the store button busy and refuses a submit while the credential list is loading or failed, so nothing posts after a 500; the list error shows as an ErrorPanel alert in the section. A 409 becomes the form alert "A credential is already stored for th...
+- Q-013 accept C-c3420a43 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. ReplaceSection shows "Replace document" for an http_openapi server and "Edit code" for a code_block server in a kit Section named "Change registration". The document form has no Server id field, takes the origin from the server record, and after a preview sets the effects...
+- Q-014 accept C-78ea404d by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. The two tracing tests of the frozen calls test file were changed in place as task 2.1 requires and run rows T1 and T2 of the plan: T1 resolves { refs: ["acme.lookup_vendor@1", "acme.create_payment@1"], complete: true } over exactly two GET /blocks requests with limit 100 ...
+- Q-015 accept C-5d82c84b by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. refs.test.ts runs rows T3 and T4 of the plan: for a list whose hundredth page ends with a null cursor loadToolRefs makes 100 requests, the last with cursor c99, and resolves the 100 refs with complete true; an item whose ref is 5 or whose bound is "yes" rejects with ApiRe...
+- Q-016 accept H-ecf0d557 by the delegate (claude-fable-5-1 via claude-code): The unit can go on. Criterion C-0f038efb is not a browser criterion: its scenario names only parseToolServer, toolRows and cursorPageFetcher over the records S_FIX, S_MCP and S_CODE of the Node test plan, and design decision 2 says the servers parser does not change and the Call column stays a dash ...
+- Q-017 accept H-5a58c421 by the delegate (claude-fable-5-1 via claude-code): The unit can go on. The repository holds a browser test for this criterion, test_register_mcp_server_and_code_block_detail in e2e/test_m7_tool_registration.py, which follows the six steps of test-plan-browser.md § Register 1 row by row: the http URL is refused locally with no POST, the 400 loopback ...
+- Q-018 accept H-4adb729f by the delegate (claude-fable-5-1 via claude-code): The unit can go on. The repository's browser test test_register_openapi_preview_effects_and_retry in e2e/test_m7_tool_registration.py runs the five steps of test-plan-browser.md § Register 2: the preview 500 shows as the form alert with the engine text and no Operations table, the second preview ren...
+- Q-019 accept H-b2d28b5d by the delegate (claude-fable-5-1 via claude-code): The unit can go on. The repository's browser test test_credential_stored_rotated_secret_never_shows in e2e/test_m7_tool_registration.py runs the five steps of test-plan-browser.md § Credential: while the list failed the section shows an alert, the Store button is aria-disabled and a forced click pos...
+- Q-020 accept H-6a1a6ad5 by the delegate (claude-fable-5-1 via claude-code): The unit can go on. The judge could not reach the replace flow because it lacked the route and fixtures and saw ReplaceSection.tsx truncated; the full file is 400 lines and ServersPage renders the section on the Tool servers detail at ?server=<id>. The repository's browser test test_replace_document...
+- Q-021 accept H-21f75d66 by the delegate (claude-fable-5-1 via claude-code): The unit can go on. The criterion is not a browser scenario: its WHEN names only loadToolRefs and toolListNote on rows T3 and T4 of the Node test plan, and tasks.md covers it with refs.test.ts alone, listing only the four page scenarios for the browser test. The two tracing tests in refs.test.ts ass...
+- Q-022 accept H-bfb6e7a2 by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. The hold records only that the judge's reply timed out; it carries no finding. I read the production files of the diff myself against the specification: register.ts checks each draft in the design's order with its texts, builds the registration and PUT replacement bo...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
-| C-a7a348b2 | web-runs › A stale validation has its own text in the test-run and dry-run panels › A stale version reads as one message in both panels | - | needs_human | the judge gave no verdict for this criterion |
-| C-3ad08589 | web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix | - | needs_human | the judge gave no verdict for this criterion |
-| C-a4971512 | web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals | - | needs_human | the judge gave no verdict for this criterion |
-| C-9153e19d | web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fixed | - | needs_human | the judge gave no verdict for this criterion |
-| C-29e43442 | web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body | - | needs_human | the judge gave no verdict for this criterion |
-| C-a714f000 | web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused | - | needs_human | the judge gave no verdict for this criterion |
-| C-0f038efb | web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list | - | needs_human | the judge gave no verdict for this criterion |
-| C-2ec0cc21 | web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file | - | needs_human | the judge gave no verdict for this criterion |
-| C-e3ab2add | web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form | - | needs_human | uncovered: no adequate discriminating test traces it |
-| C-0a8c70b3 | web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered | - | needs_human | uncovered: no adequate discriminating test traces it |
-| C-62f4785e | web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows | - | needs_human | uncovered: no adequate discriminating test traces it |
-| C-c3420a43 | web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail | - | needs_human | uncovered: no adequate discriminating test traces it |
-| C-78ea404d | web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages | - | needs_human | the judge gave no verdict for this criterion |
-| C-5d82c84b | web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off | - | needs_human | the judge gave no verdict for this criterion |
+| C-a7a348b2 | web-runs › A stale validation has its own text in the test-run and dry-run panels › A stale version reads as one message in both panels | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. staleVersionText returns the stale text only when reason is version_not_runnable and cause is validation_stale and null otherwise; refusedTest in test-run.ts calls it before the block_missing branch and returns ... |
+| C-3ad08589 | web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. register.test.ts runs every row of test-plan.md § Drafts: M1 from the padded draft, M2 and M3, P1 with the lowercased origin, P2 and P3 with the origin failing before the document, O1 with the two-entry overlay,... |
+| C-a4971512 | web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. register-calls.test.ts parses PV into three rows with their names and no version, checks PV unchanged and the nine malformed values null; runs K1 to K6 with a recording fake and asserts the records, the id crm r... |
+| C-9153e19d | web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fixed | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. credentials.test.ts asserts parseCredential gives CV() for CREC(), gives CV() for the hostile record with value and secret and that its JSON.stringify holds no s3cr3t, and gives null for the eight malformed valu... |
+| C-29e43442 | web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. credentials-calls.test.ts runs L1, L2, S1 and S2 against a recording fake: L1 resolves CV() over two GET /credentials requests with limit 200 and then the cursor c1, and asserts neither the view nor the records ... |
+| C-a714f000 | web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. grants.ts bounds the node id at 128 characters in both places: parseGrant refuses a node scope whose nodeId fails matches(nodeId, NODE, 128) and gives null, and grantBody trims the step and refuses one over 128 ... |
+| C-0f038efb | web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. parseHttp in servers.ts gives null for an absent http and undefined for a present http that is not { method, path } of strings, which makes parseSurfaceTools and so parseToolServer return null; the call member i... |
+| C-2ec0cc21 | web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. REGISTER_PAGE holds the id, file, path, capability and title of the plan; REGISTER_NAMES holds exactly 29 values and CREDENTIAL_NAMES 11, those of design § Messages (Names). The feature file exports feature with... |
+| C-e3ab2add | web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form | - | pass | accepted by agent (CLAUDECODE): The criterion is satisfied, and the missing proof that the test discriminates now exists. e2e/test_m7_tool_registration.py::test_register_mcp_server_and_code_block_detail follows the six steps of test-plan-browser.md § Register 1 assertion by assertion: the http URL r... |
+| C-0a8c70b3 | web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered | - | pass | accepted by agent (CLAUDECODE): The criterion is satisfied, and the missing proof that the test discriminates now exists. e2e/test_m7_tool_registration.py::test_register_openapi_preview_effects_and_retry follows the five steps of test-plan-browser.md § Register 2 assertion by assertion: the preview ... |
+| C-62f4785e | web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. CredentialSection keeps the store button busy and refuses a submit while the credential list is loading or failed, so nothing posts after a 500; the list error shows as an ErrorPanel alert in the section. A 409 ... |
+| C-c3420a43 | web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. ReplaceSection shows "Replace document" for an http_openapi server and "Edit code" for a code_block server in a kit Section named "Change registration". The document form has no Server id field, takes the origin... |
+| C-78ea404d | web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. The two tracing tests of the frozen calls test file were changed in place as task 2.1 requires and run rows T1 and T2 of the plan: T1 resolves { refs: ["acme.lookup_vendor@1", "acme.create_payment@1"], complete:... |
+| C-5d82c84b | web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off | - | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. refs.test.ts runs rows T3 and T4 of the plan: for a list whose hundredth page ends with a null cursor loadToolRefs makes 100 requests, the last with cursor c99, and resolves the 100 refs with complete true; an i... |
 
 ## Findings
 
@@ -233,16 +257,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-c3420a43): The end-to-end test test_m7_tool_registration::test_replace_document_and_edit_code_from_detail[chromium] traces criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-78ea404d): No end-to-end test traces criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-5d82c84b): No end-to-end test traces criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off); step 5 generates one.
-
-## Needs a human
-
-- UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table
-- UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table
-- UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table
-- UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table
-- UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table
-- UI criterion C-5d82c84b has no end-to-end test; see the generated UI tests table
-- the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s)
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
