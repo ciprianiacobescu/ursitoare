@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | ambiguous | Does the new client page gate supersede the existing server-403 page for every capability-gated feature, including /admin/users? |
+| Q-001 | answered | 1.1 | ambiguous | Does the new client page gate supersede the existing server-403 page for every capability-gated feature, including /admin/users? |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Does the new client page gate supersede the existing server-403 page for every capability-gated feature, including /admin/users?
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** 1.1
 - **Kind:** ambiguous
 - **Asked:** 2026-11-25T18:31Z by deepseek-free, run r-20261125T1822Z-dd0f, task 1.1
@@ -33,3 +33,4 @@ C-8c08d9f5 says that a signed-in user whose /me capabilities lack a feature's ca
 
 ### Answer
 <!-- write below this line -->
+Option 3. Apply the client page gate to every capability-gated feature EXCEPT where an accepted requirement already specifies the server 403 page with its decision id. Today that is /admin/users: web-admin's scenario 'Alice sees a 403 page with the decision id' and e2e/test_m2_admin.py C-652f54b7. Such features keep today's behaviour and their tests stay unedited: they send the request and show the server FORBIDDEN alert with 'Decision id:' and 'Copy decision id'. For every other capability-gated feature (for example /admin/grants), a signed-in user without the capability sees only the not-allowed panel and none of the feature's API requests are sent. Name the excepted features explicitly in the spec and in the code (a list, not a heuristic), and add a test proving /admin/users still sends its request.
