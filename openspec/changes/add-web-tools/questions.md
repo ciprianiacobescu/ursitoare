@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-a4971512 (web-tools › A preview is read strictly, the calls use their routes and a refusal lands on the form › Previews, calls and refusals): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fi |
 | Q-006 | answered | none | verdict | Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body): accept as satisfie |
-| Q-007 | open | none | verdict | Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused): accept as satisfied? |
+| Q-007 | answered | none | verdict | Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused): accept as satisfied? |
 | Q-008 | open | none | verdict | Criterion C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list): accept as satisfied? |
 | Q-009 | open | none | verdict | Criterion C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file): accept as s |
 | Q-010 | open | none | verdict | Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form): accept as  |
@@ -384,7 +384,8 @@ accept The criterion is satisfied. credentials-calls.test.ts runs L1, L2, S1 and
 
 ## Q-007: Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -411,6 +412,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. grants.ts bounds the node id at 128 characters in both places: parseGrant refuses a node scope whose nodeId fails matches(nodeId, NODE, 128) and gives null, and grantBody trims the step and refuses one over 128 with the field nodeId and the unchanged step-id text. The two tracing tests build ID128, ID129 and ID1024 as test-plan.md § Step ids gives them and assert the scope "pay-run / <ID128>", null for ID129 and ID1024, the ok body for ID128 with and without spaces around it, and { ok: false, field: "nodeId", message: <the step text> } for ID129 and ID1024. Both passed by assertion. The judge simply gave no verdict; nothing is missing.
 ---
 
 ## Q-008: Criterion C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list): accept as satisfied?
