@@ -30,7 +30,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-017 | answered | none | verdict | Hold H-5a58c421: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table |
 | Q-018 | answered | none | verdict | Hold H-4adb729f: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table |
 | Q-019 | answered | none | verdict | Hold H-b2d28b5d: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table |
-| Q-020 | open | none | verdict | Hold H-6a1a6ad5: UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table |
+| Q-020 | answered | none | verdict | Hold H-6a1a6ad5: UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table |
 | Q-021 | open | none | verdict | Hold H-21f75d66: UI criterion C-5d82c84b has no end-to-end test; see the generated UI tests table |
 | Q-022 | open | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
 <!-- l4:index:end -->
@@ -779,7 +779,8 @@ accept The unit can go on. The repository's browser test test_credential_stored_
 
 ## Q-020: Hold H-6a1a6ad5: UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -798,6 +799,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on. The judge could not reach the replace flow because it lacked the route and fixtures and saw ReplaceSection.tsx truncated; the full file is 400 lines and ServersPage renders the section on the Tool servers detail at ?server=<id>. The repository's browser test test_replace_document_and_edit_code_from_detail in e2e/test_m7_tool_registration.py runs the six steps of test-plan-browser.md § Replace with mocked answers: an approved OpenAPI server offers Replace document and not Edit code, the form has no Server id, the preview sets createPayment to pay from the tool create_payment and leaves listVendors on Skip, Save changes PUTs the document with the one-entry overlay and reads Document replaced. while the surface reads drifted; the code-block server's Edit code form is pre-filled from the approved surface with the two schemas as JSON.stringify(x, null, 2), and Save changes PUTs the one tool with the changed source, reads Code saved. and the detail drifted after three reads. The code does each of these: ReplaceSection chooses the button by adapter, prefills effects with prefillEffects after a preview, builds the PUT bodies with openApiReplacement and codeReplacement, sets the status text and calls onSaved, which bumps the ServersPage reload key, and loadCodeDraft prefers the pending surface over the approved one.
 ---
 
 ## Q-021: Hold H-21f75d66: UI criterion C-5d82c84b has no end-to-end test; see the generated UI tests table
