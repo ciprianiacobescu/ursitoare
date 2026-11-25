@@ -1,0 +1,13 @@
+{
+  "schema": "l4/followup@1",
+  "parent": "openspec:add-web-shell",
+  "items": [
+    {
+      "id": "FB-001",
+      "sha256": "0975dbd4993abc6875134703b22e41d85ed1c4bf4597cb9e1291dab2434b3616"
+    }
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": []
+}
