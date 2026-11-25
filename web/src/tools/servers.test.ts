@@ -425,6 +425,17 @@ test("C-debfaec1 the state note names the short digests", () => {
   );
 });
 
+test("C-02e9d4e8 pending server with no pending surface note names no digest", () => {
+  assert.equal(
+    call(() => stateNote({ ...VIEW, pendingDigest: null })),
+    "This server has not been approved. Its tools cannot be used yet. No surface has been submitted yet.",
+  );
+  assert.equal(
+    call(() => stateNote(VIEW)),
+    "This server has not been approved. Its tools cannot be used yet. Pending surface 0123456789ab.",
+  );
+});
+
 const CAROL = { userId: "u_carol", reviewProfile: "solo" } as const;
 const TEAM = { userId: "u_carol", reviewProfile: "team" } as const;
 const MINE: ToolServerView = { ...VIEW, registeredBy: "u_erin", pendingSubmittedBy: "u_carol" };

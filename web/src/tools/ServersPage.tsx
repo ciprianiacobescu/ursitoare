@@ -85,7 +85,7 @@ export function ServersPage(): ReactNode {
       createCursorList(
         cursorPageFetcher(browserSession.api, SERVERS_PATH, { parseItem: parseToolServer }),
       ),
-    [],
+    [reloadKey],
   );
 
   useEffect(() => {
