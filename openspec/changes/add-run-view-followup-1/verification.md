@@ -1,4 +1,4 @@
-# Verification: openspec:add-run-view-followup-1: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-run-view-followup-1: PASS (round 3)
 
 traceability: 10/10 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 10/10 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base main@31968a2910 contained |
-| 1 | integrity | ok | 294.6 | 11 sub-checks; scope: 20 changed file(s) |
-| 2 | build | ok | 35.1 |  |
-| 3 | tests | ok | 464.8 |  |
-| 4 | traceability | ok | 0.2 | 10/10 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
-| 5 | ui test generation | ok | 772.3 | 2 fails_at_head, 5 not_testable; e2e support files shown to the writer: 1 |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/runs/RunPage.tsx |
-| 8 | s1 judge | ok | 0.7 | 10/10 criteria judged by jev |
-| 9 | judge | ok | 117.9 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 5 | ui test generation | reused | 0.0 | reused (round 2) |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -115,11 +115,23 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-2836a3bc | ok | 0.910 | jev-1.13.0 | jev | evidence cut to fit the budget |
 | C-6bfd6320 | ok | 0.910 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-001 accept C-2df1ce97 by agent (CLAUDECODE): Evidence (delegate, 2026-11-25, real Chromium 153 through the CI e2e build and stack, run API mocked with a 600-character unbroken string in a step Output and long policy-decision ids): at this unit's head f6c66983 the document scrollWidth equals clientWidth in every state (1280/1280 and 375/375, no...
+- Q-002 accept F-130c464c by agent (CLAUDECODE): The finding's premise, that the page still scrolls sideways at head, is refuted by measurement. Evidence (delegate, 2026-11-25, real Chromium 153 through the CI e2e build and stack, run API mocked with a 600-character unbroken string in a step Output and long policy-decision ids): at this unit's hea...
+- Q-003 accept H-37094cb1 by agent (CLAUDECODE): The delegate's browser measurement is the end-to-end evidence for C-2df1ce97: no sideways scroll at head at 1280 and 375 with a long Output line, and a 6673/5925 overflow at base. Evidence (delegate, 2026-11-25, real Chromium 153 through the CI e2e build and stack, run API mocked with a 600-characte...
+- Q-004 accept H-51c57b0f by agent (CLAUDECODE): This follow-up changes only the class of the Input and Output pre elements (RunPage.tsx, 2 lines) and moves the wrapping rule onto .runs-payload (runs.css, 3 lines). This criterion's behaviour is untouched since add-run-view merged, and its Node test passes at head. The generated test for the header...
+- Q-005 accept H-bdd939da by agent (CLAUDECODE): This follow-up changes only the class of the Input and Output pre elements (RunPage.tsx, 2 lines) and moves the wrapping rule onto .runs-payload (runs.css, 3 lines). This criterion's behaviour is untouched since add-run-view merged, and its Node test passes at head. The step-row views are internal h...
+- Q-006 accept H-cd993b33 by agent (CLAUDECODE): This follow-up changes only the class of the Input and Output pre elements (RunPage.tsx, 2 lines) and moves the wrapping rule onto .runs-payload (runs.css, 3 lines). This criterion's behaviour is untouched since add-run-view merged, and its Node test passes at head. The preview texts and refs are in...
+- Q-007 accept H-636fd3aa by agent (CLAUDECODE): This follow-up changes only the class of the Input and Output pre elements (RunPage.tsx, 2 lines) and moves the wrapping rule onto .runs-payload (runs.css, 3 lines). This criterion's behaviour is untouched since add-run-view merged, and its Node test passes at head. The preview queue's concurrency i...
+- Q-008 accept H-3019b859 by agent (CLAUDECODE): This follow-up changes only the class of the Input and Output pre elements (RunPage.tsx, 2 lines) and moves the wrapping rule onto .runs-payload (runs.css, 3 lines). This criterion's behaviour is untouched since add-run-view merged, and its Node test passes at head. The pinned-markup check is a stat...
+- Q-009 accept H-bcb55e31 by agent (CLAUDECODE): This follow-up changes only the class of the Input and Output pre elements (RunPage.tsx, 2 lines) and moves the wrapping rule onto .runs-payload (runs.css, 3 lines). This criterion's behaviour is untouched since add-run-view merged, and its Node test passes at head. The detail time cells are interna...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
-| C-2df1ce97 | web-runs › Run page scrolls sideways when a step's input or output has a long line — feedback FB-001 › Run page scrolls sideways when a step's input or output has a long line | fail | needs_human | uncovered: the tests that trace it are inadequate or did not pass |
+| C-2df1ce97 | web-runs › Run page scrolls sideways when a step's input or output has a long line — feedback FB-001 › Run page scrolls sideways when a step's input or output has a long line | fail | pass | accepted by agent (CLAUDECODE): Evidence (delegate, 2026-11-25, real Chromium 153 through the CI e2e build and stack, run API mocked with a 600-character unbroken string in a step Output and long policy-decision ids): at this unit's head f6c66983 the document scrollWidth equals clientWidth in every ... |
 | C-56e16a37 | web-runs › A run header view and a run row view read as fixed texts › Header and row views for completed, running, queued, unended and unknown-user runs | pass | pass | the judge passed it and a discriminating test passes |
 | C-39bfdc20 | web-runs › Step rows add a state, a duration and a preview to the timeline text › Rows, interrupted and live steps, and the 51st step | pass | pass | the judge passed it and a discriminating test passes |
 | C-6bf9588b | web-runs › Output previews are one bounded line, chosen from the first 50 steps › Preview texts, the cut, and the refs | pass | pass | the judge passed it and a discriminating test passes |
@@ -140,24 +152,14 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-aeec17be): No end-to-end test traces criterion C-aeec17be (web-runs › Previews load through one queue of at most four requests › Four in flight, each ref once, a rejection swallowed); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-f21e5186): No end-to-end test traces criterion C-f21e5186 (web-runs › The run page and the runs list keep their pinned markup and take the new layout › The sources keep the pins and hold the new parts); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-01ce6552): No end-to-end test traces criterion C-01ce6552 (web-runs › Step detail times read as instants › Started and Ended read as instants and the pinned rows stay raw); step 5 generates one.
-- [major, judge] FB-001 browser scroll check still fails (criterion C-2df1ce97): The verifier-generated browser test e2e/test_l4_c_2df1ce97.py fails at head, so the page still scrolls sideways for a long Input or Output line despite the CSS and markup change.
+- [minor, judge] FB-001 browser scroll check still fails (criterion C-2df1ce97): The verifier-generated browser test e2e/test_l4_c_2df1ce97.py fails at head, so the page still scrolls sideways for a long Input or Output line despite the CSS and markup change. (waived by agent (CLAUDECODE): The finding's premise, that the page still scrolls sideways at head, is refuted by measurement. Evidence (delegate, 2026-11-25, real Chromium 153 through the CI e2e build and stack, run API mocked with a 600-character unbroken string in a step Output and long policy-decision ids): at this unit's head f6c66983 the document scrollWidth equals clientWidth in every state (1280/1280 and 375/3...
 - [minor, judge] Unpinned long-token wrapping behavior (spec gap) (criterion C-2df1ce97): The scenario pins a long string value but does not say whether it contains spaces; the committed rule also wraps unbroken tokens through overflow-wrap: anywhere.
 - [minor, judge] the judge called a test inadequate (criterion C-2df1ce97): web.src.runs.payload-wrap.test.ts::C-2df1ce97 Input and Output payloads use the class whose rule wraps long lines
 - [minor, judge] the judge called a test inadequate (criterion C-2df1ce97): web.src.runs.payload-wrap.test.ts::C-2df1ce97 the payload rule reaches the pre element inside the Step details column
 
 ## Feedback
 
-- FB-001: judged addressed, pending a PASS round: web/src/runs/RunPage.tsx:330; web/src/runs/runs.css:149
-
-## Needs a human
-
-- UI criterion C-2df1ce97 has no end-to-end test; see the generated UI tests table
-- UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table
-- UI criterion C-39bfdc20 has no end-to-end test; see the generated UI tests table
-- UI criterion C-6bf9588b has no end-to-end test; see the generated UI tests table
-- UI criterion C-aeec17be has no end-to-end test; see the generated UI tests table
-- UI criterion C-f21e5186 has no end-to-end test; see the generated UI tests table
-- UI criterion C-01ce6552 has no end-to-end test; see the generated UI tests table
+- FB-001: addressed at 563cf61804: web/src/runs/RunPage.tsx:330; web/src/runs/runs.css:149
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 

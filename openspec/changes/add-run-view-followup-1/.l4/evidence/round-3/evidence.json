@@ -1,0 +1,177 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [],
+    "skipped": true,
+    "note": "the spec names no path or module in backticks: nothing to compare against",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-run-view-followup-1-fix-1/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1-fix-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1-fix-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1-fix-1/specs/web-runs/spec.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1-fix-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1/.l4/followup.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1/.l4/ledger/r-20261125T1400Z-3001.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1/.l4/ledger/r-20261125T1400Z-d512.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1/specs/web-runs/spec.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-run-view-followup-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/archive/2026-11-21-add-run-view/feedback.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/runs/RunPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "web/src/runs/payload-wrap.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "web/src/runs/runs.css",
+        "module": "web",
+        "kind": "code",
+        "label": null,
+        "reason": "the spec declares no scope"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/runs/RunPage.tsx",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/runs/RunPage.tsx"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 3238,
+      "passed": 3238,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 2,
+      "new_passed": 2,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
