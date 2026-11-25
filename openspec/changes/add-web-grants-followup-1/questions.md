@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-44e0e2c0 (web-tools › Server list keeps the old state after approve, replace or discovery — feedback FB-002 › Server list keeps the old state after approve, replace or discovery): accept a |
-| Q-002 | open | none | verdict | Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied? |
 | Q-003 | open | none | verdict | Hold H-ca42fb4d: UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-e57e62e0: UI criterion C-464ddcf9 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-cb78452d: UI criterion C-4f5443ee has no end-to-end test; see the generated UI tests table |
@@ -61,7 +61,7 @@ accept Evidence (delegate, 2026-11-25): e2e/test_server_list_reload.py's four br
 
 ## Q-002: Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -88,6 +88,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept This follow-up changes only stateNote's branch for a null pendingDigest (servers.ts, 3 lines, proved by its own Node test and C-02e9d4e8) and the server list's useMemo dependency (ServersPage.tsx, 1 line, proved by the browser evidence for C-44e0e2c0). The calls of the three pages are untouched by it; their Node tests in web/src/tools/calls.test.ts pass at head, and they were accepted when add-web-grants and add-web-tools merged.
 ---
 
 ## Q-003: Hold H-ca42fb4d: UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table
