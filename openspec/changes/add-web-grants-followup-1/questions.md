@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Hold H-ec30fde7: UI criterion C-4c2144fe has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-95489d0f: UI criterion C-78ea404d has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-d38f4f7c: UI criterion C-985ca634 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-3848153d: UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-3848153d: UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-7723363f: UI criterion C-a7f551fc has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -285,7 +285,7 @@ accept This follow-up changes only stateNote's branch for a null pendingDigest (
 
 ## Q-011: Hold H-3848153d: UI criterion C-ba990588 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -304,6 +304,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept This follow-up changes only stateNote's branch for a null pendingDigest (servers.ts, 3 lines, proved by its own Node test and C-02e9d4e8) and the server list's useMemo dependency (ServersPage.tsx, 1 line, proved by the browser evidence for C-44e0e2c0). This criterion is a pure-function or source-file property, which the generator rightly found not testable in a browser. It is covered by its passing Node tests and, apart from stateNote's new branch, is not touched by this diff. The page renders correctly at head in the delegate's browser run.
 ---
 
 ## Q-012: Hold H-7723363f: UI criterion C-a7f551fc has no end-to-end test; see the generated UI tests table
