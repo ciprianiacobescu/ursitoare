@@ -32,7 +32,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-019 | answered | none | verdict | Hold H-b2d28b5d: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table |
 | Q-020 | answered | none | verdict | Hold H-6a1a6ad5: UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table |
 | Q-021 | answered | none | verdict | Hold H-21f75d66: UI criterion C-5d82c84b has no end-to-end test; see the generated UI tests table |
-| Q-022 | open | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
+| Q-022 | answered | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
 <!-- l4:index:end -->
 
 ---
@@ -829,7 +829,8 @@ accept The unit can go on. The criterion is not a browser scenario: its WHEN nam
 
 ## Q-022: Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s)
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -845,3 +846,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. The hold records only that the judge's reply timed out; it carries no finding. I read the production files of the diff myself against the specification: register.ts checks each draft in the design's order with its texts, builds the registration and PUT replacement bodies, refuses another path or a blank key with RangeError before a call, sends the Idempotency-Key on registration and reads the MCP id from the answer's server; credentials.ts reads only the five members of a credential, checks the header before the value, never puts the value in a message, pages GET /credentials for at most 50 pages and rotates with the scheme and no header; grants.ts bounds the step id at 128 in parseGrant and grantBody and reads up to 100 pages with a complete flag and the note; stale.ts and the refusedTest branch of test-run.ts give the stale text for the stale cause only; the feature file registers the page without a navLabel; RegisterPage keeps one key per draft until a field changes and navigates to the server link; CredentialSection makes no request and shows only the text for a code-block server, keeps the field type password, reads the secret once from an uncontrolled input, empties it after every answer and reloads the list only after a success; no page holds console, storage or dangerouslySetInnerHTML. Every criterion of the unit was already accepted by the earlier delegate answers Q-002 to Q-021 on the same files, and the lint errors of the latest gate excerpt are not in servers-call.test.ts at head, whose line 5 imports cursorPageFetcher and whose lines 90 and 100 hold no non-null assertion.
