@@ -27,7 +27,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-014 | answered | none | verdict | Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied? |
 | Q-015 | answered | none | verdict | Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off): accept as satisfied |
 | Q-016 | answered | none | verdict | Hold H-ecf0d557: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table |
-| Q-017 | open | none | verdict | Hold H-5a58c421: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table |
+| Q-017 | answered | none | verdict | Hold H-5a58c421: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-4adb729f: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table |
 | Q-019 | open | none | verdict | Hold H-b2d28b5d: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table |
 | Q-020 | open | none | verdict | Hold H-6a1a6ad5: UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table |
@@ -704,7 +704,8 @@ accept The unit can go on. Criterion C-0f038efb is not a browser criterion: its 
 
 ## Q-017: Hold H-5a58c421: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -723,6 +724,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on. The repository holds a browser test for this criterion, test_register_mcp_server_and_code_block_detail in e2e/test_m7_tool_registration.py, which follows the six steps of test-plan-browser.md § Register 1 row by row: the http URL is refused locally with no POST, the 400 loopback and the 409 land on the url and id fields under one Idempotency-Key, the changed URL posts under another key, the 201 navigates to ?server=crm where the Credential region reads No credential stored., and the code-block server reads Code blocks need no credential. with no Credential form, no Secret value field and no further credentials request. The code does what each step asks: mcpRegistration refuses a non-https URL unless local is ticked, RegisterPage keeps one key until a field changes and navigates to serverLink(id), registrationFormErrors maps body/url with reason loopback to the url field sentence and a 409 ALREADY_EXISTS to the id field, and CredentialSection returns early for a code_block adapter without calling loadServerCredential and renders only the paragraph. The ServersPage header carries the Register a tool server link and the feature file registers the /admin/tool-servers/new route. The generated test that failed at head is not in the repository, so its failure could not be examined, but tasks.md leaves these criteria to the repository's browser tests and the verifier, and nothing in the code contradicts the scenario.
 ---
 
 ## Q-018: Hold H-4adb729f: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table
