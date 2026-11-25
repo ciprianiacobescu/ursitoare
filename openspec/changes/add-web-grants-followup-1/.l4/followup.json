@@ -1,0 +1,17 @@
+{
+  "schema": "l4/followup@1",
+  "parent": "openspec:add-web-grants",
+  "items": [
+    {
+      "id": "FB-001",
+      "sha256": "825e107f411f6edc0dceeb57f79c9ca516efd97fa8db1baa268e893f379c2ae2"
+    },
+    {
+      "id": "FB-002",
+      "sha256": "7b4195fb24759a1741bb5d2e6c3a0226316db9cb1ccac40ade9cd994f0612849"
+    }
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": []
+}

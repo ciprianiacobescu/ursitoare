@@ -237,6 +237,9 @@ export function toolRows(
 
 export function stateNote(s: ToolServerView): string | null {
   if (s.state === "pending") {
+    if (s.pendingDigest === null) {
+      return "This server has not been approved. Its tools cannot be used yet. No surface has been submitted yet.";
+    }
     return `This server has not been approved. Its tools cannot be used yet. Pending surface ${shortDigest(s.pendingDigest)}.`;
   }
   if (s.state === "drifted") {
