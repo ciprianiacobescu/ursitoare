@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Hold H-63c43a31: UI criterion C-ba861867 has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-09eadad5: UI criterion C-61225ade has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-1e0bd82b: UI criterion C-383b59d1 has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-0985c18b: UI criterion C-b2a74658 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-0985c18b: UI criterion C-b2a74658 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-6ef26063: UI criterion C-62803105 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-2728a6c4: UI criterion C-1dc68043 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-58e2ae8f: UI criterion C-946ba56d has no end-to-end test; see the generated UI tests table |
@@ -191,7 +191,7 @@ accept This follow-up changes only App.tsx, which wraps each feature element in 
 
 ## Q-007: Hold H-0985c18b: UI criterion C-b2a74658 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -210,6 +210,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept This follow-up changes only App.tsx, which wraps each feature element in FeaturePage: an explicit SERVER_GATED_FEATURES list holds admin-users; the session loading state is shown; a ready session without the feature's capability gets the Not allowed panel. useSession reads the shared capabilityLoader, so no extra /me request is made. The full e2e gate passed at head, so every page's browser tests still pass behind the gate. This criterion is a shell property the generator found not testable in a browser. It is covered by its passing Node tests and by the full e2e gate at head, and the gate does not change it for a user who holds the capability.
 ---
 
 ## Q-008: Hold H-6ef26063: UI criterion C-62803105 has no end-to-end test; see the generated UI tests table
