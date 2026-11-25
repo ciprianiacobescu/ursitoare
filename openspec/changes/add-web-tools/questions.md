@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Criterion C-62f4785e (web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows): accept as satisfied? |
 | Q-013 | answered | none | verdict | Criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail): accept as satisfied? |
 | Q-014 | answered | none | verdict | Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied? |
-| Q-015 | open | none | verdict | Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off): accept as satisfied |
+| Q-015 | answered | none | verdict | Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off): accept as satisfied |
 | Q-016 | open | none | verdict | Hold H-ecf0d557: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-5a58c421: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-4adb729f: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table |
@@ -646,7 +646,8 @@ accept The criterion is satisfied. The two tracing tests of the frozen calls tes
 
 ## Q-015: Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off): accept as satisfied
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -673,6 +674,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. refs.test.ts runs rows T3 and T4 of the plan: for a list whose hundredth page ends with a null cursor loadToolRefs makes 100 requests, the last with cursor c99, and resolves the 100 refs with complete true; an item whose ref is 5 or whose bound is "yes" rejects with ApiRequestError 200 INVALID_RESPONSE; a client rejecting 500 has that very error rethrown; one empty page gives { refs: [], complete: true } after one request; toolListNote gives null for a complete list and "Only the first 10,000 tools are listed." for a cut one. loadToolRefs breaks with complete true on a null cursor, throws invalidResponse for an unreadable page or item and lets a client error propagate, and toolListNote is a one-line conditional on complete. Both tests passed by assertion at red.
 ---
 
 ## Q-016: Hold H-ecf0d557: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table
