@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-9da14d6e (web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied? |
 | Q-005 | answered | none | verdict | Hold H-63664d16: UI criterion C-9da14d6e has no end-to-end test; see the generated UI tests table |
-| Q-006 | open | none | verdict | Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table |
+| Q-006 | answered | none | verdict | Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -163,7 +163,8 @@ accept The criterion does have an end-to-end test. The unit's browser test file 
 
 ## Q-006: Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -182,3 +183,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The criterion does have an end-to-end test. The unit's browser test file holds a test tagged with this criterion whose seeded surfaces, steps and expected Changes items, row counts and posted body match the Review 2 section of the unit's browser test plan. The generator reported the Review 2 setup as not shown, but it is in the unit's folder, and the project's rules place a browser-only criterion in a tagged pytest test and out of criteria_ids for the verifier to check, which this unit did. The test has not been run by the harness, which the acceptance profile after merge covers; the code trace behind the criterion's own verdict found no step that would fail.
