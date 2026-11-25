@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.2 | technical | web/src/tools/review-diff.test.ts:227 expected diff omits removed log_note |
+| Q-002 | open | 2.1 | technical | web/src/tools/review-discover.test.ts:268 expected string omits the reason |
 <!-- l4:index:end -->
 
 ---
@@ -35,6 +36,29 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `web/src/tools/review-diff.test.ts`: after the `find_vendor` item in the expected array of the `surfaceDiff(S(LOG), S(FD))` assertion at line 227, add `{ name: "log_note", kind: "removed", fields: [] },` so the accepted array is `[ { name: "find_vendor", kind: "added", fields: [], description: { old: null, new: "Find a vendor." }, input: [{ property: "vendor_name", text: "Vendor to look up." }] }, { name: "log_note", kind: "removed", fields: [] } ]`.
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-002: web/src/tools/review-discover.test.ts:268 expected string omits the reason
+
+- **Status:** open
+- **Blocking tasks:** 2.1
+- **Kind:** technical
+- **Asked:** 2026-11-25T04:38Z by beam, run r-20261125T0316Z-e642, task 2.1
+
+### Context
+The test asserts text.length === 145 but expects equality to "Discovered 2 tools over MCP 2026-07-28. Left out: " + "n".repeat(79) + "…", which is 130 characters. The spec formats each left-out entry as <name> (<reason>), so the 145 length can only be reached by appending " (name_invalid)" (15 characters).
+
+Harness note: the red tests and test-support files of this task are frozen. To let the next green change `web/src/tools/review-discover.test.ts`, set **Status** to `accepted` or `answered` to take option 1, which names the file, or write an answer that names its path or run `l4 questions accept Q-NNN --unit add-web-tool-review`, then commit and push. An ignore file is never unfrozen by an answer, whatever it says. An answer that does not name the file leaves it frozen, and an answer edited after a run has used it counts as an override and unfreezes nothing.
+
+### Options
+1. Edit `web/src/tools/review-discover.test.ts`: change the expected string on the assertion to `"Discovered 2 tools over MCP 2026-07-28. Left out: " + "n".repeat(79) + "… (name_invalid)"`
+
+### Clarifier suggestion
+Edit `web/src/tools/review-discover.test.ts`: change the expected string on the assertion to `"Discovered 2 tools over MCP 2026-07-28. Left out: " + "n".repeat(79) + "… (name_invalid)"`
 
 ### Answer
 <!-- write below this line -->
