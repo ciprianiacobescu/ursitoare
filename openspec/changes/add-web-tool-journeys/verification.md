@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-tool-journeys: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-web-tool-journeys: PASS (round 2)
 
 traceability: 2/3 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 2/3 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.4 | base merged: main@526628d1ad as 2cc2cb2ae8 (1 commit) |
-| 1 | integrity | ok | 445.5 | 11 sub-checks; scope: 8 changed file(s) |
-| 2 | build | ok | 51.6 |  |
-| 3 | tests | ok | 709.1 |  |
-| 4 | traceability | ok | 0.2 | 2/3 criteria covered |
-| 4a | audit sampling | ok | 75.4 | 2 not_testable; support files at the base: 3 |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 4a | audit sampling | reused | 0.0 | reused (round 1) |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | 100.0% of the changed executable lines ran |
-| 8 | s1 judge | ok | 0.2 | 3/3 criteria judged by jev |
-| 9 | judge | ok | 293.6 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -108,12 +108,16 @@ traceability: 2/3 criteria covered by a discriminating test
 | C-a147034b | not_testable | - | - | The observable outcome is produced by the TypeScript test test/journeys/journey-sources.test.ts reading e2e/test_m7_tools.py and test/journeys/m7-tools.test.ts, with four mutated copies each required to raise a problem; there is no Python module under test to import (the shown sources define no Pyth |
 | C-ef502704 | not_testable | - | - | The criterion is verified only by Node/TypeScript e2e journeys (test/journeys/m7-tools.test.ts) and a Python e2e test against the real stack requiring units U47b-U56b; this unit adds no importable Python production module under test, and the journeys are not runnable without those units. |
 
+## Answers to verdict questions
+
+- Q-002 accept C-eba5ac9e by the delegate (claude-fable-5-1 via claude-code): The browser journey traces the criterion and checks every value of its scenario. It runs in two browser contexts (carol's page and alice's new context), and asserts the exact status "Discovered 2 tools over MCP 2026-07-28.", find_vendor read in the Tools row and in the exact Effect cell of Calls, th...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
 |---|---|---|---|---|
 | C-ef502704 | web-tools › The tools journey works against the real engine › Carol registers three servers and alice dry-runs through all three adapters | pass | pass | the judge passed it and a discriminating test passes |
-| C-eba5ac9e | web-tools › The M7 journey proves tool registration, review and a dry run in a browser › Carol sets up three tool servers and alice's dry run reads, runs and stubs | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-eba5ac9e | web-tools › The M7 journey proves tool registration, review and a dry run in a browser › Carol sets up three tool servers and alice's dry run reads, runs and stubs | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The browser journey traces the criterion and checks every value of its scenario. It runs in two browser contexts (carol's page and alice's new context), and asserts the exact status "Discovered 2 tools over MCP 2026-07-28.", find_vendor re... |
 | C-a147034b | web-tools › The journey files carry the milestone marker, the M6b checks and no skip › The journey sources read as the rules say | pass | pass | the judge passed it and a discriminating test passes |
 
 ## Findings
