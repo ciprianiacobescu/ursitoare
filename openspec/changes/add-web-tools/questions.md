@@ -484,6 +484,7 @@ accept The criterion is satisfied. REGISTER_PAGE holds the id, file, path, capab
 ## Q-010: Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form): accept as 
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The criterion is browser-only. I read RegisterPage.tsx, CredentialSection.tsx, ServersPage.tsx, register.ts and the kit Form and found the code consistent with every step of test-plan-browser.md § Register 1, and e2e/test_m7_tool_registration.py follows those steps, but no run record shows it green and the verifier records a generated browser test (e2e/test_l4_c_e3ab2add.py) as failing at head. That file is not in the repository I can read, so I cannot tell whether it failed on a page defect or on its own mocks, and I cannot run a browser. A person who can run the browser tests must decide.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
