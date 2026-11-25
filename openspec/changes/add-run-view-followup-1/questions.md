@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-2df1ce97 (web-runs › Run page scrolls sideways when a step's input or output has a long line — feedback FB-001 › Run page scrolls sideways when a step's input or output has a long line): a |
+| Q-001 | answered | none | verdict | Criterion C-2df1ce97 (web-runs › Run page scrolls sideways when a step's input or output has a long line — feedback FB-001 › Run page scrolls sideways when a step's input or output has a long line): a |
 | Q-002 | open | none | verdict | Finding F-130c464c: FB-001 browser scroll check still fails |
 | Q-003 | open | none | verdict | Hold H-37094cb1: UI criterion C-2df1ce97 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table |
@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-2df1ce97 (web-runs › Run page scrolls sideways when a step's input or output has a long line — feedback FB-001 › Run page scrolls sideways when a step's input or output has a long line): a
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -53,6 +53,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Evidence (delegate, 2026-11-25, real Chromium 153 through the CI e2e build and stack, run API mocked with a 600-character unbroken string in a step Output and long policy-decision ids): at this unit's head f6c66983 the document scrollWidth equals clientWidth in every state (1280/1280 and 375/375, no step selected and the step selected), and the Output pre wraps (scrollWidth 432 = clientWidth at 1280, 275 at 375). At base 31968a29, with the step selected, the page is 6673 wide at 1280 and 5925 at 375, all from the Output pre (scrollWidth 5876). Screenshots were looked at by the delegate. The verifier-generated browser test's failure at head is not reproduced by this measurement; its artifacts were not kept, so its cause cannot be read.
 ---
 
 ## Q-002: Finding F-130c464c: FB-001 browser scroll check still fails
