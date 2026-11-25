@@ -10,15 +10,15 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | submitted | behaviour | web/src/tools/servers.ts:192 | Server page says 'Pending surface .' when there is no pending surface |
-| FB-002 | submitted | behaviour | web/src/tools/ServersPage.tsx:83 | Server list keeps the old state after approve, replace or discovery |
+| FB-001 | taken | behaviour | web/src/tools/servers.ts:192 | Server page says 'Pending surface .' when there is no pending surface |
+| FB-002 | taken | behaviour | web/src/tools/ServersPage.tsx:83 | Server list keeps the old state after approve, replace or discovery |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: Server page says 'Pending surface .' when there is no pending surface
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** behaviour
 - **Where:** `web/src/tools/servers.ts:192-194`
 - **Where:** `web/src/tools/servers.ts:239-241`
@@ -48,12 +48,13 @@ shortDigest(null) returns an empty string and the pending branch of the state no
 
 ### Outcome
 <!-- written by the harness -->
+Taken into add-web-grants-followup-1
 
 ---
 
 ## FB-002: Server list keeps the old state after approve, replace or discovery
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** behaviour
 - **Where:** `web/src/tools/ServersPage.tsx:83-89`
 - **Where:** `web/src/tools/ServersPage.tsx:106-122`
@@ -111,3 +112,4 @@ The list is a cursor list created once (useMemo with no dependencies) and loaded
 
 ### Outcome
 <!-- written by the harness -->
+Taken into add-web-grants-followup-1
