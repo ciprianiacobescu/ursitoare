@@ -439,23 +439,88 @@ export interface DiscoverDraft {
   names?: Readonly<Record<string, string>>;
 }
 
-export function initialDraft(_tools: readonly ReviewTool[]): DiscoverDraft {
-  throw new Error("not implemented");
+type DraftEffect = "" | "read" | "write" | "send" | "pay" | "skip";
+
+const MAX_EXCLUDED = 1_000;
+const OVERLAY_KEY_PATTERN = /^[A-Za-z0-9_.-]{1,128}$/;
+const DRAFT_NAME_PATTERN = /^[a-z][a-z0-9_]{0,63}$/;
+const DISCOVERY_REASON_PATTERN = /^[a-z][a-z0-9_]{0,63}$/;
+const DRAFT_EFFECTS: readonly string[] = ["", "read", "write", "send", "pay", "skip"];
+
+export function initialDraft(tools: readonly ReviewTool[]): DiscoverDraft {
+  const effects: Record<string, DraftEffect> = {};
+  const names: Record<string, string> = {};
+  for (const tool of tools) {
+    const key = tool.serverName;
+    if (key === null || key === "__proto__") continue;
+    const effect: DraftEffect = tool.effect === "write" ? "" : (tool.effect as DraftEffect);
+    effects[key] = effect;
+    if (tool.name !== key) names[key] = tool.name;
+  }
+  return { effects, names };
 }
 
-export function discoverBody(_d: DiscoverDraft): {
+export function discoverBody(d: DiscoverDraft): {
   tools: Record<string, { effect?: string; name?: string; skip?: true }>;
 } {
-  throw new Error("not implemented");
+  const keys = new Set<string>();
+  for (const key of Object.keys(d.effects)) keys.add(key);
+  if (d.names !== undefined) {
+    for (const key of Object.keys(d.names)) keys.add(key);
+  }
+  keys.delete("__proto__");
+  if (keys.size > MAX_TOOLS) throw new RangeError("too many tool settings");
+  const tools: Record<string, { effect?: string; name?: string; skip?: true }> = {};
+  for (const key of keys) {
+    if (!OVERLAY_KEY_PATTERN.test(key)) throw new RangeError(`invalid tool name: ${key}`);
+    const effectRaw = Object.hasOwn(d.effects, key) ? d.effects[key] : "";
+    if (typeof effectRaw !== "string" || !DRAFT_EFFECTS.includes(effectRaw)) {
+      throw new RangeError(`invalid effect for ${key}`);
+    }
+    const nameRaw = d.names !== undefined && Object.hasOwn(d.names, key) ? d.names[key] : "";
+    if (typeof nameRaw !== "string") throw new RangeError(`invalid tool name for ${key}`);
+    if (nameRaw !== "" && !DRAFT_NAME_PATTERN.test(nameRaw)) {
+      throw new RangeError(`invalid tool name for ${key}`);
+    }
+    if (effectRaw === "skip") {
+      tools[key] = { skip: true };
+      continue;
+    }
+    const entry: { effect?: string; name?: string } = {};
+    if (effectRaw !== "") entry.effect = effectRaw;
+    if (nameRaw !== "") entry.name = nameRaw;
+    if (Object.keys(entry).length > 0) tools[key] = entry;
+  }
+  return { tools };
 }
 
-export function parseDiscovery(_raw: unknown): {
+export function parseDiscovery(raw: unknown): {
   protocolVersion: string;
   era: string;
   count: number;
   excluded: { name: string; reason: string }[];
 } | null {
-  throw new Error("not implemented");
+  if (!isRecord(raw)) return null;
+  const server = member(raw, "server");
+  if (!isRecord(server)) return null;
+  const list = member(server, "tools");
+  if (!Array.isArray(list) || list.length > MAX_TOOLS) return null;
+  const era = member(raw, "era");
+  if (era !== "modern" && era !== "legacy") return null;
+  const version = member(raw, "protocolVersion");
+  if (typeof version !== "string" || !PROTOCOL_VERSIONS.includes(version)) return null;
+  const excludedRaw = member(raw, "excluded");
+  if (!Array.isArray(excludedRaw) || excludedRaw.length > MAX_EXCLUDED) return null;
+  const excluded: { name: string; reason: string }[] = [];
+  for (const item of excludedRaw as unknown[]) {
+    if (!isRecord(item)) return null;
+    const name = member(item, "name");
+    const reason = member(item, "reason");
+    if (typeof name !== "string") return null;
+    if (typeof reason !== "string" || !DISCOVERY_REASON_PATTERN.test(reason)) return null;
+    excluded.push({ name, reason });
+  }
+  return { protocolVersion: version, era, count: list.length, excluded };
 }
 
 export async function discoverTools(
@@ -468,8 +533,19 @@ export async function discoverTools(
   throw new Error("not implemented");
 }
 
-export function discoveryText(_d: NonNullable<ReturnType<typeof parseDiscovery>>): string {
-  throw new Error("not implemented");
+function leftOutName(name: string): string {
+  const shown = neutralise(name);
+  return shown.length > 80 ? shown.slice(0, 79) + "…" : shown;
+}
+
+export function discoveryText(d: NonNullable<ReturnType<typeof parseDiscovery>>): string {
+  const base = `Discovered ${d.count} tools over MCP ${d.protocolVersion}.`;
+  if (d.excluded.length === 0) return base;
+  const parts = d.excluded.map((entry) => {
+    const reason = entry.reason === "description" ? "description dropped, tool kept" : entry.reason;
+    return `${leftOutName(entry.name)} (${reason})`;
+  });
+  return `${base} Left out: ${parts.join(", ")}`;
 }
 
 export function discoveryErrorText(_error: unknown): string {

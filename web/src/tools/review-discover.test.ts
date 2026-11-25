@@ -265,7 +265,10 @@ test("C-7374d16f discoveryText cuts a long neutralised name to 79 characters (X3
   assert.ok(d !== null);
   const text = discoveryText(d);
   assert.equal(text.length, 145);
-  assert.equal(text, "Discovered 2 tools over MCP 2026-07-28. Left out: " + "n".repeat(79) + "…");
+  assert.equal(
+    text,
+    "Discovered 2 tools over MCP 2026-07-28. Left out: " + "n".repeat(79) + "… (name_invalid)",
+  );
 });
 
 test("C-7374d16f discoveryText neutralises a bidi name (X5)", () => {

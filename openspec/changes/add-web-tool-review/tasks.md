@@ -7,7 +7,7 @@ Values: `test-plan.md`; steps: `test-plan-browser.md`. No `src/`, API or migrati
 
 ## 2. Discovery
 
-- [ ] 2.1 Write `web/src/tools/review-discover.test.ts` (scenario "Settings become the body and a discovery is worded with every tool left out") first (rows I1, I2, B1, B2, P1, P2, X1 to X6), then implement `initialDraft`, `discoverBody`, `parseDiscovery` and `discoveryText`, leaving `discoverTools`, `loadServerReview`, `discoveryErrorText` and `collidingNames` to 2.2
+- [x] 2.1 Write `web/src/tools/review-discover.test.ts` (scenario "Settings become the body and a discovery is worded with every tool left out") first (rows I1, I2, B1, B2, P1, P2, X1 to X6), then implement `initialDraft`, `discoverBody`, `parseDiscovery` and `discoveryText`, leaving `discoverTools`, `loadServerReview`, `discoveryErrorText` and `collidingNames` to 2.2
 - [ ] 2.2 Write `web/src/tools/review-calls.test.ts` (scenario "The calls use their routes and each refusal has its text"; `registerToolMessages()` first; the rows only this task adds: K1 to K3 and E1 to E9, which need the four functions) first, then implement `discoverTools`, `loadServerReview`, `discoveryErrorText` and `collidingNames`
 
 ## 3. The page
