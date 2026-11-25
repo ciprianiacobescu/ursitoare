@@ -29,7 +29,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-016 | answered | none | verdict | Hold H-ecf0d557: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-5a58c421: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table |
 | Q-018 | answered | none | verdict | Hold H-4adb729f: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table |
-| Q-019 | open | none | verdict | Hold H-b2d28b5d: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table |
+| Q-019 | answered | none | verdict | Hold H-b2d28b5d: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table |
 | Q-020 | open | none | verdict | Hold H-6a1a6ad5: UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table |
 | Q-021 | open | none | verdict | Hold H-21f75d66: UI criterion C-5d82c84b has no end-to-end test; see the generated UI tests table |
 | Q-022 | open | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
@@ -754,7 +754,8 @@ accept The unit can go on. The repository's browser test test_register_openapi_p
 
 ## Q-019: Hold H-b2d28b5d: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -773,6 +774,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on. The repository's browser test test_credential_stored_rotated_secret_never_shows in e2e/test_m7_tool_registration.py runs the five steps of test-plan-browser.md § Credential: while the list failed the section shows an alert, the Store button is aria-disabled and a forced click posts nothing; after a reload over two pages the section reads No credential stored. with the enter any text sentence; the 409 is an alert and the secret field is emptied; the accepted store reads Credential stored (key version 1). with the status Credential stored., Rotate credential, the scheme radio checked and the header name pre-filled, under a different Idempotency-Key; the rotation sends value, authScheme and headerName with no key and reads key version 2; the page body and console never hold either secret. The code does each of these: the Form is busy while the list is not ready, so its submit button is aria-disabled and handleSubmit returns, the list error renders as an ErrorPanel with role alert, each store uses a fresh crypto.randomUUID(), the uncontrolled password input is cleared in both the success and the failure path, the list is reloaded only after a success, an effect pre-fills the scheme and header from the stored credential, and rotateServerCredential posts with no header option. The generated test's failure cannot be inspected since it is not in the repository, but the code matches the scenario.
 ---
 
 ## Q-020: Hold H-6a1a6ad5: UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table
