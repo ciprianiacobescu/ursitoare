@@ -13,6 +13,10 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.2 | technical | web/src/tools/review-diff.test.ts:227 expected diff omits removed log_note |
 | Q-002 | accepted | 2.1 | technical | web/src/tools/review-discover.test.ts:268 expected string omits the reason |
+| Q-003 | open | none | verdict | Criterion C-9da14d6e (web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again): accept as satisfied? |
+| Q-004 | open | none | verdict | Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied? |
+| Q-005 | open | none | verdict | Hold H-63664d16: UI criterion C-9da14d6e has no end-to-end test; see the generated UI tests table |
+| Q-006 | open | none | verdict | Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -60,6 +64,115 @@ Harness note: the red tests and test-support files of this task are frozen. To l
 
 ### Clarifier suggestion
 Edit `web/src/tools/review-discover.test.ts`: change the expected string on the assertion to `"Discovered 2 tools over MCP 2026-07-28. Left out: " + "n".repeat(79) + "… (name_invalid)"`
+
+### Answer
+<!-- write below this line -->
+
+---
+
+## Q-003: Criterion C-9da14d6e (web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-9da14d6e (web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again)
+
+### Context
+Criterion C-9da14d6e (web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again) is needs human after round 1.
+
+Scenario:
+\- **WHEN** the steps of test-plan-browser.md § Review 1 run (a 422 `credential_missing`, a 422 `name_collision`, a 200 that lists `route_ticket` as left out after a tool name, a 200 after the settings `read` and `Skip`)
+\- **THEN** the first refusal is an alert in "Discovery" with one post and no second detail read; the second names the two tools and shows "Tool settings" for them; the third post is `{"tools": {"Find.Vendor": {"name": "find_vendor_2"}}}`, and its success shows the status with the tool left out, the table for the discovered tools, "Calls" cells read exactly and "Changes" listing both tools as `added` with the first surface's description and input description; the fourth post is `{"tools": {"find_vendor": {"effect": "read"}, "log_note": {"skip": true}}}`, with `log_note` left out as `skipped`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m7_tool_review::test_discovery_settings_and_calls[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-004: Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server)
+
+### Context
+Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server) is needs human after round 1.
+
+Scenario:
+\- **WHEN** the steps of § Review 2 run (a drifted MCP server whose pending surface changes a hint, an effect and a description, drops a tool and adds one; then "Discover tools")
+\- **THEN** "Changes" lists `changed find_vendor: hints`, `changed log_note: effect, description` with the lines `Description before: (none)` and `Description after: Log a note`, `removed old_tool`, `added ping`; "Calls" has four rows and the `readNote` sentence, and the combobox of `log_note` reads `send`; "Discover tools" posts `{"tools": {"find_vendor": {"effect": "read"}}}`, the effect of the approved surface, and "Calls" then has three rows (the second read has no `ping`)
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m7_tool_review::test_changes_and_calls_of_a_drifted_server[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Hold H-63664d16: UI criterion C-9da14d6e has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-9da14d6e has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-9da14d6e: not_testable after 1 attempt(s); The test plan's Review 1 steps aren't shown. That leaves the seeded server id, the sign-in user, the fake engine's four discover answers and the exact expected texts unknown, so a test would have to guess them..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-006: Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+
+### Context
+After round 1 the verifier cannot decide on its own: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-c8329b48: not_testable after 1 attempt(s); The scenario depends on the '§ Review 2' setup, which isn't shown. That setup covers the drifted server's id, the signed-in user, and the fake stack's seeded approved and pending surfaces. Without it the test would have to guess the URL, the login and the data..
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
 
 ### Answer
 <!-- write below this line -->
