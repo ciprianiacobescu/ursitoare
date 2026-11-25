@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
+| Q-001 | answered | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Task 1.1: the pre-satisfied check could not decide
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 1.1
 - **Kind:** harness
 - **Asked:** 2026-11-25T09:38Z by claude-sonnet, run r-20261125T0805Z-29d6, task 1.1
@@ -241,3 +242,4 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 
 ### Answer
 <!-- write below this line -->
+accept: Count these tests on the evidence of the real run. The unit adds no production file: its proposal scaffolds nothing and its three files are tests, so the Node journey and the source test pass against the base code by construction, and the design and task 1.1 foresee exactly this pre_satisfied question for a unit whose journeys are green on arrival. The project's own test-gate decision record states that L4's zero-value check is Python-only and that a TypeScript test passing at red holds the unit for a decision, which is the situation here. The replay runs the saved change through every gate, so the earlier typecheck excerpt is checked there; the lines it names in the saved copy of the Node journey are an assertion's closing bracket and a plain awaited call, not the code that excerpt describes, and the held record says the later attempt typechecked clean.
