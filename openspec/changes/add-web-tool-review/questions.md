@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 1.2 | technical | web/src/tools/review-diff.test.ts:227 expected diff omits removed log_note |
 | Q-002 | accepted | 2.1 | technical | web/src/tools/review-discover.test.ts:268 expected string omits the reason |
 | Q-003 | answered | none | verdict | Criterion C-9da14d6e (web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again): accept as satisfied? |
-| Q-004 | open | none | verdict | Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied? |
 | Q-005 | open | none | verdict | Hold H-63664d16: UI criterion C-9da14d6e has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -105,7 +105,8 @@ accept The page implements every step of the scenario as the browser plan writes
 
 ## Q-004: Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -132,6 +133,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The drifted server's view follows from the code. surfaceDiff compares each field in the fixed order with the call stripped of its hints and the hints as their own field, so a hint change alone reads changed find_vendor: hints and the effect and description change of log_note reads changed log_note: effect, description with the lines Description before: (none) and Description after: Log a note; a dropped tool is removed and a new one added. The Calls table shows the pending surface, so it has one row per pending tool plus the header, and readNote shows its sentence when a tool is read. The combobox value starts at initialDraft, which keeps send. Discover tools posts discoverBody of initialDraft over the approved surface, where write becomes the proposal and read stays, giving {"tools": {"find_vendor": {"effect": "read"}}}, and the reload shows the second surface without ping. The browser test tagged with this criterion asserts each of these points.
 ---
 
 ## Q-005: Hold H-63664d16: UI criterion C-9da14d6e has no end-to-end test; see the generated UI tests table
