@@ -128,7 +128,7 @@ export async function listAuditEvents(
     limit: number;
   },
 ): Promise<AuditEventRecord[]> {
-  if (!Number.isInteger(q.limit) || q.limit < 1 || q.limit > 200) {
+  if (!Number.isInteger(q.limit) || q.limit < 1 || q.limit > 201) {
     reject("bad_limit");
   }
   if (q.order !== "asc" && q.order !== "desc") {

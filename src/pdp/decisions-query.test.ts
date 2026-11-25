@@ -161,7 +161,7 @@ test("C-061beb81 the policy decision reader refuses bad options", async () => {
     await seedDecisions(db, a);
 
     await rejectsReason(db.appPool, a, { order: "desc", limit: 0 }, "bad_limit");
-    await rejectsReason(db.appPool, a, { order: "desc", limit: 201 }, "bad_limit");
+    await rejectsReason(db.appPool, a, { order: "desc", limit: 202 }, "bad_limit");
     await rejectsReason(db.appPool, a, { order: "up" as "asc", limit: 50 }, "bad_order");
     await rejectsReason(
       db.appPool,

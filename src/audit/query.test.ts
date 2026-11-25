@@ -111,7 +111,7 @@ test("C-c0d8a403 the reader returns records and refuses bad options", async () =
     assert.deepEqual(rows[0]?.actor, { kind: "user", id: "u_1" });
 
     await rejectsReason(db.appPool, a, { order: "desc", limit: 0 }, "bad_limit");
-    await rejectsReason(db.appPool, a, { order: "desc", limit: 201 }, "bad_limit");
+    await rejectsReason(db.appPool, a, { order: "desc", limit: 202 }, "bad_limit");
     await rejectsReason(db.appPool, a, { order: "desc", limit: 1.5 }, "bad_limit");
     await rejectsReason(db.appPool, a, { order: "up" as "asc", limit: 3 }, "bad_order");
     await rejectsReason(
