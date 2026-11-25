@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
-| Q-002 | open | none | verdict | Criterion C-eba5ac9e (web-tools › The M7 journey proves tool registration, review and a dry run in a browser › Carol sets up three tool servers and alice's dry run reads, runs and stubs): accept as sa |
+| Q-002 | answered | none | verdict | Criterion C-eba5ac9e (web-tools › The M7 journey proves tool registration, review and a dry run in a browser › Carol sets up three tool servers and alice's dry run reads, runs and stubs): accept as sa |
 <!-- l4:index:end -->
 
 ---
@@ -249,7 +249,8 @@ accept: Count these tests on the evidence of the real run. The unit adds no prod
 
 ## Q-002: Criterion C-eba5ac9e (web-tools › The M7 journey proves tool registration, review and a dry run in a browser › Carol sets up three tool servers and alice's dry run reads, runs and stubs): accept as sa
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -276,3 +277,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The browser journey traces the criterion and checks every value of its scenario. It runs in two browser contexts (carol's page and alice's new context), and asserts the exact status "Discovered 2 tools over MCP 2026-07-28.", find_vendor read in the Tools row and in the exact Effect cell of Calls, the exact Retry cells unsafe to retry for create_payment and safe to retry plus the Result cell trusted for risk_score, the status "Surface approved." once in each of three approvals, the ledger credential stored at key version 1, the run state completed, the three Policy decisions items with no Service detail on score, the outputs V-ACME, low and P-7, and the Taint row none after pay and untrusted after done, with assert_layout and assert_accessible after every view and both watch_csp lists asserted empty. The test is ignored only because it has no red record, which is by construction: the unit adds test files only and the project rules say a browser criterion stays out of criteria_ids and is checked by the verifier, so the judge's pass stands.
