@@ -26,7 +26,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-013 | answered | none | verdict | Criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail): accept as satisfied? |
 | Q-014 | answered | none | verdict | Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied? |
 | Q-015 | answered | none | verdict | Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off): accept as satisfied |
-| Q-016 | open | none | verdict | Hold H-ecf0d557: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table |
+| Q-016 | answered | none | verdict | Hold H-ecf0d557: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-5a58c421: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-4adb729f: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table |
 | Q-019 | open | none | verdict | Hold H-b2d28b5d: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table |
@@ -679,7 +679,8 @@ accept The criterion is satisfied. refs.test.ts runs rows T3 and T4 of the plan:
 
 ## Q-016: Hold H-ecf0d557: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -698,6 +699,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on. Criterion C-0f038efb is not a browser criterion: its scenario names only parseToolServer, toolRows and cursorPageFetcher over the records S_FIX, S_MCP and S_CODE of the Node test plan, and design decision 2 says the servers parser does not change and the Call column stays a dash until U56b. Task 2.2 covers it with servers-call.test.ts alone and task 3.1 lists only the four browser scenarios of the pages, so no end-to-end test was ever planned for it. The three Node tests assert every row of the scenario: the tool records of S_MCP and S_CODE with http null and their own flags, the dash Call of toolRows, null for the S_MCP whose surface tool has a present http that is only a method, and the page acme, crm, snips with a null next cursor. Earlier answers Q-001 and Q-008 accepted the criterion on that evidence, and the lint errors of the latest gate excerpt are not in the file at head, whose line 5 imports cursorPageFetcher.
 ---
 
 ## Q-017: Hold H-5a58c421: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table
