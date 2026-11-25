@@ -1,0 +1,110 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src",
+      "web",
+      "node:assert/strict",
+      "test/journeys/journey-sources.test.ts",
+      "test/journeys/m7-tools.test.ts",
+      "e2e/test_m7_tools.py",
+      "e2e/test_m6_grants.py",
+      "e2e",
+      "**/[]",
+      "**/[\"untrusted\"]",
+      "**/test_m6_grants.py",
+      "**/review.ts",
+      "**/[",
+      "module e2e",
+      "module main",
+      "module node:assert",
+      "module test",
+      "module tools"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m7_tools.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-journeys/.l4/ledger/r-20261125T0805Z-29d6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-journeys/.l4/ledger/r-20261125T1205Z-ae40.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-journeys/.l4/ledger/r-20261125T1209Z-b177.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-journeys/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-journeys/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/journeys/journey-sources.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/journeys/m7-tools.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "ok",
+    "reason": "",
+    "percent": 100.0,
+    "unmeasured_files": [],
+    "other_files": [],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 3236,
+      "passed": 3235,
+      "failed": 1,
+      "errored": 0,
+      "skipped": 0,
+      "new": 5,
+      "new_passed": 5,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
