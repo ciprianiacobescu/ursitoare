@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Criterion C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file): accept as s |
 | Q-010 | open | none | verdict | Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form): accept as  |
 | Q-011 | open | none | verdict | Criterion C-0a8c70b3 (web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered): accept as satisfied? |
-| Q-012 | open | none | verdict | Criterion C-62f4785e (web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows): accept as satisfied? |
+| Q-012 | answered | none | verdict | Criterion C-62f4785e (web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows): accept as satisfied? |
 | Q-013 | open | none | verdict | Criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail): accept as satisfied? |
 | Q-014 | open | none | verdict | Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied? |
 | Q-015 | open | none | verdict | Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off): accept as satisfied |
@@ -547,7 +547,8 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ## Q-012: Criterion C-62f4785e (web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -574,6 +575,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. CredentialSection keeps the store button busy and refuses a submit while the credential list is loading or failed, so nothing posts after a 500; the list error shows as an ErrorPanel alert in the section. A 409 becomes the form alert "A credential is already stored for this server." through credentialErrors, and the uncontrolled password field is emptied in both the success and the failure path. Each store submit calls storeCredential with a fresh crypto.randomUUID() key, and rotateServerCredential posts { value, authScheme, headerName } to /credentials/<id>/rotate with no header option, so the rotation carries no Idempotency-Key. After a store or rotation that succeeds the section bumps its reload key and reads the list again, which yields "Credential stored (key version 1)." and then "(key version 2)."; a refusal does not reload. The scheme and header name are pre-filled from the stored credential by an effect, and the submit label switches to "Rotate credential". A code-block server renders only the text and never requests the list. Only the five CredentialView members are parsed, the secret is never put in state, no console call exists, and the repository's browser test follows the plan's § Credential steps row by row, asserting the body never holds either secret and the console never does. The generated test that failed at head is not in the repository and the generator reported for the sibling criterion that it lacked the route and fixtures, so its failure does not show a defect in the code.
 ---
 
 ## Q-013: Criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail): accept as satisfied?
