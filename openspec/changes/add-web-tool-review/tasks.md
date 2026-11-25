@@ -2,7 +2,7 @@ Values: `test-plan.md`; steps: `test-plan-browser.md`. No `src/`, API or migrati
 
 ## 1. Reading a surface
 
-- [ ] 1.1 Write `web/src/tools/review.test.ts` (scenario "Call texts, hints and flags are read from a surface and a malformed one is refused"; rows R1 to R3, C1, C2) first, then implement `parseReviewTools`, `callRows` and `readNote` in `web/src/tools/review.ts`; every other name of `review.ts` stays a scaffold stub (the diff is task 1.2, discovery tasks 2.1 and 2.2, `REVIEW_NAMES` task 3.1)
+- [x] 1.1 Write `web/src/tools/review.test.ts` (scenario "Call texts, hints and flags are read from a surface and a malformed one is refused"; rows R1 to R3, C1, C2) first, then implement `parseReviewTools`, `callRows` and `readNote` in `web/src/tools/review.ts`; every other name of `review.ts` stays a scaffold stub (the diff is task 1.2, discovery tasks 2.1 and 2.2, `REVIEW_NAMES` task 3.1)
 - [ ] 1.2 Write `web/src/tools/review-diff.test.ts` (scenario "The diff names added, removed and changed tools and the fields that changed") first (the rows only this task adds: D1 to D9 and the `changeText` and `changesView` rows V1 to V13), then implement `surfaceDiff`, `changeText` and `changesView`, leaving the discovery names to 2.1 and 2.2
 
 ## 2. Discovery
