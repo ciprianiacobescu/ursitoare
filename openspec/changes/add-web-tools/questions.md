@@ -516,6 +516,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 ## Q-011: Criterion C-0a8c70b3 (web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered): accept as satisfied?
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The criterion is browser-only. The RegisterPage code matches § Register 2 of test-plan-browser.md on reading (the alert for a 500 from toolsErrorMessage, the Operations table with Excluded rows and the Effect comboboxes, the no-effect refusal on the document field, the 400 on Origin via REGISTER_REASONS, the navigation to ?server=ledger), and e2e/test_m7_tool_registration.py follows the steps, but there is no record of that test running green and the verifier records a generated browser test (e2e/test_l4_c_0a8c70b3.py) failing at head. That file is absent from the repository I can read, so I cannot tell whether the failure is a page defect, and I cannot run a browser. A person who can run the browser tests must decide.
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
