@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | technical | src/api/audit-limit-max.test.ts:89 compares decision lists taken at different times |
+| Q-001 | answered | 1.1 | technical | src/api/audit-limit-max.test.ts:89 compares decision lists taken at different times |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/api/audit-limit-max.test.ts:89 compares decision lists taken at different times
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** 1.1
 - **Kind:** technical
 - **Asked:** 2026-11-25T14:24Z by claude-sonnet, run r-20261125T1400Z-3001, task 1.1
@@ -37,3 +37,4 @@ Edit `src/api/audit-limit-max.test.ts`: for the decision list, take the limit=19
 
 ### Answer
 <!-- write below this line -->
+accept: take option 1. Edit src/api/audit-limit-max.test.ts: for the decision list, take the limit=199 answer first, then the limit=200 answer, and assert that the 200 items deep-equal the 199 items plus exactly the one decision row the 199 request itself recorded (the newest, at the top). Keep the status-200 assertions for both calls and the 400 refusal of limit=201. This keeps the criterion exact: the data is the same except for the request's own read_audit decision, which the engine records by design; the audit-event comparison stays as it is.
