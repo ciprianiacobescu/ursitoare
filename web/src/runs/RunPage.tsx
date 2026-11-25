@@ -327,12 +327,12 @@ export function RunPage(): ReactNode {
                     </Section>
                   )}
                   <Section title="Input" headingLevel={3} className="runs-flat">
-                    <pre>
+                    <pre className="runs-payload">
                       {payloadShown(selectedStep.inputRef, loads.get(selectedStep.inputRef ?? ""))}
                     </pre>
                   </Section>
                   <Section title="Output" headingLevel={3} className="runs-flat">
-                    <pre>
+                    <pre className="runs-payload">
                       {payloadShown(selectedStep.outputRef, loads.get(selectedStep.outputRef ?? ""))}
                     </pre>
                   </Section>

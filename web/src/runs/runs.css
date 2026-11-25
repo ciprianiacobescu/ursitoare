@@ -146,8 +146,9 @@
   overflow-wrap: anywhere;
 }
 
-.runs-payload pre {
+.runs-payload {
   margin: 0;
+  max-width: 100%;
   padding: var(--ui-space-2);
   border: 1px solid var(--ui-color-border);
   border-radius: var(--ui-radius);

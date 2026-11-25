@@ -11,7 +11,8 @@ verification round, turns them into a fix unit and checks that each one was addr
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
 | FB-001 | addressed | behaviour | src/audit/query.ts:185 | Audit events are listed in numeric seq order |
-| FB-002 | submitted | behaviour | src/api/audit-routes.ts:387 | limit=200 on the audit and decision lists answers 500 |
+| FB-002 | addressed | behaviour | src/api/audit-routes.ts:387 | limit=200 on the audit and decision lists answers 500 |
+| FB-003 | submitted | behaviour | src/api/audit-routes.ts:387 | limit=200 must still find the next page: the stores must accept limit+1 |
 <!-- l4:feedback-index:end -->
 
 ---
@@ -51,7 +52,7 @@ Addressed in round 1 at 4c97a03f3b: src/audit/query.ts:187 changes ORDER BY seq 
 
 ## FB-002: limit=200 on the audit and decision lists answers 500
 
-- **Status:** submitted
+- **Status:** addressed
 - **Kind:** behaviour
 - **Where:** `src/api/audit-routes.ts:387-392`
 - **Where:** `src/api/audit-routes.ts:426-431`
@@ -98,6 +99,58 @@ Both handlers ask the store for page.limit + 1 rows to detect a next page, so li
 ### When / Then
 - **When:** GET /api/v1/audit-events or GET /api/v1/policy-decisions is called with limit=200, the documented maximum of both routes
 - **Then:** the answer is not a 500: it is the same page the route gives for limit=199 on the same data, holding at most 200 items with the next_cursor of the page rules; limit=201 is still refused with 400 VALIDATION_FAILED
+
+### Outcome
+<!-- written by the harness -->
+Addressed in round 1 at 25cafb4889: src/api/audit-routes.ts:392 and :431 cap the store request at Math.min(query.page.limit + 1, 200) in both handlers, so limit=200 no longer asks for 201 and no longer 500s; src/api/audit-limit-max.test.ts adds C-4af021e5 tests confirming limit=200 matches limit=199 and limit=201 is 400 VALIDATION_...
+
+---
+
+## FB-003: limit=200 must still find the next page: the stores must accept limit+1
+
+- **Status:** submitted
+- **Kind:** behaviour
+- **Where:** `src/api/audit-routes.ts:387-392`
+- **Where:** `src/audit/query.ts:130-132`
+- **Where:** `src/pdp/decisions-query.ts:147-149`
+- **Where:** `src/api/pagination.ts:98-99`
+- **Lesson:** no
+- **By:** CiprianSpot, 2026-11-25T19:24:25Z
+
+### Code
+`src/api/audit-routes.ts:387-392`
+```typescript
+    if (query.page.cursor !== null) throw engineKeyRequired();
+    const rows = await listAuditEvents(deps.pool, tenant, {
+      filter: query.filter,
+      order: query.order,
+      limit: Math.min(query.page.limit + 1, 200),
+    });
+```
+`src/audit/query.ts:130-132`
+```typescript
+): Promise<AuditEventRecord[]> {
+  if (!Number.isInteger(q.limit) || q.limit < 1 || q.limit > 200) {
+    reject("bad_limit");
+```
+`src/pdp/decisions-query.ts:147-149`
+```typescript
+  if (!Number.isInteger(q.limit) || q.limit < 1 || q.limit > 200) {
+    reject("bad_limit");
+  }
+```
+`src/api/pagination.ts:98-99`
+```typescript
+  const items: T[] = rows.slice(0, opts.limit);
+  if (rows.length > opts.limit) {
+```
+
+### Feedback
+Follow-up 2 caps the store query at Math.min(limit + 1, 200). With limit=200 the handler then fetches at most 200 rows, so paginate (a next_cursor only when rows.length > limit) never issues one and the no-key branch never refuses: a client paging the audit or decision log at limit=200 silently stops after 200 rows. Its tests use fewer than 200 rows, so they cannot see it. Fix it as src/registry/block-store.ts:214 does: the stores accept limit + 1 (201), the handlers pass page.limit + 1, and the Math.min cap goes.
+
+### When / Then
+- **When:** GET /api/v1/audit-events or GET /api/v1/policy-decisions is called with limit=200 while 201 or more rows match, with an engine key and without one
+- **Then:** with an engine key the answer holds the first 200 items and a non-null next_cursor whose next page starts with item 201, as limit=199 gives a next_cursor when 200 or more rows match; without an engine key the answer is the ENGINE_KEY_REQUIRED refusal that limit=199 gives in that case; listAuditEvents and listPolicyDecisions accept limit 201 and still refuse 202
 
 ### Outcome
 <!-- written by the harness -->

@@ -388,14 +388,14 @@ async function auditListHandler(
     const rows = await listAuditEvents(deps.pool, tenant, {
       filter: query.filter,
       order: query.order,
-      limit: query.page.limit + 1,
+      limit: Math.min(query.page.limit + 1, 200),
     });
     if (rows.length > query.page.limit) throw engineKeyRequired();
     return { items: rows, next_cursor: null };
   }
 
   const position = startAfter(binding, query.page.cursor);
-  const context = { filter: query.filter, order: query.order, limit: query.page.limit + 1 };
+  const context = { filter: query.filter, order: query.order, limit: Math.min(query.page.limit + 1, 200) };
   const rows = await listAuditEvents(
     deps.pool,
     tenant,
@@ -427,14 +427,14 @@ async function decisionsListHandler(
     const rows = await listPolicyDecisions(deps.pool, tenant, {
       filter: query.filter,
       order: query.order,
-      limit: query.page.limit + 1,
+      limit: Math.min(query.page.limit + 1, 200),
     });
     if (rows.length > query.page.limit) throw engineKeyRequired();
     return { items: rows, next_cursor: null };
   }
 
   const position = startAfter(binding, query.page.cursor);
-  const context = { filter: query.filter, order: query.order, limit: query.page.limit + 1 };
+  const context = { filter: query.filter, order: query.order, limit: Math.min(query.page.limit + 1, 200) };
   const rows = await listPolicyDecisions(
     deps.pool,
     tenant,

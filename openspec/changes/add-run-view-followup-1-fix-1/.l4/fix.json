@@ -1,0 +1,13 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-run-view-followup-1",
+  "round": 1,
+  "findings": [
+    "F-003479b0"
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": [],
+  "repairs": []
+}
