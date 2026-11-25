@@ -10,14 +10,14 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | taken | behaviour | src/identity/oidc/login.ts:101 | OIDC handlers send a reply and resolve undefined, so Fastify sends twice and logs a 500 |
+| FB-001 | addressed | behaviour | src/identity/oidc/login.ts:101 | OIDC handlers send a reply and resolve undefined, so Fastify sends twice and logs a 500 |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: OIDC handlers send a reply and resolve undefined, so Fastify sends twice and logs a 500
 
-- **Status:** taken
+- **Status:** addressed
 - **Kind:** behaviour
 - **Where:** `src/identity/oidc/login.ts:101-110`
 - **Where:** `src/identity/oidc/callback.ts:185-218`
@@ -152,4 +152,4 @@ The OIDC route handlers are async and call reply...send() without returning repl
 
 ### Outcome
 <!-- written by the harness -->
-Taken into add-oidc-login-followup-1
+Addressed in round 1 at cf12a12c4d: src/identity/oidc/login.ts returns reply after send; src/identity/oidc/callback.ts returns reply after send; src/identity/oidc/logout.ts returns reply after send; src/identity/oidc/routes.ts returns reply after send; src/api/server.ts error handler returns reply when reply.sent; src/identity/oidc...
