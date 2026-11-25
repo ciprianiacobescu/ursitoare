@@ -11,7 +11,7 @@ verification round, turns them into a fix unit and checks that each one was addr
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
 | FB-001 | addressed | behaviour | src/audit/query.ts:185 | Audit events are listed in numeric seq order |
-| FB-002 | submitted | behaviour | src/api/audit-routes.ts:387 | limit=200 on the audit and decision lists answers 500 |
+| FB-002 | taken | behaviour | src/api/audit-routes.ts:387 | limit=200 on the audit and decision lists answers 500 |
 <!-- l4:feedback-index:end -->
 
 ---
@@ -51,7 +51,7 @@ Addressed in round 1 at 4c97a03f3b: src/audit/query.ts:187 changes ORDER BY seq 
 
 ## FB-002: limit=200 on the audit and decision lists answers 500
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** behaviour
 - **Where:** `src/api/audit-routes.ts:387-392`
 - **Where:** `src/api/audit-routes.ts:426-431`
@@ -101,3 +101,4 @@ Both handlers ask the store for page.limit + 1 rows to detect a next page, so li
 
 ### Outcome
 <!-- written by the harness -->
+Taken into add-audit-api-followup-2
