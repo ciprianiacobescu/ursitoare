@@ -11,6 +11,7 @@ verification round, turns them into a fix unit and checks that each one was addr
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
 | FB-001 | addressed | behaviour | src/audit/query.ts:185 | Audit events are listed in numeric seq order |
+| FB-002 | submitted | behaviour | src/api/audit-routes.ts:387 | limit=200 on the audit and decision lists answers 500 |
 <!-- l4:feedback-index:end -->
 
 ---
@@ -45,3 +46,58 @@ src/audit/query.ts selects `seq::text AS seq` and then orders by `ORDER BY seq`.
 ### Outcome
 <!-- written by the harness -->
 Addressed in round 1 at 4c97a03f3b: src/audit/query.ts:187 changes ORDER BY seq to ORDER BY audit_event.seq, ordering by the table's bigint column as requested.
+
+---
+
+## FB-002: limit=200 on the audit and decision lists answers 500
+
+- **Status:** submitted
+- **Kind:** behaviour
+- **Where:** `src/api/audit-routes.ts:387-392`
+- **Where:** `src/api/audit-routes.ts:426-431`
+- **Where:** `src/pdp/decisions-query.ts:147-149`
+- **Where:** `src/audit/query.ts:130-132`
+- **Lesson:** yes
+- **By:** CiprianSpot, 2026-11-25T13:35:14Z
+
+### Code
+`src/api/audit-routes.ts:387-392`
+```typescript
+    if (query.page.cursor !== null) throw engineKeyRequired();
+    const rows = await listAuditEvents(deps.pool, tenant, {
+      filter: query.filter,
+      order: query.order,
+      limit: query.page.limit + 1,
+    });
+```
+`src/api/audit-routes.ts:426-431`
+```typescript
+    if (query.page.cursor !== null) throw engineKeyRequired();
+    const rows = await listPolicyDecisions(deps.pool, tenant, {
+      filter: query.filter,
+      order: query.order,
+      limit: query.page.limit + 1,
+    });
+```
+`src/pdp/decisions-query.ts:147-149`
+```typescript
+  if (!Number.isInteger(q.limit) || q.limit < 1 || q.limit > 200) {
+    reject("bad_limit");
+  }
+```
+`src/audit/query.ts:130-132`
+```typescript
+): Promise<AuditEventRecord[]> {
+  if (!Number.isInteger(q.limit) || q.limit < 1 || q.limit > 200) {
+    reject("bad_limit");
+```
+
+### Feedback
+Both handlers ask the store for page.limit + 1 rows to detect a next page, so limit=200 becomes 201, which listAuditEvents and listPolicyDecisions refuse (> 200) with an AuditError / PdpError that the error handler maps to 500 INTERNAL. The block store accepts 201 for this reason. Found by the add-web-tool-journeys judge (the Node journey had to use limit=100).
+
+### When / Then
+- **When:** GET /api/v1/audit-events or GET /api/v1/policy-decisions is called with limit=200, the documented maximum of both routes
+- **Then:** the answer is not a 500: it is the same page the route gives for limit=199 on the same data, holding at most 200 items with the next_cursor of the page rules; limit=201 is still refused with 400 VALIDATION_FAILED
+
+### Outcome
+<!-- written by the harness -->
