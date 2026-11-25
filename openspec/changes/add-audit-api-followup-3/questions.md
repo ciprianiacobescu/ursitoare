@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | technical | src/audit/query.test.ts:114 and src/pdp/decisions-query.test.ts (bad_limit 201 case) contradict the new FB-003 tests |
+| Q-001 | answered | 1.1 | technical | src/audit/query.test.ts:114 and src/pdp/decisions-query.test.ts (bad_limit 201 case) contradict the new FB-003 tests |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: src/audit/query.test.ts:114 and src/pdp/decisions-query.test.ts (bad_limit 201 case) contradict the new FB-003 tests
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** 1.1
 - **Kind:** technical
 - **Asked:** 2026-11-25T19:49Z by claude-sonnet, run r-20261125T1925Z-2e55, task 1.1
@@ -36,3 +36,4 @@ Edit `src/audit/query.test.ts`: change the `limit: 201` bad_limit case on line 1
 
 ### Answer
 <!-- write below this line -->
+accept: take option 1. Edit src/audit/query.test.ts (the limit 201 bad_limit case at line 114 becomes limit 202) and src/pdp/decisions-query.test.ts (the limit 201 bad_limit case in the 'refuses bad options' test becomes limit 202); src/api/audit-limit-next-page.test.ts stays as written. FB-003's criterion is exactly this: the stores accept limit 201 (one row past the largest page) and still refuse 202, so the refused boundary moves by one and stays asserted; nothing is weakened.
