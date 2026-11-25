@@ -227,3 +227,4 @@
 {"at":"2026-11-25T12:09:36Z","run":"r-20261125T1209Z-b177","type":"unit.dispatched","unit":"openspec:add-web-tool-journeys"}
 {"at":"2026-11-25T13:07:19Z","attempt":1,"cost_usd":4.712263,"runs":4,"type":"plan.charged","unit":"openspec:add-web-tool-journeys"}
 {"at":"2026-11-25T13:07:19Z","run":"r-20261125T1307Z-ccec","type":"unit.dispatched","unit":"openspec:add-web-tool-journeys"}
+{"at":"2026-11-25T13:18:12Z","head":"e5258e60193cddd9f5b6aa076082fd43bc2509f3","pr":175,"target_before":"526628d1ad44ab150a54b1bfd12d660b0590a78b","type":"unit.merge_requested","unit":"openspec:add-web-tool-journeys"}
