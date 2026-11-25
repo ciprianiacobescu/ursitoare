@@ -12,6 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1 | harness | Task 1.1: the pre-satisfied check could not decide |
+| Q-002 | open | none | verdict | Criterion C-eba5ac9e (web-tools › The M7 journey proves tool registration, review and a dry run in a browser › Carol sets up three tool servers and alice's dry run reads, runs and stubs): accept as sa |
 <!-- l4:index:end -->
 
 ---
@@ -243,3 +244,35 @@ A person answers; an agent only where `clarifier.answer_by_agents` is true on th
 ### Answer
 <!-- write below this line -->
 accept: Count these tests on the evidence of the real run. The unit adds no production file: its proposal scaffolds nothing and its three files are tests, so the Node journey and the source test pass against the base code by construction, and the design and task 1.1 foresee exactly this pre_satisfied question for a unit whose journeys are green on arrival. The project's own test-gate decision record states that L4's zero-value check is Python-only and that a TypeScript test passing at red holds the unit for a decision, which is the situation here. The replay runs the saved change through every gate, so the earlier typecheck excerpt is checked there; the lines it names in the saved copy of the Node journey are an assertion's closing bracket and a plain awaited call, not the code that excerpt describes, and the held record says the later attempt typechecked clean.
+
+---
+
+## Q-002: Criterion C-eba5ac9e (web-tools › The M7 journey proves tool registration, review and a dry run in a browser › Carol sets up three tool servers and alice's dry run reads, runs and stubs): accept as sa
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 1, verifier
+- **Criteria:** C-eba5ac9e (web-tools › The M7 journey proves tool registration, review and a dry run in a browser › Carol sets up three tool servers and alice's dry run reads, runs and stubs)
+
+### Context
+Criterion C-eba5ac9e (web-tools › The M7 journey proves tool registration, review and a dry run in a browser › Carol sets up three tool servers and alice's dry run reads, runs and stubs) is needs human after round 1.
+
+Scenario:
+\- **WHEN** steps 1 to 5 of test-plan-browser.md § Journey run in two browser contexts (carol, alice)
+\- **THEN** the values are those of the steps: "Discovered 2 tools over MCP 2026-07-28.", `find_vendor` `read` in "Tools" and in the exact Effect cell of "Calls", the exact cells `unsafe to retry` (`create_payment`) and `safe to retry`, `trusted` (`risk_score`), "Surface approved." three times, the `ledger` credential stored; the run `State: completed` with the items `find · allow · POST mcp.fake.test/mcp`, `score · allow` (no Service detail) and `pay · allow · stubbed · POST tools.fake.test/blocks/erp.create_payment@1`, outputs `V-ACME`, `low`, `P-7`, and the Taint row `none` for `pay`, `untrusted` for `done`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m7_tools::test_carol_sets_up_three_servers_and_alice_dry_runs[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
