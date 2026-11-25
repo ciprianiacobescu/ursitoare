@@ -188,7 +188,7 @@ export function registerCallbackRoute(server: FastifyInstance, deps: CallbackDep
         secure,
       });
       reply.header("set-cookie", [clearedLogin(), sessionCookie]);
-      reply.code(302).header("location", state.returnTo).send();
+      return reply.code(302).header("location", state.returnTo).send();
     } catch (error) {
       const code = refusalCode(error);
       const reason = error instanceof OidcError ? error.details["reason"] : undefined;
@@ -213,7 +213,7 @@ export function registerCallbackRoute(server: FastifyInstance, deps: CallbackDep
       }
 
       reply.header("set-cookie", [clearedLogin()]);
-      reply.code(302).header("location", refusalLocation(code)).send();
+      return reply.code(302).header("location", refusalLocation(code)).send();
     }
   });
 }

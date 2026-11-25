@@ -102,10 +102,9 @@ export function registerLoginRoute(server: FastifyInstance, deps: LoginDeps): vo
     } catch (error) {
       const code = refusalCode(error);
       request.log.warn({ code }, "sign-in refused");
-      reply.code(302).header("location", refusalLocation(code)).send();
-      return;
+      return reply.code(302).header("location", refusalLocation(code)).send();
     }
 
-    reply.code(302).header("location", authorizeUrl).send();
+    return reply.code(302).header("location", authorizeUrl).send();
   });
 }

@@ -116,10 +116,13 @@ export function buildServer(deps: ServerDeps): Promise<FastifyInstance> {
 
   server.setErrorHandler((error, request, reply) => {
     const mapped = toErrorResponse(error);
+    if (reply.sent) {
+      return reply;
+    }
     if (mapped.status >= 500) {
       request.log.error({ err: error }, "request failed");
     }
-    reply.code(mapped.status).send(mapped.body);
+    return reply.code(mapped.status).send(mapped.body);
   });
 
   server.setNotFoundHandler((_request, reply) => {
