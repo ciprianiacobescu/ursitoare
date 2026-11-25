@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 1.2 | technical | web/src/tools/review-diff.test.ts:227 expected diff omits removed log_note |
-| Q-002 | open | 2.1 | technical | web/src/tools/review-discover.test.ts:268 expected string omits the reason |
+| Q-002 | accepted | 2.1 | technical | web/src/tools/review-discover.test.ts:268 expected string omits the reason |
 <!-- l4:index:end -->
 
 ---
@@ -44,7 +44,8 @@ Edit `web/src/tools/review-diff.test.ts`: after the `find_vendor` item in the ex
 
 ## Q-002: web/src/tools/review-discover.test.ts:268 expected string omits the reason
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 2.1
 - **Kind:** technical
 - **Asked:** 2026-11-25T04:38Z by beam, run r-20261125T0316Z-e642, task 2.1
