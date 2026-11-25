@@ -232,6 +232,7 @@ test("C-b5979a6e surfaceDiff carries described input properties of an added and 
       description: { old: null, new: "Find a vendor." },
       input: [{ property: "vendor_name", text: "Vendor to look up." }],
     },
+    { name: "log_note", kind: "removed", fields: [] },
   ]);
   const changedInput: Record<string, unknown> = { ...FIND, input: FD.input };
   assert.deepEqual(call(() => surfaceDiff(S(FIND), S(changedInput))), [

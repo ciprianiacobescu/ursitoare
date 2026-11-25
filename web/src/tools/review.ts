@@ -193,19 +193,245 @@ export interface SurfaceChange {
   input?: { property: string; text: string }[];
 }
 
-export function surfaceDiff(_approved: unknown, _pending: unknown): SurfaceChange[] {
-  throw new Error("not implemented");
+const FIELD_ORDER: readonly string[] = [
+  "effect",
+  "description",
+  "input",
+  "output",
+  "untrusted_result",
+  "unsafe_to_retry",
+  "data_class",
+  "call",
+  "hints",
+  "untrusted_fields",
+];
+
+function isSurface(v: unknown): boolean {
+  return parseReviewTools(v) !== null;
 }
 
-export function changeText(_c: SurfaceChange): string {
-  throw new Error("not implemented");
+function toolMap(surface: unknown): Map<string, Record<string, unknown>> {
+  const m = new Map<string, Record<string, unknown>>();
+  const s = surface as { tools: unknown[] };
+  for (const t of s.tools) {
+    const tool = t as Record<string, unknown>;
+    m.set(tool.name as string, tool);
+  }
+  return m;
+}
+
+function strOrNull(v: unknown): string | null {
+  return typeof v === "string" ? v : null;
+}
+
+function boolDefault(v: unknown, d: boolean): boolean {
+  return typeof v === "boolean" ? v : d;
+}
+
+function isRecordLocal(v: unknown): v is Record<string, unknown> {
+  return typeof v === "object" && v !== null && !Array.isArray(v);
+}
+
+function canonical(v: unknown): string {
+  if (v === null || v === undefined) return "null";
+  if (typeof v === "string") return JSON.stringify(v);
+  if (typeof v === "number" || typeof v === "boolean") return JSON.stringify(v);
+  if (Array.isArray(v)) return "[" + v.map(canonical).join(",") + "]";
+  if (typeof v === "object") {
+    const keys = Object.keys(v as object).sort();
+    return "{" + keys.map((k) => JSON.stringify(k) + ":" + canonical((v as Record<string, unknown>)[k])).join(",") + "}";
+  }
+  return "null";
+}
+
+function sortedCopy(arr: unknown): unknown {
+  if (!Array.isArray(arr)) return arr === undefined ? [] : arr;
+  return [...arr].sort();
+}
+
+function invocation(tool: Record<string, unknown>): unknown {
+  if (Object.hasOwn(tool, "http") && tool.http !== undefined && tool.http !== null) {
+    return { http: tool.http };
+  }
+  if (Object.hasOwn(tool, "call") && tool.call !== undefined && tool.call !== null) {
+    const c = tool.call as Record<string, unknown>;
+    const { hints: _hints, ...rest } = c;
+    return { call: rest };
+  }
+  return null;
+}
+
+function hintsValue(tool: Record<string, unknown>): unknown {
+  if (isRecordLocal(tool.call)) {
+    const c = tool.call as Record<string, unknown>;
+    if (Object.hasOwn(c, "hints")) return c.hints;
+    return null;
+  }
+  if (Object.hasOwn(tool, "hints")) return tool.hints;
+  return null;
+}
+
+function normalized(tool: Record<string, unknown>, field: string): unknown {
+  switch (field) {
+    case "effect":
+      return tool.effect;
+    case "description":
+      return strOrNull(tool.description);
+    case "input":
+      return tool.input;
+    case "output":
+      return tool.output;
+    case "untrusted_result":
+      return boolDefault(tool.untrusted_result, true);
+    case "unsafe_to_retry":
+      return boolDefault(tool.unsafe_to_retry, false);
+    case "data_class":
+      return strOrNull(tool.data_class);
+    case "call":
+      return invocation(tool);
+    case "hints":
+      return hintsValue(tool);
+    case "untrusted_fields":
+      return sortedCopy(tool.untrusted_fields);
+    default:
+      return undefined;
+  }
+}
+
+function describedInputs(tool: Record<string, unknown>): { property: string; text: string }[] {
+  const input = tool.input;
+  if (!isRecordLocal(input)) return [];
+  const props = input.properties;
+  if (!isRecordLocal(props)) return [];
+  const out: { property: string; text: string }[] = [];
+  for (const key of Object.keys(props)) {
+    const p = props[key];
+    if (isRecordLocal(p) && typeof p.description === "string") {
+      out.push({ property: key, text: p.description });
+    }
+  }
+  return out;
+}
+
+export function surfaceDiff(approved: unknown, pending: unknown): SurfaceChange[] {
+  if (!isSurface(approved) || !isSurface(pending)) return [];
+  const aMap = toolMap(approved);
+  const pMap = toolMap(pending);
+  const names = new Set<string>([...aMap.keys(), ...pMap.keys()]);
+  const sorted = [...names].sort();
+  const out: SurfaceChange[] = [];
+  for (const name of sorted) {
+    const a = aMap.get(name);
+    const p = pMap.get(name);
+    if (!a && p) {
+      out.push({
+        name,
+        kind: "added",
+        fields: [],
+        description: { old: null, new: strOrNull(p.description) },
+        input: describedInputs(p),
+      });
+    } else if (a && !p) {
+      out.push({ name, kind: "removed", fields: [] });
+    } else if (a && p) {
+      const fields: string[] = [];
+      for (const f of FIELD_ORDER) {
+        if (canonical(normalized(a, f)) !== canonical(normalized(p, f))) {
+          fields.push(f);
+        }
+      }
+      if (fields.length === 0) continue;
+      const change: SurfaceChange = { name, kind: "changed", fields };
+      if (fields.includes("description")) {
+        change.description = { old: strOrNull(a.description), new: strOrNull(p.description) };
+      }
+      if (fields.includes("input")) {
+        change.input = describedInputs(p);
+      }
+      out.push(change);
+    }
+  }
+  return out;
+}
+
+export function changeText(c: SurfaceChange): string {
+  if (c.kind === "added") return `added ${c.name}`;
+  if (c.kind === "removed") return `removed ${c.name}`;
+  return `changed ${c.name}: ${c.fields.join(", ")}`;
+}
+
+function neutralise(s: string): string {
+  let out = s.replace(/\n/g, "\u21b5");
+  out = out.replace(/[\p{Cc}\p{Cf}\p{Co}\p{Cn}\p{Zl}\p{Zp}]/gu, "?");
+  return out;
+}
+
+function cut(s: string): string {
+  if (s.length <= 2000) return s;
+  return s.slice(0, 2000) + ` (${s.length - 2000} more characters)`;
+}
+
+function neutralisedText(v: string | null): string {
+  if (v === null) return "(none)";
+  return cut(neutralise(v));
 }
 
 export function changesView(
-  _approved: unknown,
-  _pending: unknown,
+  approved: unknown,
+  pending: unknown,
 ): { text: string | null; items: { text: string; lines: string[] }[] } {
-  throw new Error("not implemented");
+  if (pending === null || pending === undefined) {
+    return { text: "No pending surface to compare.", items: [] };
+  }
+  if (!isSurface(pending)) {
+    return { text: "The surface could not be read.", items: [] };
+  }
+  let approvedSurf: unknown;
+  if (approved === null || approved === undefined) {
+    approvedSurf = { tools: [] };
+  } else if (!isSurface(approved)) {
+    return { text: "The surface could not be read.", items: [] };
+  } else {
+    approvedSurf = approved;
+  }
+  const diff = surfaceDiff(approvedSurf, pending);
+  if (diff.length === 0) {
+    return { text: "No changes.", items: [] };
+  }
+  const items = diff.map((c) => {
+    const lines: string[] = [];
+    if (c.kind === "added") {
+      const newDesc = c.description ? c.description.new : null;
+      lines.push(`Description: ${neutralisedText(newDesc)}`);
+      const inputs = c.input ?? [];
+      const shown = inputs.slice(0, 50);
+      for (const inp of shown) {
+        lines.push(`Input ${inp.property}: ${cut(neutralise(inp.text))}`);
+      }
+      if (inputs.length > 50) {
+        lines.push(`(${inputs.length - 50} more properties)`);
+      }
+    } else if (c.kind === "changed") {
+      if (c.fields.includes("description")) {
+        const oldD = c.description ? c.description.old : null;
+        const newD = c.description ? c.description.new : null;
+        lines.push(`Description before: ${neutralisedText(oldD)}`);
+        lines.push(`Description after: ${neutralisedText(newD)}`);
+      }
+      if (c.fields.includes("input")) {
+        const inputs = c.input ?? [];
+        const shown = inputs.slice(0, 50);
+        for (const inp of shown) {
+          lines.push(`Input ${inp.property}: ${cut(neutralise(inp.text))}`);
+        }
+        if (inputs.length > 50) {
+          lines.push(`(${inputs.length - 50} more properties)`);
+        }
+      }
+    }
+    return { text: changeText(c), lines };
+  });
+  return { text: null, items };
 }
 
 export interface DiscoverDraft {
