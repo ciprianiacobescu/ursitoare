@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused): accept as satisfied? |
 | Q-008 | answered | none | verdict | Criterion C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list): accept as satisfied? |
 | Q-009 | answered | none | verdict | Criterion C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file): accept as s |
-| Q-010 | open | none | verdict | Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form): accept as  |
+| Q-010 | answered | none | verdict | Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form): accept as |
 | Q-011 | open | none | verdict | Criterion C-0a8c70b3 (web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered): accept as satisfied? |
 | Q-012 | answered | none | verdict | Criterion C-62f4785e (web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows): accept as satisfied? |
 | Q-013 | answered | none | verdict | Criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail): accept as satisfied? |
@@ -483,7 +483,7 @@ accept The criterion is satisfied. REGISTER_PAGE holds the id, file, path, capab
 
 ## Q-010: Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form): accept as 
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): The criterion is browser-only. I read RegisterPage.tsx, CredentialSection.tsx, ServersPage.tsx, register.ts and the kit Form and found the code consistent with every step of test-plan-browser.md § Register 1, and e2e/test_m7_tool_registration.py follows those steps, but no run record shows it green and the verifier records a generated browser test (e2e/test_l4_c_e3ab2add.py) as failing at head. That file is not in the repository I can read, so I cannot tell whether it failed on a page defect or on its own mocks, and I cannot run a browser. A person who can run the browser tests must decide.
 - **Blocking tasks:** none
 - **Kind:** verdict
@@ -511,6 +511,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied, and the missing proof that the test discriminates now exists. e2e/test_m7_tool_registration.py::test_register_mcp_server_and_code_block_detail follows the six steps of test-plan-browser.md § Register 1 assertion by assertion: the http URL refused locally with no POST, the 400 loopback under one Idempotency-Key and the 409 under the same key, the changed URL under another key, the landing on ?server=crm reading "No credential stored." after one credentials request, and the code-block detail reading "Code blocks need no credential." with no Credential form, no Secret value field and no further credentials request. It passed in the round-2 e2e gate at head 70b281a2. The owner's delegate then ran it outside CI in a Node 24 container with the gate's own commands (pnpm install, uv sync, pnpm run build, node test/support/e2e-stack/main.ts, pytest): green three times at head 09b5e67d, and red at the base eefc5827 with only the test file copied in, failing at its first locator because the link "Register a tool server" does not exist there. So it is a discriminating, plan-faithful test that passes at head, and screenshots of each step show the states the scenario names. The generated test_l4_c_e3ab2add.py that failed at head was not kept and has no CI artifact, so its failure cannot be attributed to the page; nothing in the page contradicts the scenario. Proof against the real engine rather than mocked answers is the scope of add-web-tool-journeys.
 ---
 
 ## Q-011: Criterion C-0a8c70b3 (web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered): accept as satisfied?
