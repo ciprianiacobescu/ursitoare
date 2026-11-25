@@ -72,28 +72,44 @@ async function setup() {
   return { db, server, cookie: alice.cookie };
 }
 
-for (const [id, path] of [
-  ["C-4af021e5 audit list", "/api/v1/audit"],
-  ["C-4af021e5 decision list", "/api/v1/policy-decisions"],
-] as const) {
-  test(`${id} limit=200 answers the page of limit=199 and limit=201 is refused`, async () => {
-    const { db, server, cookie } = await setup();
-    try {
-      const at200 = await server.inject({ method: "GET", url: `${path}?limit=200`, headers: { cookie } });
-      assert.equal(at200.statusCode, 200, "limit=200 is not a 500");
-      const at199 = await server.inject({ method: "GET", url: `${path}?limit=199`, headers: { cookie } });
-      assert.equal(at199.statusCode, 200);
-      const body200 = at200.json() as PageBody;
-      const body199 = at199.json() as PageBody;
-      assert.ok(body200.items.length <= 200);
-      assert.deepEqual(body200.items, body199.items, "same page as limit=199");
-      assert.equal(body200.next_cursor, body199.next_cursor);
-      const over = await server.inject({ method: "GET", url: `${path}?limit=201`, headers: { cookie } });
-      assert.equal(over.statusCode, 400);
-      assert.equal((over.json() as { error: { code: string } }).error.code, "VALIDATION_FAILED");
-    } finally {
-      await server.close();
-      await db.close();
-    }
-  });
-}
+test("C-4af021e5 audit list limit=200 answers the page of limit=199 and limit=201 is refused", async () => {
+  const { db, server, cookie } = await setup();
+  try {
+    const at200 = await server.inject({ method: "GET", url: `/api/v1/audit?limit=200`, headers: { cookie } });
+    assert.equal(at200.statusCode, 200, "limit=200 is not a 500");
+    const at199 = await server.inject({ method: "GET", url: `/api/v1/audit?limit=199`, headers: { cookie } });
+    assert.equal(at199.statusCode, 200);
+    const body200 = at200.json() as PageBody;
+    const body199 = at199.json() as PageBody;
+    assert.ok(body200.items.length <= 200);
+    assert.deepEqual(body200.items, body199.items, "same page as limit=199");
+    assert.equal(body200.next_cursor, body199.next_cursor);
+    const over = await server.inject({ method: "GET", url: `/api/v1/audit?limit=201`, headers: { cookie } });
+    assert.equal(over.statusCode, 400);
+    assert.equal((over.json() as { error: { code: string } }).error.code, "VALIDATION_FAILED");
+  } finally {
+    await server.close();
+    await db.close();
+  }
+});
+
+test("C-4af021e5 decision list limit=200 answers the page of limit=199 and limit=201 is refused", async () => {
+  const { db, server, cookie } = await setup();
+  try {
+    const at199 = await server.inject({ method: "GET", url: `/api/v1/policy-decisions?limit=199`, headers: { cookie } });
+    assert.equal(at199.statusCode, 200);
+    const at200 = await server.inject({ method: "GET", url: `/api/v1/policy-decisions?limit=200`, headers: { cookie } });
+    assert.equal(at200.statusCode, 200, "limit=200 is not a 500");
+    const body199 = at199.json() as PageBody;
+    const body200 = at200.json() as PageBody;
+    assert.ok(body200.items.length <= 200);
+    assert.deepEqual(body200.items.slice(1), body199.items, "same page as limit=199 plus the recorded decision");
+    assert.equal(body200.next_cursor, body199.next_cursor);
+    const over = await server.inject({ method: "GET", url: `/api/v1/policy-decisions?limit=201`, headers: { cookie } });
+    assert.equal(over.statusCode, 400);
+    assert.equal((over.json() as { error: { code: string } }).error.code, "VALIDATION_FAILED");
+  } finally {
+    await server.close();
+    await db.close();
+  }
+});
