@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-25T01:38:16Z",
+  "integrated_revision": "207332d7b634a8b126f8365b7f64f031a76b27d5",
+  "merge_commit": "207332d7b634a8b126f8365b7f64f031a76b27d5",
+  "plan_digest": "34aab8fa5ef378c7",
+  "plan_id": "m7",
+  "postcheck": "pass",
+  "pr": 170,
+  "receipt_id": "m7/openspec:add-web-tools/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "8ddfa0814ccc7ae9958f60ca63d8d7b87e94ebc1",
+  "spec_digest": "0956170ee72eb868",
+  "target": "main",
+  "unit_id": "openspec:add-web-tools"
+}
