@@ -28,7 +28,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-015 | answered | none | verdict | Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off): accept as satisfied |
 | Q-016 | answered | none | verdict | Hold H-ecf0d557: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-5a58c421: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table |
-| Q-018 | open | none | verdict | Hold H-4adb729f: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table |
+| Q-018 | answered | none | verdict | Hold H-4adb729f: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table |
 | Q-019 | open | none | verdict | Hold H-b2d28b5d: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table |
 | Q-020 | open | none | verdict | Hold H-6a1a6ad5: UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table |
 | Q-021 | open | none | verdict | Hold H-21f75d66: UI criterion C-5d82c84b has no end-to-end test; see the generated UI tests table |
@@ -729,7 +729,8 @@ accept The unit can go on. The repository holds a browser test for this criterio
 
 ## Q-018: Hold H-4adb729f: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -748,6 +749,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on. The repository's browser test test_register_openapi_preview_effects_and_retry in e2e/test_m7_tool_registration.py runs the five steps of test-plan-browser.md § Register 2: the preview 500 shows as the form alert with the engine text and no Operations table, the second preview renders six rows with the combobox options Skip, read, write, send, pay for createPayment, Excluded: method_unsupported without a combobox for exportVendors and a dash with Excluded: no_operation_id on the last row, Register server with no effect puts Choose an effect for at least one operation. under the document field and posts nothing, the 400 with body/origin private lands under Origin with the two-entry overlay in the body, and the retry's 201 lands on ?server=ledger. The code does each of these: runPreview sets the form error from toolsErrorMessage on failure, the table renders a dash for a null operation id and Excluded: for an excluded row and a select labelled Effect of <id> otherwise, openApiRegistration refuses the document field when no effect is set and drops empty effects from the overlay, registrationFormErrors maps body/origin to the origin field and reads private as the Local network server sentence, and the Form kit renders the form error with role alert. The generated test's failure cannot be inspected since it is not in the repository, but the code matches the scenario.
 ---
 
 ## Q-019: Hold H-b2d28b5d: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table
