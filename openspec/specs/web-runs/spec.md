@@ -321,3 +321,10 @@ The runs page SHALL show the table "Runs" (caption visually hidden, the heading 
 #### Scenario: A mocked list shows tones, durations and one name request
 - **WHEN** `test_runs_list_shows_badges_duration_and_names` loads `/runs` with `run_a` (completed, `user-1`) and `run_b` (failed, `usr_9`) and `/people` answering only `user-1`
 - **THEN** the headers are `Run`, `Flow`, `Mode`, `State`, `Started`, `Duration`, `Started by`; the `run_a` row has "Alice Example", "2.5 s" and a badge `success`; the `run_b` row "usr_9", "1 min 5 s" and a badge `failed` with `data-tone` `danger`; the link `Open run run_a` is visible; the caption has class `ui-table-caption ui-visually-hidden`; `/people` was asked once with `ids=user-1%2Cusr_9`; layout, axe and CSP are clean
+
+### Requirement: A stale validation has its own text in the test-run and dry-run panels
+`staleVersionText(details)` SHALL give "This version was validated by an older validator. Validate it again from the flow's version page, then run it." for details whose own members are `reason` `version_not_runnable` and `cause` `validation_stale`, else `null`. `testRunFormErrors`, and so `dryRunFormErrors` for every error that is not a 400, SHALL give `{ $form: <that text> }` for such a 422 `OPERATION_REFUSED`; every other refusal reads as before.
+
+#### Scenario: A stale version reads as one message in both panels
+- **WHEN** `staleVersionText`, `testRunFormErrors` and `dryRunFormErrors` run on the rows of test-plan.md § Stale
+- **THEN** the stale details give the text and the other values `null`; both form-error functions give `{ $form: STALE }` for the stale refusal and the existing blocks text for the `block_missing` one
