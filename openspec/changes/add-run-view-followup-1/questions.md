@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-2df1ce97 (web-runs › Run page scrolls sideways when a step's input or output has a long line — feedback FB-001 › Run page scrolls sideways when a step's input or output has a long line): a |
 | Q-002 | answered | none | verdict | Finding F-130c464c: FB-001 browser scroll check still fails |
-| Q-003 | open | none | verdict | Hold H-37094cb1: UI criterion C-2df1ce97 has no end-to-end test; see the generated UI tests table |
+| Q-003 | answered | none | verdict | Hold H-37094cb1: UI criterion C-2df1ce97 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-bdd939da: UI criterion C-39bfdc20 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-cd993b33: UI criterion C-6bf9588b has no end-to-end test; see the generated UI tests table |
@@ -83,7 +83,7 @@ accept The finding's premise, that the page still scrolls sideways at head, is r
 
 ## Q-003: Hold H-37094cb1: UI criterion C-2df1ce97 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -102,6 +102,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The delegate's browser measurement is the end-to-end evidence for C-2df1ce97: no sideways scroll at head at 1280 and 375 with a long Output line, and a 6673/5925 overflow at base. Evidence (delegate, 2026-11-25, real Chromium 153 through the CI e2e build and stack, run API mocked with a 600-character unbroken string in a step Output and long policy-decision ids): at this unit's head f6c66983 the document scrollWidth equals clientWidth in every state (1280/1280 and 375/375, no step selected and the step selected), and the Output pre wraps (scrollWidth 432 = clientWidth at 1280, 275 at 375). At base 31968a29, with the step selected, the page is 6673 wide at 1280 and 5925 at 375, all from the Output pre (scrollWidth 5876). Screenshots were looked at by the delegate.
 ---
 
 ## Q-004: Hold H-51c57b0f: UI criterion C-56e16a37 has no end-to-end test; see the generated UI tests table
