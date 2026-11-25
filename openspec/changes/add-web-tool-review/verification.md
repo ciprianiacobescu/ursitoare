@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-tool-review: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-web-tool-review: PASS (round 2)
 
 traceability: 5/7 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 5/7 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.6 | base main@b5c1358354 contained |
-| 1 | integrity | ok | 290.3 | 11 sub-checks (+2 unfrozen by human answers); scope: 14 changed file(s) |
-| 2 | build | ok | 35.7 |  |
-| 3 | tests | ok | 467.5 |  |
-| 4 | traceability | ok | 0.2 | 5/7 criteria covered |
-| 4a | audit sampling | ok | 8.0 | 2 not_testable; support files at the base: 6 |
-| 5 | ui test generation | ok | 29.2 | 7 not_testable; 5 not_testable covered by step 4: notes, no hold (L4-VER-067); e2e support files shown to the writer: 1 |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/tools/ReviewSections.tsx, web/src/tools/ServersPage.tsx, web/src/tools/review.ts |
-| 8 | s1 judge | ok | 0.3 | 5/7 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 422.9 | 2 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 4a | audit sampling | reused | 0.0 | reused (round 1) |
+| 5 | ui test generation | reused | 0.0 | reused (round 1) |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -141,6 +141,13 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-b5979a6e | not_testable | - | - | The criterion targets TypeScript web code (review.ts, changeText/changesView rows in test-plan.md) that no shown Python module exposes. A pytest test cannot call it, and the D1–D9 and V1–V13 rows are not shown. |
 | C-9ba9b0d3 | not_testable | - | - | The behaviour is in TypeScript web code (web/src/tools/review.ts). The test-plan rows K1-K3 and E1-E9 aren't shown, so pytest has no Python interface to import and no exact texts to assert. |
 
+## Answers to verdict questions
+
+- Q-003 accept C-9da14d6e by the delegate (claude-fable-5-1 via claude-code): The page implements every step of the scenario as the browser plan writes it. The detail is read once per load through loadServerReview, and a refusal sets the failed phase, which renders a role alert, without calling onReload, so the first 422 gives one post and no second read. A name_collision ref...
+- Q-004 accept C-c8329b48 by the delegate (claude-fable-5-1 via claude-code): The drifted server's view follows from the code. surfaceDiff compares each field in the fixed order with the call stripped of its hints and the hints as their own field, so a hint change alone reads changed find_vendor: hints and the effect and description change of log_note reads changed log_note: ...
+- Q-005 accept H-63664d16 by the delegate (claude-fable-5-1 via claude-code): The criterion does have an end-to-end test. The unit's browser test file holds a test tagged with this criterion whose steps, mocked answers and expected texts match the Review 1 section of the unit's browser test plan line by line. The generator reported the plan's steps as not shown, but they are ...
+- Q-006 accept H-c8ca5be3 by the delegate (claude-fable-5-1 via claude-code): The criterion does have an end-to-end test. The unit's browser test file holds a test tagged with this criterion whose seeded surfaces, steps and expected Changes items, row counts and posted body match the Review 2 section of the unit's browser test plan. The generator reported the Review 2 setup a...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -150,8 +157,8 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-7374d16f | web-tools › Effect settings become the overlay body and a discovery answer names every tool left out › Settings become the body and a discovery is worded with every tool left out | pass | pass | the judge passed it and a discriminating test passes |
 | C-9ba9b0d3 | web-tools › The discovery call and the review load use their routes and each refusal is worded › The calls use their routes and each refusal has its text | pass | pass | the judge passed it and a discriminating test passes |
 | C-85b20ad6 | web-tools › The review names are fixed, the page uses kit components and the messages stay untouched › The review names are fixed and the page reads as the rules say | pass | pass | the judge passed it and a discriminating test passes |
-| C-9da14d6e | web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-c8329b48 | web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-9da14d6e | web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The page implements every step of the scenario as the browser plan writes it. The detail is read once per load through loadServerReview, and a refusal sets the failed phase, which renders a role alert, without calling onReload, so the firs... |
+| C-c8329b48 | web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The drifted server's view follows from the code. surfaceDiff compares each field in the fixed order with the call stripped of its hints and the hints as their own field, so a hint change alone reads changed find_vendor: hints and the effec... |
 
 ## Findings
 
@@ -164,11 +171,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-85b20ad6): No end-to-end test traces criterion C-85b20ad6 (web-tools › The review names are fixed, the page uses kit components and the messages stay untouched › The review names are fixed and the page reads as the rules say); step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-9da14d6e): The end-to-end test test_m7_tool_review::test_discovery_settings_and_calls[chromium] traces criterion C-9da14d6e (web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-c8329b48): The end-to-end test test_m7_tool_review::test_changes_and_calls_of_a_drifted_server[chromium] traces criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
-
-## Needs a human
-
-- UI criterion C-9da14d6e has no end-to-end test; see the generated UI tests table
-- UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
