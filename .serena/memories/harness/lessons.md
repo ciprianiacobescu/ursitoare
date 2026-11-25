@@ -1,5 +1,12 @@
 <!-- l4:lessons v1 — harness-owned; propose changes via .serena/memories/inbox/ -->
 
+## L-017ca54b · Human feedback: Both handlers ask the store for page.limit + 1 rows to…
+- **Scope:** `src/api/**`, `src/audit/**`, `src/pdp/**`
+- **Source:** human feedback FB-002 (openspec:add-audit-api-followup-2 round 1)
+- **Dedupe key:** feedback-5278e2ac58dd
+- **Reinforced:** 1 · 2026-11-25
+Both handlers ask the store for page.limit + 1 rows to detect a next page, so limit=200 becomes 201, which listAuditEvents and listPolicyDecisions refuse (> 200) with an AuditError / PdpError that the error handler maps to 500 INTERNAL. The block store accepts 201 for this reason. Found by the add-web-tool-journeys judge (the Node journey had to use limit=100).
+
 ## L-09421538 · UI criteria need an end-to-end test
 - **Scope:** `web/**`
 - **Source:** verifier round 2
