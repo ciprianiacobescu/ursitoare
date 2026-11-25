@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-44e0e2c0 (web-tools › Server list keeps the old state after approve, replace or discovery — feedback FB-002 › Server list keeps the old state after approve, replace or discovery): accept a |
+| Q-001 | answered | none | verdict | Criterion C-44e0e2c0 (web-tools › Server list keeps the old state after approve, replace or discovery — feedback FB-002 › Server list keeps the old state after approve, replace or discovery): accept a |
 | Q-002 | open | none | verdict | Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied? |
 | Q-003 | open | none | verdict | Hold H-ca42fb4d: UI criterion C-debfaec1 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-e57e62e0: UI criterion C-464ddcf9 has no end-to-end test; see the generated UI tests table |
@@ -29,7 +29,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-44e0e2c0 (web-tools › Server list keeps the old state after approve, replace or discovery — feedback FB-002 › Server list keeps the old state after approve, replace or discovery): accept a
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -56,6 +56,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept Evidence (delegate, 2026-11-25): e2e/test_server_list_reload.py's four browser tests ran through the CI e2e build and stack in a node:24 container. At this unit's head 5ff290b3 they passed 4/4 in each of three runs. At base 35a0d283, with only the test file added, they failed 4/4, each at its first row assertion: the Tool servers row kept its old state (pending, drifted, approved, approved) after approve, approve drifted, replace and discover again. A head screenshot after approving shows the row and the Surface card both reading approved.
 ---
 
 ## Q-002: Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied?
