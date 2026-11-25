@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | 1.1 | ambiguous | Does the new client page gate supersede the existing server-403 page for every capability-gated feature, including /admin/users? |
-| Q-002 | open | none | verdict | Criterion C-0daf92cd (web-shell › The shell is accessible and works for deep links › Deep link): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-0daf92cd (web-shell › The shell is accessible and works for deep links › Deep link): accept as satisfied? |
 | Q-003 | open | none | verdict | Hold H-906ac7b8: UI criterion C-8c08d9f5 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-63c43a31: UI criterion C-ba861867 has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-09eadad5: UI criterion C-61225ade has no end-to-end test; see the generated UI tests table |
@@ -63,7 +63,7 @@ Option 3. Apply the client page gate to every capability-gated feature EXCEPT wh
 
 ## Q-002: Criterion C-0daf92cd (web-shell › The shell is accessible and works for deep links › Deep link): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -90,6 +90,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The scenario text is stale: it names /flows, which became a real page in later milestones, while the frozen test test_m0_skeleton::test_deep_link_returns_the_app opens /no-such-page-deep-link and passes at head in the full e2e gate. The generated test followed the stale text, so its failure says nothing about this diff. This follow-up changes only App.tsx, which wraps each feature element in FeaturePage: an explicit SERVER_GATED_FEATURES list holds admin-users; the session loading state is shown; a ready session without the feature's capability gets the Not allowed panel. useSession reads the shared capabilityLoader, so no extra /me request is made. The full e2e gate passed at head, so every page's browser tests still pass behind the gate. The stale scenario text is on the delegate's hardening list.
 ---
 
 ## Q-003: Hold H-906ac7b8: UI criterion C-8c08d9f5 has no end-to-end test; see the generated UI tests table
