@@ -190,3 +190,4 @@
 {"at":"2026-11-25T00:00:15Z","attempt":1,"cost_usd":6.080269,"runs":8,"type":"plan.charged","unit":"openspec:add-web-tools"}
 {"at":"2026-11-25T00:00:15Z","run":"r-20261125T0000Z-2fa2","type":"unit.dispatched","unit":"openspec:add-web-tools"}
 {"at":"2026-11-25T00:18:14Z","detail":"awaiting_human: no new answers (verdicts open: Q-010, Q-011) (escalated to a person: Q-010, Q-011)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-tools"}
+{"at":"2026-11-25T01:19:50Z","by":"harness","reason":"the cause is gone: openspec:add-web-tools is awaiting_human","type":"plan.resumed"}
