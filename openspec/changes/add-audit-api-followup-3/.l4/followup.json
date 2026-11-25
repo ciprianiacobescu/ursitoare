@@ -1,0 +1,13 @@
+{
+  "schema": "l4/followup@1",
+  "parent": "openspec:add-audit-api",
+  "items": [
+    {
+      "id": "FB-003",
+      "sha256": "78bf996020a84d874fdf754cb1f97392fc438153e0de1006f42d2c1ee1064a39"
+    }
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": []
+}
