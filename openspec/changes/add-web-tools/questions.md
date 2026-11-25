@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body): accept as satisfie |
 | Q-007 | answered | none | verdict | Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused): accept as satisfied? |
 | Q-008 | answered | none | verdict | Criterion C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list): accept as satisfied? |
-| Q-009 | open | none | verdict | Criterion C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file): accept as s |
+| Q-009 | answered | none | verdict | Criterion C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file): accept as s |
 | Q-010 | open | none | verdict | Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form): accept as  |
 | Q-011 | open | none | verdict | Criterion C-0a8c70b3 (web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered): accept as satisfied? |
 | Q-012 | open | none | verdict | Criterion C-62f4785e (web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows): accept as satisfied? |
@@ -450,7 +450,8 @@ accept The criterion is satisfied. parseHttp in servers.ts gives null for an abs
 
 ## Q-009: Criterion C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file): accept as s
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -477,6 +478,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. REGISTER_PAGE holds the id, file, path, capability and title of the plan; REGISTER_NAMES holds exactly 29 values and CREDENTIAL_NAMES 11, those of design § Messages (Names). The feature file exports feature with the literals of REGISTER_PAGE, no navLabel, and calls registerToolMessages(). RegisterPage.tsx renders PageHeader over a Card at PAGE_WIDTHS.form; ServersPage.tsx carries the "Register a tool server" link in the PageHeader actions and renders CredentialSection and ReplaceSection as kit Sections after the Surface section; the secret field is type="password" with autoComplete="new-password"; GrantsPage.tsx renders toolListNote as a plain <p> under the Tool select. The four tracing tests assert all of this, including featureLiterals null, visibleNav for carol listing "Tool servers", "Grants", "Policies", the empty results of findCssImports, findPaletteUtilities and findInlineStyleUse and the absence of the banned tokens, and all passed by assertion.
 ---
 
 ## Q-010: Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form): accept as 
