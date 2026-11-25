@@ -112,3 +112,10 @@ The behaviour pinned by the scenarios below SHALL hold.
 #### Scenario: Audit events are listed in numeric seq order
 - **WHEN** a tenant has 12 audit events with seq 1 to 12 and GET /api/v1/audit is read with order desc and with order asc, limit 5, following next_cursor until it is null
 - **THEN** desc returns seq 12,11,10,9,8 then 7,6,5,4,3 then 2,1 and asc returns 1,2,3,4,5 then 6,7,8,9,10 then 11,12; across the pages every seq 1 to 12 appears exactly once
+
+### Requirement: limit=200 on the audit and decision lists answers 500 — feedback FB-002
+The behaviour pinned by the scenarios below SHALL hold.
+
+#### Scenario: limit=200 on the audit and decision lists answers 500
+- **WHEN** GET /api/v1/audit-events or GET /api/v1/policy-decisions is called with limit=200, the documented maximum of both routes
+- **THEN** the answer is not a 500: it is the same page the route gives for limit=199 on the same data, holding at most 200 items with the next_cursor of the page rules; limit=201 is still refused with 400 VALIDATION_FAILED
