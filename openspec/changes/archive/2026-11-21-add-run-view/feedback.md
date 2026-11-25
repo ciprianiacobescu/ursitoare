@@ -10,14 +10,14 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | submitted | behaviour | web/src/runs/RunPage.tsx:329 | Run page scrolls sideways when a step's input or output has a long line |
+| FB-001 | taken | behaviour | web/src/runs/RunPage.tsx:329 | Run page scrolls sideways when a step's input or output has a long line |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: Run page scrolls sideways when a step's input or output has a long line
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** behaviour
 - **Where:** `web/src/runs/RunPage.tsx:329-339`
 - **Where:** `web/src/runs/runs.css:149-158`
@@ -62,3 +62,4 @@ The Input and Output pre elements lost the wrapping rule when the payload sectio
 
 ### Outcome
 <!-- written by the harness -->
+Taken into add-run-view-followup-1

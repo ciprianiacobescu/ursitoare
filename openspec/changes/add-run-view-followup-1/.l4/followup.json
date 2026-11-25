@@ -1,0 +1,13 @@
+{
+  "schema": "l4/followup@1",
+  "parent": "openspec:add-run-view",
+  "items": [
+    {
+      "id": "FB-001",
+      "sha256": "5e7d8cf451108bdee3588def97ae46d9d13a9288ad1627f4f21acd2706560296"
+    }
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": []
+}
