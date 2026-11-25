@@ -24,7 +24,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-011 | open | none | verdict | Criterion C-0a8c70b3 (web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered): accept as satisfied? |
 | Q-012 | answered | none | verdict | Criterion C-62f4785e (web-tools › The registration and credential pages show the states of the API's answers › A credential is stored and rotated and its secret never shows): accept as satisfied? |
 | Q-013 | answered | none | verdict | Criterion C-c3420a43 (web-tools › The registration and credential pages show the states of the API's answers › A document and a code block are replaced from the server detail): accept as satisfied? |
-| Q-014 | open | none | verdict | Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied? |
+| Q-014 | answered | none | verdict | Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied? |
 | Q-015 | open | none | verdict | Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off): accept as satisfied |
 | Q-016 | open | none | verdict | Hold H-ecf0d557: UI criterion C-0f038efb has no end-to-end test; see the generated UI tests table |
 | Q-017 | open | none | verdict | Hold H-5a58c421: UI criterion C-e3ab2add has no end-to-end test; see the generated UI tests table |
@@ -613,7 +613,8 @@ accept The criterion is satisfied. ReplaceSection shows "Replace document" for a
 
 ## Q-014: Criterion C-78ea404d (web-tools › The calls use the right routes and headers and refuse unreadable answers › Calls of the three pages): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -640,6 +641,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. The two tracing tests of the frozen calls test file were changed in place as task 2.1 requires and run rows T1 and T2 of the plan: T1 resolves { refs: ["acme.lookup_vendor@1", "acme.create_payment@1"], complete: true } over exactly two GET /blocks requests with limit 100 and then the cursor c1, and T2 makes 100 requests with the last cursor c99 and resolves acme.t1@1 to acme.t100@1 with complete false. loadToolRefs loops over at most 100 pages, pushes the bound refs in order, stops with complete true on a null cursor and sets complete false only when the hundredth page still carries a cursor, never rejecting for that reason. Both tests passed by assertion at red. The other twelve tests of the file are pre-existing frozen tests of the nine calls, which the unit does not change, and the scenario asks only that their records, results and rejections stay those they assert.
 ---
 
 ## Q-015: Criterion C-5d82c84b (web-tools › The calls use the right routes and headers and refuse unreadable answers › The tool list is read for up to 100 pages and says when it is cut off): accept as satisfied
