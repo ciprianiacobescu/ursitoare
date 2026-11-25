@@ -1,0 +1,303 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      ".../code",
+      "ui/rules-tree.test.ts:44-56",
+      "body/tools/<i>/<k>",
+      "body/document/…",
+      "web/src/tools/calls.test.ts",
+      "src",
+      "node:assert/strict",
+      "web/src/tools/register.test.ts",
+      "web/src/tools/register.ts",
+      "web/src/tools/register-calls.test.ts",
+      "web/src/tools/credentials.test.ts",
+      "web/src/tools/credentials.ts",
+      "web/src/tools/credentials-calls.test.ts",
+      "web/src/tools/refs.test.ts",
+      "web/src/tools/grants.ts",
+      "web/src/tools/grant-node-bound.test.ts",
+      "web/src/tools/servers-call.test.ts",
+      "web/src/runs/stale.test.ts",
+      "web/src/runs/stale.ts",
+      "web/src/runs/test-run.ts",
+      "web/src/tools/register-pages.test.ts",
+      "e2e/test_m7_tool_registration.py",
+      "e2e",
+      "web/src/features/67-admin-tool-register.tsx",
+      "**/servers.test.ts",
+      "**/messages.ts",
+      "**/RegisterPage.tsx",
+      "**/PoliciesPage.tsx",
+      "**/ServersPage.tsx",
+      "**/GrantsPage.tsx",
+      "**/TestRunPanel.tsx",
+      "**/DryRunPanel.tsx",
+      "**/^[a-z][a-z0-9_]{0,31}$",
+      "**/register.ts",
+      "**/^[A-Za-z0-9_-]{1,128}$",
+      "**/^[A-Za-z0-9-]{1,64}$",
+      "**/?server=<id>",
+      "**/servers.ts",
+      "**/CredentialSection.tsx",
+      "**/ReplaceSection.tsx",
+      "**/[",
+      "**/pages.test.ts",
+      "**/states.test.ts",
+      "module ...",
+      "module body",
+      "module credentials",
+      "module e2e",
+      "module grants",
+      "module node:assert",
+      "module tools",
+      "module ui",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m7_tool_registration.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-tools/.l4/ledger/r-20261124T0843Z-680c.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tools/.l4/ledger/r-20261124T1053Z-85c7.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tools/.l4/ledger/r-20261124T1311Z-f4b6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tools/.l4/ledger/r-20261124T1454Z-d23f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tools/.l4/ledger/r-20261124T1654Z-97e6.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tools/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tools/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/features/67-admin-tool-register.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/stale.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/runs/stale.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/runs/test-run.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/CredentialSection.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/GrantsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/RegisterPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/ReplaceSection.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/ServersPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/calls.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/credentials-calls.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/credentials.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/credentials.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/grant-node-bound.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/grants.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/refs.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/register-calls.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/register-pages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/register.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/register.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/servers-call.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/features/67-admin-tool-register.tsx, web/src/runs/stale.ts, web/src/runs/test-run.ts, web/src/tools/CredentialSection.tsx, web/src/tools/GrantsPage.tsx and 6 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/features/67-admin-tool-register.tsx",
+      "web/src/runs/stale.ts",
+      "web/src/runs/test-run.ts",
+      "web/src/tools/CredentialSection.tsx",
+      "web/src/tools/GrantsPage.tsx",
+      "web/src/tools/RegisterPage.tsx",
+      "web/src/tools/ReplaceSection.tsx",
+      "web/src/tools/ServersPage.tsx",
+      "web/src/tools/credentials.ts",
+      "web/src/tools/grants.ts",
+      "web/src/tools/register.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": false,
+    "summary": {
+      "total": 3182,
+      "passed": 3180,
+      "failed": 2,
+      "errored": 0,
+      "skipped": 0,
+      "new": 49,
+      "new_passed": 49,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

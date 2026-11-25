@@ -29,9 +29,10 @@ import {
   loadToolRefs,
   parseGrant,
   postGrant,
+  toolListNote,
   revokeGrantById,
 } from "./grants.ts";
-import type { GrantView } from "./grants.ts";
+import type { GrantView, ToolRefs } from "./grants.ts";
 import { toolsErrorMessage } from "./messages.ts";
 
 const PAGE_HEADING = "Grants";
@@ -80,7 +81,7 @@ export function GrantsPage(): ReactNode {
   const [flowId, setFlowId] = useState("");
   const [nodeId, setNodeId] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
-  const [tools, setTools] = useState<RegionLoad<readonly string[]>>({ phase: "loading" });
+  const [tools, setTools] = useState<RegionLoad<ToolRefs>>({ phase: "loading" });
   const [action, setAction] = useState<ActionPhase>({ phase: "idle" });
   const [idempotencyKey, setIdempotencyKey] = useState<string | null>(null);
 
@@ -120,7 +121,8 @@ export function GrantsPage(): ReactNode {
   const actionView = actionState(action);
   const busy = action.phase === "busy";
   const toolBusy = toolRegion.view !== "ready";
-  const refs = tools.phase === "ready" ? tools.value : [];
+  const refs = tools.phase === "ready" ? tools.value.refs : [];
+  const listNote = tools.phase === "ready" ? toolListNote(tools.value) : null;
 
   const resetDraft = (): void => {
     setSubjectKind("role");
@@ -320,6 +322,7 @@ export function GrantsPage(): ReactNode {
               </select>
             )}
           </Field>
+          {listNote === null ? null : <p>{listNote}</p>}
           {toolRegion.view === "loading" ? <LoadingState label="Loading tools" /> : null}
           {tools.phase === "error" ? <ErrorPanel error={tools.error} /> : null}
           <fieldset className="tools-fieldset">

@@ -5,6 +5,7 @@ import type { CapabilityState } from "../kit/capabilities.ts";
 import type { FormErrors } from "../kit/data/form-errors.ts";
 import { messageFor } from "../kit/messages.ts";
 import { runErrorMessage } from "./messages.ts";
+import { staleVersionText } from "./stale.ts";
 import { parseRunView } from "./types.ts";
 import type { RunView } from "./types.ts";
 
@@ -157,6 +158,8 @@ function refusedTest(details: Record<string, unknown>): FormErrors | null {
   if (reason === "kind_unsupported") {
     return { $form: "The flow uses a node kind that test runs do not support yet." };
   }
+  const stale = staleVersionText(details);
+  if (stale !== null) return { $form: stale };
   if (reason === "version_not_runnable" && details["cause"] === "block_missing") {
     const blocks = stringArray(details["blocks"]);
     return {
