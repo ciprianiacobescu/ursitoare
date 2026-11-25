@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Criterion C-9153e19d (web-tools › A credential is read without its secret, and its body, texts and refusals are fixed › A credential view never carries a secret and its body, texts and refusals are fi |
 | Q-006 | answered | none | verdict | Criterion C-29e43442 (web-tools › The credential calls page the list and send the secret only in the body › The credential calls page the list and send the secret only in the body): accept as satisfie |
 | Q-007 | answered | none | verdict | Criterion C-a714f000 (web-tools › A step id of the grant form is at most 128 characters › A step id of 128 characters is accepted and one of 129 is refused): accept as satisfied? |
-| Q-008 | open | none | verdict | Criterion C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list): accept as satisfied? |
+| Q-008 | answered | none | verdict | Criterion C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list): accept as satisfied? |
 | Q-009 | open | none | verdict | Criterion C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file): accept as s |
 | Q-010 | open | none | verdict | Criterion C-e3ab2add (web-tools › The registration and credential pages show the states of the API's answers › An MCP server is registered and a code-block server shows no credential form): accept as  |
 | Q-011 | open | none | verdict | Criterion C-0a8c70b3 (web-tools › The registration and credential pages show the states of the API's answers › An OpenAPI document is previewed, given effects and registered): accept as satisfied? |
@@ -417,7 +417,8 @@ accept The criterion is satisfied. grants.ts bounds the node id at 128 character
 
 ## Q-008: Criterion C-0f038efb (web-tools › A server whose tools carry a call is parsed and listed › Servers of every adapter parse and list): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -444,6 +445,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. parseHttp in servers.ts gives null for an absent http and undefined for a present http that is not { method, path } of strings, which makes parseSurfaceTools and so parseToolServer return null; the call member is never read, so a surface tool with a call and no http parses as http null with its own flags, and toolRows gives "—" for it. The three tracing tests build S_MCP, S_CODE and S_FIX as test-plan.md § Servers gives them, assert the exact tool records with http null and their flags and the "—" Call for both, null for the S_MCP whose surface tool has http { method: "POST" }, and the page acme, crm, snips with next_cursor null from cursorPageFetcher. All passed; design decision 2 says the base parser already holds this and task 2.2 says to accept the pre-satisfied check once the tests assert the rows, which they do. The lint errors of the latest gate excerpt are not in the file at head: line 5 imports cursorPageFetcher, and lines 90 and 100 hold no non-null assertion.
 ---
 
 ## Q-009: Criterion C-2ec0cc21 (web-tools › The registration page carries fixed names, one feature file and kit components only › The registration page carries fixed names and its own feature file): accept as s
