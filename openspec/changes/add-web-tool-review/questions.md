@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.2 | technical | web/src/tools/review-diff.test.ts:227 expected diff omits removed log_note |
+| Q-001 | accepted | 1.2 | technical | web/src/tools/review-diff.test.ts:227 expected diff omits removed log_note |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: web/src/tools/review-diff.test.ts:227 expected diff omits removed log_note
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 1.2
 - **Kind:** technical
 - **Asked:** 2026-11-25T03:13Z by deepseek-free, run r-20261125T0140Z-462b, task 1.2
