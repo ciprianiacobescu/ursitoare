@@ -31,7 +31,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-018 | answered | none | verdict | Hold H-4adb729f: UI criterion C-0a8c70b3 has no end-to-end test; see the generated UI tests table |
 | Q-019 | answered | none | verdict | Hold H-b2d28b5d: UI criterion C-62f4785e has no end-to-end test; see the generated UI tests table |
 | Q-020 | answered | none | verdict | Hold H-6a1a6ad5: UI criterion C-c3420a43 has no end-to-end test; see the generated UI tests table |
-| Q-021 | open | none | verdict | Hold H-21f75d66: UI criterion C-5d82c84b has no end-to-end test; see the generated UI tests table |
+| Q-021 | answered | none | verdict | Hold H-21f75d66: UI criterion C-5d82c84b has no end-to-end test; see the generated UI tests table |
 | Q-022 | open | none | verdict | Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s) |
 <!-- l4:index:end -->
 
@@ -804,7 +804,8 @@ accept The unit can go on. The judge could not reach the replace flow because it
 
 ## Q-021: Hold H-21f75d66: UI criterion C-5d82c84b has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -823,6 +824,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on. The criterion is not a browser scenario: its WHEN names only loadToolRefs and toolListNote on rows T3 and T4 of the Node test plan, and tasks.md covers it with refs.test.ts alone, listing only the four page scenarios for the browser test. The two tracing tests in refs.test.ts assert the scenario: a list whose hundredth page ends gives 100 requests, the last with cursor c99, and complete true; an unreadable item rejects INVALID_RESPONSE; a 500 is rethrown; one empty page gives refs empty and complete true; toolListNote gives null for a complete list and Only the first 10,000 tools are listed. for a cut one. loadToolRefs breaks with complete true on a null cursor and sets complete false only when the hundredth page still carries one, toolListNote is a one-line conditional, and GrantsPage renders the note as a plain paragraph under the Tool select when it is not null. The step 5 writer timed out rather than finding anything; an end-to-end test is not planned or needed for a function-level scenario.
 ---
 
 ## Q-022: Hold H-bfb6e7a2: the judge's reply was discarded (part 1 of 2, timeout: no answer within 600s)
