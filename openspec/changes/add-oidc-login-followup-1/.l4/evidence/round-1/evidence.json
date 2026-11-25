@@ -1,0 +1,139 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [],
+    "skipped": true,
+    "note": "the spec names no path or module in backticks: nothing to compare against",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-oidc-login-followup-1/.l4/followup.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login-followup-1/.l4/ledger/r-20261124T1053Z-a988.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login-followup-1/.l4/ledger/r-20261125T0022Z-3a8b.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login-followup-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login-followup-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login-followup-1/specs/identity-authn/spec.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-login-followup-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/archive/2026-10-29-add-oidc-login/feedback.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/api/server.ts",
+        "module": "api",
+        "kind": "code",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "src/identity/oidc/callback.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "src/identity/oidc/login.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "src/identity/oidc/logout.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "src/identity/oidc/routes.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": null,
+        "reason": "the spec declares no scope"
+      },
+      {
+        "path": "src/identity/oidc/single-send.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": null,
+        "reason": "the spec declares no scope"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/api/server.ts, src/identity/oidc/callback.ts, src/identity/oidc/login.ts, src/identity/oidc/logout.ts, src/identity/oidc/routes.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/api/server.ts",
+      "src/identity/oidc/callback.ts",
+      "src/identity/oidc/login.ts",
+      "src/identity/oidc/logout.ts",
+      "src/identity/oidc/routes.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 3135,
+      "passed": 3135,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 2,
+      "new_passed": 2,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

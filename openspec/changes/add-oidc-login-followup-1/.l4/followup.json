@@ -1,0 +1,13 @@
+{
+  "schema": "l4/followup@1",
+  "parent": "openspec:add-oidc-login",
+  "items": [
+    {
+      "id": "FB-001",
+      "sha256": "cfa171067eb2e22a45cc60547fbd596101453dbe883edf1af9f99f55491d764c"
+    }
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": []
+}
