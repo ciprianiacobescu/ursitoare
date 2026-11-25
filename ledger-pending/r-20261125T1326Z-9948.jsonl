@@ -1,2 +1,3 @@
 {"ts": "2026-11-25T13:26:11.939753Z", "run_id": "r-20261125T1326Z-9948", "unit": "openspec:add-web-tool-journeys", "seq": 1, "type": "run.started", "harness_version": "0.4.59", "harness_commit": "7dc8d28660a3d70a321f205161d1abb4809d0c3f", "command": "plan --sweep", "branch": "l4/openspec/add-web-tool-journeys"}
 {"ts": "2026-11-25T13:26:11.940258Z", "run_id": "r-20261125T1326Z-9948", "unit": "openspec:add-web-tool-journeys", "seq": 2, "type": "phase.changed", "from": "in_review", "to": "merged", "trigger": "pr_merged", "exit_code": 0, "pr": 175, "merge_commit": "c7e3f972cc590108c0bc2462804b18f97cb6f93e"}
+{"ts": "2026-11-25T13:26:14.015803Z", "run_id": "r-20261125T1326Z-9948", "unit": "openspec:add-web-tool-journeys", "seq": 3, "type": "run.finished", "exit_code": 0}
