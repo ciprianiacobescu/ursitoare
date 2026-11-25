@@ -50,19 +50,17 @@ export function registerLogoutRoute(server: FastifyInstance, deps: LogoutDeps): 
     const session = await resolveSession(deps.pool, cookieValue, { clock: deps.clock });
     if (session === null) {
       reply.header("set-cookie", clearSession());
-      reply
+      return reply
         .code(401)
         .send(envelope("UNAUTHENTICATED", "Authentication required"));
-      return;
     }
 
     const token = csrfHeader(request.headers["x-csrf-token"]);
     const csrfValid = await verifyCsrfToken(deps.pool, session, token);
     if (!csrfValid) {
-      reply
+      return reply
         .code(403)
         .send(envelope("OIDC_CSRF_INVALID", "CSRF token missing or invalid"));
-      return;
     }
 
     await revokeSession(deps.pool, session, { clock: deps.clock });
@@ -90,6 +88,6 @@ export function registerLogoutRoute(server: FastifyInstance, deps: LogoutDeps): 
     }
 
     reply.header("set-cookie", clearSession());
-    reply.code(200).send({ redirect });
+    return reply.code(200).send({ redirect });
   });
 }

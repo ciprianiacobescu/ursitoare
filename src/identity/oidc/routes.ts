@@ -30,9 +30,9 @@ function registerUnavailableRoutes(server: FastifyInstance): void {
   const unavailableHandler = async (
     _request: FastifyRequest,
     reply: FastifyReply,
-  ): Promise<void> => {
+  ): Promise<FastifyReply> => {
     reply.header("cache-control", "no-store");
-    reply.code(503).send(NOT_CONFIGURED);
+    return reply.code(503).send(NOT_CONFIGURED);
   };
 
   server.get("/auth/oidc/login", unavailableHandler);
