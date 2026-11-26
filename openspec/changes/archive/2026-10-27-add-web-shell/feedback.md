@@ -10,14 +10,14 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | submitted | behaviour | web/src/app/features.ts:178 | A feature's page opens for a user without the feature's capability |
+| FB-001 | taken | behaviour | web/src/app/features.ts:178 | A feature's page opens for a user without the feature's capability |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: A feature's page opens for a user without the feature's capability
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** behaviour
 - **Where:** `web/src/app/features.ts:178-190`
 - **Where:** `web/src/app/App.tsx:41-58`
@@ -84,3 +84,4 @@ The capability of a feature is read only to hide its menu link; the route table 
 
 ### Outcome
 <!-- written by the harness -->
+Taken into add-web-shell-followup-1

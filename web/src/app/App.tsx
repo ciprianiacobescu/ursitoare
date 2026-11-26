@@ -1,10 +1,20 @@
 import { useEffect } from "react";
+import type { ReactNode } from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router";
 
+import { ApiRequestError } from "../api/client.ts";
+import { useSession } from "../auth/use-session.ts";
+import { ErrorPanel } from "../kit/ErrorPanel.tsx";
+import { LoadingState } from "../kit/LoadingState.tsx";
+import type { CapabilityState } from "../kit/capabilities.ts";
 import { Button } from "../ui/button.tsx";
-import { listFeatures, type Feature } from "./features.ts";
+import { listFeatures } from "./features.ts";
+import type { Feature } from "./features.ts";
 import { pageTitle, routeTable } from "./routes.ts";
 import { Shell } from "./Shell.tsx";
+
+const SERVER_GATED_FEATURES: ReadonlySet<string> = new Set(["admin-users"]);
+const NOT_ALLOWED: ApiRequestError = new ApiRequestError(403, "FORBIDDEN", "Not allowed");
 
 function DocumentTitle({ routeId }: { readonly routeId: string }) {
   useEffect(() => {
@@ -32,9 +42,35 @@ function featureById(features: readonly Feature[], id: string): Feature | undefi
   return features.find((feature) => feature.id === id);
 }
 
+function FeaturePage({
+  feature,
+  session,
+}: {
+  readonly feature: Feature | undefined;
+  readonly session: CapabilityState | null;
+}): ReactNode {
+  if (feature === undefined) {
+    return null;
+  }
+  if (feature.capability === undefined || SERVER_GATED_FEATURES.has(feature.id)) {
+    return feature.element;
+  }
+  if (session === null) {
+    return <LoadingState label="Checking your session" />;
+  }
+  if (session.status !== "ready") {
+    return feature.element;
+  }
+  if (!session.me.capabilities.has(feature.capability)) {
+    return <ErrorPanel error={NOT_ALLOWED} />;
+  }
+  return feature.element;
+}
+
 export function App() {
   const features = listFeatures();
   const entries = routeTable(features);
+  const session = useSession();
 
   return (
     <BrowserRouter>
@@ -50,7 +86,7 @@ export function App() {
                 element={
                   <>
                     <DocumentTitle routeId={entry.id} />
-                    {featureById(features, entry.id)?.element}
+                    <FeaturePage feature={featureById(features, entry.id)} session={session} />
                   </>
                 }
               />

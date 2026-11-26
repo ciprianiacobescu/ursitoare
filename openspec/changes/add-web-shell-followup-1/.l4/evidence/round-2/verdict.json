@@ -1,0 +1,383 @@
+{
+  "schema": "l4/verdict@1",
+  "round": 2,
+  "verdict": "FAIL",
+  "base_sha": "6ef3fbd2d9d2be69beb92c42540ef46b62a3e53b",
+  "head_sha": "1f92551f9ff7a27ebe4221c89a398c0d50819850",
+  "steps": [
+    {
+      "step": "0",
+      "name": "preconditions",
+      "status": "ok",
+      "seconds": 0.3,
+      "note": "base merged: main@6ef3fbd2d9 as 1f92551f9f (1 commit)"
+    },
+    {
+      "step": "1",
+      "name": "integrity",
+      "status": "failed",
+      "seconds": 0.2,
+      "note": "a protected path was changed; scope: 18 changed file(s)"
+    },
+    {
+      "step": "2",
+      "name": "build",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "3",
+      "name": "tests",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "4",
+      "name": "traceability",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "4a",
+      "name": "audit sampling",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "5",
+      "name": "ui test generation",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "6",
+      "name": "quality",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "8",
+      "name": "s1 judge",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "9",
+      "name": "judge",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "10",
+      "name": "aggregation",
+      "status": "ok",
+      "seconds": 0.0,
+      "note": "FAIL"
+    }
+  ],
+  "gates": [],
+  "criteria": [],
+  "findings": [
+    {
+      "severity": "blocker",
+      "title": "a protected path was changed",
+      "detail": ".serena/memories/harness/ (touched by non-harness commit 2440ee533f)",
+      "source": "deterministic",
+      "criterion": null,
+      "log": null,
+      "spec_gap": false,
+      "suggested_fix": "",
+      "id": "F-6e5715a0",
+      "feedback": null
+    }
+  ],
+  "holds": [],
+  "subject_sha": "1f92551f9ff7a27ebe4221c89a398c0d50819850",
+  "family_criteria": [],
+  "reused_from": null,
+  "integrity": {
+    "checks": [
+      {
+        "name": "protected paths",
+        "status": "failed",
+        "note": "1 protected path(s) changed"
+      },
+      {
+        "name": "pre-existing tests",
+        "status": "ok",
+        "note": "1 test file(s) compared with the base"
+      },
+      {
+        "name": "red-green freeze",
+        "status": "ok",
+        "note": "1 task(s): red and green compared"
+      },
+      {
+        "name": "test path freeze",
+        "status": "ok",
+        "note": "1 harness step commit(s) checked"
+      },
+      {
+        "name": "content scan",
+        "status": "ok",
+        "note": "no result-manipulating construct in the changed support and runner files"
+      },
+      {
+        "name": "gate configuration",
+        "status": "skipped",
+        "note": "no gate or runner configuration file changed"
+      },
+      {
+        "name": "test awareness",
+        "status": "ok",
+        "note": "no production line reacts to the test run"
+      },
+      {
+        "name": "suppressions",
+        "status": "skipped",
+        "note": "not checked: python only; changed files outside it: web/src/app/App.tsx, web/src/app/feature-page-gate.test.ts"
+      },
+      {
+        "name": "tdd history",
+        "status": "ok",
+        "note": "1 task(s); red tests passing at head: step 3"
+      },
+      {
+        "name": "python encoding",
+        "status": "ok",
+        "note": "1 Python file(s) added or changed, each read, none declares another encoding"
+      },
+      {
+        "name": "pre-existing tests still pass",
+        "status": "skipped",
+        "note": "step 1 already failed"
+      }
+    ],
+    "findings": [
+      {
+        "severity": "blocker",
+        "title": "a protected path was changed",
+        "detail": ".serena/memories/harness/ (touched by non-harness commit 2440ee533f)",
+        "source": "deterministic",
+        "criterion": null,
+        "log": null,
+        "spec_gap": false,
+        "suggested_fix": "",
+        "id": "F-6e5715a0",
+        "feedback": null
+      }
+    ],
+    "declared": [],
+    "human_protected": [],
+    "human_tests": [],
+    "unfrozen": [],
+    "human_suppressions": [],
+    "human_scan": [],
+    "human_config": [],
+    "allowed_tests": [],
+    "mocked_support": [],
+    "base_tests": null,
+    "test_awareness": []
+  },
+  "trace": [],
+  "audit": [],
+  "generated": [],
+  "s1": [],
+  "evidence": {
+    "schema": "l4/evidence@1",
+    "holds": [],
+    "items": {},
+    "scope": {
+      "declared": [],
+      "skipped": true,
+      "note": "the spec names no path or module in backticks: nothing to compare against",
+      "holds": [],
+      "files": [
+        {
+          "path": "e2e/test_m2_admin.py",
+          "module": null,
+          "kind": "test",
+          "label": null,
+          "reason": "the spec declares no scope"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/.l4/evidence/round-1/evidence.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/.l4/evidence/round-1/verdict.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/.l4/evidence/round-1/verification.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/.l4/followup.json",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/.l4/ledger/r-20261125T1400Z-61c9.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/.l4/ledger/r-20261125T1822Z-dd0f.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/.l4/ledger/r-20261125T1955Z-8d0c.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/.l4/ledger/r-20261125T2214Z-b404.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/.openspec.yaml",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/proposal.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/questions.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/specs/web-shell/spec.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/tasks.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-shell-followup-1/verification.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/archive/2026-10-27-add-web-shell/feedback.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "web/src/app/App.tsx",
+          "module": "web",
+          "kind": "code",
+          "label": null,
+          "reason": "the spec declares no scope"
+        },
+        {
+          "path": "web/src/app/feature-page-gate.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": null,
+          "reason": "the spec declares no scope"
+        }
+      ]
+    },
+    "diff_coverage": null,
+    "tests_ran": null
+  },
+  "human": [],
+  "fix": {
+    "action": "spawn",
+    "ordinal": 1,
+    "tasks": [
+      "F-6e5715a0 a protected path was changed"
+    ],
+    "not_converted": [],
+    "reason": "",
+    "plan": null,
+    "code": ""
+  },
+  "judge_verdict": null,
+  "judge_carried": {},
+  "cx_runs": {},
+  "tests": {},
+  "failures": {},
+  "failures_dropped": 0,
+  "e2e_tests": [],
+  "red_green": {
+    "web.src.app.feature-page-gate.test.ts::C-8c08d9f5 App gates a capability feature's page on the client except admin-users": "1.1"
+  },
+  "guards": [
+    "guard.violation: web/src/app/page-gate.ts",
+    "guard.violation: web/src/app/App.tsx"
+  ],
+  "prompt_sha256": "",
+  "template": "",
+  "harness_commit": "7dc8d28660a3d70a321f205161d1abb4809d0c3f",
+  "judge_calls": 0,
+  "judge_reply": "",
+  "judge_replies": {},
+  "judge_parts": [],
+  "judge_files": [],
+  "judge_followups": [],
+  "judge_batches": [],
+  "judge_split": {},
+  "hold_views": {},
+  "profiles": {
+    "judge": "nemotron-judge",
+    "implementer": [
+      "deepseek-free",
+      "beam"
+    ]
+  },
+  "judge_model": null,
+  "independence": null,
+  "cost_usd": null
+}
