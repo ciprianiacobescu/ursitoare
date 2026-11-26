@@ -264,3 +264,15 @@ export function createOidcClient(deps: {
 
   return { discovery, signingKey, exchangeCode };
 }
+
+export function discoveryUrl(_issuer: string, _backchannelUrl: string | null): string {
+  throw new Error("not implemented");
+}
+
+export function serverSideUrl(
+  _endpoint: string,
+  _issuer: string,
+  _backchannelUrl: string | null,
+): string | null {
+  throw new Error("not implemented");
+}

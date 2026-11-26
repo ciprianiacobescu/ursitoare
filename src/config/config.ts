@@ -166,7 +166,7 @@ function readEngineKey(env: Env, readSecret: SecretReader): Secret | null {
   return secret;
 }
 
-function isDatabaseUrl(value: string): boolean {
+export function isDatabaseUrl(value: string): boolean {
   let parsed: URL;
   try {
     parsed = new URL(value);

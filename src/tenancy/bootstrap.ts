@@ -1,7 +1,7 @@
 import type { QueryResultRow } from "pg";
 
 import { systemClock, systemIds, type Clock, type IdSource } from "../core/index.ts";
-import type { TenantContext } from "./context.ts";
+import type { ReviewProfile, TenantContext } from "./context.ts";
 import { TenancyError } from "./errors.ts";
 import { inTransaction, type TenantPool } from "./tx.ts";
 
@@ -108,4 +108,16 @@ export async function ensureDefaultTenant(
     }
     throw error;
   }
+}
+
+export async function ensureTenant(
+  _ownerPool: TenantPool,
+  _input: { name: string; reviewProfile: ReviewProfile },
+  _opts?: EnsureTenantOptions,
+): Promise<{ tenant: TenantContext; created: boolean }> {
+  throw new Error("not implemented");
+}
+
+export async function findTenantByName(_pool: TenantPool, _name: string): Promise<TenantContext | null> {
+  throw new Error("not implemented");
 }

@@ -22,3 +22,6 @@ secrets/
 !.serena/memories/
 .serena/memories/*
 !.serena/memories/harness/
+.stack-e2e/
+.stack-e2e.*.bak/
+.stack-out/

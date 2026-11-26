@@ -124,3 +124,5 @@ export const ACTIONS: { readonly [A in ActionName]: ActionSpec<ActionContext<A>>
 };
 
 export const ACTION_NAMES: readonly ActionName[] = Object.keys(ACTIONS) as ActionName[];
+
+export const SINK_ACTION: string = "";
