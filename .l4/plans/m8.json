@@ -1,0 +1,112 @@
+{
+  "schema": "l4/delivery-plan@1",
+  "plan_id": "m8",
+  "target": "main",
+  "merge": "auto",
+  "limits": {
+    "max_cost_usd": 300,
+    "max_unit_attempts": 3,
+    "max_runs": 120
+  },
+  "external_dependencies": [],
+  "exclude": [],
+  "batches": [
+    {
+      "id": "m8-stack",
+      "acceptance_profile": "none",
+      "depends_on": [],
+      "units": [
+        {
+          "id": "openspec:add-web-tool-trust",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-web-ref-carry",
+          "depends_on": [
+            "openspec:add-web-tool-trust"
+          ]
+        },
+        {
+          "id": "openspec:add-init-secrets",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-tenant-bootstrap",
+          "depends_on": [
+            "openspec:add-init-secrets"
+          ]
+        },
+        {
+          "id": "openspec:add-oidc-backchannel",
+          "depends_on": []
+        },
+        {
+          "id": "openspec:add-keycloak-realm",
+          "depends_on": [
+            "openspec:add-init-secrets",
+            "openspec:add-oidc-backchannel"
+          ]
+        },
+        {
+          "id": "openspec:add-audit-sink",
+          "depends_on": [
+            "openspec:add-tenant-bootstrap"
+          ]
+        },
+        {
+          "id": "openspec:add-hobbyist-compose",
+          "depends_on": [
+            "openspec:add-init-secrets",
+            "openspec:add-tenant-bootstrap",
+            "openspec:add-oidc-backchannel",
+            "openspec:add-keycloak-realm",
+            "openspec:add-audit-sink"
+          ]
+        },
+        {
+          "id": "openspec:add-stack-overlay",
+          "depends_on": [
+            "openspec:add-init-secrets",
+            "openspec:add-hobbyist-compose",
+            "openspec:add-tenant-bootstrap",
+            "openspec:add-audit-sink"
+          ]
+        },
+        {
+          "id": "openspec:add-stack-realm-reset",
+          "depends_on": [
+            "openspec:add-stack-overlay",
+            "openspec:add-init-secrets",
+            "openspec:add-keycloak-realm",
+            "openspec:add-hobbyist-compose",
+            "openspec:add-tenant-bootstrap"
+          ]
+        },
+        {
+          "id": "openspec:add-stack-seeding",
+          "depends_on": [
+            "openspec:add-stack-overlay",
+            "openspec:add-stack-realm-reset",
+            "openspec:add-tenant-bootstrap",
+            "openspec:add-hobbyist-compose",
+            "openspec:add-init-secrets"
+          ]
+        },
+        {
+          "id": "openspec:add-stack-conformance",
+          "depends_on": [
+            "openspec:add-init-secrets",
+            "openspec:add-keycloak-realm",
+            "openspec:add-oidc-backchannel",
+            "openspec:add-hobbyist-compose",
+            "openspec:add-tenant-bootstrap",
+            "openspec:add-audit-sink",
+            "openspec:add-stack-overlay",
+            "openspec:add-stack-realm-reset",
+            "openspec:add-stack-seeding"
+          ]
+        }
+      ]
+    }
+  ]
+}
