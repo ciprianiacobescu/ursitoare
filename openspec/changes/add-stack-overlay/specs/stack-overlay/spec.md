@@ -41,7 +41,7 @@ The stack-run harness of the milestone proof: an overlay of the hobbyist compose
 | alice | Alice Example | E2E tenant | org-a | ursitoare-authors, team-finance | test_flow |
 | bob | Bob Example | E2E tenant | org-a | ursitoare-approvers, team-finance | read_registry |
 | carol | Carol Example | E2E tenant | org-a | ursitoare-admins | manage_users_roles |
-| mallory | Mallory Example | Tenant B | org-b | ursitoare-authors | none |
+| mallory | Mallory Example | Tenant B | org-b | ursitoare-authors | test_flow |
 
 `readUsers(dir)` and `readClients(dir)` SHALL read `users.json` and `clients.json`; a bad file throws an `Error` naming the file, never a secret.
 

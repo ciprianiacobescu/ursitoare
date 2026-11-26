@@ -245,9 +245,11 @@ roles:
   # beam (add-stack-realm-reset "lists itself" and "omits add-keycloak-realm"; m8.json has neither: the M7 misread of
   # the sorted plan entry), so the reader is switched for the batch alone, as in M7: nemotron first (the batch subject
   # is small), mimo and hy4 as hello fallbacks.
-  - nemotron-judge
-  - mimo-judge
+  # 2026-11-26 05:40Z (delegate): run 45744199259: nemotron failed hello, mimo length-stopped on six subjects (2.5 h,
+  # job_time); hy4 answered every subject it got. hy4 first, mimo second; beam stays out until the whole-batch subject
+  # records (beam misreads it). RESTORE the full order (kiro, nemotron, beam, mimo, hy4, claude) before m8 activates.
   - hy4-judge
+  - mimo-judge
   s1_judge:
   - jev
   - laya
