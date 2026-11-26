@@ -6,7 +6,7 @@ Paths without a directory are in `web/src/tools/`. Each task is one red-green cy
 
 ## 2. Entries and prefill
 
-- [ ] 2.1 Write `trust-overlay.test.ts` (scenario "Overlay entries are built from trust and carried fields, and Replace and Discover prefill them"; rows OE, PF, DS; PF2, PF4 and PF5 go through `overlayEntry`) first, then implement `overlayEntry`, `prefillTrust` and `discoverSettings` in `trust.ts` (records get own keys through `Object.defineProperty`), implementing requirement "An overlay entry holds only the values that differ from the engine's defaults"
+- [x] 2.1 Write `trust-overlay.test.ts` (scenario "Overlay entries are built from trust and carried fields, and Replace and Discover prefill them"; rows OE, PF, DS; PF2, PF4 and PF5 go through `overlayEntry`) first, then implement `overlayEntry`, `prefillTrust` and `discoverSettings` in `trust.ts` (records get own keys through `Object.defineProperty`), implementing requirement "An overlay entry holds only the values that differ from the engine's defaults"
 
 ## 3. The two builders
 

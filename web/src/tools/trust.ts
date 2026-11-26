@@ -153,27 +153,106 @@ export function carriedAfterEffect(
   return carriedFields(adapter, tool, { effect: nextEffect, derivedName });
 }
 
+function setOwn<T>(record: Record<string, T>, key: string, value: T): void {
+  Object.defineProperty(record, key, {
+    value,
+    enumerable: true,
+    configurable: true,
+    writable: true,
+  });
+}
+
 export function overlayEntry(
-  _adapter: OverlayAdapter,
-  _effect: string | null,
-  _trust: ToolTrust,
-  _carried: Carried,
+  adapter: OverlayAdapter,
+  effect: string | null,
+  trust: ToolTrust,
+  carried: Carried,
 ): Record<string, string | boolean> {
-  throw new Error("not implemented");
+  if (adapter === "openapi" && effect === null) {
+    throw new RangeError("An OpenAPI entry needs an effect.");
+  }
+  if (effect !== null && !EFFECTS.includes(effect)) {
+    throw new RangeError("Unknown effect.");
+  }
+  if (
+    trust.dataClass !== null &&
+    trust.dataClass !== "public" &&
+    trust.dataClass !== "private"
+  ) {
+    throw new RangeError("Unknown data class.");
+  }
+  if (carried.name !== undefined && !TOOL_NAME.test(carried.name)) {
+    throw new RangeError("Invalid tool name.");
+  }
+  const entry: Record<string, string | boolean> = {};
+  if (effect !== null) entry["effect"] = effect;
+  if (carried.name !== undefined) entry["name"] = carried.name;
+  if (trust.trusted) entry["untrusted_result"] = false;
+  if (carried.unsafe_to_retry !== undefined) {
+    entry["unsafe_to_retry"] = carried.unsafe_to_retry;
+  }
+  if (trust.dataClass !== null) entry["data_class"] = trust.dataClass;
+  return entry;
 }
 
 export function prefillTrust(
-  _stored: ReadonlyMap<string, StoredTool> | null,
-  _operations: readonly OperationRowView[],
+  stored: ReadonlyMap<string, StoredTool> | null,
+  operations: readonly OperationRowView[],
 ): { trust: Record<string, ToolTrust>; carried: Record<string, Carried> } {
-  throw new Error("not implemented");
+  const trust: Record<string, ToolTrust> = {};
+  const carried: Record<string, Carried> = {};
+  if (stored === null) return { trust, carried };
+  for (const operation of operations) {
+    if (operation.excluded !== null) continue;
+    if (operation.operationId === null) continue;
+    if (operation.name === null) continue;
+    const tool = stored.get(operation.name);
+    if (tool === undefined) continue;
+    const toolTrust = trustOf(tool);
+    const toolCarried = carriedFields("openapi", tool, {
+      effect: tool.effect,
+      derivedName: operation.name,
+    });
+    if (toolTrust.trusted || toolTrust.dataClass !== null) {
+      setOwn(trust, operation.operationId, toolTrust);
+    }
+    if (
+      toolCarried.name !== undefined ||
+      toolCarried.unsafe_to_retry !== undefined
+    ) {
+      setOwn(carried, operation.operationId, toolCarried);
+    }
+  }
+  return { trust, carried };
 }
 
-export function discoverSettings(_stored: ReadonlyMap<string, StoredTool> | null): {
+export function discoverSettings(stored: ReadonlyMap<string, StoredTool> | null): {
   trust: Record<string, ToolTrust>;
   carried: Record<string, Carried>;
 } {
-  throw new Error("not implemented");
+  const trust: Record<string, ToolTrust> = {};
+  const carried: Record<string, Carried> = {};
+  if (stored === null) return { trust, carried };
+  for (const tool of stored.values()) {
+    const serverName = tool.serverName;
+    if (serverName === null || serverName === "__proto__") continue;
+    const toolTrust = trustOf(tool);
+    const fields = carriedFields("mcp", tool, {
+      effect: tool.effect,
+      derivedName: serverName,
+    });
+    const toolCarried: Carried = {};
+    if (fields.unsafe_to_retry !== undefined) {
+      toolCarried.unsafe_to_retry = fields.unsafe_to_retry;
+    }
+    if (toolTrust.trusted || toolTrust.dataClass !== null) {
+      setOwn(trust, serverName, toolTrust);
+    }
+    if (toolCarried.unsafe_to_retry !== undefined) {
+      setOwn(carried, serverName, toolCarried);
+    }
+  }
+  return { trust, carried };
 }
 
 export function trustAckMissing(
