@@ -297,8 +297,63 @@ export function ackStatus(
   return { shown, missing, message };
 }
 
-export function valueChangeLines(_approved: unknown, _pending: unknown): ReadonlyMap<string, string[]> {
-  throw new Error("not implemented");
+interface ValueFields {
+  effect: string;
+  untrusted: boolean;
+  unsafe: boolean;
+  dataClass: string | null;
+}
+
+function neutraliseValue(s: string): string {
+  let out = s.replace(/\n/g, "↵");
+  out = out.replace(/[\p{Cc}\p{Cf}\p{Co}\p{Cn}\p{Zl}\p{Zp}]/gu, "?");
+  return out.length <= 2000 ? out : out.slice(0, 2000) + ` (${out.length - 2000} more characters)`;
+}
+
+function readValueFields(surface: unknown): Map<string, ValueFields> | null {
+  if (!isRecord(surface)) return null;
+  const tools = surface["tools"];
+  if (!Array.isArray(tools)) return null;
+  const map = new Map<string, ValueFields>();
+  for (const raw of tools) {
+    if (!isRecord(raw)) continue;
+    const name = raw["name"];
+    if (typeof name !== "string") continue;
+    const effect = raw["effect"];
+    const dataClass = raw["data_class"];
+    map.set(name, {
+      effect: typeof effect === "string" ? effect : "",
+      untrusted: raw["untrusted_result"] !== false,
+      unsafe: raw["unsafe_to_retry"] === true,
+      dataClass: typeof dataClass === "string" ? dataClass : null,
+    });
+  }
+  return map;
+}
+
+export function valueChangeLines(approved: unknown, pending: unknown): ReadonlyMap<string, string[]> {
+  const result = new Map<string, string[]>();
+  const before = readValueFields(approved);
+  const after = readValueFields(pending);
+  if (before === null || after === null) return result;
+  for (const [name, next] of after) {
+    const old = before.get(name);
+    if (old === undefined) continue;
+    const lines: string[] = [];
+    if (old.effect !== next.effect) lines.push(`Effect: ${old.effect} → ${next.effect}`);
+    if (old.untrusted !== next.untrusted) {
+      lines.push(next.untrusted ? "Result: trusted → untrusted" : "Result: untrusted → trusted");
+    }
+    if (old.unsafe !== next.unsafe) {
+      lines.push(next.unsafe ? "Retry: safe → unsafe" : "Retry: unsafe → safe");
+    }
+    if (old.dataClass !== next.dataClass) {
+      const show = (v: string | null): string => (v === null ? "not set" : neutraliseValue(v));
+      lines.push(`Data class: ${show(old.dataClass)} → ${show(next.dataClass)}`);
+    }
+    if (lines.length > 0) result.set(name, lines);
+  }
+  return result;
 }
 
 export interface ChangesText {
@@ -306,8 +361,15 @@ export interface ChangesText {
   items: { text: string; lines: string[] }[];
 }
 
-export function withValueLines(_view: ChangesText, _values: ReadonlyMap<string, string[]>): ChangesText {
-  throw new Error("not implemented");
+export function withValueLines(view: ChangesText, values: ReadonlyMap<string, string[]>): ChangesText {
+  return {
+    text: view.text,
+    items: view.items.map((item) => {
+      const match = /^changed ([^:]*): /.exec(item.text);
+      const extra = match === null ? undefined : values.get(match[1] ?? "");
+      return { text: item.text, lines: extra === undefined ? [...item.lines] : [...item.lines, ...extra] };
+    }),
+  };
 }
 
 export function fillName(template: string, key: string): string {
