@@ -12,7 +12,7 @@ verification round, turns them into a fix unit and checks that each one was addr
 |----|--------|------|-------|----------|
 | FB-001 | addressed | behaviour | src/audit/query.ts:185 | Audit events are listed in numeric seq order |
 | FB-002 | addressed | behaviour | src/api/audit-routes.ts:387 | limit=200 on the audit and decision lists answers 500 |
-| FB-003 | submitted | behaviour | src/api/audit-routes.ts:387 | limit=200 must still find the next page: the stores must accept limit+1 |
+| FB-003 | addressed | behaviour | src/api/audit-routes.ts:387 | limit=200 must still find the next page: the stores must accept limit+1 |
 <!-- l4:feedback-index:end -->
 
 ---
@@ -108,7 +108,7 @@ Addressed in round 1 at 25cafb4889: src/api/audit-routes.ts:392 and :431 cap the
 
 ## FB-003: limit=200 must still find the next page: the stores must accept limit+1
 
-- **Status:** submitted
+- **Status:** addressed
 - **Kind:** behaviour
 - **Where:** `src/api/audit-routes.ts:387-392`
 - **Where:** `src/audit/query.ts:130-132`
@@ -154,3 +154,4 @@ Follow-up 2 caps the store query at Math.min(limit + 1, 200). With limit=200 the
 
 ### Outcome
 <!-- written by the harness -->
+Addressed in round 1 at d993703bc5: src/api/audit-routes.ts:387-392 (handlers pass page.limit + 1, Math.min cap removed), src/audit/query.ts:130-132 (accepts limit up to 201, refuses 202), src/pdp/decisions-query.ts:147-149 (same), and the new limit=200 next-page tests pass.
