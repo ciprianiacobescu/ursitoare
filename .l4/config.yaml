@@ -235,12 +235,10 @@ roles:
   # (ee7bfb84) required: beam 5 rounds of wording fixes (87ef9a4b..cb4430f6), then nemotron-judge alone judged the
   # batch and add-web-tool-journeys (beam twice misread the sorted plan entry as self-dependencies): 10/10 + batch
   # READY at 6dff8a9e. Kiro is skipped under its 10% credit floor until 2026-12-01.
-  - kiro-judge
-  - nemotron-judge
+  # 2026-11-26 (delegate): beam ONLY until the m8 readiness review records, as for m6b and m7. Readiness takes the first
+  # judge whose hello passes and has no fallback after an error; nemotron length-stops on large subjects. RESTORE kiro,
+  # nemotron, beam, mimo, hy4, claude in the push before m8 activates.
   - beam-judge
-  - mimo-judge
-  - hy4-judge
-  - claude-judge
   s1_judge:
   - jev
   - laya
