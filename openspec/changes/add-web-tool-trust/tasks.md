@@ -15,7 +15,7 @@ Paths without a directory are in `web/src/tools/`. Each task is one red-green cy
 
 ## 4. The warning, the tick and the changes
 
-- [ ] 4.1 Write `trust-ack.test.ts` (scenario "The tick list, the refusal text and the fixed names are as the plan says"; rows AK1 to AK9, NM1) first, then implement `trustAckMissing`, `ackStatus`, `fillName`, `TRUST_WARNING` and `TRUST_NAMES` in `trust.ts`, implementing requirement "Trusting a result needs the fixed warning and a tick for each tool"
+- [x] 4.1 Write `trust-ack.test.ts` (scenario "The tick list, the refusal text and the fixed names are as the plan says"; rows AK1 to AK9, NM1) first, then implement `trustAckMissing`, `ackStatus`, `fillName`, `TRUST_WARNING` and `TRUST_NAMES` in `trust.ts`, implementing requirement "Trusting a result needs the fixed warning and a tick for each tool"
 - [ ] 4.2 Write `trust-changes.test.ts` (scenario "Changed values read as fixed lines under their tool"; rows VL1 to VL7, VL7 through `surfaceDiff` of `./review.ts`) first, then implement `valueChangeLines` and `withValueLines` in `trust.ts` (design 7), implementing requirement "Changes shows the old and new value of each changed field"
 
 ## 5. The pages

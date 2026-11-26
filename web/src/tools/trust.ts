@@ -256,18 +256,45 @@ export function discoverSettings(stored: ReadonlyMap<string, StoredTool> | null)
 }
 
 export function trustAckMissing(
-  _trust: Readonly<Record<string, ToolTrust>>,
-  _ack: Readonly<Record<string, boolean>>,
+  trust: Readonly<Record<string, ToolTrust>>,
+  ack: Readonly<Record<string, boolean>>,
 ): string[] {
-  throw new Error("not implemented");
+  const keys: string[] = [];
+  for (const key of Object.keys(trust)) {
+    const entry = trust[key];
+    if (entry === undefined) continue;
+    if (!(entry.trusted || entry.dataClass === "public")) continue;
+    if (ack[key] === true) continue;
+    keys.push(key);
+  }
+  return keys.sort();
 }
 
 export function ackStatus(
-  _trust: Readonly<Record<string, ToolTrust>>,
-  _baseline: Readonly<Record<string, ToolTrust>>,
-  _ticks: Readonly<Record<string, boolean>>,
+  trust: Readonly<Record<string, ToolTrust>>,
+  baseline: Readonly<Record<string, ToolTrust>>,
+  ticks: Readonly<Record<string, boolean>>,
 ): { shown: string[]; missing: string[]; message: string | null } {
-  throw new Error("not implemented");
+  const shown: string[] = [];
+  for (const key of Object.keys(trust)) {
+    const entry = trust[key];
+    if (entry === undefined) continue;
+    const base = baseline[key];
+    const nowTrusted = entry.trusted;
+    const nowPublic = entry.dataClass === "public";
+    const baseTrusted = base !== undefined && base.trusted;
+    const basePublic = base !== undefined && base.dataClass === "public";
+    if ((nowTrusted && !baseTrusted) || (nowPublic && !basePublic)) {
+      shown.push(key);
+    }
+  }
+  shown.sort();
+  const missing = shown.filter((key) => ticks[key] !== true);
+  const message =
+    missing.length === 0
+      ? null
+      : "Accept the warning for: " + missing.join(", ") + ".";
+  return { shown, missing, message };
 }
 
 export function valueChangeLines(_approved: unknown, _pending: unknown): ReadonlyMap<string, string[]> {
@@ -283,10 +310,19 @@ export function withValueLines(_view: ChangesText, _values: ReadonlyMap<string, 
   throw new Error("not implemented");
 }
 
-export function fillName(_template: string, _key: string): string {
-  throw new Error("not implemented");
+export function fillName(template: string, key: string): string {
+  return template.replace(/\{key\}/g, () => key);
 }
 
-export const TRUST_WARNING: string = "";
+export const TRUST_WARNING: string = "A trusted result can reach write, send and pay steps without an llm.extract step, and the validator stops reporting L3_TAINT_TO_CONSEQUENTIAL for it. On a registered server this change leaves it drifted until the surface is approved again, and every changed tool gets a new ref (@N+1). Marking a read tool's data public removes it from the private-data check behind W_LETHAL_TRIFECTA.";
 
-export const TRUST_NAMES: Readonly<Record<string, string>> = {};
+export const TRUST_NAMES: Readonly<Record<string, string>> = Object.freeze({
+  trustColumn: "Result trusted",
+  dataClassColumn: "Data class",
+  trustedOf: "Result of {key} is trusted",
+  dataClassOf: "Data class of {key}",
+  notSet: "Not set",
+  ackOf: "I accept the warning for {key}",
+  ackMissing: "Accept the warning for: {keys}.",
+  replaceHint: "To change trust, paste the document again.",
+});
