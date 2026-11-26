@@ -76,7 +76,7 @@ Connect counts of one request: `BT` 3 (lookup, decision, append), `PT` 4, `XT` 2
 | M22 | payload `{ v: 1 }` wrapped in 66 levels of `{ a: … }` | `{ ok: false, reason: "payload" }` |
 | M23 | payload `{ Authorization: "Bearer x", cookie: "a=b", session_id: "s", private_key: "k", user_agent: "u" }` | ok, payload `{ user_agent: "u", redacted_keys: ["Authorization", "cookie", "private_key", "session_id"], emitter: "broker", mintkey_actor_type: "agent" }` |
 | M24 | `payload` and `actor_id` `null`, no `target_id`, broker | ok, actor `mintkey-broker`, payload `{ emitter: "broker", mintkey_actor_type: "agent" }`, no `target`, no `mk` |
-| M11 to M13 | payload `jti` `"a b"`; 201 `j` characters; `5` | ok, the payload keeps it, no `mk` |
+| M11 to M13 | payload `jti` `"a b"`; 201 `j` characters; the number `5` | ok, the payload keeps it, no `mk` |
 | M14 | payload `{ emitter: "x", mintkey_actor_type: "y", k: 1 }`, proxy | payload `{ emitter: "proxy", mintkey_actor_type: "agent", k: 1 }`, no `mk` |
 | M15 | `target_type` `Service` | ok, no `target` |
 | M16, M17 | `actor_id` `a` U+0001 `b`, proxy; `actor_id` of 201 `a`, broker | actor `mintkey-proxy`; `mintkey-broker` |

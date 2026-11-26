@@ -17,7 +17,7 @@ U61 gave the runner, control port and step framework; U61d the realm overlay and
 11. **Timeout 300 s on the stack:** U61d's wait alone can take 186 s, then the seed (14 steps, one real sign-in). 
 12. **`test_stack_seeding.py` passes on both profiles** (a loopback server per test, no `page`), because `50-journeys.sh` collects it; it is not in `FAKE_ONLY_TESTS`. Every generated `test_l4_c_*.py` file reads `L4_E2E_BASE_URL`, two at import, and the runner sets only `E2E_BASE_URL`: collection of `e2e` exited 2 on the stack's variables (probed), so `conftest.py` mirrors the variable, and the child-pytest test asserts exit 0 without it. 
 13. **The step keeps no trace or screenshot** and passes `--tb=short`: a trace holds the typed password, and a long traceback prints the `users` fixture and `login`'s `user` argument into the junit file. The junit file goes under `$STACK_RUN` (exported by `stack-e2e.sh`; the runner mounts `.stack-out` at `/run/stack-out`).
-14. **Seed tests use the in-process stack minus four parts** (`tenant-b`, `rbac`, `catalogue`, `tool-servers`), whose seeds would leave nothing to create. `database` and `oidc` still create `E2E tenant`, so its `created` line is U59a's test.
+14. **Seed tests use the in-process stack minus five parts** (`tenant-b`, `rbac`, `catalogue`, `tool-servers`, and U60's `internal`, whose seed binds the fake's own sink tokens), whose seeds would leave nothing to create or a second route of each sink kind. `database` and `oidc` still create `E2E tenant`, so its `created` line is U59a's test.
 
 ## Interfaces
 
