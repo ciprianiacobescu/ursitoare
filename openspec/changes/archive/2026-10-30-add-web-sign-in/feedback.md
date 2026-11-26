@@ -10,14 +10,14 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | submitted | behaviour | web/src/auth/session-fetch.ts:23 | A write fails in one tab after the same session loads a page in another tab |
+| FB-001 | taken | behaviour | web/src/auth/session-fetch.ts:23 | A write fails in one tab after the same session loads a page in another tab |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: A write fails in one tab after the same session loads a page in another tab
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** behaviour
 - **Where:** `web/src/auth/session-fetch.ts:23-46`
 - **Lesson:** no
@@ -59,3 +59,4 @@ Browser repro 2026-11-26 at 96cfab9a on the fake e2e stack (carol, /admin/roles-
 
 ### Outcome
 <!-- written by the harness -->
+Taken into add-web-sign-in-followup-1
