@@ -267,3 +267,17 @@ The Node journey SHALL run the web logic on the e2e stack's engine: carol regist
 #### Scenario: The journey sources read as the rules say
 - **WHEN** `test/journeys/journey-sources.test.ts` reads `e2e/test_m7_tools.py` and `test/journeys/m7-tools.test.ts` (test-plan.md S1)
 - **THEN** the Python file holds `@pytest.mark.milestone("M7")`, `set_viewport_size(`, `watch_csp(`, `assert_layout(`, `assert_accessible(`, `exact=True`, `browser.new_context(` and `def test_carol_sets_up_three_servers_and_alice_dry_runs`, and no `pytest.skip`, `xfail`, `skipif`, `time.sleep` or `page.wait_for_timeout`; the TypeScript file holds `startE2eStack(`, `"mcp"`, `"tool-servers"`, `mcpApi(`, `toolsApi(`, `egressApi(` and `demo-live`, and neither `.skip(` nor `.todo(`; four mutated copies (a required token removed, a skip call appended) each give a problem
+
+### Requirement: Server page says 'Pending surface .' when there is no pending surface — feedback FB-001
+The behaviour pinned by the scenarios below SHALL hold.
+
+#### Scenario: Server page says 'Pending surface .' when there is no pending surface
+- **WHEN** a server in state pending has no pending surface yet (pendingDigest is null), as an MCP server has after registration and before its first discovery
+- **THEN** the Surface card's state note mentions no digest and reads 'This server has not been approved. Its tools cannot be used yet. No surface has been submitted yet.'; with a pending digest it still ends with 'Pending surface ' and the 12-character digest
+
+### Requirement: Server list keeps the old state after approve, replace or discovery — feedback FB-002
+The behaviour pinned by the scenarios below SHALL hold.
+
+#### Scenario: Server list keeps the old state after approve, replace or discovery
+- **WHEN** an admin approves a pending or drifted surface, replaces a server's document, or discovers its tools again on the tool servers page
+- **THEN** the server list on the same page is loaded again and the server's row shows its new state (for example approved), as the Surface card does, without reloading the page

@@ -263,11 +263,18 @@ roles:
   # 2026-11-26 08:55Z (delegate): order restored for m8 unit verification (the readiness review recorded 12/12 + batch
   # READY at cfbb2b8d, 7 rounds; claude-judge read the batch in rounds 6-7, $22.21 in all). Kiro is skipped under its
   # 10% credit floor until 2026-12-01.
+  # 2026-11-26 21:50Z (delegate): mimo-go-judge back in, after the free ones. add-web-tool-trust finished its 8 tasks
+  # (deepseek-free, beam and claude-sonnet worked on it, so beam-judge and claude-judge are vetoed) and has had no judge
+  # since 19:05Z: in six runs (45881025235..45898574266) nemotron, mimo and hy4 failed the CI hello ("did not answer
+  # within 60 s" or "reported an error"), while from this Mac all of them, and mimo-go, answered in 5-10 s at 21:35Z.
+  # The owner's 2026-10-27 decision keeps mimo-go-judge "for when the free one is past its limit"; it was out only while
+  # the Go balance was empty, and it answers on Go again. $0.14/$0.28 per million tokens; the free judges stay first.
   - kiro-judge
   - nemotron-judge
   - beam-judge
   - mimo-judge
   - hy4-judge
+  - mimo-go-judge
   - claude-judge
   s1_judge:
   - jev
@@ -281,6 +288,7 @@ roles:
   - nemotron-judge
   - beam-judge
   - mimo-judge
+  - mimo-go-judge
   # Unattended runs: the delegate answers implementer questions read-only and escalates what it cannot check. It runs
   # on a model no implementer or judge uses (delegate.independence: model; doctor DLG-001).
   delegate:
