@@ -241,7 +241,11 @@ roles:
   # 2026-11-26 02:10Z (delegate): beam failed the hello probe in 2 of 3 readiness runs ("opencode reported an
   # error"; runs 45731878631, 45739620367), so mimo and hy4 follow it: a failed hello falls through to the next judge.
   # nemotron stays out (length-stops on large subjects).
-  - beam-judge
+  # 2026-11-26 02:30Z (delegate): 12/12 units READY (run 45739992109, beam). The batch got two false findings from
+  # beam (add-stack-realm-reset "lists itself" and "omits add-keycloak-realm"; m8.json has neither: the M7 misread of
+  # the sorted plan entry), so the reader is switched for the batch alone, as in M7: nemotron first (the batch subject
+  # is small), mimo and hy4 as hello fallbacks.
+  - nemotron-judge
   - mimo-judge
   - hy4-judge
   s1_judge:
