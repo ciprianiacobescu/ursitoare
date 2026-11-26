@@ -119,3 +119,10 @@ The behaviour pinned by the scenarios below SHALL hold.
 #### Scenario: limit=200 on the audit and decision lists answers 500
 - **WHEN** GET /api/v1/audit-events or GET /api/v1/policy-decisions is called with limit=200, the documented maximum of both routes
 - **THEN** the answer is not a 500: it is the same page the route gives for limit=199 on the same data, holding at most 200 items with the next_cursor of the page rules; limit=201 is still refused with 400 VALIDATION_FAILED
+
+### Requirement: limit=200 must still find the next page: the stores must accept limit+1 — feedback FB-003
+The behaviour pinned by the scenarios below SHALL hold.
+
+#### Scenario: limit=200 must still find the next page: the stores must accept limit+1
+- **WHEN** GET /api/v1/audit-events or GET /api/v1/policy-decisions is called with limit=200 while 201 or more rows match, with an engine key and without one
+- **THEN** with an engine key the answer holds the first 200 items and a non-null next_cursor whose next page starts with item 201, as limit=199 gives a next_cursor when 200 or more rows match; without an engine key the answer is the ENGINE_KEY_REQUIRED refusal that limit=199 gives in that case; listAuditEv...
