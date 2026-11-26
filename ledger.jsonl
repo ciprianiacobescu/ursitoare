@@ -23,3 +23,4 @@
 {"at":"2026-11-26T19:07:20Z","attempt":1,"cost_usd":0.54225,"runs":5,"type":"plan.charged","unit":"openspec:add-web-tool-trust"}
 {"at":"2026-11-26T19:07:20Z","run":"r-20261126T1907Z-ab78","type":"unit.dispatched","unit":"openspec:add-web-tool-trust"}
 {"at":"2026-11-26T19:14:35Z","detail":"waiting_capacity until 2026-11-26T19:43:11Z","reason":"unit_waiting_capacity","type":"plan.waiting","unit":"openspec:add-web-tool-trust"}
+{"at":"2026-11-26T19:45:36Z","by":"harness","reason":"the cause is gone: openspec:add-web-tool-trust is waiting_capacity","type":"plan.resumed"}
