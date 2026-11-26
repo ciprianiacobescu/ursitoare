@@ -43,7 +43,7 @@ Proved only by the delegate's stack run at this unit's head, in no scenario and 
 
 | Criterion | Step | Asserts |
 |---|---|---|
-| `signInThroughKeycloak` signs `carol` in through the real one-page Keycloak form (form, cookies, redirect) and Node `fetch` in the runner reaches `http://localhost:8180` through the IPv4 forwarder | `50-journeys.sh` | the first `fresh_state` reset answers 204, so `seedStack` signed in and passed its roles check |
+| `signInThroughKeycloak` signs `carol` in through the real one-page Keycloak form (form, cookies, redirect) and Node `fetch` in the runner reaches `http://localhost:8180` through the IPv4 forwarder | `50-journeys.sh` | the first reset (`stack_seeded`, before the first test) answers 204, so `seedStack` signed in and passed its roles check |
 | After a real sign-in the group mapper gives each user the capabilities of `OVERLAY_USERS` | `50-journeys.sh` | no `login: <user> lacks capabilities` in `e2e-junit.xml`; a search of the run directory for the passwords of `users.json` finds none |
 | Every pytest journey except `fake_only` and `stack` passes on `E2E_PROFILE=stack` | `50-journeys.sh` | pytest exits 0; no failure or error in `e2e-junit.xml`; the summary shows the `fake_only` tests deselected |
 | The browser reaches `http://127.0.0.1:8080` and `http://localhost:8180` (the row `add-stack-overlay` points at this step) | `50-journeys.sh` | `test_m1_sign_in.py` passes |

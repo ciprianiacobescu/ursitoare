@@ -251,11 +251,15 @@ roles:
   # 2026-11-26 06:10Z (delegate): the review recorded at b4a3bcd3 (hy4): 11/12 READY; hy4 misread the batch entry as
   # beam did (add-hobbyist-compose "lists itself": the next unit's list). nemotron read the batch right in M7, so it
   # goes first again (its hello failed once at 02:42Z); hy4 and mimo follow on hello or length failures.
-  # 2026-11-26 07:40Z (delegate): the review recorded at 281133be: nemotron's batch verdict is false again (four
+  # 2026-11-26 07:11Z (delegate): the review recorded at 281133be: nemotron's batch verdict is false again (four
   # findings; "add-stack-realm-reset is not in the units array"). Tally of false whole-batch verdicts on the sorted
   # entry: M8 beam 1, hy4 1, nemotron 1; M7 beam 2. A local dry run with claude-judge (594 s, $7.79 equivalent on the
   # subscription) read the entry right and found a true cross-unit defect (fixed here). ONE round with claude-judge
   # first, hy4 behind it; the free order (owner: free judges, claude last) is restored before m8 activates.
+  # 2026-11-26 08:50Z (delegate): the review recorded at 192eccec ($8.26): 12/12 READY; claude's batch verdict is
+  # NEEDS_REVISION on one true major (20-reset.sh leaves no tenant and most journeys take no fresh_state; fixed in
+  # add-stack-seeding). One more round with claude-judge first re-judges only add-stack-seeding,
+  # add-stack-conformance and the batch; the free order is still restored before m8 activates.
   - claude-judge
   - hy4-judge
   s1_judge:

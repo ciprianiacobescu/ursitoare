@@ -70,7 +70,7 @@ No message holds the owner password, BT, PT, a `pw-` password or `D`.
 
 ## conftest lines (`journeys-step.test.ts`)
 
-`e2e/conftest.py` holds the guard `if "E2E_BASE_URL" in os.environ and "L4_E2E_BASE_URL" not in os.environ:` above the line `os.environ["L4_E2E_BASE_URL"] = os.environ["E2E_BASE_URL"]` (bare, it raises `KeyError` where only `L4_E2E_BASE_URL` is set), `def reset_state() -> None:`, `def seed_users(`, `def is_fake_only(`, `def is_me_response(`, `def check_capabilities(`, `STACK_RESET_TIMEOUT_S = 300`, `config.addinivalue_line(` and the marker text `"fake_only: needs the fake stack's control listener; deselected on the stack profile"`.
+`e2e/conftest.py` holds the guard `if "E2E_BASE_URL" in os.environ and "L4_E2E_BASE_URL" not in os.environ:` above the line `os.environ["L4_E2E_BASE_URL"] = os.environ["E2E_BASE_URL"]` (bare, it raises `KeyError` where only `L4_E2E_BASE_URL` is set), `def reset_state() -> None:`, `def first_reset(profile: str) -> None:`, the line `@pytest.fixture(scope="session", autouse=True)` directly above `def stack_seeded(e2e_profile: str) -> None:`, `def seed_users(`, `def is_fake_only(`, `def is_me_response(`, `def check_capabilities(`, `STACK_RESET_TIMEOUT_S = 300`, `config.addinivalue_line(` and the marker text `"fake_only: needs the fake stack's control listener; deselected on the stack profile"`.
 
 ## Python rows (`e2e/test_stack_seeding.py`)
 
