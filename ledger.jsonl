@@ -16,3 +16,5 @@
 {"at":"2026-11-26T08:56:36Z","run":"r-20261126T0856Z-9b38","type":"unit.dispatched","unit":"openspec:add-web-tool-trust"}
 {"at":"2026-11-26T11:30:02Z","attempt":1,"cost_usd":0.0,"runs":2,"type":"plan.charged","unit":"openspec:add-web-tool-trust"}
 {"at":"2026-11-26T11:30:02Z","run":"r-20261126T1129Z-e48e","type":"unit.dispatched","unit":"openspec:add-web-tool-trust"}
+{"at":"2026-11-26T14:01:50Z","attempt":1,"cost_usd":0.0,"runs":3,"type":"plan.charged","unit":"openspec:add-web-tool-trust"}
+{"at":"2026-11-26T14:01:50Z","run":"r-20261126T1401Z-9952","type":"unit.dispatched","unit":"openspec:add-web-tool-trust"}
