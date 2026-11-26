@@ -313,6 +313,7 @@ export function ServersPage(): ReactNode {
         <ReplaceSection
           serverId={serverId}
           server={view}
+          surface={pendingSurface !== null ? pendingSurface : approvedSurface}
           onSaved={() => setReloadKey((current) => current + 1)}
         />
       )}
