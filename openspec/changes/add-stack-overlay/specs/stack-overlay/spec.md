@@ -86,7 +86,7 @@ The stack-run harness of the milestone proof: an overlay of the hobbyist compose
 - **THEN** the first request records the four headers, `x-mintkey-identity` and `x-mintkey-service-identity` `svcid_ursitoare`, `x-mintkey-token` and `x-mintkey-service-token` `t-0123`; the second records none of them; `putCredential` answers `grpcStatus` 0 and `keyVersion` 1
 
 ### Requirement: docs/testing.md and the README describe the stack run
-`docs/testing.md` SHALL hold a section `## Stack profile` with the sentences of `test-plan.md` § Docs, its closing sentence "never `down -v`" SHALL point to that section, and `A reset discards every durable workflow` SHALL stay. `test/support/README.md` SHALL hold one row starting `` | `stack/` | `add-stack-overlay` | `` and keep its pinned text.
+`docs/testing.md` SHALL hold a section `## Stack profile` with the sentences of `test-plan.md` § Docs, the closing paragraph's "never `down -v`" SHALL be replaced by a pointer to that section (the phrase no longer appears), and `A reset discards every durable workflow` SHALL stay. `test/support/README.md` SHALL hold one row starting `` | `stack/` | `add-stack-overlay` | `` and keep its pinned text.
 
 #### Scenario: The documents
 - **WHEN** a test reads `docs/testing.md` and `test/support/README.md`

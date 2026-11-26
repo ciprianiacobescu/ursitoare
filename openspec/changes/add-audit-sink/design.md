@@ -31,7 +31,7 @@ export function loadAuditSinkConfig(env: Env, base: { database: { app: object | 
 export const SINK_ROLE: string;
 export const SINK_REFUSAL_EVENT: string;
 export type SinkEmitter = "broker" | "proxy";
-export interface SinkEvent { event_type: string; tenant_id: string; actor_id?: string; actor_type: string; target_id?: string; target_type?: string; payload: Record<string, unknown> }
+export interface SinkEvent { event_type: string; tenant_id: string; actor_id?: string | null; actor_type: string; target_id?: string | null; target_type?: string | null; payload?: Record<string, unknown> | null }
 export type SinkMapping = { ok: true; event: AuditEventInput } | { ok: false; reason: "tenant_mismatch" | "event_type" | "payload" };
 export function mapMintkeyEvent(body: SinkEvent, emitter: SinkEmitter, mintkeyTenantUuid: string): SinkMapping;
 export function refusalEvent(emitter: SinkEmitter, reason: string, eventType: unknown): AuditEventInput;

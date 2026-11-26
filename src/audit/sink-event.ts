@@ -11,11 +11,11 @@ export type SinkEmitter = "broker" | "proxy";
 export interface SinkEvent {
   event_type: string;
   tenant_id: string;
-  actor_id?: string;
+  actor_id?: string | null;
   actor_type: string;
-  target_id?: string;
-  target_type?: string;
-  payload: Record<string, unknown>;
+  target_id?: string | null;
+  target_type?: string | null;
+  payload?: Record<string, unknown> | null;
 }
 
 export type SinkMapping =

@@ -63,13 +63,13 @@ export function overlayEntry(
 }
 
 export function prefillTrust(
-  _stored: ReadonlyMap<string, StoredTool>,
+  _stored: ReadonlyMap<string, StoredTool> | null,
   _operations: readonly OperationRowView[],
 ): { trust: Record<string, ToolTrust>; carried: Record<string, Carried> } {
   throw new Error("not implemented");
 }
 
-export function discoverSettings(_stored: ReadonlyMap<string, StoredTool>): {
+export function discoverSettings(_stored: ReadonlyMap<string, StoredTool> | null): {
   trust: Record<string, ToolTrust>;
   carried: Record<string, Carried>;
 } {

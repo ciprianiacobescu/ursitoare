@@ -33,7 +33,7 @@ Also: `owner-job: OWNER_JOB_ORGANIZATION is not org-a`, and the alias texts for 
 | S5 | add `docker volume rm "$names"` after the `down` line | `S5 docker volume rm is not allowed` |
 | S5b | add the line `docker system prune -f` after `mkdir -p "$RUN_OUT"` | `S5 docker system is not allowed` |
 | S6 | the `volume ls` line of `wipe_project` loses its `--filter` | `S6 docker volume ls without the project label` |
-| S7 | add `-p 8080:8080` to the `RUNNER=` line | `S7 names reserved port 8080` (and an `S7 publishes` text) |
+| S7 | add `-p 8080:8080` to the `RUNNER=` line | `S7 names reserved port 8080` (a second S7 text for the same line may follow; the row checks this one) |
 | S8 | add the line `set -x` after `set -euo pipefail` | `S8 prints the environment or traces commands: set -x` |
 | S9 | `config --format json \| $RUNNER` by `config --format json \| tee x \| $RUNNER` | `S9 config is not piped straight into the runner` |
 | S10 | remove the line `trap finish EXIT` | `S10 trap is not set between the state check and the build` |

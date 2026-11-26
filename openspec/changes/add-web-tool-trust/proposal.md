@@ -30,8 +30,8 @@ export interface Carried { name?: string; unsafe_to_retry?: boolean }
 export function carriedFields(adapter: OverlayAdapter, stored: StoredTool | undefined, next: { effect: string; derivedName: string | null }): Carried;
 export function carriedAfterEffect(adapter: OverlayAdapter, stored: ReadonlyMap<string, StoredTool> | null, lookup: string | null, effect: string, derivedName: string | null): Carried;   // (addition)
 export function overlayEntry(adapter: OverlayAdapter, effect: string | null, trust: ToolTrust, carried: Carried): Record<string, string | boolean>;
-export function prefillTrust(stored: ReadonlyMap<string, StoredTool>, operations: readonly OperationRowView[]): { trust: Record<string, ToolTrust>; carried: Record<string, Carried> };   // key: operationId
-export function discoverSettings(stored: ReadonlyMap<string, StoredTool>): { trust: Record<string, ToolTrust>; carried: Record<string, Carried> };   // key: server tool name
+export function prefillTrust(stored: ReadonlyMap<string, StoredTool> | null, operations: readonly OperationRowView[]): { trust: Record<string, ToolTrust>; carried: Record<string, Carried> };   // key: operationId
+export function discoverSettings(stored: ReadonlyMap<string, StoredTool> | null): { trust: Record<string, ToolTrust>; carried: Record<string, Carried> };   // key: server tool name
 export function trustAckMissing(trust: Readonly<Record<string, ToolTrust>>, ack: Readonly<Record<string, boolean>>): string[];   // trusted or public, not ticked, sorted
 export function ackStatus(trust: Readonly<Record<string, ToolTrust>>, baseline: Readonly<Record<string, ToolTrust>>, ticks: Readonly<Record<string, boolean>>): { shown: string[]; missing: string[]; message: string | null };   // (addition)
 export function valueChangeLines(approved: unknown, pending: unknown): ReadonlyMap<string, string[]>;
