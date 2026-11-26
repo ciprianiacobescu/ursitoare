@@ -260,8 +260,15 @@ roles:
   # NEEDS_REVISION on one true major (20-reset.sh leaves no tenant and most journeys take no fresh_state; fixed in
   # add-stack-seeding). One more round with claude-judge first re-judges only add-stack-seeding,
   # add-stack-conformance and the batch; the free order is still restored before m8 activates.
-  - claude-judge
+  # 2026-11-26 08:55Z (delegate): order restored for m8 unit verification (the readiness review recorded 12/12 + batch
+  # READY at cfbb2b8d, 7 rounds; claude-judge read the batch in rounds 6-7, $22.21 in all). Kiro is skipped under its
+  # 10% credit floor until 2026-12-01.
+  - kiro-judge
+  - nemotron-judge
+  - beam-judge
+  - mimo-judge
   - hy4-judge
+  - claude-judge
   s1_judge:
   - jev
   - laya
