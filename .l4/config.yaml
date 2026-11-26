@@ -248,6 +248,10 @@ roles:
   # 2026-11-26 05:40Z (delegate): run 45744199259: nemotron failed hello, mimo length-stopped on six subjects (2.5 h,
   # job_time); hy4 answered every subject it got. hy4 first, mimo second; beam stays out until the whole-batch subject
   # records (beam misreads it). RESTORE the full order (kiro, nemotron, beam, mimo, hy4, claude) before m8 activates.
+  # 2026-11-26 06:10Z (delegate): the review recorded at b4a3bcd3 (hy4): 11/12 READY; hy4 misread the batch entry as
+  # beam did (add-hobbyist-compose "lists itself": the next unit's list). nemotron read the batch right in M7, so it
+  # goes first again (its hello failed once at 02:42Z); hy4 and mimo follow on hello or length failures.
+  - nemotron-judge
   - hy4-judge
   - mimo-judge
   s1_judge:
