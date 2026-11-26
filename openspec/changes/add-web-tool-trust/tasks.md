@@ -2,7 +2,7 @@ Paths without a directory are in `web/src/tools/`. Each task is one red-green cy
 
 ## 1. The stored surface
 
-- [ ] 1.1 Write `trust.test.ts` (scenarios "A stored surface gives each tool's trust with the engine's defaults and a malformed one is refused" and "A retry flag is carried only when the effect is unchanged"; rows ST, TO, CF, CA) first, then implement `DEFAULT_TRUST` (frozen), `storedTools`, `trustOf`, `carriedFields` and `carriedAfterEffect` in `trust.ts` (design 2 and 3; no value import from `./review.ts` or `./register.ts`), implementing requirement "A stored surface is read for trust and the fields a replacement carries". Run `pnpm run test web/src/tools/trust.test.ts`
+- [x] 1.1 Write `trust.test.ts` (scenarios "A stored surface gives each tool's trust with the engine's defaults and a malformed one is refused" and "A retry flag is carried only when the effect is unchanged"; rows ST, TO, CF, CA) first, then implement `DEFAULT_TRUST` (frozen), `storedTools`, `trustOf`, `carriedFields` and `carriedAfterEffect` in `trust.ts` (design 2 and 3; no value import from `./review.ts` or `./register.ts`), implementing requirement "A stored surface is read for trust and the fields a replacement carries". Run `pnpm run test web/src/tools/trust.test.ts`
 
 ## 2. Entries and prefill
 

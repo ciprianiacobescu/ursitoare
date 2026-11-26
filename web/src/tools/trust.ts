@@ -9,7 +9,10 @@ export interface ToolTrust {
   dataClass: DataClass | null;
 }
 
-export const DEFAULT_TRUST: Readonly<ToolTrust> = Object.freeze({}) as unknown as Readonly<ToolTrust>;
+export const DEFAULT_TRUST: Readonly<ToolTrust> = Object.freeze({
+  trusted: false,
+  dataClass: null,
+});
 
 export interface StoredTool {
   name: string;
@@ -20,12 +23,78 @@ export interface StoredTool {
   serverName: string | null;
 }
 
-export function storedTools(_surface: unknown): ReadonlyMap<string, StoredTool> | null {
-  throw new Error("not implemented");
+const TOOL_NAME = /^[a-z][a-z0-9_]{0,63}$/;
+const MCP_NAME = /^[A-Za-z0-9_.-]{1,128}$/;
+const EFFECTS: readonly string[] = ["read", "write", "send", "pay"];
+const MAX_TOOLS = 100;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-export function trustOf(_t: StoredTool | undefined): ToolTrust {
-  throw new Error("not implemented");
+function readStoredTool(raw: unknown): StoredTool | null {
+  if (!isRecord(raw)) return null;
+  const name = raw["name"];
+  if (typeof name !== "string" || !TOOL_NAME.test(name)) return null;
+  const effect = raw["effect"];
+  if (typeof effect !== "string" || !EFFECTS.includes(effect)) return null;
+  const untrusted = raw["untrusted_result"];
+  if (Object.hasOwn(raw, "untrusted_result") && typeof untrusted !== "boolean") {
+    return null;
+  }
+  const retry = raw["unsafe_to_retry"];
+  if (Object.hasOwn(raw, "unsafe_to_retry") && typeof retry !== "boolean") {
+    return null;
+  }
+  const dataClass = raw["data_class"];
+  if (
+    Object.hasOwn(raw, "data_class") &&
+    dataClass !== null &&
+    dataClass !== "public" &&
+    dataClass !== "private"
+  ) {
+    return null;
+  }
+  let serverName: string | null = null;
+  if (Object.hasOwn(raw, "call")) {
+    const call = raw["call"];
+    if (call !== null) {
+      if (!isRecord(call)) return null;
+      if (call["kind"] === "mcp") {
+        const mcpName = call["name"];
+        if (typeof mcpName !== "string" || !MCP_NAME.test(mcpName)) return null;
+        serverName = mcpName;
+      }
+    }
+  }
+  return {
+    name,
+    effect,
+    untrusted_result: untrusted === undefined ? true : untrusted === true,
+    unsafe_to_retry: retry === undefined ? null : (retry as boolean),
+    data_class:
+      dataClass === undefined || dataClass === null ? null : (dataClass as DataClass),
+    serverName,
+  };
+}
+
+export function storedTools(surface: unknown): ReadonlyMap<string, StoredTool> | null {
+  if (!isRecord(surface)) return null;
+  const tools = surface["tools"];
+  if (!Array.isArray(tools) || tools.length > MAX_TOOLS) return null;
+  const map = new Map<string, StoredTool>();
+  for (const raw of tools) {
+    const tool = readStoredTool(raw);
+    if (tool === null) return null;
+    if (map.has(tool.name)) return null;
+    map.set(tool.name, tool);
+  }
+  return map;
+}
+
+export function trustOf(t: StoredTool | undefined): ToolTrust {
+  if (t === undefined) return DEFAULT_TRUST;
+  return { trusted: !t.untrusted_result, dataClass: t.data_class };
 }
 
 export type OverlayAdapter = "openapi" | "mcp";
@@ -35,22 +104,53 @@ export interface Carried {
   unsafe_to_retry?: boolean;
 }
 
+function defaultRetry(adapter: OverlayAdapter, effect: string): boolean {
+  return adapter === "mcp" ? true : effect !== "read";
+}
+
 export function carriedFields(
-  _adapter: OverlayAdapter,
-  _stored: StoredTool | undefined,
-  _next: { effect: string; derivedName: string | null },
+  adapter: OverlayAdapter,
+  stored: StoredTool | undefined,
+  next: { effect: string; derivedName: string | null },
 ): Carried {
-  throw new Error("not implemented");
+  if (stored === undefined) return {};
+  const carried: Carried = {};
+  if (next.derivedName !== null && next.derivedName !== stored.name) {
+    carried.name = stored.name;
+  }
+  if (
+    stored.effect === next.effect &&
+    stored.unsafe_to_retry !== null &&
+    stored.unsafe_to_retry !== defaultRetry(adapter, next.effect)
+  ) {
+    carried.unsafe_to_retry = stored.unsafe_to_retry;
+  }
+  return carried;
 }
 
 export function carriedAfterEffect(
-  _adapter: OverlayAdapter,
-  _stored: ReadonlyMap<string, StoredTool> | null,
-  _lookup: string | null,
-  _effect: string,
-  _derivedName: string | null,
+  adapter: OverlayAdapter,
+  stored: ReadonlyMap<string, StoredTool> | null,
+  lookup: string | null,
+  effect: string,
+  derivedName: string | null,
 ): Carried {
-  throw new Error("not implemented");
+  if (stored === null || lookup === null) return {};
+  let tool: StoredTool | undefined;
+  if (adapter === "mcp") {
+    for (const candidate of stored.values()) {
+      if (candidate.serverName === lookup) {
+        tool = candidate;
+        break;
+      }
+    }
+  } else {
+    tool = stored.get(lookup);
+  }
+  if (tool === undefined) return {};
+  if (adapter === "openapi" && effect === "") return {};
+  const nextEffect = adapter === "mcp" && effect === "" ? "write" : effect;
+  return carriedFields(adapter, tool, { effect: nextEffect, derivedName });
 }
 
 export function overlayEntry(
