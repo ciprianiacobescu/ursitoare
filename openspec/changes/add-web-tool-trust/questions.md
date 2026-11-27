@@ -21,7 +21,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-008 | answered | none | verdict | Finding F-4ee90a68: discoverBody neither validates nor emits keys that appear only in a draft's carried map |
 | Q-009 | answered | none | verdict | Finding F-1b3e37fc: Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults |
 | Q-010 | answered | none | verdict | Hold H-fd0a4300: UI criterion C-f52c8d49 has no end-to-end test; see the generated UI tests table |
-| Q-011 | open | none | verdict | Hold H-ec069147: UI criterion C-3a1c08af has no end-to-end test; see the generated UI tests table |
+| Q-011 | answered | none | verdict | Hold H-ec069147: UI criterion C-3a1c08af has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-91b47a21: UI criterion C-08abe836 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-95bd71c9: UI criterion C-3ad08589 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-4d97dc56: UI criterion C-7374d16f has no end-to-end test; see the generated UI tests table |
@@ -345,7 +345,8 @@ accept The unit can go on as it stands. The hold says the criterion lacks an end
 
 ## Q-011: Hold H-ec069147: UI criterion C-3a1c08af has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -364,6 +365,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. The hold says the criterion lacks an end-to-end test because the generated-test writer timed out, but the unit's own browser file holds a test tagged with this criterion whose assertions are exactly the scenario: after the preview the document field is described by the replace hint, the trust box of createPayment is checked, its data class reads private, no acceptance tick is shown, the warning appears once, and Save changes issues one PUT whose overlay holds createPayment with effect pay, untrusted_result false, unsafe_to_retry false and data_class private and listVendors with effect read, followed by a second detail read. The code supports each step: the servers page hands the pending surface, else the approved one, to the Replace section, which reads it with storedTools and after each preview prefills trust and carried values with prefillTrust and sets the baseline to that trust, so ackStatus shows no tick; carriedFields keeps the stored false for create_payment because its effect is unchanged and false differs from the OpenAPI default for pay, while list_vendors stored false equals the read default and nothing is carried; overlayEntry writes exactly the pinned members. The test was not run in a gate here; the acceptance profile after merge runs every configured gate.
 ---
 
 ## Q-012: Hold H-91b47a21: UI criterion C-08abe836 has no end-to-end test; see the generated UI tests table
