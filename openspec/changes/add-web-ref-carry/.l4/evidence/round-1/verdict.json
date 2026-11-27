@@ -1,0 +1,487 @@
+{
+  "schema": "l4/verdict@1",
+  "round": 1,
+  "verdict": "FAIL",
+  "base_sha": "573790765e5cfba65969dee050afd165db21018b",
+  "head_sha": "45b495f281e21f70de58517e22da89a3879a57b3",
+  "steps": [
+    {
+      "step": "0",
+      "name": "preconditions",
+      "status": "ok",
+      "seconds": 0.3,
+      "note": "base main@573790765e contained"
+    },
+    {
+      "step": "1",
+      "name": "integrity",
+      "status": "failed",
+      "seconds": 0.3,
+      "note": "an inline suppression was not declared (+1 unfrozen by human answers); scope: 19 changed file(s)"
+    },
+    {
+      "step": "2",
+      "name": "build",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "3",
+      "name": "tests",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "4",
+      "name": "traceability",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "4a",
+      "name": "audit sampling",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "5",
+      "name": "ui test generation",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "6",
+      "name": "quality",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "8",
+      "name": "s1 judge",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "9",
+      "name": "judge",
+      "status": "not_run",
+      "seconds": 0.0,
+      "note": "an earlier step failed"
+    },
+    {
+      "step": "10",
+      "name": "aggregation",
+      "status": "ok",
+      "seconds": 0.0,
+      "note": "FAIL"
+    }
+  ],
+  "gates": [],
+  "criteria": [],
+  "findings": [
+    {
+      "severity": "major",
+      "title": "an inline suppression was not declared",
+      "detail": "e2e/test_m8_ref_carry.py:187 # type: ignore. Remove each comment by fixing what it hides; declare one only if it cannot be removed",
+      "source": "deterministic",
+      "criterion": null,
+      "log": null,
+      "spec_gap": false,
+      "suggested_fix": "",
+      "id": "F-6eb0cc43",
+      "feedback": null
+    }
+  ],
+  "holds": [],
+  "subject_sha": "45b495f281e21f70de58517e22da89a3879a57b3",
+  "family_criteria": [],
+  "reused_from": null,
+  "integrity": {
+    "checks": [
+      {
+        "name": "protected paths",
+        "status": "ok",
+        "note": "no protected path differs from the base"
+      },
+      {
+        "name": "pre-existing tests",
+        "status": "ok",
+        "note": "2 test file(s) compared with the base"
+      },
+      {
+        "name": "red-green freeze",
+        "status": "ok",
+        "note": "6 task(s): red and green compared (+1 unfrozen by a delegate or an agent)"
+      },
+      {
+        "name": "test path freeze",
+        "status": "ok",
+        "note": "6 harness step commit(s) checked"
+      },
+      {
+        "name": "content scan",
+        "status": "ok",
+        "note": "no result-manipulating construct in the changed support and runner files"
+      },
+      {
+        "name": "gate configuration",
+        "status": "skipped",
+        "note": "no gate or runner configuration file changed"
+      },
+      {
+        "name": "test awareness",
+        "status": "ok",
+        "note": "no production line reacts to the test run"
+      },
+      {
+        "name": "suppressions",
+        "status": "failed",
+        "note": "1 new suppression(s), 0 declared; not checked: python only; changed files outside it: web/src/tools/GrantsPage.tsx, web/src/tools/RefCarryPanel.tsx, web/src/tools/RefMarker.tsx, web/src/tools/ServersPage.tsx, web/src/tools/ref-carry-copy.test.ts (+6 more)"
+      },
+      {
+        "name": "tdd history",
+        "status": "ok",
+        "note": "6 task(s); red tests passing at head: step 3"
+      },
+      {
+        "name": "python encoding",
+        "status": "ok",
+        "note": "2 Python file(s) added or changed, each read, none declares another encoding"
+      },
+      {
+        "name": "pre-existing tests still pass",
+        "status": "skipped",
+        "note": "step 1 already failed"
+      }
+    ],
+    "findings": [
+      {
+        "severity": "major",
+        "title": "an inline suppression was not declared",
+        "detail": "e2e/test_m8_ref_carry.py:187 # type: ignore. Remove each comment by fixing what it hides; declare one only if it cannot be removed",
+        "source": "deterministic",
+        "criterion": null,
+        "log": null,
+        "spec_gap": false,
+        "suggested_fix": "",
+        "id": "F-6eb0cc43",
+        "feedback": null
+      }
+    ],
+    "declared": [],
+    "human_protected": [],
+    "human_tests": [],
+    "unfrozen": [
+      "e2e/test_m8_ref_carry.py (task 4.1, unfrozen by Q-001 (delegate_override, claude-fable-5-1))"
+    ],
+    "human_suppressions": [],
+    "human_scan": [],
+    "human_config": [],
+    "allowed_tests": [],
+    "mocked_support": [],
+    "base_tests": null,
+    "test_awareness": []
+  },
+  "trace": [],
+  "audit": [],
+  "generated": [],
+  "s1": [],
+  "evidence": {
+    "schema": "l4/evidence@1",
+    "holds": [],
+    "items": {},
+    "scope": {
+      "declared": [
+        "src/tools/surface.ts:80-100",
+        "src/grants/policy-sets.ts:279-301",
+        "src/api/grant-routes.ts:274-280",
+        "src/grants/status.ts",
+        "people",
+        "src/tools/store.ts:159-183",
+        "src/api/tool-server-routes.ts:109-114",
+        "src/tools/store.ts:447-562",
+        "e2e/test_m7_tools.py",
+        "test/support/catalogue/blocks.v0.json",
+        "web/src/auth/session-fetch.ts:47-72",
+        "e2e/test_m6b_admin.py",
+        "e2e/test_m6b_section_layout.py",
+        "src/api/route.ts:205-208",
+        "src/api/tool-server-routes.ts:220-226",
+        "src/grants/store.ts",
+        "src/grants/store.ts:265-274",
+        "src/api/idempotency.ts:106-216",
+        "web/src/tools/ServersPage.tsx",
+        "src",
+        "node:assert/strict",
+        "web/src/tools/ref-carry-refs.test.ts",
+        "web/src/tools/ref-carry.ts",
+        "web/src/tools/ref-carry-read.test.ts",
+        "web/src/tools/ref-carry-copy.test.ts",
+        "web/src/tools/ref-carry-view.test.ts",
+        "web/src/tools/ref-carry-pages.test.ts",
+        "e2e/test_m8_ref_carry.py",
+        "e2e",
+        "web/src/tools/RefCarryPanel.tsx",
+        "web/src/tools/ref-marker-pages.test.ts",
+        "e2e/test_m8_ref_carry_grants.py",
+        "web/src/tools/RefMarker.tsx",
+        "web/src/tools/GrantsPage.tsx",
+        "**/RefCarryPanel.tsx",
+        "**/RefMarker.tsx",
+        "**/ServersPage.tsx",
+        "**/GrantsPage.tsx",
+        "**/[serverId]",
+        "**/[reloadKey]",
+        "**/servers.ts",
+        "**/tools[].effect",
+        "**/review.ts",
+        "**/[]",
+        "**/loadAll*",
+        "**/[data-slot=\"badge\"]",
+        "**/[",
+        "**/pages.test.ts",
+        "**/servers.test.ts",
+        "**/approve.test.ts",
+        "module api",
+        "module e2e",
+        "module grants",
+        "module node:assert",
+        "module test",
+        "module tools",
+        "module web"
+      ],
+      "skipped": false,
+      "note": "",
+      "holds": [],
+      "files": [
+        {
+          "path": "e2e/test_m8_ref_carry.py",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "e2e/test_m8_ref_carry_grants.py",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "openspec/changes/add-web-ref-carry/.l4/ledger/r-20261127T0637Z-36df.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-ref-carry/.l4/ledger/r-20261127T0851Z-5327.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-ref-carry/.l4/ledger/r-20261127T1106Z-2a77.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-ref-carry/.l4/ledger/r-20261127T1428Z-eae0.jsonl",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-ref-carry/questions.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "openspec/changes/add-web-ref-carry/tasks.md",
+          "module": null,
+          "kind": "exempt",
+          "label": null,
+          "reason": "exempt: harness, spec or documentation path"
+        },
+        {
+          "path": "web/src/tools/GrantsPage.tsx",
+          "module": "web",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "web/src/tools/RefCarryPanel.tsx",
+          "module": "web",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "web/src/tools/RefMarker.tsx",
+          "module": "web",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "web/src/tools/ServersPage.tsx",
+          "module": "web",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "web/src/tools/ref-carry-copy.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "web/src/tools/ref-carry-pages.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "web/src/tools/ref-carry-read.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "web/src/tools/ref-carry-refs.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "web/src/tools/ref-carry-view.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        },
+        {
+          "path": "web/src/tools/ref-carry.ts",
+          "module": "web",
+          "kind": "code",
+          "label": "relevant",
+          "reason": "named in the spec"
+        },
+        {
+          "path": "web/src/tools/ref-marker-pages.test.ts",
+          "module": null,
+          "kind": "test",
+          "label": "relevant",
+          "reason": "new test file"
+        }
+      ]
+    },
+    "diff_coverage": null,
+    "tests_ran": null
+  },
+  "human": [],
+  "fix": {
+    "action": "spawn",
+    "ordinal": 1,
+    "tasks": [
+      "F-6eb0cc43 an inline suppression was not declared"
+    ],
+    "not_converted": [],
+    "reason": "",
+    "plan": null,
+    "code": ""
+  },
+  "judge_verdict": null,
+  "judge_carried": {},
+  "cx_runs": {},
+  "tests": {},
+  "failures": {},
+  "failures_dropped": 0,
+  "e2e_tests": [],
+  "red_green": {
+    "web.src.tools.ref-carry-refs.test.ts::C-568a8224 REF_MARKERS holds the superseded and waiting texts": "1.1",
+    "web.src.tools.ref-carry-refs.test.ts::C-568a8224 refState gives null for a ref that no non-pending server lists": "1.1",
+    "web.src.tools.ref-carry-refs.test.ts::C-568a8224 refState tells current superseded and waiting on the listing server": "1.1",
+    "web.src.tools.ref-carry-refs.test.ts::C-d008fd69 approvedEffects maps a readable surface and is empty otherwise": "1.1",
+    "web.src.tools.ref-carry-refs.test.ts::C-d008fd69 changedRefs adds an effect only from the approved effects": "1.1",
+    "web.src.tools.ref-carry-refs.test.ts::C-d008fd69 changedRefs finds the bumped tool and sorts the changes by tool name": "1.1",
+    "web.src.tools.ref-carry-refs.test.ts::C-d008fd69 changedRefs skips a first approval an added and a removed tool and a null ref": "1.1",
+    "web.src.tools.ref-carry-refs.test.ts::C-d008fd69 refNoticeText words the changes as old to new": "1.1",
+    "web.src.tools.ref-carry-read.test.ts::C-b97e74b9 loadAllGrants always passes an AbortSignal": "2.1",
+    "web.src.tools.ref-carry-read.test.ts::C-b97e74b9 loadAllGrants reads every page with its cursor limit and signal": "2.1",
+    "web.src.tools.ref-carry-read.test.ts::C-b97e74b9 loadAllGrants refuses a bad item and a bad page": "2.1",
+    "web.src.tools.ref-carry-read.test.ts::C-b97e74b9 loadAllGrants rejects with the failed request error": "2.1",
+    "web.src.tools.ref-carry-read.test.ts::C-b97e74b9 loadAllGrants stops at a hundred pages and reports it incomplete": "2.1",
+    "web.src.tools.ref-carry-read.test.ts::C-b97e74b9 loadAllToolServers reads every page with its cursor limit and signal": "2.1",
+    "web.src.tools.ref-carry-read.test.ts::C-b97e74b9 loadAllToolServers refuses an unreadable item": "2.1",
+    "web.src.tools.ref-carry-read.test.ts::C-b97e74b9 loadAllToolServers rejects a 401 from the real client": "2.1",
+    "web.src.tools.ref-carry-read.test.ts::C-b97e74b9 loadAllToolServers stops at a hundred pages and reports it incomplete": "2.1",
+    "web.src.tools.ref-carry-read.test.ts::C-d7d00513 parseGrantRecord reads a grant with its arguments and the boundary values": "2.1",
+    "web.src.tools.ref-carry-read.test.ts::C-d7d00513 parseGrantRecord refuses each malformed record": "2.1",
+    "web.src.tools.ref-carry-copy.test.ts::C-0db1d5a2 carryKeys reuses one key per pair and refuses a key outside the header alphabet": "3.1",
+    "web.src.tools.ref-carry-copy.test.ts::C-0db1d5a2 copyGrants reports a refusal reason or an error code without stopping": "3.1",
+    "web.src.tools.ref-carry-copy.test.ts::C-0db1d5a2 copyGrants sends nothing for an unusable key and for an empty plan": "3.1",
+    "web.src.tools.ref-carry-copy.test.ts::C-0db1d5a2 copyGrants sends one post per grant in order and reports each answer": "3.1",
+    "web.src.tools.ref-carry-copy.test.ts::C-b4fa2d61 copyGrantBody returns a fresh any step body and refuses a bad ref": "3.1",
+    "web.src.tools.ref-carry-copy.test.ts::C-b4fa2d61 copyPlan copies any step grants and lists node grants as update the flow first": "3.1",
+    "web.src.tools.ref-carry-copy.test.ts::C-b4fa2d61 copyPlan gives empty lists without changes or grants": "3.1",
+    "web.src.tools.ref-carry-copy.test.ts::C-b4fa2d61 copyPlan lists a changed effect whatever the grant scope": "3.1",
+    "web.src.tools.ref-carry-view.test.ts::C-1733a357 carryGrants never copies a grant whose effect changed": "3.2",
+    "web.src.tools.ref-carry-view.test.ts::C-1733a357 carryGrants posts nothing when no grant names an old ref": "3.2",
+    "web.src.tools.ref-carry-view.test.ts::C-1733a357 carryGrants reads every page then copies and reports every grant": "3.2",
+    "web.src.tools.ref-carry-view.test.ts::C-1733a357 carryGrants rejects with the read error before any post": "3.2",
+    "web.src.tools.ref-carry-view.test.ts::C-1733a357 carryView gives one line per outcome then the update the flow first line": "3.2",
+    "web.src.tools.ref-carry-view.test.ts::C-1733a357 carryView lists a changed effect and copies nothing for it": "3.2",
+    "web.src.tools.ref-carry-view.test.ts::C-1733a357 carryView notes an incomplete read and deploys only after a created grant": "3.2",
+    "web.src.tools.ref-carry-view.test.ts::C-1733a357 carryView of nothing says no grant names the old refs": "3.2",
+    "web.src.tools.ref-carry-view.test.ts::C-1733a357 carryView refuses outcomes that do not follow the plan copy": "3.2",
+    "web.src.tools.ref-carry-view.test.ts::C-1733a357 fillRefText replaces own keys once and literally": "3.2",
+    "web.src.tools.ref-carry-view.test.ts::C-1733a357 grantLabel names the subject and the scope": "3.2",
+    "web.src.tools.ref-carry-pages.test.ts::C-88f41f1b the carry panel and Servers page keep every pin": "4.1",
+    "web.src.tools.ref-marker-pages.test.ts::C-5db13202 the ref marker and the Grants page keep every pin": "4.2"
+  },
+  "guards": [],
+  "prompt_sha256": "",
+  "template": "",
+  "harness_commit": "7dc8d28660a3d70a321f205161d1abb4809d0c3f",
+  "judge_calls": 0,
+  "judge_reply": "",
+  "judge_replies": {},
+  "judge_parts": [],
+  "judge_files": [],
+  "judge_followups": [],
+  "judge_batches": [],
+  "judge_split": {},
+  "hold_views": {},
+  "profiles": {
+    "judge": "nemotron-judge",
+    "implementer": [
+      "deepseek-free",
+      "beam",
+      "claude-sonnet"
+    ]
+  },
+  "judge_model": null,
+  "independence": null,
+  "cost_usd": null
+}
