@@ -84,3 +84,5 @@
 {"at":"2026-11-27T18:43:31Z","branch":"l4/archive/openspec/add-web-ref-carry","head":"69b4ef2032514aea5b063fe1d9cc8715bb804557","type":"unit.branch_deleted","unit":"openspec:add-web-ref-carry"}
 {"at":"2026-11-27T18:43:33Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-init-secrets"}
 {"at":"2026-11-27T18:43:33Z","run":"r-20261127T1843Z-d042","type":"unit.dispatched","unit":"openspec:add-init-secrets"}
+{"at":"2026-11-27T21:19:27Z","attempt":1,"cost_usd":2.693038,"runs":2,"type":"plan.charged","unit":"openspec:add-init-secrets"}
+{"at":"2026-11-27T21:19:27Z","run":"r-20261127T2119Z-dd2c","type":"unit.dispatched","unit":"openspec:add-init-secrets"}
