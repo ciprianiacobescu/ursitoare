@@ -56,6 +56,7 @@ Edit `e2e/test_m8_ref_carry.py`: in FIRST add `"pendingDigest": DP, "pendingSubm
 ## Q-002: e2e/test_m8_ref_carry.py:302 403 body lacks details.decisionId
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: accept needs a clarifier suggestion, and Q-002 has none
 - **Blocking tasks:** 4.1
 - **Kind:** technical
 - **Asked:** 2026-11-27T13:06Z by claude-sonnet, run r-20261127T1106Z-2a77, task 4.1
