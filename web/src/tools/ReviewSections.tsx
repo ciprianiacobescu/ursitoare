@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
 import { browserSession } from "../auth/browser-session.ts";
@@ -22,11 +22,25 @@ import {
 } from "./review.ts";
 import type { DiscoverDraft, ReviewTool } from "./review.ts";
 import type { ToolServerView } from "./servers.ts";
+import { DataClassSelect, TrustNotes, TrustToggle } from "./TrustControls.tsx";
+import {
+  TRUST_NAMES,
+  ackStatus,
+  carriedAfterEffect,
+  discoverSettings,
+  storedTools,
+  trustFor,
+  valueChangeLines,
+  withValueLines,
+} from "./trust.ts";
+import type { Carried, ToolTrust } from "./trust.ts";
 
 interface SettingsRow {
   serverName: string;
   hints: string;
 }
+
+type DraftEffect = "" | "read" | "write" | "send" | "pay" | "skip";
 
 export function ReviewSections(props: {
   serverId: string;
@@ -36,21 +50,39 @@ export function ReviewSections(props: {
   onReload: () => void;
 }): ReactNode {
   const { serverId, server, approved, pending, onReload } = props;
+  const warningId = useId();
 
   const [draft, setDraft] = useState<DiscoverDraft>({ effects: {}, names: {} });
+  const [baseline, setBaseline] = useState<Record<string, ToolTrust>>({});
+  const [ticks, setTicks] = useState<Record<string, boolean>>({});
   const [colliding, setColliding] = useState<string[]>([]);
   const [discoveryAction, setDiscoveryAction] = useState<ActionPhase>({ phase: "idle" });
 
   useEffect(() => {
     setDiscoveryAction({ phase: "idle" });
     setDraft({ effects: {}, names: {} });
+    setBaseline({});
+    setTicks({});
     setColliding([]);
   }, [serverId]);
 
   useEffect(() => {
     setColliding([]);
     const tools = pending !== null && pending !== undefined ? parseReviewTools(pending) : null;
-    setDraft(initialDraft(tools ?? []));
+    if (tools === null) {
+      setDraft({ effects: {}, names: {} });
+      setBaseline({});
+      setTicks({});
+      return;
+    }
+    const settings = discoverSettings(storedTools(pending));
+    setDraft({
+      ...initialDraft(tools),
+      trust: settings.trust,
+      carried: settings.carried,
+    });
+    setBaseline(settings.trust);
+    setTicks({});
   }, [pending]);
 
   const approvedTools: ReviewTool[] | null =
@@ -79,7 +111,13 @@ export function ReviewSections(props: {
   const callsRows = selectedTools === null ? [] : callRows(selectedTools);
   const noteText = selectedTools === null ? null : readNote(selectedTools);
 
-  const cv = changesView(approved ?? null, pending ?? null);
+  const cv = withValueLines(
+    changesView(approved ?? null, pending ?? null),
+    valueChangeLines(approved ?? null, pending ?? null),
+  );
+
+  const draftTrust = draft.trust ?? {};
+  const ack = ackStatus(draftTrust, baseline, ticks);
 
   const callsList = useMemo(
     () => createCursorList(async () => ({ items: callsRows, next_cursor: null })),
@@ -92,12 +130,62 @@ export function ReviewSections(props: {
 
   const disabled = server === null || discoveryAction.phase === "busy";
 
+  const changeTrust = (serverName: string, next: ToolTrust): void => {
+    setDraft((prev) => {
+      const trust: Record<string, ToolTrust> = { ...(prev.trust ?? {}) };
+      trust[serverName] = next;
+      return { ...prev, trust };
+    });
+  };
+
+  const changeEffect = (serverName: string, effect: DraftEffect): void => {
+    setDraft((prev) => {
+      const effects = { ...prev.effects, [serverName]: effect };
+      const next = carriedAfterEffect(
+        "mcp",
+        storedTools(pending),
+        serverName,
+        effect,
+        serverName,
+      );
+      const current = prev.carried ?? {};
+      const carried: Record<string, Carried> = {};
+      for (const key of Object.keys(current)) {
+        if (key !== serverName) carried[key] = current[key] as Carried;
+      }
+      if (next.name !== undefined || next.unsafe_to_retry !== undefined) {
+        carried[serverName] = next;
+      }
+      return { ...prev, effects, carried };
+    });
+  };
+
+  const changeTick = (name: string, ticked: boolean): void => {
+    setTicks((current) => ({ ...current, [name]: ticked }));
+  };
+
   const runDiscovery = async (useDraft: boolean): Promise<void> => {
     if (server === null) return;
+    if (useDraft) {
+      const ackNow = ackStatus(draftTrust, baseline, ticks);
+      if (ackNow.message !== null) {
+        setDiscoveryAction({ phase: "failed", text: ackNow.message });
+        return;
+      }
+    }
     let body: ReturnType<typeof discoverBody>;
     try {
       const tools = approvedTools ?? [];
-      body = useDraft ? discoverBody(draft) : discoverBody(initialDraft(tools));
+      if (useDraft) {
+        body = discoverBody(draft);
+      } else {
+        const settings = discoverSettings(storedTools(approved));
+        body = discoverBody({
+          ...initialDraft(tools),
+          trust: settings.trust,
+          carried: settings.carried,
+        });
+      }
     } catch {
       setDiscoveryAction({ phase: "failed", text: "Invalid discovery settings." });
       return;
@@ -113,9 +201,11 @@ export function ReviewSections(props: {
       const names = collidingNames(error);
       if (names.length >= 2) {
         setColliding(names);
-        const effects: Record<string, "" | "read" | "write" | "send" | "pay" | "skip"> = {};
+        const effects: Record<string, DraftEffect> = {};
         for (const name of names) effects[name] = "";
-        setDraft({ effects, names: {} });
+        setDraft({ effects, names: {}, trust: {}, carried: {} });
+        setBaseline({});
+        setTicks({});
       }
     }
   };
@@ -143,7 +233,7 @@ export function ReviewSections(props: {
                 if (key !== row.serverName) names[key] = base[key] as string;
               }
               if (value !== "") names[row.serverName] = value;
-              return { effects: prev.effects, names } as DiscoverDraft;
+              return { ...prev, names };
             });
           }}
         />
@@ -158,11 +248,7 @@ export function ReviewSections(props: {
           aria-label={`Effect of ${row.serverName}`}
           value={draft.effects[row.serverName] ?? ""}
           onChange={(event) => {
-            const value = event.target.value as "" | "read" | "write" | "send" | "pay" | "skip";
-            setDraft((prev) => ({
-              effects: { ...prev.effects, [row.serverName]: value },
-              names: prev.names,
-            }) as DiscoverDraft);
+            changeEffect(row.serverName, event.target.value as DraftEffect);
           }}
         >
           <option value="">Proposed</option>
@@ -173,6 +259,39 @@ export function ReviewSections(props: {
           <option value="skip">Skip</option>
         </select>
       ),
+    },
+    {
+      key: "trust",
+      header: TRUST_NAMES["trustColumn"] ?? "Result trusted",
+      cell: (row: SettingsRow) => {
+        const trust = trustFor(draftTrust, row.serverName);
+        return (
+          <TrustToggle
+            name={row.serverName}
+            describedBy={warningId}
+            checked={trust.trusted}
+            onChange={(checked) =>
+              changeTrust(row.serverName, { trusted: checked, dataClass: trust.dataClass })
+            }
+          />
+        );
+      },
+    },
+    {
+      key: "dataClass",
+      header: TRUST_NAMES["dataClassColumn"] ?? "Data class",
+      cell: (row: SettingsRow) => {
+        const trust = trustFor(draftTrust, row.serverName);
+        return (
+          <DataClassSelect
+            name={row.serverName}
+            value={trust.dataClass}
+            onChange={(dataClass) =>
+              changeTrust(row.serverName, { trusted: trust.trusted, dataClass })
+            }
+          />
+        );
+      },
     },
   ];
 
@@ -210,6 +329,12 @@ export function ReviewSections(props: {
                 list={settingsList}
                 rowKey={(row: SettingsRow) => row.serverName}
                 emptyTitle="No tools"
+              />
+              <TrustNotes
+                warningId={warningId}
+                shown={ack.shown}
+                ticks={ticks}
+                onTick={changeTick}
               />
               <Button
                 tone="secondary"

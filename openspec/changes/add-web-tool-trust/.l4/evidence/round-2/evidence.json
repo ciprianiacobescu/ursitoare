@@ -1,0 +1,276 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/tools/openapi/read.ts:387-392",
+      "src/tools/mcp/surface.ts:481-484",
+      "src/runs/intents/gate.ts:68-72",
+      "src/authoring/validate/taint-checks.ts",
+      "src/tools/surface.ts",
+      "web/src/tools",
+      "node:assert/strict",
+      "e2e/test_m8_tool_trust.py",
+      "e2e",
+      "e2e/test_m8_tool_trust_review.py",
+      "e2e/test_m7_tool_review.py",
+      "**/trust.ts",
+      "**/TrustControls.tsx",
+      "**/register.ts",
+      "**/review.ts",
+      "**/ServersPage.tsx",
+      "**/^[a-z][a-z0-9_]{0,63}$",
+      "**/^[A-Za-z0-9_.-]{1,128}$",
+      "**/capabilities.ts",
+      "**/?",
+      "**/OpenApiDraft.trust?",
+      "**/carried?",
+      "**/DiscoverDraft.trust?",
+      "**/[",
+      "**/trust.test.ts",
+      "**/register.test.ts",
+      "**/RegisterPage.tsx",
+      "**/ReplaceSection.tsx",
+      "**/ReviewSections.tsx",
+      "module authoring",
+      "module e2e",
+      "module node:assert",
+      "module runs",
+      "module tools",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m8_tool_trust.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "e2e/test_m8_tool_trust_review.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-trust/.l4/ledger/r-20261126T0856Z-9b38.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-trust/.l4/ledger/r-20261126T1129Z-e48e.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-trust/.l4/ledger/r-20261126T1401Z-9952.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-trust/.l4/ledger/r-20261126T1620Z-708c.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-trust/.l4/ledger/r-20261126T1907Z-ab78.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-trust/.l4/ledger/r-20261126T1945Z-5ff4.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-trust/.l4/ledger/r-20261126T2021Z-c69f.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-trust/.l4/ledger/r-20261126T2056Z-b64d.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-trust/.l4/ledger/r-20261126T2131Z-30c3.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-tool-trust/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/tools/RegisterPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/ReplaceSection.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/ReviewSections.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/ServersPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/TrustControls.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/register-trust.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/register.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/review-trust.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/review.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/trust-ack.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/trust-changes.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/trust-overlay.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/trust-pages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/trust-review-pages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/trust.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/trust.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/tools/RegisterPage.tsx, web/src/tools/ReplaceSection.tsx, web/src/tools/ReviewSections.tsx, web/src/tools/ServersPage.tsx, web/src/tools/TrustControls.tsx and 3 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/tools/RegisterPage.tsx",
+      "web/src/tools/ReplaceSection.tsx",
+      "web/src/tools/ReviewSections.tsx",
+      "web/src/tools/ServersPage.tsx",
+      "web/src/tools/TrustControls.tsx",
+      "web/src/tools/register.ts",
+      "web/src/tools/review.ts",
+      "web/src/tools/trust.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 3293,
+      "passed": 3293,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 37,
+      "new_passed": 37,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}

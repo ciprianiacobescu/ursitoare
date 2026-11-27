@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
 import { browserSession } from "../auth/browser-session.ts";
@@ -23,6 +23,16 @@ import {
 } from "./register.ts";
 import type { CodeDraft, OperationRowView } from "./register.ts";
 import type { ToolServerView } from "./servers.ts";
+import { DataClassSelect, TrustNotes, TrustToggle } from "./TrustControls.tsx";
+import {
+  TRUST_NAMES,
+  ackStatus,
+  carriedAfterEffect,
+  prefillTrust,
+  storedTools,
+  trustFor,
+} from "./trust.ts";
+import type { Carried, ToolTrust } from "./trust.ts";
 
 type Effect = "" | "read" | "write" | "send" | "pay";
 type Mode = "openapi" | "code";
@@ -37,63 +47,109 @@ const EFFECTS: readonly Effect[] = ["", "read", "write", "send", "pay"];
 function OperationsTable(props: {
   preview: Preview;
   effects: Record<string, Effect>;
+  trust: Record<string, ToolTrust>;
+  warningId: string;
   onEffect: (operationId: string, effect: Effect) => void;
+  onTrust: (operationId: string, trust: ToolTrust) => void;
 }): ReactNode {
   return (
-    <table className="ui-table" aria-label={label("operations")}>
-      <thead>
-        <tr>
-          <th scope="col">Operation</th>
-          <th scope="col">Method</th>
-          <th scope="col">Path</th>
-          <th scope="col">Effect</th>
-        </tr>
-      </thead>
-      <tbody>
-        {props.preview.operations.map((operation, index) => (
-          <tr key={operation.operationId ?? `row-${index}`}>
-            <td>{operation.operationId ?? "—"}</td>
-            <td>{operation.method}</td>
-            <td>{operation.path}</td>
-            <td>
-              {operation.excluded !== null ? (
-                `Excluded: ${operation.excluded}`
-              ) : (
-                <select
-                  className="ui-input"
-                  aria-label={`${label("effectOf")}${operation.operationId ?? ""}`}
-                  value={props.effects[operation.operationId ?? ""] ?? ""}
-                  onChange={(event) =>
-                    props.onEffect(operation.operationId ?? "", event.target.value as Effect)
-                  }
-                >
-                  {EFFECTS.map((effect) => (
-                    <option key={effect} value={effect}>
-                      {effect === "" ? label("skip") : effect}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </td>
+    <div className="overflow-x-auto">
+      <table className="ui-table" aria-label={label("operations")}>
+        <thead>
+          <tr>
+            <th scope="col">Operation</th>
+            <th scope="col">Method</th>
+            <th scope="col">Path</th>
+            <th scope="col">Effect</th>
+            <th scope="col">{TRUST_NAMES["trustColumn"] ?? "Result trusted"}</th>
+            <th scope="col">{TRUST_NAMES["dataClassColumn"] ?? "Data class"}</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {props.preview.operations.map((operation, index) => {
+            const operationId = operation.operationId ?? "";
+            const toolTrust = trustFor(props.trust, operationId);
+            return (
+              <tr key={operation.operationId ?? `row-${index}`}>
+                <td>{operation.operationId ?? "—"}</td>
+                <td>{operation.method}</td>
+                <td>{operation.path}</td>
+                <td>
+                  {operation.excluded !== null ? (
+                    `Excluded: ${operation.excluded}`
+                  ) : (
+                    <select
+                      className="ui-input"
+                      aria-label={`${label("effectOf")}${operation.operationId ?? ""}`}
+                      value={props.effects[operation.operationId ?? ""] ?? ""}
+                      onChange={(event) =>
+                        props.onEffect(operation.operationId ?? "", event.target.value as Effect)
+                      }
+                    >
+                      {EFFECTS.map((effect) => (
+                        <option key={effect} value={effect}>
+                          {effect === "" ? label("skip") : effect}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </td>
+                <td>
+                  {operation.excluded !== null ? null : (
+                    <TrustToggle
+                      name={operationId}
+                      describedBy={props.warningId}
+                      checked={toolTrust.trusted}
+                      onChange={(checked) =>
+                        props.onTrust(operationId, {
+                          trusted: checked,
+                          dataClass: toolTrust.dataClass,
+                        })
+                      }
+                    />
+                  )}
+                </td>
+                <td>
+                  {operation.excluded !== null ? null : (
+                    <DataClassSelect
+                      name={operationId}
+                      value={toolTrust.dataClass}
+                      onChange={(dataClass) =>
+                        props.onTrust(operationId, {
+                          trusted: toolTrust.trusted,
+                          dataClass,
+                        })
+                      }
+                    />
+                  )}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
 export function ReplaceSection(props: {
   serverId: string;
   server: ToolServerView | null;
+  surface: unknown;
   onSaved: () => void;
 }): ReactNode {
-  const { serverId, server, onSaved } = props;
+  const { serverId, server, surface, onSaved } = props;
   const idPrefix = useId();
+  const warningId = useId();
   const [mode, setMode] = useState<Mode | null>(null);
   const [origin, setOrigin] = useState("");
   const [local, setLocal] = useState(false);
   const [documentText, setDocumentText] = useState("");
   const [effects, setEffects] = useState<Record<string, Effect>>({});
+  const [trust, setTrust] = useState<Record<string, ToolTrust>>({});
+  const [carried, setCarried] = useState<Record<string, Carried>>({});
+  const [baseline, setBaseline] = useState<Record<string, ToolTrust>>({});
+  const [ticks, setTicks] = useState<Record<string, boolean>>({});
   const [preview, setPreview] = useState<Preview | null>(null);
   const [openErrors, setOpenErrors] = useState<FormErrors>({});
   const [codeDraft, setCodeDraft] = useState<CodeDraft | null>(null);
@@ -102,12 +158,19 @@ export function ReplaceSection(props: {
   const [busy, setBusy] = useState(false);
   const [action, setAction] = useState<ActionPhase>({ phase: "idle" });
 
+  const stored = useMemo(() => storedTools(surface), [surface]);
+  const ack = ackStatus(trust, baseline, ticks);
+
   useEffect(() => {
     setMode(null);
     setOrigin("");
     setLocal(false);
     setDocumentText("");
     setEffects({});
+    setTrust({});
+    setCarried({});
+    setBaseline({});
+    setTicks({});
     setPreview(null);
     setOpenErrors({});
     setCodeDraft(null);
@@ -126,6 +189,10 @@ export function ReplaceSection(props: {
     setLocal(false);
     setDocumentText("");
     setEffects({});
+    setTrust({});
+    setCarried({});
+    setBaseline({});
+    setTicks({});
     setPreview(null);
     setOpenErrors({});
     setAction({ phase: "idle" });
@@ -163,6 +230,11 @@ export function ReplaceSection(props: {
         const result = await previewOperations(browserSession.api, checked);
         setPreview(result);
         if (server !== null) setEffects(prefillEffects(server.tools, result.operations));
+        const prefill = prefillTrust(stored, result.operations);
+        setTrust(prefill.trust);
+        setCarried(prefill.carried);
+        setBaseline(prefill.trust);
+        setTicks({});
       } catch (error) {
         setPreview(null);
         setOpenErrors(registrationFormErrors("openapi", error));
@@ -170,6 +242,31 @@ export function ReplaceSection(props: {
         setBusy(false);
       }
     })();
+  };
+
+  const changeEffect = (operationId: string, effect: Effect): void => {
+    setEffects((current) => ({ ...current, [operationId]: effect }));
+    const operation = preview?.operations.find((row) => row.operationId === operationId);
+    const lookup = operation?.name ?? null;
+    const next = carriedAfterEffect("openapi", stored, lookup, effect, lookup);
+    setCarried((current) => {
+      const updated: Record<string, Carried> = {};
+      for (const key of Object.keys(current)) {
+        if (key !== operationId) updated[key] = current[key] as Carried;
+      }
+      if (next.name !== undefined || next.unsafe_to_retry !== undefined) {
+        updated[operationId] = next;
+      }
+      return updated;
+    });
+  };
+
+  const changeTrust = (operationId: string, next: ToolTrust): void => {
+    setTrust((current) => ({ ...current, [operationId]: next }));
+  };
+
+  const changeTick = (operationId: string, ticked: boolean): void => {
+    setTicks((current) => ({ ...current, [operationId]: ticked }));
   };
 
   const saveDocument = (): void => {
@@ -180,9 +277,16 @@ export function ReplaceSection(props: {
       local,
       documentText,
       effects,
+      trust,
+      carried,
     });
     if (!checked.ok) {
       setOpenErrors({ [checked.field]: checked.message });
+      return;
+    }
+    const ackNow = ackStatus(trust, baseline, ticks);
+    if (ackNow.message !== null) {
+      setOpenErrors({ $form: ackNow.message });
       return;
     }
     setOpenErrors({});
@@ -254,6 +358,7 @@ export function ReplaceSection(props: {
           idPrefix={idPrefix}
           name="document"
           label={label("openApiDocumentJson")}
+          hint={TRUST_NAMES["replaceHint"] ?? ""}
           error={openErrors["document"] ?? null}
         >
           {(control) => (
@@ -279,13 +384,22 @@ export function ReplaceSection(props: {
           </Button>
         </div>
         {preview === null ? null : (
-          <OperationsTable
-            preview={preview}
-            effects={effects}
-            onEffect={(operationId, effect) =>
-              setEffects((current) => ({ ...current, [operationId]: effect }))
-            }
-          />
+          <>
+            <OperationsTable
+              preview={preview}
+              effects={effects}
+              trust={trust}
+              warningId={warningId}
+              onEffect={changeEffect}
+              onTrust={changeTrust}
+            />
+            <TrustNotes
+              warningId={warningId}
+              shown={ack.shown}
+              ticks={ticks}
+              onTick={changeTick}
+            />
+          </>
         )}
       </Form>
     );
