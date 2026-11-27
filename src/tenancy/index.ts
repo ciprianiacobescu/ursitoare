@@ -10,6 +10,7 @@ export type { EnsureTenantOptions } from "./bootstrap.ts";
 export { ensureDefaultTenant, ensureTenant, findTenantByName } from "./bootstrap.ts";
 export type { RouteRegistration } from "./routes.ts";
 export { registerTenantRoute, unregisterTenantRoute, resolveTenantBy } from "./routes.ts";
+export { MINTKEY_SINK_ROUTE_KINDS, bindSinkTokens } from "./sink-binding.ts";
 export type { CatalogRule, CatalogViolation } from "./catalog.ts";
 export { CATALOG_GLOBAL_TABLES, checkTenancyCatalog } from "./catalog.ts";
 export { getTenantProfile } from "./profile.ts";

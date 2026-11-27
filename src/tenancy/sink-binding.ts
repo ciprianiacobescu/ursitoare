@@ -1,18 +1,24 @@
-// Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
-
 import type { TenantContext } from "./context.ts";
-import type { RouteRegistration } from "./routes.ts";
-import type { TenantPool } from "./tx.ts";
+import { TenancyError } from "./errors.ts";
+import { registerTenantRoute, type RouteRegistration } from "./routes.ts";
+import { withTenantTx, type TenantPool } from "./tx.ts";
 
-export const MINTKEY_SINK_ROUTE_KINDS: Readonly<{ broker: string; proxy: string }> = {
-  broker: "",
-  proxy: "",
-};
+export const MINTKEY_SINK_ROUTE_KINDS: Readonly<{ broker: string; proxy: string }> = Object.freeze({
+  broker: "mintkey_sink_broker",
+  proxy: "mintkey_sink_proxy",
+});
 
 export async function bindSinkTokens(
-  _pool: TenantPool,
-  _ctx: TenantContext,
-  _tokens: Readonly<{ broker: string; proxy: string }>,
+  pool: TenantPool,
+  ctx: TenantContext,
+  tokens: Readonly<{ broker: string; proxy: string }>,
 ): Promise<{ broker: RouteRegistration; proxy: RouteRegistration }> {
-  throw new Error("not implemented");
+  if (tokens.broker === tokens.proxy) {
+    throw new TenancyError("TENANT_INVALID", "the two sink tokens must differ");
+  }
+  return withTenantTx(pool, ctx, async (tx) => {
+    const broker = await registerTenantRoute(tx, MINTKEY_SINK_ROUTE_KINDS.broker, tokens.broker);
+    const proxy = await registerTenantRoute(tx, MINTKEY_SINK_ROUTE_KINDS.proxy, tokens.proxy);
+    return { broker, proxy };
+  });
 }
