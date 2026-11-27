@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 4.1 | technical | e2e/test_m8_ref_carry.py:86-96 FIRST has no pendingDigest, so Approve is disabled |
+| Q-001 | accepted | 4.1 | technical | e2e/test_m8_ref_carry.py:86-96 FIRST has no pendingDigest, so Approve is disabled |
 | Q-002 | open | 4.1 | technical | e2e/test_m8_ref_carry.py:302 403 body lacks details.decisionId |
 | Q-003 | open | 4.1 | technical | e2e/test_m8_ref_carry.py:255 two alerts remain after the copy |
 <!-- l4:index:end -->
@@ -20,7 +20,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: e2e/test_m8_ref_carry.py:86-96 FIRST has no pendingDigest, so Approve is disabled
 
-- **Status:** open
+- **Status:** accepted
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** 4.1
 - **Kind:** technical
 - **Asked:** 2026-11-27T13:06Z by claude-sonnet, run r-20261127T1106Z-2a77, task 4.1
