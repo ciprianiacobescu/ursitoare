@@ -1,7 +1,9 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
 import type { Api } from "../admin/shared.ts";
+import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
 import { parseReviewTools } from "./review.ts";
+import { parseToolServer } from "./servers.ts";
 import type { ToolServerView } from "./servers.ts";
 
 export interface RefChange {
@@ -70,22 +72,133 @@ export interface GrantRecord {
   status: "active" | "needs_reconfirm" | "revoked";
 }
 
-export function parseGrantRecord(_raw: unknown): GrantRecord | null {
-  throw new Error("not implemented");
+const GRANT_ID = /^grant_[A-Za-z0-9-]{1,64}$/;
+const GRANT_TOOL = /^[a-z][a-z0-9._-]*@(0|[1-9][0-9]{0,8})$/;
+const GRANT_ROLE = /^[a-z][a-z0-9_]{0,31}$/;
+const GRANT_USER = /^[A-Za-z0-9_-]{1,64}$/;
+const GRANT_FLOW = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
+const GRANT_NODE = /^[a-z][a-z0-9_]*$/;
+const GRANT_ARG = /^[a-z][a-z0-9_]{0,63}$/;
+const GRANT_STATUSES: readonly GrantRecord["status"][] = [
+  "active",
+  "needs_reconfirm",
+  "revoked",
+];
+const GRANT_OPS: readonly GrantArg["op"][] = ["eq", "lte", "gte"];
+const MAX_ARGS = 8;
+const MAX_ARG_VALUE = 256;
+const PAGE_LIMIT = 100;
+const MAX_PAGES = 100;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function matchesText(value: unknown, pattern: RegExp, max: number): value is string {
+  return typeof value === "string" && value.length <= max && pattern.test(value);
+}
+
+function parseGrantSubject(raw: unknown): GrantSubject | null {
+  if (!isRecord(raw)) return null;
+  if (raw["kind"] === "role") {
+    const role = raw["role"];
+    if (matchesText(role, GRANT_ROLE, 32)) return { kind: "role", role };
+  }
+  if (raw["kind"] === "user") {
+    const userId = raw["userId"];
+    if (matchesText(userId, GRANT_USER, 64)) return { kind: "user", userId };
+  }
+  return null;
+}
+
+function parseGrantScope(raw: unknown): GrantScope | null {
+  if (!isRecord(raw)) return null;
+  if (raw["kind"] === "any_step") return { kind: "any_step" };
+  if (raw["kind"] === "node") {
+    const flowId = raw["flowId"];
+    const nodeId = raw["nodeId"];
+    if (matchesText(flowId, GRANT_FLOW, 64) && matchesText(nodeId, GRANT_NODE, 128)) {
+      return { kind: "node", flowId, nodeId };
+    }
+  }
+  return null;
+}
+
+function parseGrantArg(raw: unknown): GrantArg | null {
+  if (!isRecord(raw)) return null;
+  const arg = raw["arg"];
+  const op = raw["op"];
+  const value = raw["value"];
+  if (!matchesText(arg, GRANT_ARG, 64)) return null;
+  if (typeof op !== "string" || !GRANT_OPS.includes(op as GrantArg["op"])) return null;
+  if (typeof value === "string") {
+    if (value.length > MAX_ARG_VALUE) return null;
+  } else if (typeof value === "number") {
+    if (!Number.isFinite(value)) return null;
+  } else if (typeof value !== "boolean") {
+    return null;
+  }
+  return { arg, op: op as GrantArg["op"], value };
+}
+
+export function parseGrantRecord(raw: unknown): GrantRecord | null {
+  if (!isRecord(raw)) return null;
+  const status = raw["status"];
+  if (typeof status !== "string" || !GRANT_STATUSES.includes(status as GrantRecord["status"])) {
+    return null;
+  }
+  const grant = raw["grant"];
+  if (!isRecord(grant)) return null;
+  const id = grant["id"];
+  const tool = grant["tool"];
+  if (!matchesText(id, GRANT_ID, 69) || !matchesText(tool, GRANT_TOOL, 128)) return null;
+  const subject = parseGrantSubject(grant["subject"]);
+  const scope = parseGrantScope(grant["scope"]);
+  if (subject === null || scope === null) return null;
+  const rawArgs = grant["args"];
+  if (!Array.isArray(rawArgs) || rawArgs.length > MAX_ARGS) return null;
+  const args: GrantArg[] = [];
+  for (const item of rawArgs as unknown[]) {
+    const parsed = parseGrantArg(item);
+    if (parsed === null) return null;
+    args.push(parsed);
+  }
+  return { id, subject, tool, scope, args, status: status as GrantRecord["status"] };
+}
+
+async function readAllPages<T>(
+  api: Api<"get">,
+  path: string,
+  parseItem: (raw: unknown) => T | null,
+  signal?: AbortSignal,
+): Promise<{ items: T[]; complete: boolean }> {
+  const fetchPage = cursorPageFetcher(api, path, { parseItem });
+  const pageSignal = signal ?? new AbortController().signal;
+  const items: T[] = [];
+  let cursor: string | null = null;
+  for (let page = 0; page < MAX_PAGES; page += 1) {
+    const answer = await fetchPage({ cursor, limit: PAGE_LIMIT, signal: pageSignal });
+    items.push(...answer.items);
+    if (answer.next_cursor === null) return { items, complete: true };
+    cursor = answer.next_cursor;
+  }
+  return { items, complete: false };
 }
 
 export async function loadAllGrants(
-  _api: Api<"get">,
-  _signal?: AbortSignal,
+  api: Api<"get">,
+  signal?: AbortSignal,
 ): Promise<{ grants: GrantRecord[]; complete: boolean }> {
-  throw new Error("not implemented");
+  const page = await readAllPages(api, "/grants", parseGrantRecord, signal);
+  return { grants: page.items, complete: page.complete };
 }
 
 export async function loadAllToolServers(
-  _api: Api<"get">,
-  _signal?: AbortSignal,
+  api: Api<"get">,
+  signal?: AbortSignal,
 ): Promise<{ servers: ToolServerView[]; complete: boolean }> {
-  throw new Error("not implemented");
+  const page = await readAllPages(api, "/tool-servers", parseToolServer, signal);
+  return { servers: page.items, complete: page.complete };
 }
 
 export interface CopyPlan {

@@ -6,7 +6,7 @@ Values: `test-plan.md`; steps: `test-plan-browser.md`. No `src/`, API, CSS or mi
 
 ## 2. Reading grants and servers
 
-- [ ] 2.1 Write `web/src/tools/ref-carry-read.test.ts` (scenarios "A grant record keeps its arguments and malformed ones are refused" and "Every page is read, a hundred pages are the bound and a bad item rejects"; rows GR1 to GR4, LG1 to LG6, TS1 to TS4) first, then implement `parseGrantRecord`, `loadAllGrants` and `loadAllToolServers` (one internal page reader over `cursorPageFetcher`, design 4), implementing the requirement "A grant is read with its arguments and every page of grants and tool servers is read"
+- [x] 2.1 Write `web/src/tools/ref-carry-read.test.ts` (scenarios "A grant record keeps its arguments and malformed ones are refused" and "Every page is read, a hundred pages are the bound and a bad item rejects"; rows GR1 to GR4, LG1 to LG6, TS1 to TS4) first, then implement `parseGrantRecord`, `loadAllGrants` and `loadAllToolServers` (one internal page reader over `cursorPageFetcher`, design 4), implementing the requirement "A grant is read with its arguments and every page of grants and tool servers is read"
 
 ## 3. The copy
 
