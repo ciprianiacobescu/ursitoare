@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Hold H-3d26971a: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-96a6450c: UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table |
 | Q-009 | answered | none | verdict | Hold H-d011c1bb: UI criterion C-4b83877f has no end-to-end test; see the generated UI tests table |
-| Q-010 | open | none | verdict | Hold H-cb55efac: UI criterion C-b8363cd2 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-cb55efac: UI criterion C-b8363cd2 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -312,7 +312,8 @@ accept The hold may be waived. The repository already holds an end-to-end test f
 
 ## Q-010: Hold H-cb55efac: UI criterion C-b8363cd2 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -331,3 +332,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The repository already holds end-to-end tests for C-b8363cd2: the three tests test_a_failed_server_read_shows_no_marker, test_a_failed_server_read_adds_no_alert and test_an_unanswered_server_read_does_not_end_the_session in e2e/test_m8_ref_carry_grants.py, each tagged with the criterion and following test-plan-browser.md § Grants markers and failed reads step by step. They answer /tool-servers with 403, then 500 with /blocks and /grants also failing, then 401, and assert the rows with their text and one badge each, zero ref markers, zero alerts, the URL still on /admin/grants, and in the error state exactly two alerts, the Tool options being only Choose a tool and Create grant with aria-disabled true. The code gives those results: the Grants page reads the servers through a plain createApiClient() whose fetch is the global one, so the session-end wrapper that only the session client installs never runs on a 401; the read's rejection handler is empty and the servers state starts as an empty list, so any failure leaves no marker, no loading state and no alert; RefMarker returns null for a null state, so the status Badge stays the row's only badge slot. The generated test is not in the repository and failed at the head only, which says nothing about the change beyond what the committed tests already check.
