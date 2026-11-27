@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-ref-carry: NEEDS_HUMAN (round 2)
+# Verification: openspec:add-web-ref-carry: PASS (round 3)
 
 traceability: 9/12 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 9/12 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.5 | base merged: main@5d6dc2df5e as 029a2d69ca (1 commit) |
-| 1 | integrity | ok | 295.9 | 11 sub-checks (+1 unfrozen by human answers); scope: 27 changed file(s) |
-| 2 | build | ok | 36.6 |  |
-| 3 | tests | ok | 510.8 |  |
-| 4 | traceability | ok | 0.2 | 9/12 criteria covered |
-| 4a | audit sampling | ok | 78.7 | 2 not_testable, 1 skipped; support files at the base: 8 |
-| 5 | ui test generation | ok | 2176.6 | 3 fails_at_head, 8 not_testable, 1 writer_failed; 8 not_testable covered by step 4: notes, no hold (L4-VER-067); e2e support files shown to the writer: 1 |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/tools/GrantsPage.tsx, web/src/tools/RefCarryPanel.tsx, web/src/tools/RefMarker.tsx, web/src/tools/ServersPage.tsx, web/src/tools/ref-carry.ts |
-| 8 | s1 judge | ok | 0.5 | 10/12 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 293.8 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 2) |
+| 1 | integrity | reused | 0.0 | reused (round 2) |
+| 2 | build | reused | 0.0 | reused (round 2) |
+| 3 | tests | reused | 0.0 | reused (round 2) |
+| 4 | traceability | reused | 0.0 | reused (round 2) |
+| 4a | audit sampling | reused | 0.0 | reused (round 2) |
+| 5 | ui test generation | reused | 0.0 | reused (round 2) |
+| 6 | quality | reused | 0.0 | reused (round 2) |
+| 8 | s1 judge | reused | 0.0 | reused (round 2) |
+| 9 | judge | reused | 0.0 | reused (round 2) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -171,6 +171,16 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-568a8224 | not_testable | - | - | The criterion tests refState and RefMarker rendering in the TypeScript frontend (web/src/tools/ref-carry.ts, web/src/components/RefMarker.tsx); the shown sources provide no Python module under test for pytest to import, so it cannot be checked by an automated pytest test. |
 | C-1733a357 | not_testable | - | - | The change is frontend logic in web/src/tools/ref-carry.ts (TypeScript) plus React panels; pytest cannot import it, no Python port or existing test-file header is shown, and test-plan.md § View rows run (rows FT1..FT3, GL1, CV1..CV5, CR1..CR4) is not provided, so the named UI outcomes have no public |
 
+## Answers to verdict questions
+
+- Q-004 accept C-8540a4f8 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. ServersPage keeps the view before the approval, feeds it and the approve answer to changedRefs with the approved surface's effects, and mounts RefCarryPanel inside the Surface section only after a successful approval. The panel returns nothing when refNoticeT...
+- Q-005 accept C-4b83877f by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The Grants page reads GET /tool-servers through loadAllToolServers with a plain API client beside its other reads; the page reader asks for limit 100 and passes each page's cursor, so two pages give two hits, the second with cursor s2. Each row renders RefMar...
+- Q-006 accept C-b8363cd2 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The servers read on the Grants page uses a plain API client whose fetch is the global one, so the 401 session-end handler that only the session client wraps around its fetch never runs and the URL stays on /admin/grants. The read's rejection handler is empty ...
+- Q-007 accept H-3d26971a by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. C-568a8224 is the refState and REF_MARKERS requirement, whose scenario runs rows RS1 and RS2 of the test plan: pure-function rows, not a browser journey. Three Node tests named with the criterion assert every value of those rows and passed from a red that failed by assertion,...
+- Q-008 accept H-96a6450c by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. The repository already holds the end-to-end tests for C-8540a4f8: the three tests of e2e/test_m8_ref_carry.py, tagged with the criterion and following test-plan-browser.md § Approve step by step, cover the bumped approval with the copy, a first approval and a 403 on the grant...
+- Q-009 accept H-d011c1bb by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. The repository already holds an end-to-end test for C-4b83877f: test_superseded_and_waiting_refs_are_marked_beside_the_badge in e2e/test_m8_ref_carry_grants.py, tagged with the criterion and following test-plan-browser.md § Grants markers step by step. It answers /tool-server...
+- Q-010 accept H-cb55efac by the delegate (claude-fable-5-1 via claude-code): The hold may be waived. The repository already holds end-to-end tests for C-b8363cd2: the three tests test_a_failed_server_read_shows_no_marker, test_a_failed_server_read_adds_no_alert and test_an_unanswered_server_read_does_not_end_the_session in e2e/test_m8_ref_carry_grants.py, each tagged with th...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -184,9 +194,9 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-568a8224 | web-tools › A grant's ref is current, superseded or waiting by the server that lists its tool › A ref is current, superseded or waiting by the server that lists it | pass | pass | the judge passed it and a discriminating test passes |
 | C-88f41f1b | web-tools › The carry panel is thin and the Servers page keeps its pins › The panel and the Servers page source keep every pin | pass | pass | the judge passed it and a discriminating test passes |
 | C-5db13202 | web-tools › The ref marker is thin and the Grants page keeps its pins › The marker and the Grants page source keep every pin | pass | pass | the judge passed it and a discriminating test passes |
-| C-8540a4f8 | web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-4b83877f | web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-b8363cd2 | web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-8540a4f8 | web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. ServersPage keeps the view before the approval, feeds it and the approve answer to changedRefs with the approved surface's effects, and mounts RefCarryPanel inside the Surface section only after a s... |
+| C-4b83877f | web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The Grants page reads GET /tool-servers through loadAllToolServers with a plain API client beside its other reads; the page reader asks for limit 100 and passes each page's cursor, so two pages give... |
+| C-b8363cd2 | web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied as it stands. The servers read on the Grants page uses a plain API client whose fetch is the global one, so the 401 session-end handler that only the session client wraps around its fetch never runs and the URL s... |
 
 ## Findings
 
@@ -209,13 +219,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-8540a4f8): The end-to-end test test_m8_ref_carry::test_a_failed_grants_read_creates_nothing[chromium], test_m8_ref_carry::test_approving_bumped_refs_offers_the_copy[chromium], test_m8_ref_carry::test_first_approval_offers_nothing[chromium] traces criterion C-8540a4f8 (web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-4b83877f): The end-to-end test test_m8_ref_carry_grants::test_superseded_and_waiting_refs_are_marked_beside_the_badge[chromium] traces criterion C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
 - [minor, deterministic] UI criterion without an end-to-end test (criterion C-b8363cd2): The end-to-end test test_m8_ref_carry_grants::test_a_failed_server_read_adds_no_alert[chromium], test_m8_ref_carry_grants::test_a_failed_server_read_shows_no_marker[chromium], test_m8_ref_carry_grants::test_an_unanswered_server_read_does_not_end_the_session[chromium] traces criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was), but it was never proved to fail without the change (no red, audit or generated record), so it is not evidence; step 5 generates one.
-
-## Needs a human
-
-- UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table
-- UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table
-- UI criterion C-4b83877f has no end-to-end test; see the generated UI tests table
-- UI criterion C-b8363cd2 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
