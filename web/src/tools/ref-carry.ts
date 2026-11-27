@@ -1,6 +1,7 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
 import type { Api } from "../admin/shared.ts";
+import { parseReviewTools } from "./review.ts";
 import type { ToolServerView } from "./servers.ts";
 
 export interface RefChange {
@@ -11,19 +12,43 @@ export interface RefChange {
 }
 
 export function changedRefs(
-  _before: ToolServerView,
-  _after: ToolServerView,
-  _effectsBefore?: ReadonlyMap<string, string>,
+  before: ToolServerView,
+  after: ToolServerView,
+  effectsBefore?: ReadonlyMap<string, string>,
 ): RefChange[] {
-  throw new Error("not implemented");
+  const beforeTools = new Map(before.tools.map((tool) => [tool.name, tool] as const));
+  const changes: RefChange[] = [];
+  for (const afterTool of after.tools) {
+    const beforeTool = beforeTools.get(afterTool.name);
+    if (beforeTool === undefined) continue;
+    if (beforeTool.ref === null || afterTool.ref === null) continue;
+    if (beforeTool.ref === afterTool.ref) continue;
+    const change: RefChange = {
+      tool: afterTool.name,
+      from: beforeTool.ref,
+      to: afterTool.ref,
+    };
+    const fromEffect = effectsBefore?.get(afterTool.name) ?? beforeTool.effect;
+    const toEffect = afterTool.effect;
+    if (fromEffect !== toEffect) change.effect = { from: fromEffect, to: toEffect };
+    changes.push(change);
+  }
+  changes.sort((a, b) => (a.tool < b.tool ? -1 : a.tool > b.tool ? 1 : 0));
+  return changes;
 }
 
-export function approvedEffects(_approved: unknown): ReadonlyMap<string, string> {
-  throw new Error("not implemented");
+export function approvedEffects(approved: unknown): ReadonlyMap<string, string> {
+  const effects = new Map<string, string>();
+  const tools = parseReviewTools(approved);
+  if (tools === null) return effects;
+  for (const tool of tools) effects.set(tool.name, tool.effect);
+  return effects;
 }
 
-export function refNoticeText(_changes: readonly RefChange[]): string | null {
-  throw new Error("not implemented");
+export function refNoticeText(changes: readonly RefChange[]): string | null {
+  if (changes.length === 0) return null;
+  const parts = changes.map((change) => `${change.from} → ${change.to}`);
+  return `Refs changed: ${parts.join(", ")}. Grants and flows still name the old refs.`;
 }
 
 export type GrantSubject = { kind: "role"; role: string } | { kind: "user"; userId: string };
@@ -98,13 +123,25 @@ export function carryKeys(_newKey: () => string): (grantId: string, to: string) 
 
 export type RefState = "current" | "superseded" | "waiting";
 
-export function refState(_tool: string, _servers: readonly ToolServerView[]): RefState | null {
-  throw new Error("not implemented");
+export function refState(tool: string, servers: readonly ToolServerView[]): RefState | null {
+  const dot = tool.indexOf(".");
+  if (dot <= 0) return null;
+  const at = tool.lastIndexOf("@");
+  if (at <= dot + 1) return null;
+  const serverId = tool.slice(0, dot);
+  const toolName = tool.slice(dot + 1, at);
+  if (toolName.length === 0 || toolName.includes(".")) return null;
+  const server = servers.find((s) => s.id === serverId && s.state !== "pending");
+  if (server === undefined) return null;
+  const listed = server.tools.find((t) => t.name === toolName && t.ref !== null);
+  if (listed === undefined) return null;
+  if (server.state === "approved") return listed.ref === tool ? "current" : "superseded";
+  return listed.ref === tool ? "waiting" : "superseded";
 }
 
 export const REF_MARKERS: Readonly<{ superseded: string; waiting: string }> = {
-  superseded: "",
-  waiting: "",
+  superseded: "superseded",
+  waiting: "waiting for approval",
 };
 
 export const REF_CARRY_NAMES: Readonly<Record<string, string>> = {};

@@ -2,7 +2,7 @@ Values: `test-plan.md`; steps: `test-plan-browser.md`. No `src/`, API, CSS or mi
 
 ## 1. Refs and markers
 
-- [ ] 1.1 Write `web/src/tools/ref-carry-refs.test.ts` (scenarios "Changed refs are found by tool name and worded as old to new" and "A ref is current, superseded or waiting by the server that lists it"; rows CH1 to CH8, AE1, NT1 to NT3, RS1 and RS2) first, then implement `changedRefs`, `approvedEffects`, `refNoticeText`, `refState` and `REF_MARKERS` in `web/src/tools/ref-carry.ts`, implementing the requirements "A changed ref is found by tool name and worded as old to new" and "A grant's ref is current, superseded or waiting by the server that lists its tool"; every other name of the file stays a scaffold stub
+- [x] 1.1 Write `web/src/tools/ref-carry-refs.test.ts` (scenarios "Changed refs are found by tool name and worded as old to new" and "A ref is current, superseded or waiting by the server that lists it"; rows CH1 to CH8, AE1, NT1 to NT3, RS1 and RS2) first, then implement `changedRefs`, `approvedEffects`, `refNoticeText`, `refState` and `REF_MARKERS` in `web/src/tools/ref-carry.ts`, implementing the requirements "A changed ref is found by tool name and worded as old to new" and "A grant's ref is current, superseded or waiting by the server that lists its tool"; every other name of the file stays a scaffold stub
 
 ## 2. Reading grants and servers
 
