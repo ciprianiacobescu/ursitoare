@@ -2,7 +2,7 @@ import { useEffect, useId, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
 import { browserSession } from "../auth/browser-session.ts";
-import { ApiRequestError } from "../api/client.ts";
+import { ApiRequestError, createApiClient } from "../api/client.ts";
 import { ErrorPanel } from "../kit/ErrorPanel.tsx";
 import { LoadingState } from "../kit/LoadingState.tsx";
 import { DataTable } from "../kit/data/DataTable.tsx";
@@ -34,6 +34,9 @@ import {
 } from "./grants.ts";
 import type { GrantView, ToolRefs } from "./grants.ts";
 import { toolsErrorMessage } from "./messages.ts";
+import { RefMarker } from "./RefMarker.tsx";
+import { loadAllToolServers, refState } from "./ref-carry.ts";
+import type { ToolServerView } from "./servers.ts";
 
 const PAGE_HEADING = "Grants";
 const GRANTS_PATH = "/grants";
@@ -82,6 +85,7 @@ export function GrantsPage(): ReactNode {
   const [nodeId, setNodeId] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [tools, setTools] = useState<RegionLoad<ToolRefs>>({ phase: "loading" });
+  const [servers, setServers] = useState<readonly ToolServerView[]>([]);
   const [action, setAction] = useState<ActionPhase>({ phase: "idle" });
   const [idempotencyKey, setIdempotencyKey] = useState<string | null>(null);
 
@@ -111,6 +115,19 @@ export function GrantsPage(): ReactNode {
       (error: unknown) => {
         if (!controller.signal.aborted) setTools({ phase: "error", error });
       },
+    );
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    loadAllToolServers(createApiClient(), controller.signal).then(
+      (answer) => {
+        if (!controller.signal.aborted) setServers(answer.servers);
+      },
+      () => {},
     );
     return () => {
       controller.abort();
@@ -196,7 +213,12 @@ export function GrantsPage(): ReactNode {
     cell: (grant: GrantView): ReactNode => {
       switch (column.key) {
         case "grant":
-          return <span id={grantTextId(grant.id)}>{grantTextWithBadge(grant)}</span>;
+          return (
+            <span id={grantTextId(grant.id)}>
+              {grantTextWithBadge(grant)}
+              <RefMarker state={refState(grant.tool, servers)} />
+            </span>
+          );
         case "actions": {
           const actions = grantActions(grant);
           return (
