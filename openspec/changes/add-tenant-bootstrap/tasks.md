@@ -2,7 +2,7 @@ Tests follow `test-plan.md`. Every test file starts with `assert.equal(typeof <t
 
 ## 1. The admin endpoint
 
-- [ ] 1.1 Write `src/config/admin.test.ts` first (scenario "Valid and refused admin settings": the test `C-4433906a loadAdminDatabase reads and refuses`, importing `isDatabaseUrl` from `src/config/config.ts`), then implement `loadAdminDatabase` in `src/config/admin.ts` (design 2) and add the export lines `readSecretValue` and `loadAdminDatabase` to `src/config/index.ts`. Run `pnpm run test src/config/admin.test.ts`
+- [x] 1.1 Write `src/config/admin.test.ts` first (scenario "Valid and refused admin settings": the test `C-4433906a loadAdminDatabase reads and refuses`, importing `isDatabaseUrl` from `src/config/config.ts`), then implement `loadAdminDatabase` in `src/config/admin.ts` (design 2) and add the export lines `readSecretValue` and `loadAdminDatabase` to `src/config/index.ts`. Run `pnpm run test src/config/admin.test.ts`
 
 ## 2. Tenants by name and sink routes
 
