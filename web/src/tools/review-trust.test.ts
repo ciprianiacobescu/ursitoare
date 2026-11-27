@@ -130,7 +130,10 @@ test("C-cbd5fcec review-trust builds the overlay body from trust and carried fie
     carried: ds1.carried,
   };
   assert.deepEqual(call(() => discoverBody(draft3)), {
-    tools: { find_vendor: { skip: true } },
+    tools: {
+      find_vendor: { skip: true },
+      "Log.Note": { unsafe_to_retry: false },
+    },
   });
 
   // DB4

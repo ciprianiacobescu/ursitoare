@@ -478,6 +478,9 @@ export function discoverBody(d: DiscoverDraft): {
   if (d.trust !== undefined) {
     for (const key of Object.keys(d.trust)) keys.add(key);
   }
+  if (d.carried !== undefined) {
+    for (const key of Object.keys(d.carried)) keys.add(key);
+  }
   keys.delete("__proto__");
   if (keys.size > MAX_TOOLS) throw new RangeError("too many tool settings");
   const tools: Record<string, Record<string, string | boolean>> = {};
