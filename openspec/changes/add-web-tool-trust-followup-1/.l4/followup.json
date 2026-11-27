@@ -1,0 +1,13 @@
+{
+  "schema": "l4/followup@1",
+  "parent": "openspec:add-web-tool-trust",
+  "items": [
+    {
+      "id": "FB-001",
+      "sha256": "3e74e5c35fc5d4296f3530f63d46588f8bf9ce1b132d7d3f63d52af9c9ac76f3"
+    }
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": []
+}

@@ -10,14 +10,14 @@ verification round, turns them into a fix unit and checks that each one was addr
 <!-- l4:feedback-index:start -->
 | ID | Status | Kind | Where | Feedback |
 |----|--------|------|-------|----------|
-| FB-001 | submitted | behaviour | web/src/tools/TrustControls.tsx:25 | Trust table controls shrink until their values cannot be read |
+| FB-001 | taken | behaviour | web/src/tools/TrustControls.tsx:25 | Trust table controls shrink until their values cannot be read |
 <!-- l4:feedback-index:end -->
 
 ---
 
 ## FB-001: Trust table controls shrink until their values cannot be read
 
-- **Status:** submitted
+- **Status:** taken
 - **Kind:** behaviour
 - **Where:** `web/src/tools/TrustControls.tsx:25-45`
 - **Where:** `web/src/tools/RegisterPage.tsx:272-283`
@@ -74,3 +74,4 @@ Seen on screenshots of the merged pages (e2e/test_m8_tool_trust.py and e2e/test_
 
 ### Outcome
 <!-- written by the harness -->
+Taken into add-web-tool-trust-followup-1
