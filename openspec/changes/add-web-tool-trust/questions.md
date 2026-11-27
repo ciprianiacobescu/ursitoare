@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-f52c8d49 (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › An OpenAPI server is registered with a trusted result after a tick): accept as sati |
 | Q-002 | answered | none | verdict | Criterion C-3a1c08af (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace keeps the stored trust and needs no tick): accept as satisfied? |
-| Q-003 | open | none | verdict | Criterion C-08abe836 (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace drops a retry flag when the effect changes): accept as satisfied? |
+| Q-003 | answered | none | verdict | Criterion C-08abe836 (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace drops a retry flag when the effect changes): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf |
 | Q-005 | open | none | verdict | Criterion C-7374d16f (web-tools › Effect settings become the overlay body and a discovery answer names every tool left out › Settings become the body and a discovery is worded with every tool left out |
 | Q-006 | open | none | verdict | Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied? |
@@ -99,7 +99,8 @@ accept The criterion is satisfied. ServersPage passes the pending surface, else 
 
 ## Q-003: Criterion C-08abe836 (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace drops a retry flag when the effect changes): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -126,6 +127,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. Changing an effect in the Replace form calls carriedAfterEffect with the operation's derived name as the lookup, and carriedFields drops unsafe_to_retry whenever the stored effect differs from the new one, so moving createPayment from pay to send and listVendors from read to pay leaves both carried records empty and the handler removes the operation's entry. The trust record is untouched, so no tick appears and the overlay built by overlayEntry is createPayment { effect: send, untrusted_result: false, data_class: private } and listVendors { effect: pay }, with no unsafe_to_retry, exactly as the browser test asserts.
 ---
 
 ## Q-004: Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf
