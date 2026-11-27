@@ -5,6 +5,9 @@ import { ApiRequestError } from "../api/client.ts";
 import { toolsErrorMessage } from "./messages.ts";
 import { parseToolServer, type ToolServerView } from "./servers.ts";
 
+import { DEFAULT_TRUST, overlayEntry } from "./trust.ts";
+import type { Carried, ToolTrust } from "./trust.ts";
+
 export interface ReviewTool {
   name: string;
   effect: string;
@@ -439,6 +442,8 @@ export function changesView(
 export interface DiscoverDraft {
   effects: Readonly<Record<string, "" | "read" | "write" | "send" | "pay" | "skip">>;
   names?: Readonly<Record<string, string>>;
+  trust?: Readonly<Record<string, ToolTrust>>;
+  carried?: Readonly<Record<string, Carried>>;
 }
 
 type DraftEffect = "" | "read" | "write" | "send" | "pay" | "skip";
@@ -463,34 +468,82 @@ export function initialDraft(tools: readonly ReviewTool[]): DiscoverDraft {
 }
 
 export function discoverBody(d: DiscoverDraft): {
-  tools: Record<string, { effect?: string; name?: string; skip?: true }>;
+  tools: Record<string, Record<string, string | boolean>>;
 } {
   const keys = new Set<string>();
-  for (const key of Object.keys(d.effects)) keys.add(key);
+  for (const key of Object.keys(d.effects ?? {})) keys.add(key);
   if (d.names !== undefined) {
     for (const key of Object.keys(d.names)) keys.add(key);
   }
+  if (d.trust !== undefined) {
+    for (const key of Object.keys(d.trust)) keys.add(key);
+  }
+  if (d.carried !== undefined) {
+    for (const key of Object.keys(d.carried)) keys.add(key);
+  }
   keys.delete("__proto__");
   if (keys.size > MAX_TOOLS) throw new RangeError("too many tool settings");
-  const tools: Record<string, { effect?: string; name?: string; skip?: true }> = {};
+  const tools: Record<string, Record<string, string | boolean>> = {};
   for (const key of keys) {
     if (!OVERLAY_KEY_PATTERN.test(key)) throw new RangeError(`invalid tool name: ${key}`);
-    const effectRaw = Object.hasOwn(d.effects, key) ? d.effects[key] : "";
+    const effectRaw =
+      d.effects !== undefined && Object.hasOwn(d.effects, key) ? d.effects[key] : "";
     if (typeof effectRaw !== "string" || !DRAFT_EFFECTS.includes(effectRaw)) {
       throw new RangeError(`invalid effect for ${key}`);
     }
-    const nameRaw = d.names !== undefined && Object.hasOwn(d.names, key) ? d.names[key] : "";
+    const nameRaw =
+      d.names !== undefined && Object.hasOwn(d.names, key) ? d.names[key] : "";
     if (typeof nameRaw !== "string") throw new RangeError(`invalid tool name for ${key}`);
     if (nameRaw !== "" && !DRAFT_NAME_PATTERN.test(nameRaw)) {
       throw new RangeError(`invalid tool name for ${key}`);
+    }
+    const trustRaw =
+      d.trust !== undefined && Object.hasOwn(d.trust, key) ? d.trust[key] : undefined;
+    if (trustRaw !== undefined) {
+      if (typeof trustRaw !== "object" || trustRaw === null || Array.isArray(trustRaw)) {
+        throw new RangeError(`invalid trust for ${key}`);
+      }
+      const tr = trustRaw as { trusted?: unknown; dataClass?: unknown };
+      if (typeof tr.trusted !== "boolean") throw new RangeError(`invalid trust for ${key}`);
+      const dc = tr.dataClass;
+      if (dc !== null && dc !== undefined && dc !== "public" && dc !== "private") {
+        throw new RangeError(`invalid trust for ${key}`);
+      }
+    }
+    const carriedRaw =
+      d.carried !== undefined && Object.hasOwn(d.carried, key) ? d.carried[key] : undefined;
+    if (carriedRaw !== undefined) {
+      if (typeof carriedRaw !== "object" || carriedRaw === null || Array.isArray(carriedRaw)) {
+        throw new RangeError(`invalid carried for ${key}`);
+      }
+      const cr = carriedRaw as { name?: unknown; unsafe_to_retry?: unknown };
+      if (cr.name !== undefined) {
+        if (typeof cr.name !== "string" || !DRAFT_NAME_PATTERN.test(cr.name)) {
+          throw new RangeError(`invalid carried name for ${key}`);
+        }
+      }
+      if (cr.unsafe_to_retry !== undefined && typeof cr.unsafe_to_retry !== "boolean") {
+        throw new RangeError(`invalid carried retry for ${key}`);
+      }
     }
     if (effectRaw === "skip") {
       tools[key] = { skip: true };
       continue;
     }
-    const entry: { effect?: string; name?: string } = {};
-    if (effectRaw !== "") entry.effect = effectRaw;
-    if (nameRaw !== "") entry.name = nameRaw;
+    const trust: ToolTrust =
+      trustRaw === undefined
+        ? DEFAULT_TRUST
+        : {
+            trusted: (trustRaw as { trusted: boolean }).trusted,
+            dataClass:
+              (trustRaw as { dataClass: ToolTrust["dataClass"] }).dataClass === undefined
+                ? null
+                : ((trustRaw as { dataClass: ToolTrust["dataClass"] }).dataClass ?? null),
+          };
+    const carried: Carried = carriedRaw === undefined ? {} : { ...(carriedRaw as Carried) };
+    if (nameRaw !== "") carried.name = nameRaw;
+    const effect = effectRaw === "" ? null : effectRaw;
+    const entry = overlayEntry("mcp", effect, trust, carried);
     if (Object.keys(entry).length > 0) tools[key] = entry;
   }
   return { tools };

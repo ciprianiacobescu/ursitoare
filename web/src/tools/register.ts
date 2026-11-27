@@ -7,6 +7,9 @@ import type { FormErrors } from "../kit/data/form-errors.ts";
 import { messageFor } from "../kit/messages.ts";
 import { toolsErrorMessage } from "./messages.ts";
 
+import { DEFAULT_TRUST, overlayEntry } from "./trust.ts";
+import type { Carried, ToolTrust } from "./trust.ts";
+
 export type RegisterKind = "mcp" | "openapi" | "code";
 
 export interface McpDraft {
@@ -21,6 +24,8 @@ export interface OpenApiDraft {
   local: boolean;
   documentText: string;
   effects: Readonly<Record<string, "" | "read" | "write" | "send" | "pay">>;
+  trust?: Readonly<Record<string, ToolTrust>>;
+  carried?: Readonly<Record<string, Carried>>;
 }
 
 export interface CodeDraft {
@@ -107,11 +112,20 @@ function addressProblem(
 }
 
 function operationOverlay(
-  effects: OpenApiDraft["effects"],
-): Record<string, { effect: string }> | null {
-  const operations: Record<string, { effect: string }> = {};
-  for (const [operationId, effect] of Object.entries(effects)) {
-    if (effect !== "") operations[operationId] = { effect };
+  d: OpenApiDraft,
+): Record<string, Record<string, string | boolean>> | null {
+  const operations: Record<string, Record<string, string | boolean>> = {};
+  const trust = d.trust ?? {};
+  const carried = d.carried ?? {};
+  for (const [operationId, effect] of Object.entries(d.effects)) {
+    if (effect === "") continue;
+    const toolTrust = Object.hasOwn(trust, operationId)
+      ? ((trust as Record<string, ToolTrust>)[operationId] ?? DEFAULT_TRUST)
+      : DEFAULT_TRUST;
+    const toolCarried = Object.hasOwn(carried, operationId)
+      ? ((carried as Record<string, Carried>)[operationId] ?? {})
+      : {};
+    operations[operationId] = overlayEntry("openapi", effect, toolTrust, toolCarried);
   }
   return Object.keys(operations).length === 0 ? null : operations;
 }
@@ -176,7 +190,7 @@ export function openApiRegistration(d: OpenApiDraft): RegistrationRequest {
   if (problem !== null) return refuse("origin", problem);
   const document = parseObject(d.documentText);
   if (!document.ok) return refuse("document", DOC_T);
-  const operations = operationOverlay(d.effects);
+  const operations = operationOverlay(d);
   if (operations === null) return refuse("document", NO_EFFECT);
   return {
     ok: true,
@@ -211,7 +225,7 @@ export function openApiReplacement(serverId: string, d: OpenApiDraft): Registrat
   replacementId(serverId);
   const document = parseObject(d.documentText);
   if (!document.ok) return refuse("document", DOC_T);
-  const operations = operationOverlay(d.effects);
+  const operations = operationOverlay(d);
   if (operations === null) return refuse("document", NO_EFFECT);
   return {
     ok: true,
