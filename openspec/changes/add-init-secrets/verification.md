@@ -1,4 +1,4 @@
-# Verification: openspec:add-init-secrets: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-init-secrets: PASS (round 2)
 
 traceability: 13/13 criteria covered by a discriminating test
 
@@ -14,17 +14,17 @@ traceability: 13/13 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base main@69b4ef2032 contained |
-| 1 | integrity | ok | 880.8 | 11 sub-checks; scope: 12 changed file(s) |
-| 2 | build | ok | 35.2 |  |
-| 3 | tests | ok | 506.6 |  |
-| 4 | traceability | ok | 0.2 | 13/13 criteria covered |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
 | 4a | audit sampling | not_run | 0.0 | audit sampling writes pytest tests only; changed code is not python |
 | 5 | ui test generation | not_run | 0.0 | the unit changed no file under verifier.playwright.ui_paths |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: src/cli/builtin.ts, src/cli/errors.ts, src/cli/init-secrets.ts |
-| 8 | s1 judge | ok | 0.6 | 11/13 criteria judged by jev; the state does not fit 450 tokens even without the excerpt |
-| 9 | judge | ok | 397.2 | 1 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -128,6 +128,10 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-2687097e | unavailable | - | - | jev | the state does not fit 450 tokens even without the excerpt |
 | C-54587b81 | ok | 0.770 | jev-1.13.0 | jev | evidence cut to fit the budget |
 
+## Answers to verdict questions
+
+- Q-001 accept F-672fa76b by the delegate (claude-fable-5-1 via claude-code): The finding is waived. The random parameter is typed as a function returning a Uint8Array under strict TypeScript, so a null or undefined answer is outside the contract, and the requirement only speaks of an answer whose length is not 32 (pinned by the 31-byte and 33-byte scenario) and of a throwing...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -151,7 +155,7 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, deterministic] a test is ignored as evidence (criterion C-2687097e): src.cli.main.test.ts::C-2687097e cliMain prints help for the default registry: no proof that it discriminates (no red, audit or generated record)
 - [minor, deterministic] a test is ignored as evidence (criterion C-2687097e): src.cli.main.test.ts::C-2687097e cliMain refuses a command that needs the owner configuration: no proof that it discriminates (no red, audit or generated record)
 - [minor, deterministic] a test is ignored as evidence (criterion C-2687097e): src.cli.main.test.ts::C-2687097e cliMain refuses an unknown command: no proof that it discriminates (no red, audit or generated record)
-- [major, judge] planSecrets can throw TypeError for a null random answer (spec gap) (criterion C-70d304da): planSecrets accesses drawn.length without first ensuring drawn is non-null, so a random source returning null or undefined throws TypeError instead of the required CliError.
+- [minor, judge] planSecrets can throw TypeError for a null random answer (spec gap) (criterion C-70d304da): planSecrets accesses drawn.length without first ensuring drawn is non-null, so a random source returning null or undefined throws TypeError instead of the required CliError. (waived by the delegate (claude-fable-5-1 via claude-code): The finding is waived. The random parameter is typed as a function returning a Uint8Array under strict TypeScript, so a null or undefined answer is outside the contract, and the requirement only speaks of an answer whose length is not 32 (pinned by the 31-byte and 33-byte scenario) and of a throwing source, which must propagate. A null answer makes planSecrets thr...
 - [minor, judge] Relative output path is wrong when --dir is / (spec gap) (criterion C-3c0b021a): The command strips a prefix of dir plus slash; for dir "/" the planned paths are "/secrets/..." and "/.env", so they do not start with "//" and the printed paths are absolute rather than relative.
 
 ## New tests (red then green, `task.red_ok` in the ledger)

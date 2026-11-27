@@ -1,0 +1,168 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "secrets/<name>",
+      "config/secret.ts:34-38",
+      "config/config.ts:149-151",
+      "config/egress.ts",
+      "secrets/first_user_password",
+      "docs/operations.md",
+      "secrets",
+      "src/cli/builtin.ts",
+      "src/cli/init-secrets.ts",
+      "src/cli/index.ts",
+      "src/cli/main.ts",
+      "src/cli/registry.ts",
+      "src/config/index.ts",
+      "apps/vault-adapter/internal/kek/loader.go:46-48",
+      "apps/broker/internal/keyloader/loader.go:55-69",
+      "packages/go/svcid/fromenv.go:14-28",
+      "docs/deploy.md",
+      "docs/decisions/0002",
+      "src/cli/errors.ts",
+      "src/cli/main.test.ts",
+      "src/cli/flow/test-registry.test.ts",
+      "src/cli/registry.test.ts",
+      "src/cli/run.test.ts",
+      "src/cli/owner.test.ts",
+      "deploy",
+      "src/cli/init-secrets-plan.test.ts",
+      "src/cli/init-secrets-write.test.ts",
+      "src/cli/init-secrets-disk.test.ts",
+      "src/cli/init-secrets-command.test.ts",
+      "src/cli/init-secrets-registry.test.ts",
+      "**/*_SINK_*",
+      "**/^[a-z][a-z0-9._-]{0,63}$",
+      "**/URSITOARE_*_FILE",
+      "**/[",
+      "**/.env*",
+      "module broker",
+      "module cli",
+      "module config",
+      "module docs",
+      "module go",
+      "module main",
+      "module registry",
+      "module secrets",
+      "module vault-adapter"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-init-secrets/.l4/ledger/r-20261127T1843Z-d042.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-init-secrets/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/cli/builtin.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/errors.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/flow/test-registry.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/init-secrets-command.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/init-secrets-disk.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/init-secrets-plan.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/init-secrets-registry.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/init-secrets-write.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/init-secrets.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/main.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/cli/builtin.ts, src/cli/errors.ts, src/cli/init-secrets.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/cli/builtin.ts",
+      "src/cli/errors.ts",
+      "src/cli/init-secrets.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 3363,
+      "passed": 3363,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 12,
+      "new_passed": 12,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
