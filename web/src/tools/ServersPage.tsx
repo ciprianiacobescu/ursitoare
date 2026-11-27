@@ -21,6 +21,7 @@ import { createCursorList } from "../kit/data/cursor-list.ts";
 import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
 import { CredentialSection } from "./CredentialSection.tsx";
 import { ReplaceSection } from "./ReplaceSection.tsx";
+import { RefCarryPanel } from "./RefCarryPanel.tsx";
 import { ReviewSections } from "./ReviewSections.tsx";
 import { TOOL_NAMES, TOOL_TABLES, TOOL_TITLES, actionState, regionState } from "./pages.ts";
 import type { ActionPhase, RegionLoad } from "./pages.ts";
@@ -40,6 +41,8 @@ import {
   toolRows,
 } from "./servers.ts";
 import type { ToolServerView } from "./servers.ts";
+import { approvedEffects, changedRefs } from "./ref-carry.ts";
+import type { RefChange } from "./ref-carry.ts";
 import { loadServerReview } from "./review.ts";
 import type { ServerReview } from "./review.ts";
 
@@ -79,6 +82,7 @@ export function ServersPage(): ReactNode {
     selfApproval: boolean;
   } | null>(null);
   const [action, setAction] = useState<ActionPhase>({ phase: "idle" });
+  const [carry, setCarry] = useState<{ changes: RefChange[]; run: number } | null>(null);
 
   const servers = useMemo(
     () =>
@@ -101,6 +105,7 @@ export function ServersPage(): ReactNode {
     setDialogOpen(false);
     setApproveBody(null);
     setAction({ phase: "idle" });
+    setCarry(null);
   }, [serverId]);
 
   useEffect(() => {
@@ -161,13 +166,22 @@ export function ServersPage(): ReactNode {
   const confirmApprove = (): void => {
     const body = approveBody;
     const id = view === null ? null : view.id;
+    const before = view;
+    const effectsBefore = approvedEffects(approvedSurface);
+    setCarry(null);
     setDialogOpen(false);
     setApproveBody(null);
     if (body === null || id === null) return;
     setAction({ phase: "busy" });
     void (async () => {
       try {
-        await approveToolSurface(browserSession.api, id, body);
+        const after = await approveToolSurface(browserSession.api, id, body);
+        if (before !== null) {
+          setCarry((held) => ({
+            changes: changedRefs(before, after, effectsBefore),
+            run: (held === null ? 0 : held.run) + 1,
+          }));
+        }
         setAction({ phase: "done", text: SURFACE_APPROVED });
         setReloadKey((current) => current + 1);
       } catch (error) {
@@ -294,6 +308,7 @@ export function ServersPage(): ReactNode {
               {actionView.status.text}
             </p>
           )}
+          {carry === null ? null : <RefCarryPanel key={carry.run} changes={carry.changes} />}
           {dialog === null || !dialogOpen ? null : (
             <ConfirmDialog
               open

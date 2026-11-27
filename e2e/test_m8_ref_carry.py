@@ -89,6 +89,8 @@ FIRST = {
     "approvedDigest": None,
     "approvedSurface": None,
     "pendingSurface": NEW,
+    "pendingDigest": DP,
+    "pendingSubmittedBy": "u_carol",
     "tools": [
         {"name": "create_payment", "effect": "pay", "ref": None},
         {"name": "list_vendors", "effect": "write", "ref": None},
@@ -211,8 +213,8 @@ def test_approving_bumped_refs_offers_the_copy(page: Page) -> None:
     csp = start(page)
     others = page._others
     # list + credentials
-    answer(page, "tool-servers", (200, EMPTY))
-    answer(page, "credentials", (200, EMPTY))
+    answer(page, "tool-servers", EMPTY)
+    answer(page, "credentials", EMPTY)
     detail_hits = answer(page, "tool-servers/ledger", (200, DRIFT), (200, DONE), method="GET")
     approves = answer(page, "tool-servers/ledger/surface/approve", (200, {"server": ACCEPTED, "blocks": []}), method="POST")
     grants = answer(page, "grants", (200, {"items": ITEMS, "next_cursor": None}))
@@ -270,8 +272,8 @@ def test_approving_bumped_refs_offers_the_copy(page: Page) -> None:
 @pytest.mark.l4("C-8540a4f8")
 def test_first_approval_offers_nothing(page: Page) -> None:
     csp = start(page)
-    answer(page, "tool-servers", (200, EMPTY))
-    answer(page, "credentials", (200, EMPTY))
+    answer(page, "tool-servers", EMPTY)
+    answer(page, "credentials", EMPTY)
     detail_hits = answer(page, "tool-servers/ledger", (200, FIRST), (200, FIRST_DONE), method="GET")
     approves = answer(page, "tool-servers/ledger/surface/approve", (200, {"server": ACCEPTED1, "blocks": []}), method="POST")
     grants = answer(page, "grants", (200, {"items": ITEMS, "next_cursor": None}))
@@ -295,11 +297,11 @@ def test_first_approval_offers_nothing(page: Page) -> None:
 @pytest.mark.l4("C-8540a4f8")
 def test_a_failed_grants_read_creates_nothing(page: Page) -> None:
     csp = start(page)
-    answer(page, "tool-servers", (200, EMPTY))
-    answer(page, "credentials", (200, EMPTY))
+    answer(page, "tool-servers", EMPTY)
+    answer(page, "credentials", EMPTY)
     detail_hits = answer(page, "tool-servers/ledger", (200, DRIFT), (200, DONE), method="GET")
     approves = answer(page, "tool-servers/ledger/surface/approve", (200, {"server": ACCEPTED, "blocks": []}), method="POST")
-    grants = answer(page, "grants", (403, {"error": {"code": "FORBIDDEN", "message": "dec_1"}}))
+    grants = answer(page, "grants", (403, {"error": {"code": "FORBIDDEN", "message": "m", "details": {"decisionId": "dec_1"}}}))
     posts = answer(page, "grants", method="POST")
 
     page.goto("/admin/tool-servers?server=ledger")
