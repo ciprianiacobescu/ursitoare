@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was): accept as satisfied? |
 | Q-007 | answered | none | verdict | Hold H-3d26971a: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table |
 | Q-008 | answered | none | verdict | Hold H-96a6450c: UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table |
-| Q-009 | open | none | verdict | Hold H-d011c1bb: UI criterion C-4b83877f has no end-to-end test; see the generated UI tests table |
+| Q-009 | answered | none | verdict | Hold H-d011c1bb: UI criterion C-4b83877f has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-cb55efac: UI criterion C-b8363cd2 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -287,7 +287,8 @@ accept The hold may be waived. The repository already holds the end-to-end tests
 
 ## Q-009: Hold H-d011c1bb: UI criterion C-4b83877f has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -306,6 +307,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The repository already holds an end-to-end test for C-4b83877f: test_superseded_and_waiting_refs_are_marked_beside_the_badge in e2e/test_m8_ref_carry_grants.py, tagged with the criterion and following test-plan-browser.md § Grants markers step by step. It answers /tool-servers in two pages, then asserts the superseded marker with its data-state on the ledger.create_payment@1 row, the waiting for approval marker on the acme.lookup_vendor@1 row, one badge per row with data-tone success on the first, no marker on the ledger.create_payment@2 and crm.find_customer@1 rows, and two server queries with limit 100 and cursor s2. The code gives those results: the Grants page reads all tool-server pages with a plain API client at limit 100, renders RefMarker after grantTextWithBadge inside the same span, RefMarker is a span with data-slot ref-marker that renders nothing for current or null, and refState returns superseded, waiting or null exactly as the scenario lists. The generated test is not in the repository and failed at the base as well as the head, so it shows nothing about the change.
 ---
 
 ## Q-010: Hold H-cb55efac: UI criterion C-b8363cd2 has no end-to-end test; see the generated UI tests table
