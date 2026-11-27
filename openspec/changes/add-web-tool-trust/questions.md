@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Criterion C-f52c8d49 (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › An OpenAPI server is registered with a trusted result after a tick): accept as sati |
+| Q-001 | answered | none | verdict | Criterion C-f52c8d49 (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › An OpenAPI server is registered with a trusted result after a tick): accept as sati |
 | Q-002 | open | none | verdict | Criterion C-3a1c08af (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace keeps the stored trust and needs no tick): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-08abe836 (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace drops a retry flag when the effect changes): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf |
@@ -33,7 +33,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Criterion C-f52c8d49 (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › An OpenAPI server is registered with a trusted result after a tick): accept as sati
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -60,6 +61,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied by the code as it stands. The registration Operations table renders the six headers in order, each non-excluded row gets a TrustToggle described by the warning paragraph that TrustNotes renders once, and the excluded exportVendors row gets no controls. ackStatus with an empty baseline lists createPayment and listVendors once they are trusted and public, submit runs the field checks first and then puts the message Accept the warning for: createPayment, listVendors. into the $form error, which the Form kit renders as the role alert, and returns before registerServer is called. With both ticks the overlay built by overlayEntry is createPayment { effect: pay, untrusted_result: false, data_class: private } and listVendors { effect: read, data_class: public }, and navigate(serverLink) ends the URL with ?server=ledger. The browser test asserts exactly these values; it was not run in a gate, but every assertion follows from the code.
 ---
 
 ## Q-002: Criterion C-3a1c08af (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace keeps the stored trust and needs no tick): accept as satisfied?
