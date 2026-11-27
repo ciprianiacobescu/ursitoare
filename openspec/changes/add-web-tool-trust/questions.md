@@ -27,7 +27,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-014 | answered | none | verdict | Hold H-4d97dc56: UI criterion C-7374d16f has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-c196208f: UI criterion C-c7bb4abe has no end-to-end test; see the generated UI tests table |
-| Q-017 | open | none | verdict | Hold H-abcad329: UI criterion C-c4fa5fc4 has no end-to-end test; see the generated UI tests table |
+| Q-017 | answered | none | verdict | Hold H-abcad329: UI criterion C-c4fa5fc4 has no end-to-end test; see the generated UI tests table |
 | Q-018 | open | none | verdict | Hold H-1f2ad2b0: UI criterion C-f43385f5 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -498,7 +498,8 @@ accept The unit can go on as it stands. The hold says the criterion lacks an end
 
 ## Q-017: Hold H-abcad329: UI criterion C-c4fa5fc4 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -517,6 +518,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. The criterion pins what discoverBody does with a key that appears only in a draft's carried map: a key outside the pattern or one that brings the total over 100 throws RangeError, and otherwise the tool gets the overlay entry built from its carried fields. That is a builder result a browser cannot observe, because the pages fill carried only from discoverSettings of a stored surface whose server tool names storedTools has already checked against the same pattern, and from carriedAfterEffect keyed by a rendered row's name, so no page can produce a carried-only key that is malformed or in excess; an end-to-end test is not the right instrument. The Node test review-carried-keys.test.ts carries the criterion in its name and asserts exactly the scenario: RangeError for a carried-only key with a space, for an empty carried-only key and for 101 carried-only keys, and the body foo with name bar and unsafe_to_retry false for a well-formed carried-only key. The builder now adds the keys of carried to its key set before deleting __proto__, counting against 100 and testing each key against the pattern, then builds the entry from the carried fields through overlayEntry.
 ---
 
 ## Q-018: Hold H-1f2ad2b0: UI criterion C-f43385f5 has no end-to-end test; see the generated UI tests table
