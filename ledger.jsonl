@@ -90,3 +90,4 @@
 {"at":"2026-11-27T21:22:02Z","run":"r-20261127T2122Z-5e71","type":"unit.dispatched","unit":"openspec:add-init-secrets"}
 {"at":"2026-11-27T21:32:28Z","head":"1ffec31f7363a2b33ed9a4bd4ff55e05158ce280","pr":192,"target_before":"69b4ef2032514aea5b063fe1d9cc8715bb804557","type":"unit.merge_requested","unit":"openspec:add-init-secrets"}
 {"at":"2026-11-27T21:32:33Z","ci":"not_run","head":"1ffec31f7363a2b33ed9a4bd4ff55e05158ce280","merge_commit":"6284ce7b1577d86b7f283c324fbba3f089e476e9","method":"squash","pr":192,"raced":false,"type":"unit.merged","unit":"openspec:add-init-secrets"}
+{"at":"2026-11-27T21:32:39Z","branch":"l4/openspec/add-init-secrets","head":"1ffec31f7363a2b33ed9a4bd4ff55e05158ce280","type":"unit.branch_deleted","unit":"openspec:add-init-secrets"}
