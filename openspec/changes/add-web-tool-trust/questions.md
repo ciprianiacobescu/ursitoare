@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf |
 | Q-005 | answered | none | verdict | Criterion C-7374d16f (web-tools › Effect settings become the overlay body and a discovery answer names every tool left out › Settings become the body and a discovery is worded with every tool left out |
 | Q-006 | answered | none | verdict | Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied? |
-| Q-007 | open | none | verdict | Criterion C-c7bb4abe (web-tools › The server page shows discovery, settings, changes and calls › Tool settings carries the trust controls, Discover keeps the stored trust and Changes shows the value l |
+| Q-007 | answered | none | verdict | Criterion C-c7bb4abe (web-tools › The server page shows discovery, settings, changes and calls › Tool settings carries the trust controls, Discover keeps the stored trust and Changes shows the value l |
 | Q-008 | open | none | verdict | Finding F-4ee90a68: discoverBody neither validates nor emits keys that appear only in a draft's carried map |
 | Q-009 | open | none | verdict | Finding F-1b3e37fc: Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults |
 | Q-010 | open | none | verdict | Hold H-fd0a4300: UI criterion C-f52c8d49 has no end-to-end test; see the generated UI tests table |
@@ -231,7 +231,8 @@ accept The criterion is satisfied by the code as it stands. The M7 drifted-serve
 
 ## Q-007: Criterion C-c7bb4abe (web-tools › The server page shows discovery, settings, changes and calls › Tool settings carries the trust controls, Discover keeps the stored trust and Changes shows the value l
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -258,6 +259,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. On each loaded detail the draft is initialDraft of the pending tools with the trust and carried records of discoverSettings of the pending surface, and the baseline is that trust, so find_vendor and log_note start checked with private and public, ping unchecked, and no tick shows. The Changes item for log_note gains Result: untrusted → trusted and Data class: not set → public. Discover tools builds its body from the approved surface: find_vendor trusted and private with effect read, and log_note only unsafe_to_retry false because the stored false differs from the MCP default and the effect is unchanged. Trusting ping makes it newly trusted against the baseline, so Discover again with these settings shows Accept the warning for: ping. as the Discovery alert and posts nothing; moving log_note to send recomputes its carried values through carriedAfterEffect, which drops the retry flag because the stored effect differs. After the tick the second body holds the three trust entries and no unsafe_to_retry. The warning paragraph renders once because the Replace section returns null for an MCP server. The browser test was not run in a gate, but every assertion follows from the code.
 ---
 
 ## Q-008: Finding F-4ee90a68: discoverBody neither validates nor emits keys that appear only in a draft's carried map
