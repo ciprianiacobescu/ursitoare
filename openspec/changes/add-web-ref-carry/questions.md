@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Criterion C-8540a4f8 (web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge): accept as sati |
 | Q-006 | answered | none | verdict | Criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was): accept as satisfied? |
-| Q-007 | open | none | verdict | Hold H-3d26971a: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-3d26971a: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-96a6450c: UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-d011c1bb: UI criterion C-4b83877f has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-cb55efac: UI criterion C-b8363cd2 has no end-to-end test; see the generated UI tests table |
@@ -237,7 +237,8 @@ accept The criterion is satisfied as it stands. The servers read on the Grants p
 
 ## Q-007: Hold H-3d26971a: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -256,6 +257,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. C-568a8224 is the refState and REF_MARKERS requirement, whose scenario runs rows RS1 and RS2 of the test plan: pure-function rows, not a browser journey. Three Node tests named with the criterion assert every value of those rows and passed from a red that failed by assertion, and refState in ref-carry.ts gives those values. The browser-visible side of the same logic, the markers on the Grants page, is asserted by the e2e test of C-4b83877f. The generated end-to-end test failed at the base and at the head alike, so it shows nothing about the code; the unit can go on.
 ---
 
 ## Q-008: Hold H-96a6450c: UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table
