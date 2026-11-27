@@ -24,12 +24,12 @@ import type { DiscoverDraft, ReviewTool } from "./review.ts";
 import type { ToolServerView } from "./servers.ts";
 import { DataClassSelect, TrustNotes, TrustToggle } from "./TrustControls.tsx";
 import {
-  DEFAULT_TRUST,
   TRUST_NAMES,
   ackStatus,
   carriedAfterEffect,
   discoverSettings,
   storedTools,
+  trustFor,
   valueChangeLines,
   withValueLines,
 } from "./trust.ts";
@@ -264,7 +264,7 @@ export function ReviewSections(props: {
       key: "trust",
       header: TRUST_NAMES["trustColumn"] ?? "Result trusted",
       cell: (row: SettingsRow) => {
-        const trust = draftTrust[row.serverName] ?? DEFAULT_TRUST;
+        const trust = trustFor(draftTrust, row.serverName);
         return (
           <TrustToggle
             name={row.serverName}
@@ -281,7 +281,7 @@ export function ReviewSections(props: {
       key: "dataClass",
       header: TRUST_NAMES["dataClassColumn"] ?? "Data class",
       cell: (row: SettingsRow) => {
-        const trust = draftTrust[row.serverName] ?? DEFAULT_TRUST;
+        const trust = trustFor(draftTrust, row.serverName);
         return (
           <DataClassSelect
             name={row.serverName}

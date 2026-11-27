@@ -14,6 +14,13 @@ export const DEFAULT_TRUST: Readonly<ToolTrust> = Object.freeze({
   dataClass: null,
 });
 
+export function trustFor(
+  trust: Readonly<Record<string, ToolTrust>>,
+  key: string,
+): Readonly<ToolTrust> {
+  return Object.hasOwn(trust, key) ? (trust[key] ?? DEFAULT_TRUST) : DEFAULT_TRUST;
+}
+
 export interface StoredTool {
   name: string;
   effect: string;

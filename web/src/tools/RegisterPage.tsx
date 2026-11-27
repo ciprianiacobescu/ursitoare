@@ -33,7 +33,7 @@ import type {
 } from "./register.ts";
 import { serverLink } from "./servers.ts";
 import { DataClassSelect, TrustNotes, TrustToggle } from "./TrustControls.tsx";
-import { DEFAULT_TRUST, TRUST_NAMES, ackStatus } from "./trust.ts";
+import { TRUST_NAMES, ackStatus, trustFor } from "./trust.ts";
 import type { ToolTrust } from "./trust.ts";
 
 type Effect = "" | "read" | "write" | "send" | "pay";
@@ -108,12 +108,12 @@ export function RegisterPage(): ReactNode {
   };
 
   const toggleTrust = (operationId: string, trusted: boolean): void => {
-    const current = trust[operationId] ?? DEFAULT_TRUST;
+    const current = trustFor(trust, operationId);
     setToolTrust(operationId, { trusted, dataClass: current.dataClass });
   };
 
   const setDataClass = (operationId: string, dataClass: ToolTrust["dataClass"]): void => {
-    const current = trust[operationId] ?? DEFAULT_TRUST;
+    const current = trustFor(trust, operationId);
     setToolTrust(operationId, { trusted: current.trusted, dataClass });
   };
 
@@ -286,7 +286,7 @@ export function RegisterPage(): ReactNode {
           <tbody>
             {preview.operations.map((operation, index) => {
               const operationId = operation.operationId ?? "";
-              const toolTrust = trust[operationId] ?? DEFAULT_TRUST;
+              const toolTrust = trustFor(trust, operationId);
               return (
                 <tr key={operation.operationId ?? `row-${index}`}>
                   <td>{operation.operationId ?? "—"}</td>

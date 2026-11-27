@@ -25,12 +25,12 @@ import type { CodeDraft, OperationRowView } from "./register.ts";
 import type { ToolServerView } from "./servers.ts";
 import { DataClassSelect, TrustNotes, TrustToggle } from "./TrustControls.tsx";
 import {
-  DEFAULT_TRUST,
   TRUST_NAMES,
   ackStatus,
   carriedAfterEffect,
   prefillTrust,
   storedTools,
+  trustFor,
 } from "./trust.ts";
 import type { Carried, ToolTrust } from "./trust.ts";
 
@@ -68,7 +68,7 @@ function OperationsTable(props: {
         <tbody>
           {props.preview.operations.map((operation, index) => {
             const operationId = operation.operationId ?? "";
-            const toolTrust = props.trust[operationId] ?? DEFAULT_TRUST;
+            const toolTrust = trustFor(props.trust, operationId);
             return (
               <tr key={operation.operationId ?? `row-${index}`}>
                 <td>{operation.operationId ?? "—"}</td>
