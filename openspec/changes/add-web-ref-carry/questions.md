@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.1 | technical | e2e/test_m8_ref_carry.py:86-96 FIRST has no pendingDigest, so Approve is disabled |
 | Q-002 | answered | 4.1 | technical | e2e/test_m8_ref_carry.py:302 403 body lacks details.decisionId |
-| Q-003 | open | 4.1 | technical | e2e/test_m8_ref_carry.py:255 two alerts remain after the copy |
+| Q-003 | answered | 4.1 | technical | e2e/test_m8_ref_carry.py:255 two alerts remain after the copy |
 <!-- l4:index:end -->
 
 ---
@@ -90,7 +90,7 @@ Why: test-plan-browser.md § Approve says this test is "as C-8540a4f8 but `grant
 
 ## Q-003: e2e/test_m8_ref_carry.py:255 two alerts remain after the copy
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path e2e/test_m8_ref_carry.py of task 4.1; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 4.1
 - **Kind:** technical
@@ -121,3 +121,8 @@ Edit `e2e/test_m8_ref_carry.py`: add `answer(page, ...)` mocks for each unmocked
 
 ### Answer
 <!-- write below this line -->
+Do not add mocks: no request of this page goes unmocked. Edit `e2e/test_m8_ref_carry.py` instead: on lines 214, 215, 273, 274, 298 and 299 replace the reply `(200, EMPTY)` with `EMPTY`, so they read `answer(page, "tool-servers", EMPTY)` and `answer(page, "credentials", EMPTY)`. Nothing else changes.
+
+Origin, reproduced at c7477a9d on a local e2e stack with this test's own mocks plus a catch-all route that logs any request reaching the engine: the catch-all saw none. Every /api/v1 request (me, tool-servers?limit=50, tool-servers/ledger, credentials?limit=200, people, the approve POST) was answered by the test's routes. Both alerts read "Something went wrong. The engine sent an answer this page cannot read. Error code: INVALID_RESPONSE": one is the Credential section's, the other the server list's. They are there from page load, before the approval, so they are still there after the copy.
+
+Cause: `EMPTY` (line 20) is already a whole reply, `(200, {"items": [], "next_cursor": None})`, as in `e2e/test_m7_tool_registration.py:22`, which passes it bare (`answer(page, "tool-servers", EMPTY)`, lines 137 and 148). Wrapping it again as `(200, EMPTY)` makes the body the JSON array `[200, {"items": [], "next_cursor": null}]`, which the cursor-list reader rejects. test-plan-browser.md § Approve says "Every test answers `tool-servers` (list) and `credentials` with `EMPTY`", the reply itself. With the six replies changed to `EMPTY`, the same run shows 0 alerts after load and 0 after the approval, with detail_hits 2, approves 1 and grants 0. No assertion is weakened: line 255's count of 0 stays.
