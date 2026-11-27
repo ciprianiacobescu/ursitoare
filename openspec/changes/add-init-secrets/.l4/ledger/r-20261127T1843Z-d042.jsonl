@@ -275,3 +275,7 @@
 {"ts": "2026-11-27T21:18:11.699392Z", "run_id": "r-20261127T1843Z-d042", "unit": "openspec:add-init-secrets", "seq": 275, "type": "step.timed", "phase": "verify", "round": 1, "seconds": 1910.3}
 {"ts": "2026-11-27T21:18:11.699745Z", "run_id": "r-20261127T1843Z-d042", "unit": "openspec:add-init-secrets", "seq": 276, "type": "phase.changed", "from": "verifying", "to": "awaiting_human", "trigger": "verify_needs_human", "exit_code": 11}
 {"ts": "2026-11-27T21:18:13.877518Z", "run_id": "r-20261127T1843Z-d042", "unit": "openspec:add-init-secrets", "seq": 277, "type": "pr.labels", "number": 192, "labels": ["l4:awaiting_human", "l4:needs-answers"]}
+{"ts": "2026-11-27T21:18:15.820674Z", "run_id": "r-20261127T1843Z-d042", "unit": "openspec:add-init-secrets", "seq": 278, "type": "delegate.result", "question": "Q-001", "id": "Q-001", "status": "deferred", "reason": "soft_deadline", "called": false, "tasks": [], "target": "F-672fa76b", "kind": "verdict", "retry_after": "2026-11-27T21:18:15Z"}
+{"ts": "2026-11-27T21:18:15.821753Z", "run_id": "r-20261127T1843Z-d042", "unit": "openspec:add-init-secrets", "seq": 279, "type": "delegate.pass", "bound": "deadline", "delegate_only": false, "calls": 0}
+{"ts": "2026-11-27T21:18:15.829283Z", "run_id": "r-20261127T1843Z-d042", "unit": "openspec:add-init-secrets", "seq": 280, "type": "lock.released"}
+{"ts": "2026-11-27T21:18:15.829808Z", "run_id": "r-20261127T1843Z-d042", "unit": "openspec:add-init-secrets", "seq": 281, "type": "run.finished", "exit_code": 11}
