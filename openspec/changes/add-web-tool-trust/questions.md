@@ -27,6 +27,8 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-014 | answered | none | verdict | Hold H-4d97dc56: UI criterion C-7374d16f has no end-to-end test; see the generated UI tests table |
 | Q-015 | answered | none | verdict | Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-c196208f: UI criterion C-c7bb4abe has no end-to-end test; see the generated UI tests table |
+| Q-017 | open | none | verdict | Hold H-abcad329: UI criterion C-c4fa5fc4 has no end-to-end test; see the generated UI tests table |
+| Q-018 | open | none | verdict | Hold H-1f2ad2b0: UI criterion C-f43385f5 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -491,3 +493,50 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 ### Answer
 <!-- write below this line -->
 accept The unit can go on as it stands. The hold says the criterion lacks an end-to-end test because the generated-test writer timed out, but the unit's own browser file holds a test tagged with this criterion whose assertions are exactly the scenario of the Tool settings steps: the six column headers including Result trusted and Data class, find_vendor and log_note checked with private and public and ping unchecked, the warning once and no tick box, the Changes item for log_note holding Result: untrusted → trusted and Data class: not set → public, Discover tools posting find_vendor trusted and private with effect read and log_note with only unsafe_to_retry false, then after trusting ping and moving log_note to send the alert Accept the warning for: ping. with no post, and after the tick a second post with the three trust entries and no unsafe_to_retry. The code supports each step: the review sections build the draft and baseline from discoverSettings of the pending surface on each loaded detail, Discover tools builds its body from the approved surface's trust and carried values, carriedFields carries the stored false for log_note only while the effect is unchanged and drops it when the effect moves to send through carriedAfterEffect, ackStatus shows a tick only for a key newly trusted or newly public against the baseline, a missing tick becomes the failed action text rendered with the alert role, overlayEntry writes the pinned members, surfaceDiff lists untrusted_result and data_class so log_note is a changed item, and valueChangeLines appends the two value lines under it. The Replace section returns null for an MCP server, so the warning renders once. The test was not run in a gate here; the acceptance profile after merge runs every configured gate.
+
+---
+
+## Q-017: Hold H-abcad329: UI criterion C-c4fa5fc4 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-c4fa5fc4 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-c4fa5fc4: writer_failed after 2 attempt(s); opencode's permission rules rejected a tool call (bash).
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-018: Hold H-1f2ad2b0: UI criterion C-f43385f5 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 3, verifier
+
+### Context
+After round 3 the verifier cannot decide on its own: UI criterion C-f43385f5 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-f43385f5: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_f43385f5::test_object_prototype_member_operation_trust_default[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
