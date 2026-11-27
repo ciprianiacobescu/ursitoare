@@ -28,7 +28,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-015 | answered | none | verdict | Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-c196208f: UI criterion C-c7bb4abe has no end-to-end test; see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-abcad329: UI criterion C-c4fa5fc4 has no end-to-end test; see the generated UI tests table |
-| Q-018 | open | none | verdict | Hold H-1f2ad2b0: UI criterion C-f43385f5 has no end-to-end test; see the generated UI tests table |
+| Q-018 | answered | none | verdict | Hold H-1f2ad2b0: UI criterion C-f43385f5 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -523,7 +523,8 @@ accept The unit can go on as it stands. The criterion pins what discoverBody doe
 
 ## Q-018: Hold H-1f2ad2b0: UI criterion C-f43385f5 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 3, verifier
@@ -542,3 +543,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. The generated browser test fails at the base and at the head for a reason of its own: it opens the registration page and at once expects a row for toString, but the Operations table renders only after an OpenAPI document is pasted and previewed, and the test never pastes one, so it fails against any version of the page and proves nothing about the code. The code satisfies the criterion. Every page reads its trust record through trustFor, which returns DEFAULT_TRUST unless Object.hasOwn finds an own entry, so toString or constructor with no own entry shows unchecked and with no data class; each setter writes a complete ToolTrust with trusted and dataClass, the data-class select maps its empty option to null, and the tick and baseline reads compare against true or read trusted of the inherited function as undefined, so a newly trusted prototype-named key is shown and must be ticked like any other. The OpenAPI builder reads trust and carried with Object.hasOwn, and discoverBody does the same, so the submitted overlay entry is the one overlayEntry builds for any other name and no RangeError arises. The Node test trust-lookup.test.ts carries the criterion and scans the three pages for a plain trust index with a nullish fallback and for the guarded lookup.
