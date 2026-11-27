@@ -11,14 +11,14 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | 1.1 | technical | web/src/tools/review-trust.test.ts:132 expectation contradicts carried-key emission |
+| Q-001 | answered | 1.1 | technical | web/src/tools/review-trust.test.ts:132 expectation contradicts carried-key emission |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: web/src/tools/review-trust.test.ts:132 expectation contradicts carried-key emission
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): Genuine conflict between two frozen tests and their specifications. The parent unit's frozen DB3 assertion (web/src/tools/review-trust.test.ts:132) passes carried = ds1.carried, which holds the carried-only key Log.Note: { unsafe_to_retry: false }, and expects only { find_vendor: { skip: true } }; test-plan.md DB3 pins that value and says DB3 holds on base code, and the parent spec says DB3 gives "the skip" body. The fix unit's frozen red test R1c (web/src/tools/review-carried.test.ts:32) and its regression scenario require a carried-only key to emit the overlay entry built from its carried fields, which makes DB3 emit Log.Note: { unsafe_to_retry: false }. I found no production-code rule in any document that satisfies both. Option 1 changes a frozen test from a fix task, which a person must commit; Option 2 fails the fix unit's own red test and contradicts its spec. No clarifier suggestion exists to accept. A person must decide which pinned value gives way.
 - **Blocking tasks:** 1.1
 - **Kind:** technical
@@ -39,3 +39,6 @@ AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
 
 ### Answer
 <!-- write below this line -->
+Option 1. Edit web/src/tools/review-trust.test.ts at the DB3 assertion (line 132) so its expected value is { tools: { find_vendor: { skip: true }, "Log.Note": { unsafe_to_retry: false } } }, and change nothing else in that file.
+
+Why: the parent requirement for discoverBody validates and counts the keys of effects, names, trust and carried alike, and its DB5 row already emits a key that is only in trust ({ untrusted_result: false }). A key that is only in carried is the same case, and F-4ee90a68 (decided in Q-008) settles it that way. DB3's draft takes ds1.carried, in which Log.Note is carried-only (effects holds find_vendor alone), so under that rule DB3 gives find_vendor's skip entry plus Log.Note's carried retry flag. Keeping that stored flag through a rediscovery is what this unit is for. The DB3 value in test-plan.md was worked out before the rule was applied to carried keys. The assertion stays a strict deep-equal, so it is not weakened: find_vendor's entry is still exactly { skip: true }. Option 2 would fail R1c and contradict this fix unit's own spec.
