@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Finding F-1b3e37fc: Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults |
 | Q-010 | answered | none | verdict | Hold H-fd0a4300: UI criterion C-f52c8d49 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-ec069147: UI criterion C-3a1c08af has no end-to-end test; see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-91b47a21: UI criterion C-08abe836 has no end-to-end test; see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-91b47a21: UI criterion C-08abe836 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-95bd71c9: UI criterion C-3ad08589 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-4d97dc56: UI criterion C-7374d16f has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table |
@@ -370,7 +370,8 @@ accept The unit can go on as it stands. The hold says the criterion lacks an end
 
 ## Q-012: Hold H-91b47a21: UI criterion C-08abe836 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -389,6 +390,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. The hold says the criterion lacks an end-to-end test because the generated-test writer timed out, but the unit's own browser file holds a test tagged with this criterion whose assertions are exactly the scenario: after the same Replace preview it moves createPayment to send and listVendors to pay, presses Save changes and asserts one PUT whose overlay is createPayment with effect send, untrusted_result false and data_class private and listVendors with effect pay, with no unsafe_to_retry anywhere. The code supports it: each effect change in the Replace form calls carriedAfterEffect with the operation's derived name, which looks the stored tool up by name and drops the retry flag whenever the stored effect differs from the new one, and the handler then removes the operation's carried entry; the trust record is untouched, so the baseline still covers it and no tick appears; overlayEntry writes the remaining members. The test was not run in a gate here; the acceptance profile after merge runs every configured gate.
 ---
 
 ## Q-013: Hold H-95bd71c9: UI criterion C-3ad08589 has no end-to-end test; see the generated UI tests table
