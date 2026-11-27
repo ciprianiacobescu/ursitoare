@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-27T18:41:58Z",
+  "integrated_revision": "7979559b845985c56ba2b276ef2827cf912bc035",
+  "merge_commit": "7979559b845985c56ba2b276ef2827cf912bc035",
+  "plan_digest": "4adcec585ee8dfd7",
+  "plan_id": "m8",
+  "postcheck": "pass",
+  "pr": 189,
+  "receipt_id": "m8/openspec:add-web-ref-carry/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "7a65fcebd3256d340b43e4fbd6c711a712bd6c8f",
+  "spec_digest": "ee2bfc94424ab3da",
+  "target": "main",
+  "unit_id": "openspec:add-web-ref-carry"
+}
