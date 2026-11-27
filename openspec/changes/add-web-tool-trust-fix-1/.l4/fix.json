@@ -1,0 +1,14 @@
+{
+  "schema": "l4/fix-unit@1",
+  "parent": "openspec:add-web-tool-trust",
+  "round": 1,
+  "findings": [
+    "F-4ee90a68",
+    "F-1b3e37fc"
+  ],
+  "chores": [],
+  "test_chores": [],
+  "refactors": [],
+  "retakes": [],
+  "repairs": []
+}
