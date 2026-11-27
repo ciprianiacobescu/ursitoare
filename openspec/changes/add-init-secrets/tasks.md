@@ -2,7 +2,7 @@ Tests follow `test-plan.md` (files, ids, fixtures, rows). Every test file starts
 
 ## 1. The plan: files, formats and the .env
 
-- [ ] 1.1 Write `src/cli/init-secrets-plan.test.ts` first (scenarios "The plan lists the files, the modes and the random calls", "Formats, distinct values and a reused buffer", "A short or throwing random source" and "The six keys, the first user and a refused name": the plan rows of `test-plan.md`), then in `src/cli/init-secrets.ts` replace the scaffold stubs of `SECRET_FILES`, `ENV_KEYS` and `planSecrets` with the real ones (design 2 to 4 and 7: one `random(32)` per file in `SECRET_FILES` order, hex text computed at once, `raw32` bytes copied, the `.env` of six lines, `firstUser` checked before `random` is called). Run `pnpm run test src/cli/init-secrets-plan.test.ts`
+- [x] 1.1 Write `src/cli/init-secrets-plan.test.ts` first (scenarios "The plan lists the files, the modes and the random calls", "Formats, distinct values and a reused buffer", "A short or throwing random source" and "The six keys, the first user and a refused name": the plan rows of `test-plan.md`), then in `src/cli/init-secrets.ts` replace the scaffold stubs of `SECRET_FILES`, `ENV_KEYS` and `planSecrets` with the real ones (design 2 to 4 and 7: one `random(32)` per file in `SECRET_FILES` order, hex text computed at once, `raw32` bytes copied, the `.env` of six lines, `firstUser` checked before `random` is called). Run `pnpm run test src/cli/init-secrets-plan.test.ts`
 
 ## 2. Writing without overwriting, and removing on failure
 
