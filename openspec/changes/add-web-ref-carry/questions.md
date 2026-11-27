@@ -15,7 +15,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-002 | answered | 4.1 | technical | e2e/test_m8_ref_carry.py:302 403 body lacks details.decisionId |
 | Q-003 | answered | 4.1 | technical | e2e/test_m8_ref_carry.py:255 two alerts remain after the copy |
 | Q-004 | answered | none | verdict | Criterion C-8540a4f8 (web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant): accept as satisfied? |
-| Q-005 | open | none | verdict | Criterion C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge): accept as sati |
+| Q-005 | answered | none | verdict | Criterion C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge): accept as sati |
 | Q-006 | open | none | verdict | Criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was): accept as satisfied? |
 | Q-007 | open | none | verdict | Hold H-3d26971a: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-96a6450c: UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table |
@@ -171,7 +171,8 @@ accept The criterion is satisfied as it stands. ServersPage keeps the view befor
 
 ## Q-005: Criterion C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge): accept as sati
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -198,6 +199,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The Grants page reads GET /tool-servers through loadAllToolServers with a plain API client beside its other reads; the page reader asks for limit 100 and passes each page's cursor, so two pages give two hits, the second with cursor s2. Each row renders RefMarker right after grantTextWithBadge inside the same span, and RefMarker is a span with data-slot ref-marker and data-state that renders nothing for current or null, so the status Badge stays the row's only badge slot. refState gives superseded for ledger.create_payment@1 against the approved ledger listing @2, waiting for acme.lookup_vendor@1 against the drifted acme listing the same ref, current for ledger.create_payment@2 and null for crm.find_customer@1 because crm lists no tool of that name. The e2e test asserts exactly these markers, badges and server queries.
 ---
 
 ## Q-006: Criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was): accept as satisfied?
