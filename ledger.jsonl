@@ -70,3 +70,4 @@
 {"at":"2026-11-27T18:13:49Z","attempt":1,"cost_usd":10.825024,"runs":6,"type":"plan.charged","unit":"openspec:add-web-ref-carry"}
 {"at":"2026-11-27T18:13:49Z","run":"r-20261127T1813Z-f113","type":"unit.dispatched","unit":"openspec:add-web-ref-carry"}
 {"at":"2026-11-27T18:16:57Z","detail":"awaiting_human: no new answers (verdicts open: Q-010)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-ref-carry"}
+{"at":"2026-11-27T18:20:47Z","by":"harness","reason":"the cause is gone: openspec:add-web-ref-carry is awaiting_human","type":"plan.resumed"}
