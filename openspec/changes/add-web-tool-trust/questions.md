@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | none | verdict | Criterion C-08abe836 (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace drops a retry flag when the effect changes): accept as satisfied? |
 | Q-004 | answered | none | verdict | Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf |
 | Q-005 | answered | none | verdict | Criterion C-7374d16f (web-tools › Effect settings become the overlay body and a discovery answer names every tool left out › Settings become the body and a discovery is worded with every tool left out |
-| Q-006 | open | none | verdict | Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied? |
+| Q-006 | answered | none | verdict | Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied? |
 | Q-007 | open | none | verdict | Criterion C-c7bb4abe (web-tools › The server page shows discovery, settings, changes and calls › Tool settings carries the trust controls, Discover keeps the stored trust and Changes shows the value l |
 | Q-008 | open | none | verdict | Finding F-4ee90a68: discoverBody neither validates nor emits keys that appear only in a draft's carried map |
 | Q-009 | open | none | verdict | Finding F-1b3e37fc: Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults |
@@ -198,7 +198,8 @@ accept The criterion is satisfied. It names a frozen test of an earlier unit tha
 
 ## Q-006: Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -225,6 +226,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied by the code as it stands. The M7 drifted-server browser test is frozen from an earlier unit and runs unedited, so no red of this unit can trace it; its assertions hold against the edited review sections. Discover tools now posts discoverBody of initialDraft of the approved tools with the trust and carried records of discoverSettings of the approved surface. In that test every approved tool is untrusted with no data class, and each stored unsafe_to_retry is true, which equals the MCP default, so nothing is carried and the body is find_vendor with effect read alone, log_note and old_tool dropping out as empty entries. The Changes list keeps its item texts: find_vendor differs only in hints so valueChangeLines gives it no line, and log_note gains the line Effect: write → send under its unchanged item text, which the contain-text assertions tolerate. The Tool settings table is rendered by the kit DataTable inside a wrapper with horizontal overflow, so the two new columns cannot widen the page.
 ---
 
 ## Q-007: Criterion C-c7bb4abe (web-tools › The server page shows discovery, settings, changes and calls › Tool settings carries the trust controls, Discover keeps the stored trust and Changes shows the value l
