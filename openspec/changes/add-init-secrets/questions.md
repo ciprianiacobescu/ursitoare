@@ -11,14 +11,15 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Finding F-672fa76b: planSecrets can throw TypeError for a null random answer |
+| Q-001 | answered | none | verdict | Finding F-672fa76b: planSecrets can throw TypeError for a null random answer |
 <!-- l4:index:end -->
 
 ---
 
 ## Q-001: Finding F-672fa76b: planSecrets can throw TypeError for a null random answer
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -40,3 +41,4 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The finding is waived. The random parameter is typed as a function returning a Uint8Array under strict TypeScript, so a null or undefined answer is outside the contract, and the requirement only speaks of an answer whose length is not 32 (pinned by the 31-byte and 33-byte scenario) and of a throwing source, which must propagate. A null answer makes planSecrets throw before any write, and runCli reports every non-CliError as CLI_INTERNAL: command failed with exit 1, which is exactly the outcome the spec and the design's failure table require for a throwing random source. No secret can reach the output on that path, so nothing the specification asks for is violated.
