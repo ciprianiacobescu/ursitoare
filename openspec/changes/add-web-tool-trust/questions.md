@@ -19,7 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-006 | answered | none | verdict | Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied? |
 | Q-007 | answered | none | verdict | Criterion C-c7bb4abe (web-tools › The server page shows discovery, settings, changes and calls › Tool settings carries the trust controls, Discover keeps the stored trust and Changes shows the value l |
 | Q-008 | answered | none | verdict | Finding F-4ee90a68: discoverBody neither validates nor emits keys that appear only in a draft's carried map |
-| Q-009 | open | none | verdict | Finding F-1b3e37fc: Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults |
+| Q-009 | answered | none | verdict | Finding F-1b3e37fc: Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults |
 | Q-010 | open | none | verdict | Hold H-fd0a4300: UI criterion C-f52c8d49 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-ec069147: UI criterion C-3a1c08af has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-91b47a21: UI criterion C-08abe836 has no end-to-end test; see the generated UI tests table |
@@ -292,7 +292,8 @@ reject The finding is correct and the specification is explicit. The requirement
 
 ## Q-009: Finding F-1b3e37fc: Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -314,6 +315,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct. The design requires every lookup by a tool name or operationId to use Object.hasOwn or a Map, and the builders do, but the three pages read the trust record with a plain index and a nullish fallback. For a legal operationId or server tool name that is also an Object.prototype member, such as toString or constructor, with no own entry, the read yields the inherited function instead of DEFAULT_TRUST, so the checkbox and select receive undefined values, and ticking the box stores a trust whose dataClass is undefined. On the OpenAPI forms that entry reaches overlayEntry, which throws RangeError for a data class that is neither null, public nor private, and the registration handler calls the builder outside its try block, so the submit fails with no message. WHEN an operationId or server tool name that is also an Object.prototype member name, such as toString or constructor, has no own entry in a page's trust record THEN the page shows it at DEFAULT_TRUST and, after the admin trusts or classes it and ticks, submits the same overlay entry as for any other name without an error.
 ---
 
 ## Q-010: Hold H-fd0a4300: UI criterion C-f52c8d49 has no end-to-end test; see the generated UI tests table
