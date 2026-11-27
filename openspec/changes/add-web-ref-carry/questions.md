@@ -14,7 +14,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 4.1 | technical | e2e/test_m8_ref_carry.py:86-96 FIRST has no pendingDigest, so Approve is disabled |
 | Q-002 | answered | 4.1 | technical | e2e/test_m8_ref_carry.py:302 403 body lacks details.decisionId |
 | Q-003 | answered | 4.1 | technical | e2e/test_m8_ref_carry.py:255 two alerts remain after the copy |
-| Q-004 | open | none | verdict | Criterion C-8540a4f8 (web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant): accept as satisfied? |
+| Q-004 | answered | none | verdict | Criterion C-8540a4f8 (web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant): accept as satisfied? |
 | Q-005 | open | none | verdict | Criterion C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge): accept as sati |
 | Q-006 | open | none | verdict | Criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was): accept as satisfied? |
 | Q-007 | open | none | verdict | Hold H-3d26971a: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table |
@@ -138,7 +138,8 @@ Cause: `EMPTY` (line 20) is already a whole reply, `(200, {"items": [], "next_cu
 
 ## Q-004: Criterion C-8540a4f8 (web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -165,6 +166,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. ServersPage keeps the view before the approval, feeds it and the approve answer to changedRefs with the approved surface's effects, and mounts RefCarryPanel inside the Surface section only after a successful approval. The panel returns nothing when refNoticeText is null, so a first approval (null refs before) shows no text and no button and reads no grants. The notice is a tools-note paragraph, the button carries the fixed name, and carryGrants runs only in the press handler, so nothing is requested before the press. carryGrants reads all grants first and rejects before any post, which the panel renders as ErrorPanel, an alert that shows the 403 decision id. The list is a ul named Copied grants, the Deploy on Policies link goes to /admin/policies only when a grant was created, a grant whose effect changed is listed and never posted, and no code path sends DELETE, PUT or PATCH. The three tests in e2e/test_m8_ref_carry.py assert each of these observable results exactly as test-plan-browser.md § Approve lists them.
 ---
 
 ## Q-005: Criterion C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge): accept as sati
