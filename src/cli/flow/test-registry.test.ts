@@ -18,7 +18,7 @@ const ADMIN_COMMANDS = [
   "admin verify-audit",
 ];
 
-const ALL_COMMANDS = [...ADMIN_COMMANDS, "flow test", "flow validate"];
+const ALL_COMMANDS = [...ADMIN_COMMANDS, "flow test", "flow validate", "init-secrets"];
 
 const emptyEnv: Env = {};
 
