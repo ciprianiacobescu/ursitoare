@@ -3,7 +3,7 @@ import type { ApiClient } from "../api/client.ts";
 import type { CapabilityLoader } from "../kit/capabilities.ts";
 import { redirectToSignIn } from "./return-to.ts";
 import type { LocationLike } from "./return-to.ts";
-import { withCsrfHeader, withSessionEnd } from "./session-fetch.ts";
+import { withCsrfHeader, withCsrfRetry, withSessionEnd } from "./session-fetch.ts";
 import { signOut } from "./sign-out.ts";
 import type { SignOutResult } from "./sign-out.ts";
 
@@ -34,23 +34,30 @@ export function csrfTokenFrom(
 
 export function createBrowserSession(env: SessionEnv): BrowserSession {
   const csrfToken = csrfTokenFrom(env.loader);
+  const csrfFetch = withCsrfHeader(env.fetch, csrfToken);
+  const refresh = async (): Promise<void> => {
+    env.loader.reset();
+    await env.loader.load();
+  };
 
   const api = createApiClient({
-    fetch: withSessionEnd(withCsrfHeader(env.fetch, csrfToken), () => {
+    fetch: withSessionEnd(withCsrfRetry(csrfFetch, refresh), () => {
       redirectToSignIn(env.location);
     }),
   });
 
   const logout = createApiClient({
     baseUrl: "",
-    fetch: withCsrfHeader(env.fetch, csrfToken),
+    fetch: withCsrfRetry(csrfFetch, refresh),
   });
+
+  const signOutClient = createApiClient({ baseUrl: "", fetch: csrfFetch });
 
   return {
     api,
     logout,
     signOut(): Promise<SignOutResult> {
-      return signOut({ client: logout, loader: env.loader });
+      return signOut({ client: signOutClient, loader: env.loader });
     },
   };
 }

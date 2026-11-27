@@ -44,6 +44,36 @@ export function withCsrfHeader(
   };
 }
 
+const CSRF_ERROR_CODES: ReadonlySet<string> = new Set(["CSRF_INVALID", "OIDC_CSRF_INVALID"]);
+
+async function isCsrfRefusal(response: Response): Promise<boolean> {
+  if (response.status !== 403) return false;
+  try {
+    const code = errorCodeOf(await response.clone().json());
+    return typeof code === "string" && CSRF_ERROR_CODES.has(code);
+  } catch {
+    return false;
+  }
+}
+
+export function withCsrfRetry(
+  inner: typeof fetch,
+  refresh: () => Promise<void>,
+): typeof fetch {
+  return async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+    const response = await inner(input, init);
+    if (!isRootRelative(input) || !isStateChanging(init?.method)) {
+      return response;
+    }
+    if (!(await isCsrfRefusal(response))) {
+      return response;
+    }
+
+    await refresh();
+    return inner(input, init);
+  };
+}
+
 export function withSessionEnd(inner: typeof fetch, onEnded: () => void): typeof fetch {
   let ended = false;
 
