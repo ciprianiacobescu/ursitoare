@@ -1,7 +1,10 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
+import { randomBytes } from "node:crypto";
+import { lstat, mkdir, open, rm } from "node:fs/promises";
+
 import { CliError } from "./errors.ts";
-import type { CliCommand } from "./registry.ts";
+import type { CliCall, CliCommand } from "./registry.ts";
 
 export type SecretFormat = "hex64" | "raw32";
 
@@ -141,10 +144,29 @@ export interface InitSecretsFs {
 }
 
 export const nodeInitSecretsFs: InitSecretsFs = {
-  exists: () => Promise.reject(new Error("not implemented")),
-  mkdir: () => Promise.reject(new Error("not implemented")),
-  writeNew: () => Promise.reject(new Error("not implemented")),
-  remove: () => Promise.reject(new Error("not implemented")),
+  async exists(path: string): Promise<boolean> {
+    try {
+      await lstat(path);
+      return true;
+    } catch (error) {
+      if ((error as { code?: unknown }).code === "ENOENT") return false;
+      throw error;
+    }
+  },
+  async mkdir(path: string, mode: number): Promise<void> {
+    await mkdir(path, { recursive: true, mode });
+  },
+  async writeNew(path: string, bytes: Uint8Array, mode: number): Promise<void> {
+    const handle = await open(path, "wx", mode);
+    try {
+      await handle.writeFile(bytes);
+    } finally {
+      await handle.close();
+    }
+  },
+  async remove(path: string): Promise<void> {
+    await rm(path, { force: true });
+  },
 };
 
 function failureCode(error: unknown): string | null {
@@ -215,13 +237,42 @@ export interface InitSecretsDeps {
   fs?: InitSecretsFs;
 }
 
-export function createInitSecretsCommand(_deps?: InitSecretsDeps): CliCommand {
-  throw new Error("not implemented");
+export function createInitSecretsCommand(deps?: InitSecretsDeps): CliCommand {
+  const random = deps?.random ?? ((n: number): Uint8Array => randomBytes(n));
+  const fs = deps?.fs ?? nodeInitSecretsFs;
+  return {
+    summary: "write the first-run secrets and the .env file",
+    options: {
+      dir: {
+        type: "string",
+        summary: "directory that receives .env and secrets/",
+        required: true,
+      },
+      "first-user": { type: "string", summary: "name of the first user, default owner" },
+    },
+    database: false,
+    async run(call: CliCall): Promise<number> {
+      const dir = call.args.dir;
+      if (typeof dir !== "string" || dir === "") {
+        throw new CliError("CLI_USAGE", "--dir must name a directory");
+      }
+      const firstUser = call.args["first-user"];
+      const plan = planSecrets(
+        dir,
+        random,
+        typeof firstUser === "string" ? { firstUser } : undefined,
+      );
+      const { written } = await writeSecrets(plan, fs);
+      const prefix = `${dir}/`;
+      for (const path of written) {
+        call.stdout.write(`wrote ${path.startsWith(prefix) ? path.slice(prefix.length) : path}\n`);
+      }
+      call.stdout.write(
+        `first user ${plan.firstUser}; the one-time password is in secrets/first_user_password\n`,
+      );
+      return 0;
+    },
+  };
 }
 
-export const initSecretsCommand: CliCommand = {
-  summary: "",
-  options: {},
-  database: false,
-  run: () => Promise.reject(new Error("not implemented")),
-};
+export const initSecretsCommand: CliCommand = createInitSecretsCommand();
