@@ -36,3 +36,5 @@
 {"at":"2026-11-26T22:08:39Z","by":"harness","reason":"the cause is gone: openspec:add-web-tool-trust is waiting_capacity","type":"plan.resumed"}
 {"at":"2026-11-26T22:08:41Z","attempt":1,"cost_usd":0.54225,"runs":10,"type":"plan.charged","unit":"openspec:add-web-tool-trust"}
 {"at":"2026-11-26T22:08:41Z","run":"r-20261126T2208Z-78d9","type":"unit.dispatched","unit":"openspec:add-web-tool-trust"}
+{"at":"2026-11-27T00:36:05Z","attempt":1,"cost_usd":4.009507,"runs":11,"type":"plan.charged","unit":"openspec:add-web-tool-trust"}
+{"at":"2026-11-27T00:36:05Z","run":"r-20261127T0036Z-041d","type":"unit.dispatched","unit":"openspec:add-web-tool-trust"}
