@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Criterion C-f52c8d49 (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › An OpenAPI server is registered with a trusted result after a tick): accept as sati |
-| Q-002 | open | none | verdict | Criterion C-3a1c08af (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace keeps the stored trust and needs no tick): accept as satisfied? |
+| Q-002 | answered | none | verdict | Criterion C-3a1c08af (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace keeps the stored trust and needs no tick): accept as satisfied? |
 | Q-003 | open | none | verdict | Criterion C-08abe836 (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace drops a retry flag when the effect changes): accept as satisfied? |
 | Q-004 | open | none | verdict | Criterion C-3ad08589 (web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix): accept as satisf |
 | Q-005 | open | none | verdict | Criterion C-7374d16f (web-tools › Effect settings become the overlay body and a discovery answer names every tool left out › Settings become the body and a discovery is worded with every tool left out |
@@ -66,7 +66,8 @@ accept The criterion is satisfied by the code as it stands. The registration Ope
 
 ## Q-002: Criterion C-3a1c08af (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace keeps the stored trust and needs no tick): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -93,6 +94,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied. ServersPage passes the pending surface, else the approved one, to ReplaceSection, which reads it with storedTools. After the preview, prefillTrust pairs createPayment with the stored create_payment and gives trusted and private, and carriedFields keeps unsafe_to_retry false because the effect is unchanged and false differs from the OpenAPI default for pay; list_vendors stored false equals the read default so nothing is carried. The baseline is set to the prefilled trust, so ackStatus shows no tick. The document field carries the replaceHint as its hint, which the Field kit wires into aria-describedby. Save builds createPayment { effect: pay, untrusted_result: false, unsafe_to_retry: false, data_class: private } and listVendors { effect: read } and PUTs it once, then reloads the detail. The Tool settings warning renders only for MCP servers, so the warning counts once on this OpenAPI page.
 ---
 
 ## Q-003: Criterion C-08abe836 (web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace drops a retry flag when the effect changes): accept as satisfied?
