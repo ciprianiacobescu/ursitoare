@@ -1,6 +1,7 @@
 // Signature stub (milestone scaffold, docs/decisions/0002): the change that owns this file implements it.
 
 import type { Api } from "../admin/shared.ts";
+import { ApiRequestError } from "../api/client.ts";
 import { cursorPageFetcher } from "../kit/data/page-fetcher.ts";
 import { parseReviewTools } from "./review.ts";
 import { parseToolServer } from "./servers.ts";
@@ -207,31 +208,126 @@ export interface CopyPlan {
   effectChanged: { grant: GrantRecord; to: string; effect: { from: string; to: string } }[];
 }
 
-export function copyPlan(_grants: readonly GrantRecord[], _changes: readonly RefChange[]): CopyPlan {
-  throw new Error("not implemented");
+export function copyPlan(grants: readonly GrantRecord[], changes: readonly RefChange[]): CopyPlan {
+  const copy: CopyPlan["copy"] = [];
+  const flowFirst: CopyPlan["flowFirst"] = [];
+  const effectChanged: CopyPlan["effectChanged"] = [];
+  for (const grant of grants) {
+    if (grant.status === "revoked") continue;
+    const change = changes.find((c) => c.from === grant.tool);
+    if (change === undefined) continue;
+    if (change.effect !== undefined) {
+      effectChanged.push({ grant, to: change.to, effect: change.effect });
+    } else if (grant.scope.kind === "any_step") {
+      copy.push({ grant, to: change.to });
+    } else if (grant.scope.kind === "node") {
+      flowFirst.push({ grant, to: change.to });
+    }
+  }
+  return { copy, flowFirst, effectChanged };
 }
 
 export function copyGrantBody(
-  _grant: GrantRecord,
-  _to: string,
+  grant: GrantRecord,
+  to: string,
 ): { subject: GrantSubject; tool: string; scope: { kind: "any_step" }; args: GrantArg[] } {
-  throw new Error("not implemented");
+  if (!GRANT_TOOL.test(to)) throw new RangeError("Invalid tool ref");
+  const subject: GrantSubject =
+    grant.subject.kind === "role"
+      ? { kind: "role", role: grant.subject.role }
+      : { kind: "user", userId: grant.subject.userId };
+  return {
+    subject,
+    tool: to,
+    scope: { kind: "any_step" },
+    args: grant.args.map((arg) => ({ arg: arg.arg, op: arg.op, value: arg.value })),
+  };
 }
 
 export type CopyOutcome =
   | { grantId: string; to: string; ok: true; newId: string }
   | { grantId: string; to: string; ok: false; reason: string };
 
-export async function copyGrants(
-  _api: Api<"post">,
-  _plan: CopyPlan,
-  _keyOf: (grantId: string, to: string) => string,
-): Promise<CopyOutcome[]> {
-  throw new Error("not implemented");
+function isValidKey(key: string): boolean {
+  if (key.length < 1 || key.length > 128) return false;
+  for (let i = 0; i < key.length; i += 1) {
+    const code = key.charCodeAt(i);
+    if (code < 0x21 || code > 0x7e) return false;
+  }
+  return true;
 }
 
-export function carryKeys(_newKey: () => string): (grantId: string, to: string) => string {
-  throw new Error("not implemented");
+function errorReason(err: unknown): string {
+  if (!(err instanceof ApiRequestError)) return "request_failed";
+  if (err.status === 422 && err.code === "OPERATION_REFUSED") {
+    const details = err.details;
+    if (isRecord(details)) {
+      const reason = details["reason"];
+      if (typeof reason === "string" && /^[a-z][a-z0-9_]{0,63}$/.test(reason)) {
+        return reason;
+      }
+    }
+  }
+  if (/^[A-Z][A-Z0-9_]*$/.test(err.code)) return err.code;
+  return "request_failed";
+}
+
+function readGrantId(reply: unknown): string | null {
+  if (!isRecord(reply)) return null;
+  const id = reply["id"];
+  if (typeof id !== "string" || !GRANT_ID.test(id)) return null;
+  return id;
+}
+
+export async function copyGrants(
+  api: Api<"post">,
+  plan: CopyPlan,
+  keyOf: (grantId: string, to: string) => string,
+): Promise<CopyOutcome[]> {
+  const outcomes: CopyOutcome[] = [];
+  for (const entry of plan.copy) {
+    const { grant, to } = entry;
+    let key: string;
+    try {
+      key = keyOf(grant.id, to);
+    } catch {
+      outcomes.push({ grantId: grant.id, to, ok: false, reason: "request_failed" });
+      continue;
+    }
+    if (!isValidKey(key)) {
+      outcomes.push({ grantId: grant.id, to, ok: false, reason: "request_failed" });
+      continue;
+    }
+    let reply: unknown;
+    try {
+      reply = await api.post("/grants", copyGrantBody(grant, to), {
+        headers: { "Idempotency-Key": key },
+      });
+    } catch (err) {
+      outcomes.push({ grantId: grant.id, to, ok: false, reason: errorReason(err) });
+      continue;
+    }
+    const newId = readGrantId(reply);
+    if (newId === null) {
+      outcomes.push({ grantId: grant.id, to, ok: false, reason: "INVALID_RESPONSE" });
+    } else {
+      outcomes.push({ grantId: grant.id, to, ok: true, newId });
+    }
+  }
+  return outcomes;
+}
+
+export function carryKeys(newKey: () => string): (grantId: string, to: string) => string {
+  const cache = new Map<string, string>();
+  return (grantId: string, to: string): string => {
+    const cacheKey = `${grantId}\u0000${to}`;
+    const cached = cache.get(cacheKey);
+    if (cached !== undefined) return cached;
+    const key = newKey();
+    if (!isValidKey(key)) throw new RangeError("Invalid idempotency key");
+    cache.set(cacheKey, key);
+    return key;
+  };
 }
 
 export type RefState = "current" | "superseded" | "waiting";

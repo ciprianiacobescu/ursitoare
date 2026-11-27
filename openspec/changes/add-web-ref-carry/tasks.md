@@ -10,7 +10,7 @@ Values: `test-plan.md`; steps: `test-plan-browser.md`. No `src/`, API, CSS or mi
 
 ## 3. The copy
 
-- [ ] 3.1 Write `web/src/tools/ref-carry-copy.test.ts` (scenarios "The plan copies any step grants and lists node grants as update the flow first" and "A copy sends one request per grant and reports a refusal without stopping"; rows CP1 to CP4, CB1 to CB3, CG1 to CG4, CK1 to CK3) first, then implement `copyPlan`, `copyGrantBody`, `copyGrants` and `carryKeys`, implementing the requirements "The plan copies any step grants and lists node grants as update the flow first" and "A copy is one request per grant, in order, and every refusal is reported"
+- [x] 3.1 Write `web/src/tools/ref-carry-copy.test.ts` (scenarios "The plan copies any step grants and lists node grants as update the flow first" and "A copy sends one request per grant and reports a refusal without stopping"; rows CP1 to CP4, CB1 to CB3, CG1 to CG4, CK1 to CK3) first, then implement `copyPlan`, `copyGrantBody`, `copyGrants` and `carryKeys`, implementing the requirements "The plan copies any step grants and lists node grants as update the flow first" and "A copy is one request per grant, in order, and every refusal is reported"
 - [ ] 3.2 Write `web/src/tools/ref-carry-view.test.ts` (scenario "The lines, notes and the whole carry read as fixed texts"; rows FT1 to FT3, GL1, CV1 to CV5, CR1 to CR4) first, then implement `REF_CARRY_NAMES`, `fillRefText`, `grantLabel`, `carryView` and `carryGrants`, implementing the requirement "The carry result lines, notes and run are fixed"
 
 ## 4. The pages
