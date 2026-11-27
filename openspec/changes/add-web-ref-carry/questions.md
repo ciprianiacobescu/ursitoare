@@ -16,7 +16,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-003 | answered | 4.1 | technical | e2e/test_m8_ref_carry.py:255 two alerts remain after the copy |
 | Q-004 | answered | none | verdict | Criterion C-8540a4f8 (web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant): accept as satisfied? |
 | Q-005 | answered | none | verdict | Criterion C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge): accept as sati |
-| Q-006 | open | none | verdict | Criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was): accept as satisfied? |
+| Q-006 | answered | none | verdict | Criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was): accept as satisfied? |
 | Q-007 | open | none | verdict | Hold H-3d26971a: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-96a6450c: UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-d011c1bb: UI criterion C-4b83877f has no end-to-end test; see the generated UI tests table |
@@ -204,7 +204,8 @@ accept The criterion is satisfied as it stands. The Grants page reads GET /tool-
 
 ## Q-006: Criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was): accept as satisfied?
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -231,6 +232,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+accept The criterion is satisfied as it stands. The servers read on the Grants page uses a plain API client whose fetch is the global one, so the 401 session-end handler that only the session client wraps around its fetch never runs and the URL stays on /admin/grants. The read's rejection handler is empty and the servers state starts as an empty list, so a 403, 500 or 401 leaves no marker, adds no alert and changes nothing else on the page: the rows keep their text and one Badge each. In the error state the two pre-existing alerts (the tool list's ErrorPanel and the table's) remain the only ones, the Tool select keeps only Choose a tool, and the busy form keeps Create grant aria-disabled. The three e2e tests assert each of these results.
 ---
 
 ## Q-007: Hold H-3d26971a: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table
