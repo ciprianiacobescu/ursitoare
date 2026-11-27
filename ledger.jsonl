@@ -94,3 +94,4 @@
 {"at":"2026-11-27T21:38:12Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"6284ce7b1577d86b7f283c324fbba3f089e476e9","status":"pass","type":"unit.postcheck","unit":"openspec:add-init-secrets"}
 {"at":"2026-11-27T21:38:12Z","revision":"6284ce7b1577d86b7f283c324fbba3f089e476e9","type":"unit.integrated","unit":"openspec:add-init-secrets"}
 {"at":"2026-11-27T21:38:12Z","attempt":1,"cost_usd":3.562569,"runs":3,"type":"plan.charged","unit":"openspec:add-init-secrets"}
+{"at":"2026-11-27T21:39:44Z","branch":"l4/archive/openspec/add-init-secrets","head":"d258cd2d6b5c91776fd5bd8b8493fd573478d544","type":"unit.branch_deleted","unit":"openspec:add-init-secrets"}
