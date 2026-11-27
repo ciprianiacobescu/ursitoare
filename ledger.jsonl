@@ -63,3 +63,5 @@
 {"at":"2026-11-27T11:06:39Z","run":"r-20261127T1106Z-2a77","type":"unit.dispatched","unit":"openspec:add-web-ref-carry"}
 {"at":"2026-11-27T13:15:45Z","detail":"awaiting_human: no new answers (open: Q-002, Q-003) (escalated to a person: Q-002, Q-003)","reason":"unit_awaiting_human","type":"plan.waiting","unit":"openspec:add-web-ref-carry"}
 {"at":"2026-11-27T14:29:00Z","by":"harness","reason":"the cause is gone: openspec:add-web-ref-carry is awaiting_human","type":"plan.resumed"}
+{"at":"2026-11-27T14:29:03Z","attempt":1,"cost_usd":6.315055,"runs":4,"type":"plan.charged","unit":"openspec:add-web-ref-carry"}
+{"at":"2026-11-27T14:29:03Z","run":"r-20261127T1428Z-eae0","type":"unit.dispatched","unit":"openspec:add-web-ref-carry"}
