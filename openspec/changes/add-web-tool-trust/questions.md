@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Criterion C-7374d16f (web-tools › Effect settings become the overlay body and a discovery answer names every tool left out › Settings become the body and a discovery is worded with every tool left out |
 | Q-006 | answered | none | verdict | Criterion C-c8329b48 (web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server): accept as satisfied? |
 | Q-007 | answered | none | verdict | Criterion C-c7bb4abe (web-tools › The server page shows discovery, settings, changes and calls › Tool settings carries the trust controls, Discover keeps the stored trust and Changes shows the value l |
-| Q-008 | open | none | verdict | Finding F-4ee90a68: discoverBody neither validates nor emits keys that appear only in a draft's carried map |
+| Q-008 | answered | none | verdict | Finding F-4ee90a68: discoverBody neither validates nor emits keys that appear only in a draft's carried map |
 | Q-009 | open | none | verdict | Finding F-1b3e37fc: Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults |
 | Q-010 | open | none | verdict | Hold H-fd0a4300: UI criterion C-f52c8d49 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-ec069147: UI criterion C-3a1c08af has no end-to-end test; see the generated UI tests table |
@@ -264,7 +264,8 @@ accept The criterion is satisfied. On each loaded detail the draft is initialDra
 
 ## Q-008: Finding F-4ee90a68: discoverBody neither validates nor emits keys that appear only in a draft's carried map
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -286,6 +287,7 @@ To set the check the fix must pass, end the reason with one sentence WHEN <the s
 
 ### Answer
 <!-- write below this line -->
+reject The finding is correct and the specification is explicit. The requirement for discoverBody says it throws RangeError for a key of effects, names, trust or carried outside the key pattern and for more than 100 keys, but the builder collects its key set from effects, names and trust only, reads carried entries just for those keys, and so neither checks nor counts nor emits a key that appears only in carried. The 100-key test row uses keys in effects only, so no test pins the gap. WHEN a DiscoverDraft holds a carried entry under a key that is in none of effects, names or trust THEN discoverBody treats that key like a key of the other three maps: a key outside ^[A-Za-z0-9_.-]{1,128}$ or one that brings the total over 100 throws RangeError, and otherwise the tool gets the overlay entry built from its carried fields.
 ---
 
 ## Q-009: Finding F-1b3e37fc: Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults
