@@ -14,6 +14,13 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-001 | accepted | 4.1 | technical | e2e/test_m8_ref_carry.py:86-96 FIRST has no pendingDigest, so Approve is disabled |
 | Q-002 | answered | 4.1 | technical | e2e/test_m8_ref_carry.py:302 403 body lacks details.decisionId |
 | Q-003 | answered | 4.1 | technical | e2e/test_m8_ref_carry.py:255 two alerts remain after the copy |
+| Q-004 | open | none | verdict | Criterion C-8540a4f8 (web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant): accept as satisfied? |
+| Q-005 | open | none | verdict | Criterion C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge): accept as sati |
+| Q-006 | open | none | verdict | Criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was): accept as satisfied? |
+| Q-007 | open | none | verdict | Hold H-3d26971a: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table |
+| Q-008 | open | none | verdict | Hold H-96a6450c: UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table |
+| Q-009 | open | none | verdict | Hold H-d011c1bb: UI criterion C-4b83877f has no end-to-end test; see the generated UI tests table |
+| Q-010 | open | none | verdict | Hold H-cb55efac: UI criterion C-b8363cd2 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -126,3 +133,189 @@ Do not add mocks: no request of this page goes unmocked. Edit `e2e/test_m8_ref_c
 Origin, reproduced at c7477a9d on a local e2e stack with this test's own mocks plus a catch-all route that logs any request reaching the engine: the catch-all saw none. Every /api/v1 request (me, tool-servers?limit=50, tool-servers/ledger, credentials?limit=200, people, the approve POST) was answered by the test's routes. Both alerts read "Something went wrong. The engine sent an answer this page cannot read. Error code: INVALID_RESPONSE": one is the Credential section's, the other the server list's. They are there from page load, before the approval, so they are still there after the copy.
 
 Cause: `EMPTY` (line 20) is already a whole reply, `(200, {"items": [], "next_cursor": None})`, as in `e2e/test_m7_tool_registration.py:22`, which passes it bare (`answer(page, "tool-servers", EMPTY)`, lines 137 and 148). Wrapping it again as `(200, EMPTY)` makes the body the JSON array `[200, {"items": [], "next_cursor": null}]`, which the cursor-list reader rejects. test-plan-browser.md § Approve says "Every test answers `tool-servers` (list) and `credentials` with `EMPTY`", the reply itself. With the six replies changed to `EMPTY`, the same run shows 0 alerts after load and 0 after the approval, with detail_hits 2, approves 1 and grants 0. No assertion is weakened: line 255's count of 0 stays.
+
+---
+
+## Q-004: Criterion C-8540a4f8 (web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-8540a4f8 (web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant)
+
+### Context
+Criterion C-8540a4f8 (web-tools › The server page offers the copy after an approval that changed refs › Approving a bumped surface offers the copy and reports one line per grant) is needs human after round 2.
+
+Scenario:
+\- **WHEN** the steps of test-plan-browser.md § Approve run (the drifted `ledger` whose two tools bump, `list_vendors` from `read` to `write`, an approval, then the button over six grants; a first approval of a pending server; a 403 on `GET /grants`)
+\- **THEN** after "Surface approved." the paragraph reads the NT3 text, the button shows, the list "Copied grants" has 0 matches and `GET /grants` 0 hits; after the press the list has four lines in order (created `create_payment@2`, `arg_unknown`, update the flow first, "Effect changed: read → write; grant it again on the Grants page: role author · any step (ledger.list_vendors@2)."), `POST /grants` has 2 hits with the two bodies and two distinct keys, none for `ledger.list_vendors@2`, no `DELETE`, `PUT` or `PATCH` was sent and the link "Deploy on Policies" has `href` `/admin/policies`; a first approval shows no "Refs changed" text or button and no `GET /grants`; the 403 shows one alert containing "dec_1" and no list, link or `POST /grants`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m8_ref_carry::test_a_failed_grants_read_creates_nothing[chromium] (no proof that it discriminates (no red, audit or generated record)); test_m8_ref_carry::test_approving_bumped_refs_offers_the_copy[chromium] (no proof that it discriminates (no red, audit or generated record)); test_m8_ref_carry::test_first_approval_offers_nothing[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-005: Criterion C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge): accept as sati
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge)
+
+### Context
+Criterion C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge) is needs human after round 2.
+
+Scenario:
+\- **WHEN** the steps of test-plan-browser.md § Grants markers and failed reads, `test_superseded_and_waiting_refs_are_marked_beside_the_badge` (four grants, `/tool-servers` in two pages)
+\- **THEN** the row of `ledger.create_payment@1` has one `[data-slot="badge"]` (`data-tone` `success`) and one `[data-slot="ref-marker"]` reading "superseded"; the row of `acme.lookup_vendor@1` one marker reading "waiting for approval"; the rows of `ledger.create_payment@2` and `crm.find_customer@1` no marker; `/tool-servers` has 2 hits, both with `limit` `100`, the second with `cursor` `s2`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m8_ref_carry_grants::test_superseded_and_waiting_refs_are_marked_beside_the_badge[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-006: Criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was): accept as satisfied?
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+- **Criteria:** C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was)
+
+### Context
+Criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was) is needs human after round 2.
+
+Scenario:
+\- **WHEN** the steps of test-plan-browser.md § Grants markers and failed reads run with `/tool-servers` answering 403 (`test_a_failed_server_read_shows_no_marker`), then 500 with `/blocks` and `/grants` also failing (`test_a_failed_server_read_adds_no_alert`), then 401 with no session (`test_an_unanswered_server_read_does_not_end_the_session`)
+\- **THEN** the rows show their text and one badge each, `[data-slot="ref-marker"]` has 0 matches, the page has 0 alerts and the URL still ends `/admin/grants`; in the error state the page has exactly 2 alerts, the options of "Tool" are exactly `["Choose a tool"]` and "Create grant" has `aria-disabled` `true`
+
+Why: uncovered: no adequate discriminating test traces it
+Judge: pass
+Tracing tests: none
+Ignored tests: test_m8_ref_carry_grants::test_a_failed_server_read_adds_no_alert[chromium] (no proof that it discriminates (no red, audit or generated record)); test_m8_ref_carry_grants::test_a_failed_server_read_shows_no_marker[chromium] (no proof that it discriminates (no red, audit or generated record)); test_m8_ref_carry_grants::test_an_unanswered_server_read_does_not_end_the_session[chromium] (no proof that it discriminates (no red, audit or generated record))
+
+Answer `accept` if the criterion is satisfied as it stands, or `reject` and say why.
+To set the check the fix must pass, end the reason with one sentence WHEN <the situation> THEN <the behaviour you expect>, with WHEN and THEN in capitals: it becomes a scenario of the fix unit. Without one, the fix is checked against the scenario above as it is written.
+
+### Options
+1. accept
+2. reject: <reason>, then WHEN ... THEN ... to set the check
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-007: Hold H-3d26971a: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-568a8224: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_568a8224::test_grant_ref_state_is_current_superseded_waiting_or_null[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-008: Hold H-96a6450c: UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-8540a4f8: writer_failed after 2 attempt(s); opencode's permission rules rejected a tool call (bash).
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-009: Hold H-d011c1bb: UI criterion C-4b83877f has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-4b83877f has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-4b83877f: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_4b83877f::test_superseded_and_waiting_refs_are_marked_beside_the_badge[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->
+---
+
+## Q-010: Hold H-cb55efac: UI criterion C-b8363cd2 has no end-to-end test; see the generated UI tests table
+
+- **Status:** open
+- **Blocking tasks:** none
+- **Kind:** verdict
+- **Asked:** round 2, verifier
+
+### Context
+After round 2 the verifier cannot decide on its own: UI criterion C-b8363cd2 has no end-to-end test; see the generated UI tests table
+
+Step 5 for C-b8363cd2: fails_at_head after 2 attempt(s); the test fails at the head: test_l4_c_b8363cd2::test_failed_server_read_leaves_grants_page_as_it_was[chromium].
+An accept lasts until the criterion's text or its tracing tests change (or a later reject); meanwhile this hold is not asked again, whatever step 5 reports in a later round.
+
+Answer `accept` if the unit can go on as it stands, or `reject` and say why; end the reason with a sentence WHEN ... THEN ... so that a fix unit can be made.
+
+### Options
+1. accept
+2. reject: <reason>
+
+### Answer
+<!-- write below this line -->

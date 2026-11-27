@@ -1,0 +1,288 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/tools/surface.ts:80-100",
+      "src/grants/policy-sets.ts:279-301",
+      "src/api/grant-routes.ts:274-280",
+      "src/grants/status.ts",
+      "people",
+      "src/tools/store.ts:159-183",
+      "src/api/tool-server-routes.ts:109-114",
+      "src/tools/store.ts:447-562",
+      "e2e/test_m7_tools.py",
+      "test/support/catalogue/blocks.v0.json",
+      "web/src/auth/session-fetch.ts:47-72",
+      "e2e/test_m6b_admin.py",
+      "e2e/test_m6b_section_layout.py",
+      "src/api/route.ts:205-208",
+      "src/api/tool-server-routes.ts:220-226",
+      "src/grants/store.ts",
+      "src/grants/store.ts:265-274",
+      "src/api/idempotency.ts:106-216",
+      "web/src/tools/ServersPage.tsx",
+      "src",
+      "node:assert/strict",
+      "web/src/tools/ref-carry-refs.test.ts",
+      "web/src/tools/ref-carry.ts",
+      "web/src/tools/ref-carry-read.test.ts",
+      "web/src/tools/ref-carry-copy.test.ts",
+      "web/src/tools/ref-carry-view.test.ts",
+      "web/src/tools/ref-carry-pages.test.ts",
+      "e2e/test_m8_ref_carry.py",
+      "e2e",
+      "web/src/tools/RefCarryPanel.tsx",
+      "web/src/tools/ref-marker-pages.test.ts",
+      "e2e/test_m8_ref_carry_grants.py",
+      "web/src/tools/RefMarker.tsx",
+      "web/src/tools/GrantsPage.tsx",
+      "**/RefCarryPanel.tsx",
+      "**/RefMarker.tsx",
+      "**/ServersPage.tsx",
+      "**/GrantsPage.tsx",
+      "**/[serverId]",
+      "**/[reloadKey]",
+      "**/servers.ts",
+      "**/tools[].effect",
+      "**/review.ts",
+      "**/[]",
+      "**/loadAll*",
+      "**/[data-slot=\"badge\"]",
+      "**/[",
+      "**/pages.test.ts",
+      "**/servers.test.ts",
+      "**/approve.test.ts",
+      "module api",
+      "module e2e",
+      "module grants",
+      "module node:assert",
+      "module test",
+      "module tools",
+      "module web"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "e2e/test_m8_ref_carry.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "e2e/test_m8_ref_carry_grants.py",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry-fix-1/.l4/fix.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry-fix-1/.openspec.yaml",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry-fix-1/proposal.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry-fix-1/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry/.l4/evidence/round-1/evidence.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry/.l4/evidence/round-1/verdict.json",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry/.l4/evidence/round-1/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry/.l4/ledger/r-20261127T0637Z-36df.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry/.l4/ledger/r-20261127T0851Z-5327.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry/.l4/ledger/r-20261127T1106Z-2a77.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry/.l4/ledger/r-20261127T1428Z-eae0.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry/questions.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-web-ref-carry/verification.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "web/src/tools/GrantsPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/RefCarryPanel.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/RefMarker.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/ServersPage.tsx",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/ref-carry-copy.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/ref-carry-pages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/ref-carry-read.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/ref-carry-refs.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/ref-carry-view.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "web/src/tools/ref-carry.ts",
+        "module": "web",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "web/src/tools/ref-marker-pages.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: web/src/tools/GrantsPage.tsx, web/src/tools/RefCarryPanel.tsx, web/src/tools/RefMarker.tsx, web/src/tools/ServersPage.tsx, web/src/tools/ref-carry.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "web/src/tools/GrantsPage.tsx",
+      "web/src/tools/RefCarryPanel.tsx",
+      "web/src/tools/RefMarker.tsx",
+      "web/src/tools/ServersPage.tsx",
+      "web/src/tools/ref-carry.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 3351,
+      "passed": 3351,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 47,
+      "new_passed": 47,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
