@@ -25,7 +25,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-012 | answered | none | verdict | Hold H-91b47a21: UI criterion C-08abe836 has no end-to-end test; see the generated UI tests table |
 | Q-013 | answered | none | verdict | Hold H-95bd71c9: UI criterion C-3ad08589 has no end-to-end test; see the generated UI tests table |
 | Q-014 | answered | none | verdict | Hold H-4d97dc56: UI criterion C-7374d16f has no end-to-end test; see the generated UI tests table |
-| Q-015 | open | none | verdict | Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table |
+| Q-015 | answered | none | verdict | Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table |
 | Q-016 | open | none | verdict | Hold H-c196208f: UI criterion C-c7bb4abe has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
@@ -445,7 +445,8 @@ accept The unit can go on as it stands. The criterion's WHEN is the frozen Node 
 
 ## Q-015: Hold H-c8ca5be3: UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -464,6 +465,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. The hold says the criterion lacks an end-to-end test because the generated-test writer timed out, but the criterion names the frozen browser test of the earlier review unit, which runs unedited and is tagged with it, and its assertions are the scenario: the Changes list holds changed find_vendor: hints and changed log_note: effect, description with the description lines, the Calls table shows the pending surface's effects and hints, and Discover tools posts find_vendor with effect read alone. The edited code keeps those results: Discover tools now adds the trust and carried records of the approved surface, but in that test every approved tool is untrusted with no data class and each stored unsafe_to_retry is true, which equals the MCP default, so nothing is added and log_note and old_tool drop out as empty entries; the Changes items keep their texts and log_note gains only the line Effect: write → send under them, which the contain-text assertions tolerate; the Tool settings table renders inside the kit's table wrapper, which scrolls horizontally, so the two new columns cannot widen the page. The test was not run in a gate here; the acceptance profile after merge runs every configured gate.
 ---
 
 ## Q-016: Hold H-c196208f: UI criterion C-c7bb4abe has no end-to-end test; see the generated UI tests table
