@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-tool-trust: NEEDS_HUMAN (round 1)
+# Verification: openspec:add-web-tool-trust: FAIL (round 2)
 
 traceability: 10/17 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 10/17 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.3 | base merged: main@141a2678bd as 1ed7306ae5 (2 commits) |
-| 1 | integrity | ok | 311.2 | 11 sub-checks; scope: 28 changed file(s) |
-| 2 | build | ok | 33.1 |  |
-| 3 | tests | ok | 505.0 |  |
-| 4 | traceability | ok | 0.3 | 9/17 criteria covered |
-| 4a | audit sampling | ok | 270.1 | 2 not_testable, 1 skipped; support files at the base: 10 |
-| 5 | ui test generation | ok | 3840.3 | 1 accepted, 11 not_testable, 5 writer_failed; 9 not_testable covered by step 4: notes, no hold (L4-VER-067); e2e support files shown to the writer: 1 |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/tools/RegisterPage.tsx, web/src/tools/ReplaceSection.tsx, web/src/tools/ReviewSections.tsx, web/src/tools/ServersPage.tsx, web/src/tools/TrustControls.tsx and 3 more |
-| 8 | s1 judge | ok | 1.7 | 17/17 criteria judged by jev |
-| 9 | judge | ok | 3404.4 | 7 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 1) |
+| 1 | integrity | reused | 0.0 | reused (round 1) |
+| 2 | build | reused | 0.0 | reused (round 1) |
+| 3 | tests | reused | 0.0 | reused (round 1) |
+| 4 | traceability | reused | 0.0 | reused (round 1) |
+| 4a | audit sampling | reused | 0.0 | reused (round 1) |
+| 5 | ui test generation | reused | 0.0 | reused (round 1) |
+| 6 | quality | reused | 0.0 | reused (round 1) |
+| 8 | s1 judge | reused | 0.0 | reused (round 1) |
+| 9 | judge | reused | 0.0 | reused (round 1) |
+| 10 | aggregation | ok | 0.0 | FAIL |
 
 ## Gates
 
@@ -200,6 +200,25 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-1da179fb | not_testable | - | - | the criterion's token list lives in test-plan.md's Source rows and the outcome is a jest run of trust-pages.test.ts; the tokens and file paths are not given, so a pytest cannot reproduce the five scanners |
 | C-03790492 | not_testable | - | - | the module under test is TypeScript (web/src/tools/trust.ts), which pytest cannot import, and the ST1-ST5/TO1-TO2 fixture rows are not shown |
 
+## Answers to verdict questions
+
+- Q-001 accept C-f52c8d49 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied by the code as it stands. The registration Operations table renders the six headers in order, each non-excluded row gets a TrustToggle described by the warning paragraph that TrustNotes renders once, and the excluded exportVendors row gets no controls. ackStatus with an em...
+- Q-002 accept C-3a1c08af by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. ServersPage passes the pending surface, else the approved one, to ReplaceSection, which reads it with storedTools. After the preview, prefillTrust pairs createPayment with the stored create_payment and gives trusted and private, and carriedFields keeps unsafe_to_retry fal...
+- Q-003 accept C-08abe836 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. Changing an effect in the Replace form calls carriedAfterEffect with the operation's derived name as the lookup, and carriedFields drops unsafe_to_retry whenever the stored effect differs from the new one, so moving createPayment from pay to send and listVendors from read...
+- Q-004 accept C-3ad08589 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. It names a frozen test of an earlier unit that must stay green unedited, so by construction no red of this unit can trace it; the proof is that its assertions still hold against the edited builders. operationOverlay now reads the optional trust and carried records with Ob...
+- Q-005 accept C-7374d16f by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. It names a frozen test of an earlier unit that must stay green unedited, so no red of this unit can trace it; the proof is that its assertions hold against the edited review.ts. initialDraft still returns effects and an always-present names record, discoverBody still give...
+- Q-006 accept C-c8329b48 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied by the code as it stands. The M7 drifted-server browser test is frozen from an earlier unit and runs unedited, so no red of this unit can trace it; its assertions hold against the edited review sections. Discover tools now posts discoverBody of initialDraft of the approved...
+- Q-007 accept C-c7bb4abe by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. On each loaded detail the draft is initialDraft of the pending tools with the trust and carried records of discoverSettings of the pending surface, and the baseline is that trust, so find_vendor and log_note start checked with private and public, ping unchecked, and no ti...
+- Q-008 reject F-4ee90a68 by the delegate (claude-fable-5-1 via claude-code): The finding is correct and the specification is explicit. The requirement for discoverBody says it throws RangeError for a key of effects, names, trust or carried outside the key pattern and for more than 100 keys, but the builder collects its key set from effects, names and trust only, reads carrie...
+- Q-009 reject F-1b3e37fc by the delegate (claude-fable-5-1 via claude-code): The finding is correct. The design requires every lookup by a tool name or operationId to use Object.hasOwn or a Map, and the builders do, but the three pages read the trust record with a plain index and a nullish fallback. For a legal operationId or server tool name that is also an Object.prototype...
+- Q-010 accept H-fd0a4300 by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. The hold says the criterion lacks an end-to-end test because the generated-test writer timed out, but the unit's own browser file holds a test tagged with this criterion whose assertions are exactly the scenario: the six Operations column headers including Result tru...
+- Q-011 accept H-ec069147 by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. The hold says the criterion lacks an end-to-end test because the generated-test writer timed out, but the unit's own browser file holds a test tagged with this criterion whose assertions are exactly the scenario: after the preview the document field is described by t...
+- Q-012 accept H-91b47a21 by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. The hold says the criterion lacks an end-to-end test because the generated-test writer timed out, but the unit's own browser file holds a test tagged with this criterion whose assertions are exactly the scenario: after the same Replace preview it moves createPayment ...
+- Q-013 accept H-95bd71c9 by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. The criterion's WHEN is the frozen Node test of the registration builders running unedited, and its THEN is the request bodies, the refusal fields and texts and the unchanged drafts, none of which a browser can observe, so no end-to-end test is the right instrument a...
+- Q-014 accept H-4d97dc56 by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. The criterion's WHEN is the frozen Node test of the review builders running unedited, and its THEN is the values of initialDraft, discoverBody, parseDiscovery and discoveryText, which are internal function results a browser cannot observe, so no end-to-end test is th...
+- Q-015 accept H-c8ca5be3 by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. The hold says the criterion lacks an end-to-end test because the generated-test writer timed out, but the criterion names the frozen browser test of the earlier review unit, which runs unedited and is tagged with it, and its assertions are the scenario: the Changes l...
+- Q-016 accept H-c196208f by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. The hold says the criterion lacks an end-to-end test because the generated-test writer timed out, but the unit's own browser file holds a test tagged with this criterion whose assertions are exactly the scenario of the Tool settings steps: the six column headers incl...
+
 ## Criteria
 
 | Id | Criterion | Judge | Result | Reason |
@@ -210,16 +229,16 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 | C-5367a266 | web-tools › Trusting a result needs the fixed warning and a tick for each tool › The tick list, the refusal text and the fixed names are as the plan says | pass | pass | the judge passed it and a discriminating test passes |
 | C-315dc330 | web-tools › Changes shows the old and new value of each changed field › Changed values read as fixed lines under their tool | pass | pass | the judge passed it and a discriminating test passes |
 | C-1da179fb | web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › The OpenAPI form sources hold the trust controls and keep the page rules | pass | pass | the judge passed it and a discriminating test passes |
-| C-f52c8d49 | web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › An OpenAPI server is registered with a trusted result after a tick | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-3a1c08af | web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace keeps the stored trust and needs no tick | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-08abe836 | web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace drops a retry flag when the effect changes | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-3ad08589 | web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-f52c8d49 | web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › An OpenAPI server is registered with a trusted result after a tick | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied by the code as it stands. The registration Operations table renders the six headers in order, each non-excluded row gets a TrustToggle described by the warning paragraph that TrustNotes renders once, and the excl... |
+| C-3a1c08af | web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace keeps the stored trust and needs no tick | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. ServersPage passes the pending surface, else the approved one, to ReplaceSection, which reads it with storedTools. After the preview, prefillTrust pairs createPayment with the stored create_payment and gives tru... |
+| C-08abe836 | web-tools › The OpenAPI forms carry the trust controls and a Replace keeps the stored values › A Replace drops a retry flag when the effect changes | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. Changing an effect in the Replace form calls carriedAfterEffect with the operation's derived name as the lookup, and carriedFields drops unsafe_to_retry whenever the stored effect differs from the new one, so mo... |
+| C-3ad08589 | web-tools › A registration draft becomes the API request or names the field to fix › The three drafts become the registration requests or name the field to fix | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. It names a frozen test of an earlier unit that must stay green unedited, so by construction no red of this unit can trace it; the proof is that its assertions still hold against the edited builders. operationOve... |
 | C-7b68e67c | web-tools › A registration draft becomes the API request or names the field to fix › A draft with trust and carried fields builds the overlay with only the members that differ | pass | pass | the judge passed it and a discriminating test passes |
-| C-7374d16f | web-tools › Effect settings become the overlay body and a discovery answer names every tool left out › Settings become the body and a discovery is worded with every tool left out | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-7374d16f | web-tools › Effect settings become the overlay body and a discovery answer names every tool left out › Settings become the body and a discovery is worded with every tool left out | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. It names a frozen test of an earlier unit that must stay green unedited, so no red of this unit can trace it; the proof is that its assertions hold against the edited review.ts. initialDraft still returns effect... |
 | C-cbd5fcec | web-tools › Effect settings become the overlay body and a discovery answer names every tool left out › A settings draft with trust and carried fields builds the overlay body | pass | pass | the judge passed it and a discriminating test passes |
 | C-9da14d6e | web-tools › The server page shows discovery, settings, changes and calls › An MCP server is discovered, given a setting and discovered again | pass | pass | the judge passed it and a discriminating test passes |
-| C-c8329b48 | web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server | pass | needs_human | uncovered: no adequate discriminating test traces it |
-| C-c7bb4abe | web-tools › The server page shows discovery, settings, changes and calls › Tool settings carries the trust controls, Discover keeps the stored trust and Changes shows the value lines | pass | needs_human | uncovered: no adequate discriminating test traces it |
+| C-c8329b48 | web-tools › The server page shows discovery, settings, changes and calls › The Changes list and the Calls table of a drifted server | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied by the code as it stands. The M7 drifted-server browser test is frozen from an earlier unit and runs unedited, so no red of this unit can trace it; its assertions hold against the edited review sections. Discover... |
+| C-c7bb4abe | web-tools › The server page shows discovery, settings, changes and calls › Tool settings carries the trust controls, Discover keeps the stored trust and Changes shows the value lines | pass | pass | accepted by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. On each loaded detail the draft is initialDraft of the pending tools with the trust and carried records of discoverSettings of the pending surface, and the baseline is that trust, so find_vendor and log_note sta... |
 | C-9bb4c4cf | web-tools › The server page shows discovery, settings, changes and calls › The Tool settings sources hold the trust controls and keep the page rules | pass | pass | the judge passed it and a discriminating test passes |
 
 ## Findings
@@ -269,20 +288,16 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] leftover deliberation comments in the tool settings browser test: e2e/test_m8_tool_trust_review.py carries the author's self-talk about the expected row count inside the test body instead of a real comment, which reads as unfinished work in a committed test.
 - [minor, judge] the Tool settings browser test watches the CSP but never asserts it: test_tool_settings_trust collects CSP violations with watch_csp(page) and never checks the result, unlike the three tests of test_m8_tool_trust.py which end with assert csp == []. A CSP regression on the review page would go unnoticed.
 - [minor, judge] order of the keys in shown/missing and the refusal message is not pinned by any scenario (spec gap) (criterion C-5367a266): ackStatus sorts shown and derives missing from it, so the refusal text lists keys alphabetically. AK3 uses keys a,b,c,d whose insertion order already equals sorted order, so no row distinguishes sorted order from first-appearance (form/table) order; two reasonable implementations would differ for e.g. {zebra, apple}.
-- [major, judge] discoverBody neither validates nor emits keys that appear only in a draft's carried map (spec gap) (criterion C-cbd5fcec): The specification requires discoverBody to throw RangeError for a key of effects, names, trust *or carried* outside ^[A-Za-z0-9_.-]{1,128}$ (and to bound the total at 100 keys). review.ts builds its key set from effects, names and trust only; carried keys are never pattern-checked, never counted against MAX_TOOLS, and — because the loop iterates that key set — a carried entry whose key is in none of the other three maps is silently dropped. No DB row pins a carried-only key, so the gap is undiscovered by the criterion's scenarios.
-- [major, judge] Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults (spec gap) (criterion C-c7bb4abe): The spec's failure cases demand that every lookup by a tool name or operationId use Object.hasOwn or a Map. RegisterPage.tsx, ReplaceSection.tsx and ReviewSections.tsx all fall back with `trust[name] ?? DEFAULT_TRUST`; for a legal key such as "toString" with no own entry the read yields Object.prototype.toString (not nullish), so the checkbox/select get a function instead of DEFAULT_TRUST, and ticking it writes dataClass undefined, which makes overlayEntry throw RangeError on submit with no message shown. The builders (RG1/DB5) are safe; only the React reads are not.
+- [major, human] discoverBody neither validates nor emits keys that appear only in a draft's carried map (spec gap) (criterion C-cbd5fcec): The specification requires discoverBody to throw RangeError for a key of effects, names, trust *or carried* outside ^[A-Za-z0-9_.-]{1,128}$ (and to bound the total at 100 keys). review.ts builds its key set from effects, names and trust only; carried keys are never pattern-checked, never counted against MAX_TOOLS, and — because the loop iterates that key set — a carried entry whose key is in none of the other three maps is silently dropped. No DB row pins a carried-only key, so the gap is undiscovered by the criterion's scenarios. [rejected by the delegate (claude-fable-5-1 via claude-code) (T...
+- [major, human] Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults (spec gap) (criterion C-c7bb4abe): The spec's failure cases demand that every lookup by a tool name or operationId use Object.hasOwn or a Map. RegisterPage.tsx, ReplaceSection.tsx and ReviewSections.tsx all fall back with `trust[name] ?? DEFAULT_TRUST`; for a legal key such as "toString" with no own entry the read yields Object.prototype.toString (not nullish), so the checkbox/select get a function instead of DEFAULT_TRUST, and ticking it writes dataClass undefined, which makes overlayEntry throw RangeError on submit with no message shown. The builders (RG1/DB5) are safe; only the React reads are not. [rejected by the delegate ...
 - [minor, judge] task 2.1: PF5 does not go through overlayEntry (criterion C-75b3f1d2): Task 2.1's detail line says "PF2, PF4 and PF5 go through overlayEntry". In web/src/tools/trust-overlay.test.ts the rows PF1, PF5, PF6 and PF7 are asserted inside the test titled "prefillTrust pairs stored tools with operations (PF1, PF5, PF6, PF7)", whose body never calls overlayEntry (it deepEquals prefillTrust's trust/carried records directly); only the test titled "prefilled entries carry only non-default values (PF2, PF3, PF4)" builds entries through entryFor -> overlayEntry. Row identities are taken from the test's own titles because test-plan.md § Overlay rows is not in the prompt; if PF...
 - [minor, judge] The five scanners do not read trust.ts (spec gap) (criterion C-1da179fb): The criterion's THEN says the test reads trust.ts, TrustControls.tsx, RegisterPage.tsx, ReplaceSection.tsx and ServersPage.tsx and that "the five scanners give []". trust-pages.test.ts runs findInlineStyleUse, findPaletteUtilities, findCssImports, findBannedImports and findRawColours only over the four-component `pages` array; trust.ts is checked for console./localStorage/sessionStorage/registerMessages and for its import lines, but no scanner runs on it. Which files the scanners must cover is not pinned by the scenario, and two reasonable readings differ.
 
-## Needs a human
+## Fix unit
 
-- UI criterion C-f52c8d49 has no end-to-end test; see the generated UI tests table
-- UI criterion C-3a1c08af has no end-to-end test; see the generated UI tests table
-- UI criterion C-08abe836 has no end-to-end test; see the generated UI tests table
-- UI criterion C-3ad08589 has no end-to-end test; see the generated UI tests table
-- UI criterion C-7374d16f has no end-to-end test; see the generated UI tests table
-- UI criterion C-c8329b48 has no end-to-end test; see the generated UI tests table
-- UI criterion C-c7bb4abe has no end-to-end test; see the generated UI tests table
+Fix unit 1 is created for these tasks:
+- F-4ee90a68 discoverBody neither validates nor emits keys that appear only in a draft's carried map
+- F-1b3e37fc Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
