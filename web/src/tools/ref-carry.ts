@@ -348,19 +348,38 @@ export function refState(tool: string, servers: readonly ToolServerView[]): RefS
   return listed.ref === tool ? "waiting" : "superseded";
 }
 
-export const REF_MARKERS: Readonly<{ superseded: string; waiting: string }> = {
+export const REF_MARKERS: Readonly<{ superseded: string; waiting: string }> = Object.freeze({
   superseded: "superseded",
   waiting: "waiting for approval",
-};
+});
 
-export const REF_CARRY_NAMES: Readonly<Record<string, string>> = {};
+export const REF_CARRY_NAMES: Readonly<Record<string, string>> = Object.freeze({
+  copyAction: "Create the same grants for the new refs",
+  copied: "Created {to} for {grant}.",
+  refused: "Not created for {grant}: {reason}.",
+  flowFirst: "Update the flow first: {grant} ({tool}).",
+  effectChanged:
+    "Effect changed: {old} → {new}; grant it again on the Grants page: {grant} ({tool}).",
+  deploy: "Deploy on Policies",
+  deployPath: "/admin/policies",
+  incomplete: "Only the first 10,000 grants were read.",
+  none: "No grant names the old refs.",
+  listName: "Copied grants",
+});
 
-export function fillRefText(_template: string, _values: Readonly<Record<string, string>>): string {
-  throw new Error("not implemented");
+export function fillRefText(template: string, values: Readonly<Record<string, string>>): string {
+  return template.replace(/\{([^{}]*)\}/g, (whole: string, key: string): string => {
+    if (!Object.prototype.hasOwnProperty.call(values, key)) return whole;
+    return values[key] ?? whole;
+  });
 }
 
-export function grantLabel(_grant: GrantRecord): string {
-  throw new Error("not implemented");
+export function grantLabel(grant: GrantRecord): string {
+  const subject =
+    grant.subject.kind === "role" ? `role ${grant.subject.role}` : `user ${grant.subject.userId}`;
+  const scope =
+    grant.scope.kind === "any_step" ? "any step" : `${grant.scope.flowId} / ${grant.scope.nodeId}`;
+  return `${subject} · ${scope}`;
 }
 
 export interface CarryView {
@@ -371,18 +390,58 @@ export interface CarryView {
 }
 
 export function carryView(
-  _plan: CopyPlan,
-  _outcomes: readonly CopyOutcome[],
-  _complete: boolean,
+  plan: CopyPlan,
+  outcomes: readonly CopyOutcome[],
+  complete: boolean,
 ): CarryView {
-  throw new Error("not implemented");
+  if (outcomes.length !== plan.copy.length) throw new RangeError("Outcomes do not follow the plan");
+  const lines: string[] = [];
+  plan.copy.forEach((entry, index) => {
+    const outcome = outcomes[index];
+    if (outcome === undefined || outcome.grantId !== entry.grant.id || outcome.to !== entry.to) {
+      throw new RangeError("Outcomes do not follow the plan");
+    }
+    const grant = grantLabel(entry.grant);
+    lines.push(
+      outcome.ok
+        ? fillRefText(REF_CARRY_NAMES["copied"] ?? "", { to: entry.to, grant })
+        : fillRefText(REF_CARRY_NAMES["refused"] ?? "", { grant, reason: outcome.reason }),
+    );
+  });
+  for (const entry of plan.flowFirst) {
+    lines.push(
+      fillRefText(REF_CARRY_NAMES["flowFirst"] ?? "", {
+        grant: grantLabel(entry.grant),
+        tool: entry.to,
+      }),
+    );
+  }
+  for (const entry of plan.effectChanged) {
+    lines.push(
+      fillRefText(REF_CARRY_NAMES["effectChanged"] ?? "", {
+        old: entry.effect.from,
+        new: entry.effect.to,
+        grant: grantLabel(entry.grant),
+        tool: entry.to,
+      }),
+    );
+  }
+  return {
+    lines,
+    empty: lines.length === 0 ? (REF_CARRY_NAMES["none"] ?? null) : null,
+    incomplete: complete ? null : (REF_CARRY_NAMES["incomplete"] ?? null),
+    deploy: outcomes.some((outcome) => outcome.ok),
+  };
 }
 
 export async function carryGrants(
-  _api: Api<"get" | "post">,
-  _changes: readonly RefChange[],
-  _keyOf: (grantId: string, to: string) => string,
-  _signal?: AbortSignal,
+  api: Api<"get" | "post">,
+  changes: readonly RefChange[],
+  keyOf: (grantId: string, to: string) => string,
+  signal?: AbortSignal,
 ): Promise<CarryView> {
-  throw new Error("not implemented");
+  const { grants, complete } = await loadAllGrants(api, signal);
+  const plan = copyPlan(grants, changes);
+  const outcomes = await copyGrants(api, plan, keyOf);
+  return carryView(plan, outcomes, complete);
 }
