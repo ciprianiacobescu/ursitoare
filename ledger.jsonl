@@ -55,3 +55,5 @@
 {"at":"2026-11-27T06:36:12Z","revision":"e2e685d811b38a1848a2c793660d37fb413a9454","type":"unit.integrated","unit":"openspec:add-web-tool-trust"}
 {"at":"2026-11-27T06:36:12Z","attempt":1,"cost_usd":17.808356,"runs":16,"type":"plan.charged","unit":"openspec:add-web-tool-trust"}
 {"at":"2026-11-27T06:37:51Z","branch":"l4/archive/openspec/add-web-tool-trust","head":"573790765e5cfba65969dee050afd165db21018b","type":"unit.branch_deleted","unit":"openspec:add-web-tool-trust"}
+{"at":"2026-11-27T06:37:52Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-web-ref-carry"}
+{"at":"2026-11-27T06:37:52Z","run":"r-20261127T0637Z-36df","type":"unit.dispatched","unit":"openspec:add-web-ref-carry"}
