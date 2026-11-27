@@ -88,6 +88,7 @@ e2e/test_m8_ref_carry.py:281
 ## Q-003: e2e/test_m8_ref_carry.py:255 two alerts remain after the copy
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: names the frozen path e2e/test_m8_ref_carry.py of task 4.1; only the clarifier suggestion may unfreeze it
 - **Blocking tasks:** 4.1
 - **Kind:** technical
 - **Asked:** 2026-11-27T13:06Z by claude-sonnet, run r-20261127T1106Z-2a77, task 4.1
