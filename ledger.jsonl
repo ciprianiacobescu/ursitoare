@@ -73,3 +73,5 @@
 {"at":"2026-11-27T18:20:47Z","by":"harness","reason":"the cause is gone: openspec:add-web-ref-carry is awaiting_human","type":"plan.resumed"}
 {"at":"2026-11-27T18:20:48Z","attempt":1,"cost_usd":12.45274,"runs":7,"type":"plan.charged","unit":"openspec:add-web-ref-carry"}
 {"at":"2026-11-27T18:20:48Z","run":"r-20261127T1820Z-106a","type":"unit.dispatched","unit":"openspec:add-web-ref-carry"}
+{"at":"2026-11-27T18:23:58Z","attempt":1,"cost_usd":13.838311,"runs":8,"type":"plan.charged","unit":"openspec:add-web-ref-carry"}
+{"at":"2026-11-27T18:23:58Z","run":"r-20261127T1823Z-ae5f","type":"unit.dispatched","unit":"openspec:add-web-ref-carry"}
