@@ -17,6 +17,8 @@ export type CliErrorCode =
   | "CLI_AUDIT_FAILED"
   | "CLI_SECRETS_EXIST"
   | "CLI_SECRETS_FAILED"
+  | "CLI_SINK_TAKEN"
+  | "CLI_SINK_TOKENS_EQUAL"
   | "CLI_INTERNAL";
 
 export class CliError extends Error {
