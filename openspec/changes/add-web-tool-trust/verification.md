@@ -1,4 +1,4 @@
-# Verification: openspec:add-web-tool-trust: NEEDS_HUMAN (round 3)
+# Verification: openspec:add-web-tool-trust: PASS (round 4)
 
 traceability: 13/19 criteria covered by a discriminating test
 
@@ -16,17 +16,17 @@ traceability: 13/19 criteria covered by a discriminating test
 
 | Step | Name | Status | Seconds | Note |
 |---|---|---|---|---|
-| 0 | preconditions | ok | 0.9 | base main@141a2678bd contained |
-| 1 | integrity | ok | 292.0 | 11 sub-checks; scope: 51 changed file(s) |
-| 2 | build | ok | 36.5 |  |
-| 3 | tests | ok | 505.8 |  |
-| 4 | traceability | ok | 0.2 | 13/19 criteria covered |
-| 4a | audit sampling | ok | 442.2 | 1 not_testable, 1 rejected, 2 skipped; support files at the base: 14 |
-| 5 | ui test generation | ok | 1084.3 | 1 fails_at_head, 9 not_testable, 1 writer_failed; 9 not_testable covered by step 4: notes, no hold (L4-VER-067); e2e support files shown to the writer: 1 |
-| 6 | quality | ok | 0.0 | not measured: diff coverage measures python only; changed code outside it: web/src/tools/RegisterPage.tsx, web/src/tools/ReplaceSection.tsx, web/src/tools/ReviewSections.tsx, web/src/tools/ServersPage.tsx, web/src/tools/TrustControls.tsx and 3 more |
-| 8 | s1 judge | ok | 1.1 | 19/19 criteria judged by jev |
-| 9 | judge | ok | 2802.5 | 9 call(s) |
-| 10 | aggregation | ok | 0.0 | NEEDS_HUMAN |
+| 0 | preconditions | reused | 0.0 | reused (round 3) |
+| 1 | integrity | reused | 0.0 | reused (round 3) |
+| 2 | build | reused | 0.0 | reused (round 3) |
+| 3 | tests | reused | 0.0 | reused (round 3) |
+| 4 | traceability | reused | 0.0 | reused (round 3) |
+| 4a | audit sampling | reused | 0.0 | reused (round 3) |
+| 5 | ui test generation | reused | 0.0 | reused (round 3) |
+| 6 | quality | reused | 0.0 | reused (round 3) |
+| 8 | s1 judge | reused | 0.0 | reused (round 3) |
+| 9 | judge | reused | 0.0 | reused (round 3) |
+| 10 | aggregation | ok | 0.0 | PASS |
 
 ## Gates
 
@@ -250,6 +250,8 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - Q-005 accept C-7374d16f by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. It names a frozen test of an earlier unit that must stay green unedited, so no red of this unit can trace it; the proof is that its assertions hold against the edited review.ts. initialDraft still returns effects and an always-present names record, discoverBody still give...
 - Q-006 accept C-c8329b48 by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied by the code as it stands. The M7 drifted-server browser test is frozen from an earlier unit and runs unedited, so no red of this unit can trace it; its assertions hold against the edited review sections. Discover tools now posts discoverBody of initialDraft of the approved...
 - Q-007 accept C-c7bb4abe by the delegate (claude-fable-5-1 via claude-code): The criterion is satisfied. On each loaded detail the draft is initialDraft of the pending tools with the trust and carried records of discoverSettings of the pending surface, and the baseline is that trust, so find_vendor and log_note start checked with private and public, ping unchecked, and no ti...
+- Q-017 accept H-abcad329 by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. The criterion pins what discoverBody does with a key that appears only in a draft's carried map: a key outside the pattern or one that brings the total over 100 throws RangeError, and otherwise the tool gets the overlay entry built from its carried fields. That is a ...
+- Q-018 accept H-1f2ad2b0 by the delegate (claude-fable-5-1 via claude-code): The unit can go on as it stands. The generated browser test fails at the base and at the head for a reason of its own: it opens the registration page and at once expects a row for toString, but the Operations table renders only after an OpenAPI document is pasted and previewed, and the test never pa...
 
 ## Criteria
 
@@ -324,11 +326,6 @@ Diff coverage not measured: diff coverage measures python only; changed code out
 - [minor, judge] spec_gap: discoverBody silently excludes __proto__ from key counting and validation (spec gap) (criterion C-c4fa5fc4): discoverBody deletes __proto__ from the collected key set before the 100-key limit check and pattern validation. A draft with 100 valid keys plus __proto__ in any map would not throw, and __proto__ is never emitted. No scenario pins this behavior; two reasonable implementations differ on whether __proto__ counts toward the limit.
 - [minor, judge] spec_gap: overlayEntry throws RangeError when trust.dataClass is undefined (spec gap) (criterion C-75b3f1d2): overlayEntry throws RangeError for trust.dataClass that is neither null, public, nor private. The ToolTrust type types dataClass as DataClass | null, so undefined should not occur, but if it does (e.g. from an Object.prototype inheritance leak before the trustFor fix), overlayEntry throws. No scenario pins this input.
 - [minor, judge] the judge called a test inadequate (criterion C-f43385f5): web.src.tools.trust-lookup.test.ts::C-f43385f5 C-c7bb4abe RegisterPage.tsx reads trust only through own entries
-
-## Needs a human
-
-- UI criterion C-c4fa5fc4 has no end-to-end test; see the generated UI tests table
-- UI criterion C-f43385f5 has no end-to-end test; see the generated UI tests table
 
 ## New tests (red then green, `task.red_ok` in the ledger)
 
