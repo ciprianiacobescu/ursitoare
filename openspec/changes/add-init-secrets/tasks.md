@@ -6,7 +6,7 @@ Tests follow `test-plan.md` (files, ids, fixtures, rows). Every test file starts
 
 ## 2. Writing without overwriting, and removing on failure
 
-- [ ] 2.1 Write `src/cli/init-secrets-write.test.ts` first (scenarios "Existing files stop the run before any write" and "A failing dependency leaves nothing behind": rows E1, W1 to W4, M1 and X1 and the success call list, with the fake `fs` of `test-plan.md` § Fixtures), then replace the scaffold stub of `writeSecrets` in `src/cli/init-secrets.ts` (design 5 and 6) and add `"CLI_SECRETS_EXIST"` and `"CLI_SECRETS_FAILED"` to `CliErrorCode` in `src/cli/errors.ts`. Run `pnpm run test src/cli/init-secrets-write.test.ts` and `pnpm run test src/cli/run.test.ts`
+- [x] 2.1 Write `src/cli/init-secrets-write.test.ts` first (scenarios "Existing files stop the run before any write" and "A failing dependency leaves nothing behind": rows E1, W1 to W4, M1 and X1 and the success call list, with the fake `fs` of `test-plan.md` § Fixtures), then replace the scaffold stub of `writeSecrets` in `src/cli/init-secrets.ts` (design 5 and 6) and add `"CLI_SECRETS_EXIST"` and `"CLI_SECRETS_FAILED"` to `CliErrorCode` in `src/cli/errors.ts`. Run `pnpm run test src/cli/init-secrets-write.test.ts` and `pnpm run test src/cli/run.test.ts`
 
 ## 3. The command and the default filesystem
 

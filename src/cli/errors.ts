@@ -15,6 +15,8 @@ export type CliErrorCode =
   | "CLI_ISSUER_REQUIRED"
   | "CLI_ENGINE_KEY_REQUIRED"
   | "CLI_AUDIT_FAILED"
+  | "CLI_SECRETS_EXIST"
+  | "CLI_SECRETS_FAILED"
   | "CLI_INTERNAL";
 
 export class CliError extends Error {

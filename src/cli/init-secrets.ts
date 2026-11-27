@@ -147,11 +147,67 @@ export const nodeInitSecretsFs: InitSecretsFs = {
   remove: () => Promise.reject(new Error("not implemented")),
 };
 
+function failureCode(error: unknown): string | null {
+  const code = (error as { code?: unknown } | null | undefined)?.code;
+  return typeof code === "string" && /^[A-Z0-9_]+$/.test(code) ? code : null;
+}
+
+function failureText(what: string, path: string, error: unknown): string {
+  const code = failureCode(error);
+  return code === null ? `${what} ${path}` : `${what} ${path} (${code})`;
+}
+
 export async function writeSecrets(
-  _plan: SecretPlan,
-  _fs: InitSecretsFs,
+  plan: SecretPlan,
+  fs: InitSecretsFs,
 ): Promise<{ written: string[] }> {
-  throw new Error("not implemented");
+  const existing: string[] = [];
+  for (const file of plan.files) {
+    try {
+      if (await fs.exists(file.path)) existing.push(file.path);
+    } catch (error) {
+      throw new CliError("CLI_SECRETS_FAILED", failureText("could not check", file.path, error));
+    }
+  }
+  if (existing.length > 0) {
+    throw new CliError("CLI_SECRETS_EXIST", `refusing to overwrite ${existing.join(", ")}`);
+  }
+
+  for (const dir of plan.dirs) {
+    try {
+      await fs.mkdir(dir, 0o700);
+    } catch (error) {
+      throw new CliError("CLI_SECRETS_FAILED", failureText("could not create", dir, error));
+    }
+  }
+
+  const written: string[] = [];
+  for (const file of plan.files) {
+    try {
+      await fs.writeNew(file.path, file.bytes, 0o600);
+      written.push(file.path);
+    } catch (error) {
+      const clash = failureCode(error) === "EEXIST";
+      const toRemove = clash ? [...written].reverse() : [file.path, ...[...written].reverse()];
+      const notRemoved: string[] = [];
+      for (const path of toRemove) {
+        try {
+          await fs.remove(path);
+        } catch {
+          notRemoved.push(path);
+        }
+      }
+      const suffix = notRemoved.length > 0 ? `; could not remove ${notRemoved.join(", ")}` : "";
+      if (clash) {
+        throw new CliError("CLI_SECRETS_EXIST", `refusing to overwrite ${file.path}${suffix}`);
+      }
+      throw new CliError(
+        "CLI_SECRETS_FAILED",
+        `${failureText("could not write", file.path, error)}${suffix}`,
+      );
+    }
+  }
+  return { written };
 }
 
 export interface InitSecretsDeps {
