@@ -20,7 +20,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-007 | answered | none | verdict | Criterion C-c7bb4abe (web-tools › The server page shows discovery, settings, changes and calls › Tool settings carries the trust controls, Discover keeps the stored trust and Changes shows the value l |
 | Q-008 | answered | none | verdict | Finding F-4ee90a68: discoverBody neither validates nor emits keys that appear only in a draft's carried map |
 | Q-009 | answered | none | verdict | Finding F-1b3e37fc: Page trust lookups read inherited Object.prototype members instead of Object.prototype-safe defaults |
-| Q-010 | open | none | verdict | Hold H-fd0a4300: UI criterion C-f52c8d49 has no end-to-end test; see the generated UI tests table |
+| Q-010 | answered | none | verdict | Hold H-fd0a4300: UI criterion C-f52c8d49 has no end-to-end test; see the generated UI tests table |
 | Q-011 | open | none | verdict | Hold H-ec069147: UI criterion C-3a1c08af has no end-to-end test; see the generated UI tests table |
 | Q-012 | open | none | verdict | Hold H-91b47a21: UI criterion C-08abe836 has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-95bd71c9: UI criterion C-3ad08589 has no end-to-end test; see the generated UI tests table |
@@ -320,7 +320,8 @@ reject The finding is correct. The design requires every lookup by a tool name o
 
 ## Q-010: Hold H-fd0a4300: UI criterion C-f52c8d49 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -339,6 +340,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The unit can go on as it stands. The hold says the criterion lacks an end-to-end test because the generated-test writer timed out, but the unit's own browser file holds a test tagged with this criterion whose assertions are exactly the scenario: the six Operations column headers including Result trusted and Data class, the form alert Accept the warning for: createPayment, listVendors. with no post, and after both ticks one post whose overlay holds createPayment with effect pay, untrusted_result false and data_class private and listVendors with effect read and data_class public. Those headers and overlay members exist only with this change, so the test discriminates by construction. The code supports each step: the registration table renders the two new headers, the submit runs the field checks and then puts the ack message into the form error that the Form kit renders as the alert, and the builder writes trust members through overlayEntry. The test was not run in a gate here; the acceptance profile after merge runs every configured gate.
 ---
 
 ## Q-011: Hold H-ec069147: UI criterion C-3a1c08af has no end-to-end test; see the generated UI tests table
