@@ -6,7 +6,7 @@ Tests follow `test-plan.md`. Every test file starts with `assert.equal(typeof <t
 
 ## 2. Tenants by name and sink routes
 
-- [ ] 2.1 Write `src/tenancy/ensure-tenant.test.ts` first (scenario "Create, repeat, conflict, bad input and race": the test `C-6dcf07eb ensureTenant by name`), then implement `ensureTenant` and `findTenantByName` in `src/tenancy/bootstrap.ts` (design 4), add `"TENANT_PROFILE_CONFLICT"` to `TenancyErrorCode` in `src/tenancy/errors.ts` and both export lines to `src/tenancy/index.ts`. Run `pnpm run test src/tenancy/ensure-tenant.test.ts`
+- [x] 2.1 Write `src/tenancy/ensure-tenant.test.ts` first (scenario "Create, repeat, conflict, bad input and race": the test `C-6dcf07eb ensureTenant by name`), then implement `ensureTenant` and `findTenantByName` in `src/tenancy/bootstrap.ts` (design 4), add `"TENANT_PROFILE_CONFLICT"` to `TenancyErrorCode` in `src/tenancy/errors.ts` and both export lines to `src/tenancy/index.ts`. Run `pnpm run test src/tenancy/ensure-tenant.test.ts`
 - [ ] 2.2 Write `src/tenancy/sink-binding.test.ts` first (scenario "Bind, repeat, resolve and roll back": the test `C-238cef58 bindSinkTokens two hash-only routes`), then implement `MINTKEY_SINK_ROUTE_KINDS` (frozen) and `bindSinkTokens` in `src/tenancy/sink-binding.ts` and add their export lines to `src/tenancy/index.ts`. Run `pnpm run test src/tenancy/sink-binding.test.ts`
 
 ## 3. The setup commands

@@ -6,6 +6,7 @@ export type TenancyErrorCode =
   | "TENANT_ROUTE_RESERVED"
   | "TENANT_DEFAULT_CONFLICT"
   | "TENANT_BOOTSTRAP_FAILED"
+  | "TENANT_PROFILE_CONFLICT"
   | "TENANT_TX_ABORTED";
 
 export class TenancyError extends Error {

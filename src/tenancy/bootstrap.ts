@@ -111,13 +111,75 @@ export async function ensureDefaultTenant(
 }
 
 export async function ensureTenant(
-  _ownerPool: TenantPool,
-  _input: { name: string; reviewProfile: ReviewProfile },
-  _opts?: EnsureTenantOptions,
+  ownerPool: TenantPool,
+  input: { name: string; reviewProfile: ReviewProfile },
+  opts: EnsureTenantOptions = {},
 ): Promise<{ tenant: TenantContext; created: boolean }> {
-  throw new Error("not implemented");
+  assertTenantName(input.name);
+  if (input.reviewProfile !== "solo" && input.reviewProfile !== "team") {
+    throw new TenancyError("TENANT_INVALID", "invalid review profile");
+  }
+  const reviewProfile = input.reviewProfile;
+
+  const ids = opts.ids ?? systemIds;
+  const clock = opts.clock ?? systemClock;
+
+  try {
+    return await inTransaction(ownerPool, async (client) => {
+      await client.query(
+        "SELECT pg_advisory_xact_lock(hashtextextended('ursitoare:ensure_tenant', 0))",
+      );
+
+      const existing = await client.query<TenantRow>(
+        "SELECT tenant_id, review_profile FROM ursitoare.tenant WHERE name = $1",
+        [input.name],
+      );
+      const existingRow = existing.rows[0];
+      if (existingRow !== undefined) {
+        if (existingRow.review_profile !== reviewProfile) {
+          throw new TenancyError(
+            "TENANT_PROFILE_CONFLICT",
+            "the tenant exists with another review profile",
+            { reviewProfile: existingRow.review_profile },
+          );
+        }
+        return { tenant: toContext(existingRow), created: false };
+      }
+
+      const inserted = await client.query<TenantRow>(
+        `INSERT INTO ursitoare.tenant (tenant_id, name, review_profile, created_at)
+         VALUES ($1, $2, $3, $4)
+         RETURNING tenant_id, review_profile`,
+        [ids.next("ten"), input.name, reviewProfile, clock.now()],
+      );
+      const insertedRow = inserted.rows[0];
+      if (insertedRow === undefined) {
+        throw new TenancyError("TENANT_BOOTSTRAP_FAILED", "could not create the tenant");
+      }
+      return { tenant: toContext(insertedRow), created: true };
+    });
+  } catch (error) {
+    if (error instanceof TenancyError) {
+      throw error;
+    }
+    const state = sqlState(error);
+    if (state !== undefined) {
+      throw new TenancyError("TENANT_BOOTSTRAP_FAILED", "could not create the tenant", {
+        sqlstate: state,
+      });
+    }
+    throw error;
+  }
 }
 
-export async function findTenantByName(_pool: TenantPool, _name: string): Promise<TenantContext | null> {
-  throw new Error("not implemented");
+export async function findTenantByName(pool: TenantPool, name: string): Promise<TenantContext | null> {
+  assertTenantName(name);
+  return inTransaction(pool, async (client) => {
+    const result = await client.query<TenantRow>(
+      "SELECT tenant_id, review_profile FROM ursitoare.tenant WHERE name = $1",
+      [name],
+    );
+    const row = result.rows[0];
+    return row === undefined ? null : toContext(row);
+  });
 }

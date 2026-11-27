@@ -7,7 +7,7 @@ export { TENANT_ID_PATTERN, ROUTE_KIND_PATTERN, MAX_ROUTE_KEY_LENGTH, hashRouteK
 export type { TenantPool, TenantTx } from "./tx.ts";
 export { withTenantTx } from "./tx.ts";
 export type { EnsureTenantOptions } from "./bootstrap.ts";
-export { ensureDefaultTenant } from "./bootstrap.ts";
+export { ensureDefaultTenant, ensureTenant, findTenantByName } from "./bootstrap.ts";
 export type { RouteRegistration } from "./routes.ts";
 export { registerTenantRoute, unregisterTenantRoute, resolveTenantBy } from "./routes.ts";
 export type { CatalogRule, CatalogViolation } from "./catalog.ts";
