@@ -19,6 +19,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 ## Q-001: web/src/tools/review-trust.test.ts:132 expectation contradicts carried-key emission
 
 - **Status:** open
+- **Escalated by:** the delegate (claude-fable-5-1 via claude-code): Genuine conflict between two frozen tests and their specifications. The parent unit's frozen DB3 assertion (web/src/tools/review-trust.test.ts:132) passes carried = ds1.carried, which holds the carried-only key Log.Note: { unsafe_to_retry: false }, and expects only { find_vendor: { skip: true } }; test-plan.md DB3 pins that value and says DB3 holds on base code, and the parent spec says DB3 gives "the skip" body. The fix unit's frozen red test R1c (web/src/tools/review-carried.test.ts:32) and its regression scenario require a carried-only key to emit the overlay entry built from its carried fields, which makes DB3 emit Log.Note: { unsafe_to_retry: false }. I found no production-code rule in any document that satisfies both. Option 1 changes a frozen test from a fix task, which a person must commit; Option 2 fails the fix unit's own red test and contradicts its spec. No clarifier suggestion exists to accept. A person must decide which pinned value gives way.
 - **Blocking tasks:** 1.1
 - **Kind:** technical
 - **Asked:** 2026-11-27T02:02Z by beam, run r-20261127T0049Z-77ad, task 1.1
