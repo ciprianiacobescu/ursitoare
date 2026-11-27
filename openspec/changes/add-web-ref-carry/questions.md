@@ -12,7 +12,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
 | Q-001 | accepted | 4.1 | technical | e2e/test_m8_ref_carry.py:86-96 FIRST has no pendingDigest, so Approve is disabled |
-| Q-002 | open | 4.1 | technical | e2e/test_m8_ref_carry.py:302 403 body lacks details.decisionId |
+| Q-002 | answered | 4.1 | technical | e2e/test_m8_ref_carry.py:302 403 body lacks details.decisionId |
 | Q-003 | open | 4.1 | technical | e2e/test_m8_ref_carry.py:255 two alerts remain after the copy |
 <!-- l4:index:end -->
 
@@ -55,7 +55,7 @@ Edit `e2e/test_m8_ref_carry.py`: in FIRST add `"pendingDigest": DP, "pendingSubm
 
 ## Q-002: e2e/test_m8_ref_carry.py:302 403 body lacks details.decisionId
 
-- **Status:** open
+- **Status:** answered
 - **Escalated by:** the delegate (claude-fable-5-1 via claude-code): the reply was discarded: accept needs a clarifier suggestion, and Q-002 has none
 - **Blocking tasks:** 4.1
 - **Kind:** technical
@@ -83,6 +83,9 @@ e2e/test_m8_ref_carry.py:281
 
 ### Answer
 <!-- write below this line -->
+Take option 1. Edit `e2e/test_m8_ref_carry.py` line 302 so `grants` replies `(403, {"error": {"code": "FORBIDDEN", "message": "m", "details": {"decisionId": "dec_1"}}})`.
+
+Why: test-plan-browser.md § Approve says this test is "as C-8540a4f8 but `grants` replies `(403, FORBIDDEN)`", with `FORBIDDEN` copied from `e2e/test_m6_tool_pages.py` (lines 96-102), which carries the decision id in `details.decisionId` and has `message` "m". The red test inlined it with "dec_1" in `message` instead. `ErrorPanel` shows a decision id only from `details.decisionId` of a 403 (`web/src/kit/error-panel.ts:35-40`, `web/src/kit/ErrorPanel.tsx:25`) and shows the code's own message, never the server's `message`, so the current fixture can never meet the spec's "one alert containing dec_1". The assertions at lines 311-312 stay exactly as written; only the fixture changes to the one the test plan names.
 ---
 
 ## Q-003: e2e/test_m8_ref_carry.py:255 two alerts remain after the copy
