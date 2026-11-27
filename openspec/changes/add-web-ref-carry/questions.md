@@ -18,7 +18,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-005 | answered | none | verdict | Criterion C-4b83877f (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › Superseded and waiting refs are marked beside the one badge): accept as sati |
 | Q-006 | answered | none | verdict | Criterion C-b8363cd2 (web-tools › The Grants list marks superseded and waiting refs without a second badge or a new alert › A failed server read leaves the Grants page as it was): accept as satisfied? |
 | Q-007 | answered | none | verdict | Hold H-3d26971a: UI criterion C-568a8224 has no end-to-end test; see the generated UI tests table |
-| Q-008 | open | none | verdict | Hold H-96a6450c: UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table |
+| Q-008 | answered | none | verdict | Hold H-96a6450c: UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-d011c1bb: UI criterion C-4b83877f has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-cb55efac: UI criterion C-b8363cd2 has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
@@ -262,7 +262,8 @@ accept The hold may be waived. C-568a8224 is the refState and REF_MARKERS requir
 
 ## Q-008: Hold H-96a6450c: UI criterion C-8540a4f8 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
+- **Answered by:** the delegate (claude-fable-5-1 via claude-code)
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 2, verifier
@@ -281,6 +282,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. The repository already holds the end-to-end tests for C-8540a4f8: the three tests of e2e/test_m8_ref_carry.py, tagged with the criterion and following test-plan-browser.md § Approve step by step, cover the bumped approval with the copy, a first approval and a 403 on the grants read. The generator's writer failed on a tool permission, which says nothing about the code. The Servers page, the panel and the carry logic implement every clause of the scenario, as checked for Q-004, so the unit can go on.
 ---
 
 ## Q-009: Hold H-d011c1bb: UI criterion C-4b83877f has no end-to-end test; see the generated UI tests table
