@@ -116,3 +116,4 @@
 {"at":"2026-11-28T06:17:56Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"db733e24c7572a16991aa72911ed60a8ae779703","status":"pass","type":"unit.postcheck","unit":"openspec:add-oidc-backchannel"}
 {"at":"2026-11-28T06:17:56Z","revision":"db733e24c7572a16991aa72911ed60a8ae779703","type":"unit.integrated","unit":"openspec:add-oidc-backchannel"}
 {"at":"2026-11-28T06:17:56Z","attempt":1,"cost_usd":0.73655,"runs":2,"type":"plan.charged","unit":"openspec:add-oidc-backchannel"}
+{"at":"2026-11-28T06:19:58Z","branch":"l4/archive/openspec/add-oidc-backchannel","head":"c2be8f4ae30f5f6cecc91d1964b4c5712ed645cb","type":"unit.branch_deleted","unit":"openspec:add-oidc-backchannel"}
