@@ -265,14 +265,64 @@ export function createOidcClient(deps: {
   return { discovery, signingKey, exchangeCode };
 }
 
-export function discoveryUrl(_issuer: string, _backchannelUrl: string | null): string {
-  throw new Error("not implemented");
+export function discoveryUrl(issuer: string, backchannelUrl: string | null): string {
+  if (backchannelUrl === null) {
+    return `${issuer}/.well-known/openid-configuration`;
+  }
+  let issuerUrl: URL;
+  let backchannel: URL;
+  try {
+    issuerUrl = new URL(issuer);
+    backchannel = new URL(backchannelUrl);
+  } catch {
+    throw new OidcError("OIDC_PROVIDER_UNAVAILABLE", "The OIDC provider is unavailable", {
+      reason: "issuer",
+    });
+  }
+  const path = issuerUrl.pathname.endsWith("/")
+    ? issuerUrl.pathname.slice(0, -1)
+    : issuerUrl.pathname;
+  return `${backchannel.origin}${path}/.well-known/openid-configuration`;
 }
 
 export function serverSideUrl(
-  _endpoint: string,
-  _issuer: string,
-  _backchannelUrl: string | null,
+  endpoint: string,
+  issuer: string,
+  backchannelUrl: string | null,
 ): string | null {
-  throw new Error("not implemented");
+
+  let endpointUrl: URL;
+  try {
+    endpointUrl = new URL(endpoint);
+  } catch {
+    return null;
+  }
+  if (endpointUrl.protocol !== "https:" && endpointUrl.protocol !== "http:") return null;
+
+  if (backchannelUrl === null) {
+    let issuerUrl: URL;
+    try {
+      issuerUrl = new URL(issuer);
+    } catch {
+      return null;
+    }
+    if (endpointUrl.origin !== issuerUrl.origin) return null;
+    return endpoint;
+  }
+
+  let issuerUrl: URL;
+  let backchannel: URL;
+  try {
+    issuerUrl = new URL(issuer);
+    backchannel = new URL(backchannelUrl);
+  } catch {
+    return null;
+  }
+  if (endpointUrl.origin === backchannel.origin) {
+    return endpoint;
+  }
+  if (endpointUrl.origin === issuerUrl.origin) {
+    return `${backchannel.origin}${endpointUrl.pathname}${endpointUrl.search}${endpointUrl.hash}`;
+  }
+  return null;
 }

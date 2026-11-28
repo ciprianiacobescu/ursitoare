@@ -38,7 +38,7 @@ export { OidcError } from "./oidc/errors.ts";
 export { SESSION_COOKIE, parseCookies, serializeCookie } from "./oidc/cookies.ts";
 export { sanitizeReturnTo } from "./oidc/return-to.ts";
 export type { OidcClient } from "./oidc/client.ts";
-export { createOidcClient } from "./oidc/client.ts";
+export { createOidcClient, discoveryUrl, serverSideUrl } from "./oidc/client.ts";
 export { verifyIdToken } from "./oidc/id-token.ts";
 export type { OidcOptions, SessionContext } from "./oidc/sessions.ts";
 export {

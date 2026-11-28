@@ -6,7 +6,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 2. The two URL functions
 
-- [ ] 2.1 Write `src/identity/oidc/backchannel-urls.test.ts` (scenarios "discoveryUrl and serverSideUrl follow the rule" (`C-ad6ca6fb`) and "Without a back-channel nothing changes" (`C-2f15db84`), rows D1 to D8, S1 to S13, E1, N1, N2) first, then implement `discoveryUrl` and `serverSideUrl` in `src/identity/oidc/client.ts` (fill the scaffold stubs; design decision 4) and add both names to the `createOidcClient` value export line of `src/identity/index.ts`; do not change `createOidcClient`, `fetchDiscovery` or `parseDiscovery` in this task. Run `pnpm run test src/identity/oidc/backchannel-urls.test.ts` and `pnpm run test src/identity/oidc/client.test.ts`.
+- [x] 2.1 Write `src/identity/oidc/backchannel-urls.test.ts` (scenarios "discoveryUrl and serverSideUrl follow the rule" (`C-ad6ca6fb`) and "Without a back-channel nothing changes" (`C-2f15db84`), rows D1 to D8, S1 to S13, E1, N1, N2) first, then implement `discoveryUrl` and `serverSideUrl` in `src/identity/oidc/client.ts` (fill the scaffold stubs; design decision 4) and add both names to the `createOidcClient` value export line of `src/identity/index.ts`; do not change `createOidcClient`, `fetchDiscovery` or `parseDiscovery` in this task. Run `pnpm run test src/identity/oidc/backchannel-urls.test.ts` and `pnpm run test src/identity/oidc/client.test.ts`.
 
 ## 3. Discovery at the back-channel origin
 
