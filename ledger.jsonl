@@ -119,3 +119,5 @@
 {"at":"2026-11-28T06:19:58Z","branch":"l4/archive/openspec/add-oidc-backchannel","head":"c2be8f4ae30f5f6cecc91d1964b4c5712ed645cb","type":"unit.branch_deleted","unit":"openspec:add-oidc-backchannel"}
 {"at":"2026-11-28T06:20:00Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-keycloak-realm"}
 {"at":"2026-11-28T06:20:00Z","run":"r-20261128T0619Z-fc2e","type":"unit.dispatched","unit":"openspec:add-keycloak-realm"}
+{"at":"2026-11-28T08:57:50Z","attempt":1,"cost_usd":0.0,"runs":2,"type":"plan.charged","unit":"openspec:add-keycloak-realm"}
+{"at":"2026-11-28T08:57:50Z","run":"r-20261128T0857Z-f6a9","type":"unit.dispatched","unit":"openspec:add-keycloak-realm"}
