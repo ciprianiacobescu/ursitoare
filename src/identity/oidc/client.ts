@@ -180,7 +180,7 @@ export function createOidcClient(deps: {
 
   async function fetchDiscovery(): Promise<Discovery> {
     const response = await send(
-      `${config.issuer}/.well-known/openid-configuration`,
+      discoveryUrl(config.issuer, config.backchannelUrl ?? null),
       requestInit({ method: "GET" }),
     );
     if (response.status < 200 || response.status >= 300) {
