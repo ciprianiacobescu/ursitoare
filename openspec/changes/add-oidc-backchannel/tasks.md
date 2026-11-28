@@ -2,7 +2,7 @@ Every test file starts with `assert.equal(typeof <function under test>, "functio
 
 ## 1. The variable
 
-- [ ] 1.1 Write `src/config/oidc-backchannel.test.ts` (scenarios "A back-channel origin is read as an origin" (`C-07ab704f`) and "A bad or stray back-channel value is refused" (`C-41a07522`), rows A1 to A9 and B1 to B15) first, then add `readonly backchannelUrl?: string` to `OidcConfig` in `src/config/oidc.ts` and `backchannelUrl?: string` to `OidcConfigShape` in `src/identity/oidc/config-shape.ts`, and read `URSITOARE_OIDC_BACKCHANNEL_URL` in `loadOidcConfig` in the order of design decision 3, storing the URL's origin and adding the member to the returned object only when the variable is set (design decisions 2 and 3). Run `pnpm run test src/config/oidc-backchannel.test.ts` and `pnpm run test src/config/oidc.test.ts`.
+- [x] 1.1 Write `src/config/oidc-backchannel.test.ts` (scenarios "A back-channel origin is read as an origin" (`C-07ab704f`) and "A bad or stray back-channel value is refused" (`C-41a07522`), rows A1 to A9 and B1 to B15) first, then add `readonly backchannelUrl?: string` to `OidcConfig` in `src/config/oidc.ts` and `backchannelUrl?: string` to `OidcConfigShape` in `src/identity/oidc/config-shape.ts`, and read `URSITOARE_OIDC_BACKCHANNEL_URL` in `loadOidcConfig` in the order of design decision 3, storing the URL's origin and adding the member to the returned object only when the variable is set (design decisions 2 and 3). Run `pnpm run test src/config/oidc-backchannel.test.ts` and `pnpm run test src/config/oidc.test.ts`.
 
 ## 2. The two URL functions
 
