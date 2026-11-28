@@ -66,7 +66,7 @@ async function readCapped(response: Response): Promise<string> {
   return Buffer.concat(chunks.map((chunk) => Buffer.from(chunk))).toString("utf8");
 }
 
-function endpoint(value: unknown, issuer: URL): string {
+function parseEndpoint(value: unknown): URL {
   if (typeof value !== "string") throw unavailable("endpoint");
   let parsed: URL;
   try {
@@ -75,11 +75,27 @@ function endpoint(value: unknown, issuer: URL): string {
     throw unavailable("endpoint");
   }
   if (parsed.protocol !== "https:" && parsed.protocol !== "http:") throw unavailable("endpoint");
-  if (parsed.origin !== issuer.origin) throw unavailable("origin");
-  return value;
+  return parsed;
 }
 
-function parseDiscovery(value: unknown, issuer: string): Discovery {
+function endpoint(value: unknown, issuer: URL): string {
+  const parsed = parseEndpoint(value);
+  if (parsed.origin !== issuer.origin) throw unavailable("origin");
+  return value as string;
+}
+
+function engineEndpoint(value: unknown, issuer: string, backchannelUrl: string | null): string {
+  parseEndpoint(value);
+  const resolved = serverSideUrl(value as string, issuer, backchannelUrl);
+  if (resolved === null) throw unavailable("origin");
+  return resolved;
+}
+
+function parseDiscovery(
+  value: unknown,
+  issuer: string,
+  backchannelUrl: string | null,
+): Discovery {
   if (typeof value !== "object" || value === null) throw unavailable("discovery");
   const record = value as Record<string, unknown>;
   if (record["issuer"] !== issuer) throw unavailable("issuer");
@@ -92,8 +108,8 @@ function parseDiscovery(value: unknown, issuer: string): Discovery {
   }
 
   const authorizeUrl = endpoint(record["authorization_endpoint"], base);
-  const tokenUrl = endpoint(record["token_endpoint"], base);
-  const jwksUrl = endpoint(record["jwks_uri"], base);
+  const tokenUrl = engineEndpoint(record["token_endpoint"], issuer, backchannelUrl);
+  const jwksUrl = engineEndpoint(record["jwks_uri"], issuer, backchannelUrl);
   const endSession = record["end_session_endpoint"];
   const logoutUrl =
     endSession === undefined || endSession === null ? null : endpoint(endSession, base);
@@ -186,7 +202,11 @@ export function createOidcClient(deps: {
     if (response.status < 200 || response.status >= 300) {
       throw unavailable("status", { status: response.status });
     }
-    return parseDiscovery(await readJson(response), config.issuer);
+    return parseDiscovery(
+      await readJson(response),
+      config.issuer,
+      config.backchannelUrl ?? null,
+    );
   }
 
   async function discovery(): Promise<Discovery> {
