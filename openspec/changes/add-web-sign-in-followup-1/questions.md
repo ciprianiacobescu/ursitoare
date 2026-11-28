@@ -13,7 +13,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 |----|--------|----------|------|----------|
 | Q-001 | answered | none | verdict | Hold H-3127c190: UI criterion C-bfbec1c2 has no end-to-end test; see the generated UI tests table |
 | Q-002 | answered | none | verdict | Hold H-545ec45b: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table |
-| Q-003 | open | none | verdict | Hold H-e3f87d2a: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table |
+| Q-003 | answered | none | verdict | Hold H-e3f87d2a: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-2023e80e: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table |
 | Q-005 | open | none | verdict | Hold H-d7fe3aa5: UI criterion C-22c98964 has no end-to-end test; see the generated UI tests table |
 | Q-006 | open | none | verdict | Hold H-2135a2da: UI criterion C-023c2efe has no end-to-end test; see the generated UI tests table |
@@ -83,7 +83,7 @@ accept The hold may be waived. Criterion C-01e427f8 is a unit-level contract (re
 
 ## Q-003: Hold H-e3f87d2a: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -102,6 +102,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-e78811f4 is a unit-level contract (the SIGN_IN_MESSAGES constant) with no surface a browser can drive; step 5 itself reported it not_testable. verification.md lists it as covered by a passing test that traces it, and the judge passed it, so the unit can go on as it stands.
 ---
 
 ## Q-004: Hold H-2023e80e: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table
