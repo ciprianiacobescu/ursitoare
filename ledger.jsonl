@@ -127,3 +127,4 @@
 {"at":"2026-11-28T11:21:22Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"063e2934630210c4526c5a5a376997571157d4e5","status":"pass","type":"unit.postcheck","unit":"openspec:add-keycloak-realm"}
 {"at":"2026-11-28T11:21:22Z","revision":"063e2934630210c4526c5a5a376997571157d4e5","type":"unit.integrated","unit":"openspec:add-keycloak-realm"}
 {"at":"2026-11-28T11:21:22Z","attempt":1,"cost_usd":0.0,"runs":2,"type":"plan.charged","unit":"openspec:add-keycloak-realm"}
+{"at":"2026-11-28T11:23:23Z","branch":"l4/archive/openspec/add-keycloak-realm","head":"da3553207c8d6d1a8571ab2408735598f9692af0","type":"unit.branch_deleted","unit":"openspec:add-keycloak-realm"}
