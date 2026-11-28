@@ -16,6 +16,7 @@ export type ActionName =
   | "dry_run_flow"
   | "edit_flow"
   | "edit_profile"
+  | "emit_audit"
   | "invoke_llm"
   | "invoke_tool"
   | "manage_credentials"
@@ -90,6 +91,7 @@ export const ACTIONS: { readonly [A in ActionName]: ActionSpec<ActionContext<A>>
   dry_run_flow: defineAction("dry_run_flow", ["Tenant", "Flow"], "{}", true),
   edit_flow: defineAction("edit_flow", ["Tenant", "Flow"], "{}", true),
   edit_profile: defineAction("edit_profile", ["Tenant"], "{}", true),
+  emit_audit: defineAction("emit_audit", ["Tenant"], "{}", false),
   invoke_llm: defineAction(
     "invoke_llm",
     ["Tenant", "Block"],
