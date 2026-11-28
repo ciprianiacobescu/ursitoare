@@ -14,4 +14,4 @@ Tests follow `test-plan.md` (files, ids, fixtures, rule texts, rows) and `test-p
 
 ## 4. The Postgres script
 
-- [ ] 4.1 Write `test/deploy/initdb-keycloak.test.ts` first (scenarios "The init script creates exactly the role and database from the secret file" and "Each deviation of the init script gives its own problem", with `scriptProblems` and the 11 rows of `test-plan-data.md`), then create `deploy/postgres/initdb/10-keycloak.sh` with the text of `test-plan-data.md` § The init script. Run `pnpm run test test/deploy/initdb-keycloak.test.ts`
+- [x] 4.1 Write `test/deploy/initdb-keycloak.test.ts` first (scenarios "The init script creates exactly the role and database from the secret file" and "Each deviation of the init script gives its own problem", with `scriptProblems` and the 11 rows of `test-plan-data.md`), then create `deploy/postgres/initdb/10-keycloak.sh` with the text of `test-plan-data.md` § The init script. Run `pnpm run test test/deploy/initdb-keycloak.test.ts`
