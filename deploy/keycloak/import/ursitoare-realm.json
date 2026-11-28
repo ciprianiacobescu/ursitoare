@@ -1,0 +1,117 @@
+{
+  "realm": "ursitoare",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "organizationsEnabled": true,
+  "browserFlow": "browser-single-page",
+  "authenticationFlows": [
+    {
+      "alias": "browser-single-page",
+      "description": "browser login on one page",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        { "authenticator": "auth-cookie", "authenticatorFlow": false, "requirement": "ALTERNATIVE", "priority": 10, "userSetupAllowed": false },
+        { "authenticator": "identity-provider-redirector", "authenticatorFlow": false, "requirement": "ALTERNATIVE", "priority": 25, "userSetupAllowed": false },
+        { "authenticatorFlow": true, "requirement": "ALTERNATIVE", "priority": 30, "flowAlias": "browser-single-page forms", "userSetupAllowed": false }
+      ]
+    },
+    {
+      "alias": "browser-single-page forms",
+      "description": "username, password, conditional OTP",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        { "authenticator": "auth-username-password-form", "authenticatorFlow": false, "requirement": "REQUIRED", "priority": 10, "userSetupAllowed": false },
+        { "authenticatorFlow": true, "requirement": "CONDITIONAL", "priority": 20, "flowAlias": "browser-single-page otp", "userSetupAllowed": false }
+      ]
+    },
+    {
+      "alias": "browser-single-page otp",
+      "description": "OTP when the user has one",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        { "authenticator": "conditional-user-configured", "authenticatorFlow": false, "requirement": "REQUIRED", "priority": 10, "userSetupAllowed": false },
+        { "authenticator": "auth-otp-form", "authenticatorFlow": false, "requirement": "REQUIRED", "priority": 20, "userSetupAllowed": false }
+      ]
+    }
+  ],
+  "groups": [{ "name": "ursitoare-admins" }, { "name": "ursitoare-authors" }, { "name": "team-default" }],
+  "clients": [
+    {
+      "clientId": "ursitoare-engine",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "${KC_URSITOARE_CLIENT_SECRET}",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": ["${KC_URSITOARE_REDIRECT_URI}"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "${KC_URSITOARE_POST_LOGOUT_URI}##${KC_URSITOARE_REDIRECT_URI}"
+      },
+      "defaultClientScopes": ["web-origins", "acr", "profile", "roles", "basic", "email"],
+      "optionalClientScopes": ["organization"],
+      "protocolMappers": [
+        {
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-group-membership-mapper",
+          "config": {
+            "claim.name": "groups",
+            "full.path": "false",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "ursitoare-mcp",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": ["http://127.0.0.1/*", "http://localhost/*"],
+      "attributes": { "pkce.code.challenge.method": "S256" },
+      "protocolMappers": [
+        {
+          "name": "ursitoare-mcp-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "ursitoare-mcp",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "${KC_URSITOARE_FIRST_USER}",
+      "enabled": true,
+      "credentials": [{ "type": "password", "value": "${KC_URSITOARE_FIRST_PASSWORD}", "temporary": true }],
+      "groups": ["/ursitoare-admins", "/ursitoare-authors", "/team-default"]
+    }
+  ],
+  "organizations": [
+    {
+      "name": "${KC_URSITOARE_ORGANIZATION:home}",
+      "alias": "${KC_URSITOARE_ORGANIZATION:home}",
+      "enabled": true,
+      "domains": [],
+      "members": [{ "username": "${KC_URSITOARE_FIRST_USER}" }]
+    }
+  ]
+}

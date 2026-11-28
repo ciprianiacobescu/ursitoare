@@ -6,7 +6,7 @@ Tests follow `test-plan.md` (files, ids, fixtures, rule texts, rows) and `test-p
 
 ## 2. The realm template
 
-- [ ] 2.1 Write `test/deploy/realm-template.test.ts` first (scenarios "The committed template names the six placeholders and renders with test values", "The committed template is the realm of the test plan" and "The bound browser flow has no organization step", with the realm of `test-plan-data.md` as a literal), then create `deploy/keycloak/import/ursitoare-realm.json` with that realm (design 2 to 7; no `clientScopes` key, the post-logout value with two URIs). Run `pnpm run test test/deploy/realm-template.test.ts` and `pnpm run test test/deploy/realm-render.test.ts`
+- [x] 2.1 Write `test/deploy/realm-template.test.ts` first (scenarios "The committed template names the six placeholders and renders with test values", "The committed template is the realm of the test plan" and "The bound browser flow has no organization step", with the realm of `test-plan-data.md` as a literal), then create `deploy/keycloak/import/ursitoare-realm.json` with that realm (design 2 to 7; no `clientScopes` key, the post-logout value with two URIs). Run `pnpm run test test/deploy/realm-template.test.ts` and `pnpm run test test/deploy/realm-render.test.ts`
 
 ## 3. The claim checks
 
