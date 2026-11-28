@@ -1,0 +1,166 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/identity/rbac/sync.ts",
+      "src/identity/route.ts",
+      "src/identity/oidc/id-token.ts:138-142",
+      "${publicBaseUrl}/auth/oidc/callback",
+      "post_logout_redirect_uri=${publicBaseUrl}/sign-in",
+      "test/support/fake-oidc/contract.ts",
+      "http://localhost:8180/realms/ursitoare",
+      "http://keycloak",
+      "test/deploy/realm.ts",
+      "test/support/fake-oidc/index.ts",
+      "src/identity/index.ts",
+      "src/cli/init-secrets.ts",
+      "docs/decisions/0002",
+      "deploy/keycloak/import/ursitoare-realm.json",
+      "deploy/postgres/initdb/10-keycloak.sh",
+      "deploy/secrets",
+      ".l4/config.yaml",
+      "test/deploy/realm-render.test.ts",
+      "test/deploy/realm-template.test.ts",
+      "test/deploy/realm-claims.test.ts",
+      "test/deploy/realm-fake.test.ts",
+      "test/deploy/realm-secrets.test.ts",
+      "test/deploy/initdb-keycloak.test.ts",
+      "**/login.ts",
+      "**/[A-Za-z_][A-Za-z0-9_]*",
+      "**/^[a-z][a-z0-9._-]{0,63}$",
+      "**/LogoutEndpoint.java",
+      "**/[\"home\"]",
+      "**/*.sh",
+      "**/${NAME:?}",
+      "**/[]",
+      "deploy/**",
+      "**/[",
+      "module ${publicBaseUrl}",
+      "module .l4",
+      "module cli",
+      "module deploy",
+      "module docs",
+      "module http:",
+      "module identity",
+      "module post_logout_redirect_uri=${publicBaseUrl}",
+      "module seed",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "deploy/keycloak/import/ursitoare-realm.json",
+        "module": "deploy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "deploy/postgres/initdb/10-keycloak.sh",
+        "module": "deploy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "openspec/changes/add-keycloak-realm/.l4/ledger/r-20261128T0619Z-fc2e.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-keycloak-realm/.l4/ledger/r-20261128T0857Z-f6a9.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-keycloak-realm/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "test/deploy/initdb-keycloak.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/deploy/realm-claims.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/deploy/realm-fake.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/deploy/realm-render.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/deploy/realm-secrets.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/deploy/realm-template.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "test/deploy/realm.ts",
+        "module": "test",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: deploy/postgres/initdb/10-keycloak.sh, test/deploy/realm.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "deploy/postgres/initdb/10-keycloak.sh",
+      "test/deploy/realm.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 3397,
+      "passed": 3397,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 10,
+      "new_passed": 10,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
