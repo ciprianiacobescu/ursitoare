@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-28T06:17:56Z",
+  "integrated_revision": "db733e24c7572a16991aa72911ed60a8ae779703",
+  "merge_commit": "db733e24c7572a16991aa72911ed60a8ae779703",
+  "plan_digest": "4adcec585ee8dfd7",
+  "plan_id": "m8",
+  "postcheck": "pass",
+  "pr": 196,
+  "receipt_id": "m8/openspec:add-oidc-backchannel/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "984dad11db38ded950530d88c507443fa5cfb9bc",
+  "spec_digest": "c5de4251be4c177c",
+  "target": "main",
+  "unit_id": "openspec:add-oidc-backchannel"
+}
