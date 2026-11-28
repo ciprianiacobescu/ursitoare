@@ -17,7 +17,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-004 | answered | none | verdict | Hold H-2023e80e: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table |
 | Q-005 | answered | none | verdict | Hold H-d7fe3aa5: UI criterion C-22c98964 has no end-to-end test; see the generated UI tests table |
 | Q-006 | answered | none | verdict | Hold H-2135a2da: UI criterion C-023c2efe has no end-to-end test; see the generated UI tests table |
-| Q-007 | open | none | verdict | Hold H-8928b203: UI criterion C-5368eb23 has no end-to-end test; see the generated UI tests table |
+| Q-007 | answered | none | verdict | Hold H-8928b203: UI criterion C-5368eb23 has no end-to-end test; see the generated UI tests table |
 | Q-008 | open | none | verdict | Hold H-f279e66d: UI criterion C-3809dcd7 has no end-to-end test; see the generated UI tests table |
 | Q-009 | open | none | verdict | Hold H-aa40376f: UI criterion C-b4adf358 has no end-to-end test; see the generated UI tests table |
 | Q-010 | open | none | verdict | Hold H-bede43a4: UI criterion C-eb130cb7 has no end-to-end test; see the generated UI tests table |
@@ -179,7 +179,7 @@ accept The hold may be waived. Criterion C-023c2efe is a unit-level contract (wi
 
 ## Q-007: Hold H-8928b203: UI criterion C-5368eb23 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -198,6 +198,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-5368eb23 is a unit-level contract (createBrowserSession with an injected fetch, loader and location) with no surface a browser can drive; step 5 itself reported it not_testable. verification.md lists it as covered by a passing test that traces it, and the judge passed it, so the unit can go on as it stands.
 ---
 
 ## Q-008: Hold H-f279e66d: UI criterion C-3809dcd7 has no end-to-end test; see the generated UI tests table
