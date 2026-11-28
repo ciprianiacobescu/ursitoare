@@ -1,0 +1,322 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "src/cli/setup",
+      "src/cli/builtin.ts",
+      "src/config/index.ts",
+      "src/tenancy/index.ts",
+      "src/cli/index.ts",
+      "src/cli/run.ts",
+      "docs/operations.md",
+      "docs/decisions/0002",
+      "src/cli/setup/errors.ts",
+      "src/cli/main.test.ts",
+      "src/cli/flow/test-registry.test.ts",
+      "src/cli/init-secrets-registry.test.ts",
+      "src/cli/registry.test.ts",
+      "src/tenancy/bootstrap.test.ts",
+      "src/config/admin.test.ts",
+      "src/config/config.ts",
+      "src/config/admin.ts",
+      "src/tenancy/ensure-tenant.test.ts",
+      "src/tenancy/bootstrap.ts",
+      "src/tenancy/errors.ts",
+      "src/tenancy/sink-binding.test.ts",
+      "src/tenancy/sink-binding.ts",
+      "src/cli/setup/tenant-option.test.ts",
+      "src/cli/setup/tenant-create.test.ts",
+      "src/cli/setup/tenant-option.ts",
+      "src/cli/setup/tenant-create.ts",
+      "src/cli/setup/tenant-idp.test.ts",
+      "src/cli/setup/tenant-idp.ts",
+      "src/cli/setup/tenant-sink.test.ts",
+      "src/cli/errors.ts",
+      "src/cli/setup/tenant-sink.ts",
+      "src/cli/setup/db-prepare.test.ts",
+      "src/cli/setup/db-prepare.ts",
+      "src/cli/setup/db-roles.test.ts",
+      "src/cli/setup/db-roles.ts",
+      "src/cli/setup/registry.test.ts",
+      "src/cli/setup/bootstrap-chain.test.ts",
+      "**/builtin.ts",
+      "**/[",
+      "**/index.ts",
+      "module cli",
+      "module config",
+      "module docs",
+      "module main",
+      "module registry",
+      "module tenancy"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-tenant-bootstrap/.l4/ledger/r-20261127T2139Z-9210.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tenant-bootstrap/.l4/ledger/r-20261128T0008Z-0633.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-tenant-bootstrap/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/cli/builtin.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/errors.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/flow/test-registry.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/init-secrets-registry.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/main.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/setup/bootstrap-chain.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/setup/db-prepare.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/setup/db-prepare.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/setup/db-roles.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/setup/db-roles.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/setup/errors.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/setup/registry.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/setup/tenant-create.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/setup/tenant-create.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/setup/tenant-idp.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/setup/tenant-idp.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/setup/tenant-option.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/setup/tenant-option.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/cli/setup/tenant-sink.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/cli/setup/tenant-sink.ts",
+        "module": "cli",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/admin.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/config/admin.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/config/index.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/bootstrap.ts",
+        "module": "tenancy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/ensure-tenant.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tenancy/errors.ts",
+        "module": "tenancy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/index.ts",
+        "module": "tenancy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/tenancy/sink-binding.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/tenancy/sink-binding.ts",
+        "module": "tenancy",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/cli/builtin.ts, src/cli/errors.ts, src/cli/setup/db-prepare.ts, src/cli/setup/db-roles.ts, src/cli/setup/errors.ts and 10 more",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/cli/builtin.ts",
+      "src/cli/errors.ts",
+      "src/cli/setup/db-prepare.ts",
+      "src/cli/setup/db-roles.ts",
+      "src/cli/setup/errors.ts",
+      "src/cli/setup/tenant-create.ts",
+      "src/cli/setup/tenant-idp.ts",
+      "src/cli/setup/tenant-option.ts",
+      "src/cli/setup/tenant-sink.ts",
+      "src/config/admin.ts",
+      "src/config/index.ts",
+      "src/tenancy/bootstrap.ts",
+      "src/tenancy/errors.ts",
+      "src/tenancy/index.ts",
+      "src/tenancy/sink-binding.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 3375,
+      "passed": 3375,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 12,
+      "new_passed": 12,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
