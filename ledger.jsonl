@@ -97,3 +97,5 @@
 {"at":"2026-11-27T21:39:44Z","branch":"l4/archive/openspec/add-init-secrets","head":"d258cd2d6b5c91776fd5bd8b8493fd573478d544","type":"unit.branch_deleted","unit":"openspec:add-init-secrets"}
 {"at":"2026-11-27T21:39:45Z","attempt":1,"cost_usd":0.0,"runs":1,"type":"plan.charged","unit":"openspec:add-tenant-bootstrap"}
 {"at":"2026-11-27T21:39:45Z","run":"r-20261127T2139Z-9210","type":"unit.dispatched","unit":"openspec:add-tenant-bootstrap"}
+{"at":"2026-11-28T00:09:00Z","attempt":1,"cost_usd":4.971068,"runs":2,"type":"plan.charged","unit":"openspec:add-tenant-bootstrap"}
+{"at":"2026-11-28T00:09:00Z","run":"r-20261128T0008Z-0633","type":"unit.dispatched","unit":"openspec:add-tenant-bootstrap"}
