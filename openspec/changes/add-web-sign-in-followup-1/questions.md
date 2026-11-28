@@ -28,7 +28,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-015 | answered | none | verdict | Hold H-a83fac20: UI criterion C-812ae263 has no end-to-end test; see the generated UI tests table |
 | Q-016 | answered | none | verdict | Hold H-39317e01: UI criterion C-c1ed19d8 has no end-to-end test; see the generated UI tests table |
 | Q-017 | answered | none | verdict | Hold H-b94b73e6: UI criterion C-39471a6a has no end-to-end test; see the generated UI tests table |
-| Q-018 | open | none | verdict | Hold H-10718ca8: UI criterion C-bf32f3ba has no end-to-end test; see the generated UI tests table |
+| Q-018 | answered | none | verdict | Hold H-10718ca8: UI criterion C-bf32f3ba has no end-to-end test; see the generated UI tests table |
 <!-- l4:index:end -->
 
 ---
@@ -443,7 +443,7 @@ accept The hold may be waived. Criterion C-39471a6a is a unit-level contract (th
 
 ## Q-018: Hold H-10718ca8: UI criterion C-bf32f3ba has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -462,3 +462,4 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-bf32f3ba is a unit-level contract (startControlServer on port 0 with absent or throwing seedData) with no surface a browser can drive; step 5 itself reported it not_testable. verification.md lists it as covered by a passing test that traces it, and the judge passed it, so the unit can go on as it stands.
