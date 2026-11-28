@@ -122,3 +122,4 @@
 {"at":"2026-11-28T08:57:50Z","attempt":1,"cost_usd":0.0,"runs":2,"type":"plan.charged","unit":"openspec:add-keycloak-realm"}
 {"at":"2026-11-28T08:57:50Z","run":"r-20261128T0857Z-f6a9","type":"unit.dispatched","unit":"openspec:add-keycloak-realm"}
 {"at":"2026-11-28T11:15:42Z","head":"33521584a0df20e352ce72d787536d30bf832807","pr":198,"target_before":"c2be8f4ae30f5f6cecc91d1964b4c5712ed645cb","type":"unit.merge_requested","unit":"openspec:add-keycloak-realm"}
+{"at":"2026-11-28T11:15:45Z","ci":"not_run","head":"33521584a0df20e352ce72d787536d30bf832807","merge_commit":"063e2934630210c4526c5a5a376997571157d4e5","method":"squash","pr":198,"raced":false,"type":"unit.merged","unit":"openspec:add-keycloak-realm"}
