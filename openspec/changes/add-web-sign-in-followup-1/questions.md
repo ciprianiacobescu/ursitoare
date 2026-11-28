@@ -22,7 +22,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 | Q-009 | answered | none | verdict | Hold H-aa40376f: UI criterion C-b4adf358 has no end-to-end test; see the generated UI tests table |
 | Q-010 | answered | none | verdict | Hold H-bede43a4: UI criterion C-eb130cb7 has no end-to-end test; see the generated UI tests table |
 | Q-011 | answered | none | verdict | Hold H-499b792b: UI criterion C-4b09fc8c has no end-to-end test; see the generated UI tests table |
-| Q-012 | open | none | verdict | Hold H-9f7f3848: UI criterion C-77971a2d has no end-to-end test; see the generated UI tests table |
+| Q-012 | answered | none | verdict | Hold H-9f7f3848: UI criterion C-77971a2d has no end-to-end test; see the generated UI tests table |
 | Q-013 | open | none | verdict | Hold H-ad0fc545: UI criterion C-53df20c1 has no end-to-end test; see the generated UI tests table |
 | Q-014 | open | none | verdict | Hold H-74d8aa3c: UI criterion C-c79d9365 has no end-to-end test; see the generated UI tests table |
 | Q-015 | open | none | verdict | Hold H-a83fac20: UI criterion C-812ae263 has no end-to-end test; see the generated UI tests table |
@@ -299,7 +299,7 @@ accept The hold may be waived. Criterion C-4b09fc8c is a unit-level contract (si
 
 ## Q-012: Hold H-9f7f3848: UI criterion C-77971a2d has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -318,6 +318,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived. Criterion C-77971a2d is a unit-level contract (signOut's results with a mocked post and counted reset calls) with no surface a browser can drive; step 5 itself reported it not_testable. verification.md lists it as covered by a passing test that traces it, and the judge passed it, so the unit can go on as it stands.
 ---
 
 ## Q-013: Hold H-ad0fc545: UI criterion C-53df20c1 has no end-to-end test; see the generated UI tests table
