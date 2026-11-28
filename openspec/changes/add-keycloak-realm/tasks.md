@@ -2,7 +2,7 @@ Tests follow `test-plan.md` (files, ids, fixtures, rule texts, rows) and `test-p
 
 ## 1. Rendering
 
-- [ ] 1.1 Write `test/deploy/realm-render.test.ts` first (scenario "The constants, the reader and the substitution"), then in `test/deploy/realm.ts` replace the scaffold stubs of `REALM_TEMPLATE_PATH`, `KC_REALM_ENV`, `REALM_GROUPS`, `REALM_CLIENTS`, `REALM_BROWSER_FLOW`, `readRealmTemplate`, `realmPlaceholders` and `renderRealm` (design 1: one pass, `Object.hasOwn` lookup, `JSON.parse` last; `readRealmTemplate` resolves the default path from `import.meta.dirname`). Leave `realmClaimProblems` as the stub. Run `pnpm run test test/deploy/realm-render.test.ts`
+- [x] 1.1 Write `test/deploy/realm-render.test.ts` first (scenario "The constants, the reader and the substitution"), then in `test/deploy/realm.ts` replace the scaffold stubs of `REALM_TEMPLATE_PATH`, `KC_REALM_ENV`, `REALM_GROUPS`, `REALM_CLIENTS`, `REALM_BROWSER_FLOW`, `readRealmTemplate`, `realmPlaceholders` and `renderRealm` (design 1: one pass, `Object.hasOwn` lookup, `JSON.parse` last; `readRealmTemplate` resolves the default path from `import.meta.dirname`). Leave `realmClaimProblems` as the stub. Run `pnpm run test test/deploy/realm-render.test.ts`
 
 ## 2. The realm template
 
