@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-28T01:56:47Z",
+  "integrated_revision": "f632d7a2e5818332ed88f0ff9419a7c422da6327",
+  "merge_commit": "f632d7a2e5818332ed88f0ff9419a7c422da6327",
+  "plan_digest": "4adcec585ee8dfd7",
+  "plan_id": "m8",
+  "postcheck": "pass",
+  "pr": 194,
+  "receipt_id": "m8/openspec:add-tenant-bootstrap/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "045712f1862f24a1b402ed601f67647e888e2ade",
+  "spec_digest": "0816248919542615",
+  "target": "main",
+  "unit_id": "openspec:add-tenant-bootstrap"
+}

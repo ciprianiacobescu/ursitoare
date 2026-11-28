@@ -102,3 +102,6 @@
 {"at":"2026-11-28T01:49:08Z","head":"045712f1862f24a1b402ed601f67647e888e2ade","pr":194,"target_before":"d258cd2d6b5c91776fd5bd8b8493fd573478d544","type":"unit.merge_requested","unit":"openspec:add-tenant-bootstrap"}
 {"at":"2026-11-28T01:49:14Z","ci":"not_run","head":"045712f1862f24a1b402ed601f67647e888e2ade","merge_commit":"f632d7a2e5818332ed88f0ff9419a7c422da6327","method":"squash","pr":194,"raced":false,"type":"unit.merged","unit":"openspec:add-tenant-bootstrap"}
 {"at":"2026-11-28T01:49:19Z","branch":"l4/openspec/add-tenant-bootstrap","head":"045712f1862f24a1b402ed601f67647e888e2ade","type":"unit.branch_deleted","unit":"openspec:add-tenant-bootstrap"}
+{"at":"2026-11-28T01:56:47Z","detail":"6 gate(s) passed; left out (gates.e2e.serve is set and this runner starts no server): e2e","profile":"all","revision":"f632d7a2e5818332ed88f0ff9419a7c422da6327","status":"pass","type":"unit.postcheck","unit":"openspec:add-tenant-bootstrap"}
+{"at":"2026-11-28T01:56:47Z","revision":"f632d7a2e5818332ed88f0ff9419a7c422da6327","type":"unit.integrated","unit":"openspec:add-tenant-bootstrap"}
+{"at":"2026-11-28T01:56:47Z","attempt":1,"cost_usd":6.822007,"runs":2,"type":"plan.charged","unit":"openspec:add-tenant-bootstrap"}
