@@ -21,7 +21,7 @@ import type { PolicySetRecord } from "./policy-sets.ts";
 const T = "tenant_a";
 const CLOCK = fixedClock("2026-11-06T09:00:00.000Z");
 const CAROL = { kind: "user", id: "carol" } as const;
-const VG = "f0c722021d80c6d32d648993da56c7978a89fe0af4a5497ddd7048ff3cae2f09";
+const VG = "22bd3183868a700bae617f38600042d780338e02c66534e6e50037e7378fef44";
 const GRANTS_CEDAR = `@id("grants-deploy-admin") permit (principal in Role::"tenant_admin", action == Action::"deploy_policy", resource);\n`;
 const G0 = "grant_00000000-0000-7000-8000-000000000000";
 

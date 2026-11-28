@@ -7,6 +7,7 @@ import { after, test } from "node:test";
 import { fixedClock, sequentialIds } from "../core/index.ts";
 import { createLogger } from "../observability/index.ts";
 import {
+  ACTION_NAMES,
   PLATFORM_POLICY_IDS,
   PdpError,
   entityRef,
@@ -26,9 +27,9 @@ import { createPolicyRuntime, type PolicyRuntime } from "./policy-runtime.ts";
 const T = "tenant_a";
 const U = "tenant_b";
 const CLOCK = fixedClock("2026-11-06T09:00:00.000Z");
-const VBASE = "599ac6e140250949aa9104d2e02c0da35508a8ec6227aa6cd452187caf2efdd8";
-const VA = "a06b41c582ccf2e65c778e4a8964dd2f391a3aff59666018d916118044068b63";
-const VB = "2a012a8532beaa8ca7ebb464290c10cbbc9ae72d3b892afb09e8b8abcde6790e";
+const VBASE = "2433057edffa0f02146bff18284251d9b23a0b1005ea151bcb6bf91d55bbda64";
+const VA = "e276cfc292ab396ea64d315bfad4b0797339397667d86c70dabff9ef8a48df55";
+const VB = "f1283864ef4a5aee732f00c0b216956676c5be6ad050bd3530e2805b5cdb14c0";
 
 const SRC_R = `@id("t-a-read-all")\npermit (principal, action == Action::"invoke_tool", resource is Block)\nwhen { context.tool.effect == "read" };\n`;
 const SRC_S = `@id("t-b-send")\npermit (principal, action == Action::"invoke_tool", resource is Block)\nwhen { context.tool.effect == "send" };\n`;
@@ -421,6 +422,10 @@ test("C-c43f4f58: load failures deny with an error and are not cached", async ()
     );
     assert.deepEqual(await nullRuntime.toolArgs(T), {}, "a null pool has no stored types");
     await assert.doesNotReject(() => nullRuntime.reload(T), "a null pool reloads");
-    assert.equal(nullRuntime.engine.actions.length, 25, "the base engine serves every action");
+    assert.equal(
+      nullRuntime.engine.actions.length,
+      ACTION_NAMES.length,
+      "the base engine serves every action",
+    );
   });
 });
