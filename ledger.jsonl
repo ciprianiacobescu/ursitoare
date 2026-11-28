@@ -111,3 +111,4 @@
 {"at":"2026-11-28T04:19:06Z","attempt":1,"cost_usd":0.73655,"runs":2,"type":"plan.charged","unit":"openspec:add-oidc-backchannel"}
 {"at":"2026-11-28T04:19:06Z","run":"r-20261128T0419Z-2a41","type":"unit.dispatched","unit":"openspec:add-oidc-backchannel"}
 {"at":"2026-11-28T06:12:29Z","head":"984dad11db38ded950530d88c507443fa5cfb9bc","pr":196,"target_before":"21f5898677dad752e90d9788fcf61b2092f2834e","type":"unit.merge_requested","unit":"openspec:add-oidc-backchannel"}
+{"at":"2026-11-28T06:12:33Z","ci":"not_run","head":"984dad11db38ded950530d88c507443fa5cfb9bc","merge_commit":"db733e24c7572a16991aa72911ed60a8ae779703","method":"squash","pr":196,"raced":false,"type":"unit.merged","unit":"openspec:add-oidc-backchannel"}
