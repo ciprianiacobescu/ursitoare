@@ -1,0 +1,15 @@
+{
+  "confirmed_at": "2026-11-28T11:21:22Z",
+  "integrated_revision": "063e2934630210c4526c5a5a376997571157d4e5",
+  "merge_commit": "063e2934630210c4526c5a5a376997571157d4e5",
+  "plan_digest": "4adcec585ee8dfd7",
+  "plan_id": "m8",
+  "postcheck": "pass",
+  "pr": 198,
+  "receipt_id": "m8/openspec:add-keycloak-realm/1",
+  "repository": "https://github.com/ciprianiacobescu/ursitoare",
+  "reviewed_head": "33521584a0df20e352ce72d787536d30bf832807",
+  "spec_digest": "db2abd031d2eabb9",
+  "target": "main",
+  "unit_id": "openspec:add-keycloak-realm"
+}
