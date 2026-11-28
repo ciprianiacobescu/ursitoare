@@ -1,0 +1,162 @@
+{
+  "schema": "l4/evidence@1",
+  "holds": [],
+  "items": {},
+  "scope": {
+    "declared": [
+      "http://localhost",
+      "http://keycloak",
+      "http://keycloak:8080",
+      "https://IDP-Internal.example",
+      "https://idp-internal.example",
+      "http://idp.example",
+      "src/main.ts",
+      "test/support",
+      "src/main.oidc.test.ts",
+      "test/support/e2e-stack/oidc-part.test.ts",
+      "web",
+      "test/journeys",
+      "scripts/stack-e2e.d/50-journeys.sh",
+      "docs/decisions/0002",
+      "src/identity/index.ts",
+      "config/oidc.ts",
+      "src/identity/oidc/client.ts",
+      "src/config/oidc-backchannel.test.ts",
+      "src/config/oidc.ts",
+      "src/identity/oidc/config-shape.ts",
+      "src/identity/oidc/backchannel-urls.test.ts",
+      "src/identity/oidc/backchannel-discovery.test.ts",
+      "src/identity/oidc/client.test.ts",
+      "src/identity/oidc/backchannel-exchange.test.ts",
+      "**/login.ts",
+      "**/logout.ts",
+      "**/routes.ts",
+      "**/callback.ts",
+      "src/identity/oidc/*.test.ts",
+      "src/config/*.test.ts",
+      "**/OidcConfig.backchannelUrl?",
+      "**/OidcConfigShape.backchannelUrl?",
+      "**/client.ts",
+      "**/[",
+      "**/login.test.ts",
+      "module config",
+      "module docs",
+      "module http:",
+      "module https:",
+      "module identity",
+      "module main",
+      "module main.oidc.test",
+      "module scripts",
+      "module test"
+    ],
+    "skipped": false,
+    "note": "",
+    "holds": [],
+    "files": [
+      {
+        "path": "openspec/changes/add-oidc-backchannel/.l4/ledger/r-20261128T0158Z-09bf.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-backchannel/.l4/ledger/r-20261128T0419Z-2a41.jsonl",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "openspec/changes/add-oidc-backchannel/tasks.md",
+        "module": null,
+        "kind": "exempt",
+        "label": null,
+        "reason": "exempt: harness, spec or documentation path"
+      },
+      {
+        "path": "src/config/oidc-backchannel.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/config/oidc.ts",
+        "module": "config",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/index.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/backchannel-discovery.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/backchannel-exchange.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/backchannel-urls.test.ts",
+        "module": null,
+        "kind": "test",
+        "label": "relevant",
+        "reason": "new test file"
+      },
+      {
+        "path": "src/identity/oidc/client.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      },
+      {
+        "path": "src/identity/oidc/config-shape.ts",
+        "module": "identity",
+        "kind": "code",
+        "label": "relevant",
+        "reason": "named in the spec"
+      }
+    ]
+  },
+  "diff_coverage": {
+    "status": "not_applicable",
+    "reason": "diff coverage measures python only; changed code outside it: src/config/oidc.ts, src/identity/index.ts, src/identity/oidc/client.ts, src/identity/oidc/config-shape.ts",
+    "percent": 0.0,
+    "unmeasured_files": [],
+    "other_files": [
+      "src/config/oidc.ts",
+      "src/identity/index.ts",
+      "src/identity/oidc/client.ts",
+      "src/identity/oidc/config-shape.ts"
+    ],
+    "functions": []
+  },
+  "tests_ran": {
+    "tests_ok": true,
+    "summary": {
+      "total": 3387,
+      "passed": 3387,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "new": 12,
+      "new_passed": 12,
+      "skipped_unchanged": []
+    },
+    "findings": []
+  }
+}
