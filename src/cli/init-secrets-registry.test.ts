@@ -36,11 +36,16 @@ test("C-2687097e the default registry lists init-secrets and runs it", async () 
       "admin list-users",
       "admin revoke-role",
       "admin verify-audit",
+      "db-prepare",
+      "db-roles",
       "flow test",
       "flow validate",
       "init-secrets",
+      "tenant-create",
+      "tenant-idp",
+      "tenant-sink",
     ],
-    "the default registry holds the eight commands and no other",
+    "the default registry holds the thirteen commands and no other",
   );
 
   const help = await run(["help"]);

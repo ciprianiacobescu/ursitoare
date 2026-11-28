@@ -107,7 +107,17 @@ test("C-2687097e registerAdminCommands and createDefaultRegistry list the five a
   assert.ok(defaultRegistry !== undefined, "createDefaultRegistry returns a registry");
   assert.deepEqual(
     defaultRegistry.list().map((entry) => entry.name),
-    [...ADMIN_COMMANDS, "flow test", "flow validate", "init-secrets"],
-    "the default registry holds the five admin commands, the two flow commands and init-secrets (eight commands)",
+    [
+      ...ADMIN_COMMANDS,
+      "db-prepare",
+      "db-roles",
+      "flow test",
+      "flow validate",
+      "init-secrets",
+      "tenant-create",
+      "tenant-idp",
+      "tenant-sink",
+    ],
+    "the default registry holds the thirteen commands and no other",
   );
 });
