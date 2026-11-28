@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { ACTIONS, ACTION_NAMES } from "./actions.ts";
+import { ACTIONS, ACTION_NAMES, SINK_ACTION } from "./actions.ts";
 
 const PHASE_ONE_ACTIONS = [
   "activate_flow",
@@ -32,8 +32,9 @@ const PHASE_ONE_ACTIONS = [
 ];
 
 test("C-6cc6bc38 C-f057eba6 the 25 actions and no Phase-2 actions", () => {
-  assert.deepEqual([...ACTION_NAMES], PHASE_ONE_ACTIONS);
-  assert.deepEqual(Object.keys(ACTIONS), PHASE_ONE_ACTIONS);
+  const names = ACTION_NAMES.filter((name: string) => name !== SINK_ACTION);
+  assert.deepEqual([...names], PHASE_ONE_ACTIONS);
+  assert.deepEqual(Object.keys(ACTIONS).filter((name: string) => name !== SINK_ACTION), PHASE_ONE_ACTIONS);
 
   for (const name of [
     "import_skill",
@@ -46,6 +47,8 @@ test("C-6cc6bc38 C-f057eba6 the 25 actions and no Phase-2 actions", () => {
   ]) {
     assert.equal(Object.hasOwn(ACTIONS, name), false, name);
   }
+
+  assert.equal(SINK_ACTION, "emit_audit");
 });
 
 test("C-f6a4aaaf entries", () => {
@@ -64,7 +67,8 @@ test("C-f6a4aaaf entries", () => {
 });
 
 test("C-6b24d8a6 capability flags", () => {
-  const notCapable = ACTION_NAMES.filter((name) => !ACTIONS[name].capability);
+  const names = ACTION_NAMES.filter((name: string) => name !== SINK_ACTION);
+  const notCapable = names.filter((name) => !ACTIONS[name].capability);
   assert.deepEqual([...notCapable], [
     "activate_flow",
     "approve_task",
@@ -72,9 +76,11 @@ test("C-6b24d8a6 capability flags", () => {
     "invoke_tool",
   ]);
 
-  const capable = ACTION_NAMES.filter((name) => ACTIONS[name].capability);
+  const capable = names.filter((name) => ACTIONS[name].capability);
   assert.equal(capable.length, 21);
   for (const name of capable) {
     assert.ok(ACTIONS[name].resources.includes("Tenant"), name);
   }
+
+  assert.equal(SINK_ACTION, "emit_audit");
 });
