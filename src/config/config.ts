@@ -9,6 +9,8 @@ import type { OidcConfig } from "./oidc.ts";
 import { loadOidcConfig } from "./oidc.ts";
 import type { EgressConfig } from "./egress.ts";
 import { loadEgressConfig } from "./egress.ts";
+import type { AuditSinkConfig } from "./audit-sink.ts";
+import { loadAuditSinkConfig } from "./audit-sink.ts";
 
 export type Role = "all" | "api" | "worker" | "sandbox";
 
@@ -31,6 +33,7 @@ export interface AppConfig {
   readonly database: { readonly app: DatabaseEndpoint | null; readonly owner: DatabaseEndpoint | null };
   readonly oidc?: OidcConfig;
   readonly egress?: EgressConfig;
+  readonly auditSink?: AuditSinkConfig;
   readonly internalPort?: number;
 }
 
@@ -229,6 +232,7 @@ export function loadConfig(env: Env, readSecret: SecretReader = defaultReadSecre
   const database = { app, owner };
   const oidc = loadOidcConfig(env, readSecret, { engineKey, database });
   const egress = loadEgressConfig(env, readSecret);
+  const auditSink = loadAuditSinkConfig(env, { database });
   const internalPort = parseInternalPort(env, port);
   const config: AppConfig = {
     role,
@@ -243,5 +247,6 @@ export function loadConfig(env: Env, readSecret: SecretReader = defaultReadSecre
     internalPort,
   };
   const withOidc = oidc === undefined ? config : { ...config, oidc };
-  return egress === undefined ? withOidc : { ...withOidc, egress };
+  const withEgress = egress === undefined ? withOidc : { ...withOidc, egress };
+  return auditSink === undefined ? withEgress : { ...withEgress, auditSink };
 }

@@ -7,6 +7,8 @@ export { parseInternalPort } from "./internal.ts";
 export type { OidcConfig } from "./oidc.ts";
 export type { EgressConfig } from "./egress.ts";
 export { loadEgressConfig } from "./egress.ts";
+export type { AuditSinkConfig } from "./audit-sink.ts";
+export { loadAuditSinkConfig } from "./audit-sink.ts";
 export type { SecretReader } from "./secret.ts";
 export { Secret, readSecretValue } from "./secret.ts";
 export { loadAdminDatabase } from "./admin.ts";
