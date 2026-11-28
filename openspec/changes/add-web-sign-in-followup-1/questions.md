@@ -11,7 +11,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 <!-- l4:index:start -->
 | ID | Status | Blocking | Kind | Question |
 |----|--------|----------|------|----------|
-| Q-001 | open | none | verdict | Hold H-3127c190: UI criterion C-bfbec1c2 has no end-to-end test; see the generated UI tests table |
+| Q-001 | answered | none | verdict | Hold H-3127c190: UI criterion C-bfbec1c2 has no end-to-end test; see the generated UI tests table |
 | Q-002 | open | none | verdict | Hold H-545ec45b: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table |
 | Q-003 | open | none | verdict | Hold H-e3f87d2a: UI criterion C-e78811f4 has no end-to-end test; see the generated UI tests table |
 | Q-004 | open | none | verdict | Hold H-2023e80e: UI criterion C-cef4634b has no end-to-end test; see the generated UI tests table |
@@ -35,7 +35,7 @@ Do not change question IDs. Commit and push to the l4/… branch to resume the r
 
 ## Q-001: Hold H-3127c190: UI criterion C-bfbec1c2 has no end-to-end test; see the generated UI tests table
 
-- **Status:** open
+- **Status:** answered
 - **Blocking tasks:** none
 - **Kind:** verdict
 - **Asked:** round 1, verifier
@@ -54,6 +54,7 @@ Answer `accept` if the unit can go on as it stands, or `reject` and say why; end
 
 ### Answer
 <!-- write below this line -->
+accept The hold may be waived: the fix works in a real browser and the generated test, not the code, is at fault. I ran a two-tab test against the fake e2e stack, at main d258cd2d (base) and at the unit head 322cd696. Carol signs in, tab A opens Roles and teams, tab B loads / (its GET /api/v1/me answers 200 and rotates the token), then tab A fills Team name "ops" and presses Create team. At the base the POST /api/v1/teams answers 403 CSRF_INVALID and the page shows "This page is out of date. Reload it and try again." At the head the same POST answers 403 CSRF_INVALID, the session fetch loads GET /api/v1/me once, repeats POST /api/v1/teams once with the new x-csrf-token and gets 201, the Teams table shows the row "ops" and the out-of-date message has 0 matches. Signing out from the stale tab at the head also works: POST /auth/oidc/logout answers 403, GET /api/v1/me 200, the repeated logout 200, and the tab ends on /sign-in with the Sign in button. Each path repeats the request exactly once. The test fails at the base and passes at the head, so the behaviour is discriminated; the three Node tests of session-fetch-retry.test.ts cover the same clauses from a red that failed by assertion. The generated test failed at the base and the head alike, so it says nothing about the code.
 ---
 
 ## Q-002: Hold H-545ec45b: UI criterion C-01e427f8 has no end-to-end test; see the generated UI tests table
