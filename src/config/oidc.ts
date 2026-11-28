@@ -7,6 +7,7 @@ export interface OidcConfig {
   readonly issuer: string;
   readonly clientId: string;
   readonly clientSecret: Secret;
+  readonly backchannelUrl?: string;
 }
 
 export interface OidcConfigBase {
@@ -17,6 +18,8 @@ export interface OidcConfigBase {
 const ISSUER_VARIABLE = "URSITOARE_OIDC_ISSUER";
 const CLIENT_ID_VARIABLE = "URSITOARE_OIDC_CLIENT_ID";
 const SECRET_FILE_VARIABLE = "URSITOARE_OIDC_CLIENT_SECRET_FILE";
+const BACKCHANNEL_VARIABLE = "URSITOARE_OIDC_BACKCHANNEL_URL";
+const BACKCHANNEL_REASON = "must be an https origin, or an http origin for a private host";
 const DEFAULT_CLIENT_ID = "ursitoare-engine";
 const CLIENT_ID_PATTERN = /^[A-Za-z0-9._-]{1,128}$/;
 const ISSUER_REASON =
@@ -71,6 +74,21 @@ function isIssuer(value: string): boolean {
   return isPrivateAddress(parsed.hostname);
 }
 
+function backchannelOriginOf(value: string): string | undefined {
+  let parsed: URL;
+  try {
+    parsed = new URL(value);
+  } catch {
+    return undefined;
+  }
+  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return undefined;
+  if (parsed.username !== "" || parsed.password !== "") return undefined;
+  if (parsed.search !== "" || parsed.hash !== "" || parsed.pathname !== "/") return undefined;
+  if (value.includes("?") || value.includes("#")) return undefined;
+  if (parsed.protocol === "http:" && !isPrivateAddress(parsed.hostname)) return undefined;
+  return parsed.origin;
+}
+
 function isUnset(value: string | undefined): boolean {
   return value === undefined || value.length === 0;
 }
@@ -83,14 +101,22 @@ export function loadOidcConfig(
   const issuer = env[ISSUER_VARIABLE];
   const clientId = env[CLIENT_ID_VARIABLE];
   const secretFile = env[SECRET_FILE_VARIABLE];
+  const backchannel = env[BACKCHANNEL_VARIABLE];
 
   if (isUnset(issuer)) {
     if (!isUnset(clientId)) throw error(CLIENT_ID_VARIABLE, STRAY_REASON);
     if (!isUnset(secretFile)) throw error(SECRET_FILE_VARIABLE, STRAY_REASON);
+    if (!isUnset(backchannel)) throw error(BACKCHANNEL_VARIABLE, STRAY_REASON);
     return undefined;
   }
 
   if (!isIssuer(issuer as string)) throw error(ISSUER_VARIABLE, ISSUER_REASON);
+
+  let backchannelOrigin: string | undefined;
+  if (!isUnset(backchannel)) {
+    backchannelOrigin = backchannelOriginOf(backchannel as string);
+    if (backchannelOrigin === undefined) throw error(BACKCHANNEL_VARIABLE, BACKCHANNEL_REASON);
+  }
 
   if (isUnset(secretFile)) throw error(SECRET_FILE_VARIABLE, SECRET_REQUIRED_REASON);
 
@@ -102,5 +128,10 @@ export function loadOidcConfig(
   if (base.engineKey === null) throw error(ISSUER_VARIABLE, ENGINE_KEY_REQUIRED_REASON);
   if (base.database.app === null) throw error(ISSUER_VARIABLE, DATABASE_REQUIRED_REASON);
 
-  return { issuer: issuer as string, clientId: chosenClientId, clientSecret };
+  return {
+    issuer: issuer as string,
+    clientId: chosenClientId,
+    clientSecret,
+    ...(backchannelOrigin === undefined ? {} : { backchannelUrl: backchannelOrigin }),
+  };
 }
