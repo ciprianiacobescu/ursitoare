@@ -138,3 +138,8 @@
 {"ts": "2026-11-28T11:05:12.750631Z", "run_id": "r-20261128T0857Z-f6a9", "unit": "openspec:add-keycloak-realm", "seq": 138, "type": "step.timed", "phase": "verify", "round": 1, "seconds": 1263.3}
 {"ts": "2026-11-28T11:05:12.751325Z", "run_id": "r-20261128T0857Z-f6a9", "unit": "openspec:add-keycloak-realm", "seq": 139, "type": "phase.changed", "from": "verifying", "to": "verified", "trigger": "verify_pass", "exit_code": null}
 {"ts": "2026-11-28T11:05:16.078782Z", "run_id": "r-20261128T0857Z-f6a9", "unit": "openspec:add-keycloak-realm", "seq": 140, "type": "pr.labels", "number": 198, "labels": ["l4:verified"]}
+{"ts": "2026-11-28T11:05:23.360766Z", "run_id": "r-20261128T0857Z-f6a9", "unit": "openspec:add-keycloak-realm", "seq": 141, "type": "pr.ready", "url": "<forge>/ciprianiacobescu/ursitoare/pull/198", "number": 198, "head": "33521584a0df20e352ce72d787536d30bf832807"}
+{"ts": "2026-11-28T11:05:23.362130Z", "run_id": "r-20261128T0857Z-f6a9", "unit": "openspec:add-keycloak-realm", "seq": 142, "type": "phase.changed", "from": "verified", "to": "in_review", "trigger": "hand_off_pushed", "exit_code": 0}
+{"ts": "2026-11-28T11:05:26.370170Z", "run_id": "r-20261128T0857Z-f6a9", "unit": "openspec:add-keycloak-realm", "seq": 143, "type": "pr.labels", "number": 198, "labels": ["l4:in_review"]}
+{"ts": "2026-11-28T11:05:27.425016Z", "run_id": "r-20261128T0857Z-f6a9", "unit": "openspec:add-keycloak-realm", "seq": 144, "type": "lock.released"}
+{"ts": "2026-11-28T11:05:27.426037Z", "run_id": "r-20261128T0857Z-f6a9", "unit": "openspec:add-keycloak-realm", "seq": 145, "type": "run.finished", "exit_code": 0}
